@@ -1,0 +1,18 @@
+<p>
+  <b>Name:</b>
+  <%=h @culture_administrator.name %>
+</p>
+
+<p>
+  <b>Mobil nr:</b>
+  <%=h @culture_administrator.mobil_nr %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%=h @culture_administrator.email %>
+</p>
+
+
+<%= link_to 'Edit', edit_culture_administrator_path(@culture_administrator) %> |
+<%= link_to 'Back', culture_administrators_path %>

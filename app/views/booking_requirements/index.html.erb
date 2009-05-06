@@ -1,0 +1,24 @@
+<h1>Listing booking_requirements</h1>
+
+<table>
+  <tr>
+    <th>Requirement</th>
+    <th>Occasion</th>
+    <th>Group</th>
+  </tr>
+
+<% @booking_requirements.each do |booking_requirement| %>
+  <tr>
+    <td><%=h booking_requirement.requirement %></td>
+    <td><%=h booking_requirement.occasion_id %></td>
+    <td><%=h booking_requirement.group_id %></td>
+    <td><%= link_to 'Show', booking_requirement %></td>
+    <td><%= link_to 'Edit', edit_booking_requirement_path(booking_requirement) %></td>
+    <td><%= link_to 'Destroy', booking_requirement, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New booking_requirement', new_booking_requirement_path %>

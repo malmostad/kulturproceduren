@@ -1,0 +1,23 @@
+<p>
+  <b>Send mail:</b>
+  <%=h @notification_request.send_mail %>
+</p>
+
+<p>
+  <b>Send sms:</b>
+  <%=h @notification_request.send_sms %>
+</p>
+
+<p>
+  <b>Group:</b>
+  <%=h @notification_request.group_id %>
+</p>
+
+<p>
+  <b>Occasion:</b>
+  <%=h @notification_request.occasion_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_notification_request_path(@notification_request) %> |
+<%= link_to 'Back', notification_requests_path %>

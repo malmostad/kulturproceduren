@@ -1,0 +1,8 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  send_mail: false
+  send_sms: false
+  group_id: 1
+  occasion_id: 1
+

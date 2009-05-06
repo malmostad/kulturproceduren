@@ -1,0 +1,23 @@
+<h1>New booking_requirement</h1>
+
+<% form_for(@booking_requirement) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :requirement %><br />
+    <%= f.text_area :requirement %>
+  </p>
+  <p>
+    <%= f.label :occasion_id %><br />
+    <%= f.text_field :occasion_id %>
+  </p>
+  <p>
+    <%= f.label :group_id %><br />
+    <%= f.text_field :group_id %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', booking_requirements_path %>

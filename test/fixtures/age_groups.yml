@@ -1,0 +1,455 @@
+AgeGroup0:
+  age: 12
+  quantity: 17
+  group_id: 1200055130
+
+AgeGroup1:
+  age: 8
+  quantity: 11
+  group_id: 1200122789
+
+AgeGroup2:
+  age: 12
+  quantity: 16
+  group_id: 1200190429
+
+AgeGroup3:
+  age: 12
+  quantity: 20
+  group_id: 1200461027
+
+AgeGroup4:
+  age: 12
+  quantity: 10
+  group_id: 1200325728
+
+AgeGroup5:
+  age: 8
+  quantity: 24
+  group_id: 1200122788
+
+AgeGroup6:
+  age: 13
+  quantity: 23
+  group_id: 1200190428
+
+AgeGroup7:
+  age: 13
+  quantity: 20
+  group_id: 1200461026
+
+AgeGroup8:
+  age: 8
+  quantity: 24
+  group_id: 1200258087
+
+AgeGroup9:
+  age: 13
+  quantity: 20
+  group_id: 1200325727
+
+AgeGroup10:
+  age: 9
+  quantity: 23
+  group_id: 1200122787
+
+AgeGroup11:
+  age: 8
+  quantity: 14
+  group_id: 1200461025
+
+AgeGroup12:
+  age: 9
+  quantity: 18
+  group_id: 1200258086
+
+AgeGroup13:
+  age: 8
+  quantity: 24
+  group_id: 1200325726
+
+AgeGroup14:
+  age: 9
+  quantity: 17
+  group_id: 1200393385
+
+AgeGroup15:
+  age: 9
+  quantity: 17
+  group_id: 1200122786
+
+AgeGroup16:
+  age: 9
+  quantity: 13
+  group_id: 1200528683
+
+AgeGroup17:
+  age: 9
+  quantity: 17
+  group_id: 1200393384
+
+AgeGroup18:
+  age: 8
+  quantity: 10
+  group_id: 1200461024
+
+AgeGroup19:
+  age: 9
+  quantity: 15
+  group_id: 1200258085
+
+AgeGroup20:
+  age: 11
+  quantity: 21
+  group_id: 1200122785
+
+AgeGroup21:
+  age: 11
+  quantity: 14
+  group_id: 1200393383
+
+AgeGroup22:
+  age: 11
+  quantity: 14
+  group_id: 1200258084
+
+AgeGroup23:
+  age: 12
+  quantity: 18
+  group_id: 1200122784
+
+AgeGroup24:
+  age: 8
+  quantity: 20
+  group_id: 996059972
+
+AgeGroup25:
+  age: 11
+  quantity: 15
+  group_id: 1200528681
+
+AgeGroup26:
+  age: 12
+  quantity: 15
+  group_id: 1200258083
+
+AgeGroup27:
+  age: 13
+  quantity: 19
+  group_id: 1200122783
+
+AgeGroup28:
+  age: 8
+  quantity: 15
+  group_id: 996059971
+
+AgeGroup29:
+  age: 12
+  quantity: 24
+  group_id: 1200528680
+
+AgeGroup30:
+  age: 12
+  quantity: 11
+  group_id: 1200393381
+
+AgeGroup31:
+  age: 13
+  quantity: 16
+  group_id: 1200528679
+
+AgeGroup32:
+  age: 13
+  quantity: 18
+  group_id: 1200393380
+
+AgeGroup33:
+  age: 13
+  quantity: 18
+  group_id: 1200258081
+
+AgeGroup34:
+  age: 9
+  quantity: 21
+  group_id: 996059970
+
+AgeGroup35:
+  age: 8
+  quantity: 13
+  group_id: 1200122781
+
+AgeGroup36:
+  age: 8
+  quantity: 17
+  group_id: 1200528678
+
+AgeGroup37:
+  age: 8
+  quantity: 18
+  group_id: 1200393379
+
+AgeGroup38:
+  age: 8
+  quantity: 17
+  group_id: 1200258080
+
+AgeGroup39:
+  age: 9
+  quantity: 18
+  group_id: 996059969
+
+AgeGroup40:
+  age: 9
+  quantity: 12
+  group_id: 1200055140
+
+AgeGroup41:
+  age: 8
+  quantity: 14
+  group_id: 1200122780
+
+AgeGroup42:
+  age: 8
+  quantity: 19
+  group_id: 1200528677
+
+AgeGroup43:
+  age: 8
+  quantity: 19
+  group_id: 1200393378
+
+AgeGroup44:
+  age: 8
+  quantity: 15
+  group_id: 1200258079
+
+AgeGroup45:
+  age: 11
+  quantity: 17
+  group_id: 996059968
+
+AgeGroup46:
+  age: 11
+  quantity: 12
+  group_id: 1200055139
+
+AgeGroup47:
+  age: 9
+  quantity: 13
+  group_id: 1200122779
+
+AgeGroup48:
+  age: 9
+  quantity: 15
+  group_id: 1200528676
+
+AgeGroup49:
+  age: 9
+  quantity: 11
+  group_id: 1200393377
+
+AgeGroup50:
+  age: 11
+  quantity: 20
+  group_id: 1200190438
+
+AgeGroup51:
+  age: 9
+  quantity: 14
+  group_id: 1200258078
+
+AgeGroup52:
+  age: 12
+  quantity: 14
+  group_id: 996059967
+
+AgeGroup53:
+  age: 12
+  quantity: 19
+  group_id: 1200055138
+
+AgeGroup54:
+  age: 9
+  quantity: 15
+  group_id: 1200528675
+
+AgeGroup55:
+  age: 12
+  quantity: 14
+  group_id: 1200325736
+
+AgeGroup56:
+  age: 9
+  quantity: 14
+  group_id: 1200393376
+
+AgeGroup57:
+  age: 12
+  quantity: 20
+  group_id: 1200190437
+
+AgeGroup58:
+  age: 9
+  quantity: 13
+  group_id: 1200258077
+
+AgeGroup59:
+  age: 13
+  quantity: 24
+  group_id: 996059966
+
+AgeGroup60:
+  age: 13
+  quantity: 16
+  group_id: 1200055137
+
+AgeGroup61:
+  age: 11
+  quantity: 11
+  group_id: 1200393375
+
+AgeGroup62:
+  age: 13
+  quantity: 21
+  group_id: 1200190436
+
+AgeGroup63:
+  age: 8
+  quantity: 15
+  group_id: 996059965
+
+AgeGroup64:
+  age: 13
+  quantity: 24
+  group_id: 1200461034
+
+AgeGroup65:
+  age: 11
+  quantity: 11
+  group_id: 1200528674
+
+AgeGroup66:
+  age: 13
+  quantity: 16
+  group_id: 1200325735
+
+AgeGroup67:
+  age: 8
+  quantity: 11
+  group_id: 1200055136
+
+AgeGroup68:
+  age: 8
+  quantity: 18
+  group_id: 996059964
+
+AgeGroup69:
+  age: 8
+  quantity: 18
+  group_id: 1200461033
+
+AgeGroup70:
+  age: 12
+  quantity: 19
+  group_id: 1200528673
+
+AgeGroup71:
+  age: 8
+  quantity: 23
+  group_id: 1200325734
+
+AgeGroup72:
+  age: 8
+  quantity: 20
+  group_id: 1200190435
+
+AgeGroup73:
+  age: 8
+  quantity: 11
+  group_id: 1200055135
+
+AgeGroup74:
+  age: 9
+  quantity: 22
+  group_id: 996059963
+
+AgeGroup75:
+  age: 8
+  quantity: 23
+  group_id: 1200325733
+
+AgeGroup76:
+  age: 8
+  quantity: 23
+  group_id: 1200190434
+
+AgeGroup77:
+  age: 9
+  quantity: 15
+  group_id: 1200055134
+
+AgeGroup78:
+  age: 8
+  quantity: 14
+  group_id: 1200461031
+
+AgeGroup79:
+  age: 9
+  quantity: 15
+  group_id: 1200190433
+
+AgeGroup80:
+  age: 9
+  quantity: 11
+  group_id: 1200055133
+
+AgeGroup81:
+  age: 9
+  quantity: 20
+  group_id: 1200461030
+
+AgeGroup82:
+  age: 9
+  quantity: 11
+  group_id: 1200325731
+
+AgeGroup83:
+  age: 9
+  quantity: 13
+  group_id: 1200190431
+
+AgeGroup84:
+  age: 9
+  quantity: 22
+  group_id: 1200461029
+
+AgeGroup85:
+  age: 9
+  quantity: 14
+  group_id: 1200325730
+
+AgeGroup86:
+  age: 13
+  quantity: 23
+  group_id: 1199987491
+
+AgeGroup87:
+  age: 11
+  quantity: 17
+  group_id: 1200055131
+
+AgeGroup88:
+  age: 11
+  quantity: 22
+  group_id: 1200190430
+
+AgeGroup89:
+  age: 11
+  quantity: 24
+  group_id: 1200461028
+
+AgeGroup90:
+  age: 11
+  quantity: 11
+  group_id: 1200325729
+

@@ -1,0 +1,23 @@
+<p>
+  <b>Name:</b>
+  <%=h @event.name %>
+</p>
+
+<p>
+  <b>From age:</b>
+  <%=h @event.from_age %>
+</p>
+
+<p>
+  <b>To age:</b>
+  <%=h @event.to_age %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @event.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_event_path(@event) %> |
+<%= link_to 'Back', events_path %>

@@ -1,0 +1,2 @@
+module BookingRequirementsHelper
+end

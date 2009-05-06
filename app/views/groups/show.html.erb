@@ -1,0 +1,18 @@
+<p>
+  <b>Name:</b>
+  <%=h @group.name %>
+</p>
+
+<p>
+  <b>Elit:</b>
+  <%=h @group.elit_id %>
+</p>
+
+<p>
+  <b>School:</b>
+  <%=h @group.school_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_group_path(@group) %> |
+<%= link_to 'Back', groups_path %>
