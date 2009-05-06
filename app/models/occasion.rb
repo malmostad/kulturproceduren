@@ -6,3 +6,4 @@ class Occasion < ActiveRecord::Base
 #  has_many_through        :Group, :through => tickets
   validates_presence_of   :date, :seats, :address
 end
+

@@ -4211,3 +4211,12 @@ Processing OccasionsController#show (for 127.0.0.1 at 2009-05-06 11:26:43) [GET]
 Rendering template within layouts/occasions
 Rendering occasions/show
 Completed in 18ms (View: 7, DB: 1) | 200 OK [http://localhost/occasions/5]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET client_min_messages TO 'panic'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET client_min_messages TO 'notice'[0m
+
+
+Processing OccasionsController#index (for 127.0.0.1 at 2009-05-06 12:57:40) [GET]
+  [4;36;1mOccasion Load (1.1ms)[0m   [0;1mSELECT * FROM "occasions" [0m
+Rendering template within layouts/occasions
+Rendering occasions/index
+Completed in 83ms (View: 12, DB: 1) | 200 OK [http://localhost/occasions]
