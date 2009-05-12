@@ -7,4 +7,24 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+
+  protected
+
+  def authenticate
+    unless session[:current_user_id]
+
+      session[:return_to] = request.path
+
+      flash[:error] = "You are not authorized to access the requested page."
+      redirect_to :controller => "login"
+
+      return false
+    end
+  end
+
+  def user_online?
+    !session[:current_user_id].nil?
+  end
+  helper_method :user_online?
+
 end

@@ -1,0 +1,30 @@
+<h1>Login</h1>
+
+<% if user_online? -%>
+
+  <p>
+    <%= link_to "Logout", :action => "logout" %>
+  </p>
+
+<% else -%>
+
+  <% form_for :user, :url => { :action => "login" } do |f| %>
+    <fieldset>
+      <legend>Credentials</legend>
+
+      <dl>
+        <dt><label for="user_username">Username:</label></dt>
+        <dd><%= f.text_field :username %></dd>
+
+        <dt><label for="user_password">Password:</label></dt>
+        <dd><%= f.password_field :password %></dd>
+      </dl>
+
+      <div>
+        <%= f.submit "Login" %>
+      </div>
+      
+    </fieldset>
+  <% end %>
+
+<% end -%>

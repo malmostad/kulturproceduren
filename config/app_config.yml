@@ -1,0 +1,6 @@
+development:
+    :salt_length: 10
+test:
+    :salt_length: 10
+production:
+    :salt_length: 10
