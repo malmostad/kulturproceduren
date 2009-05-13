@@ -1,11 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  username: MyString
-  password: MyString
-  salt: MyString
+<%
+require 'digest/sha1'
 
-two:
-  username: MyString
-  password: MyString
-  salt: MyString
+salt = "aBcDeFgH"
+password = Digest::SHA1.hexdigest("foopass" + salt)
+%>
+
+foo:
+  username: foo
+  password: <%= password %>
+  salt: <%= salt %>
