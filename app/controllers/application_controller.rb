@@ -22,9 +22,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+
   def user_online?
     !session[:current_user_id].nil?
   end
   helper_method :user_online?
+
 
 end
