@@ -5,5 +5,7 @@ class Occasion < ActiveRecord::Base
   has_many                :NotificationRequest
 #  has_many_through        :Group, :through => tickets
   validates_presence_of   :date, :seats, :address
+  has_many                :User #Host role
+  belongs_to              :Answer
 end
 

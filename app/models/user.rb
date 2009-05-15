@@ -2,7 +2,14 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
-  validates_presence_of :username, :password, :salt
+  has_and_belongs_to_many  :Role
+  has_and_belongs_to_many  :Group            #Role CultureAdministrator
+  has_and_belongs_to_many  :Occasion         #Role Host
+  has_and_belongs_to_many  :District         #Role CultureCoordinator
+  has_and_belongs_to_many  :CultureProvider  #Role CultureWorker
+
+
+  validates_presence_of :username, :password, :salt, :name, :email, :mobil_nr
   validates_uniqueness_of :username
 
   attr_protected :id, :salt
