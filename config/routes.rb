@@ -1,4 +1,20 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :users
+
+  map.resources :culture_providers
+
+  map.resources :answers
+
+  map.resources :questions
+
+  map.resources :questionaires
+
+  map.resources :tags
+
+  map.resources :school_prios
+
+  map.resources :roles
+
   map.resources :events
 
   map.resources :tickets
@@ -18,8 +34,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :groups
 
   map.resources :age_groups
-
-  map.resources :culture_administrators
 
   # The priority is based upon order of creation: first created -> highest priority.
 
