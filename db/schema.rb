@@ -9,11 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090511132203) do
+ActiveRecord::Schema.define(:version => 20090515110825) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
     t.integer  "quantity"
+    t.integer  "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "answers", :force => true do |t|
+    t.integer  "question_id"
+    t.integer  "occasion_id"
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -32,12 +40,29 @@ ActiveRecord::Schema.define(:version => 20090511132203) do
     t.integer "group_id"
   end
 
+  create_table "culture_administrator_user", :id => false, :force => true do |t|
+    t.integer "culture_administrator_id"
+    t.integer "user_id"
+  end
+
   create_table "culture_administrators", :force => true do |t|
     t.string   "name"
     t.string   "mobil_nr"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "culture_providers", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "culture_providers_users", :id => false, :force => true do |t|
+    t.integer "culture_provider_id"
+    t.integer "user_id"
   end
 
   create_table "districts", :force => true do |t|
@@ -47,6 +72,11 @@ ActiveRecord::Schema.define(:version => 20090511132203) do
     t.datetime "updated_at"
   end
 
+  create_table "districts_users", :id => false, :force => true do |t|
+    t.integer "district_id"
+    t.integer "user_id"
+  end
+
   create_table "events", :force => true do |t|
     t.integer  "from_age"
     t.integer  "to_age"
@@ -54,6 +84,11 @@ ActiveRecord::Schema.define(:version => 20090511132203) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+  end
+
+  create_table "events_tags", :id => false, :force => true do |t|
+    t.integer "event_id"
+    t.integer "tag_id"
   end
 
   create_table "groups", :force => true do |t|
@@ -83,10 +118,55 @@ ActiveRecord::Schema.define(:version => 20090511132203) do
     t.datetime "updated_at"
   end
 
+  create_table "occasions_users", :id => false, :force => true do |t|
+    t.integer "occasion_id"
+    t.integer "user_id"
+  end
+
+  create_table "questionaires", :force => true do |t|
+    t.integer  "event_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "questions", :force => true do |t|
+    t.integer  "questionaire_id"
+    t.boolean  "template"
+    t.text     "question"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+  end
+
+  create_table "school_prios", :force => true do |t|
+    t.integer  "prio"
+    t.integer  "shool_id"
+    t.integer  "district_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "schools", :force => true do |t|
     t.string   "name"
     t.integer  "elit_id"
     t.integer  "district_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string   "tag"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

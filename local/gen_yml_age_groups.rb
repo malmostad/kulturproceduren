@@ -19,4 +19,6 @@ sth.fetch { |g|
   puts "  quantity: #{quantity}"
   puts "  group_id: #{g[0]}"
   puts ""
+  n = n+1
 }
+

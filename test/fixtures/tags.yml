@@ -1,7 +1,10 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  tag: MyString
+  tag: Barnteater
 
 two:
-  tag: MyString
+  tag: Konsert
+
+three:
+  tag: Film

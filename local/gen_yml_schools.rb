@@ -1,11 +1,29 @@
 #!/usr/bin/ruby
 
-puts "Skolnamn, ett på varje rad - avsluta med ^D"
+require "rubygems"
+require "dbi"
 
-id = [    1143950691, 442820205, 996332877, 430326217, 986866124, 357751860, 953125641, 995115194, 866167485, 1092900264, ]
+dbh = DBI.connect('DBI:Pg:kp-dev', 'root', '')
+
+sth = dbh.prepare("select id from districts")
+sth.execute
+id = sth.fetch_all
+
+schools = [ "Djupadalsskolan",
+            "Geijerskolan",
+            "Hyllieskolan",
+            "Karl Johanskolan",
+            "Strandskolan",
+            "Klagshamnsskolan",
+            "Sundsbroskolan",
+            "Linnéskolan",
+            "Tygelsjöskolan",
+            "Skolan på Ön",
+            "Ängslättskolan",
+            "Ängslättskolan" ]
 
 i=0
-STDIN.read.split("\n").each {  |a|
+schools.each {  |a|
   puts "Skola#{i}"
   puts "  name: #{a}"
   j = i % 10
