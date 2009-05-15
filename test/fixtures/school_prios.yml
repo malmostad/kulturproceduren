@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  prio: 1
+  shool_id: 1
+  district_id: 1
+
+two:
+  prio: 1
+  shool_id: 1
+  district_id: 1

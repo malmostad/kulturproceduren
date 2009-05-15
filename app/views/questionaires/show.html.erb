@@ -1,0 +1,13 @@
+<p>
+  <b>Event:</b>
+  <%=h @questionaire.event_id %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @questionaire.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_questionaire_path(@questionaire) %> |
+<%= link_to 'Back', questionaires_path %>

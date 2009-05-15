@@ -1,0 +1,13 @@
+<p>
+  <b>Name:</b>
+  <%=h @culture_provider.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @culture_provider.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_culture_provider_path(@culture_provider) %> |
+<%= link_to 'Back', culture_providers_path %>

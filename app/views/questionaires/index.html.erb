@@ -1,0 +1,22 @@
+<h1>Listing questionaires</h1>
+
+<table>
+  <tr>
+    <th>Event</th>
+    <th>Description</th>
+  </tr>
+
+<% @questionaires.each do |questionaire| %>
+  <tr>
+    <td><%=h questionaire.event_id %></td>
+    <td><%=h questionaire.description %></td>
+    <td><%= link_to 'Show', questionaire %></td>
+    <td><%= link_to 'Edit', edit_questionaire_path(questionaire) %></td>
+    <td><%= link_to 'Destroy', questionaire, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New questionaire', new_questionaire_path %>

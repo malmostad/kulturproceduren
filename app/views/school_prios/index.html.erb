@@ -1,0 +1,24 @@
+<h1>Listing school_prios</h1>
+
+<table>
+  <tr>
+    <th>Prio</th>
+    <th>Shool</th>
+    <th>District</th>
+  </tr>
+
+<% @school_prios.each do |school_prio| %>
+  <tr>
+    <td><%=h school_prio.prio %></td>
+    <td><%=h school_prio.shool_id %></td>
+    <td><%=h school_prio.district_id %></td>
+    <td><%= link_to 'Show', school_prio %></td>
+    <td><%= link_to 'Edit', edit_school_prio_path(school_prio) %></td>
+    <td><%= link_to 'Destroy', school_prio, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New school_prio', new_school_prio_path %>
