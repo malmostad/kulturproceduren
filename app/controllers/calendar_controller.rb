@@ -3,7 +3,7 @@ class CalendarController < ApplicationController
   before_filter :authenticate
 
   def index
-  @message = session[:current_user_id]
+    @occasions = Occasion.find(:all, :order => "date DESC")
   end
 
 end

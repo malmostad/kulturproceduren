@@ -1,6 +1,9 @@
-<h1>Calendar#index</h1>
-
-<%=  link_to('Logout', :controller => 'login' , :action => 'logout') %>
-
-Userid =
-<%=  @message %>
+<div>
+<a href="/login/logout">Logout</a>
+</div>
+<!-- user_id = <%= session[:current_user_id] %> -->
+<ul>
+<% @occasions.each do |o| %>
+<li/><%= Event.find_by_id(o.event_id).name %> , <%= o.date %>
+<% end %>
+</ul>
