@@ -9,6 +9,36 @@ dbh = DBI.connect('DBI:Pg:kp-dev', 'root', '')
 
 # 0 - Empty db
 
+puts "DELETE FROM ROLES"
+dbh.do "DELETE FROM ROLES"
+
+puts "DELETE FROM NOTIFICATIONREQUESTS"
+dbh.do "DELETE FROM NOTIFICATIONSREQUESTS"
+
+puts "DELETE FROM TICKETS"
+dbh.do "DELETE FROM TICKETS"
+
+puts "DELETE FROM BOOKINGREQUIREMENTS"
+dbh.do "DELETE FROM BOOKINGREQUIREMENTS"
+
+puts "DELETE FROM ANSWERS"
+dbh.do "DELETE FROM ANSWERS"
+
+puts "DELETE FROM QUESTIONS"
+dbh.do "DELETE FROM QUESTIONS"
+
+puts "DELETE FROM QUESTIONAIRES"
+dbh.do "DELETE FROM QUESTIONAIRES"
+
+puts "DELETE FROM OCCASIONS"
+dbh.do "DELETE FROM OCCASIONS"
+
+puts "DELETE FROM EVENTS;"
+dbh.do "DELETE FROM EVENTS"
+
+puts "DELETE FROM CULTURE_PROVIDERS;"
+dbh.do "DELETE FROM CULTURE_PROVIDERS"
+
 puts "DELETE FROM USERS;"
 dbh.do "DELETE FROM USERS"
 
@@ -240,9 +270,12 @@ end
 
 # 11 - Questions
 
+puts "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Var det bra?',NOW(),NOW());"
+dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Var det bra?',NOW(),NOW())"
+
+# 12 - Answers
 
 
-# 12 - Anserws
 
 # 13 - BookingRequirement
 
