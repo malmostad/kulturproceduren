@@ -35,19 +35,6 @@ ActiveRecord::Schema.define(:version => 20090515110825) do
     t.datetime "updated_at"
   end
 
-  create_table "culture_administrator_group", :id => false, :force => true do |t|
-    t.integer "culture_administrator_id"
-    t.integer "group_id"
-  end
-
-  create_table "culture_administrators", :force => true do |t|
-    t.string   "name"
-    t.string   "mobil_nr"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "culture_administrators_users", :id => false, :force => true do |t|
     t.integer "culture_administrator_id"
     t.integer "user_id"
@@ -185,6 +172,9 @@ ActiveRecord::Schema.define(:version => 20090515110825) do
     t.string   "username"
     t.string   "password"
     t.string   "salt"
+    t.string   "name"
+    t.string   "email"
+    t.string   "mobil_nr"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

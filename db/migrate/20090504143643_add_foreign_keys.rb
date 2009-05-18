@@ -21,8 +21,8 @@ class AddForeignKeys < ActiveRecord::Migration
     #
     execute 'ALTER TABLE age_groups ADD CONSTRAINT fk_group FOREIGN KEY ( group_id ) REFERENCES groups(id)'
     #
-    execute 'ALTER TABLE culture_administrator_group ADD CONSTRAINT fk_culture_administrator FOREIGN KEY ( culture_administrator_id ) REFERENCES culture_administrators(id)'
-    execute 'ALTER TABLE culture_administrator_group ADD CONSTRAINT fk_group FOREIGN KEY ( group_id ) REFERENCES groups(id)'
+#    execute 'ALTER TABLE culture_administrator_group ADD CONSTRAINT fk_culture_administrator FOREIGN KEY ( culture_administrator_id ) REFERENCES culture_administrators(id)'
+#    execute 'ALTER TABLE culture_administrator_group ADD CONSTRAINT fk_group FOREIGN KEY ( group_id ) REFERENCES groups(id)'
   end
 
   def self.down
@@ -46,8 +46,8 @@ class AddForeignKeys < ActiveRecord::Migration
     #
     execute 'ALTER TABLE age_groups DROP CONSTRAINT fk_group '
     #
-    execute 'ALTER TABLE culture_administrator_group DROP CONSTRAINT fk_culture_administrator '
-    execute 'ALTER TABLE culture_administrator_group DROP CONSTRAINT fk_group '
+#    execute 'ALTER TABLE culture_administrator_group DROP CONSTRAINT fk_culture_administrator '
+#    execute 'ALTER TABLE culture_administrator_group DROP CONSTRAINT fk_group '
 
   end
 end

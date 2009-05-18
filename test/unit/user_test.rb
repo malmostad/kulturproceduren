@@ -25,7 +25,11 @@ class UserTest < ActiveSupport::TestCase
     u = User.new
     u.username = "passcreateuser"
     u.password = pass
-    u.save
+    u.name = "Test"
+    u.email = "test@test.com"
+    u.mobil_nr = "0702345678"
+
+    assert u.save
 
     u2 = User.authenticate(u.username, pass)
 
