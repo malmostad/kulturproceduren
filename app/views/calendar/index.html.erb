@@ -1,9 +1,44 @@
-<div>
-<a href="/login/logout">Logout</a>
+
+<div class="pagetitle"><%= @dispmonth %></div>
+
+<div class="prevmonthlink">
+<a href="/calendar?month=<%= @dispmonth-1 %>&year=<%= @dispyear %>">Föregående månad</a>
 </div>
-<!-- user_id = <%= session[:current_user_id] %> -->
-<ul>
-<% @occasions.each do |o| %>
-<li/><%= Event.find_by_id(o.event_id).name %> , <%= o.date %>
+
+<div class="nextmonthlink">
+<a href="/calendar?month=<%= @dispmonth+1 %>&year=<%= @dispyear %>">Nästa månad</a>
+</div>
+
+<% iday = @cal_sday.clone %>
+
+<table class="calendar">
+<tr class="calendar_heading">
+
+  <th>Mån</th>
+  <th>Tis</th>
+  <th>Ons</th>
+  <th>Tor</th>
+  <th>Fre</th>
+  <th>Lör</th>
+  <th>Sön</th>
+</tr>
+
+<% while ( iday.month < @dispmonth +1) do %>
+<tr class="calendar">
+    <% (1..7).each do |n| %>
+  <% iday = iday + 1 %>
+     <td>
+       <%= iday.day %>
+       <% if ! @oh[iday].nil? %>
+         <div class="eventname">
+            <%= Event.find_by_id(@oh[iday].event_id).name %>
+         </div>
+         <div class="occasion">
+           <%= @oh[iday].description %>
+         </div>
+       <% end %>
+     </td>
+  <% end %>
+</tr>
 <% end %>
-</ul>
+</table>

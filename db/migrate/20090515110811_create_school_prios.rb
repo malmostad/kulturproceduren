@@ -2,7 +2,7 @@ class CreateSchoolPrios < ActiveRecord::Migration
   def self.up
     create_table :school_prios do |t|
       t.integer :prio
-      t.integer :shool_id
+      t.integer :school_id
       t.integer :district_id
 
       t.timestamps

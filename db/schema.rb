@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(:version => 20090515110825) do
 
   create_table "school_prios", :force => true do |t|
     t.integer  "prio"
-    t.integer  "shool_id"
+    t.integer  "school_id"
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"

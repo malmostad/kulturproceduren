@@ -1,4 +1,4 @@
 class Question < ActiveRecord::Base
-  belongs_to :questionaire
-  has_one    :answer
+  has_and_belongs_to_many :questionaire
+  has_one                 :answer
 end
