@@ -1,44 +1,9 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+foo:
+    id: 1
+    name: Foo
+    elit_id: 1
 
-one:
-  name: Centrum
-  elit_id: 1
-
-two:
-  name: Västra Innerstaden
-  elit_id: 2
-
-three:
-  name: Hyllie
-  elit_id: 3
-
-four:
-  name: Fosie
-  elit_id: 4
-
-five:
-  name: Oxie
-  elit_id: 5
-
-six:
-  name: Husie
-  elit_id: 6
-
-seven:
-  name: Limhamn Bunkeflo
-  elit_id: 7
-
-eight:
-  name: Kirseberg
-  elit_id: 8
-
-nine:
-  name: Rosengård
-  elit_id: 9
-
-ten:
-  name: Södra Innerstaden
-  elit_id: 10
-  
-
-
+bar:
+    id: 2
+    name: Bar
+    elit_id: 2

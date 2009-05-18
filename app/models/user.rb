@@ -2,11 +2,11 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
-  has_and_belongs_to_many  :Role
-  has_and_belongs_to_many  :Group            #Role CultureAdministrator
-  has_and_belongs_to_many  :Occasion         #Role Host
-  has_and_belongs_to_many  :District         #Role CultureCoordinator
-  has_and_belongs_to_many  :CultureProvider  #Role CultureWorker
+  has_and_belongs_to_many  :roles
+  has_and_belongs_to_many  :groups            #Role CultureAdministrator
+  has_and_belongs_to_many  :occasions         #Role Host
+  has_and_belongs_to_many  :districts         #Role CultureCoordinator
+  has_and_belongs_to_many  :culture_providers #Role CultureWorker
 
 
   validates_presence_of :username, :password, :salt, :name, :email, :mobil_nr

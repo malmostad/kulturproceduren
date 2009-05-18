@@ -1,3 +1,3 @@
 class AgeGroup < ActiveRecord::Base
-  belongs_to   :Group
+  belongs_to   :group
 end

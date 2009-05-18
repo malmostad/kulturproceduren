@@ -40,17 +40,17 @@ ActiveRecord::Schema.define(:version => 20090515110825) do
     t.integer "group_id"
   end
 
-  create_table "culture_administrator_user", :id => false, :force => true do |t|
-    t.integer "culture_administrator_id"
-    t.integer "user_id"
-  end
-
   create_table "culture_administrators", :force => true do |t|
     t.string   "name"
     t.string   "mobil_nr"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "culture_administrators_users", :id => false, :force => true do |t|
+    t.integer "culture_administrator_id"
+    t.integer "user_id"
   end
 
   create_table "culture_providers", :force => true do |t|

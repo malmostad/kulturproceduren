@@ -9,8 +9,8 @@ class Ticket < ActiveRecord::Base
   USED             = 5
   NOT_USED         = 6
 
-  belongs_to :Occasion
-  belongs_to :Event
-  belongs_to :District
-  belongs_to :Group
+  belongs_to :occasion
+  belongs_to :event
+  belongs_to :district
+  belongs_to :group
 end

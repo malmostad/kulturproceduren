@@ -1,65 +1,24 @@
-skola1:
-  name: Bergaskolan F-5
-  district_id: 996332877
-  elit_id: 35
+foo_apa_school:
+    id: 1
+    name: foo apa school
+    district_id: 1
+    elit_id: 1
 
-skola2:
-  name: Bergaskolan 6-9
-  district_id: 430326217
-  elit_id: 16
+foo_bepa_school:
+    id: 2
+    name: foo bepa school
+    district_id: 1
+    elit_id: 2
 
-skola3:
-  name: Djupadalsskolan
-  district_id: 986866124
-  elit_id: 24
 
-skola4:
-  name: Geijerskolan
-  district_id: 357751860
-  elit_id: 35
+bar_apa_school:
+    id: 3
+    name: bar apa school
+    district_id: 2
+    elit_id: 3
 
-skola5:
-  name: Hyllieskolan
-  district_id: 953125641
-  elit_id: 47
-
-skola6:
-  name: Karl Johanskolan
-  district_id: 995115194
-  elit_id: 77
-
-skola7:
-  name: Klagshamnsskolan
-  district_id: 866167485
-  elit_id: 10
-
-skola8:
-  name: Linnéskolan
-  district_id: 1092900264
-  elit_id: 30
-
-skola9:
-  name: Skolan på Ön
-  district_id: 1143950691
-  elit_id: 49
-
-skola10:
-  name: Strandskolan
-  district_id: 442820205
-  elit_id: 76
-
-skola11:
-  name: Sundsbroskolan
-  district_id: 996332877
-  elit_id: 108
-
-skola12:
-  name: Tygelsjöskolan
-  district_id: 430326217
-  elit_id: 32
-
-skola13:
-  name: Ängslättskolan
-  district_id: 986866124
-  elit_id: 71
-
+bar_bepa_school:
+    id: 4
+    name: bar bepa school
+    district_id: 2
+    elit_id: 4

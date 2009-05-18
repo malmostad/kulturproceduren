@@ -1,5 +1,5 @@
 class Answer < ActiveRecord::Base
-  belongs_to :Question
-  belongs_to :Occasion
-  belongs_to :Group
+  belongs_to :question
+  belongs_to :occasion
+  belongs_to :group
 end

@@ -1,4 +1,4 @@
 class BookingRequirement < ActiveRecord::Base
-  belongs_to   :Group
-  belongs_to   :Occasion
+  belongs_to   :group
+  belongs_to   :occasion
 end 

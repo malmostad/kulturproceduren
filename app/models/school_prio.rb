@@ -1,4 +1,4 @@
 class SchoolPrio < ActiveRecord::Base
-  belongs_to   :District
-  belongs_to   :School
+  belongs_to   :district
+  belongs_to   :school
 end

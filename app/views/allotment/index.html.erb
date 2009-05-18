@@ -1,0 +1,27 @@
+<h1>Fördelning</h1>
+
+<% form_tag({ :action => "select_event" }, { :id => "select-event-form" }) do -%>
+
+  <fieldset>
+    <legend>Välj evenemang</legend>
+
+    <dl class="form-elements">
+      <dt><label for="allotment-event-id">Evenemang:</label></dt>
+      <dd>
+        <select id="allotment-event-id" name="allotment[event_id]">
+          <% @events.each do |e| -%>
+            <option value="<%= e.id %>"><%= h e.name %></option>
+          <% end -%>
+        </select>
+      </dd>
+
+      <dt><label for="allotment-num-tickets">Antal inköpta biljetter:</label></dt>
+      <dd><input type="text" id="allotment-num-tickets" name="allotment[num_tickets]"/></dd>
+    </dl>
+
+    <div class="submit-cnt">
+      <input type="submit" value="Starta fördelning" name="submit"/>
+    </div>
+  </fieldset>
+
+<% end -%>

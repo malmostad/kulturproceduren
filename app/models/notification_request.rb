@@ -1,4 +1,4 @@
 class NotificationRequest < ActiveRecord::Base
-  belongs_to  :Occasion
-  belongs_to  :Group
+  belongs_to  :occasion
+  belongs_to  :group
 end

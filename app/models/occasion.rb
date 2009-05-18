@@ -1,11 +1,14 @@
 class Occasion < ActiveRecord::Base
-  belongs_to              :Event
-  has_many                :Ticket
-  has_many                :BookingRequirement
-  has_many                :NotificationRequest
-#  has_many_through        :Group, :through => tickets
+  belongs_to              :event
+  has_many                :tickets
+  has_many                :booking_requirements
+  has_many                :notification_request
+  #has_many_through        :groups, :through => :tickets
+  has_many                :user #Host role
+  belongs_to              :answer
+
   validates_presence_of   :date, :seats, :address
-  has_many                :User #Host role
-  belongs_to              :Answer
+
+
 end
 

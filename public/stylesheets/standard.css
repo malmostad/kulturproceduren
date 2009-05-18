@@ -1,0 +1,71 @@
+body {
+    font-size: 75%;
+    color: #2e3436;
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0.3em 0 0 0;
+}
+
+#kp h1 { font-size: 3em; line-height: 1; margin-bottom: 0.5em; }
+#kp h2 { font-size: 2em; margin-bottom: 0.75em; }
+#kp h3 { font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
+#kp h4 { font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
+#kp h5 { font-size: 1em; margin-bottom: 1.5em; }
+#kp h6 { font-size: 1em; }
+
+#kp p { margin: 0 0 1.5em; }
+
+#kp li ul,
+#kp li ol { margin:0 1.5em; }
+#kp ul, ol { margin: 0 1.5em 1.5em 1.5em; }
+
+#kp ul { list-style-type: disc; }
+#kp ol { list-style-type: decimal; }
+
+#kp dl { margin: 0 0 1.5em 0; }
+#kp dd { margin-left: 1.5em;}
+
+#kp fieldset { border: 1px solid #d3d7cf; margin: 0 0 1em 0; padding: 1em; }
+#kp legend { padding: 0 1em; }
+
+#kp table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#kp table td { padding: 3px; }
+#kp table .alt td { background: #eeeeec; }
+
+#kp img { border: 0; padding: 0; margin: 0; }
+
+/*** Page ***/
+#kp { padding: 1em; }
+
+/*** Allotment ***/
+#kp #distribution-meta { background: #fff; border: 1px solid #d3d7cf; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
+#kp #distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
+#kp #distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
+
+#kp #distribution-list td { padding: 3px 0.5em; }
+#kp #distribution-list .school-row td.name { padding-left: 2em; }
+#kp #distribution-list .group-row td.name { padding-left: 4em; }
+
+#kp #distribution-list .num-tickets input { width: 3em; }
+#kp #distribution-list .tools a {
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+    float: left;
+    border: 1px solid #d3d7cf;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    background: #fff;
+    color: #2e3436;
+}
+#kp #distribution-list .tools .fill { margin-right: 1em; }
+
+#kp #distribution-list .full { background: #8ae234; }
+#kp #distribution-list .partial { background: #fce94f; }
+#kp #distribution-list .error { background: #ef2929; }

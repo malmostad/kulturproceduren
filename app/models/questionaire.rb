@@ -1,4 +1,4 @@
 class Questionaire < ActiveRecord::Base
-  belongs_to  :Event
-  has_many    :Question
+  belongs_to :event
+  has_many   :questions
 end

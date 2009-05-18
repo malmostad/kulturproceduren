@@ -1,0 +1,2 @@
+module AllotmentHelper
+end

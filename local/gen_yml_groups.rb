@@ -4,7 +4,7 @@ require "rubygems"
 require "dbi"
 
 
-dbh = DBI.connect('DBI:Pg:kp-dev', 'root', '')
+dbh = DBI.connect('DBI:Pg:kp-dev:localhost', 'kp-dev', 'kp-dev')
 
 sth = dbh.prepare("select id from schools")
 sth.execute
