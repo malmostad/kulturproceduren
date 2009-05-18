@@ -12,14 +12,14 @@ dbh = DBI.connect('DBI:Pg:kp-dev', 'root', '')
 puts "DELETE FROM ROLES"
 dbh.do "DELETE FROM ROLES"
 
-puts "DELETE FROM NOTIFICATIONREQUESTS"
-dbh.do "DELETE FROM NOTIFICATIONSREQUESTS"
+puts "DELETE FROM NOTIFICATION_REQUESTS"
+dbh.do "DELETE FROM NOTIFICATION_REQUESTS"
 
 puts "DELETE FROM TICKETS"
 dbh.do "DELETE FROM TICKETS"
 
-puts "DELETE FROM BOOKINGREQUIREMENTS"
-dbh.do "DELETE FROM BOOKINGREQUIREMENTS"
+puts "DELETE FROM BOOKING_REQUIREMENTS"
+dbh.do "DELETE FROM BOOKING_REQUIREMENTS"
 
 puts "DELETE FROM ANSWERS"
 dbh.do "DELETE FROM ANSWERS"
@@ -170,7 +170,7 @@ sth.fetch do |g|
   quantity = 10 + rand(15)
   puts "INSERT INTO AGE_GROUPS (age,quantity,group_id) VALUES ( #{age}, #{quantity}, #{g[0]} );"
   dbh.do("INSERT INTO AGE_GROUPS (age,quantity,group_id) VALUES ( #{age}, #{quantity}, #{g[0]} )")
-  sleep 0.3
+  sleep 0.7
 end
 
 # 5 - SchoolPrios
@@ -188,7 +188,7 @@ sth_districts.fetch do |d_id|
     puts ""
     dbh.do("INSERT INTO SCHOOL_PRIOS (prio    , school_id , district_id , created_at , updated_at)
                               VALUES                   (#{prio} , #{s_id}   , #{d_id}     , NOW()      , NOW())")
-    sleep 0.3
+    sleep 0.7
     prio = prio + 1
   end
 end
@@ -215,7 +215,7 @@ enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson",
   dbh.do("INSERT INTO
           USERS   (username   ,  password     , salt      , name                , email      , mobil_nr   , created_at , updated_at)
           VALUES  ('#{uname}' , '#{password}' , '#{salt}' , '#{fname} #{ename}' , '#{email}' , '#{mobil}' , NOW()      , NOW())")
-  sleep 0.3
+  sleep 0.7
 end
 
 
@@ -254,7 +254,7 @@ e_ids.each do |e_id|
     dbh.do "INSERT INTO
             OCCASIONS (date   ,seats     , address                , description                , event_id , created_at , updated_at)
             VALUES    ('#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()    ,   NOW());"
-    sleep 0.5
+    sleep 0.7
   end
 end
 
@@ -275,13 +275,29 @@ dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES 
 
 # 12 - Answers
 
-
+# TODO
 
 # 13 - BookingRequirement
 
+# TODO
+
 # 14 - Ticktes (w00t - w000t)
 
+sth = dbh.prepare "select seats,eventid from occasions"
+sth.execute
+
+n = 0
+sth.fetch do |t|
+  (n..(n+t[0]-1)).each do |ti|
+    tickets[ti] = Hash.new
+    tickets[ti][event_id] = t[1]
+  end
+end
+
+
 # 15 - NotificationRequests
+
+# TODO
 
 # 16 - Roles
 
