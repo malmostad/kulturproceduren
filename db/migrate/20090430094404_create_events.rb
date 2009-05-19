@@ -4,7 +4,7 @@ class CreateEvents < ActiveRecord::Migration
       t.integer :from_age
       t.integer :to_age
       t.text :description
-
+      t.date  :show_date
       t.timestamps
     end
   end

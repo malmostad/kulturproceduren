@@ -1,18 +1,22 @@
 
-<div class="pagetitle"><%= @dispmonth %></div>
 
-<div class="prevmonthlink">
-<a href="/calendar?month=<%= @dispmonth-1 %>&year=<%= @dispyear %>">Föregående månad</a>
-</div>
 
-<div class="nextmonthlink">
-<a href="/calendar?month=<%= @dispmonth+1 %>&year=<%= @dispyear %>">Nästa månad</a>
+<div class="calendar-pagetitle">
+<span class="calendar-prevmonthlink">
+<a href="/calendar?month=<%= @dispmonth-1 %>&year=<%= @dispyear %>"><%=  month_name(@dispmonth-1)%></a>
+</span>
+
+<span class="calendar-curmonth"><%= month_name(@dispmonth) %></span>
+
+<span class="calendar-nextmonthlink">
+<a href="/calendar?month=<%= @dispmonth+1 %>&year=<%= @dispyear %>"><%=  month_name(@dispmonth+1) %></a>
+</span>
 </div>
 
 <% iday = @cal_sday.clone %>
-
-<table class="calendar">
-<tr class="calendar_heading">
+<br/>
+<table class="calendar-table">
+<tr class="calendar-heading-row">
 
   <th>Mån</th>
   <th>Tis</th>
@@ -21,20 +25,25 @@
   <th>Fre</th>
   <th>Lör</th>
   <th>Sön</th>
+
 </tr>
 
 <% while ( iday.month < @dispmonth +1) do %>
-<tr class="calendar">
+<tr class="calendar-row">
     <% (1..7).each do |n| %>
   <% iday = iday + 1 %>
-     <td>
+  <% if iday.month == @dispmonth %>
+     <td class="calendar-table-cell">
+       <% else  %>
+     <td class="calendar-cell-non-active">
+  <% end %>
        <%= iday.day %>
        <% if ! @oh[iday].nil? %>
-         <div class="eventname">
-            <%= Event.find_by_id(@oh[iday].event_id).name %>
+         <div class="calendar-table-eventname">
+            <a href="/events/<%= @oh[iday].event_id %>"><%= Event.find_by_id(@oh[iday].event_id).name %></a>
          </div>
-         <div class="occasion">
-           <%= @oh[iday].description %>
+         <div class="calendar-table-occasion">
+           <a href="/occasions/<%= @oh[iday].id %>"> <%= @oh[iday].description %></a>
          </div>
        <% end %>
      </td>
@@ -42,3 +51,6 @@
 </tr>
 <% end %>
 </table>
+
+<a href="/login/logout">Logout</a>
+

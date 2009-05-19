@@ -10,6 +10,7 @@ class CalendarController < ApplicationController
     return d
   end
 
+  
   def index
 
     if ! params[:month].nil?

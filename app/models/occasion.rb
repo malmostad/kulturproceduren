@@ -3,7 +3,7 @@ class Occasion < ActiveRecord::Base
   has_many                :tickets
   has_many                :booking_requirements
   has_many                :notification_request
-  #has_many_through        :groups, :through => :tickets
+  has_many                :groups, :through => :tickets
   has_many                :users #Host role
   belongs_to              :answer
 

@@ -1,9 +1,28 @@
 class OccasionsController < ApplicationController
+
+  before_filter :authenticate
+  layout "standard"
+
+
   # GET /occasions
   # GET /occasions.xml
   def index
-    @occasions = Occasion.all
-
+    @today = Date.today
+    @visible_events = Event.find( :all, :conditions => "show_date < '#{@today.to_s}'")
+    @visible_occasions = Array.new
+    @visible_events.each do |e|
+      o = Occasion.find(:all, :conditions => "event_id = #{e.id}")
+      o.each do |oo|
+        puts "ID = #{oo.id}"
+        @visible_occasions.push(oo)
+      end
+    end
+    @user = User.find_by_id(session[:current_user_id])
+    @user_events = Event.visible_events_by_userid(@user.id)
+    @user_events_hash_by_id = Hash.new
+    @user_events.each do |e|
+      @user_events_hash_by_id[e.id] = e
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @occasions }
