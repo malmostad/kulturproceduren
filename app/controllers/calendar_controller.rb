@@ -1,7 +1,8 @@
 class CalendarController < ApplicationController
 
   before_filter :authenticate
-
+  layout "standard"
+  
   def dim(m,y)
     d = 27
     d = d + 1 while Date.valid_civil?(y, m, d)
