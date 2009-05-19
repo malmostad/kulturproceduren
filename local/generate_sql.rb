@@ -473,7 +473,7 @@ n = 0
 gids.each do |gid|
   cauid = cauids[ n % cauids.length ]
   puts "INSERT INTO GROUPS_USERS (group_id,user_id) VALUES ( #{gid} , #{cauid} )"
-  dbh.do "INSERT INTO GROUPS_USERS (district_id,user_id) VALUES ( #{gid} , #{cauid} )"
+  dbh.do "INSERT INTO GROUPS_USERS (group_id,user_id) VALUES ( #{gid} , #{cauid} )"
   n = n+1
 end
 dbh.do "DISCARD ALL"
