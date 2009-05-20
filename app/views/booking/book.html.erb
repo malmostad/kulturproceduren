@@ -1,0 +1,11 @@
+<h1>Boka biljetter</h1>
+<p><%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>  </p>
+<ul>
+<% @groups.each do |g| %>
+  <li> <%= g.school.name %> <%= g.name %> - <%= @bookable_tickets["#{g.id}"].length %> Biljetter tillgängligt
+  <% if @bookable_tickets["#{g.id}"].length > 0 %>
+     <a href="/booking/book?occasion_id=<%= @occasion.id %>&group_id=<%= g.id %>&what=book">Boka</a>
+  <% end %>
+  </li>
+<%  end %>
+</ul>
