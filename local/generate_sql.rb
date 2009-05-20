@@ -183,10 +183,10 @@ dbh.do "DISCARD ALL"
 fnames = ["Berit", "Gudrun", "Hillevi", "Omar", "Mustafa", "Ove", "Bert", "Sven", "Per", "Fillippa", "Maria", "Johanna", "Johan", "Magnus", "Lars", "Martin", "Helena", "Karl", "Henrik", "Bob", "Mikael", "Sofia", "Jessica", "Louise" ]
 enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson", "Svensson", "Balkendal", "Flandersson", "Franzon", "Benlund", "Fredriksson", "Wachtmeister", "Kornfeldt", "Hoppetoss", "Lushuvud", "Jobring"]
 
-(1..500).each do |n|
+(1..1000).each do |n|
   fname = String.new(fnames[rand(fnames.length)])
   ename = String.new(enames[rand(enames.length)])
-  uname = fname[0,2].downcase << ename[0,2].downcase << rand(9999).to_s
+  uname = fname[0,2].downcase << ename[0,2].downcase << rand(99999).to_s
   email = String.new
   email = fname.clone << "." << ename.clone << rand(20).to_s << "@malmo.se"
   m1 = (30 + rand(30) ).to_s
