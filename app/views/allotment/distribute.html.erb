@@ -53,7 +53,7 @@ tickets_per_district = tickets / @districts.size
                   </td>
                   <td class="num-tickets">
                     <input type="text" class="num-tickets-display" value="<%= num_tickets %>"/>
-                    <input type="hidden" class="num-tickets-value" name="num_tickets[<%= group.id %>]" value="<%= num_tickets %>"/>
+                    <input type="hidden" class="num-tickets-value" name="allotment[ticket_assignment[<%= group.id %>]]" value="<%= num_tickets %>"/>
                   </td>
                   <td class="tools">
                     <a href="#" class="fill">+</a>

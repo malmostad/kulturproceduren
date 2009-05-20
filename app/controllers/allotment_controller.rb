@@ -26,7 +26,27 @@ class AllotmentController < ApplicationController
   end
 
   def create_tickets
-    render :text => "<pre>#{params.to_yaml}</pre>"
+    assignment = params["allotment"]["ticket_assignment"].reject { |k,v| v.to_i <= 0 }
+
+    event = Event.find session[:allotment][:event_id]
+    groups = Group.find assignment.keys
+
+    groups.each do |group|
+      num = assignment[group.id.to_s].to_i
+
+      1.upto(num) do
+        ticket = Ticket.new do |t|
+          t.group = group
+          t.event = event
+          t.state = Ticket::CREATED
+        end
+
+        ticket.save!
+      end
+    end
+
+    flash[:notice] = "Biljetter till evenemanget har fördelats."
+    redirect_to :action => "index"
   end
 
 end
