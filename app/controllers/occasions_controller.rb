@@ -13,7 +13,6 @@ class OccasionsController < ApplicationController
     @visible_events.each do |e|
       o = Occasion.find(:all, :conditions => "event_id = #{e.id}")
       o.each do |oo|
-        puts "ID = #{oo.id}"
         @visible_occasions.push(oo)
       end
     end
