@@ -1,4 +1,7 @@
 class Event < ActiveRecord::Base
+
+  named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
+
   has_many                :tickets
   has_many                :occasions
   has_and_belongs_to_many :tags
@@ -13,4 +16,5 @@ class Event < ActiveRecord::Base
     events = Event.find_by_sql "select * from events where show_date < '#{today.to_s}' and id in ( select distinct event_id from tickets,groups_users where user_id=#{u} and tickets.group_id = groups_users.group_id)"
     return events
   end
+
 end

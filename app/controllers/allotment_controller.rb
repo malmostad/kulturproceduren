@@ -3,7 +3,7 @@ class AllotmentController < ApplicationController
   layout "standard"
   
   def index
-    @events = Event.find :all, :order => "name ASC"
+    @events = Event.without_tickets.find :all, :order => "name ASC"
   end
 
   def select_event

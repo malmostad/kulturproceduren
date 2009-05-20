@@ -1,8 +1,10 @@
 require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+
+  test "find without tickets" do
+    es = Event.without_tickets.find :all
+
+    es.each { |e| assert e.tickets.empty? }
   end
 end

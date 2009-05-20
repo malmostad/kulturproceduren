@@ -1,0 +1,4 @@
+dummy_ticket:
+    state: 0
+    event_id: 2
+    district_id: 1

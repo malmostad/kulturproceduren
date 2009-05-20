@@ -1,0 +1,13 @@
+event_wo_tickets:
+    id: 1
+    from_age: 1
+    to_age: 10
+    description: Without tickets
+    name: Without tickets
+
+event_w_tickets:
+    id: 2
+    from_age: 1
+    to_age: 10
+    description: With tickets
+    name: With tickets
