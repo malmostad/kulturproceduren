@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.integer  "from_age"
     t.integer  "to_age"
     t.text     "description"
+    t.date     "show_date"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
@@ -123,7 +124,6 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
   end
 
   create_table "questions", :force => true do |t|
-    t.integer  "questionaire_id"
     t.boolean  "template"
     t.text     "question"
     t.datetime "created_at"
