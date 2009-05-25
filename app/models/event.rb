@@ -10,6 +10,15 @@ class Event < ActiveRecord::Base
 
   validates_presence_of :from_age, :to_age, :description
 
+  # Ticket states
+
+  CREATED          = 0
+  ALLOTED_GROUP    = 1
+  ALLOTED_DISTRICT = 2
+  FREE_FOR_ALL     = 3
+  NON_BOOKABLE     = 4
+
+
   def self.visible_events_by_userid(u)
     today = Date.today
     u = u.to_i

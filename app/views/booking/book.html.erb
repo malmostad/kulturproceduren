@@ -1,11 +1,19 @@
 <h1>Boka biljetter</h1>
 <p><%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>  </p>
-<ul>
-<% @groups.each do |g| %>
-  <li> <%= g.school.name %> <%= g.name %> - <%= @bookable_tickets["#{g.id}"].length %> Biljetter tillgängligt
-  <% if @bookable_tickets["#{g.id}"].length > 0 %>
-     <a href="/booking/book?occasion_id=<%= @occasion.id %>&group_id=<%= g.id %>&what=book">Boka</a>
-  <% end %>
-  </li>
+
+
+<%  form_for :booking do |f|%>
+  <fieldset>
+    <legend>Boka biljetter</legend>
+    <dl>
+      <dt><%= f.label :group_id, 'Välj grupp' %></dt>
+      <dd><%= select("group_id","", @bookable_tickets.keys.collect {|k| [Group.find_by_id(k).name + " - " + @bookable_tickets["#{k}"].length.to_s + " biljetter", k ]})  %></dd>
+      <dt><%= f.label :no_tickets , 'Antal Biljetter att boka' %></dt>
+      <dd><input name="no_tickets"></dd>
+      <input type="hidden" name="occasion_id" value="<%= @occasion.id %>">
+      <input type="hidden" name="what" value="book">
+      <div><%= submit_tag "Boka" %></div>
+    </dl>
+  </fieldset>
 <%  end %>
-</ul>
+

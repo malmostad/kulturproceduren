@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.integer  "from_age"
     t.integer  "to_age"
     t.text     "description"
+    t.integer  "ticket_state"
     t.date     "show_date"
     t.datetime "created_at"
     t.datetime "updated_at"

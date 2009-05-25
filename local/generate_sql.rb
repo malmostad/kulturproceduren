@@ -218,10 +218,10 @@ dbh.do("DISCARD ALL")
 
 # 8 - Events
 
-puts "INSERT INTO events (show_date,from_age,to_age,name,description,created_at,updated_at) VALUES ('2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW());"
-dbh.do "INSERT INTO events (show_date,from_age,to_age,name,description,created_at,updated_at) VALUES ('2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW())"
-puts "INSERT INTO events (show_date,from_age,to_age,name,description,created_at,updated_at) VALUES ('2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW());"
-dbh.do "INSERT INTO events (show_date,from_age,to_age,name,description,created_at,updated_at) VALUES ('2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW())"
+puts "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW());"
+dbh.do "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW())"
+puts "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW());"
+dbh.do "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW())"
 dbh.do("DISCARD ALL")
 
 # 9 - Occasions
@@ -325,10 +325,10 @@ end
 tickets.each do |t|
   puts "INSERT INTO
    TICKETS (state,event_id,group_id,district_id,created_at,updated_at)
-   VALUES  (1,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
+   VALUES  (0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
   dbh.do "INSERT INTO
    TICKETS (state,event_id,group_id,district_id,created_at,updated_at)
-   VALUES  (1,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
+   VALUES  (0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
   dbh.do "DISCARD ALL"
 end
 
