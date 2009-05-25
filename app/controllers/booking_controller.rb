@@ -9,14 +9,20 @@ class BookingController < ApplicationController
      pp params
      if params[:what] == "book" then
        tickets = Ticket.find(:all, :conditions => "group_id = #{params[:group_id]} AND event_id = #{@occasion.event_id}")
-       # Borde detta göras mha sql-update pga prestandaskäl?
-       tickets.each do |t|
-         t.occasion_id = params[:occasion_id]
-         t.state = BOOKED
-         t.save
+       if params[:no_tickets] > tickets.length
+         flash[:error] = "Du kan bara boka #{tickets.length}"
+         redirect_to :controller => "booking", :action => "book", :occasion_id => "#{params[:occasion_id]}" 
+       else
+         # Borde detta göras mha sql-update pga prestandaskäl?
+         ntick = 0;
+         while (booked_tickets < params[:no_tickets] ) do
+           ntick += 1
+           tickets[ntick].occasion_id = params[:occasion_id]
+           tickets[ntick].state = Ticket::BOOKED
+           tickets[ntick].save
+         end
+         redirect_to :controller => "booking", :action => "show"
        end
-       redirect_to :controller => "booking", :action => "show"
-     else
        @groups = @user.groups
        @bookable_tickets = Hash.new
        @groups.each do |g|
