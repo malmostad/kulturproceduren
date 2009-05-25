@@ -1,4 +1,6 @@
-<h1>Skapa evenemang</h1>
+<% is_edit = ["edit", "update"].include?(params["action"]) -%>
+
+<h1><%= is_edit ? "Redigera" : "Skapa" %> evenemang</h1>
 
 <% form_for(@event) do |f| %>
 
@@ -32,7 +34,7 @@
   </dl>
 
   <div class="submit-cnt">
-    <%= f.submit 'Skapa' %>
+    <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
   </div>
 
 <% end %>
