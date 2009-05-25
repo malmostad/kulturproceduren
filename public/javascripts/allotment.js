@@ -2,7 +2,7 @@
     $(function() {
 
         var tickets = {
-            total: parseInt($("#kp #distribution-meta .available-tickets").html()),
+            total: parseInt($("#kp #kp-distribution-meta .available-tickets").html()),
             getAvailable: function(num) {
                 var added = 0;
 
@@ -21,7 +21,7 @@
                 this.updateDisplay();
             },
             updateDisplay: function() {
-                $("#kp #distribution-meta .available-tickets").html(this.total);
+                $("#kp #kp-distribution-meta .available-tickets").html(this.total);
             }
         };
 
@@ -60,7 +60,7 @@
             return data;
         }
 
-        $("#kp #distribution-list .group-row .num-tickets-value").change(function() {
+        $("#kp #kp-distribution-list .group-row .num-tickets-value").change(function() {
             var field = $(this);
             var row = field.parents("tr");
             var rowData = getRowData(row);
@@ -76,10 +76,10 @@
             }
 
             field.siblings(".num-tickets-display").val(field.val());
-            updateSchoolDisplay(row.attr("className").match(/school-\d+/)[0]);
-            updateDistrictDisplay(row.attr("className").match(/district-\d+/)[0]);
+            updateSchoolDisplay(row.attr("className").match(/kp-school-\d+/)[0]);
+            updateDistrictDisplay(row.attr("className").match(/kp-district-\d+/)[0]);
         });
-        $("#kp #distribution-list .num-tickets-display").change(function() {
+        $("#kp #kp-distribution-list .num-tickets-display").change(function() {
             var field = $(this);
             var newVal = parseInt($(this).val());
             var rowData = getRowData(field.parents("tr"));
@@ -109,27 +109,27 @@
             rowData.ticketCnt.val(tc).trigger("change");
         }
 
-        $("#kp #distribution-list .group-row .tools .fill").click(function() {
+        $("#kp #kp-distribution-list .group-row .tools .fill").click(function() {
             changeAmount(this, true);
             return false;
         });
-        $("#kp #distribution-list .group-row .tools .clear").click(function() {
+        $("#kp #kp-distribution-list .group-row .tools .clear").click(function() {
             changeAmount(this, false);
             return false;
         });
-        $("#kp #distribution-list .school-row .tools .fill").click(function() {
+        $("#kp #kp-distribution-list .school-row .tools .fill").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .fill").trigger("click");
             return false;
         });
-        $("#kp #distribution-list .school-row .tools .clear").click(function() {
+        $("#kp #kp-distribution-list .school-row .tools .clear").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .clear").trigger("click");
             return false;
         });
-        $("#kp #distribution-list .district-row .tools .fill").click(function() {
+        $("#kp #kp-distribution-list .district-row .tools .fill").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .fill").trigger("click");
             return false;
         });
-        $("#kp #distribution-list .district-row .tools .clear").click(function() {
+        $("#kp #kp-distribution-list .district-row .tools .clear").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .clear").trigger("click");
             return false;
         });

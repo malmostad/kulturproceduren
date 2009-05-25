@@ -43,16 +43,16 @@ body {
 #kp { padding: 1em; }
 
 /*** Allotment ***/
-#kp #distribution-meta { background: #fff; border: 1px solid #d3d7cf; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
-#kp #distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
-#kp #distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
+#kp #kp-distribution-meta { background: #fff; border: 1px solid #d3d7cf; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
+#kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
+#kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
 
-#kp #distribution-list td { padding: 3px 0.5em; }
-#kp #distribution-list .school-row td.name { padding-left: 2em; }
-#kp #distribution-list .group-row td.name { padding-left: 4em; }
+#kp #kp-distribution-list td { padding: 3px 0.5em; }
+#kp #kp-distribution-list .school-row td.name { padding-left: 2em; }
+#kp #kp-distribution-list .group-row td.name { padding-left: 4em; }
 
-#kp #distribution-list .num-tickets input { width: 3em; }
-#kp #distribution-list .tools a {
+#kp #kp-distribution-list .num-tickets input { width: 3em; }
+#kp #kp-distribution-list .tools a {
     display: block;
     width: 1.5em;
     height: 1.5em;
@@ -64,11 +64,11 @@ body {
     background: #fff;
     color: #2e3436;
 }
-#kp #distribution-list .tools .fill { margin-right: 1em; }
+#kp #kp-distribution-list .tools .fill { margin-right: 1em; }
 
-#kp #distribution-list .full { background: #8ae234; }
-#kp #distribution-list .partial { background: #fce94f; }
-#kp #distribution-list .error { background: #ef2929; }
+#kp #kp-distribution-list .full { background: #8ae234; }
+#kp #kp-distribution-list .partial { background: #fce94f; }
+#kp #kp-distribution-list .error { background: #ef2929; }
 
 /* Calendar */
 

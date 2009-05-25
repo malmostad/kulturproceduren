@@ -16,18 +16,18 @@
     <div id="kp">
 
       <% if flash[:notice] -%>
-        <div id="flash-notice" class="flash">
+        <div id="kp-flash-notice" class="flash">
           <%= flash[:notice] %>
         </div>
       <% end -%>
 
       <% if flash[:error] -%>
-        <div id="flash-error" class="flash">
+        <div id="kp-flash-error" class="flash">
           <%= flash[:error] %>
         </div>
       <% end -%>
 
-      <div id="content">
+      <div id="kp-content">
         <%= yield %>
       </div>
 

@@ -7,9 +7,9 @@ tickets_per_district = tickets / @districts.size
 
 <h1>Fördelning</h1>
 
-<% form_tag({ :action => "create_tickets" }, { :id => "distribution-form" }) do -%>
+<% form_tag({ :action => "create_tickets" }, { :id => "kp-distribution-form" }) do -%>
 
-  <table id="distribution-list">
+  <table id="kp-distribution-list">
     <tbody>
       <%
       @districts.each do |district|
@@ -44,7 +44,7 @@ tickets_per_district = tickets / @districts.size
 
                 -%>
 
-                <tr class="group-row district-<%= district.id %> school-<%= school.id%> <%= "full" if num_tickets > 0 %>" id="group-<%= group.id %>">
+                <tr class="group-row kp-district-<%= district.id %> kp-school-<%= school.id%> <%= "full" if num_tickets > 0 %>" id="kp-group-<%= group.id %>">
                   <td class="name">
                     <%= h group.name %>
                   </td>
@@ -64,7 +64,7 @@ tickets_per_district = tickets / @districts.size
 
             <% end -%>
 
-            <tr class="school-row district-<%= district.id %>" id="school-<%= school.id %>">
+            <tr class="school-row kp-district-<%= district.id %>" id="kp-school-<%= school.id %>">
               <td class="name"><%= h school.name %></td>
               <td class="num-children"><%= school_children %></td>
               <td class="num-tickets"><%= school_tickets %></td>
@@ -89,7 +89,7 @@ tickets_per_district = tickets / @districts.size
         end
         -%>
 
-        <tr class="district-row" id="district-<%= district.id %>">
+        <tr class="district-row" id="kp-district-<%= district.id %>">
           <td class="name"><%= h district.name %></td>
           <td class="num-children"><%= district_children %></td>
           <td class="num-tickets"><%= district_tickets %></td>
@@ -111,7 +111,7 @@ tickets_per_district = tickets / @districts.size
 
 <% end -%>
 
-<div id="distribution-meta">
+<div id="kp-distribution-meta">
   <h4><%= @event.name -%></h4>
 
   <ul>
