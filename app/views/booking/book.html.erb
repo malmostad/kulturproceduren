@@ -1,7 +1,14 @@
-<h1>Boka biljetter</h1>
-<p><%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>  </p>
-
-
+<div class="kp-booking-pagetitle">
+  <p>
+    Boka biljetter
+  </p>
+</div>
+<div class="kp-booking-pageheader">
+  <p>
+    <%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>
+  </p>
+</div>
+<div class="kp-booking-form">
 <%  form_for :booking do |f|%>
   <fieldset>
     <legend>Boka biljetter</legend>
@@ -16,4 +23,5 @@
     </dl>
   </fieldset>
 <%  end %>
+</div>
 

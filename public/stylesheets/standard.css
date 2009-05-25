@@ -87,3 +87,9 @@ body {
 
 #kp .occasions-event {padding: 0.5em;}
 #kp .occasions-listing {padding-left: 1em;}
+
+/* Booking */
+#kp .kp-booking-pagetitle {font-size: 1.5em; font-weigth: bold;}
+#kp .kp-booking-pageheader { font-size: 1.1em;}
+#kp .kp-booking-form {width: 75%;}
+
