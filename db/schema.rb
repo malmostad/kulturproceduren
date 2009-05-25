@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.text     "description"
     t.integer  "ticket_state"
     t.date     "show_date"
+    t.integer  "culture_provider_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"

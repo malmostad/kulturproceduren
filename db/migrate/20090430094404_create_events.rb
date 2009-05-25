@@ -6,6 +6,7 @@ class CreateEvents < ActiveRecord::Migration
       t.text :description
       t.integer :ticket_state
       t.date  :show_date
+      t.integer :culture_provider_id
       t.timestamps
     end
   end

@@ -206,22 +206,22 @@ dbh.do("DISCARD ALL")
 
 # 7- CultureProvider
 
-puts "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Fria teatergruppen fåglarna','En teatergrupp specialiserad på intimteater', NOW() , NOW());"
-dbh.do "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Fria teatergruppen fåglarna','En teatergrupp specialiserad på intimteater', NOW() , NOW())"
-puts "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Malmö konsertkör','Vi sjunger barbershop', NOW() , NOW());"
-dbh.do "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Malmö konsertkör','Vi sjunger barbershop', NOW() , NOW())"
-puts "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Malmösymfonikerna','Malmös främsta symfoniorkester - specialiserade på Gustav Mahler', NOW() , NOW());"
-dbh.do "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Malmösymfonikerna','Malmös främsta symfoniorkester - specialiserade på Gustav Mahler', NOW() , NOW())"
-puts "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Pantomimikerna Pantrarna','De mest vitmålade ansiktena i hela södra sverige', NOW() , NOW());"
-dbh.do "INSERT INTO culture_providers (name,description,created_at,updated_at) VALUES ('Pantomimikerna Pantrarna','De mest vitmålade ansiktena i hela södra sverige', NOW() , NOW())"
+puts "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (1,'Fria teatergruppen fåglarna','En teatergrupp specialiserad på intimteater', NOW() , NOW());"
+dbh.do "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (2,'Fria teatergruppen fåglarna','En teatergrupp specialiserad på intimteater', NOW() , NOW())"
+puts "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (3,'Malmö konsertkör','Vi sjunger barbershop', NOW() , NOW());"
+dbh.do "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (4,'Malmö konsertkör','Vi sjunger barbershop', NOW() , NOW())"
+puts "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (5,'Malmösymfonikerna','Malmös främsta symfoniorkester - specialiserade på Gustav Mahler', NOW() , NOW());"
+dbh.do "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (6,'Malmösymfonikerna','Malmös främsta symfoniorkester - specialiserade på Gustav Mahler', NOW() , NOW())"
+puts "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (7,'Pantomimikerna Pantrarna','De mest vitmålade ansiktena i hela södra sverige', NOW() , NOW());"
+dbh.do "INSERT INTO culture_providers (id,name,description,created_at,updated_at) VALUES (8,'Pantomimikerna Pantrarna','De mest vitmålade ansiktena i hela södra sverige', NOW() , NOW())"
 dbh.do("DISCARD ALL")
 
 # 8 - Events
 
-puts "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW());"
-dbh.do "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW())"
-puts "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW());"
-dbh.do "INSERT INTO events (ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW())"
+puts "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW());"
+dbh.do "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW())"
+puts "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (4,1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW());"
+dbh.do "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (4,1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW())"
 dbh.do("DISCARD ALL")
 
 # 9 - Occasions
