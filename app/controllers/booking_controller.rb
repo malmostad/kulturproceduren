@@ -94,5 +94,59 @@ class BookingController < ApplicationController
      end
      pp @occasions_by_group
   end
+
+  def unbook
+     @user = User.find_by_id(session[:current_user_id])
+     @occasion = Occasion.find_by_id(params[:occasion_id])
+     if ( @occasion.nil? )
+       flash[:error] = "Ingen föreställning angiven"
+       redirect_to :controller => "occasions"
+       return
+     end
+     @groups = @user.groups
+     pp @groups
+     pp params
+
+     if params[:what] == "unbook" then
+
+       # Utför bokning och omdirigera till visa bokningar
+
+       group = Group.find_by_id(params[:group_id])
+       if ( group.nil?)
+         flash[:error] = "Ingen grupp angiven"
+         redirect_to :controller => "booking", :action => "book", :occasion_id => "#{params[:occasion_id]}"
+         return
+       end
+       if ( ( params[:no_tickets].nil? ) or ( params[:no_tickets].to_i < 0 ) )
+         flash[:error] = "Du måte ange antal biljetter du vill avboka"
+         redirect_to :controller => "booking", :action => "book", :occasion_id => "#{params[:occasion_id]}"
+         return
+       end
+       tickets = Ticket.find(:all, :conditions => "occasion_id=#{@occasion.id} AND group_id=#{group.id} AND state = #{Ticket::BOOKED}" )
+       if params[:no_tickets].to_i > tickets.length
+         flash[:error] = "Du kan bara avboka #{tickets.length}"
+         redirect_to :controller => "booking", :action => "unbook", :occasion_id => "#{params[:occasion_id]}"
+         return
+       else
+         # Borde detta göras mha sql-update pga prestandaskäl?
+         ntick = 0
+         while (ntick < params[:no_tickets].to_i ) do
+           tickets[ntick].occasion_id = nil
+           tickets[ntick].state = Ticket::UNBOOKED
+           tickets[ntick].save
+           ntick += 1
+        end
+         redirect_to :controller => "booking", :action => "show"
+         return
+       end
+     else
+       ## Visa avbokingsmöjligheter
+       @unbookable_tickets = Hash.new
+       @groups.each do |g|
+           @unbookable_tickets["#{g.id}"] = Ticket.find(:all, :conditions => "group_id = #{g.id} AND event_id = #{@occasion.event_id} AND state = #{Ticket::BOOKED}")
+       end
+       pp @bookable_tickets
+     end
+  end
 end
 

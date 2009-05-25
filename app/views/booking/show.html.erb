@@ -1,11 +1,10 @@
-<h1>Booking#show</h1>
-<p>Mina bookningar</p>
+<p>Mina biljettbokningar</p>
 
 <ul>
 <% @groups.each do |g| %>
    <% @occasions_by_group["#{g.id}"].keys.each do |k| %>
       <% o = Occasion.find_by_id(k) %>
-      <li> <%= g.school.name %>, <%= g.name %>, <%= o.event.name %>, <%= o.date.to_s %> <%=  @occasions_by_group["#{g.id}"]["#{k}"] %> biljetter bokade <a hre="">avboka</a></li>
+      <li> <%= g.school.name %>, <%= g.name %>, <%= o.event.name %>, <%= o.date.to_s %> <%=  @occasions_by_group["#{g.id}"]["#{k}"] %> biljetter bokade <a href="/booking/unbook?occasion_id=<%= o.id %>">avboka</a></li>
    <%  end %>
 <%  end %>
 </ul>
