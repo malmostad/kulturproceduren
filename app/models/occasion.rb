@@ -8,7 +8,7 @@ class Occasion < ActiveRecord::Base
   belongs_to              :answer
 
   validates_presence_of   :date, :seats, :address
-
+  validates_numericality_of :seats, :only_integer => true
 
 end
 

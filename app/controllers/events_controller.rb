@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+  layout "standard"
+  
   # GET /events
   # GET /events.xml
   def index
@@ -44,7 +46,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        flash[:notice] = 'Event was successfully created.'
+        flash[:notice] = 'Evenemanget skapades.'
         format.html { redirect_to(@event) }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
       else
@@ -61,7 +63,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
-        flash[:notice] = 'Event was successfully updated.'
+        flash[:notice] = 'Evenemanget uppdaterades.'
         format.html { redirect_to(@event) }
         format.xml  { head :ok }
       else

@@ -3,12 +3,13 @@ class Event < ActiveRecord::Base
   named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
 
   has_many                :tickets
-  has_many                :occasions
+  has_many                :occasions, :order => "date ASC"
   has_and_belongs_to_many :tags
   belongs_to              :culture_provider
   has_one                 :questionaire
 
   validates_presence_of :from_age, :to_age, :description
+  validates_numericality_of :from_age, :to_age, :only_integer => true
 
   # Ticket states
 

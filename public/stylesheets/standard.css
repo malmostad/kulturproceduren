@@ -70,7 +70,7 @@ body {
 #kp #kp-distribution-list .partial { background: #fce94f; }
 #kp #kp-distribution-list .error { background: #ef2929; }
 
-/* Calendar */
+/*** Calendar ***/
 
 #kp .calendar-cell-non-active {color: #a2a2a2; background-color: #f0f0f0; }
 #kp .calendar-cell td {color: #000000; background-color: #f2f2f2;}
@@ -83,13 +83,18 @@ body {
 #kp .calendar-table-eventname {text-align: left;}
 #kp .calendar-table-occasion {text-align: left;}
 
-/* Occasions */
+/*** Occasions ***/
 
 #kp .occasions-event {padding: 0.5em;}
 #kp .occasions-listing {padding-left: 1em;}
 
-/* Booking */
+#kp .occasions-form .date-cnt,
+#kp .occasions-form .address-cnt { float: left; padding-right: 1em; }
+#kp .occasions-form .address-cnt label,
+#kp .occasions-form .description-cnt label { display: block; }
+#kp .occasions-form .submit-cnt { clear: both; }
+
+/*** Booking ***/
 #kp .kp-booking-pagetitle {font-size: 1.5em; font-weigth: bold;}
 #kp .kp-booking-pageheader { font-size: 1.1em;}
 #kp .kp-booking-form {width: 75%;}
-

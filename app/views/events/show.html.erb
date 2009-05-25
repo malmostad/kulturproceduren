@@ -1,23 +1,56 @@
-<p>
-  <b>Name:</b>
-  <%=h @event.name %>
-</p>
+<div class="event-cnt">
 
-<p>
-  <b>From age:</b>
-  <%=h @event.from_age %>
-</p>
+  <h1><%= h @event.name %></h1>
 
-<p>
-  <b>To age:</b>
-  <%=h @event.to_age %>
-</p>
+  <ul class="tools">
+    <li><%= link_to 'Redigera', edit_event_path(@event) %></li>
+  </ul>
 
-<p>
-  <b>Description:</b>
-  <%=h @event.description %>
-</p>
+  <p class="description">
+    <%= h(@event.description).gsub(/^\s*$/, '</p><p class="description">') %>
+  </p>
 
+  <ul class="meta">
+    <li class="ages">För åldrar <%= @event.from_age %>-<%= @event.to_age %> år</li>
+  </ul>
 
-<%= link_to 'Edit', edit_event_path(@event) %> |
-<%= link_to 'Back', events_path %>
+</div>
+
+<div class="occasions-cnt">
+
+  <h2>Föreställningar</h2>
+
+  <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+
+  <% unless @event.occasions.empty? -%>
+    <table class="occasion-list">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Antal platser</th>
+          <th>Adress</th>
+          <th>Beskrivning</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @event.occasions.each do |occasion|
+          alt = cycle('', "alt") %>
+          <tr class="<%= alt %>">
+            <td><%= h occasion.date %></td>
+            <td><%= h occasion.seats %></td>
+            <td><%= h(occasion.address).gsub(/\r\n/, '<br/>') %></td>
+            <td><%= h(occasion.description).gsub(/^\s*$/, '<br/>') %></td>
+            <td>
+              <%= link_to "Redigera", edit_occasion_path(occasion) %>
+              <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+            </td>
+          </tr>
+        <% end -%>
+      </tbody>
+
+    </table>
+  <% end -%>
+
+</div>
