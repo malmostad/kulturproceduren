@@ -14,7 +14,7 @@ class CultureProvidersController < ApplicationController
   # GET /culture_providers/1.xml
   def show
     @culture_provider = CultureProvider.find(params[:id])
-
+    @today = Date.today
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @culture_provider }

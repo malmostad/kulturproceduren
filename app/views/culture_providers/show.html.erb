@@ -1,13 +1,23 @@
-<p>
-  <b>Name:</b>
-  <%=h @culture_provider.name %>
-</p>
 
-<p>
-  <b>Description:</b>
-  <%=h @culture_provider.description %>
-</p>
+<div class="kp-culture-provider-pagetitle">
+  <p>
+    <%= @culture_provider.name %>
+  </p>
+</div>
+<div class="kp-culture-provider-description">
+  <p>
+    <%= @culture_provider.description %>
+  </p>
+</div>
+<div class="kp-culture-provider-event-list">
+  <ul>
+    <% @culture_provider.events.each do |e| %>
+      <% if e.show_date <= Date.today %>
+        <li>
+          <a href="/events/show/<%= e.id %>"><%= e.name %>, <%= e.description %></a>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
 
-
-<%= link_to 'Edit', edit_culture_provider_path(@culture_provider) %> |
-<%= link_to 'Back', culture_providers_path %>
