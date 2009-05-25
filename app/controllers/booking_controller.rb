@@ -143,7 +143,7 @@ class BookingController < ApplicationController
        ## Visa avbokingsmöjligheter
        @unbookable_tickets = Hash.new
        @groups.each do |g|
-           @unbookable_tickets["#{g.id}"] = Ticket.find(:all, :conditions => "group_id = #{g.id} AND event_id = #{@occasion.event_id} AND state = #{Ticket::BOOKED}")
+           @unbookable_tickets["#{g.id}"] = Ticket.find(:all, :conditions => "group_id = #{g.id} AND occasion_id = #{@occasion.id} AND state = #{Ticket::BOOKED}")
        end
        pp @bookable_tickets
      end
