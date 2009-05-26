@@ -35,14 +35,16 @@
     <dd>
       <%= f.text_field :to_age %>
     </dd>
-    <dt>
-      <%= f.label :show_date, nil, :for => "kp-event-show_date-1i" %>
-    </dt>
-    <dd>
-      <%= f.date_select :show_date %>
-    </dd>
+    <% unless is_edit && @event.show_date <= Date.today %>
+      <dt>
+        <%= f.label :show_date, nil, :for => "kp-event-show_date-1i" %>
+      </dt>
+      <dd>
+        <%= f.date_select :show_date, :start_year => Time.now.year %>
+      </dd>
+    <% end -%>
     <dt
-    <dt class="textarea-label-cnt">
+      <dt class="textarea-label-cnt">
       <%= f.label :description %>
     </dt>
     <dd class="textarea-cnt">

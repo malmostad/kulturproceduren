@@ -1,0 +1,65 @@
+<%= render :partial => "events/menu" -%>
+
+<h1>Fördelning</h1>
+
+<% is_edit = @event.tickets.count > 0 %>
+
+<p class="allotment-details">
+  Fördelar biljetter för evenemanget <%= link_to h(@event.name), @event %>
+  som arrangeras av <%= link_to h(@event.culture_provider.name), @event.culture_provider %>.
+</p>
+
+<% if is_edit -%>
+  <p class="allotment_details">
+    Detta evenemang har redan <%= @event.tickets.count %> st biljetter fördelade.
+  </p>
+<% end -%>
+
+<% form_tag({ :action => "assign_params", :id => params["id"] }, { :id => "kp-allotment-init-form" }) do -%>
+
+  <fieldset>
+    <legend>Fördelningsparametrar</legend>
+
+    <dt><label for="kp-allotment-num_tickets">Antal <%= is_edit ? "ytterligare" : "inköpta" %> biljetter</label></dt>
+    <dd><input type="text" id="kp-allotment-num_tickets" name="allotment[num_tickets]"/></dd>
+
+    <dt><label for="kp-allotment-district_id-all">Stadsdelar</label></dt>
+    <dd>
+      <ul class="allotment-district-list checkbox-list">
+        <li>
+          <input type="checkbox"
+                 name="allotment[district_ids][]"
+                 value="-1"
+                 id="kp-allotment-district_ids-all"
+                 <%= 'checked="checked"' if !is_edit || @event.districts.size == @districts.size %>
+                 class="all-toggler"/>
+          <label for="kp-allotment-district_ids-all">Alla</label>
+        </li>
+        <% @districts.each do |district| -%>
+          <li>
+            <input type="checkbox"
+                   name="allotment[district_ids][]"
+                   value="<%= district.id %>"
+                   id="kp-allotment-district_ids-<%= district.id %>"
+                   <%
+                   if is_edit
+                     current_district = @event.districts.include?(district)
+                     -%>
+                     <%= 'disabled="disabled"' if current_district %>
+                     <%= 'checked="checked"' if current_district %>
+                   <% else -%>
+                     checked="checked"
+                   <% end -%>/>
+            <label for="kp-allotment-district_ids-<%= district.id %>"><%= h district.name %></label>
+          </li>
+        <% end -%>
+      </ul>
+    </dd>
+    </dl>
+
+    <div class="submit-cnt">
+      <input type="submit" value="Starta fördelning" name="submit"/>
+    </div>
+  </fieldset>
+
+<% end -%>

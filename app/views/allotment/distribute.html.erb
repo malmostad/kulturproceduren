@@ -2,7 +2,7 @@
 
 <h1>Fördelning</h1>
 
-<% form_tag({ :action => "create_tickets" }, { :id => "kp-distribution-form" }) do -%>
+<% form_tag({ :action => "create_tickets", :id => params["id"] }, { :id => "kp-distribution-form" }) do -%>
 
   <table id="kp-distribution-list">
     <tbody>
@@ -31,7 +31,8 @@
           </tr>
 
           <% school.distribution_groups.each do |group| -%>
-            <tr class="group-row kp-district-<%= district.id %> kp-school-<%= school.id%> <%= "full" if group.num_children <= group.num_tickets %>" id="kp-group-<%= group.id %>">
+            <tr class="group-row kp-district-<%= district.id %> kp-school-<%= school.id%> <%= fill_indicator group.num_children, group.num_tickets %>"
+                id="kp-group-<%= group.id %>">
               <td class="name"><%= h group.name %></td>
               <td class="num-children"><%= h group.num_children %></td>
               <td class="num-tickets">
@@ -61,7 +62,16 @@
   <h4><%= @event.name -%></h4>
 
   <ul>
-    <li>Totalt antal biljetter: <span class="total-tickets"><%= session[:allotment][:num_tickets] %></span></li>
+    <li>
+      Totalt antal biljetter:
+      <span class="total-tickets">
+        <% if @event.tickets.empty? -%>
+          <%= session[:allotment][:num_tickets] %>
+        <% else -%>
+          <%= session[:allotment][:num_tickets].to_i + @event.tickets.count %>
+        <% end -%>
+      </span>
+    </li>
     <li>Tillgängliga biljetter: <span class="available-tickets"><%= @tickets_left %></span></li>
   </ul>
 </div>

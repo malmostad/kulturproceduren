@@ -76,9 +76,9 @@ body {
 
 /*** Allotment ***/
 
-#kp #kp-select-event-form .allotment-district-list { list-style-type: none; margin: 0; padding: 0; }
-#kp #kp-select-event-form .allotment-district-list li { width: 15em; float: left;  }
-#kp #kp-select-event-form .submit-cnt { padding-top: 1em; clear: both; }
+#kp #kp-allotment-init-form .allotment-district-list { list-style-type: none; margin: 0; padding: 0; }
+#kp #kp-allotment-init-form .allotment-district-list li { width: 15em; float: left;  }
+#kp #kp-allotment-init-form .submit-cnt { padding-top: 1em; clear: both; }
 
 #kp #kp-distribution-meta { background: #fff; border: 1px solid #d3d7cf; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
 #kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }

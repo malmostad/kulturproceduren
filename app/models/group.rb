@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  has_many                  :notifcation_requests
+  has_many                  :notification_requests
   has_many                  :tickets
 
   has_many                  :age_groups do

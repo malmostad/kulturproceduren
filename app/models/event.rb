@@ -2,7 +2,9 @@ class Event < ActiveRecord::Base
 
   named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
 
-  has_many                :tickets
+  has_many                :tickets, :dependent => :delete_all
+  
+  has_many                :districts, :through => :tickets, :uniq => true
   has_many                :occasions, :order => "date ASC"
   has_and_belongs_to_many :tags
   belongs_to              :culture_provider

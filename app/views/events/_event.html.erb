@@ -4,7 +4,9 @@
 
   <ul class="tools">
     <li><%= link_to 'Redigera', edit_event_path(event) %></li>
-    <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "new", :id => event.id %></li>
+    <% if event.show_date > Date.today -%>
+      <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => event.id %></li>
+    <% end -%>
   </ul>
 
   <ul class="meta">
