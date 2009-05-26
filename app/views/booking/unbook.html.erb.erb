@@ -1,15 +1,10 @@
-<div class="kp-booking-pagetitle">
-  <p>
-    Avboka biljetter
-  </p>
-</div>
-<div class="kp-booking-pageheader">
-  <p>
+<h2 class="kp-booking-pagetitle">
+  Avboka biljetter
+</h2>
+<p class="kp-booking-pageheader">
     <%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>
-  </p>
-</div>
-<div class="kp-booking-form">
-<%  form_for :booking do |f|%>
+</p>
+<%  form_for :booking, :html => { :class => "kp-booking-form" } do |f|%>
   <fieldset>
     <legend>Boka biljetter</legend>
     <dl>
@@ -24,4 +19,3 @@
   </fieldset>
 <%  end %>
 
-</div>

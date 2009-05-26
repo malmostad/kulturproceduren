@@ -11,12 +11,9 @@
                  <%end%> <br/>
      Föreställningar: <br/>
      </div>
-     <div class="occasions-listing">
-
      <% e.occasions.each do |o| %>
-        <%=  o.date %> <% if ! @user_events_hash_by_id[o.event_id].nil? %> <a href="/booking/book?occasion_id=<%= o.id %>">BOKA</a><% end %> <br/>
+        <%=  o.date %> <% if ! @user_events_hash_by_id[o.event_id].nil? %> <a class="occasions-listing" href="/booking/book?occasion_id=<%= o.id %>">BOKA</a><% end %> <br/>
      <% end %>
-     </div>
   </div>
 <% end %>
 

@@ -1,15 +1,16 @@
-<div class="kp-booking-pagetitle">
-  <p>
-    Boka biljetter
-  </p>
-</div>
-<div class="kp-booking-pageheader">
-  <p>
-    <%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>
-  </p>
-</div>
-<div class="kp-booking-form">
-<%  form_for :booking do |f|%>
+<h2 class="kp-booking-pagetitle">
+  Boka biljetter
+</h2>
+<p class="kp-booking-pageheader">
+  <%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>
+</p>
+<p>
+  Det finns <%= @seats_available %> platser på den här föreställningen som är obokade.
+  <% if @overflow_warn == 1 %>
+     <p class="kp-booking-overflow-warning">OBS - Det finns grupper som du administrerar som har fler biljetter tilldelade på detta evenemang än vad det finns platser över på den här föreställningen</p>
+  <% end %>
+</p>
+<%  form_for :booking, :html => { :class => "kp-booking-form" } do |f|%>
   <fieldset>
     <legend>Boka biljetter</legend>
     <dl>
@@ -23,5 +24,5 @@
     </dl>
   </fieldset>
 <%  end %>
-</div>
+<a href="/login/logout">Logga ut</a>
 

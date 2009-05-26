@@ -1,16 +1,8 @@
-
-
-
+<% if params[:viewmode] == "calendar" %>
 <div class="calendar-pagetitle">
-<span class="calendar-prevmonthlink">
-<a href="/calendar?month=<%= @dispmonth-1 %>&year=<%= @dispyear %>"><%=  month_name(@dispmonth-1)%></a>
-</span>
-
+<a class="calendar-prevmonthlink" href="/calendar?month=<%= @dispmonth-1 %>&year=<%= @dispyear %>&viewmode=calendar"><%=  month_name(@dispmonth-1)%></a>
 <span class="calendar-curmonth"><%= month_name(@dispmonth) %></span>
-
-<span class="calendar-nextmonthlink">
-<a href="/calendar?month=<%= @dispmonth+1 %>&year=<%= @dispyear %>"><%=  month_name(@dispmonth+1) %></a>
-</span>
+<a class="calendar-nextmonthlink" href="/calendar?month=<%= @dispmonth+1 %>&year=<%= @dispyear %>&viewmode=calendar"><%=  month_name(@dispmonth+1) %></a>
 </div>
 
 <% iday = @cal_sday.clone %>
@@ -43,7 +35,7 @@
             <a href="/events/<%= @oh[iday].event_id %>"><%= Event.find_by_id(@oh[iday].event_id).name %></a>
          </div>
          <div class="calendar-table-occasion">
-           <a href="/occasions/<%= @oh[iday].id %>"> <%= @oh[iday].description %></a>
+           <a href="/booking/book?occasion_id=<%= @oh[iday].id %>"> BOKA </a>
          </div>
        <% end %>
      </td>
@@ -51,6 +43,18 @@
 </tr>
 <% end %>
 </table>
-
+<a href="/calendar">Listvy</a>
+<% else %>
+  <ul class="calendar-eventlist">
+    <% @occasions.each do |o| %>
+      <li> 
+        <a href="/events/<%= o.event.id %>"> <%= o.event.name %></a> ,
+        <a href="/occasions/<%= o.id %>"><%= o.description %> , <%= o.date %></a>
+        <a href="/booking/book?occasion_id=<%= o.id %> ">BOKA</a>
+      </li>
+    <%end%>
+  </ul>
+  <a href="/calendar?viewmode=calendar">Kalendervy</a>
+<% end %>
 <a href="/login/logout">Logout</a>
 
