@@ -13,4 +13,6 @@ class School < ActiveRecord::Base
 
   validates_presence_of  :name, :district_id
   validates_associated   :districts, :groups
+
+  attr_accessor :num_children, :num_tickets, :distribution_groups
 end

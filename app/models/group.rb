@@ -15,4 +15,6 @@ class Group < ActiveRecord::Base
   
   validates_presence_of     :name
   validates_associated      :school
+
+  attr_accessor :num_children, :num_tickets
 end
