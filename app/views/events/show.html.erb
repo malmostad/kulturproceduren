@@ -1,20 +1,6 @@
-<div class="event-cnt">
+<%= render :partial => "events/menu" -%>
 
-  <h1><%= h @event.name %></h1>
-
-  <ul class="tools">
-    <li><%= link_to 'Redigera', edit_event_path(@event) %></li>
-  </ul>
-
-  <p class="description">
-    <%= h(@event.description).gsub(/^\s*$/, '</p><p class="description">') %>
-  </p>
-
-  <ul class="meta">
-    <li class="ages">För åldrar <%= @event.from_age %>-<%= @event.to_age %> år</li>
-  </ul>
-
-</div>
+<%= render :partial => "events/event", :locals => { :event => @event } %>
 
 <div class="occasions-cnt">
 

@@ -1,4 +1,6 @@
 class SchoolsController < ApplicationController
+  layout "standard"
+  
   # GET /schools
   # GET /schools.xml
   def index

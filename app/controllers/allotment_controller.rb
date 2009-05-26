@@ -4,7 +4,9 @@ class AllotmentController < ApplicationController
   
   def index
     @events = Event.without_tickets.find :all, :order => "name ASC"
+    render :action => "index"
   end
+  alias_method :new, :index
 
   def select_event
     session[:allotment] = {}

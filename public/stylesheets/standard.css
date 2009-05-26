@@ -39,8 +39,40 @@ body {
 
 #kp img { border: 0; padding: 0; margin: 0; }
 
+#kp .clearer { clear: both; }
+
 /*** Page ***/
-#kp { padding: 1em; }
+#kp { padding: 1em; width: 470px; }
+
+/*** Navigation ***/
+#kp .pri-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #d3d7cf;
+}
+#kp .pri-nav li {
+    display: inline-block;
+    margin-right: 0.5em;
+    border: 1px solid #d3d7cf;
+    border-bottom: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    background: #d3d7cf;
+}
+#kp .pri-nav a { display: block; padding: 0.5em 1em; position: relative; top: 1px; }
+#kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
+
+#kp .sec-nav {
+    list-style-type:none;
+    margin: 0 0 1em 0;
+    padding: 0;
+    border: 1px solid #d3d7cf;
+    border-top: 0;
+    clear: both;
+}
+#kp .sec-nav li { display: inline-block; padding: 0.5em 1em; }
+#kp .sec-nav li.active { font-weight: bold; }
 
 /*** Allotment ***/
 #kp #kp-distribution-meta { background: #fff; border: 1px solid #d3d7cf; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
@@ -83,11 +115,33 @@ body {
 #kp .calendar-table-eventname {text-align: left;}
 #kp .calendar-table-occasion {text-align: left;}
 
+/*** Events ***/
+
+#kp .event-cnt { border: 1px solid #d3d7cf; padding: 1em; }
+#kp .event-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
+#kp .event-cnt .tools {
+    list-style-type: none;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+#kp .event-cnt .tools li { display: inline; margin-right: 1em; }
+#kp .event-cnt .meta {
+    border: 1px solid #d3d7cf;
+    color: #555753;
+    padding: 0.5em;
+    margin: 0;
+    list-style-type: none;
+    float: right;
+}
+#kp .event-cnt .meta li { padding-bottom: 0.3em; }
+
 /*** Occasions ***/
 
 #kp .occasions-event {padding: 0.5em;}
 #kp .occasions-listing {padding-left: 1em;}
 
+#kp .occasions-form textarea { height: 5em; width: 15em; }
+#kp .occasions-form #kp-occasion-seats { width: 5em; }
 #kp .occasions-form .date-cnt,
 #kp .occasions-form .address-cnt { float: left; padding-right: 1em; }
 #kp .occasions-form .address-cnt label,
@@ -95,6 +149,6 @@ body {
 #kp .occasions-form .submit-cnt { clear: both; }
 
 /*** Booking ***/
-#kp .kp-booking-pagetitle {font-size: 1.5em; font-weigth: bold;}
+#kp .kp-booking-pagetitle {font-size: 1.5em; font-weight: bold;}
 #kp .kp-booking-pageheader { font-size: 1.1em;}
 #kp .kp-booking-form {width: 75%;}

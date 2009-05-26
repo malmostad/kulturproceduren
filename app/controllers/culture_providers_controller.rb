@@ -1,4 +1,6 @@
 class CultureProvidersController < ApplicationController
+  layout "standard"
+  
   # GET /culture_providers
   # GET /culture_providers.xml
   def index

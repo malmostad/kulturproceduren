@@ -1,3 +1,5 @@
+<%= render :partial => "events/menu" -%>
+
 <h1>Fördelning</h1>
 
 <% form_tag({ :action => "select_event" }, { :id => "kp-select-event-form" }) do -%>
@@ -6,11 +8,13 @@
     <legend>Välj evenemang</legend>
 
     <dl class="form-elements">
-      <dt><label for="kp-allotment-event-id">Evenemang:</label></dt>
+      <dt>
+        <label for="kp-allotment-event-id">Evenemang:</label>
+      </dt>
       <dd>
         <select id="kp-allotment-event-id" name="allotment[event_id]">
           <% @events.each do |e| -%>
-            <option value="<%= e.id %>"><%= h e.name %></option>
+            <option value="<%= e.id %>" <%= 'selected="selected"' if params["id"].to_i == e.id %>><%= h e.name %> - <%= h e.culture_provider.name %></option>
           <% end -%>
         </select>
       </dd>

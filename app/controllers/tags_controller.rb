@@ -1,4 +1,6 @@
 class TagsController < ApplicationController
+  layout "standard"
+  
   # GET /tags
   # GET /tags.xml
   def index

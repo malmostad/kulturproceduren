@@ -1,26 +1,21 @@
-<h1>Listing events</h1>
+<%= render :partial => "menu" -%>
+
+<h1>Evenemang</h1>
 
 <table>
   <tr>
-    <th>Name</th>
-    <th>From age</th>
-    <th>To age</th>
-    <th>Description</th>
+    <th>Namn</th>
+    <th>Ålder</th>
+    <th>Beskrivning</th>
+    <th></th>
   </tr>
 
-<% @events.each do |event| %>
-  <tr>
-    <td><%=h event.name %></td>
-    <td><%=h event.from_age %></td>
-    <td><%=h event.to_age %></td>
-    <td><%=h event.description %></td>
-    <td><%= link_to 'Show', event %></td>
-    <td><%= link_to 'Edit', edit_event_path(event) %></td>
-    <td><%= link_to 'Destroy', event, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <% @events.each do |event| %>
+    <tr>
+      <td><%=h event.name %></td>
+      <td><%=h event.from_age %>-<%=h event.to_age %></td>
+      <td><%=h event.description %></td>
+      <td><%= link_to 'Visa', event %></td>
+    </tr>
+  <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New event', new_event_path %>

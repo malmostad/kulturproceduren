@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  layout "standard"
+  
   # GET /questions
   # GET /questions.xml
   def index

@@ -4,7 +4,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    @events = Event.all
+    @events = Event.all :order => "created_at DESC"
   end
 
   # GET /events/1
@@ -17,6 +17,7 @@ class EventsController < ApplicationController
   # GET /events/new.xml
   def new
     @event = Event.new
+    @culture_providers = CultureProvider.all :order => "name ASC"
   end
 
   # GET /events/1/edit

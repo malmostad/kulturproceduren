@@ -1,6 +1,6 @@
 class LoginController < ApplicationController
 
-  layout "tickets"
+  layout "standard"
   
   def index
   end

@@ -1,4 +1,6 @@
 class DistrictsController < ApplicationController
+  layout "standard"
+  
   # GET /districts
   # GET /districts.xml
   def index

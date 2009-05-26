@@ -1,0 +1,20 @@
+<div class="event-cnt">
+
+  <h1><%= h event.name %></h1>
+
+  <ul class="tools">
+    <li><%= link_to 'Redigera', edit_event_path(event) %></li>
+    <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "new", :id => event.id %></li>
+  </ul>
+
+  <ul class="meta">
+    <li class="culture-provider"><%= link_to h(event.culture_provider.name), culture_provider_path(event.culture_provider) %></li>
+    <li class="ages">För åldrar <%= event.from_age %>-<%= event.to_age %> år</li>
+  </ul>
+
+  <p class="description">
+    <%= h(event.description).gsub(/^\s*$/, '</p><p class="description">') %>
+  </p>
+
+  <div class="clearer"></div>
+</div>

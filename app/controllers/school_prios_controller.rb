@@ -1,4 +1,6 @@
 class SchoolPriosController < ApplicationController
+  layout "standard"
+  
   # GET /school_prios
   # GET /school_prios.xml
   def index

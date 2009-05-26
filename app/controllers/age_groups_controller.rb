@@ -1,4 +1,6 @@
 class AgeGroupsController < ApplicationController
+  layout "standard"
+  
   # GET /age_groups
   # GET /age_groups.xml
   def index

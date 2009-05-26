@@ -1,3 +1,5 @@
+<%= render :partial => "menu" -%>
+
 <% is_edit = ["edit", "update"].include?(params["action"]) -%>
 
 <h1><%= is_edit ? "Redigera" : "Skapa" %> evenemang</h1>
@@ -7,26 +9,41 @@
   <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
   <dl class="form-elements">
+    <% unless is_edit -%>
+      <dt>
+        <%= f.label :culture_provider_id %>
+      </dt>
+      <dd>
+        <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name %>
+      </dd>
+    <% end -%>
     <dt>
-      <%= f.label :name %>:
+      <%= f.label :name %>
     </dt>
     <dd>
       <%= f.text_field :name %>
     </dd>
     <dt>
-      <%= f.label :from_age %>:
+      <%= f.label :from_age %>
     </dt>
     <dd>
       <%= f.text_field :from_age %>
     </dd>
     <dt>
-      <%= f.label :to_age %>:
+      <%= f.label :to_age %>
     </dt>
     <dd>
       <%= f.text_field :to_age %>
     </dd>
+    <dt>
+      <%= f.label :show_date %>
+    </dt>
+    <dd>
+      <%= f.date_select :show_date %>
+    </dd>
+    <dt
     <dt class="textarea-label-cnt">
-      <%= f.label :description %>:
+      <%= f.label :description %>
     </dt>
     <dd class="textarea-cnt">
       <%= f.text_area :description %>

@@ -9,23 +9,23 @@ form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
     <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
     <div class="date-cnt">
-      <%= f.label :date %>:
+      <%= f.label :date %>
       <%= f.date_select :date %>
     </div>
 
     <div class="seats-cnt">
-      <%= f.label :seats %>:
+      <%= f.label :seats %>
       <%= f.text_field :seats %>
     </div>
 
     <div class="address-cnt">
       <%= f.label :address %>
-      <%= f.text_area :address, :rows => 5 %>
+      <%= f.text_area :address %>
     </div>
 
     <div class="description-cnt">
       <%= f.label :description %>
-      <%= f.text_area :description, :rows => 5 %>
+      <%= f.text_area :description %>
     </div>
 
     <div class="submit-cnt">

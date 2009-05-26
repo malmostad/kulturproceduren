@@ -1,4 +1,6 @@
 class BookingRequirementsController < ApplicationController
+  layout "standard"
+  
   # GET /booking_requirements
   # GET /booking_requirements.xml
   def index

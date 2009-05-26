@@ -1,4 +1,6 @@
 class TicketsController < ApplicationController
+  layout "standard"
+  
   # GET /tickets
   # GET /tickets.xml
   def index

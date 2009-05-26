@@ -1,4 +1,6 @@
 class NotificationRequestsController < ApplicationController
+  layout "standard"
+  
   # GET /notification_requests
   # GET /notification_requests.xml
   def index

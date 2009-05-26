@@ -91,6 +91,7 @@ sv:
         models:
             event: evenemanget
             occasion: föreställningen
+            culture_provider: arrangören
 
         attributes:
             event:
@@ -98,6 +99,9 @@ sv:
                 from_age: Från ålder
                 to_age: Till ålder
                 description: Beskrivning
+                culture_provider: Arrangör
+                culture_provider_id: Arrangör
+                show_date: Publiceringsdatum
             occasion:
                 date: Datum
                 seats: Antal platser
