@@ -1,20 +1,23 @@
 # Monkeypatching of Rails default classes
 
+# Prefixed form ids
 module ActionView
   module Helpers
     class InstanceTag
-
       private
-
-      # Prefixed form ids
       def tag_id
         "kp-#{sanitized_object_name}-#{sanitized_method_name}"
       end
-
       def tag_id_with_index(index)
         "kp-#{sanitized_object_name}-#{index}-#{sanitized_method_name}"
       end
-      
+    end
+
+    class DateTimeSelector
+      private
+      def input_id_from_type(type)
+        "kp-" + input_name_from_type(type).gsub(/([\[\(])|(\]\[)/, '-').gsub(/[\]\)]/, '')
+      end
     end
   end
 end

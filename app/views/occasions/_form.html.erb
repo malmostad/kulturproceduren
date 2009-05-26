@@ -9,7 +9,7 @@ form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
     <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
     <div class="date-cnt">
-      <%= f.label :date %>
+      <%= f.label :date, nil, :for => "kp-occasion-date-1i" %>
       <%= f.date_select :date %>
     </div>
 
