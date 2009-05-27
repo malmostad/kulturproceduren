@@ -1,60 +1,24 @@
-<% if params[:viewmode] == "calendar" %>
-<div class="calendar-pagetitle">
-<a class="calendar-prevmonthlink" href="/calendar?month=<%= @dispmonth-1 %>&year=<%= @dispyear %>&viewmode=calendar"><%=  month_name(@dispmonth-1)%></a>
-<span class="calendar-curmonth"><%= month_name(@dispmonth) %></span>
-<a class="calendar-nextmonthlink" href="/calendar?month=<%= @dispmonth+1 %>&year=<%= @dispyear %>&viewmode=calendar"><%=  month_name(@dispmonth+1) %></a>
-</div>
+<%= render :partial => "menu" %>
 
-<% iday = @cal_sday.clone %>
-<br/>
-<table class="calendar-table">
-<tr class="calendar-heading-row">
+<table class="calendar-list">
+  <tbody>
+    <% prev_date = Date.new %>
 
-  <th>Mån</th>
-  <th>Tis</th>
-  <th>Ons</th>
-  <th>Tor</th>
-  <th>Fre</th>
-  <th>Lör</th>
-  <th>Sön</th>
+    <% @occasions.each do |occasion| -%>
+      
+      <% if prev_date < occasion.date %>
+        <tr class="date-row">
+          <th colspan="3"><%= occasion.date %></th>
+        </tr>
+      <% end -%>
+      
+      <tr>
+        <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
+        <td class="occasion"><%= link_to h(occasion.description), occasion %></td>
+        <td class="booking"><%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %></td>
+      </tr>
 
-</tr>
-
-<% while ( iday.month < @dispmonth +1) do %>
-<tr class="calendar-row">
-    <% (1..7).each do |n| %>
-  <% iday = iday + 1 %>
-  <% if iday.month == @dispmonth %>
-     <td class="calendar-table-cell">
-       <% else  %>
-     <td class="calendar-cell-non-active">
-  <% end %>
-       <%= iday.day %>
-       <% if ! @oh[iday].nil? %>
-         <div class="calendar-table-eventname">
-            <a href="/events/<%= @oh[iday].event_id %>"><%= Event.find_by_id(@oh[iday].event_id).name %></a>
-         </div>
-         <div class="calendar-table-occasion">
-           <a href="/booking/book?occasion_id=<%= @oh[iday].id %>"> BOKA </a>
-         </div>
-       <% end %>
-     </td>
-  <% end %>
-</tr>
-<% end %>
+      <% prev_date = occasion.date %>
+    <% end -%>
+  </tbody>
 </table>
-<a href="/calendar">Listvy</a>
-<% else %>
-  <ul class="calendar-eventlist">
-    <% @occasions.each do |o| %>
-      <li> 
-        <a href="/events/<%= o.event.id %>"> <%= o.event.name %></a> ,
-        <a href="/occasions/<%= o.id %>"><%= o.description %> , <%= o.date %></a>
-        <a href="/booking/book?occasion_id=<%= o.id %> ">BOKA</a>
-      </li>
-    <%end%>
-  </ul>
-  <a href="/calendar?viewmode=calendar">Kalendervy</a>
-<% end %>
-<a href="/login/logout">Logout</a>
-

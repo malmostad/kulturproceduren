@@ -148,16 +148,17 @@ body {
 
 /*** Calendar ***/
 
-#kp .calendar-cell-non-active {color: #a2a2a2; background-color: #f0f0f0; }
-#kp .calendar-cell td {color: #000000; background-color: #f2f2f2;}
-#kp .calendar-pagetitle {float: left; width: 75%;}
-#kp .calendar-curmonth { width: 90% ;font-size: 1.5em;  float: left;  text-align: center;}
-#kp .calendar-prevmonthlink {float: left;vertical-align: bottom;}
-#kp .calendar-nextmonthlink {float: right;vertical-align: bottom;}
-#kp .calendar-table {width: 75%; text-align: center;}
-#kp .calendar-table-cell {text-align: center;}
-#kp .calendar-table-eventname {text-align: left;}
-#kp .calendar-table-occasion {text-align: left;}
+#kp .calendar-list th, #kp .calendar-list td { padding: 5px; }
+#kp .calendar-list .date-row th { background: #ccc; text-align: left; }
+
+#kp .calendar-table { width: 100%; }
+#kp .calendar-table td, #kp .calendar-table th { text-align: center; }
+#kp .calendar-table .inactive {color: #a2a2a2; background-color: #f0f0f0; }
+#kp .calendar-table-eventname, #kp .calendar-table-occasion { text-align: left; }
+#kp .calendar-month-nav th { padding-bottom: 1em; font-size: 1.1em; }
+#kp .calendar-month-nav th.current { font-size: 1.3em; }
+#kp .calendar-month-nav th.prev { text-align: left; }
+#kp .calendar-month-nav th.next { text-align: right; }
 
 /*** Occasions ***/
 

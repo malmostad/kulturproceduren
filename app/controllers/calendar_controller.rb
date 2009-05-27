@@ -4,34 +4,41 @@ class CalendarController < ApplicationController
   
   def index
 
-    if ( params[:viewmode] == "calendar" )
-
-      if ! params[:month].nil?
-        @dispmonth = params[:month].to_i
-      else
-        @dispmonth = Date.today.month
-      end
-      if ! params[:year].nil?
-        @dispyear = params[:year].to_i
-      else
-        @dispyear = Date.today.year
-      end
-      @monthdays = dim(@dispmonth, @dispyear)
-
-      @occasions = Occasion.find(:all, :conditions => ["date BETWEEN '#{@dispyear}-#{@dispmonth}-01' and '#{@dispyear}-#{@dispmonth}-#{@monthdays}'"], :order => "date DESC")
-      @oh = Hash.new
-      @occasions.each do |t|
-        @oh[t.date] = t
-      end
+    @from = Date.today
+    @to = @from.advance(:months => 2)
     
-      @dispmonth_sday = Date.new(@dispyear, @dispmonth, 1)
+    @occasions = Occasion.all :include => :event,
+      :conditions => [ "occasions.date between ? and ? and events.show_date <= ?", @from, @to, Date.today ],
+      :order => "occasions.date ASC, events.name ASC"
+  end
 
-      @cal_sday = @dispmonth_sday - @dispmonth_sday.cwday
-    
+  def calendar
+    if ! params[:month].nil?
+      @dispmonth = params[:month].to_i
     else
-      @occasions = Occasion.visible_by_date
-
+      @dispmonth = Date.today.month
     end
+
+    if ! params[:year].nil?
+      @dispyear = params[:year].to_i
+    else
+      @dispyear = Date.today.year
+    end
+    
+    @monthdays = dim(@dispmonth, @dispyear)
+
+    @occasions = Occasion.find(:all,
+      :conditions => ["date BETWEEN '#{@dispyear}-#{@dispmonth}-01' and '#{@dispyear}-#{@dispmonth}-#{@monthdays}'"],
+      :order => "date DESC")
+
+    @oh = {}
+    @occasions.each do |t|
+      @oh[t.date] = t
+    end
+
+    @dispmonth_sday = Date.new(@dispyear, @dispmonth, 1)
+
+    @cal_sday = @dispmonth_sday - @dispmonth_sday.cwday
   end
   
   private
