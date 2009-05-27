@@ -11,6 +11,8 @@ class SchoolsController < ApplicationController
 
   def new
     @school = School.new
+    @school.district_id = params[:district_id] if params[:district_id]
+
     @districts = District.all
   end
 

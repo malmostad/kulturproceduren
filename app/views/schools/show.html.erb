@@ -19,4 +19,8 @@
 
 <h2>Grupper i skolan</h2>
 
+<ul class="tools">
+  <li><%= link_to 'Lägg till grupp', new_group_path(:school_id => @school.id) %></li>
+</ul>
+
 <%= render :partial => "groups/list", :locals => { :groups => @school.groups } %>

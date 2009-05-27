@@ -12,6 +12,8 @@ class GroupsController < ApplicationController
 
   def new
     @group = Group.new
+    @group.school_id = params[:school_id] if params[:school_id]
+    
     @schools = School.all :order => "name ASC"
   end
 

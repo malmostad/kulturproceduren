@@ -10,10 +10,10 @@ class AllotmentController < ApplicationController
 
   def assign_params
     session[:allotment] = {}
-    session[:allotment][:num_tickets] = params["allotment"]["num_tickets"]
+    session[:allotment][:num_tickets] = params[:allotment][:num_tickets]
     
-    if params["allotment"]["district_ids"] && params["allotment"]["district_ids"].length > 0
-      ids = params["allotment"]["district_ids"].collect { |id| id.to_i }
+    if params[:allotment][:district_ids] && params[:allotment][:district_ids].length > 0
+      ids = params[:allotment][:district_ids].collect { |id| id.to_i }
 
       unless ids.include?(-1)
         session[:allotment][:district_ids] = ids
@@ -25,7 +25,7 @@ class AllotmentController < ApplicationController
       session[:allotment][:district_ids] |= @event.districts.collect { |d| d.id.to_i }
     end
 
-    redirect_to :action => "distribute", :id => params["id"]
+    redirect_to :action => "distribute", :id => params[:id]
   end
 
   def distribute
@@ -46,7 +46,7 @@ class AllotmentController < ApplicationController
 
   def create_tickets
     @event.tickets.clear
-    assignment = params["allotment"]["ticket_assignment"].reject { |k,v| v.to_i <= 0 }
+    assignment = params[:allotment][:ticket_assignment].reject { |k,v| v.to_i <= 0 }
 
     groups = Group.find assignment.keys, :include => { :school => :district }
 
@@ -75,7 +75,7 @@ class AllotmentController < ApplicationController
 
   def load_event
     begin
-      @event = Event.find params["id"], :include => :culture_provider
+      @event = Event.find params[:id], :include => :culture_provider
 
       if @event.show_date <= Date.today
         flash[:error] = "Fördelning kan inte göras efter ett evenemangs publiceringsdatum."

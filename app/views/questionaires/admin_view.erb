@@ -1,7 +1,9 @@
 
-<% is_edit = ["edit", "update"].include? params["action"] -%>
+<% is_edit = ["edit", "update"].include? params[:action] -%>
+
 <%= render :partial => "questions/form", :locals => { :question => @question , :questionaire => @questionaire } %>
-Utvärderingsformulär för <%= @questionaire.event.name  %>
+
+<h1>Utvärderingsformulär för <%= h @questionaire.event.name  %></h1>
 
 <% form_for @questionaire do |f| %>
 <table>

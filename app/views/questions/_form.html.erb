@@ -1,5 +1,5 @@
 <%
-is_edit = ["edit", "update"].include? params["action"]
+is_edit = ["edit", "update"].include? params[:action]
 
 form_for( question || Question.new { |q| q.questionaire = [ questionaire ] },
   :html => { :class => "question-form" }) do |f| -%>

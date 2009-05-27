@@ -20,7 +20,7 @@
 
 <h2>Åldersgrupper</h2>
 
-<% is_edit = ["edit", "update"].include?(params["action"]) %>
+<% is_edit = ["edit", "update"].include?(params[:action]) %>
 <% form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
   <fieldset>
     <legend><%= is_edit ? "Redigera" : "Lägg till" %> åldersgrupp</legend>

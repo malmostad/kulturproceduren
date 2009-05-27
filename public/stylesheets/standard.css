@@ -47,6 +47,13 @@ body {
 #kp .flash { margin: 0.5em; border: 1px solid #c00; padding: 0.5em; background: #fcc; }
 #kp #kp-flash-notice { border-color: #060; background: #cfc; }
 
+#kp ul.tools {
+    list-style-type: none;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+#kp ul.tools li { display: inline; margin-right: 1em; }
+
 /*** Navigation ***/
 #kp .pri-nav {
     list-style-type: none;
@@ -96,12 +103,6 @@ body {
 
 #kp .model-cnt { border: 1px solid #d3d7cf; padding: 1em; }
 #kp .model-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
-#kp .model-cnt .tools {
-    list-style-type: none;
-    margin: 0 0 1em 0;
-    padding: 0;
-}
-#kp .model-cnt .tools li { display: inline; margin-right: 1em; }
 #kp .model-cnt .meta {
     border: 1px solid #d3d7cf;
     color: #555753;

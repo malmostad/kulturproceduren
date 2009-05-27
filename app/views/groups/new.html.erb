@@ -1,6 +1,6 @@
 <%= render :partial => "menu" -%>
 
-<% is_edit = ["edit", "update"].include?(params["action"]) -%>
+<% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
 <h1><%= is_edit ? "Redigera" : "Skapa ny" %> grupp</h1>
 

@@ -1,5 +1,5 @@
 <%
-is_edit = ["edit", "update"].include? params["action"]
+is_edit = ["edit", "update"].include? params[:action]
 
 form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
   :html => { :class => "occasions-form" }) do |f| -%>
