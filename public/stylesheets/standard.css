@@ -44,6 +44,9 @@ body {
 /*** Page ***/
 #kp { padding: 1em; width: 470px; }
 
+#kp .flash { margin: 0.5em; border: 1px solid #c00; padding: 0.5em; background: #fcc; }
+#kp #kp-flash-notice { border-color: #060; background: #cfc; }
+
 /*** Navigation ***/
 #kp .pri-nav {
     list-style-type: none;
@@ -73,6 +76,21 @@ body {
 }
 #kp .sec-nav li { display: inline-block; padding: 0.5em 1em; }
 #kp .sec-nav li.active { font-weight: bold; }
+
+/*** Forms ***/
+
+#kp form .errorExplanation {
+    margin: 0.5em;
+    padding: 0.5em;
+    border: 1px solid #c00;
+    background: #fcc;
+}
+
+#kp form .errorExplanation h2 { font-size: 1.2em; margin: 0 0 1em 0; }
+#kp form .errorExplanation p { margin: 0 0 0.5em 0; padding: 0; }
+#kp form .errorExplanation ul { margin: 0 0 0 2em; padding: 0; }
+
+#kp form input.error { background: #fcc; }
 
 /*** Models ***/
 

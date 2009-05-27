@@ -44,6 +44,7 @@ class DistrictsController < ApplicationController
     @district = District.find(params[:id])
     @district.destroy
 
+    flash[:notice] = "Stadsdelen togs bort."
     redirect_to(districts_url)
   end
 end

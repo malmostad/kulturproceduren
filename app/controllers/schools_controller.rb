@@ -2,7 +2,7 @@ class SchoolsController < ApplicationController
   layout "admin"
   
   def index
-    @schools = School.all :order => "name ASC"
+    @schools = School.all :order => "name ASC", :include => :district
   end
 
   def show
@@ -62,8 +62,10 @@ class SchoolsController < ApplicationController
 
   def destroy
     @school = School.find(params[:id])
+    district = @school.district
     @school.destroy
 
-    redirect_to(schools_url)
+    flash[:notice] = "Skolan togs bort."
+    redirect_to(district)
   end
 end

@@ -2,7 +2,7 @@ class GroupsController < ApplicationController
   layout "admin"
   
   def index
-    @groups = Group.all :order => "name ASC"
+    @groups = Group.all :order => "name ASC", :include => { :school => :district }
   end
 
   def show
@@ -47,8 +47,10 @@ class GroupsController < ApplicationController
 
   def destroy
     @group = Group.find(params[:id])
+    school = @group.school
     @group.destroy
 
-    redirect_to(groups_url)
+    flash[:notice] = "Skolan togs bort."
+    redirect_to(school)
   end
 end
