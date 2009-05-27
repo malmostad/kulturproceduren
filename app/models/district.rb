@@ -1,6 +1,6 @@
 class District < ActiveRecord::Base
   
-  has_many :schools do
+  has_many :schools, :dependent => :destroy do
     def find_by_age_span(from, to)
       find :all,
         :include => :school_prio,

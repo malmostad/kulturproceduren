@@ -17,9 +17,9 @@
     <div id="kp">
 
       <ul class="pri-nav">
-        <li class="pri-nav-cp <%= active_by_controller "culture_providers" %>"><%= link_to "Arrangörer", culture_providers_path -%></li>
-        <li class="pri-nav-events <%= active_by_controller "events", "occasions", "allotment" %>"><%= link_to "Evenemang", events_path -%></li>
-        <li class="pri-nav-admin"><%= link_to "Administration", :controller => "admin" -%></li>
+        <li class="pri-nav-districts <%= active_by_controller "districts" %>"><%= link_to "Stadsdelar", districts_path -%></li>
+        <li class="pri-nav-schools <%= active_by_controller "schools" %>"><%= link_to "Skolor", schools_path -%></li>
+        <li class="pri-nav-groups <%= active_by_controller "groups" %>"><%= link_to "Grupper", groups_path -%></li>
       </ul>
 
       <%= yield :sec_nav %>

@@ -1,6 +1,6 @@
 class School < ActiveRecord::Base
   
-  has_many :groups do
+  has_many :groups, :dependent => :destroy do
     def find_by_age_span(from, to)
       find :all,
         :order => "name ASC",
@@ -9,10 +9,9 @@ class School < ActiveRecord::Base
   end
 
   belongs_to :district
-  has_one :school_prio
+  has_one :school_prio, :dependent => :destroy
 
   validates_presence_of  :name, :district_id
-  validates_associated   :districts, :groups
 
   attr_accessor :num_children, :num_tickets, :distribution_groups
 end

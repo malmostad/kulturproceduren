@@ -1,0 +1,28 @@
+<% show_district ||= false %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Namn</th>
+      <% if show_district -%>
+        <th>Stadsdel</th>
+      <% end -%>
+      <th>ELIT-ID</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% schools.each do |school| %>
+      <tr>
+        <td><%= link_to h(school.name), school %></td>
+        <% if show_district -%>
+          <td><%= link_to h(school.district.name), school.district %></td>
+        <% end -%>
+        <td><%= h school.elit_id %></td>
+        <td><%= link_to 'Redigera', edit_school_path(school) %></td>
+        <td><%= link_to 'Radera', school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

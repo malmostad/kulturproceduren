@@ -1,90 +1,69 @@
 class SchoolsController < ApplicationController
-  layout "standard"
+  layout "admin"
   
-  # GET /schools
-  # GET /schools.xml
   def index
-    @schools = School.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @schools }
-    end
+    @schools = School.all :order => "name ASC"
   end
 
-  # GET /schools/1
-  # GET /schools/1.xml
   def show
     @school = School.find(params[:id])
-    @district_name = District.find_by_id(@school.district_id).name
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @school }
-    end
   end
-
-  # GET /schools/new
-  # GET /schools/new.xml
 
   def new
     @school = School.new
-    @district_list = District.find( :all ) { |d| d.name }
-    
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @school }
-    end
+    @districts = District.all
   end
 
-  # GET /schools/1/edit
   def edit
     @school = School.find(params[:id])
+    @districts = District.all
+    render :action => "new"
   end
 
-  # POST /schools
-  # POST /schools.xml
   def create
     @school = School.new(params[:school])
 
-    respond_to do |format|
-      if @school.save
-        flash[:notice] = 'School was successfully created.'
-        format.html { redirect_to(@school) }
-        format.xml  { render :xml => @school, :status => :created, :location => @school }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @school.errors, :status => :unprocessable_entity }
+    if @school.save
+      prio = SchoolPrio.new do |p|
+        p.school = @school
+        p.district = @school.district
+        p.prio = SchoolPrio.max_prio(@school.district) + 1
       end
+      prio.save!
+
+      flash[:notice] = 'Skolan skapades.'
+      redirect_to(@school)
+    else
+      @districts = District.all
+      render :action => "new"
     end
   end
 
-  # PUT /schools/1
-  # PUT /schools/1.xml
   def update
     @school = School.find(params[:id])
 
-    respond_to do |format|
-      if @school.update_attributes(params[:school])
-        flash[:notice] = 'School was successfully updated.'
-        format.html { redirect_to(@school) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @school.errors, :status => :unprocessable_entity }
+    new_district = @school.district_id.to_i != params[:school][:district_id].to_i
+
+    if @school.update_attributes(params[:school])
+
+      if new_district
+        @school.school_prio.district = @school.district
+        @school.school_prio.prio = SchoolPrio.max_prio(@school.district) + 1
+        @school.school_prio.save!
       end
+
+      flash[:notice] = 'Skolan uppdaterades.'
+      redirect_to(@school)
+    else
+      @districts = District.all
+      render :action => "new"
     end
   end
 
-  # DELETE /schools/1
-  # DELETE /schools/1.xml
   def destroy
     @school = School.find(params[:id])
     @school.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(schools_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(schools_url)
   end
 end

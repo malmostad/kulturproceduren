@@ -2,7 +2,7 @@ class Group < ActiveRecord::Base
   has_many                  :notification_requests
   has_many                  :tickets
 
-  has_many                  :age_groups do
+  has_many                  :age_groups, :order => "age ASC", :dependent => :destroy do
     def num_children_by_age_span(from, to)
       sum "quantity", :conditions => [ "age between ? and ?", from, to ]
     end

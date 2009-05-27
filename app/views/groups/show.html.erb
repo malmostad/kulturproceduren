@@ -1,18 +1,58 @@
-<p>
-  <b>Name:</b>
-  <%=h @group.name %>
-</p>
+<%= render :partial => "groups/menu" -%>
 
-<p>
-  <b>Elit:</b>
-  <%=h @group.elit_id %>
-</p>
+<div class="model-cnt">
 
-<p>
-  <b>School:</b>
-  <%=h @group.school_id %>
-</p>
+  <h1><%= h @group.name %></h1>
 
+  <ul class="tools">
+    <li><%= link_to 'Redigera', edit_group_path(@group) %></li>
+    <li><%= link_to 'Radera', @group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></li>
+  </ul>
 
-<%= link_to 'Edit', edit_group_path(@group) %> |
-<%= link_to 'Back', groups_path %>
+  <ul class="meta">
+    <li class="district">Skola: <%= link_to h(@group.school.name), @group.school %></li>
+    <li class="district">Stadsdel: <%= link_to h(@group.school.district.name), @group.school.district %></li>
+    <li class="elit-id">ELIT-ID: <%= h @group.elit_id || "-" %></li>
+  </ul>
+
+  <div class="clearer"></div>
+</div>
+
+<h2>Åldersgrupper</h2>
+
+<% is_edit = ["edit", "update"].include?(params["action"]) %>
+<% form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
+  <fieldset>
+    <legend><%= is_edit ? "Redigera" : "Lägg till" %> åldersgrupp</legend>
+
+    <%= f.error_messages %>
+
+    <%= f.label :age %>
+    <%= f.text_field :age %>
+    <%= f.label :quantity %>
+    <%= f.text_field :quantity %>
+    <%= f.hidden_field :group_id %>
+    <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
+  </fieldset>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ålder</th>
+      <th>Antal elever</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @group.age_groups.each do |age_group| %>
+      <tr>
+        <td><%= h age_group.age %></td>
+        <td><%= h age_group.quantity %></td>
+        <td><%= link_to 'Redigera', edit_age_group_path(age_group) %></td>
+        <td><%= link_to 'Radera', age_group, :confirm => 'Är du säker på att du vill radera åldersgruppen?', :method => :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

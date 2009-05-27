@@ -1,23 +1,29 @@
-<h1>New group</h1>
+<%= render :partial => "menu" -%>
+
+<% is_edit = ["edit", "update"].include?(params["action"]) -%>
+
+<h1><%= is_edit ? "Redigera" : "Skapa ny" %> grupp</h1>
+
+<% if is_edit -%>
+  <p class="details">
+    Redigerar gruppen <%= link_to h(@group.name), @group %>,
+    <%= link_to h(@group.school.name), @group.school %>,
+    <%= link_to h(@group.school.district.name), @group.school.district %>.
+  </p>
+<% end -%>
 
 <% form_for(@group) do |f| %>
+
   <%= f.error_messages %>
 
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-<!--  <p>
-    <%= f.label :elit_id %><br />
-    <%= f.text_field :elit_id %>
-  </p> -->
-  <p>
-    <%= f.label :school_id %><br />
-    <%= select ( "group" , "school_id" , School.find( :all ).collect { |s| [s.name , s.id ] } ) %>
-  </p>
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
-<% end %>
+  <dl class="form-elements">
+    <dt><%= f.label :name %></dt>
+    <dd><%= f.text_field :name %></dd>
+    <dt><%= f.label :school_id %></dt>
+    <dd><%= f.collection_select :school_id, @schools, :id, :name %></dd>
+  </dl>
 
-<%= link_to 'Back', groups_path %>
+  <div class="submit-cnt">
+    <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
+  </div>
+<% end %>

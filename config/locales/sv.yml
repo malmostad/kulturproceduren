@@ -92,6 +92,10 @@ sv:
             event: evenemanget
             occasion: föreställningen
             culture_provider: arrangören
+            district: stadsdelen
+            school: skolan
+            group: gruppen
+            age_group: åldersgruppen
 
         attributes:
             event:
@@ -107,6 +111,21 @@ sv:
                 seats: Antal platser
                 address: Adress
                 description: Beskrivning
+            district:
+                name: Namn
+                elit_id: ELIT-ID
+            school:
+                name: Namn
+                elit_id: ELIT-ID
+                district_id: Stadsdel
+            group:
+                name: Namn
+                elit_id: ELIT-ID
+                school_id: Skola
+            age_group:
+                age: Ålder
+                quantity: Antal
+
 
     date:
         formats:

@@ -1,0 +1,30 @@
+<% show_school ||= false %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Namn</th>
+      <% if show_school -%>
+        <th>Skola</th>
+        <th>Stadsdel</th>
+      <% end -%>
+      <th>ELIT-ID</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% groups.each do |group| %>
+      <tr>
+        <td><%= link_to h(group.name), group %></td>
+        <% if show_school -%>
+          <td><%= link_to h(group.school.name), group.school %></td>
+          <td><%= link_to h(group.school.district.name), group.school.district %></td>
+        <% end -%>
+        <td><%= h group.elit_id %></td>
+        <td><%= link_to 'Redigera', edit_group_path(group) %></td>
+        <td><%= link_to 'Radera', group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

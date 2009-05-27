@@ -53,14 +53,14 @@ body {
 }
 #kp .pri-nav li {
     display: inline-block;
-    margin-right: 0.5em;
+    margin-right: 0.2em;
     border: 1px solid #d3d7cf;
     border-bottom: 0;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
     background: #d3d7cf;
 }
-#kp .pri-nav a { display: block; padding: 0.5em 1em; position: relative; top: 1px; }
+#kp .pri-nav a { display: block; padding: 0.3em 0.6em; position: relative; top: 1px; }
 #kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
 
 #kp .sec-nav {
@@ -73,6 +73,26 @@ body {
 }
 #kp .sec-nav li { display: inline-block; padding: 0.5em 1em; }
 #kp .sec-nav li.active { font-weight: bold; }
+
+/*** Models ***/
+
+#kp .model-cnt { border: 1px solid #d3d7cf; padding: 1em; }
+#kp .model-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
+#kp .model-cnt .tools {
+    list-style-type: none;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+#kp .model-cnt .tools li { display: inline; margin-right: 1em; }
+#kp .model-cnt .meta {
+    border: 1px solid #d3d7cf;
+    color: #555753;
+    padding: 0.5em;
+    margin: 0;
+    list-style-type: none;
+    float: right;
+}
+#kp .model-cnt .meta li { padding-bottom: 0.3em; }
 
 /*** Allotment ***/
 
@@ -120,26 +140,6 @@ body {
 #kp .calendar-table-eventname {text-align: left;}
 #kp .calendar-table-occasion {text-align: left;}
 
-/*** Events ***/
-
-#kp .event-cnt { border: 1px solid #d3d7cf; padding: 1em; }
-#kp .event-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
-#kp .event-cnt .tools {
-    list-style-type: none;
-    margin: 0 0 1em 0;
-    padding: 0;
-}
-#kp .event-cnt .tools li { display: inline; margin-right: 1em; }
-#kp .event-cnt .meta {
-    border: 1px solid #d3d7cf;
-    color: #555753;
-    padding: 0.5em;
-    margin: 0;
-    list-style-type: none;
-    float: right;
-}
-#kp .event-cnt .meta li { padding-bottom: 0.3em; }
-
 /*** Occasions ***/
 
 #kp .occasions-event {padding: 0.5em;}
@@ -158,3 +158,6 @@ body {
 #kp .kp-booking-pageheader { font-size: 1.1em;}
 #kp .kp-booking-form {width: 75%;}
 #kp .kp-booking-overflow-warning {color: red;}
+
+/*** Groups ***/
+#kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }

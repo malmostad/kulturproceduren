@@ -1,18 +1,22 @@
-<p>
-  <b>Name:</b>
-  <%=h @school.name %>
-</p>
+<%= render :partial => "menu" -%>
 
-<!-- <p>
-  <b>Elit:</b>
-  <%=h @school.elit_id %>
-</p> -->
+<div class="model-cnt">
 
-<p>
-  <b>District:</b>
-  <%=h @district_name %>
-</p>
+  <h1><%= h @school.name %></h1>
 
+  <ul class="tools">
+    <li><%= link_to 'Redigera', edit_school_path(@school) %></li>
+    <li><%= link_to 'Radera', @school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></li>
+  </ul>
 
-<%= link_to 'Edit', edit_school_path(@school) %> |
-<%= link_to 'Back', schools_path %>
+  <ul class="meta">
+    <li class="district">Stadsdel: <%= link_to h(@school.district.name), @school.district %></li>
+    <li class="elit-id">ELIT-ID: <%= h @school.elit_id || "-" %></li>
+  </ul>
+
+  <div class="clearer"></div>
+</div>
+
+<h2>Grupper i skolan</h2>
+
+<%= render :partial => "groups/list", :locals => { :groups => @school.groups } %>
