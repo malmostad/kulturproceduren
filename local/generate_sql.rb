@@ -5,13 +5,13 @@ require "dbi"
 require 'digest/sha1'
 
 
-dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5432", 'kp-dev', 'kp-dev')
+dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5433", 'root', '')
 
 
 # 0 - Empty db
 
 tables = [
-  "QUESTIONS_QUESTIONAIRES",
+  "questionaires_questions",
   "CULTURE_ADMINISTRATORS_USERS",
   "BOOKING_REQUIREMENTS",
   "OCCASIONS_USERS",
@@ -273,8 +273,8 @@ sth.execute
 qid = sth.fetch
 
 qaids.each do |qaid|
-  puts "INSERT INTO QUESTIONS_QUESTIONAIRES (QUESTION_ID,QUESTIONAIRE_ID) VALUES ( #{qid} , #{qaid} )"
-  dbh.do "INSERT INTO QUESTIONS_QUESTIONAIRES (QUESTION_ID,QUESTIONAIRE_ID) VALUES ( #{qid} , #{qaid} )"
+  puts "INSERT INTO questionaires_questions (QUESTION_ID,QUESTIONAIRE_ID) VALUES ( #{qid} , #{qaid} )"
+  dbh.do "INSERT INTO questionaires_questions (QUESTION_ID,QUESTIONAIRE_ID) VALUES ( #{qid} , #{qaid} )"
 end
 dbh.do "DISCARD ALL"
 

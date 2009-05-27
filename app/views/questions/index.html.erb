@@ -2,14 +2,12 @@
 
 <table>
   <tr>
-    <th>Questionaire</th>
-    <th>Template</th>
+    <th>isTemplate</th>
     <th>Question</th>
   </tr>
 
 <% @questions.each do |question| %>
   <tr>
-    <td><%=h question.questionaire_id %></td>
     <td><%=h question.template %></td>
     <td><%=h question.question %></td>
     <td><%= link_to 'Show', question %></td>

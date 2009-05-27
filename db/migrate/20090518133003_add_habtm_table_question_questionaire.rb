@@ -1,11 +1,11 @@
 class AddHabtmTableQuestionQuestionaire < ActiveRecord::Migration
   def self.up
-    create_table :questions_questionaires, :id => false do |t|
+    create_table :questionaires_questions, :id => false do |t|
       t.references :question, :questionaire
     end
   end
 
   def self.down
-    drop_table :questions_questionaires
+    drop_table :questionaires_questions
   end
 end

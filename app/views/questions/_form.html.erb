@@ -1,0 +1,26 @@
+<%
+is_edit = ["edit", "update"].include? params["action"]
+
+form_for( question || Question.new { |q| q.questionaire = [ questionaire ] },
+  :html => { :class => "question-form" }) do |f| -%>
+  <fieldset>
+    <legend><%= is_edit ? "Redigera" : "Lägg till" %> fråga</legend>
+
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+    <div class="question-cnt">
+      <%= f.label :question %>
+      <%= f.text_field :question %>
+    </div>
+
+    <div class="istemplate-cnt">
+      <%= f.label :template %>
+      <%= f.check_box :template %>
+    </div>
+    <div class="submit-cnt">
+      <input type="hidden" name="questionaire_id" value="<%= @questionaire.id -%>"/>
+      <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
+    </div>
+
+  </fieldset>
+<% end -%>
