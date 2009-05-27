@@ -1,13 +1,19 @@
-<p>
-  <b>Event:</b>
-  <%=h @questionaire.event_id %>
+<p class="questionaire-pagetitle">
+Utvärderingsenkät för <%= Occasion.find_by_id(params[:occasion_id]).event.name %>,
+föreställningen den <%= Occasion.find_by_id(params[:occasion_id]).date.to_s %>
+med gruppen <%= Group.find_by_id(params[:group_id]).school.name %> <%= Group.find_by_id(params[:group_id]).name %>
 </p>
-
-<p>
-  <b>Description:</b>
-  <%=h @questionaire.description %>
-</p>
-
-
-<%= link_to 'Edit', edit_questionaire_path(@questionaire) %> |
-<%= link_to 'Back', questionaires_path %>
+<form action="/questionaires/<%=params[:questionaire_id]-%>/answer/<%=params[:occasion_id]-%>/<%=params[:group_id]-%>" method="post">
+<% @questionaire.questions.each do |q| %>
+  <div class="question-cnt">
+    <%= q.question %>
+  </div>
+  <div class="questioin-radiobutton-cnt">
+    <% (1..5).each do |i| %>
+      <%= i.to_s %> <%= radio_button_tag "question_id[#{q.id}]" , i.to_s %>
+    <%end%>
+  </div>
+<% end %>
+<%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+<%= submit_tag 'Besvara' %>
+</form>

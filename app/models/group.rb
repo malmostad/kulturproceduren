@@ -1,6 +1,9 @@
 class Group < ActiveRecord::Base
   has_many                  :notification_requests
   has_many                  :tickets
+  has_many :occasions, :through => :tickets , :uniq => true
+  has_many :events, :through => :tickets , :uniq => true
+
 
   has_many                  :age_groups, :order => "age ASC", :dependent => :destroy do
     def num_children_by_age_span(from, to)

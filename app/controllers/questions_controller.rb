@@ -6,11 +6,8 @@ class QuestionsController < ApplicationController
   # GET /questions.xml
   def index
     @questions = Question.all
+    @user = User.find_by_id(session[:current_user_id])
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @questions }
-    end
   end
 
   # GET /questions/1

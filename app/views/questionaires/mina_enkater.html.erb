@@ -1,0 +1,14 @@
+
+Mina enkäter
+
+<ul>
+<% @questionaires.each do |q| %>
+  <% q.event.occasions.each do |o| %>
+    <% (o.groups & @user.groups).each do |g| %>
+      <li><%= o.event.name %><%= o.date %><br/><%= g.school.name %><%= g.name %>
+          <a href="/questionaires/<%= q.id -%>/show/<%= o.id -%>/<%= g.id -%>"> Besvara enkäten </a>
+     </li>
+    <% end %>
+  <% end %>
+<% end %>
+</ul>

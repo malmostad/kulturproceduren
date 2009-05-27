@@ -5,11 +5,20 @@ class QuestionairesController < ApplicationController
   # GET /questionaires
   # GET /questionaires.xml
   def index
-    @questionaires = Questionaire.all
+    @user = User.find_by_id(session[:current_user_id])
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @questionaires }
+    if @user.roles.include?(Role.find_by_name("Administratör"))
+      @questionaires = Questionaire.all
+      render :template => "index"
+    else
+      @questionaires = Array.new
+      @user.groups.each do |g|
+        g.events.each do |e|
+          #TODO Byt ut hårdkodat datum mot Date.today
+          @questionaires.push(e.questionaire) if ( e.last_occasion.date < Date.new(2009,12,12) )
+        end
+      end
+      render :mina_enkater
     end
   end
 
@@ -17,11 +26,20 @@ class QuestionairesController < ApplicationController
   # GET /questionaires/1.xml
   def show
     @user = User.find_by_id(session[:current_user_id])
-    @questionaire = Questionaire.find(params[:id])
-    @all_q = Question.find(:all)
+    
     if @user.roles.include?(Role.find_by_name("Administratör"))
+      @questionaire = Questionaire.find(params[:id])
+      @all_q = Question.find(:all)
       render :admin_view
+    else
+      @questionaire = Questionaire.find(params[:questionaire_id])
+      render :show
     end
+  end
+
+  def answer
+    pp params
+    redirect_to "/"
   end
 
   # GET /questionaires/new
