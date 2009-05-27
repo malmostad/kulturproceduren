@@ -22,4 +22,4 @@
   <li><%= link_to 'Lägg till skola', new_school_path(:district_id => @district.id) %></li>
 </ul>
 
-<%= render :partial => "schools/list", :locals => { :schools => @district.schools } %>
+<%= render :partial => "schools/list", :locals => { :schools => @district.schools, :show_prio_tools => true } %>

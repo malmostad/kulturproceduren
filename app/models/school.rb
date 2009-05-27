@@ -14,4 +14,29 @@ class School < ActiveRecord::Base
   validates_presence_of  :name, :district_id
 
   attr_accessor :num_children, :num_tickets, :distribution_groups
+
+  
+  def above_in_prio
+    prio = SchoolPrio.first :conditions => [ "district_id = ? and prio < ?", district_id, school_prio.prio ],
+      :order => "prio DESC",
+      :include => :school
+
+    if prio
+      return prio.school
+    else
+      return nil
+    end
+  end
+
+  def below_in_prio
+    prio = SchoolPrio.first :conditions => [ "district_id = ? and prio > ?", district_id, school_prio.prio ],
+      :order => "prio ASC",
+      :include => :school
+    
+    if prio
+      return prio.school
+    else
+      return nil
+    end
+  end
 end

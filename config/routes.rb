@@ -11,8 +11,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :tags
 
-  map.resources :school_prios
-
   map.resources :roles
 
   map.resources :events

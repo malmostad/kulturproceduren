@@ -1,0 +1,14 @@
+bar_apa_school_prio:
+    prio: 3
+    school_id: 3
+    district_id: 2
+
+bar_bepa_school_prio:
+    prio: 2
+    school_id: 4
+    district_id: 2
+
+bar_cepa_school_prio:
+    prio: 1
+    school_id: 5
+    district_id: 2

@@ -22,3 +22,9 @@ bar_bepa_school:
     name: bar bepa school
     district_id: 2
     elit_id: 4
+
+bar_cepa_school:
+    id: 5
+    name: bar cepa school
+    district_id: 2
+    elit_id: 5

@@ -1,6 +1,9 @@
 class District < ActiveRecord::Base
   
-  has_many :schools, :dependent => :destroy do
+  has_many :schools,
+    :order => "school_prios.prio ASC",
+    :include => :school_prio,
+    :dependent => :destroy do
     def find_by_age_span(from, to)
       find :all,
         :include => :school_prio,
@@ -10,10 +13,11 @@ class District < ActiveRecord::Base
   end
 
   has_many :tickets
-  validates_presence_of :name
-  validates_associated  :schools, :tickets
   has_and_belongs_to_many :users  #Role Culture Coordinator
   has_many    :school_prios
+
+  validates_presence_of :name
+  validates_associated  :schools, :tickets
 
   attr_accessor :num_children, :num_tickets, :distribution_schools
 end

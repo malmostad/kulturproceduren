@@ -1,13 +1,23 @@
-<% show_district ||= false %>
+<%
+show_district ||= false
+show_prio_tools ||= false
+-%>
 
 <table>
   <thead>
     <tr>
       <th>Namn</th>
+
       <% if show_district -%>
         <th>Stadsdel</th>
       <% end -%>
+
       <th>ELIT-ID</th>
+
+      <% if show_prio_tools -%>
+        <th colspan="2">Prioritering</th>
+      <% end -%>
+
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -16,10 +26,18 @@
     <% schools.each do |school| %>
       <tr>
         <td><%= link_to h(school.name), school %></td>
+
         <% if show_district -%>
           <td><%= link_to h(school.district.name), school.district %></td>
         <% end -%>
+
         <td><%= h school.elit_id %></td>
+
+        <% if show_prio_tools -%>
+          <td><%= link_to "Upp", :controller => "school_prios", :action => "move_up", :id => school.id %></td>
+          <td><%= link_to "Ner", :controller => "school_prios", :action => "move_down", :id => school.id %></td>
+        <% end -%>
+
         <td><%= link_to 'Redigera', edit_school_path(school) %></td>
         <td><%= link_to 'Radera', school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></td>
       </tr>
