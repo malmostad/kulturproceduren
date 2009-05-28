@@ -5,15 +5,24 @@ med gruppen <%= Group.find_by_id(params[:group_id]).school.name %> <%= Group.fin
 </p>
 <form action="/questionaires/<%=params[:questionaire_id]-%>/answer/<%=params[:occasion_id]-%>/<%=params[:group_id]-%>" method="post">
 <% @questionaire.questions.each do |q| %>
-  <div class="question-cnt">
-    <%= q.question %>
-  </div>
-  <div class="questioin-radiobutton-cnt">
-    <% (1..5).each do |i| %>
-      <%= i.to_s %> <%= radio_button_tag "question_id[#{q.id}]" , i.to_s %>
-    <%end%>
+  <% if ( ( @qids.nil?) or (@qids.keys.include?(q.id.to_s) ) ) %>
+    <div class ="question-answer-cnt">
+  <% else %>
+    <div class ="unanswered-question-cnt">
+      Du måste svara på frågan.
+  <% end %>
+    <div class="question-cnt">
+      <%= q.question %>
+    </div>
+    <div class="questioin-radiobutton-cnt">
+      <% (1..5).each do |i| %>
+        <%= i.to_s %> <%= radio_button_tag "question_id[#{q.id}]" , i.to_s , ( (not @qids.nil?) and ( @qids["#{q.id}"].to_i == i ) ) %>
+      <%end%>
+    </div>
   </div>
 <% end %>
 <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+<%= hidden_field_tag 'group_id', params[:group_id] %>
+<%= hidden_field_tag 'occasion_id', params[:occasion_id] %>
 <%= submit_tag 'Besvara' %>
 </form>

@@ -181,3 +181,10 @@ body {
 
 /*** Groups ***/
 #kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }
+
+/** Questionaires **/
+
+#kp .unanswered-question-cnt {padding: 0.3em;border: 1px solid #ff0000;background-color: #f0f0f0;}
+#kp .question-answer-cnt {padding: 0.2em}
+#kp .questioin-radiobutton-cnt {margin-left: 0.5em; text-align: left}
+#kp .questionaire-pagetitle {font-size: 1.2em; padding: 0.5em;}

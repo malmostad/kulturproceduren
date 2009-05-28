@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.integer  "question_id"
     t.integer  "occasion_id"
     t.integer  "group_id"
+    t.integer  "answer"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

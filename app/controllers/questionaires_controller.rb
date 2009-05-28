@@ -12,12 +12,23 @@ class QuestionairesController < ApplicationController
       render :template => "index"
     else
       @questionaires = Array.new
+      tot_answers = 0
+      tot_tickets = 1
       @user.groups.each do |g|
         g.events.each do |e|
-          #TODO Byt ut hårdkodat datum mot Date.today
-          @questionaires.push(e.questionaire) if ( e.last_occasion.date < Date.new(2009,12,12) )
+          e.occasions.each do |o|
+            tot_answers = Answer.find(:all, :conditions => "occasion_id = #{o.id} and group_id = #{g.id}" ).length
+            tot_tickets = Ticket.find(:all, :conditions => "occasion_id = #{o.id} and group_id = #{g.id} and ( state = #{Ticket::BOOKED} or state = #{Ticket::USED} )" ).length
+            puts "e = #{e.name} , o = #{o.date} , g = #{g.name} , tot_answers = #{tot_answers} , tot_ticket = #{tot_tickets}"
+            # TODO Dagens datum istället för hårdkodat
+            if tot_tickets > 0 and tot_answers == 0 and  e.last_occasion.date < Date.new(2009,12,12) and not @questionaires.include?(e.questionaire)
+              puts "pushing event #{e.name}"
+              @questionaires.push(e.questionaire)
+            end
+          end
         end
       end
+      pp @questionaires
       render :mina_enkater
     end
   end
@@ -26,14 +37,38 @@ class QuestionairesController < ApplicationController
   # GET /questionaires/1.xml
   def show
     @user = User.find_by_id(session[:current_user_id])
-    
+    @qids = params[:question_id] unless params[:question_id].nil?
     if @user.roles.include?(Role.find_by_name("Administratör"))
       @questionaire = Questionaire.find(params[:id])
       @all_q = Question.find(:all)
       render :admin_view
     else
       @questionaire = Questionaire.find(params[:questionaire_id])
-      render :show
+      complete = false
+      unless @qids.nil?
+        complete = true
+        @questionaire.question_ids.sort.collect {|i| i.to_s}.each do |k|
+          complete = false unless @qids.keys.include?(k)
+        end
+      end
+      if (complete )
+        ok = true
+        @qids.keys.each do |k|
+          answer = Answer.new
+          answer.question_id = k
+          answer.answer = @qids[k]
+          answer.occasion_id = params[:occasion_id]
+          answer.group_id = params[:group_id]
+          if not answer.save
+            flash[:error] += " Kunde inte spara svaret på fråga #{k}"
+            ok = false
+          end
+        end
+        flash[:notice] = "Tack för att du svarade på enkäten - dina svar har sparats!"
+        redirect_to :controller => "questionaires", :action => "index"
+      else
+        render :show
+      end
     end
   end
 
