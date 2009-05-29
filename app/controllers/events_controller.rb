@@ -1,31 +1,28 @@
 class EventsController < ApplicationController
   layout "standard"
   require "pp"
+  require 'rubygems'
+  require 'gruff'
+
   def stats
-
-
     @event = Event.find_by_id(params[:id])
-    #TODO HELT FEL STATISTIK _ DUMHUVVE!!!!
-    # 
-    # Fördelning per föreställning av eventets totala biljettantall gårju inte!!!!
+    @tickets_usage = gen_fname("tickets_usage")
+    tott = Ticket.find(:all,:conditions => "event_id = #{@event.id}").length
+    unbt = Ticket.find(:all,:conditions => "event_id = #{@event.id} and state = #{Ticket::UNBOOKED}").length
+    unut = Ticket.find(:all,:conditions => "event_id = #{@event.id} and state = #{Ticket::NOT_USED}").length
+    uset = Ticket.find(:all,:conditions => "event_id = #{@event.id} and (state = #{Ticket::USED} or state = #{Ticket::BOOKED} )").length
 
-    i = 0
-    @tot_ticks = Array.new
-    @used_ticks = Array.new
-    @unused_ticks = Array.new
-    @unbooked_ticks = Array.new
-    @event.occasions.each do |o|
-      @tot_ticks[i] = Ticket.find(:all, :conditions =>"event_id = #{@event.id} and  occasion_id = #{o.id}").length
-      next if @tot_ticks[i] == 0
-      @used_ticks[i] = Ticket.find(:all, :conditions =>"event_id = #{@event.id} and occasion_id = #{o.id} and ( state = #{Ticket::USED} or state = #{Ticket::BOOKED})").length
-      @unused_ticks[i] = Ticket.find(:all, :conditions =>"event_id = #{@event.id} and occasion_id = #{o.id} and state = #{Ticket::NOT_USED}").length
-      @unbooked_ticks[i] = Ticket.find(:all, :conditions =>"event_id = #{@event.id} and occasion_id = #{o.id} and state = #{Ticket::UNBOOKED}").length
-      i += 1
-    end
-    pp @tot_ticks
-    pp @used_ticks
-    pp @unused_ticks
-    pp @unbooked_ticks
+    g = Gruff::Pie.new(500)
+    g.right_margin = 10
+    g.left_margin = 10
+    g.title_font_size = 30
+    g.title = "Biljettanvändning för #{@event.name}"
+    g.data  "Obokade biljetter", unbt
+    g.data  "Oanvända biljetter", unut
+    g.data  "Bokade/Använda biljetter" , uset
+    g.write(@tickets_usage.to_s)
+    @tickets_usage = @tickets_usage.sub("public","")
+
     render :stats
   end
 
@@ -75,5 +72,15 @@ class EventsController < ApplicationController
 
     flash[:notice] = "Evenemanget raderades."
     redirect_to(events_url)
+  end
+
+  def gen_fname(s)
+    numpart = rand(10000)
+    fname = "public/images/" + s + numpart.to_s + ".png"
+    while File.exists?(fname) do
+      numpart +=1
+      fname = "public/images/" + s + numpart.to_s + ".png"
+    end
+    return fname
   end
 end

@@ -1,20 +1,4 @@
 
 statistik för <%= @event.name %>
 
-
-<%
-  i = 0
-  @event.occasions.each do |o|
-  next if Ticket.find(:all, :conditions =>"event_id = #{@event.id} and  occasion_id = #{o.id}").length == 0
-%>
-  <p>
-    Biljettfördelning för föreställningen datum: <%= o.date.to_s %>:
-    <%= bar_graph  [
-      ['Anvanda', ((@used_ticks[i].to_f / @tot_ticks[i].to_f ) * 100).to_i],
-      ['Oanvanda', ((@unused_ticks[i].to_f / @tot_ticks[i].to_f ) * 100).to_i ],
-      ['Obokade', ((@unbooked_ticks[i].to_f / @tot_ticks[i].to_f ) * 100).to_i],
-    ]
-  i += 1
-  %>
-</p>
-<% end %>
+<img src="<%=@tickets_usage%>" />
