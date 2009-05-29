@@ -1,15 +1,31 @@
 
+<p class="statistics-pagetitle">
 statistik för <%= @event.name %>
-
+</p>
+<p class="statistics-ticket-usage">
+Biljettanvändning totalt för evenemanget.
 <img src="<%=@tickets_usage%>" />
-
-<% i = 0
-  @event.occasions.each do |o| %>
-  <% if @occasion_answers[i] != "" %>
-    Enkätsvar för föreställningen <%= o.date.to_s %>
-    <img src="<%= @occasion_answers[i]%>" />
-  <%end%>
+</p>
+<%
+i = 0
+@event.occasions.each do |o| %>
+<p class="statistic-occasion">
+Svar för föreställningen den <%= o.date.to_s %><br/>
   <%
-  i += 1
+  if not @occasion_answers[i].nil?
+    qi = 0
+    @questions.each do |q|
+%>
+  <div class="statistics-question-cnt">
+    Svarsfördelning på frågan <%= q.question %><br/>
+    <img src="<%=@occasion_answers[i][qi]%>" />
+  </div>
+<%      qi += 1
+    end
   end
-  %>
+  i += 1
+%>
+</p>
+<%
+end
+%>

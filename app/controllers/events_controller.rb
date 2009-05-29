@@ -27,48 +27,39 @@ class EventsController < ApplicationController
     histogram = Array.new
     @occasion_answers = Array.new
     answers = Array.new
-    pp @event
-    pp @event.occasions
+    questionaire = @event.questionaire
+    @questions = questionaire.questions
     @event.occasions.each do |o|
-      puts "DEBUG o.id = #{o.id}"
       answers = Answer.find(:all , :conditions => "occasion_id = #{o.id}")
-      puts "DEBUG: answers"
-      puts "DEBUG: class = #{answers.class}"
-
-      pp "#{answers}"
       if answers.length == 0
-        @occasion_answers[i] = ""
-
+        @occasion_answers[i] = nil
       else
-        @occasion_answers[i] = gen_fname("occasion_" + i.to_s  + "_")
-        (0..5).each {|n| histogram[n] = 0 }
-        answers.each do |a|
-          pp a
-          histogram[a.answer] +=1
-          puts "DEBUG: answer id = #{a.id}"
-          puts "DEBUG: answer = #{a.answer}"
+        @occasion_answers[i] = Array.new
+        qi = 0
+        @questions.each do |q|
+          @occasion_answers[i][qi] = gen_fname("occasion_" + i.to_s  + "_question_" + qi.to_s )
+          (0..5).each {|n| histogram[n] = 0 }
+          answers = Answer.find(:all , :conditions => "occasion_id = #{o.id} and question_id = #{q.id}")
+          answers.each do |a|
+            histogram[a.answer] +=1
+          end
+          g = Gruff::Bar.new(250)
+          g.right_margin = 10
+          g.left_margin = 10
+          g.title_font_size = 30
+          g.title = "Enkätsvar för föreställningen den #{o.date.to_s}"
+          g.sort = false
+          (1..5).each do |n|
+            g.data "#{n}" , histogram[(n-1)]
+          end
+          g.write @occasion_answers[i].to_s
+          @occasion_answers[i][qi] = @occasion_answers[i][qi].sub("public","")
         end
-        puts "DEBUG: answers"
-        pp answers
-        puts "DEBUG: histogram"
-        pp histogram
-        g = Gruff::Bar.new(500)
-        g.right_margin = 10
-        g.left_margin = 10
-        g.title_font_size = 30
-        g.title = "Enkätsvar för föreställningen den #{o.date.to_s}"
-        (1..5).each do |n|
-          puts "Adding data to graph"
-          puts "n = #{n} , histogram[n} = #{histogram[n]}"
-          g.data "#{n}" , histogram[(n-1)]
-        end
-        puts "i = #{i} , Writing graph to filename #{@occasion_answers[i].to_s}"
-        g.write @occasion_answers[i].to_s
-        @occasion_answers[i] = @occasion_answers[i].sub("public","")
+        qi += 1
       end
       i += 1
     end
-    pp @occasion_answer
+    pp @occasion_answers
     render :stats
   end
 
