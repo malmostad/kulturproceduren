@@ -12,7 +12,7 @@ class EventsController < ApplicationController
     unut = Ticket.find(:all,:conditions => "event_id = #{@event.id} and state = #{Ticket::NOT_USED}").length
     uset = Ticket.find(:all,:conditions => "event_id = #{@event.id} and (state = #{Ticket::USED} or state = #{Ticket::BOOKED} )").length
 
-    g = Gruff::Pie.new(500)
+    g = Gruff::Pie.new(400)
     g.right_margin = 10
     g.left_margin = 10
     g.title_font_size = 30
@@ -40,22 +40,18 @@ class EventsController < ApplicationController
           @occasion_answers[i][qi] = gen_fname("occasion_" + i.to_s  + "_question_" + qi.to_s )
           (0..5).each {|n| histogram[n] = 0 }
           answers = Answer.find(:all , :conditions => "occasion_id = #{o.id} and question_id = #{q.id}")
-          answers.each do |a|
-            histogram[a.answer] +=1
-          end
-          g = Gruff::Bar.new(250)
+          answers.each { |a| histogram[a.answer] +=1 }
+          g = Gruff::Bar.new(350)
           g.right_margin = 10
           g.left_margin = 10
           g.title_font_size = 30
-          g.title = "Enkätsvar för föreställningen den #{o.date.to_s}"
+          g.title = "Enkätsvar för föreställningen den #{o.date.to_s}\n" + q.question.to_s
           g.sort = false
-          (1..5).each do |n|
-            g.data "#{n}" , histogram[(n-1)]
-          end
-          g.write @occasion_answers[i].to_s
+          (1..5).each { |n| g.data "#{n}" , histogram[ (n-1)] }
+          g.write @occasion_answers[i][qi].to_s
           @occasion_answers[i][qi] = @occasion_answers[i][qi].sub("public","")
+          qi += 1
         end
-        qi += 1
       end
       i += 1
     end

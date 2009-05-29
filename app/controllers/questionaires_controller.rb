@@ -9,7 +9,7 @@ class QuestionairesController < ApplicationController
 
     if @user.roles.include?(Role.find_by_name("Administratör"))
       @questionaires = Questionaire.all
-      render :template => "index"
+      render :index
     else
       @questionaires = Array.new
       tot_answers = 0
