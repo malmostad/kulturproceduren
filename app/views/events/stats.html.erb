@@ -2,3 +2,14 @@
 statistik för <%= @event.name %>
 
 <img src="<%=@tickets_usage%>" />
+
+<% i = 0
+  @event.occasions.each do |o| %>
+  <% if @occasion_answers[i] != "" %>
+    Enkätsvar för föreställningen <%= o.date.to_s %>
+    <img src="<%= @occasion_answers[i]%>" />
+  <%end%>
+  <%
+  i += 1
+  end
+  %>
