@@ -6,11 +6,11 @@
   <thead>
     <tr class="calendar-month-nav">
       <th class="prev" colspan="2">
-        <a href="<%= url_for :overwrite_params => { :month => @dispmonth - 1, :year => @dispyear } %>"><%= month_name(@dispmonth - 1)%></a>
+        <a href="<%= url_for :overwrite_params => { :month => @prevmonth.month , :year => @prevmonth.year } %>"><%= month_name(@prevmonth.month)%></a>
       </th>
       <th class="current" colspan="3"><%= month_name(@dispmonth) %></th>
       <th class="next" colspan="2">
-        <a href="<%= url_for :overwrite_params => { :month => @dispmonth + 1, :year => @dispyear } %>"><%= month_name(@dispmonth + 1) %></a>
+        <a href="<%= url_for :overwrite_params => { :month => @nextmonth.month , :year => @nextmonth.year } %>"><%= month_name(@nextmonth.month)%></a>
       </th>
     </tr>
     <tr class="calendar-day-headers">
@@ -25,12 +25,14 @@
   </thead>
 
   <tbody>
-    <% while ( iday.month < @dispmonth + 1) do %>
+
+    <% puts "DEBUG FROM VIEW: #{iday.to_s} , #{@nextmonth.to_s}" %>
+    <% while ( iday < @nextmonth ) do %>
 
         <tr>
           <% (1..7).each do |n|
             iday = iday + 1 -%>
-            <td class="<%= "inactive" unless iday.month == @dispmonth %>">
+            <td class="<%= "inactive" unless iday.month == @dispmonth.month %>">
 
               <%= iday.day %>
               

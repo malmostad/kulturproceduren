@@ -13,22 +13,27 @@ class CalendarController < ApplicationController
   end
 
   def calendar
+    puts "IN CALENDER CONTROLLER ACTION CALENDAR"
+
     if ! params[:month].nil?
-      @dispmonth = params[:month].to_i
+      month = params[:month].to_i
+      year  = params[:year].to_i
+      @dispmonth = Date.new(year,month,1)
+      if @dispmonth.nil?
+        flash[:error] = "Felaktiga parametrar"
+        redirect_to :controller => "calendar", action => "calendar"
+        return
+      end
     else
-      @dispmonth = Date.today.month
+      @dispmonth = Date.today
     end
 
-    if ! params[:year].nil?
-      @dispyear = params[:year].to_i
-    else
-      @dispyear = Date.today.year
-    end
-    
-    @monthdays = dim(@dispmonth, @dispyear)
+    @nextmonth = @dispmonth << -1
+    @prevmonth = @dispmonth << 1
+    @monthdays = dim(@dispmonth.month,@dispmonth.year)
 
     @occasions = Occasion.find(:all,
-      :conditions => ["date BETWEEN '#{@dispyear}-#{@dispmonth}-01' and '#{@dispyear}-#{@dispmonth}-#{@monthdays}'"],
+      :conditions => ["date BETWEEN '#{@dispmonth.year}-#{@dispmonth.month}-01' and '#{@dispmonth.year}-#{@dispmonth.month}-#{@monthdays}'"],
       :order => "date DESC")
 
     @oh = {}
@@ -36,9 +41,11 @@ class CalendarController < ApplicationController
       @oh[t.date] = t
     end
 
-    @dispmonth_sday = Date.new(@dispyear, @dispmonth, 1)
+    @dispmonth_sday = Date.new(@dispmonth.year, @dispmonth.month, 1)
 
     @cal_sday = @dispmonth_sday - @dispmonth_sday.cwday
+
+    puts "BEFORE RENDER: nextmonth = #{@nextmonth.to_s}"
   end
   
   private
