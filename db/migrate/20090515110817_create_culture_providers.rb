@@ -2,8 +2,9 @@ class CreateCultureProviders < ActiveRecord::Migration
   def self.up
     create_table :culture_providers do |t|
       t.string :name
-      t.text :description
-
+      t.text   :description
+      t.string :image_path
+      
       t.timestamps
     end
   end

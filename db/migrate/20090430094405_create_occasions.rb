@@ -1,11 +1,13 @@
 class CreateOccasions < ActiveRecord::Migration
   def self.up
     create_table :occasions do |t|
-      t.date :date
+      t.date    :date
       t.integer :seats
-      t.text :address
-      t.text :description
+      t.text    :address
+      t.text    :description
       t.integer :event_id
+      t.integer :wheelchair_seats
+      t.boolean :telecoil
 
       t.timestamps
     end

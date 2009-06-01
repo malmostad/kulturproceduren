@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090520094536) do
+ActiveRecord::Schema.define(:version => 20090601114537) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -19,11 +19,20 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.datetime "updated_at"
   end
 
-  create_table "answers", :force => true do |t|
-    t.integer  "question_id"
+  create_table "answer_forms", :force => true do |t|
+    t.boolean  "completed"
+    t.integer  "companion_id"
     t.integer  "occasion_id"
     t.integer  "group_id"
+    t.integer  "questionaire_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "answers", :force => true do |t|
+    t.integer  "question_id"
     t.integer  "answer"
+    t.integer  "answer_form_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -32,6 +41,14 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.text     "requirement"
     t.integer  "occasion_id"
     t.integer  "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "companions", :force => true do |t|
+    t.string   "tel_nr"
+    t.string   "email"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -187,6 +204,7 @@ ActiveRecord::Schema.define(:version => 20090520094536) do
     t.integer  "event_id"
     t.integer  "occasion_id"
     t.integer  "district_id"
+    t.integer  "companion_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

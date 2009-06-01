@@ -178,7 +178,7 @@ sth_districts.fetch do |d_id|
 end
 dbh.do "DISCARD ALL"
 
-# 6 - Users
+# 6 - Users & companions
 
 fnames = ["Berit", "Gudrun", "Hillevi", "Omar", "Mustafa", "Ove", "Bert", "Sven", "Per", "Fillippa", "Maria", "Johanna", "Johan", "Magnus", "Lars", "Martin", "Helena", "Karl", "Henrik", "Bob", "Mikael", "Sofia", "Jessica", "Louise" ]
 enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson", "Svensson", "Balkendal", "Flandersson", "Franzon", "Benlund", "Fredriksson", "Wachtmeister", "Kornfeldt", "Hoppetoss", "Lushuvud", "Jobring"]
@@ -202,6 +202,24 @@ enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson",
           VALUES  ('#{uname}' , '#{password}' , '#{salt}' , '#{fname} #{ename}' , '#{email}' , '#{mobil}' , NOW()      , NOW())")
 end
 dbh.do("DISCARD ALL")
+
+(1..10).each do |n|
+  fname = String.new(fnames[rand(fnames.length)])
+  ename = String.new(enames[rand(enames.length)])
+  email = String.new
+  email = fname.clone << "." << ename.clone << rand(20).to_s << "@malmo.se"
+  m1 = (30 + rand(30) ).to_s
+  m2 = (100000 + rand(800000)).to_s
+  mobil = "07" << m1 << "-" << m2
+  puts "INSERT INTO
+        COMPANIONS   (name                , email      , tel_nr   , created_at , updated_at)
+        VALUES  ('#{fname} #{ename}' , '#{email}' , '#{mobil}' , NOW()      , NOW())"
+  dbh.do "INSERT INTO
+        COMPANIONS   (name                , email      , tel_nr   , created_at , updated_at)
+        VALUES  ('#{fname} #{ename}' , '#{email}' , '#{mobil}' , NOW()      , NOW())"
+end
+dbh.do("DISCARD ALL")
+
 
 
 # 7- CultureProvider
@@ -280,7 +298,6 @@ dbh.do "DISCARD ALL"
 
 # 12 - Answers
 
-# TODO
 
 # 13 - BookingRequirement
 
