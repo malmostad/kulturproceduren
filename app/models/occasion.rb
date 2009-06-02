@@ -13,4 +13,5 @@ class Occasion < ActiveRecord::Base
   validates_presence_of   :date, :seats, :address
   validates_numericality_of :seats, :only_integer => true
 
+
 end

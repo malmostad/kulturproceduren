@@ -1,28 +1,59 @@
-<h2 class="kp-booking-pagetitle">
-  Boka biljetter
-</h2>
-<p class="kp-booking-pageheader">
-  <%= @occasion.event.name %> - Föreställning <%= @occasion.date.to_s %>
-</p>
-<p>
-  Det finns <%= @seats_available %> platser på den här föreställningen som är obokade.
-  <% if @overflow_warn == 1 %>
-     <p class="kp-booking-overflow-warning">OBS - Det finns grupper som du administrerar som har fler biljetter tilldelade på detta evenemang än vad det finns platser över på den här föreställningen</p>
+<h3> Bokning </h3>
+
+<form method="post" action="/booking/book">
+  <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+  <%= hidden_field_tag 'occasion_id' , @occasion.id %>
+Välj Stadsdel:
+<div id="district-id-cnt">
+<%
+
+if params[:district_id].nil?
+  opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } )
+else
+  my_d = District.find(params[:district_id])
+  opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } , my_d.id.to_s )
+end
+opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
+%>
+<%= select_tag("district_id",opt_tag) %>
+</div>
+<noscript>
+ <input name="commit" type="submit" value="Hämta skolor" /><br/>
+</noscript>
+
+Välj Skola:
+<div id="school-id-cnt">
+  <% if @schools.nil? %>
+     <select id="school_id" name="school_id"><option>Välj stadsdel först</option></select>
+  <% else %>
+     <%  if params[:school_id].nil? or params[:school_id].to_i == 0 %>
+       <select id="school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} ) %></select>
+     <% else %>
+       <select id="school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} , School.find(params[:school_id]).id.to_s ) %></select>
+     <% end %>
   <% end %>
-</p>
-<%  form_for :booking, :html => { :class => "kp-booking-form" } do |f|%>
-  <fieldset>
-    <legend>Boka biljetter</legend>
-    <dl>
-      <dt><%= f.label :group_id, 'Välj grupp' %></dt>
-      <dd><%= select("group_id","", @bookable_tickets.keys.collect {|k| [Group.find_by_id(k).name + " - " + @bookable_tickets["#{k}"].length.to_s + " biljetter", k ]})  %></dd>
-      <dt><%= f.label :no_tickets , 'Antal Biljetter att boka' %></dt>
-      <dd><input name="no_tickets"></dd>
-      <input type="hidden" name="occasion_id" value="<%= @occasion.id %>">
-      <input type="hidden" name="what" value="book">
-      <div><%= submit_tag "Boka" %></div>
-    </dl>
-  </fieldset>
-<%  end %>
-<a href="/login/logout">Logga ut</a>
+</div>
+<noscript>
+  <input name="commit" type="submit" value="Hämta grupper" /><br/>
+</noscript>
+
+Välj Grupp:
+<div id="group-id-cnt">
+  <% if @groups.nil? %>
+    <%  if @schools.nil?  %>
+       <select id="group_id" name="group_id"><option>Välj stadsdel först</option></select>
+    <% else %>
+       <select id="group_id" name="group_id"><option>Välj skola först</option></select>
+    <% end %>
+  <% else %>
+     <select id="group_id" name="group_id"><%= options_for_select(@groups.collect { |g| [ g.name , g.id.to_s ]} ) %></select>
+  <% end %>
+</div>
+
+<div id="input-area">
+<% if not @groups.nil? %>
+  <%= render :partial => "input_area" %>
+<% end %>
+</div>
+</form>
 

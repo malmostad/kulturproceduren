@@ -44,8 +44,8 @@ class QuestionsController < ApplicationController
     
     @questionaire = Questionaire.find(params[:questionaire_id])
 
-    a = @questionaire.question_ids
-    a.push(@question.id)
+    @questionaire.question_ids << @question.id
+    
 
     @questionaire.question_ids = a
     

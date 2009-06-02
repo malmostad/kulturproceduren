@@ -22,5 +22,37 @@
                 }
             }
         });
-    });
+        $("#district_id").change(function() { 
+           var district_id = $("#district_id option:selected").val();
+           var request = $.get(
+                              "/booking/get_schools",
+                              { district_id: district_id },
+                              function(data) {
+                                  $("#school_id").html(data);
+                              }
+                            );
+          $("#group_id").html("<option>Välj skola först</option>");
+        });
+        $("#school_id").change(function() {
+           var school_id = $("#school_id option:selected").val();
+           var request = $.get(
+                              "/booking/get_groups",
+                              { school_id: school_id },
+                              function(data) {
+                                  $("#group_id").html(data);
+                              }
+                            );
+        });
+        $("#group_id").change(function() {
+           var request = $.get(
+                              "/booking/get_input_area", {} , function(data) {
+                                  $("#input-area").html(data);
+                              }
+                            );
+        });
+
+     });
+    //Drop-down
+   
+   
 })(jQuery);

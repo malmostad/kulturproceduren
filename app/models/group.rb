@@ -20,4 +20,15 @@ class Group < ActiveRecord::Base
   validates_associated      :school
 
   attr_accessor :num_children, :num_tickets
+
+  def ntickets_by_occasion(o)
+    if o.is_a? Integer
+      o = Occasion.find(o)
+    end
+    Ticket.count :all , :conditions => {
+      :event_id => o.event.id,
+      :group_id => self.id,
+    }
+  end
+
 end
