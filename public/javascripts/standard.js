@@ -35,13 +35,8 @@
         });
         $("#school_id").change(function() {
            var school_id = $("#school_id option:selected").val();
-           var request = $.get(
-                              "/booking/get_groups",
-                              { school_id: school_id },
-                              function(data) {
-                                  $("#group_id").html(data);
-                              }
-                            );
+           var occasion_id = $("#occasion_id").val();
+           var request = $.get("/booking/get_groups", { school_id: school_id , occasion_id : occasion_id}, function(data) {$("#group_id").html(data);});
         });
         $("#group_id").change(function() {
            var request = $.get(
@@ -49,10 +44,25 @@
                                   $("#input-area").html(data);
                               }
                             );
+                            
         });
-
+        
+       
      });
     //Drop-down
-   
+   $(document).ready(function() {
+       var changeHandler = function() {
+           var inputs = $(".seats");
+           var i;
+           var sum = 0;
+           for ( i = 0 ; i < inputs.length ; i++) {
+               sum += Number(inputs[i].value);
+           };
+           $("#booking-count").html("Du har totalt bokat <blink>" + String(sum) + "</blink> biljetter.");
+       };
+       $("#input-area").change(changeHandler);
+       $("#input-area").keypress(changeHandler);
+   });
+
    
 })(jQuery);

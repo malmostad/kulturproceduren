@@ -1,5 +1,10 @@
-<%=
 
- ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g| [ g.name , g.id]})).to_s
+<%=
+ if @occasion.nil?
+   ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g| [ g.name , g.id]})).to_s
+ else
+   ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g| [ g.name + " - " + g.ntickets_by_occasion(@occasion).to_s + " biljetter tilldelade" , g.id]})).to_s
+ end
+ 
 
 %>

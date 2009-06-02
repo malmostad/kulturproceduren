@@ -25,10 +25,22 @@ class Group < ActiveRecord::Base
     if o.is_a? Integer
       o = Occasion.find(o)
     end
-    Ticket.count :all , :conditions => {
-      :event_id => o.event.id,
-      :group_id => self.id,
-    }
+    case o.event.ticket_state
+    when Event::ALLOTED_GROUP then
+      Ticket.count :all , :conditions => {
+        :event_id => o.event.id,
+        :group_id => self.id,
+      }
+    when Event::ALLOTED_DISTRICT then
+      Ticket.count :all , :conditions => {
+        :event_id => o.event.id,
+        :district_id => self.school.district.id,
+      }
+    when Event::FREE_FOR_ALL then
+        Ticket.count :all , :conditions => {
+        :event_id => o.event.id
+      }  
+    end
   end
 
 end

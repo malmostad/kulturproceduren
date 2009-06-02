@@ -1,9 +1,16 @@
 <h3> Bokning </h3>
-
+<p>
+Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.date.to_s -%>
+</p>
 <form method="post" action="/booking/book">
+
   <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
   <%= hidden_field_tag 'occasion_id' , @occasion.id %>
-Välj Stadsdel:
+<fieldset>
+  <legend> Bokning </legend>
+  <dl>
+<dt><%= label_tag "district_id" , "Välj Stadsdel:"%> </dt>
+<dd>
 <div id="district-id-cnt">
 <%
 
@@ -17,11 +24,13 @@ opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
 %>
 <%= select_tag("district_id",opt_tag) %>
 </div>
+
 <noscript>
  <input name="commit" type="submit" value="Hämta skolor" /><br/>
 </noscript>
-
-Välj Skola:
+</dd>
+<dt><%= label_tag "school_id" , "Välj Skola:" %></dt>
+<dd>
 <div id="school-id-cnt">
   <% if @schools.nil? %>
      <select id="school_id" name="school_id"><option>Välj stadsdel först</option></select>
@@ -36,8 +45,9 @@ Välj Skola:
 <noscript>
   <input name="commit" type="submit" value="Hämta grupper" /><br/>
 </noscript>
-
-Välj Grupp:
+</dd>
+<dt><%= label_tag "group_id" , "Välj Grupp:"%></dt>
+<dd>
 <div id="group-id-cnt">
   <% if @groups.nil? %>
     <%  if @schools.nil?  %>
@@ -46,14 +56,16 @@ Välj Grupp:
        <select id="group_id" name="group_id"><option>Välj skola först</option></select>
     <% end %>
   <% else %>
-     <select id="group_id" name="group_id"><%= options_for_select(@groups.collect { |g| [ g.name , g.id.to_s ]} ) %></select>
+     <select id="group_id" name="group_id"><%=  ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g| [ g.name + " - " + g.ntickets_by_occasion(@occasion).to_s + " biljetter tilldelade" , g.id]})).to_s %></select>
   <% end %>
 </div>
-
+</dd>
 <div id="input-area">
 <% if not @groups.nil? %>
   <%= render :partial => "input_area" %>
 <% end %>
 </div>
+</dl>
+</fieldset>
 </form>
 

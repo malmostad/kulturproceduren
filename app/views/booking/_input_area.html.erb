@@ -1,5 +1,25 @@
 <p>
-Här skall det vara inmatningsfält!
+<div class="booking-seats">
+<dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
+<dd><%= text_field_tag "seats_students" ,"", {:class => "seats" }%></dd>
+<dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
+<dd><%= text_field_tag "seats_adult"  ,"", {:class => "seats" } %></dd>
+<dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
+<dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" } %></dd>
+</div>
+<div id="booking-count" class="booking-count">
+</div>
+<div class="booking-companion">
+<legend>
+  Medföljande vuxen
+</legend>
+<dt><%= label_tag "companion_name" , "Namn" %></dt>
+<dd><%= text_field_tag "comanpion_name" %></dd>
+<dt><%= label_tag "companion_email" , "E-mail address" %></dt>
+<dd><%= text_field_tag "companion_email"  %></dd>
+<dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
+<dd><%= text_field_tag "companion_telnr" %></dd>
+</div>
 
 <%= submit_tag("Boka") %><br/>
 
