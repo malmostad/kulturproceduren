@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20090601114537) do
   create_table "culture_providers", :force => true do |t|
     t.string   "name"
     t.text     "description"
+    t.string   "image_path"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(:version => 20090601114537) do
     t.integer  "ticket_state"
     t.date     "show_date"
     t.integer  "culture_provider_id"
+    t.string   "image_path"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
@@ -127,6 +129,8 @@ ActiveRecord::Schema.define(:version => 20090601114537) do
     t.text     "address"
     t.text     "description"
     t.integer  "event_id"
+    t.integer  "wheelchair_seats"
+    t.boolean  "telecoil"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -205,6 +209,10 @@ ActiveRecord::Schema.define(:version => 20090601114537) do
     t.integer  "occasion_id"
     t.integer  "district_id"
     t.integer  "companion_id"
+    t.boolean  "adult"
+    t.integer  "user_id"
+    t.boolean  "wheelchair"
+    t.datetime "booked_when"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

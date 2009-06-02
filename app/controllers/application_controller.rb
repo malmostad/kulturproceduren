@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
       session[:return_to] = request.path
 
-      flash[:error] = "You are not authorized to access the requested page."
+      flash[:error] = "Du har inte behörighet att komma åt sidan. Var god logga in."
       redirect_to :controller => "login"
 
       return false
@@ -28,5 +28,13 @@ class ApplicationController < ActionController::Base
   end
   helper_method :user_online?
 
+  def current_user
+    @current_user ||= User.find(session[:current_user_id])
+  end
+
+  def current_user_role?(role)
+    current_user.roles.include?(Role.find_by_name(role))
+  end
+  helper_method :current_user_role?
 
 end

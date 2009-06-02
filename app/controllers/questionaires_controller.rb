@@ -2,26 +2,34 @@ class QuestionairesController < ApplicationController
   layout "standard"
   before_filter :authenticate
   require "pp"
-  # GET /questionaires
-  # GET /questionaires.xml
-  def index
-    @user = User.find_by_id(session[:current_user_id])
 
-    if @user.roles.include?(Role.find_by_name("Administratör"))
+  
+  def index
+    @user = current_user
+
+    if current_user_role?("Administratör")
       @questionaires = Questionaire.all
       render :index
     else
-      @questionaires = Array.new
+      @questionaires = []
+
       tot_answers = 0
       tot_tickets = 1
+      
       @user.groups.each do |g|
         g.events.each do |e|
           e.occasions.each do |o|
-            tot_answers = Answer.find(:all, :conditions => "occasion_id = #{o.id} and group_id = #{g.id}" ).length
-            tot_tickets = Ticket.find(:all, :conditions => "occasion_id = #{o.id} and group_id = #{g.id} and ( state = #{Ticket::BOOKED} or state = #{Ticket::USED} )" ).length
+            tot_answers = Answer.count(:all, :conditions => { :occasion_id => o.id, :group_id => g.id })
+            tot_tickets = Ticket.count(:all,
+              :conditions => [
+                "occasion_id = ? and group_id = ? and ( state = ? or state = ? )",
+                o.id, g.id, Ticket::BOOKED, Ticket::USED
+              ])
+            
             puts "e = #{e.name} , o = #{o.date} , g = #{g.name} , tot_answers = #{tot_answers} , tot_ticket = #{tot_tickets}"
+            
             # TODO Dagens datum istället för hårdkodat
-            if tot_tickets > 0 and tot_answers == 0 and  e.last_occasion.date < Date.new(2009,12,12) and not @questionaires.include?(e.questionaire)
+            if tot_tickets > 0 && tot_answers == 0 && e.last_occasion.date < Date.new(2009,12,12) && !@questionaires.include?(e.questionaire)
               puts "pushing event #{e.name}"
               @questionaires.push(e.questionaire)
             end
@@ -33,33 +41,36 @@ class QuestionairesController < ApplicationController
     end
   end
 
-  # GET /questionaires/1
-  # GET /questionaires/1.xml
   def show
-    @user = User.find_by_id(session[:current_user_id])
+    @user = current_user
     @qids = params[:question_id] unless params[:question_id].nil?
-    if @user.roles.include?(Role.find_by_name("Administratör"))
+    
+    if current_user_role?("Administratör")
       @questionaire = Questionaire.find(params[:id])
       @all_q = Question.find(:all)
       render :admin_view
     else
       @questionaire = Questionaire.find(params[:questionaire_id])
       complete = false
+      
       unless @qids.nil?
         complete = true
         @questionaire.question_ids.sort.collect {|i| i.to_s}.each do |k|
           complete = false unless @qids.keys.include?(k)
         end
       end
-      if (complete )
+
+      if complete
         ok = true
+        
         @qids.keys.each do |k|
           answer = Answer.new
           answer.question_id = k
           answer.answer = @qids[k]
           answer.occasion_id = params[:occasion_id]
           answer.group_id = params[:group_id]
-          if not answer.save
+
+          if !answer.save
             flash[:error] += " Kunde inte spara svaret på fråga #{k}"
             ok = false
           end
@@ -77,18 +88,18 @@ class QuestionairesController < ApplicationController
     redirect_to "/"
   end
 
-  # GET /questionaires/new
-  # GET /questionaires/new.xml
   def new
-    if ! Event.all.collect { |e| e.questionaire.nil? }.include?(true)
-      flash[:error] = "Alla evenamng har redan enkäter!"
+    if !Event.all.collect { |e| e.questionaire.nil? }.include?(true)
+      flash[:error] = "Alla evenemang har redan enkäter!"
       redirect_to :controller => "questionaires" , :action => "index"
       return
     end
+
     @questionaire = Questionaire.new
-    @user = User.find_by_id(session[:current_user_id])
+    @user = current_user
     @all_q = Question.find(:all)
-    if @user.roles.include?(Role.find_by_name("Administratör"))
+    
+    if current_user_role?("Administratör")
       render :new
     else
       flash[:error] = "RED ALERT - UNAUTHORIZED ACCESS - ALL HANDS TO BATTLE STATIONS"
@@ -96,12 +107,12 @@ class QuestionairesController < ApplicationController
     end
   end
 
-  # GET /questionaires/1/edit
   def edit
     @questionaire = Questionaire.find(params[:id])
-    @user = User.find_by_id(session[:current_user_id])
+    @user = current_user
     @all_q = Question.find(:all)
-    if @user.roles.include?(Role.find_by_name("Administratör"))
+    
+    if current_user_role?("Administratör")
       render :admin_view
     else
       flash[:error] = "RED ALERT - UNAUTHORIZED ACCESS - ALL HANDS TO BATTLE STATIONS"
@@ -109,8 +120,6 @@ class QuestionairesController < ApplicationController
     end
   end
 
-  # POST /questionaires
-  # POST /questionaires.xml
   def create
     @questionaire = Questionaire.new(params[:questionaire])
     @questionaire.question_ids = Question.find(:all, :conditions => "template is true").collect { |q| q.id }
@@ -123,8 +132,6 @@ class QuestionairesController < ApplicationController
     end
   end
 
-  # PUT /questionaires/1
-  # PUT /questionaires/1.xml
   def update
     @questionaire = Questionaire.find(params[:id])
     if @questionaire.update_attributes(params[:questionaire])
@@ -135,8 +142,6 @@ class QuestionairesController < ApplicationController
     end
   end
 
-  # DELETE /questionaires/1
-  # DELETE /questionaires/1.xml
   def destroy
     @questionaire = Questionaire.find(params[:id])
     @questionaire.destroy
