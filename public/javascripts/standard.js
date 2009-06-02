@@ -58,10 +58,10 @@
            for ( i = 0 ; i < inputs.length ; i++) {
                sum += Number(inputs[i].value);
            };
-           $("#booking-count").html("Du har totalt bokat <blink>" + String(sum) + "</blink> biljetter.");
+           $("#booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
        };
        $("#input-area").change(changeHandler);
-       $("#input-area").keypress(changeHandler);
+       $("#input-area").keyup(changeHandler);
    });
 
    

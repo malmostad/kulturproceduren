@@ -178,7 +178,8 @@ body {
 #kp .kp-booking-pageheader { font-size: 1.1em;}
 #kp .kp-booking-form {width: 75%;}
 #kp .kp-booking-overflow-warning {color: red;}
-
+#kp .booking-count {padding: 0.7em;}
+#kp .booking-no-tickets { margin: 0.2em; ; border: 1px solid navy; padding: 0.5em; background: yellow; }
 /*** Groups ***/
 #kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }
 
@@ -188,4 +189,3 @@ body {
 #kp .question-answer-cnt {padding: 0.2em}
 #kp .questioin-radiobutton-cnt {margin-left: 0.5em; text-align: left}
 #kp .questionaire-pagetitle {font-size: 1.2em; padding: 0.5em;}
-
