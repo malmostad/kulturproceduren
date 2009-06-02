@@ -5,7 +5,7 @@ require "dbi"
 require 'digest/sha1'
 
 
-dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5433", 'root', '')
+dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5432", 'kp-dev', 'kp-dev')
 
 
 # 0 - Empty db
@@ -73,45 +73,45 @@ sth = dbh.prepare("select id from districts")
 sth.execute
 district_ids = sth.fetch_all
 schools = [ "Djupadalsskolan",
-            "Geijerskolan",
-            "Hyllieskolan",
-            "Karl Johanskolan",
-            "Strandskolan",
-            "Klagshamnsskolan",
-            "Sundsbroskolan",
-            "Linnéskolan",
-            "Tygelsjöskolan",
-            "Skolan på Ön",
-            "Ängslättskolan",
-            "Ängslättskolan",
-            "Hurvaskolan",
-            "Borgarskolan",
-            "S:t Petri skola",
-            "Gåsaskolan",
-            "Annebergsskolan",
-            "Dammfriskolan",
-            "Augustenborgskolan",
-            "Bulltoftaskolan",
-            "Holmaskolan",
-            "Asdfskolan",
-            "w00tskolan",
-            "qlskolan",
-            "3117skolan",
-            "h4xorskolan",
-            "Livets hårda skola",
-            "Björnbärskolan",
-            "Blåbärskolan",
-            "Trätoffelskolan",
-            "Bengts skola",
-            "Kvarnbyskolan",
-            "n00bskolan",
-            "Skolan på berget",
-            "Skolan på kullen",
-            "Skolan i dalen",
-            "Skolan bakom hörnet",
-            "Svens skola",
-            "Triangelskolan"
-            ]
+  "Geijerskolan",
+  "Hyllieskolan",
+  "Karl Johanskolan",
+  "Strandskolan",
+  "Klagshamnsskolan",
+  "Sundsbroskolan",
+  "Linnéskolan",
+  "Tygelsjöskolan",
+  "Skolan på Ön",
+  "Ängslättskolan",
+  "Ängslättskolan",
+  "Hurvaskolan",
+  "Borgarskolan",
+  "S:t Petri skola",
+  "Gåsaskolan",
+  "Annebergsskolan",
+  "Dammfriskolan",
+  "Augustenborgskolan",
+  "Bulltoftaskolan",
+  "Holmaskolan",
+  "Asdfskolan",
+  "w00tskolan",
+  "qlskolan",
+  "3117skolan",
+  "h4xorskolan",
+  "Livets hårda skola",
+  "Björnbärskolan",
+  "Blåbärskolan",
+  "Trätoffelskolan",
+  "Bengts skola",
+  "Kvarnbyskolan",
+  "n00bskolan",
+  "Skolan på berget",
+  "Skolan på kullen",
+  "Skolan i dalen",
+  "Skolan bakom hörnet",
+  "Svens skola",
+  "Triangelskolan"
+]
 
 i=0
 schools.each do  |a|
@@ -356,11 +356,10 @@ end
 # 16 - Roles
 
 roles = [
-  "Administratör",
-  "Kultursamordnare",
-  "Värd",
-  "Kulturarbetare",
-  "Kulturadministratör"
+  "admin",
+  "booker",
+  "host",
+  "culture_worker"
 ]
 
 roles.each do |r|
@@ -410,7 +409,7 @@ dbh.do "DISCARD ALL"
 
 # cultures_providers_users
 
-sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='Kulturarbetare'"
+sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='culture_worker'"
 sth.execute
 cprid = sth.fetch
 
@@ -433,26 +432,26 @@ dbh.do "DISCARD ALL"
 
 # districts_users
 
-sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='Kultursamordnare'"
-sth.execute
-ccgid = sth.fetch
-
-sth = dbh.prepare "SELECT USER_ID FROM ROLES_USERS WHERE role_id = #{ccgid}"
-sth.execute
-ccuids = sth.fetch_all
-
-sth = dbh.prepare "SELECT ID FROM DISTRICTS"
-sth.execute
-ccids = sth.fetch_all
-
-n = 0
-ccuids.each do |uid|
-  ccid = ccids[ n % ccids.length ]
-  puts "INSERT INTO DISTRICTS_USERS (district_id,user_id) VALUES ( #{ccid} , #{uid} )"
-  dbh.do "INSERT INTO DISTRICTS_USERS (district_id,user_id) VALUES ( #{ccid} , #{uid} )"
-  n = n+1
-end
-dbh.do "DISCARD ALL"
+#sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='Kultursamordnare'"
+#sth.execute
+#ccgid = sth.fetch
+#
+#sth = dbh.prepare "SELECT USER_ID FROM ROLES_USERS WHERE role_id = #{ccgid}"
+#sth.execute
+#ccuids = sth.fetch_all
+#
+#sth = dbh.prepare "SELECT ID FROM DISTRICTS"
+#sth.execute
+#ccids = sth.fetch_all
+#
+#n = 0
+#ccuids.each do |uid|
+#  ccid = ccids[ n % ccids.length ]
+#  puts "INSERT INTO DISTRICTS_USERS (district_id,user_id) VALUES ( #{ccid} , #{uid} )"
+#  dbh.do "INSERT INTO DISTRICTS_USERS (district_id,user_id) VALUES ( #{ccid} , #{uid} )"
+#  n = n+1
+#end
+#dbh.do "DISCARD ALL"
 # events_tags
 
 sth = dbh.prepare "SELECT ID FROM TAGS"
@@ -474,7 +473,7 @@ dbh.do "DISCARD ALL"
 
 # groups_users
 
-sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='Kulturadministratör'"
+sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='booker'"
 sth.execute
 carid = sth.fetch
 
@@ -497,7 +496,7 @@ dbh.do "DISCARD ALL"
 
 # occasions_users
 
-sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='Värd'"
+sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='host'"
 sth.execute
 hrid = sth.fetch
 

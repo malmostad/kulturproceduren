@@ -1,7 +1,17 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  name: MyString
+apa:
+    id: 1
+    name: apa
 
-two:
-  name: MyString
+bepa:
+    id: 2
+    name: bepa
+
+cepa:
+    id: 3
+    name: cepa
+
+depa:
+    id: 4
+    name: depa

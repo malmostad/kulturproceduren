@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
     @user = current_user
     @all_q = Question.find(:all)
     
-    if current_user_role?("Administratör")
+    if current_user.has_role?(:admin)
       render :template => "questionaires/admin_view"
     end
     

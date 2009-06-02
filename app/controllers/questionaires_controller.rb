@@ -7,7 +7,7 @@ class QuestionairesController < ApplicationController
   def index
     @user = current_user
 
-    if current_user_role?("Administratör")
+    if current_user.has_role?(:admin)
       @questionaires = Questionaire.all
       render :index
     else
@@ -45,7 +45,7 @@ class QuestionairesController < ApplicationController
     @user = current_user
     @qids = params[:question_id] unless params[:question_id].nil?
     
-    if current_user_role?("Administratör")
+    if current_user.has_role?(:admin)
       @questionaire = Questionaire.find(params[:id])
       @all_q = Question.find(:all)
       render :admin_view
@@ -99,7 +99,7 @@ class QuestionairesController < ApplicationController
     @user = current_user
     @all_q = Question.find(:all)
     
-    if current_user_role?("Administratör")
+    if current_user.has_role?(:admin)
       render :new
     else
       flash[:error] = "RED ALERT - UNAUTHORIZED ACCESS - ALL HANDS TO BATTLE STATIONS"
@@ -112,7 +112,7 @@ class QuestionairesController < ApplicationController
     @user = current_user
     @all_q = Question.find(:all)
     
-    if current_user_role?("Administratör")
+    if current_user.has_role?(:admin)
       render :admin_view
     else
       flash[:error] = "RED ALERT - UNAUTHORIZED ACCESS - ALL HANDS TO BATTLE STATIONS"

@@ -28,6 +28,11 @@ class User < ActiveRecord::Base
     nil
   end
 
+
+  def has_role?(role)
+    roles.exists? [ "lower(name) = ?", role.to_s.downcase ]
+  end
+
   
   def password=(pass)
     write_password(pass)

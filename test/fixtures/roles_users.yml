@@ -1,0 +1,7 @@
+foo_apa:
+    user_id: 1
+    role_id: 1
+
+foo_bepa:
+    user_id: 1
+    role_id: 2

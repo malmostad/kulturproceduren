@@ -33,9 +33,4 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_user
 
-  def current_user_role?(role)
-    current_user.roles.include?(Role.find_by_name(role))
-  end
-  helper_method :current_user_role?
-
 end

@@ -54,5 +54,16 @@ class UserTest < ActiveSupport::TestCase
 
     assert !u.save
   end
+
+
+  test "has role successful" do
+    u = User.find users(:foo).id
+    assert u.has_role?(:apa)
+  end
+
+  test "has role unsuccessful" do
+    u = User.find users(:foo).id
+    assert !u.has_role?(:cepa)
+  end
   
 end

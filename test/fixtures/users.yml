@@ -8,9 +8,10 @@ password = Digest::SHA1.hexdigest("foopass" + salt)
 %>
 
 foo:
-  username: foo
-  password: <%= password %>
-  salt: <%= salt %>
-  name: Foo
-  mobil_nr: 0701234567
-  email: foo@example.com
+    id: 1
+    username: foo
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Foo
+    mobil_nr: 0701234567
+    email: foo@example.com
