@@ -1,0 +1,10 @@
+<% content_for :sec_nav do -%>
+  <ul class="sec-nav">
+    <% if user_online? -%>
+      <li class="<%= active_by_action "account", "index" %>"><%= link_to 'Ditt konto', :controller => "account", :action => "index" %></li>
+      <li class="<%= active_by_action "account", "edit_password" %>"><%= link_to 'Byt lösenord', :controller => "account", :action => "edit_password" %></li>
+    <% else -%>
+      <li class="<%= active_by_action "account", "new" %>"><%= link_to 'Registrering', :controller => "account", :action => "new" %></li>
+    <% end -%>
+  </ul>
+<% end -%>

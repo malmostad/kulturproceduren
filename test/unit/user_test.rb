@@ -19,6 +19,16 @@ class UserTest < ActiveSupport::TestCase
     assert_nil u
   end
 
+  test "successful instance authentication" do
+    u = User.find users(:foo).id
+    assert u.authenticate("foopass")
+  end
+
+  test "unsuccessful instance authentication" do
+    u = User.find users(:foo).id
+    assert !u.authenticate("error")
+  end
+
 
   test "password creation" do
     pass = "passcreatepass"

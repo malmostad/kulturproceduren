@@ -21,6 +21,14 @@ module ActionView
     end
   end
 end
+module ActionController
+  module RecordIdentifier
+    def dom_class(record_or_class, prefix = nil)
+      singular = singular_class_name(record_or_class)
+      prefix ? "kp-#{prefix}#{JOIN}#{singular}" : "kp-#{singular}"
+    end
+  end
+end
 
 # More graceful field error indication
 ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|

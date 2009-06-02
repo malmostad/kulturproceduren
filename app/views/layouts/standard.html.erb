@@ -21,6 +21,10 @@
         <li class="pri-nav-cp <%= active_by_controller "culture_providers" %>"><%= link_to "Arrangörer", culture_providers_path -%></li>
         <li class="pri-nav-events <%= active_by_controller "events", "occasions", "allotment" %>"><%= link_to "Evenemang", events_path -%></li>
         <li class="pri-nav-admin"><%= link_to "Administration", :controller => "admin" -%></li>
+        <li class="pri-nav-users"><%= link_to "Konto", :controller => "account" -%></li>
+        <% if user_online? -%>
+          <li class="pri-nav-logout"><%= link_to "Logga ut", :controller => "login", :action => "logout" -%></li>
+        <% end -%>
       </ul>
 
       <%= yield :sec_nav %>

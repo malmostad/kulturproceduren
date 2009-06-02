@@ -1,11 +1,2 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  question_id: 1
-  occasion_id: 1
-  group_id: 1
-
-two:
-  question_id: 1
-  occasion_id: 1
-  group_id: 1

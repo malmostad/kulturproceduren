@@ -1,36 +1,21 @@
 ActionController::Routing::Routes.draw do |map|
+
   map.resources :users
-
   map.resources :culture_providers
-
   map.resources :answers
-
   map.resources :questions
-
   map.resources :questionaires 
-
   map.resources :tags
-
   map.resources :roles
-
   map.resources :events
-
   map.resources :tickets
-
   map.resources :occasions
-
   map.resources :events
-
   map.resources :notification_requests
-
   map.resources :booking_requirements
-
   map.resources :districts
-
   map.resources :schools
-
   map.resources :groups
-
   map.resources :age_groups, :except => [ :show, :index, :new ]
 
   # The priority is based upon order of creation: first created -> highest priority.

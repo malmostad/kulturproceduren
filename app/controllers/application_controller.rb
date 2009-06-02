@@ -31,6 +31,7 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find(session[:current_user_id])
   end
+  helper_method :current_user
 
   def current_user_role?(role)
     current_user.roles.include?(Role.find_by_name(role))

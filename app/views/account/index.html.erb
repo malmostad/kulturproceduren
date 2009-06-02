@@ -1,0 +1,63 @@
+<%= render :partial => "menu" %>
+
+<h1>Konto</h1>
+
+<% if user_online? %>
+  <% form_for(current_user, :url => { :action => "update" }) do |f| %>
+
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+    <fieldset>
+      <legend>Personuppgifter</legend>
+
+      <dl class="form-elements">
+        <dt>
+          <%= f.label :name %>
+        </dt>
+        <dd>
+          <%= f.text_field :name %>
+        </dd>
+        <dt>
+          <%= f.label :email %>
+        </dt>
+        <dd>
+          <%= f.text_field :email %>
+        </dd>
+        <dt>
+          <%= f.label :mobil_nr %>
+        </dt>
+        <dd>
+          <%= f.text_field :mobil_nr %>
+        </dd>
+      </dl>
+
+      <div class="submit-cnt">
+        <%= f.submit("Uppdatera personuppgifter") %>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Kontodetaljer</legend>
+
+      <dl class="form-elements">
+        <dt>
+          Användarnamn
+        </dt>
+        <dd>
+          <%= h current_user.username -%>
+        </dd>
+        <dt>
+          Lösenord
+        </dt>
+        <dd>
+          <%= link_to "Byt lösenord", :action => "edit_password" %>
+        </dd>
+      </dl>
+    </fieldset>
+
+  <% end -%>
+
+<% else -%>
+  <p>Om du inte har ett konto kan du <%= link_to "registrera ett", :action => "new" %>.</p>
+  <p>Har du ett konto, var god <%= link_to "logga in", :controller => "login" %>.</p>
+<% end -%>

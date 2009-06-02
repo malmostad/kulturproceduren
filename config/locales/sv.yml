@@ -96,6 +96,7 @@ sv:
             school: skolan
             group: gruppen
             age_group: åldersgruppen
+            user: användaren
 
         attributes:
             event:
@@ -125,6 +126,13 @@ sv:
             age_group:
                 age: Ålder
                 quantity: Antal
+            user:
+                username: Användarnamn
+                password: Lösenord
+                name: Namn
+                email: Epost
+                mobil_nr: Mobilnummer
+                password_confirmation: Bekräfta lösenord
 
 
     date:

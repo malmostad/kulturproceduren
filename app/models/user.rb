@@ -8,27 +8,50 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many  :districts         #Role CultureCoordinator
   has_and_belongs_to_many  :culture_providers #Role CultureWorker
   
-  validates_presence_of :username, :password, :salt, :name, :email, :mobil_nr
+  validates_presence_of :username, :password, :name, :email, :mobil_nr
   validates_uniqueness_of :username
+  validates_confirmation_of :password
 
   attr_protected :id, :salt
 
+
+  def authenticate(password)
+    User.encrypt(password, self.salt) == self.password
+  end
 
   def self.authenticate(username, password)
     u = find :first, :conditions => { :username => username }
     
     return nil if u.nil?
-    return u if User.encrypt(password, u.salt) == u.password
+    return u if u.authenticate(password)
     
     nil
   end
 
+  
   def password=(pass)
-    self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
-    write_attribute :password, User.encrypt(pass, self.salt)
+    write_password(pass)
   end
 
+  def password_confirmation=(pass)
+    write_password(pass, :password_confirmation)
+  end
+
+  def reset_password
+    self.salt = nil
+    write_attribute :password, nil
+    write_attribute :password_confirmation, nil
+  end
+
+  
   private
+
+  def write_password(pass, attr = :password)
+    if pass.length > 0
+      self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
+      write_attribute attr, User.encrypt(pass, self.salt)
+    end
+  end
   
   def self.encrypt(pass, salt)
     Digest::SHA1.hexdigest(pass + salt)
