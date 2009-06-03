@@ -1,0 +1,7 @@
+foo:
+    id: 1
+    name: FooCP
+
+bar:
+    id: 2
+    name: BarCP

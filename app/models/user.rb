@@ -48,6 +48,15 @@ class User < ActiveRecord::Base
     roles.exists? [ "lower(name) = ?", role.to_s.downcase ]
   end
 
+  def can_administrate?(e)
+    case e
+    when CultureProvider
+      return has_role?(:admin) || (has_role?(:culture_worker) && culture_providers.include?(e))
+    else
+      return false
+    end
+  end
+
   
   def password=(pass)
     write_password(pass)

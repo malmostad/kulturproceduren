@@ -2,7 +2,7 @@ class RoleApplicationsController < ApplicationController
   layout "standard"
   before_filter :authenticate
   before_filter :deny_admin, :only => [ :booker, :culture_worker, :create ]
-  before_filter :deny_user, :only => [ :archive, :edit, :update ]
+  before_filter :require_admin, :only => [ :archive, :edit, :update ]
   
   def index
     if current_user.has_role? :admin
@@ -71,10 +71,7 @@ class RoleApplicationsController < ApplicationController
         if @application.culture_provider
           @application.user.culture_providers << @application.culture_provider
         else
-          cp = CultureProvider.new
-          cp.name = @application.new_culture_provider_name
-          cp.save
-          @application.user.culture_providers << cp
+          @application.user.culture_providers << CultureProvider.create(:name => @application.new_culture_provider_name)
         end
       end
 
@@ -90,13 +87,6 @@ class RoleApplicationsController < ApplicationController
   def deny_admin
     if current_user.has_role? :admin
       flash[:notice] = "Du har redan administratörsbehörigheter och kan därför inte ansöka om behörigheter."
-      redirect_to :action => "index"
-    end
-  end
-
-  def deny_user
-    unless current_user.has_role? :admin
-      flash[:notice] = "Du har inte behörighet att komma åt sidan."
       redirect_to :action => "index"
     end
   end

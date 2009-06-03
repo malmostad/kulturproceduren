@@ -58,12 +58,23 @@ class UserTest < ActiveSupport::TestCase
 
   test "has role successful" do
     u = User.find users(:foo).id
-    assert u.has_role?(:apa)
+    assert u.has_role?(:admin)
   end
 
   test "has role unsuccessful" do
     u = User.find users(:foo).id
-    assert !u.has_role?(:cepa)
+    assert !u.has_role?(:culture_worker)
+  end
+
+
+  test "can administrate culture provider" do
+    cp = CultureProvider.find culture_providers(:foo)
+
+    # admin
+    assert User.find(users(:foo).id).can_administrate?(cp)
+    # culture worker
+    assert User.find(users(:provider1).id).can_administrate?(cp)
+    assert !User.find(users(:provider2).id).can_administrate?(cp)
   end
   
 end

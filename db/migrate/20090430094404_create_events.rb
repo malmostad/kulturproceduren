@@ -1,6 +1,7 @@
 class CreateEvents < ActiveRecord::Migration
   def self.up
     create_table :events do |t|
+      t.string   :name
       t.integer  :from_age
       t.integer  :to_age
       t.text     :description

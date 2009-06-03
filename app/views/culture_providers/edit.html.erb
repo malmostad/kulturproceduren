@@ -1,20 +1,64 @@
-<h1>Editing culture_provider</h1>
+<%= render :partial => "menu" %>
+
+<% is_edit = !@culture_provider.id.nil? %>
+
+<h1><%= is_edit ? "Redigera" : "Lägg till" %> arrangör</h1>
 
 <% form_for(@culture_provider) do |f| %>
-  <%= f.error_messages %>
+  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </p>
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
+  <dl class="form-elements">
+    <dt>
+      <%= f.label :name %>
+    </dt>
+    <dd>
+      <%= f.text_field :name %>
+    </dd>
+    <dt>
+      <%= f.label :description %>
+    </dt>
+    <dd>
+      <%= f.text_area :description %>
+    </dd>
+    <dt>
+      <%= f.label :contact_person %>
+    </dt>
+    <dd>
+      <%= f.text_field :contact_person %>
+    </dd>
+    <dt>
+      <%= f.label :email %>
+    </dt>
+    <dd>
+      <%= f.text_field :email %>
+    </dd>
+    <dt>
+      <%= f.label :phone %>
+    </dt>
+    <dd>
+      <%= f.text_field :phone %>
+    </dd>
+    <dt>
+      <%= f.label :address %>
+    </dt>
+    <dd>
+      <%= f.text_area :address, :rows => 5 %>
+    </dd>
+    <dt>
+      <%= f.label :opening_hours %>
+    </dt>
+    <dd>
+      <%= f.text_area :opening_hours, :rows => 5 %>
+    </dd>
+    <dt>
+      <%= f.label :url %>
+    </dt>
+    <dd>
+      <%= f.text_field :url %>
+    </dd>
+  </dl>
+
+  <div class="submit-cnt">
+    <%= f.submit(is_edit ? "Uppdatera arrangör" : "Skapa arrangör") %>
+  </div>
 <% end %>
-
-<%= link_to 'Show', @culture_provider %> |
-<%= link_to 'Back', culture_providers_path %>

@@ -1,0 +1,8 @@
+<% content_for :sec_nav do -%>
+  <ul class="sec-nav">
+    <li class="<%= active_by_action "culture_providers", "index" %>"><%= link_to 'Lista arrangörer', culture_providers_path %></li>
+    <% if user_online? && current_user.has_role?(:admin) %>
+      <li class="<%= active_by_action "culture_providers", "new" %>"><%= link_to 'Lägg till arrangör', new_culture_provider_path %></li>
+    <% end -%>
+  </ul>
+<% end -%>

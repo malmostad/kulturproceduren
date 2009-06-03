@@ -90,8 +90,8 @@ sv:
 
         models:
             event: evenemanget
-            occasion: föreställningen
             culture_provider: arrangören
+            occasion: föreställningen
             district: stadsdelen
             school: skolan
             group: gruppen
@@ -138,6 +138,15 @@ sv:
                 message: Meddelande
                 response: Svarsmeddelande
                 culture_provider_id: Arrangör
+            culture_provider:
+                name: Namn
+                description: Beskrivning
+                contact_person: Kontaktperson
+                email: Epost
+                phone: Telefon
+                address: Adress
+                opening_hours: Öppettider
+                url: Hemsida
 
 
     date:

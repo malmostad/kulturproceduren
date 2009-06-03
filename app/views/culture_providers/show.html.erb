@@ -1,23 +1,39 @@
+<%= render :partial => "menu" %>
 
-<div class="kp-culture-provider-pagetitle">
-  <p>
-    <%= @culture_provider.name %>
-  </p>
-</div>
-<div class="kp-culture-provider-description">
-  <p>
-    <%= @culture_provider.description %>
-  </p>
-</div>
-<div class="kp-culture-provider-event-list">
-  <ul>
-    <% @culture_provider.events.each do |e| %>
-      <% if e.show_date <= Date.today %>
-        <li>
-          <a href="/events/show/<%= e.id %>"><%= e.name %>, <%= e.description %></a>
-        </li>
-      <% end %>
-    <% end %>
+<div class="model-cnt">
+
+  <h1><%= h @culture_provider.name %></h1>
+
+  <% if user_online? && (current_user.can_administrate?(@culture_provider)) %>
+    <ul class="tools">
+      <li><%= link_to 'Redigera', edit_culture_provider_path(@culture_provider) %></li>
+    </ul>
+  <% end -%>
+
+  <ul class="meta">
+    <% unless empty?(@culture_provider.address) %>
+      <li class="address">Adress:<%= h(@culture_provider.address).gsub(/^/, '<br/>') %></li>
+    <% end -%>
+    <% unless empty?(@culture_provider.contact_person) %>
+      <li class="contact-person">Kontaktperson: <%= h(@culture_provider.contact_person) %></li>
+    <% end -%>
+    <% unless empty?(@culture_provider.phone) %>
+      <li class="phone">Telefon: <%= h(@culture_provider.phone) %></li>
+    <% end -%>
+    <% unless empty?(@culture_provider.email) %>
+      <li class="email">Epost: <a href="mailto:<%= u(@culture_provider.email) %>"><%= h(@culture_provider.email) %></a></li>
+    <% end -%>
+    <% unless empty?(@culture_provider.url) %>
+      <li class="url">Hemsida: <a href="<%= qualified_url(@culture_provider.url) %>"><%= h(@culture_provider.url) %></a></li>
+    <% end -%>
+    <% unless empty?(@culture_provider.opening_hours) %>
+      <li class="opening-hours">Öppettider:<%= h(@culture_provider.opening_hours).gsub(/^/, '<br/>') %></li>
+    <% end -%>
   </ul>
-</div>
 
+  <p class="description">
+    <%= h(@culture_provider.description).gsub(/^\s*$/, '</p><p class="description">') %>
+  </p>
+
+  <div class="clearer"></div>
+</div>

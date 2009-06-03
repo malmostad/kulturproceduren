@@ -2,22 +2,22 @@ require 'test_helper'
 
 class RoleTest < ActiveSupport::TestCase
   test "find by symbol" do
-    assert_equal roles(:apa).id, Role.find_by_symbol(:apa).id
+    assert_equal roles(:admin).id, Role.find_by_symbol(:admin).id
   end
 
   test "find by symbol case insensitive" do
-    assert_equal roles(:apa).id, Role.find_by_symbol(:APA).id
+    assert_equal roles(:admin).id, Role.find_by_symbol(:admin).id
   end
 
   test "symbol name" do
-    r = Role.find roles(:apa).id
-    assert_equal :apa, r.symbol_name
+    r = Role.find roles(:admin).id
+    assert_equal :admin, r.symbol_name
   end
 
   test "is?" do
-    r = Role.find roles(:apa).id
-    assert r.is?(:apa)
-    assert r.is?(:APA)
-    assert !r.is?(:bepa)
+    r = Role.find roles(:admin).id
+    assert r.is?(:admin)
+    assert r.is?(:ADMIN)
+    assert !r.is?(:booker)
   end
 end

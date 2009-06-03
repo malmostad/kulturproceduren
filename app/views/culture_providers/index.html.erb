@@ -1,22 +1,23 @@
-<h1>Listing culture_providers</h1>
+<%= render :partial => "menu" %>
+
+<h1>Arrangörer</h1>
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-  </tr>
+  <thead>
+    <tr>
+      <th>Namn</th>
+      <th>Detaljer</th>
+    </tr>
+  </thead>
 
-<% @culture_providers.each do |culture_provider| %>
-  <tr>
-    <td><%=h culture_provider.name %></td>
-    <td><%=h culture_provider.description %></td>
-    <td><%= link_to 'Show', culture_provider %></td>
-    <td><%= link_to 'Edit', edit_culture_provider_path(culture_provider) %></td>
-    <td><%= link_to 'Destroy', culture_provider, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <tbody>
+
+    <% @culture_providers.each do |provider| -%>
+      <tr>
+        <td><%= h(provider.name) %></td>
+        <td><%= link_to "Visa", provider %></td>
+      </tr>
+    <% end -%>
+
+  </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New culture_provider', new_culture_provider_path %>

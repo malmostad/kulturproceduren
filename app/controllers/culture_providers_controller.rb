@@ -1,87 +1,64 @@
 class CultureProvidersController < ApplicationController
   layout "standard"
+
+  before_filter :authenticate, :except => [ :index, :show ]
+  before_filter :require_admin, :only => [ :new, :create, :destroy ]
   
-  # GET /culture_providers
-  # GET /culture_providers.xml
   def index
     @culture_providers = CultureProvider.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @culture_providers }
-    end
   end
 
-  # GET /culture_providers/1
-  # GET /culture_providers/1.xml
   def show
     @culture_provider = CultureProvider.find(params[:id])
     @today = Date.today
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @culture_provider }
-    end
   end
 
-  # GET /culture_providers/new
-  # GET /culture_providers/new.xml
   def new
     @culture_provider = CultureProvider.new
+    render :action => "edit"
+  end
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @culture_provider }
+  def edit
+    @culture_provider = CultureProvider.find(params[:id])
+
+    unless current_user.can_administrate?(@culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @culture_provider
     end
   end
 
-  # GET /culture_providers/1/edit
-  def edit
-    @culture_provider = CultureProvider.find(params[:id])
-  end
-
-  # POST /culture_providers
-  # POST /culture_providers.xml
   def create
     @culture_provider = CultureProvider.new(params[:culture_provider])
 
-    respond_to do |format|
-      if @culture_provider.save
-        flash[:notice] = 'CultureProvider was successfully created.'
-        format.html { redirect_to(@culture_provider) }
-        format.xml  { render :xml => @culture_provider, :status => :created, :location => @culture_provider }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @culture_provider.errors, :status => :unprocessable_entity }
-      end
+    unless current_user.can_administrate?(@culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @culture_provider
+      return
+    end
+
+    if @culture_provider.save
+      flash[:notice] = 'Arrangören skapades.'
+      redirect_to(@culture_provider)
+    else
+      render :action => "edit"
     end
   end
 
-  # PUT /culture_providers/1
-  # PUT /culture_providers/1.xml
   def update
     @culture_provider = CultureProvider.find(params[:id])
 
-    respond_to do |format|
-      if @culture_provider.update_attributes(params[:culture_provider])
-        flash[:notice] = 'CultureProvider was successfully updated.'
-        format.html { redirect_to(@culture_provider) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @culture_provider.errors, :status => :unprocessable_entity }
-      end
+    if @culture_provider.update_attributes(params[:culture_provider])
+      flash[:notice] = 'Arrangören uppdaterades'
+      redirect_to(@culture_provider)
+    else
+      render :action => "edit"
     end
   end
 
-  # DELETE /culture_providers/1
-  # DELETE /culture_providers/1.xml
   def destroy
     @culture_provider = CultureProvider.find(params[:id])
     @culture_provider.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(culture_providers_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(culture_providers_url)
   end
 end

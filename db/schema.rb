@@ -61,7 +61,12 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
   create_table "culture_providers", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.string   "image_path"
+    t.string   "contact_person"
+    t.string   "email"
+    t.string   "phone"
+    t.text     "address"
+    t.text     "opening_hours"
+    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -84,6 +89,7 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
   end
 
   create_table "events", :force => true do |t|
+    t.string   "name"
     t.integer  "from_age"
     t.integer  "to_age"
     t.text     "description"
@@ -93,7 +99,6 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
     t.string   "image_path"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
   end
 
   create_table "events_tags", :id => false, :force => true do |t|

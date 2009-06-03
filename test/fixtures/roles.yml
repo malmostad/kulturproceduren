@@ -1,17 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-apa:
+admin:
     id: 1
-    name: apa
+    name: admin
 
-bepa:
+booker:
     id: 2
-    name: bepa
+    name: booker
 
-cepa:
+culture_worker:
     id: 3
-    name: cepa
-
-depa:
-    id: 4
-    name: depa
+    name: culture_worker

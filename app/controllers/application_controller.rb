@@ -22,6 +22,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_admin
+    unless current_user.has_role? :admin
+      flash[:notice] = "Du har inte behörighet att komma åt sidan."
+      redirect_to :action => "index"
+    end
+  end
+
 
   def user_online?
     !session[:current_user_id].nil?

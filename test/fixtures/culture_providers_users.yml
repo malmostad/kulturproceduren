@@ -1,0 +1,7 @@
+p1_foo:
+    user_id: 10
+    culture_provider_id: 1
+
+p2_bar:
+    user_id: 11
+    culture_provider_id: 2

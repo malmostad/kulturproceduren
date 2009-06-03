@@ -15,3 +15,21 @@ foo:
     name: Foo
     mobil_nr: 0701234567
     email: foo@example.com
+
+provider1:
+    id: 10
+    username: provider1
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Provider 1
+    mobil_nr: 0701234567
+    email: provider1@provider.com
+
+provider2:
+    id: 11
+    username: provider2
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Provider 2
+    mobil_nr: 0701234567
+    email: provider2@provider.com
