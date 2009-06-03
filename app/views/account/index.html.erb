@@ -69,6 +69,22 @@
             Du har för tillfället inga behörigheter i systemet. Var god använd länken
             ovan för att ansöka om privilegier.
           </p>
+        <% else -%>
+
+          <% if current_user.has_role? :booker -%>
+            <p>Du kan boka biljetter åt elever och förskolebarn.</p>
+          <% end -%>
+
+          <% if current_user.has_role? :culture_worker -%>
+            <p>Du kan publicera evenemang och administrera profilen för följande arrangörer:</p>
+
+            <ul>
+              <% current_user.culture_providers.each do |provider| -%>
+                <li><%= link_to h(provider.name), provider %></li>
+              <% end -%>
+            </ul>
+          <% end -%>
+
         <% end -%>
 
       <% else -%>
