@@ -21,7 +21,7 @@ class Group < ActiveRecord::Base
 
   attr_accessor :num_children, :num_tickets
 
-  def ntickets_by_occasion(o)
+  def ntickets_by_occasion(o,wheelchair = false )
     if o.is_a? Integer
       o = Occasion.find(o)
     end
@@ -30,15 +30,18 @@ class Group < ActiveRecord::Base
       Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :group_id => self.id,
+        :wheelchair => wheelchair
       }
     when Event::ALLOTED_DISTRICT then
       Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :district_id => self.school.district.id,
+        :wheelchair => wheelchair
       }
     when Event::FREE_FOR_ALL then
         Ticket.count :all , :conditions => {
-        :event_id => o.event.id
+        :event_id => o.event.id,
+        :wheelchair => wheelchair
       }  
     end
   end

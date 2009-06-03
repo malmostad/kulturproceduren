@@ -5,7 +5,7 @@ require "dbi"
 require 'digest/sha1'
 
 
-dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5432", 'kp-dev', 'kp-dev')
+dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5433", 'root', 'kp-dev')
 
 
 # 0 - Empty db
@@ -180,8 +180,8 @@ dbh.do "DISCARD ALL"
 
 # 6 - Users & companions
 
-fnames = ["Berit", "Gudrun", "Hillevi", "Omar", "Mustafa", "Ove", "Bert", "Sven", "Per", "Fillippa", "Maria", "Johanna", "Johan", "Magnus", "Lars", "Martin", "Helena", "Karl", "Henrik", "Bob", "Mikael", "Sofia", "Jessica", "Louise" ]
-enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson", "Svensson", "Balkendal", "Flandersson", "Franzon", "Benlund", "Fredriksson", "Wachtmeister", "Kornfeldt", "Hoppetoss", "Lushuvud", "Jobring"]
+fnames = ["Berit", "Gudrun", "Hillevi", "Omar", "Mustafa", "Ove", "Kalle", "Bert", "Sven", "Per", "Fillippa", "Maria", "Johanna", "Johan", "Magnus", "Lars", "Martin", "Helena", "Karl", "Henrik", "Bob", "Mikael", "Sofia", "Jessica", "Louise", "Angela", "Kenneth", "Yvonne", "Victor", "Gustav", "Pelle", "Joakim", "Patricia", "Olivia", "Matilda", "Simon", "Charlotte" , "Jennica", "Jenny", "Anna" , "Vanessa", "Natascha" , "Naomi" , "Peter" , "Ron" , "Lollo" , "Anette" ]
+enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson", "Svensson", "Balkendal", "Flandersson", "Franzon", "Benlund", "Fredriksson", "Wachtmeister", "Kornfeldt", "Hoppetoss", "Lushuvud", "Jobring" , "Bogserbåt" , "Ulvsparre" , "Trumpetare" , "Getherde" , "Knutsson" , "Ersing" , "Holmpåle" , "Fiskfena" , "Trombonsson"  , "Stolsben" , "Truckförare" , "Norbagge" , "Schkullendahl" , "del Rio" , "Jordfräsare" , "Playboy" ]
 
 (1..1000).each do |n|
   fname = String.new(fnames[rand(fnames.length)])
@@ -336,16 +336,17 @@ g_ids = sth.fetch_all
 n=0
 while n < tickets.length do
   tickets[n]["group_id"] = g_ids[n%d_ids.length]
+  tickets[n]["wheelchair"] = rand(100) < 5 ? true : false
   n = n +1
 end
 
 tickets.each do |t|
   puts "INSERT INTO
-   TICKETS (state,event_id,group_id,district_id,created_at,updated_at)
-   VALUES  (0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
+   TICKETS (wheelchair,state,event_id,group_id,district_id,created_at,updated_at)
+   VALUES  (#{t["wheelchair"]},0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
   dbh.do "INSERT INTO
-   TICKETS (state,event_id,group_id,district_id,created_at,updated_at)
-   VALUES  (0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
+   TICKETS (wheelchair,state,event_id,group_id,district_id,created_at,updated_at)
+   VALUES  (#{t["wheelchair"]},0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
   dbh.do "DISCARD ALL"
 end
 

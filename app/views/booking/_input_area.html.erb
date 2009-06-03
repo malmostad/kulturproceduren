@@ -1,4 +1,7 @@
 <p>
+<legend>
+  Antal platser
+</legend>
 <div class="booking-seats">
 <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
 <dd><%= text_field_tag "seats_students" ,"", {:class => "seats" }%></dd>
@@ -20,7 +23,12 @@
 <dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
 <dd><%= text_field_tag "companion_telnr" %></dd>
 </div>
-
+<div class="booking-request">
+<legend>
+  Speciella krav / Extra information ang. bokning
+</legend>
+<dt><%= label_tag "Extra behov" %></dt>
+<dd><%= text_area_tag "booking_request" %></dd>
+</div>
 <%= submit_tag("Boka") %><br/>
-
 </p>

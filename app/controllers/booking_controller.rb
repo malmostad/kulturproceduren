@@ -42,24 +42,33 @@ class BookingController < ApplicationController
       redirect_to :controller => "occasions"
       return
     end
-    puts "#{params[:commit] == "Hämta skolor"}"
-    puts "#{params[:district_id].nil?}"
-    puts "#{params[:district_id].to_i}"
     if params[:commit] == "Hämta skolor" and not params[:district_id].nil? and params[:district_id].to_i != 0
       @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
     elsif params[:commit] == "Hämta grupper"and not params[:district_id].nil? and params[:district_id].to_i != 0 and not params[:school_id].nil? and params[:school_id].to_i != 0
       @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
       @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
-    else
-      if params[:commit].nil?
+    elsif params[:commit] == "Boka"
 
-      else
-        flash[:notice] = "Felaktiga parametrar"
-        redirect_to :controller => "booking" , :action => "book" , :occasion_id => params[:occasion_id]
-      end
+      #"commit"=>"Boka", "seats_adult"=>"1", "district_id"=>"1", "group_id"=>"1", 
+      #"seats_wheelchair"=>"1", "companion_telnr"=>"+46-31-868788", 
+      #"occasion_id"=>"1", "comanpion_name"=>"Ove Jobring", 
+      #"seats_students"=>"12", "companion_email"=>"ove.jobring@mgmt.gu.se", 
+      #"booking_request"=>"Jag behöver en bogserbåt!", "school_id"=>"1"}
+      
+      curgroup = Group.find(params[:group_id]) or bork
+      
+      
+    elsif not params[:commit].nil?
+      bork
+      ## Else fall through and render default ...
     end
 
   end # method book
+
+  def bork
+    flash[:notice] = "Felaktiga parametrar"
+    redirect_to :controller => "booking" , :action => "book" , :occasion_id => params[:occasion_id]
+  end
 
   def show
     @user = current_user
