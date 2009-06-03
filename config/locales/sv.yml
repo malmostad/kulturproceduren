@@ -20,6 +20,31 @@ sv:
             separator: ","
             delimiter: " "
             precision: 2
+    date:
+        formats:
+            # Use the strftime parameters for formats.
+            # When no format has been given, it uses default.
+            # You can provide other formats here if you like!
+            default: "%Y-%m-%d"
+            short: "%d %b"
+            long: "%d %B %Y"
+
+        day_names: [söndag, måndag, tisdag, onsdag, torsdag, fredag, lördag]
+        abbr_day_names: [sön, mån, tis, ons, tor, fre, lör]
+
+        # Don't forget the nil at the beginning; there's no such thing as a 0th month
+        month_names: [~, januari, februari, mars, april, maj, juni, juli, augusti, september, oktober, november, december]
+        abbr_month_names: [~, jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
+        # Used in date_select and datime_select.
+        order: [ :year, :month, :day ]
+
+    time:
+        am: am
+        pm: pm
+        formats:
+            default: "%a %d %b %Y, %H:%M:%S %z"
+            short: "%d %b %H:%M"
+            long: "%d %b %Y, %H:%M"
 
     # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
     datetime:
@@ -147,31 +172,6 @@ sv:
                 address: Adress
                 opening_hours: Öppettider
                 url: Hemsida
-
-
-    date:
-        formats:
-            # Use the strftime parameters for formats.
-            # When no format has been given, it uses default.
-            # You can provide other formats here if you like!
-            default: "%Y-%m-%d"
-            short: "%d %b"
-            long: "%d %B %Y"
-
-        day_names: [söndag, måndag, tisdag, onsdag, torsdag, fredag, lördag]
-        abbr_day_names: [sön, mån, tis, ons, tor, fre, lör]
-
-        # Don't forget the nil at the beginning; there's no such thing as a 0th month
-        month_names: [~, januari, februari, mars, april, maj, juni, juli, augusti, september, oktober, november, december]
-        abbr_month_names: [~, jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
-        # Used in date_select and datime_select.
-        order: [ :year, :month, :day ]
-
-    time:
-        formats:
-            default: "%a %d %b %Y, %H:%M:%S %z"
-            short: "%d %b %H:%M"
-            long: "%d %b %Y, %H:%M"
 
     # Used in array.to_sentence.
     support:

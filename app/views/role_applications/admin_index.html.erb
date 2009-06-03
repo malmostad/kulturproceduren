@@ -30,7 +30,7 @@
             <% end -%>
           </td>
           <td><%= h application.message %></td>
-          <td><%= application.created_at.to_formatted_s(:short) %> av <%= h application.user.name %></td>
+          <td><%= l application.created_at, :format => :short %> av <%= h application.user.name %></td>
           <td><%= link_to "Besvara", edit_role_application_path(application) %></td>
         </tr>
       <% end -%>

@@ -37,3 +37,46 @@
 
   <div class="clearer"></div>
 </div>
+
+
+<% unless @culture_provider.upcoming_occasions.empty? -%>
+  <h2>Kommande föreställningar</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Namn</th>
+        <th>Datum</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @culture_provider.upcoming_occasions.each do |occasion| -%>
+        <tr>
+          <td><%= link_to h(occasion.event.name), occasion.event -%></td>
+          <td><%= l occasion.date, :format => :long %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+<% end -%>
+
+<% unless @culture_provider.standing_events.empty? -%>
+  <h2>Stående arrangemang</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Namn</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @culture_provider.standing_events.each do |event| -%>
+        <tr>
+          <td><%= link_to h(event.name), event -%></td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+<% end -%>

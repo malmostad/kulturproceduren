@@ -1,6 +1,6 @@
 <%= render :partial => "menu" -%>
 
-<h1>Obesvarade behörighetsansökningar</h1>
+<h1>Ansökningsarkiv</h1>
 
 <% unless @applications.empty? -%>
   <table>
@@ -10,7 +10,9 @@
         <th>Typ</th>
         <th>Meddelande</th>
         <th>Inskickad</th>
-        <th></th>
+        <th>Status</th>
+        <th>Besvarad</th>
+        <th>Svar</th>
       </tr>
     </thead>
 
@@ -30,7 +32,10 @@
             <% end -%>
           </td>
           <td><%= h application.message %></td>
-          <td><%= application.created_at.to_formatted_s(:short) %> av <%= link_to h(application.user.name), application.user %></td>
+          <td><%= l application.created_at, :format => :short %> av <%= link_to h(application.user.name), application.user %></td>
+          <td><%= state_string(application) %></td>
+          <td><%= l(application.updated_at, :format => :short) unless application.created_at == application.updated_at %></td>
+          <td><%= h application.response %></td>
         </tr>
       <% end -%>
     </tbody>

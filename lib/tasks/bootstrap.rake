@@ -1,4 +1,4 @@
-namespace :boostrap do
+namespace :bootstrap do
   desc "Create system roles if the do not exist"
   task(:create_system_roles => :environment) do
     [:admin, :booker, :culture_worker].each do |role|
