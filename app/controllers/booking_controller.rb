@@ -29,13 +29,19 @@ class BookingController < ApplicationController
   end
 
   def get_input_area
-    render :partial => "input_area"
+    @group = Group.find(params[:group_id])
+    @occasion = Occasion.find(params[:occasion_id])
+    render :partial => "input_area" , :locals => { :group => @group , :occasion => @occasion }
   end
 
   def book
     @user = current_user
-
-    @occasion = Occasion.find(params[:occasion_id])
+    if params[:occasion_id].nil? or params[:occasion_id].to_i == 0
+      flash[:error] = "Ingen föreställning angiven"
+      redirect_to "/"
+      return
+    end
+    @occasion = Occasion.find(params[:occasion_id].to_i)
 
     if ( @occasion.nil? )
       flash[:error] = "Ingen föreställning angiven"
@@ -44,9 +50,13 @@ class BookingController < ApplicationController
     end
     if params[:commit] == "Hämta skolor" and not params[:district_id].nil? and params[:district_id].to_i != 0
       @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
-    elsif params[:commit] == "Hämta grupper"and not params[:district_id].nil? and params[:district_id].to_i != 0 and not params[:school_id].nil? and params[:school_id].to_i != 0
-      @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
-      @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+    elsif params[:commit] == "Hämta grupper"
+      if not params[:district_id].nil? and params[:district_id].to_i != 0 and not params[:school_id].nil? and params[:school_id].to_i != 0
+        @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
+        @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+      else
+        bork
+      end
     elsif params[:commit] == "Boka"
 
       #"commit"=>"Boka", "seats_adult"=>"1", "district_id"=>"1", "group_id"=>"1", 
@@ -54,40 +64,112 @@ class BookingController < ApplicationController
       #"occasion_id"=>"1", "comanpion_name"=>"Ove Jobring", 
       #"seats_students"=>"12", "companion_email"=>"ove.jobring@mgmt.gu.se", 
       #"booking_request"=>"Jag behöver en bogserbåt!", "school_id"=>"1"}
-      
-      curgroup = Group.find(params[:group_id]) or bork
-      
-      
-    elsif not params[:commit].nil?
-      bork
-      ## Else fall through and render default ...
-    end
 
+      curgroup = Group.find(params[:group_id]) or bork
+      puts "curgroup = #{curgroup.id}"
+      puts "DEGUBB: #{curgroup.ntickets_by_occasion(@occasion).to_i}"
+      puts "DEGUBB2: #{( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )}"
+      
+      if curgroup.ntickets_by_occasion(@occasion).to_i < ( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )
+        flash[:error] = "Du har bara #{curgroup.ntickets_by_occasion(@occasion)} platser du kan boka på den här föreställningen"
+        bork
+      elsif @occasion.available_wheelchair_seats < params[:seats_wheelchair].to_i
+        flash[:error] = "Det finns bara #{@occasion.available_wheelchair_seats} rullstolsplatser du kan boka på den här föreställningen"
+        bork
+      elsif params[:companion_email].nil? or params[:companion_name].nil? or params[:companion_telnr].nil?
+        flash[:error] = "Du måste fylla i alla fälten för medföljande vuxen"
+        bork
+      else
+        #Do booking
+
+        companion = Companion.new
+        companion.tel_nr = params[:companion_telnr]
+        companion.email = params[:companion_email]
+        companion.name  = params[:companion_name]
+        unless companion.save
+          flash[:error] = "Kunde inte spara värdena för medföljande vuxen ... Försök igen?"
+          bork
+        end
+
+        if params[:booking_request].to_s.length > 0
+          br = BookingRequest.new
+          br.occasion = @occasion
+          br.group = curgroup
+          br.requirement = params[:booking_request]
+          br.save or bork
+        end
+
+
+        tot_requested = params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i
+        transaction_ok = true
+        begin
+          Ticket.transaction do
+            tickets = curgroup.bookable_tickets(@occasion,true)
+            if (tickets.length < tot_requested)
+              flash[:error] = "Du försöker boka fler biljetter än vad som är tilldelat för gruppen på den här föreställningen."
+              bork
+            end
+
+            ntickets = 0
+            nadult = 0
+            nwheelchair = 0
+
+            while ntickets < tot_requested
+              tickets[ntickets].state = Ticket::BOOKED
+              tickets[ntickets].group = curgroup
+              tickets[ntickets].companion = companion
+              tickets[ntickets].user = @user
+              tickets[ntickets].occasion = @occasion
+              tickets[ntickets].wheelchair = false
+              tickets[ntickets].adult = false
+              tickets[ntickets].booked_when = DateTime.now
+              if nadult < params[:seats_adult].to_i
+                tickets[ntickets].adult = true
+                nadult += 1
+              elsif nwheelchair < params[:seats_wheelchair].to_i
+                tickets[ntickets].wheelchair = true
+                nwheelchair += 1
+              end
+              pp tickets[ntickets]
+              if not tickets[ntickets].save
+                transaction_ok = false
+                raise ActiveRecord::Rollback
+              end
+              ntickets +=1
+            end
+          end
+        rescue Exception
+        end
+        if transaction_ok
+          flash[:notice] = "Du har bokat #{tot_requested} platser"
+          redirect_to :controller => "booking" , :action => "show"
+        else
+          flash[:error] = "Kunde inte boka biljetterna ... Försök igen?"
+          bork
+        end
+      end
+    elsif not params[:commit].nil?
+      # unrecognized commit parameter - generate error
+      flash[:error] = "Och vad ville du egentligen göra nu????"
+      bork
+    end
+      ## no params[:commit] - fall through and render default initial screen...
   end # method book
 
   def bork
+    
     flash[:notice] = "Felaktiga parametrar"
+
+    #
+    #TODO : skicka med alla not nil? parametrar i redirecten.....
+    #
+    
     redirect_to :controller => "booking" , :action => "book" , :occasion_id => params[:occasion_id]
+    return
   end
 
   def show
     @user = current_user
-    @groups = @user.groups
-    @occasions_by_group = {}
-
-    @groups.each do |g|
-      @occasions_by_group["#{g.id}"] = {}
-      tickets = Ticket.find(:all, :conditions => [ "group_id = ? and occasion_id is not null", g.id ])
-      tickets.each do |t|
-        if @occasions_by_group["#{g.id}"]["#{t.occasion_id}"].nil? then
-          @occasions_by_group["#{g.id}"]["#{t.occasion_id}"] = 1
-        else
-          @occasions_by_group["#{g.id}"]["#{t.occasion_id}"] += 1
-        end
-      end
-    end
-    
-    pp @occasions_by_group
   end
 
   def unbook

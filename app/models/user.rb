@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require "pp"
 
 class User < ActiveRecord::Base
 
@@ -8,6 +9,10 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many  :districts         #Role CultureCoordinator
   has_and_belongs_to_many  :culture_providers #Role CultureWorker
   has_many :role_applications, :order => "updated_at DESC", :include => [ :role ]
+
+  has_many :tickets
+  has_many :occasions , :through => :tickets , :uniq => true
+
   
   validates_presence_of :username, :password, :name, :email, :mobil_nr
   validates_uniqueness_of :username
@@ -29,6 +34,15 @@ class User < ActiveRecord::Base
     nil
   end
 
+  def bookings
+    ret = []
+    self.occasions.each do |o|
+      Ticket.find(:all , :select => "distinct group_id" , :conditions => { :user_id => self.id , :occasion_id => o.id}).each do |t|
+        ret << { "occasion" => o , "group" => Group.find(t.group_id) }
+      end
+    end
+    return ret
+  end
 
   def has_role?(role)
     roles.exists? [ "lower(name) = ?", role.to_s.downcase ]

@@ -10,8 +10,7 @@ Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.
   <legend> Bokning </legend>
   <dl>
 <dt><%= label_tag "district_id" , "Välj Stadsdel:"%> </dt>
-<dd>
-<div id="district-id-cnt">
+<dd><div id="district-id-cnt">
 <%
 
 if params[:district_id].nil?
@@ -23,11 +22,12 @@ end
 opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
 %>
 <%= select_tag("district_id",opt_tag) %>
-</div>
-
 <noscript>
  <input name="commit" type="submit" value="Hämta skolor" /><br/>
 </noscript>
+</div>
+
+
 </dd>
 <dt><%= label_tag "school_id" , "Välj Skola:" %></dt>
 <dd>
@@ -41,10 +41,11 @@ opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
        <select id="school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} , School.find(params[:school_id]).id.to_s ) %></select>
      <% end %>
   <% end %>
-</div>
 <noscript>
   <input name="commit" type="submit" value="Hämta grupper" /><br/>
 </noscript>
+</div>
+
 </dd>
 <dt><%= label_tag "group_id" , "Välj Grupp:"%></dt>
 <dd>
@@ -56,13 +57,16 @@ opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
        <select id="group_id" name="group_id"><option>Välj skola först</option></select>
     <% end %>
   <% else %>
-     <select id="group_id" name="group_id"><%=  ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g| [ g.name + " - " + g.ntickets_by_occasion(@occasion).to_s + " biljetter tilldelade" , g.id]})).to_s %></select>
+     <select id="group_id" name="group_id"><%=  ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g| 
+      [ g.name + " - " + g.ntickets_by_occasion(@occasion).to_s + " biljetter tilldelade" + (g.age_groups.num_children_by_age_span(@occasion.event.from_age , @occasion.event.to_age) == 0 ? " OBS - Olämplig ålder för evenemanget" : "").to_s , g.id]
+    })).to_s %>
+      </select>
   <% end %>
 </div>
 </dd>
 <div id="input-area">
 <% if not @groups.nil? %>
-  <%= render :partial => "input_area" %>
+  <%= render :partial => "input_area" , :locals => { :group => nil , :occasion => nil } %>
 <% end %>
 </div>
 </dl>

@@ -39,8 +39,12 @@
            var request = $.get("/booking/get_groups", { school_id: school_id , occasion_id : occasion_id}, function(data) {$("#group_id").html(data);});
         });
         $("#group_id").change(function() {
+           var group_id = $("#group_id option:selected").val();
+           var occasion_id = $("#occasion_id").val();
            var request = $.get(
-                              "/booking/get_input_area", {} , function(data) {
+                              "/booking/get_input_area", 
+                              {group_id: group_id , occasion_id : occasion_id } ,
+                              function(data) {
                                   $("#input-area").html(data);
                               }
                             );

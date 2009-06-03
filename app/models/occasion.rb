@@ -13,5 +13,11 @@ class Occasion < ActiveRecord::Base
   validates_presence_of   :date, :seats, :address
   validates_numericality_of :seats, :only_integer => true
 
+  def available_wheelchair_seats()
+    self.wheelchair_seats  - Ticket.count(:all , :conditions => {
+      :event_id   => self.event.id ,
+      :wheelchair => true
+    })
+  end
 
 end

@@ -1,34 +1,42 @@
-<p>
+<%
+if not group.nil?
+  if group.age_groups.num_children_by_age_span(occasion.event.from_age , occasion.event.to_age) == 0
+%>
+    <p class="booking-warn-age">
+      OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
+    </p>
+<%   
+  end
+end %>
 <legend>
   Antal platser
 </legend>
-<div class="booking-seats">
+<p class="booking-seats">
 <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
 <dd><%= text_field_tag "seats_students" ,"", {:class => "seats" }%></dd>
 <dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
 <dd><%= text_field_tag "seats_adult"  ,"", {:class => "seats" } %></dd>
 <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
 <dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" } %></dd>
-</div>
-<div id="booking-count" class="booking-count">
-</div>
-<div class="booking-companion">
+</p>
+<p id="booking-count" class="booking-count">
+</p>
+<p class="booking-companion">
 <legend>
   Medföljande vuxen
 </legend>
 <dt><%= label_tag "companion_name" , "Namn" %></dt>
-<dd><%= text_field_tag "comanpion_name" %></dd>
+<dd><%= text_field_tag "companion_name" %></dd>
 <dt><%= label_tag "companion_email" , "E-mail address" %></dt>
 <dd><%= text_field_tag "companion_email"  %></dd>
 <dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
 <dd><%= text_field_tag "companion_telnr" %></dd>
-</div>
-<div class="booking-request">
+</p>
+<p class="booking-request">
 <legend>
   Speciella krav / Extra information ang. bokning
 </legend>
 <dt><%= label_tag "Extra behov" %></dt>
 <dd><%= text_area_tag "booking_request" %></dd>
-</div>
-<%= submit_tag("Boka") %><br/>
 </p>
+<%= submit_tag("Boka") %><br/>

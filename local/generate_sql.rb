@@ -181,7 +181,7 @@ dbh.do "DISCARD ALL"
 # 6 - Users & companions
 
 fnames = ["Berit", "Gudrun", "Hillevi", "Omar", "Mustafa", "Ove", "Kalle", "Bert", "Sven", "Per", "Fillippa", "Maria", "Johanna", "Johan", "Magnus", "Lars", "Martin", "Helena", "Karl", "Henrik", "Bob", "Mikael", "Sofia", "Jessica", "Louise", "Angela", "Kenneth", "Yvonne", "Victor", "Gustav", "Pelle", "Joakim", "Patricia", "Olivia", "Matilda", "Simon", "Charlotte" , "Jennica", "Jenny", "Anna" , "Vanessa", "Natascha" , "Naomi" , "Peter" , "Ron" , "Lollo" , "Anette" ]
-enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson", "Svensson", "Balkendal", "Flandersson", "Franzon", "Benlund", "Fredriksson", "Wachtmeister", "Kornfeldt", "Hoppetoss", "Lushuvud", "Jobring" , "Bogserbåt" , "Ulvsparre" , "Trumpetare" , "Getherde" , "Knutsson" , "Ersing" , "Holmpåle" , "Fiskfena" , "Trombonsson"  , "Stolsben" , "Truckförare" , "Norbagge" , "Schkullendahl" , "del Rio" , "Jordfräsare" , "Playboy" ]
+enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson", "Svensson", "Balkendal", "Flandersson", "Franzon", "Benlund", "Fredriksson", "Wachtmeister", "Kornfeldt", "Hoppetoss", "Lushuvud", "Jobring" , "Bogserbåt" , "Ulvsparre" , "Trumpetare" , "Getherde" , "Knutsson" , "Ersing" , "Holmpåle" , "Fiskfena" , "Trombonsson"  , "Stolsben" , "Truckförare" , "Norbagge" , "Schkullendahl" , "del Rio" , "Jordfräsare" , "Heffner" ]
 
 (1..1000).each do |n|
   fname = String.new(fnames[rand(fnames.length)])
@@ -253,12 +253,14 @@ e_ids.each do |e_id|
   (1..3).each do |e_no|
     d = d + e_no
     seats = 200 + rand(10)*20
+    wheelchair_seats = ( seats.to_f * 0.01 ).to_i
+    telecoil = rand(100) < 50 ? true : false
     puts "INSERT INTO
-          OCCASIONS (date   ,seats     , address                , description                , event_id , created_at , updated_at)
-          VALUES    ('#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()      , NOW());"
+          OCCASIONS (telecoil , wheelchair_seats , date   ,seats     , address                , description                , event_id , created_at , updated_at)
+          VALUES    ( #{telecoil} , #{wheelchair_seats} , '#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()      , NOW());"
     dbh.do "INSERT INTO
-            OCCASIONS (date   ,seats     , address                , description                , event_id , created_at , updated_at)
-            VALUES    ('#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()    ,   NOW());"
+            OCCASIONS (telecoil , wheelchair_seats , date   ,seats     , address                , description                , event_id , created_at , updated_at)
+            VALUES    ( #{telecoil} , #{wheelchair_seats} , '#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()    ,   NOW())"
   end
 end
 dbh.do("DISCARD ALL")
@@ -336,17 +338,16 @@ g_ids = sth.fetch_all
 n=0
 while n < tickets.length do
   tickets[n]["group_id"] = g_ids[n%d_ids.length]
-  tickets[n]["wheelchair"] = rand(100) < 5 ? true : false
   n = n +1
 end
 
 tickets.each do |t|
   puts "INSERT INTO
-   TICKETS (wheelchair,state,event_id,group_id,district_id,created_at,updated_at)
-   VALUES  (#{t["wheelchair"]},0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
+   TICKETS (state,event_id,group_id,district_id,created_at,updated_at)
+   VALUES  (0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
   dbh.do "INSERT INTO
-   TICKETS (wheelchair,state,event_id,group_id,district_id,created_at,updated_at)
-   VALUES  (#{t["wheelchair"]},0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
+   TICKETS (state,event_id,group_id,district_id,created_at,updated_at)
+   VALUES  (0,#{t["event_id"]},#{t["group_id"]},#{t["district_id"]},NOW(),NOW())"
   dbh.do "DISCARD ALL"
 end
 

@@ -180,6 +180,8 @@ body {
 #kp .kp-booking-overflow-warning {color: red;}
 #kp .booking-count {padding: 0.7em;}
 #kp .booking-no-tickets { margin: 0.2em; ; border: 1px solid navy; padding: 0.5em; background: yellow; }
+#kp .booking-warn-age { margin: 0.2em; ; border: 1px solid navy; padding: 0.5em; background: yellow; }
+
 /*** Groups ***/
 #kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }
 

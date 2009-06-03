@@ -10,7 +10,7 @@ class Group < ActiveRecord::Base
       sum "quantity", :conditions => [ "age between ? and ?", from, to ]
     end
   end
-
+  
   has_many                  :answers
   has_many                  :booking_requirements
   has_and_belongs_to_many   :users #CultureAdministrator Role
@@ -21,7 +21,8 @@ class Group < ActiveRecord::Base
 
   attr_accessor :num_children, :num_tickets
 
-  def ntickets_by_occasion(o,wheelchair = false )
+
+  def ntickets_by_occasion(o,state=Ticket::UNBOOKED)
     if o.is_a? Integer
       o = Occasion.find(o)
     end
@@ -30,19 +31,52 @@ class Group < ActiveRecord::Base
       Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :group_id => self.id,
-        :wheelchair => wheelchair
+        :state => state
       }
     when Event::ALLOTED_DISTRICT then
       Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :district_id => self.school.district.id,
-        :wheelchair => wheelchair
+        :state => state
       }
     when Event::FREE_FOR_ALL then
         Ticket.count :all , :conditions => {
         :event_id => o.event.id,
-        :wheelchair => wheelchair
+        :state => state
       }  
+    end
+  end
+
+  def bookings()
+    Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => self.id , :state => Ticket::BOOKED } ).collect {|t| Occasion.find(t.occasion_id)}
+  end
+
+  def bookable_tickets(o,lock = false)
+    if o.is_a? Integer
+      o = Occasion.find(o) or return nil
+    end
+    puts "Inside mytickets"
+    puts "group = #{self.id}"
+    puts "occasion = #{o.id}"
+    
+    case o.event.ticket_state
+    when Event::ALLOTED_GROUP then
+      Ticket.find( :all , :conditions => {
+        :event_id => o.event.id,
+        :group_id => self.id,
+        :state => Ticket::UNBOOKED
+      } , :lock => lock )
+    when Event::ALLOTED_DISTRICT then
+      Ticket.find( :all , :conditions => {
+        :event_id => o.event.id,
+        :district_id => self.school.district.id,
+        :state => Ticket::UNBOOKED
+      } , :lock => true )
+    when Event::FREE_FOR_ALL then
+        Ticket.find( :all , :conditions => {
+        :event_id => o.event.id,
+        :state => Ticket::UNBOOKED
+      } , :lock => lock )
     end
   end
 

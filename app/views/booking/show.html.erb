@@ -2,10 +2,14 @@
   Mina biljettbokningar
 </h2>
 <ul>
-<% @groups.each do |g| %>
-   <% @occasions_by_group["#{g.id}"].keys.each do |k| %>
-      <% o = Occasion.find_by_id(k) %>
-      <li> <%= g.school.name %>, <%= g.name %>, <%= o.event.name %>, <%= o.date.to_s %> <%=  @occasions_by_group["#{g.id}"]["#{k}"] %> biljetter bokade <a href="/booking/unbook?occasion_id=<%= o.id %>">avboka</a></li>
-   <%  end %>
+<%  @user.bookings.each do |b|%>
+  <li>
+    <%= b["group"].school.name -%> , 
+    <%= b["group"].name -%> , 
+    <%= b["occasion"].event.name -%> , 
+    <%= b["occasion"].date.to_s -%> - 
+    <%= b["group"].ntickets_by_occasion(b["occasion"],Ticket::BOOKED) -%> biljetter bokade.
+  </li>
 <%  end %>
 </ul>
+
