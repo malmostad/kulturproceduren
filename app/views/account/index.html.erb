@@ -58,19 +58,23 @@
     <fieldset>
       <legend>Behörigheter</legend>
 
-      <ul class="tools">
-        <li><%= link_to "Ansök om behörigheter i systemet", role_applications_path %></li>
-      </ul>
+      <% unless current_user.has_role? :admin %>
 
-      <% if current_user.roles.empty? %>
-        <p>
-          Du har för tillfället inga behörigheter i systemet. Var god använd länken
-          ovan för att ansöka om privilegier.
-        </p>
+        <ul class="tools">
+          <li><%= link_to "Ansök om behörigheter i systemet", role_applications_path %></li>
+        </ul>
+
+        <% if current_user.roles.empty? %>
+          <p>
+            Du har för tillfället inga behörigheter i systemet. Var god använd länken
+            ovan för att ansöka om privilegier.
+          </p>
+        <% end -%>
+
+      <% else -%>
+        <p>Du är administratör och har fulla behörigheter i systemet.</p>
       <% end -%>
 
-<%  -%>
-  
     </fieldset>
 
   <% end -%>

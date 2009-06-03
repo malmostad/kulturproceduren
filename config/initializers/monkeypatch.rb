@@ -4,6 +4,25 @@
 module ActionView
   module Helpers
     class InstanceTag
+      def to_radio_button_tag(tag_value, options = {})
+        options = DEFAULT_RADIO_OPTIONS.merge(options.stringify_keys)
+        options["type"]     = "radio"
+        options["value"]    = tag_value
+        if options.has_key?("checked")
+          cv = options.delete "checked"
+          checked = cv == true || cv == "checked"
+        else
+          checked = self.class.radio_button_checked?(value(object), tag_value)
+        end
+        options["checked"]  = "checked" if checked
+        pretty_tag_value    = tag_value.to_s.gsub(/\s/, "_").gsub(/[^A-Za-z0-9-]/, "").downcase
+        options["id"]     ||= defined?(@auto_index) ?
+          "#{tag_id_with_index(@auto_index)}_#{pretty_tag_value}" :
+          "#{tag_id}_#{pretty_tag_value}"
+        add_default_name_and_id(options)
+        tag("input", options)
+      end
+
       private
       def tag_id
         "kp-#{sanitized_object_name}-#{sanitized_method_name}"

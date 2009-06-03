@@ -1,0 +1,6 @@
+<% content_for :sec_nav do -%>
+  <ul class="sec-nav">
+      <li class="<%= active_by_action "role_applications", "index" %>"><%= link_to 'Obesvarade ansökningar', role_applications_path %></li>
+      <li class="<%= active_by_action "role_applications", "archive" %>"><%= link_to 'Arkiv', archive_role_applications_path %></li>
+  </ul>
+<% end -%>

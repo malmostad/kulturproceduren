@@ -1,0 +1,41 @@
+<%= render :partial => "menu" -%>
+
+<h1>Obesvarade behörighetsansökningar</h1>
+
+<% unless @applications.empty? -%>
+  <table>
+
+    <thead>
+      <tr>
+        <th>Typ</th>
+        <th>Meddelande</th>
+        <th>Inskickad</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @applications.each do |application| -%>
+        <tr>
+          <td>
+            <%= type_string(application) %>
+
+            <% if application.role.symbol_name == :culture_worker -%>
+              för
+              <% if application.culture_provider -%>
+                <%= link_to h(application.culture_provider.name), culture_provider_path(application.culture_provider) %>
+              <% else -%>
+                <%= h application.new_culture_provider_name -%>
+              <% end -%>
+            <% end -%>
+          </td>
+          <td><%= h application.message %></td>
+          <td><%= application.created_at.to_formatted_s(:short) %> av <%= link_to h(application.user.name), application.user %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+
+  </table>
+<% else -%>
+  <p>Det finns inga nya ansökningar</p>
+<% end -%>

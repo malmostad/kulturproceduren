@@ -1,2 +1,54 @@
-<h1>RoleApplications#edit</h1>
-<p>Find me in app/views/role_applications/edit.html.erb</p>
+<h1>Besvara ansökan</h1>
+
+<dl class="info">
+  <dt>Typ av ansökan:</dt>
+  <dd>
+    <%= type_string(@application) %>
+
+    <% if @application.role.symbol_name == :culture_worker -%>
+      för
+      <% if @application.culture_provider -%>
+        <%= link_to h(@application.culture_provider.name), culture_provider_path(@application.culture_provider) %>
+      <% else -%>
+        <%= h @application.new_culture_provider_name -%>
+      <% end -%>
+    <% end -%>
+  </dd>
+  <dt>Avsändare:</dt>
+  <dd><%= link_to h(@application.user.name), @application.user %></dd>
+  <dt>Meddelande:</dt>
+  <dd><%= h(@application.message) %></dd>
+</dl>
+
+<% form_for(@application) do |f| -%>
+
+  <fieldset>
+
+    <legend>Besvara ansökan</legend>
+
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+    <dl class="form-elements">
+      <dt>
+        Svar
+      </dt>
+      <dd>
+        <%= f.radio_button :state, RoleApplication::ACCEPTED, :checked => true %>
+        <label for="kp-role_application-state_<%= RoleApplication::ACCEPTED %>">Godkänn</label>
+        <%= f.radio_button :state, RoleApplication::DENIED %>
+        <label for="kp-role_application-state_<%= RoleApplication::DENIED %>">Neka</label>
+      </dd>
+      <dt>
+        <%= f.label :response %>
+      </dt>
+      <dd>
+        <%= f.text_area :response %>
+      </dd>
+    </dl>
+
+    <div class="submit-cnt">
+      <%= f.submit("Skicka ansökan") %>
+    </div>
+  </fieldset>
+
+<% end -%>

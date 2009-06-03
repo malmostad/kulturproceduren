@@ -25,20 +25,9 @@
     <tbody>
       <% current_user.role_applications.each do |application| -%>
         <tr>
-          <td><%=
-            case application.role.symbol_name
-            when :booker then "Bokning"
-            when :culture_worker then "Publicering"
-            end
-          %></td>
-          <td><%=  application.created_at.to_formatted_s(:short) %></td>
-          <td><%=
-            case application.state
-            when RoleApplication::PENDING then "Inskickad"
-            when RoleApplication::ACCEPTED then "Godkänd"
-            when RoleApplication::DENIED then "Nekad"
-            end
-          %></td>
+          <td><%= type_string(application) %></td>
+          <td><%= application.created_at.to_formatted_s(:short) %></td>
+          <td><%= state_string(application) %></td>
           <td><%= application.updated_at.to_formatted_s(:short) unless application.created_at == application.updated_at %></td>
           <td><%= h(application.response) %></td>
         </tr>
