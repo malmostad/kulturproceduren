@@ -1,0 +1,30 @@
+<h1>Ansökan om bokningsrättigheter</h1>
+
+<% form_for(@application) do |f| -%>
+
+  <p>
+    För att kunna ge dig behörighet att boka evenemang åt elever eller förskolebarn
+    behöver vi veta vilken skola du arbetar på. Var god fyll i namnet på skolan i fältet
+    nedan. Du kan även komplettera med annan information i fältet.
+  </p>
+  <p>
+    Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+  </p>
+
+  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+  <dl class="form-elements">
+    <dt>
+      <%= f.label :message %>
+    </dt>
+    <dd>
+      <%= f.text_area :message %>
+    </dd>
+  </dl>
+
+  <div class="submit-cnt">
+    <%= f.hidden_field :role_id %>
+    <%= f.submit("Skicka ansökan") %>
+  </div>
+
+<% end -%>

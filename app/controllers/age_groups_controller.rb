@@ -1,5 +1,5 @@
 class AgeGroupsController < ApplicationController
-  layout "standard"
+  layout "admin"
 
   def edit
     @age_group = AgeGroup.find(params[:id])

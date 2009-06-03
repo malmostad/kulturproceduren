@@ -1,0 +1,53 @@
+<%= render :partial => "account/menu" -%>
+
+<h1>Behörighetsansökan</h1>
+
+<ul class="tools">
+  <li><%= link_to "Ansök om bokningsbehörighet", booker_new_role_application_path %></li>
+  <li><%= link_to "Ansök om publiceringsbehörighet", culture_worker_new_role_application_path %></li>
+</ul>
+
+<h2>Ansökningshistorik</h2>
+
+<% unless current_user.role_applications.empty? -%>
+  <table>
+
+    <thead>
+      <tr>
+        <th>Typ</th>
+        <th>Inskickad</th>
+        <th>Status</th>
+        <th>Besvarad</th>
+        <th>Svar</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% current_user.role_applications.each do |application| -%>
+        <tr>
+          <td><%=
+            case application.role.symbol_name
+            when :booker then "Bokning"
+            when :culture_worker then "Publicering"
+            end
+          %></td>
+          <td><%=  application.created_at.to_formatted_s(:short) %></td>
+          <td><%=
+            case application.state
+            when RoleApplication::PENDING then "Inskickad"
+            when RoleApplication::ACCEPTED then "Godkänd"
+            when RoleApplication::DENIED then "Nekad"
+            end
+          %></td>
+          <td><%= application.updated_at.to_formatted_s(:short) unless application.created_at == application.updated_at %></td>
+          <td><%= h(application.response) %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+
+  </table>
+<% else -%>
+  <p>
+    Du har inte gjort några ansökningar
+  </p>
+<% end -%>

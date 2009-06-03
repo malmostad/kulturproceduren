@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many  :occasions         #Role Host
   has_and_belongs_to_many  :districts         #Role CultureCoordinator
   has_and_belongs_to_many  :culture_providers #Role CultureWorker
+  has_many :role_applications, :order => "updated_at DESC", :include => [ :role ]
   
   validates_presence_of :username, :password, :name, :email, :mobil_nr
   validates_uniqueness_of :username

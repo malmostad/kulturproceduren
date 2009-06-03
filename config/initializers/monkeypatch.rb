@@ -19,8 +19,21 @@ module ActionView
         "kp-" + input_name_from_type(type).gsub(/([\[\(])|(\]\[)/, '-').gsub(/[\]\)]/, '')
       end
     end
+
+    class FormBuilder
+      def submit(value = "Save changes", options = {})
+        @template.submit_tag(value, options.reverse_merge(:id => "kp-#{object_name}_submit"))
+      end
+    end
+
+    module FormTagHelper
+      def sanitize_to_id(name)
+        "kp-" + name.to_s.gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
+      end
+    end
   end
 end
+
 module ActionController
   module RecordIdentifier
     def dom_class(record_or_class, prefix = nil)
@@ -41,3 +54,19 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
   end
   html_tag
 end
+
+
+require 'cgi'
+require 'action_view/helpers/tag_helper'
+
+module ActionView
+  module Helpers
+    # Provides a number of methods for creating form tags that doesn't rely on an Active Record object assigned to the template like
+    # FormHelper does. Instead, you provide the names and values manually.
+    #
+    # NOTE: The HTML options <tt>disabled</tt>, <tt>readonly</tt>, and <tt>multiple</tt> can all be treated as booleans. So specifying
+    # <tt>:disabled => true</tt> will give <tt>disabled="disabled"</tt>.
+
+  end
+end
+

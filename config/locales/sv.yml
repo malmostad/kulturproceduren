@@ -97,6 +97,7 @@ sv:
             group: gruppen
             age_group: åldersgruppen
             user: användaren
+            role_application: ansökan
 
         attributes:
             event:
@@ -133,6 +134,10 @@ sv:
                 email: Epost
                 mobil_nr: Mobilnummer
                 password_confirmation: Bekräfta lösenord
+            role_application:
+                message: Meddelande
+                reply: Svar
+                culture_provider_id: Arrangör
 
 
     date:

@@ -17,6 +17,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :schools
   map.resources :groups
   map.resources :age_groups, :except => [ :show, :index, :new ]
+  map.resources :role_applications,
+    :except => [ :new ],
+    :new => { :booker => :get, :culture_worker => :get }
 
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -56,7 +59,7 @@ ActionController::Routing::Routes.draw do |map|
   map.ansquest 'questionaires/:questionaire_id/answer/:occasion_id/:group_id' , :controller => 'questionaires' , :action => 'show'
 
   map.eventstat 'events/:id/statistics' , :controller => "events" , :action => "stats"
-  
+
   # See how all your routes lay out with "rake routes"
 
   # Install the default routes as the lowest priority.

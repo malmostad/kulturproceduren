@@ -55,6 +55,24 @@
       </dl>
     </fieldset>
 
+    <fieldset>
+      <legend>Behörigheter</legend>
+
+      <ul class="tools">
+        <li><%= link_to "Ansök om behörigheter i systemet", role_applications_path %></li>
+      </ul>
+
+      <% if current_user.roles.empty? %>
+        <p>
+          Du har för tillfället inga behörigheter i systemet. Var god använd länken
+          ovan för att ansöka om privilegier.
+        </p>
+      <% end -%>
+
+<%  -%>
+  
+    </fieldset>
+
   <% end -%>
 
 <% else -%>

@@ -1,0 +1,39 @@
+<h1>Ansökan om publiceringsrättigheter</h1>
+
+<% form_for(@application) do |f| -%>
+
+  <p>
+    För att kunna ge dig behörighet att publicer evenemang åt elever eller förskolebarn
+    behöver vi veta vilken arrangör du arbetar för. Var god välj din arrangör nedan,
+    eller skriv namnet på arrangören om du inte hittar den i listan. Du kan även
+    lämna meddelanden till administratören som hanterar din ansökan.
+  </p>
+  <p>
+    Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+  </p>
+
+  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+  <dl class="form-elements">
+    <dt>
+      <%= f.label :culture_provider_id %>
+    </dt>
+    <dd>
+      <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
+      eller skriv arrangörens namn:
+      <%= f.text_field :new_culture_provider_name %>
+    </dd>
+    <dt>
+      <%= f.label :message %>
+    </dt>
+    <dd>
+      <%= f.text_area :message %>
+    </dd>
+  </dl>
+
+  <div class="submit-cnt">
+    <%= f.hidden_field :role_id %>
+    <%= f.submit("Skicka ansökan") %>
+  </div>
+
+<% end -%>
