@@ -3,6 +3,6 @@ class SchoolPrio < ActiveRecord::Base
   belongs_to   :school
 
   def self.max_prio(district)
-    maximum :prio, :conditions => { :district_id => district.id }
+    maximum(:prio, :conditions => { :district_id => district.id }) || 0
   end
 end

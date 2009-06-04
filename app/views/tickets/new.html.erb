@@ -1,7 +1,7 @@
 <h1>New ticket</h1>
 
 <% form_for(@ticket) do |f| %>
-  <%= f.error_messages %>
+  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
   <p>
     <%= f.label :state %><br />

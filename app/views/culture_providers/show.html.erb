@@ -10,31 +10,35 @@
     </ul>
   <% end -%>
 
-  <ul class="meta">
+  <dl class="meta">
     <% unless empty?(@culture_provider.address) %>
-      <li class="address">Adress:<%= h(@culture_provider.address).gsub(/^/, '<br/>') %></li>
+      <dt class="address">Adress:</dt>
+      <dd class="address"><%= linebreakize(@culture_provider.address) %></dd>
     <% end -%>
     <% unless empty?(@culture_provider.contact_person) %>
-      <li class="contact-person">Kontaktperson: <%= h(@culture_provider.contact_person) %></li>
+      <dt class="contact-person">Kontaktperson:</dt>
+      <dd class="contact-person"><%= h(@culture_provider.contact_person) %></dd>
     <% end -%>
     <% unless empty?(@culture_provider.phone) %>
-      <li class="phone">Telefon: <%= h(@culture_provider.phone) %></li>
+      <dt class="phone">Telefon:</dt>
+      <dd class="phone"><%= h(@culture_provider.phone) %></dd>
     <% end -%>
     <% unless empty?(@culture_provider.email) %>
-      <li class="email">Epost: <a href="mailto:<%= u(@culture_provider.email) %>"><%= h(@culture_provider.email) %></a></li>
+      <dt class="email">Epost:</dt>
+      <dd class="email"><a href="mailto:<%= u(@culture_provider.email) %>"><%= h(@culture_provider.email) %></a></dd>
     <% end -%>
     <% unless empty?(@culture_provider.url) %>
-      <li class="url">Hemsida: <a href="<%= qualified_url(@culture_provider.url) %>"><%= h(@culture_provider.url) %></a></li>
+      <dt class="url">Hemsida:</dt>
+      <dd class="url"><a href="<%= qualified_url(@culture_provider.url) %>"><%= h(@culture_provider.url) %></a></dd>
     <% end -%>
     <% unless empty?(@culture_provider.opening_hours) %>
-      <li class="opening-hours">Öppettider:<%= h(@culture_provider.opening_hours).gsub(/^/, '<br/>') %></li>
+      <dt class="opening-hours">Öppettider:</dt>
+      <dd class="opening-hours"><%= linebreakize(@culture_provider.opening_hours) %></dd>
     <% end -%>
-  </ul>
+  </dl>
 
-  <p class="description">
-    <%= h(@culture_provider.description).gsub(/^\s*$/, '</p><p class="description">') %>
-  </p>
-
+  <%= paragraphize(@culture_provider.description, 'class="description"') %>
+  
   <div class="clearer"></div>
 </div>
 

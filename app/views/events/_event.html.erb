@@ -14,9 +14,7 @@
     <li class="ages">För åldrar <%= event.from_age %>-<%= event.to_age %> år</li>
   </ul>
 
-  <p class="description">
-    <%= h(event.description).gsub(/^\s*$/, '</p><p class="description">') %>
-  </p>
+  <%= paragraphize(event.description, 'class="description"') %>
 
   <div class="clearer"></div>
 </div>

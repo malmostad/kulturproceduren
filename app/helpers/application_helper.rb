@@ -19,4 +19,13 @@ module ApplicationHelper
 
     url
   end
+
+  def paragraphize(text, tag_attrs = '', escape = true)
+    text = h(text) if escape
+    "<p #{tag_attrs}>" + text.gsub(/^\s*$/, "</p><p #{tag_attrs}>") + "</p>"
+  end
+  def linebreakize(text, escape = true)
+    text = h(text) if escape
+    text.split($/).join("<br/>")
+  end
 end

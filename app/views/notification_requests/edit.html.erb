@@ -1,7 +1,7 @@
 <h1>Editing notification_request</h1>
 
 <% form_for(@notification_request) do |f| %>
-  <%= f.error_messages %>
+  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
   <p>
     <%= f.label :send_mail %><br />

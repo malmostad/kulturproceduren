@@ -9,10 +9,12 @@
     <li><%= link_to 'Radera', @school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></li>
   </ul>
 
-  <ul class="meta">
-    <li class="district">Stadsdel: <%= link_to h(@school.district.name), @school.district %></li>
-    <li class="elit-id">ELIT-ID: <%= h @school.elit_id || "-" %></li>
-  </ul>
+  <dl class="meta">
+    <dt class="district">Stadsdel:</dt>
+    <dd class="district"><%= link_to h(@school.district.name), @school.district %></dd>
+    <dt class="elit-id">ELIT-ID:</dt>
+    <dd class="elit-id"><%= h @school.elit_id || "-" %></dd>
+  </dl>
 
   <div class="clearer"></div>
 </div>

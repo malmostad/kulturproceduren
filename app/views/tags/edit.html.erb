@@ -1,7 +1,7 @@
 <h1>Editing tag</h1>
 
 <% form_for(@tag) do |f| %>
-  <%= f.error_messages %>
+  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
   <p>
     <%= f.label :tag %><br />

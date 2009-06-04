@@ -26,8 +26,8 @@
           <tr class="<%= alt %>">
             <td><%= h occasion.date %></td>
             <td><%= h occasion.seats %></td>
-            <td><%= h(occasion.address).gsub(/\r\n/, '<br/>') %></td>
-            <td><%= h(occasion.description).gsub(/^\s*$/, '<br/>') %></td>
+            <td><%= linebreakize(occasion.address) %></td>
+            <td><%= paragraphize(occasion.description) %></td>
             <td>
               <%= link_to "Redigera", edit_occasion_path(occasion) %>
               <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
