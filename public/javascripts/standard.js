@@ -22,30 +22,30 @@
                 }
             }
         });
-        $("#district_id").change(function() { 
-           var district_id = $("#district_id option:selected").val();
+        $("#kp-district_id").change(function() {
+           var district_id = $("#kp-district_id option:selected").val();
            var request = $.get(
                               "/booking/get_schools",
                               { district_id: district_id },
                               function(data) {
-                                  $("#school_id").html(data);
+                                  $("#kp-school_id").html(data);
                               }
                             );
-          $("#group_id").html("<option>Välj skola först</option>");
+          $("#kp-group_id").html("<option>Välj skola först</option>");
         });
-        $("#school_id").change(function() {
-           var school_id = $("#school_id option:selected").val();
-           var occasion_id = $("#occasion_id").val();
-           var request = $.get("/booking/get_groups", { school_id: school_id , occasion_id : occasion_id}, function(data) {$("#group_id").html(data);});
+        $("#kp-school_id").change(function() {
+           var school_id = $("#kp-school_id option:selected").val();
+           var occasion_id = $("#kp-occasion_id").val();
+           var request = $.get("/booking/get_groups", { school_id: school_id , occasion_id : occasion_id}, function(data) {$("#kp-group_id").html(data);});
         });
-        $("#group_id").change(function() {
-           var group_id = $("#group_id option:selected").val();
-           var occasion_id = $("#occasion_id").val();
+        $("#kp-group_id").change(function() {
+           var group_id = $("#kp-group_id option:selected").val();
+           var occasion_id = $("#kp-occasion_id").val();
            var request = $.get(
                               "/booking/get_input_area", 
                               {group_id: group_id , occasion_id : occasion_id } ,
                               function(data) {
-                                  $("#input-area").html(data);
+                                  $("#kp-input-area").html(data);
                               }
                             );
                             
@@ -62,10 +62,10 @@
            for ( i = 0 ; i < inputs.length ; i++) {
                sum += Number(inputs[i].value);
            };
-           $("#booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
+           $("#kp-booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
        };
-       $("#input-area").change(changeHandler);
-       $("#input-area").keyup(changeHandler);
+       $("#kp-input-area").change(changeHandler);
+       $("#kp-input-area").keyup(changeHandler);
    });
 
    
