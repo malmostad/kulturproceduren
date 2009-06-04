@@ -46,6 +46,15 @@ module ActionView
     end
 
     module FormTagHelper
+      def text_area_tag(name, content = nil, options = {})
+        options.stringify_keys!
+
+        if size = options.delete("size")
+          options["cols"], options["rows"] = size.split("x") if size.respond_to?(:split)
+        end
+
+        content_tag :textarea, content, { "name" => name, "id" => sanitize_to_id(name) }.update(options.stringify_keys)
+      end
       def sanitize_to_id(name)
         "kp-" + name.to_s.gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
       end
