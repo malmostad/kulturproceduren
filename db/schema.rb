@@ -32,7 +32,8 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
     t.integer  "answer"
-    t.integer  "answer_form_id"
+    t.integer  "occasion_id"
+    t.string   "answer_form_id", :limit => 46
     t.datetime "created_at"
     t.datetime "updated_at"
   end

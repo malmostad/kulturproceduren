@@ -6,28 +6,22 @@ Statistik för <%= @event.name %>
 <h4>Biljettanvändning totalt för evenemanget.</h4>
 <img src="<%=@tickets_usage%>" />
 </p>
-<%
-i = 0
-@event.occasions.each do |o| 
-  if not @occasion_answers[i].nil?
-    %>
-<p class="statistic-occasion">
-<h4>Svar för föreställningen den <%= o.date.to_s %></h4>
-  <%
+<%oi = 0
+  @event.occasions.each do |o|
     qi = 0
-    @questions.each do |q|
-%>
-
-  <div class="statistics-question-cnt">
-    <h5>Svarsfördelning på frågan <%= q.question %></h5>
-    <img src="<%=@occasion_answers[i][qi]%>" />
-  </div>
-<%      qi += 1
+    %>
+    <h4> Utvärderingssvar för föreställningen <%= o.date.to_s -%></h4>
+    <%
+    @event.questionaire.questions.each do |q|
+    %>
+    <p class ="stats-question-graf">
+      Utvärderings svar för frågan <%= q.question -%><br/>
+      <img src="<%= @og[oi][qi] -%>">
+    </p>
+    
+    <%
+    qi += 1
     end
+    oi += 1
   end
-  i += 1
-%>
-</p>
-<%
-end
-%>
+  %>

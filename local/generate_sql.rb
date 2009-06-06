@@ -280,6 +280,14 @@ dbh.do("DISCARD ALL")
 
 puts "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Var det bra?',NOW(),NOW());"
 dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Var det bra?',NOW(),NOW())"
+puts "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Var det roligt?',NOW(),NOW());"
+dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Var det roligt?',NOW(),NOW())"
+puts "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Har du en bensindriven bergsborr?',NOW(),NOW());"
+dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Har du en bensindriven bergsborr?',NOW(),NOW())"
+puts "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Körde du bogserbåt?',NOW(),NOW());"
+dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Körde du bogserbåt?',NOW(),NOW())"
+puts "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Klappade du kampelen under pausen?',NOW(),NOW());"
+dbh.do "INSERT INTO QUESTIONS ( template,question,created_at,updated_at) VALUES ( TRUE, 'Klappade du kampelen under pausen?',NOW(),NOW())"
 dbh.do("DISCARD ALL")
 
 # 11.5 Question_Questionaires

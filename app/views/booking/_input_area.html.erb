@@ -13,11 +13,11 @@ end %>
 </legend>
 <p class="booking-seats">
 <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
-<dd><%= text_field_tag "seats_students" ,"", {:class => "seats" }%></dd>
+<dd><%= text_field_tag "seats_students" ,"", {:class => "seats" , :autocomplete => "off"  } %></dd>
 <dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
-<dd><%= text_field_tag "seats_adult"  ,"", {:class => "seats" } %></dd>
+<dd><%= text_field_tag "seats_adult"  ,"", { :class => "seats" , :autocomplete => "off"  } %></dd>
 <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
-<dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" } %> <%= @occasion.wheelchair_seats -%> platser tillgängligt på den här föreställningen.</dd>
+<dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" , :autocomplete => "off"  }  %> <%= @occasion.wheelchair_seats -%> platser tillgängligt på den här föreställningen.</dd>
 </p>
 <p id="kp-booking-count" class="booking-count">
 </p>

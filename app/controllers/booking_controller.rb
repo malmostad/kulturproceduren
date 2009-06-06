@@ -73,7 +73,7 @@ class BookingController < ApplicationController
       if curgroup.ntickets_by_occasion(@occasion).to_i < ( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )
         flash[:error] = "Du har bara #{curgroup.ntickets_by_occasion(@occasion)} platser du kan boka på den här föreställningen"
         bork
-      elsif @occasion.available_wheelchair_seats < params[:seats_wheelchair].to_i
+      elsif @occasion.wheelchair_seats < params[:seats_wheelchair].to_i
         flash[:error] = "Det finns bara #{@occasion.available_wheelchair_seats} rullstolsplatser du kan boka på den här föreställningen"
         bork
       elsif params[:companion_email].nil? or params[:companion_name].nil? or params[:companion_telnr].nil?

@@ -11,33 +11,8 @@ class QuestionairesController < ApplicationController
       @questionaires = Questionaire.all
       render :index
     else
-      @questionaires = []
-
-      tot_answers = 0
-      tot_tickets = 1
-      
-      @user.groups.each do |g|
-        g.events.each do |e|
-          e.occasions.each do |o|
-            tot_answers = Answer.count(:all, :conditions => { :occasion_id => o.id, :group_id => g.id })
-            tot_tickets = Ticket.count(:all,
-              :conditions => [
-                "occasion_id = ? and group_id = ? and ( state = ? or state = ? )",
-                o.id, g.id, Ticket::BOOKED, Ticket::USED
-              ])
-            
-            puts "e = #{e.name} , o = #{o.date} , g = #{g.name} , tot_answers = #{tot_answers} , tot_ticket = #{tot_tickets}"
-            
-            # TODO Dagens datum istället för hårdkodat
-            if tot_tickets > 0 && tot_answers == 0 && e.last_occasion.date < Date.new(2009,12,12) && !@questionaires.include?(e.questionaire)
-              puts "pushing event #{e.name}"
-              @questionaires.push(e.questionaire)
-            end
-          end
-        end
-      end
-      pp @questionaires
-      render :mina_enkater
+      flash[:error] = "Du har inte behörighet att ändra på utvärderingsenkäter"
+      redirect_to "/"
     end
   end
 
@@ -67,7 +42,7 @@ class QuestionairesController < ApplicationController
           answer = Answer.new
           answer.question_id = k
           answer.answer = @qids[k]
-          answer.occasion_id = params[:occasion_id]
+          answer.occasion_id = params[:occasion_id].to_i
           answer.group_id = params[:group_id]
 
           if !answer.save
