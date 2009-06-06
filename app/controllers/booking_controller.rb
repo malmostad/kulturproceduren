@@ -91,8 +91,21 @@ class BookingController < ApplicationController
           bork
         end
 
+        chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+        tempid = ""
+        (1..45).each { |i| tempid << chars[rand(chars.size-1)] }
+        puts "DEBUG: genererat ansformid = #{tempid}"
+        ansform = AnswerForm.new
+        ansform.id = tempid
+        ansform.completed = false
+        ansform.companion = companion
+        ansform.occasion = @occasion
+        ansform.group = curgroup
+        ansform.questionaire = @occasion.event.questionaire
+        ansform.save or bork
+
         if params[:booking_request].to_s.length > 0
-          br = BookingRequest.new
+          br = BookingRequirement.new
           br.occasion = @occasion
           br.group = curgroup
           br.requirement = params[:booking_request]

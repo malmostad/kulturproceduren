@@ -57,7 +57,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "calendar"
   map.delquest 'questionaires/:questionaire_id/destroy/:question_id' , :controller => "questions" , :action => "destroy"
   #Not so RESTful ....
-  map.ansquest 'questionaires/:questionaire_id/answer/:occasion_id/:group_id' , :controller => 'questionaires' , :action => 'show'
+  map.ansquest 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'show'
 
   map.eventstat 'events/:id/statistics' , :controller => "events" , :action => "stats"
 

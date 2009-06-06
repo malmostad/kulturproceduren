@@ -43,12 +43,14 @@ class QuestionsController < ApplicationController
     res = @question.save
     
     @questionaire = Questionaire.find(params[:questionaire_id])
-
-    @questionaire.question_ids << @question.id
-    
-
+    a = @questionaire.question_ids
+    a.push(@question.id)
     @questionaire.question_ids = a
-    
+    puts "Skapade fråga med id = #{@question.id}"
+    pp @questionaire
+    puts "Frågor på questionaire ..."
+    pp @questionaire.question_ids
+
     if !@questionaire.save
       flash[:error] = "Kunde inte uppdatera enkäten med nya frågor"
     end

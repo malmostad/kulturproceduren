@@ -3,7 +3,7 @@ class CreateAnswers < ActiveRecord::Migration
     create_table :answers do |t|
       t.integer :question_id
       t.integer :answer
-      t.integer :answer_form_id
+      t.string :answer_form_id, :limit => 46
       
       t.timestamps
     end

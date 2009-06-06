@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   layout "standard"
   require "pp"
   require 'rubygems'
-  require 'gruff'
+  #require 'gruff'
 
   def stats
     @event = Event.find_by_id(params[:id])
