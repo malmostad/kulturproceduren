@@ -58,7 +58,7 @@ ActionController::Routing::Routes.draw do |map|
   map.delquest 'questionaires/:questionaire_id/destroy/:question_id' , :controller => "questions" , :action => "destroy"
   #Not so RESTful ....
   map.ansquest 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'show'
-
+  map.attlist 'occasions/:id/attlist' , :controller => 'occasions' , :action => 'attlist'
   map.eventstat 'events/:id/statistics' , :controller => "events" , :action => "stats"
 
   # See how all your routes lay out with "rake routes"
