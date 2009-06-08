@@ -1,6 +1,8 @@
 (function($) {
     $(function() {
 
+        var kp_url = "/";
+
         // Checkbox lists
         $(".checkbox-list :checkbox").change(function() {
             var cb = $(this);
@@ -23,50 +25,61 @@
             }
         });
         $("#kp-district_id").change(function() {
-           var district_id = $("#kp-district_id option:selected").val();
-           var request = $.get(
-                              "/booking/get_schools",
-                              { district_id: district_id },
-                              function(data) {
-                                  $("#kp-school_id").html(data);
-                              }
-                            );
-          $("#kp-group_id").html("<option>Välj skola först</option>");
+            var district_id = $("#kp-district_id option:selected").val();
+            var request = $.get(
+                kp_url + "booking/get_schools",
+                {
+                    district_id: district_id
+                },
+                function(data) {
+                    $("#kp-school_id").html(data);
+                }
+                );
+            $("#kp-group_id").html("<option>Välj skola först</option>");
         });
         $("#kp-school_id").change(function() {
-           var school_id = $("#kp-school_id option:selected").val();
-           var occasion_id = $("#kp-occasion_id").val();
-           var request = $.get("/booking/get_groups", { school_id: school_id , occasion_id : occasion_id}, function(data) {$("#kp-group_id").html(data);});
+            var school_id = $("#kp-school_id option:selected").val();
+            var occasion_id = $("#kp-occasion_id").val();
+            var request = $.get(
+                kp_url + "booking/get_groups",
+                {
+                    school_id: school_id ,
+                    occasion_id : occasion_id
+                }, function(data) {
+                    $("#kp-group_id").html(data);
+                });
         });
         $("#kp-group_id").change(function() {
-           var group_id = $("#kp-group_id option:selected").val();
-           var occasion_id = $("#kp-occasion_id").val();
-           var request = $.get(
-                              "/booking/get_input_area", 
-                              {group_id: group_id , occasion_id : occasion_id } ,
-                              function(data) {
-                                  $("#kp-input-area").html(data);
-                              }
-                            );
-                            
+            var group_id = $("#kp-group_id option:selected").val();
+            var occasion_id = $("#kp-occasion_id").val();
+            var request = $.get(
+                kp_url + "booking/get_input_area",
+                {
+                    group_id: group_id ,
+                    occasion_id : occasion_id
+                },
+                function(data) {
+                    $("#kp-input-area").html(data);
+                });
         });
         
        
-     });
+    });
+
     //Drop-down
-   $(document).ready(function() {
-       var changeHandler = function() {
-           var inputs = $(".seats");
-           var i;
-           var sum = 0;
-           for ( i = 0 ; i < inputs.length ; i++) {
-               sum += Number(inputs[i].value);
-           };
-           $("#kp-booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
-       };
-       $("#kp-input-area").change(changeHandler);
-       $("#kp-input-area").keyup(changeHandler);
-   });
+    $(function() {
+        var changeHandler = function() {
+            var inputs = $(".seats");
+            var i;
+            var sum = 0;
+            for ( i = 0 ; i < inputs.length ; i++) {
+                sum += Number(inputs[i].value);
+            };
+            $("#kp-booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
+        };
+        $("#kp-input-area").change(changeHandler);
+        $("#kp-input-area").keyup(changeHandler);
+    });
 
    
 })(jQuery);
