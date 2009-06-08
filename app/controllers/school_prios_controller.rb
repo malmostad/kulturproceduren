@@ -1,5 +1,8 @@
 class SchoolPriosController < ApplicationController
 
+  before_filter :authenticate
+  before_filter :require_admin
+
   before_filter :load_school
   
   def move_up

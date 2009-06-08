@@ -61,6 +61,12 @@ class UserTest < ActiveSupport::TestCase
     assert u.has_role?(:admin)
   end
 
+  test "has any role" do
+    assert User.find(users(:foo).id).has_role?(:admin, :culture_worker)
+    assert User.find(users(:booker1).id).has_role?(:admin, :culture_worker, :booker)
+    assert !User.find(users(:booker1).id).has_role?(:admin, :culture_worker)
+  end
+
   test "has role unsuccessful" do
     u = User.find users(:foo).id
     assert !u.has_role?(:culture_worker)
@@ -75,6 +81,12 @@ class UserTest < ActiveSupport::TestCase
     # culture worker
     assert User.find(users(:provider1).id).can_administrate?(cp)
     assert !User.find(users(:provider2).id).can_administrate?(cp)
+  end
+
+  test "can book" do
+    assert User.find(users(:booker1).id).can_book?
+    assert User.find(users(:admin1).id).can_book?
+    assert !User.find(users(:provider1).id).can_book?
   end
   
 end

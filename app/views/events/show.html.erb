@@ -6,7 +6,9 @@
 
   <h2>Föreställningar</h2>
 
-  <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+  <% if (current_user.can_administrate?(@event.culture_provider)) -%>
+    <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+  <% end -%>
 
   <% unless @event.occasions.empty? -%>
     <table class="occasion-list">
@@ -23,14 +25,19 @@
       <tbody>
         <% @event.occasions.each do |occasion|
           alt = cycle('', "alt") %>
-          <tr class="<%= alt %>">
+          <tr class="<%= alt %> <%= "selected" if @selected_occasion && @selected_occasion.id == occasion.id %>">
             <td><%= h occasion.date %></td>
             <td><%= h occasion.seats %></td>
             <td><%= linebreakize(occasion.address) %></td>
             <td><%= paragraphize(occasion.description) %></td>
             <td>
-              <%= link_to "Redigera", edit_occasion_path(occasion) %>
-              <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+              <% if @event.show_date <= Date.today && !@event.tickets.empty? && current_user.can_book? -%>
+                <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
+              <% end -%>
+              <% if (current_user.can_administrate?(@event.culture_provider)) -%>
+                <%= link_to "Redigera", edit_occasion_path(occasion) %>
+                <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+              <% end -%>
             </td>
           </tr>
         <% end -%>

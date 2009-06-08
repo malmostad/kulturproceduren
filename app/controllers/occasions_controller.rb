@@ -1,7 +1,8 @@
 class OccasionsController < ApplicationController
 
-  before_filter :authenticate, :only => [ :index ]
   layout "standard"
+  
+  before_filter :authenticate, :except => [ :index, :show ]
 
   def attlist
     @occasion = Occasion.find(params[:id])
@@ -34,32 +35,24 @@ class OccasionsController < ApplicationController
       @user_events_hash_by_id[e.id] = e
     end
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @occasions }
-    end
   end
 
   def show
-    @occasion = Occasion.find(params[:id])
+    @selected_occasion = Occasion.find(params[:id])
+    @event = @selected_occasion.event
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @occasion }
-    end
-  end
-
-  def new
-    @occasion = Occasion.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @occasion }
-    end
+    render :template => "events/show"
   end
 
   def edit
     @occasion = Occasion.find(params[:id])
+
+    unless current_user.can_administrate?(@occasion.event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @occasion.event
+      return
+    end
+
     @event = @occasion.event
 
     render :template => "events/show"
@@ -67,6 +60,12 @@ class OccasionsController < ApplicationController
 
   def create
     @occasion = Occasion.new(params[:occasion])
+
+    unless current_user.can_administrate?(@occasion.event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @occasion.event
+      return
+    end
 
     if @occasion.save
       flash[:notice] = 'Föreställningen skapades.'
@@ -80,6 +79,12 @@ class OccasionsController < ApplicationController
   def update
     @occasion = Occasion.find(params[:id])
 
+    unless current_user.can_administrate?(@occasion.event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @occasion.event
+      return
+    end
+
     if @occasion.update_attributes(params[:occasion])
       flash[:notice] = 'Föreställningen uppdaterades.'
       redirect_to(@occasion.event)
@@ -91,8 +96,13 @@ class OccasionsController < ApplicationController
 
   def destroy
     @occasion = Occasion.find(params[:id])
-    @occasion.destroy
 
-    redirect_to(occasions_url)
+    if current_user.can_administrate?(@occasion.event.culture_provider)
+      @occasion.destroy
+    else
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+    end
+
+    redirect_to(@occasion.event)
   end
 end

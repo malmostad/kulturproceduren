@@ -2,6 +2,8 @@ class AllotmentController < ApplicationController
 
   layout "standard"
 
+  before_filter :authenticate
+  before_filter :require_admin
   before_filter :load_event
 
   def init

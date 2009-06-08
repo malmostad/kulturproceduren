@@ -1,6 +1,9 @@
 class BookingController < ApplicationController
   require "pp"
+  
   before_filter :authenticate
+  before_filter :check_booker
+  
   layout "standard"
 
   def get_schools
@@ -255,6 +258,16 @@ class BookingController < ApplicationController
       end
       
       pp @bookable_tickets
+    end
+  end
+
+
+  private
+
+  def check_booker
+    unless current_user.can_book?
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to "/"
     end
   end
 end

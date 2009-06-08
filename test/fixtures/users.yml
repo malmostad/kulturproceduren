@@ -16,6 +16,24 @@ foo:
     mobil_nr: 0701234567
     email: foo@example.com
 
+admin1:
+    id: 2
+    username: admin1
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Admin 1
+    mobil_nr: 0701234567
+    email: admin1@example.com
+
+admin2:
+    id: 3
+    username: admin2
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Admin 2
+    mobil_nr: 0701234567
+    email: admin2@example.com
+
 provider1:
     id: 10
     username: provider1
@@ -33,3 +51,21 @@ provider2:
     name: Provider 2
     mobil_nr: 0701234567
     email: provider2@provider.com
+
+booker1:
+    id: 20
+    username: booker1
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Booker 1
+    mobil_nr: 0701234567
+    email: booker1@example.com
+
+booker2:
+    id: 21
+    username: booker2
+    password: <%= password %>
+    salt: <%= salt %>
+    name: Booker 2
+    mobil_nr: 0701234567
+    email: booker2@example.com

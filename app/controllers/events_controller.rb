@@ -1,8 +1,12 @@
+require "pp"
+require 'rubygems'
+require 'gruff'
+
 class EventsController < ApplicationController
   layout "standard"
-  require "pp"
-  require 'rubygems'
-  require 'gruff'
+
+  before_filter :authenticate, :except => [ :index, :show ]
+  before_filter :check_roles, :except => [ :index, :show ]
 
   def stats
     @event = Event.find_by_id(params[:id])
@@ -54,12 +58,11 @@ class EventsController < ApplicationController
     render :stats
   end
 
-
-
-  
-
   def index
-    @events = Event.all :order => "created_at DESC", :include => :culture_provider
+    @events = Event.find :all,
+      :conditions => [ "show_date <= ?", Date.today ],
+      :order => "created_at DESC",
+      :include => :culture_provider
   end
 
   def show
@@ -68,16 +71,31 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @culture_providers = CultureProvider.all :order => "name ASC"
+    load_culture_providers()
   end
 
   def edit
     @event = Event.find(params[:id])
+
+    unless current_user.can_administrate?(@event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to :action => "index"
+      return
+    end
+
     render :action => "new"
   end
 
   def create
     @event = Event.new(params[:event])
+
+    unless current_user.can_administrate?(@event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to :action => "index"
+      return
+    end
+
+    load_culture_providers()
 
     if @event.save
       flash[:notice] = 'Evenemanget skapades.'
@@ -90,6 +108,12 @@ class EventsController < ApplicationController
   def update
     @event = Event.find(params[:id])
 
+    unless current_user.can_administrate?(@event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to :action => "index"
+      return
+    end
+
     if @event.update_attributes(params[:event])
       flash[:notice] = 'Evenemanget uppdaterades.'
       redirect_to(@event)
@@ -100,10 +124,35 @@ class EventsController < ApplicationController
 
   def destroy
     @event = Event.find(params[:id])
+    
+    unless current_user.can_administrate?(@event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to :action => "index"
+      return
+    end
+
     @event.destroy
 
     flash[:notice] = "Evenemanget raderades."
     redirect_to(events_url)
+  end
+
+
+  private
+
+  def load_culture_providers
+    if current_user.has_role?(:admin)
+      @culture_providers = CultureProvider.all :order => "name ASC"
+    else
+      @culture_providers = current_user.culture_providers.find :all, :order => "name ASC"
+    end
+  end
+
+  def check_roles
+    unless current_user.has_role?(:admin) || current_user.has_role?(:culture_worker)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to :action => "index"
+    end
   end
 
   def gen_fname(s)
@@ -115,4 +164,5 @@ class EventsController < ApplicationController
     end
     return fname
   end
+
 end

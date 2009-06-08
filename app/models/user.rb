@@ -44,8 +44,11 @@ class User < ActiveRecord::Base
     return ret
   end
 
-  def has_role?(role)
-    roles.exists? [ "lower(name) = ?", role.to_s.downcase ]
+  def has_role?(*rs)
+    rs.each do |r|
+      return true if roles.exists? [ "lower(name) = ?", r.to_s.downcase ]
+    end
+    return false
   end
 
   def can_administrate?(e)
@@ -55,6 +58,10 @@ class User < ActiveRecord::Base
     else
       return false
     end
+  end
+
+  def can_book?
+    return has_role?(:admin, :booker)
   end
 
   

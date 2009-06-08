@@ -2,12 +2,16 @@
 
   <h1><%= h event.name %></h1>
 
-  <ul class="tools">
-    <li><%= link_to 'Redigera', edit_event_path(event) %></li>
-    <% if event.show_date > Date.today -%>
-      <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => event.id %></li>
-    <% end -%>
-  </ul>
+  <% if user_online? -%>
+    <ul class="tools">
+      <% if (current_user.can_administrate?(event.culture_provider)) -%>
+        <li><%= link_to 'Redigera', edit_event_path(event) %></li>
+      <% end -%>
+      <% if current_user.has_role?(:admin) && event.show_date > Date.today -%>
+        <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => event.id %></li>
+      <% end -%>
+    </ul>
+  <% end -%>
 
   <ul class="meta">
     <li class="culture-provider"><%= link_to h(event.culture_provider.name), culture_provider_path(event.culture_provider) %></li>

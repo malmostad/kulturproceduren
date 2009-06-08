@@ -23,7 +23,7 @@ class LoginController < ApplicationController
         redirect_to session[:return_to]
         session[:return_to] = nil
       else
-        redirect_to "/"
+        redirect_to :controller => "account", :action => "index"
       end
     end
   end

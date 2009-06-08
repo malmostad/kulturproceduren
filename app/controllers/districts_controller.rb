@@ -1,6 +1,9 @@
 class DistrictsController < ApplicationController
   layout "admin"
   
+  before_filter :authenticate
+  before_filter :require_admin
+
   def index
     @districts = District.all
   end

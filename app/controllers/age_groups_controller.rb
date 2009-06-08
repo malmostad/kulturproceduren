@@ -1,6 +1,9 @@
 class AgeGroupsController < ApplicationController
   layout "admin"
 
+  before_filter :authenticate
+  before_filter :require_admin
+
   def edit
     @age_group = AgeGroup.find(params[:id])
     @group = @age_group.group

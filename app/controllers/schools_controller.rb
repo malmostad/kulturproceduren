@@ -1,6 +1,9 @@
 class SchoolsController < ApplicationController
   layout "admin"
   
+  before_filter :authenticate
+  before_filter :require_admin
+
   def index
     @schools = School.all :order => "name ASC", :include => :district
   end
