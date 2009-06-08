@@ -5,17 +5,21 @@
     <% prev_date = Date.new %>
 
     <% @occasions.each do |occasion| -%>
-      
+
       <% if prev_date < occasion.date %>
         <tr class="date-row">
           <th colspan="3"><%= occasion.date %></th>
         </tr>
       <% end -%>
-      
+
       <tr>
         <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
         <td class="occasion"><%= link_to h(occasion.description), occasion %></td>
-        <td class="booking"><%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %></td>
+        <td class="booking">
+          <% if occasion.event.bookable? && user_online? && current_user.can_book? -%>
+            <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
+          <% end -%>
+        </td>
       </tr>
 
       <% prev_date = occasion.date %>

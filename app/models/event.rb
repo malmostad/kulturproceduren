@@ -39,4 +39,8 @@ class Event < ActiveRecord::Base
     end
     return m
   end
+
+  def bookable?
+    show_date <= Date.today && !tickets.empty?
+  end
 end

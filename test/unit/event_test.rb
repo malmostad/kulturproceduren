@@ -7,4 +7,10 @@ class EventTest < ActiveSupport::TestCase
 
     es.each { |e| assert e.tickets.empty? }
   end
+
+  test "bookable" do
+    assert Event.find(events(:bookable).id).bookable?
+    assert !Event.find(events(:not_bookable_by_date).id).bookable?
+    assert !Event.find(events(:not_bookable_by_tickets).id).bookable?
+  end
 end

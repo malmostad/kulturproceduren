@@ -11,3 +11,27 @@ event_w_tickets:
     to_age: 10
     description: With tickets
     name: With tickets
+
+bookable:
+    id: 10
+    from_age: 1
+    to_age: 10
+    description: Bookable event
+    name: Bookable event
+    show_date: 2009-01-01
+
+not_bookable_by_date:
+    id: 11
+    from_age: 1
+    to_age: 10
+    description: Not bookable event
+    name: Not bookable event
+    show_date: <%= Date.today + 10 %>
+
+not_bookable_by_tickets:
+    id: 12
+    from_age: 1
+    to_age: 10
+    description: Not bookable event
+    name: Not bookable event
+    show_date: 2009-01-01
