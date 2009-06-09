@@ -34,7 +34,8 @@ body {
     border-spacing: 0;
 }
 
-#kp table td { padding: 3px; }
+#kp table thead th { text-align: left; border-bottom: 1px solid #d3d7cf; }
+#kp table td, #kp table th { padding: 3px 5px; vertical-align: top; }
 #kp table .alt td { background: #eeeeec; }
 #kp table .selected td { background: #cfc; }
 

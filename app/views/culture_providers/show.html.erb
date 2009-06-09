@@ -39,49 +39,79 @@
   </dl>
 
   <%= paragraphize(@culture_provider.description, 'class="description"') %>
-  
+
   <div class="clearer"></div>
 </div>
 
+<% if user_online? && (current_user.can_administrate?(@culture_provider)) -%>
 
-<% unless @culture_provider.upcoming_occasions.empty? -%>
-  <h2>Kommande föreställningar</h2>
+  <% unless @culture_provider.events.empty? -%>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Namn</th>
-        <th>Datum</th>
-      </tr>
-    </thead>
+    <h2>Evenemang</h2>
 
-    <tbody>
-      <% @culture_provider.upcoming_occasions.each do |occasion| -%>
+    <table>
+      <thead>
         <tr>
-          <td><%= link_to h(occasion.event.name), occasion.event -%></td>
-          <td><%= l occasion.date, :format => :long %></td>
+          <th>Namn</th>
+          <th>Publiceringsdatum</th>
         </tr>
-      <% end -%>
-    </tbody>
-  </table>
-<% end -%>
+      </thead>
 
-<% unless @culture_provider.standing_events.empty? -%>
-  <h2>Stående arrangemang</h2>
+      <tbody>
+        <% @culture_provider.events.each do |event| -%>
+          <tr class="<%= cycle("", "alt") %>">
+            <td><%= link_to h(event.name), event -%></td>
+            <td><%= l event.show_date, :format => :long %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Namn</th>
-      </tr>
-    </thead>
+<% else -%>
 
-    <tbody>
-      <% @culture_provider.standing_events.each do |event| -%>
+  <% unless @culture_provider.upcoming_occasions.empty? -%>
+    <h2>Kommande föreställningar</h2>
+
+    <table>
+      <thead>
         <tr>
-          <td><%= link_to h(event.name), event -%></td>
+          <th>Namn</th>
+          <th>Datum</th>
         </tr>
-      <% end -%>
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        <% @culture_provider.upcoming_occasions.each do |occasion| -%>
+          <tr class="<%= cycle("", "alt") %>">
+            <td><%= link_to h(occasion.event.name), occasion.event -%></td>
+            <td><%= l occasion.date, :format => :long %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
+
+  <% unless @culture_provider.standing_events.empty? -%>
+    <h2>Stående arrangemang</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Namn</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%
+        reset_cycle()
+        @culture_provider.standing_events.each do |event| -%>
+          <tr class="<%= cycle("", "alt") %>">
+            <td><%= link_to h(event.name), event -%></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
+
 <% end -%>
