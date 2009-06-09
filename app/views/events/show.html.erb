@@ -6,7 +6,7 @@
 
   <h2>Föreställningar</h2>
 
-  <% if (current_user.can_administrate?(@event.culture_provider)) -%>
+  <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
     <%= render :partial => "occasions/form", :locals => { :event => @event } %>
   <% end -%>
 
@@ -15,6 +15,7 @@
       <thead>
         <tr>
           <th>Datum</th>
+          <th>Tid</th>
           <th>Antal platser</th>
           <th>Adress</th>
           <th>Beskrivning</th>
@@ -27,14 +28,20 @@
           alt = cycle('', "alt") %>
           <tr class="<%= alt %> <%= "selected" if @selected_occasion && @selected_occasion.id == occasion.id %>">
             <td><%= h occasion.date %></td>
-            <td><%= h occasion.seats %></td>
+            <td><%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %></td>
+            <td>
+              <%= h occasion.seats %>
+              <% if occasion.wheelchair_seats.to_i > 0 -%>
+                + <%= h occasion.wheelchair_seats %>
+              <% end -%>
+            </td>
             <td><%= linebreakize(occasion.address) %></td>
             <td><%= paragraphize(occasion.description) %></td>
             <td>
               <% if @event.bookable? && current_user.can_book? -%>
                 <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
               <% end -%>
-              <% if (current_user.can_administrate?(@event.culture_provider)) -%>
+              <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
                 <%= link_to "Redigera", edit_occasion_path(occasion) %>
                 <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
               <% end -%>

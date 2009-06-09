@@ -45,6 +45,7 @@ sv:
             default: "%a %d %b %Y, %H:%M:%S %z"
             short: "%d %b %H:%M"
             long: "%d %b %Y, %H:%M"
+            only_time: "%H:%M"
 
     # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
     datetime:
@@ -133,11 +134,20 @@ sv:
                 culture_provider: Arrangör
                 culture_provider_id: Arrangör
                 show_date: Publiceringsdatum
+                url: Hemsida
+                booking_url: Bokningslänk
+                movie_url: Youtube-länk
+                opening_hours: Öppettider
+                cost: Kostnad
             occasion:
                 date: Datum
                 seats: Antal platser
                 address: Adress
                 description: Beskrivning
+                start_time: Starttid
+                stop_time: Sluttid
+                wheelchair_seats: Antal rullstolsplatser
+                telecoil: Hörselslinga
             district:
                 name: Namn
                 elit_id: ELIT-ID

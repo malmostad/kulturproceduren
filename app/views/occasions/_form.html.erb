@@ -8,25 +8,46 @@ form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
 
     <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-    <div class="date-cnt">
-      <%= f.label :date, nil, :for => "kp-occasion-date-1i" %>
-      <%= f.date_select :date %>
-    </div>
+    <ul class="form-elements">
+      <li class="date-cnt">
+        <%= f.label :date, nil, :for => "kp-occasion-date-1i" %>
+        <%= f.date_select :date %>
+      </li>
 
-    <div class="seats-cnt">
-      <%= f.label :seats %>
-      <%= f.text_field :seats %>
-    </div>
+      <li class="start-time-cnt">
+        <%= f.label :start_time, nil, :for => "kp-occasion-start_time-4i" %>
+        <%= f.time_select :start_time, :minute_step => 5 %>
+      </li>
+      <li class="stop-time-cnt">
+        <%= f.label :stop_time, nil, :for => "kp-occasion-stop_time-4i" %>
+        <%= f.time_select :stop_time, :minute_step => 5 %>
+      </li>
 
-    <div class="address-cnt">
-      <%= f.label :address %>
-      <%= f.text_area :address %>
-    </div>
+      <li class="seats-cnt">
+        <%= f.label :seats %>
+        <%= f.text_field :seats %>
+      </li>
+      
+      <li class="wheelchair-seats-cnt">
+        <%= f.label :wheelchair_seats %>
+        <%= f.text_field :wheelchair_seats %>
+      </li>
 
-    <div class="description-cnt">
-      <%= f.label :description %>
-      <%= f.text_area :description %>
-    </div>
+      <li class="address-cnt">
+        <%= f.label :address %>
+        <%= f.text_area :address %>
+      </li>
+
+      <li class="description-cnt">
+        <%= f.label :description %>
+        <%= f.text_area :description %>
+      </li>
+
+      <li class="telecoil-cnt">
+        <%= f.check_box :telecoil %>
+        <%= f.label :telecoil %>
+      </li>
+    </ul>
 
     <div class="submit-cnt">
       <%= f.hidden_field :event_id %>

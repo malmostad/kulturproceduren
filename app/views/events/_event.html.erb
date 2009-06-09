@@ -13,10 +13,32 @@
     </ul>
   <% end -%>
 
-  <ul class="meta">
-    <li class="culture-provider"><%= link_to h(event.culture_provider.name), culture_provider_path(event.culture_provider) %></li>
-    <li class="ages">För åldrar <%= event.from_age %>-<%= event.to_age %> år</li>
-  </ul>
+  <dl class="meta">
+    <% if event.booking_url -%>
+      <dt class="booking-url">Bokning</dt>
+      <dd class="booking-url"><%= link_to h(event.booking_url), event.booking_url %></dd>
+    <% end -%>
+    <% if event.cost -%>
+      <dt class="cost">Kostnad</dt>
+      <dd class="cost"><%= linebreakize(event.cost) %></dd>
+    <% end -%>
+    <dt class="culture-provider">Arrangör</dt>
+    <dd class="culture-provider"><%= link_to h(event.culture_provider.name), culture_provider_path(event.culture_provider) %></dd>
+    <dt class="ages">För åldrar</dt>
+    <dd class="ages"><%= event.from_age %>-<%= event.to_age %> år</dd>
+    <% if event.opening_hours -%>
+      <dt class="opening-hours">Öppettider</dt>
+      <dd class="opening-hours"><%= linebreakize(event.opening_hours) %></dd>
+    <% end -%>
+    <% if event.url -%>
+      <dt class="url">Extern länk</dt>
+      <dd class="url"><%= link_to h(event.url), event.url %></dd>
+    <% end -%>
+    <% if event.movie_url -%>
+      <dt class="movie-url">Youtube-länk</dt>
+      <dd class="movie-url"><%= link_to h(event.movie_url), event.movie_url %></dd>
+    <% end -%>
+  </dl>
 
   <%= paragraphize(event.description, 'class="description"') %>
 

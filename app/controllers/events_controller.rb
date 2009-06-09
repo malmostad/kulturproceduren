@@ -70,7 +70,11 @@ class EventsController < ApplicationController
   end
 
   def new
-    @event = Event.new
+    @event = Event.new do |e|
+      e.to_age = 19
+      e.culture_provider_id = params[:culture_provider_id] if params[:culture_provider_id]
+    end
+
     load_culture_providers()
   end
 

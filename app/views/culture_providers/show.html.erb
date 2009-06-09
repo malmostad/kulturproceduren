@@ -7,6 +7,7 @@
   <% if user_online? && (current_user.can_administrate?(@culture_provider)) %>
     <ul class="tools">
       <li><%= link_to 'Redigera', edit_culture_provider_path(@culture_provider) %></li>
+      <li><%= link_to 'Lägg till arrangemang', new_event_path(:culture_provider_id => @culture_provider.id) %></li>
     </ul>
   <% end -%>
 

@@ -100,6 +100,16 @@ body {
 
 #kp form input.error { background: #fcc; }
 
+#kp ul.form-elements {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+#kp ul.form-elements li {
+    padding: 0 0 0.5em 0;
+    margin: 0;
+}
+
 /*** Models ***/
 
 #kp .model-cnt { border: 1px solid #d3d7cf; padding: 1em; }
@@ -167,12 +177,15 @@ body {
 #kp .occasions-listing {padding-left: 1em;}
 
 #kp .occasions-form textarea { height: 5em; width: 15em; }
-#kp .occasions-form #kp-occasion-seats { width: 5em; }
-#kp .occasions-form .date-cnt,
+#kp #kp-occasion-seats, #kp #kp-occasion-wheelchair_seats { width: 5em; }
+#kp .occasions-form .start-time-cnt,
+#kp .occasions-form .seats-cnt,
 #kp .occasions-form .address-cnt { float: left; padding-right: 1em; }
 #kp .occasions-form .address-cnt label,
 #kp .occasions-form .description-cnt label { display: block; }
 #kp .occasions-form .submit-cnt { clear: both; }
+
+#kp .occasion-list td p { margin: 0; }
 
 /*** Booking ***/
 #kp .kp-booking-pagetitle {font-size: 1.5em; font-weight: bold;}

@@ -90,14 +90,18 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
   end
 
   create_table "events", :force => true do |t|
+    t.integer  "culture_provider_id"
     t.string   "name"
+    t.text     "description"
+    t.date     "show_date"
     t.integer  "from_age"
     t.integer  "to_age"
-    t.text     "description"
     t.integer  "ticket_state"
-    t.date     "show_date"
-    t.integer  "culture_provider_id"
-    t.string   "image_path"
+    t.string   "url"
+    t.string   "movie_url"
+    t.text     "opening_hours"
+    t.text     "cost"
+    t.string   "booking_link"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -130,12 +134,14 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
   end
 
   create_table "occasions", :force => true do |t|
+    t.integer  "event_id"
     t.date     "date"
+    t.time     "start_time"
+    t.time     "stop_time"
     t.integer  "seats"
+    t.integer  "wheelchair_seats"
     t.text     "address"
     t.text     "description"
-    t.integer  "event_id"
-    t.integer  "wheelchair_seats"
     t.boolean  "telecoil"
     t.datetime "created_at"
     t.datetime "updated_at"

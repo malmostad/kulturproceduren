@@ -27,13 +27,13 @@
       <%= f.label :from_age %>
     </dt>
     <dd>
-      <%= f.text_field :from_age %>
+      <%= f.select :from_age, (0..19).to_a %>
     </dd>
     <dt>
       <%= f.label :to_age %>
     </dt>
     <dd>
-      <%= f.text_field :to_age %>
+      <%= f.select :to_age, (0..19).to_a %>
     </dd>
     <% unless is_edit && @event.show_date <= Date.today %>
       <dt>
@@ -43,12 +43,41 @@
         <%= f.date_select :show_date, :start_year => Time.now.year %>
       </dd>
     <% end -%>
-    <dt
-      <dt class="textarea-label-cnt">
+    <dt class="textarea-label-cnt">
       <%= f.label :description %>
     </dt>
     <dd class="textarea-cnt">
       <%= f.text_area :description %>
+    </dd>
+    <dt>
+      <%= f.label :url %>
+    </dt>
+    <dd>
+      <%= f.text_field :url %>
+    </dd>
+    <dt>
+      <%= f.label :booking_url %>
+    </dt>
+    <dd>
+      <%= f.text_field :booking_url %>
+    </dd>
+    <dt>
+      <%= f.label :movie_url %>
+    </dt>
+    <dd>
+      <%= f.text_field :movie_url %>
+    </dd>
+    <dt class="textarea-label-cnt">
+      <%= f.label :opening_hours %>
+    </dt>
+    <dd class="textarea-cnt">
+      <%= f.text_area :opening_hours, :rows => 5 %>
+    </dd>
+    <dt class="textarea-label-cnt">
+      <%= f.label :cost %>
+    </dt>
+    <dd class="textarea-cnt">
+      <%= f.text_area :cost, :rows => 5 %>
     </dd>
   </dl>
 
