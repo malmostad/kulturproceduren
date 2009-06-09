@@ -1,8 +1,6 @@
 (function($) {
     $(function() {
 
-        var kp_url = "/";
-
         // Checkbox lists
         $(".checkbox-list :checkbox").change(function() {
             var cb = $(this);
@@ -27,7 +25,7 @@
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
             var request = $.get(
-                kp_url + "booking/get_schools",
+                kpConfig.schoolList.url,
                 {
                     district_id: district_id
                 },
@@ -38,25 +36,25 @@
             $("#kp-group_id").html("<option>Välj skola först</option>");
         });
         $("#kp-school_id").change(function() {
-            var school_id = $("#kp-school_id option:selected").val();
-            var occasion_id = $("#kp-occasion_id").val();
+            var schoolId = $("#kp-school_id option:selected").val();
+            var occasionId = $("#kp-occasion_id").val();
             var request = $.get(
-                kp_url + "booking/get_groups",
+                kpConfig.groupList.url,
                 {
-                    school_id: school_id ,
-                    occasion_id : occasion_id
+                    school_id: schoolId ,
+                    occasion_id : occasionId
                 }, function(data) {
                     $("#kp-group_id").html(data);
                 });
         });
         $("#kp-group_id").change(function() {
-            var group_id = $("#kp-group_id option:selected").val();
-            var occasion_id = $("#kp-occasion_id").val();
+            var groupId = $("#kp-group_id option:selected").val();
+            var occasionId = $("#kp-occasion_id").val();
             var request = $.get(
-                kp_url + "booking/get_input_area",
+                kpConfig.bookingInput.url,
                 {
-                    group_id: group_id ,
-                    occasion_id : occasion_id
+                    group_id: groupId ,
+                    occasion_id : occasionId
                 },
                 function(data) {
                     $("#kp-input-area").html(data);

@@ -6,6 +6,21 @@
     <title>Kulturproceduren</title>
 
     <%= stylesheet_link_tag 'standard' %>
+
+    <script type="text/javascript">
+      kpConfig = {
+        schoolList: {
+          url: "/booking/get_schools"
+        },
+        groupList: {
+          url: "/booking/get_groups"
+        },
+        bookingInput: {
+          url: "/booking/get_input_area"
+        }
+      };
+    </script>
+
     <%= javascript_include_tag "jquery-1.3.2.min.js" %>
     <%= javascript_include_tag "standard.js" %>
 
