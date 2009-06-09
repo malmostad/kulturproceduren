@@ -21,6 +21,11 @@ class Group < ActiveRecord::Base
 
   attr_accessor :num_children, :num_tickets
 
+
+  def total_children
+    @total_children ||= age_groups.sum "quantity"
+  end
+
   def companion_by_occasion(o)
     t = Ticket.find(:first , :conditions => {
         :group_id => id ,

@@ -2,7 +2,6 @@ fa_xa:
     age: 10
     quantity: 17
     group_id: 1
-
 fa_xb:
     age: 11
     quantity: 19
@@ -13,29 +12,28 @@ fb_xa1:
     age: 10
     quantity: 9
     group_id: 3
-
 fb_xa2:
     age: 11
     quantity: 7
+    group_id: 3
+fb_xa3:
+    age: 12
+    quantity: 17
     group_id: 3
 
 fb_xb1:
     age: 10
     quantity: 11
     group_id: 4
-
 fb_xb2:
     age: 11
     quantity: 10
     group_id: 4
 
-
-
 ba_xa:
     age: 11
     quantity: 17
     group_id: 5
-
 ba_xb:
     age: 12
     quantity: 19
@@ -46,7 +44,6 @@ bb_xa1:
     age: 11
     quantity: 9
     group_id: 7
-
 bb_xa2:
     age: 12
     quantity: 7
@@ -56,7 +53,6 @@ bb_xb1:
     age: 12
     quantity: 11
     group_id: 8
-
 bb_xb2:
     age: 13
     quantity: 10

@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
     t.string   "movie_url"
     t.text     "opening_hours"
     t.text     "cost"
-    t.string   "booking_link"
+    t.string   "booking_url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

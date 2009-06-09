@@ -38,7 +38,7 @@
             <td><%= linebreakize(occasion.address) %></td>
             <td><%= paragraphize(occasion.description) %></td>
             <td>
-              <% if @event.bookable? && current_user.can_book? -%>
+              <% if @event.bookable? && user_online? && current_user.can_book? -%>
                 <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
               <% end -%>
               <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>

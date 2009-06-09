@@ -5,11 +5,21 @@
 <% form_tag({ :action => "create_tickets", :id => params[:id] }, { :id => "kp-distribution-form" }) do -%>
 
   <table id="kp-distribution-list">
+    <thead>
+      <tr>
+        <th>Namn</th>
+        <th>Antal barn i klassen</th>
+        <th>Antal barn inom åldersspannet</th>
+        <th>Antal biljetter</th>
+        <th></th>
+      </tr>
+    </thead>
     <tbody>
       <% @districts.each do |district| -%>
 
         <tr class="district-row" id="kp-district-<%= district.id %>">
           <td class="name"><%= h district.name %></td>
+          <td class="total-children"></td>
           <td class="num-children"><%= h district.num_children %></td>
           <td class="num-tickets"><%= h district.num_tickets %></td>
           <td class="tools">
@@ -22,6 +32,7 @@
 
           <tr class="school-row kp-district-<%= district.id %>" id="kp-school-<%= school.id %>">
             <td class="name"><%= h school.name %></td>
+            <td class="total-children"></td>
             <td class="num-children"><%= h school.num_children %></td>
             <td class="num-tickets"><%= h school.num_tickets %></td>
             <td class="tools">
@@ -34,6 +45,7 @@
             <tr class="group-row kp-district-<%= district.id %> kp-school-<%= school.id%> <%= fill_indicator group.num_children, group.num_tickets %>"
                 id="kp-group-<%= group.id %>">
               <td class="name"><%= h group.name %></td>
+              <td class="total-children"><%= h group.total_children %></td>
               <td class="num-children"><%= h group.num_children %></td>
               <td class="num-tickets">
                 <input type="text" class="num-tickets-display" value="<%= h group.num_tickets %>"/>

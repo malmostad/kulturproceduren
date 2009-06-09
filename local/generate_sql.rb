@@ -256,11 +256,11 @@ e_ids.each do |e_id|
     wheelchair_seats = ( seats.to_f * 0.01 ).to_i
     telecoil = rand(100) < 50 ? true : false
     puts "INSERT INTO
-          OCCASIONS (telecoil , wheelchair_seats , date   ,seats     , address                , description                , event_id , created_at , updated_at)
-          VALUES    ( #{telecoil} , #{wheelchair_seats} , '#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()      , NOW());"
+          OCCASIONS (telecoil,      wheelchair_seats ,    date   , start_time, stop_time,  seats    , address                , description                , event_id , created_at , updated_at)
+          VALUES    ( #{telecoil} , #{wheelchair_seats} , '#{d}' , '18:00',    '20:00',    #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()      , NOW());"
     dbh.do "INSERT INTO
-            OCCASIONS (telecoil , wheelchair_seats , date   ,seats     , address                , description                , event_id , created_at , updated_at)
-            VALUES    ( #{telecoil} , #{wheelchair_seats} , '#{d}' , #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()    ,   NOW())"
+            OCCASIONS (telecoil ,     wheelchair_seats ,    date,    start_time, stop_time           ,seats     , address                , description                , event_id , created_at , updated_at)
+            VALUES    ( #{telecoil} , #{wheelchair_seats} , '#{d}' , '18:00',    '20:00', #{seats} , 'Någonstans i sverige' , 'Föreställning no #{e_no}' , #{e_id}  , NOW()    ,   NOW())"
   end
 end
 dbh.do("DISCARD ALL")
