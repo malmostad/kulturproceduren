@@ -60,7 +60,8 @@ ActionController::Routing::Routes.draw do |map|
   map.ansquest 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'show'
   map.attlist 'occasions/:id/attlist' , :controller => 'occasions' , :action => 'attlist'
   map.eventstat 'events/:id/statistics' , :controller => "events" , :action => "stats"
-
+  map.attlist_pdf 'occasions/:id/attlist_pdf' , :controller => 'occasions' , :action => 'attlist_pdf'
+  
   # See how all your routes lay out with "rake routes"
 
   # Install the default routes as the lowest priority.

@@ -21,8 +21,16 @@ class Group < ActiveRecord::Base
 
   attr_accessor :num_children, :num_tickets
 
-
-  def ntickets_by_occasion(o,state=Ticket::UNBOOKED)
+  def companion_by_occasion(o)
+    t = Ticket.find(:first , :conditions => {
+        :group_id => id ,
+        :occasion_id => o.id ,
+        :state => Ticket::BOOKED
+      })
+    t.companion
+  end
+  
+  def ntickets_by_occasion(o,state=Ticket::UNBOOKED,wheelchair=false)
     if o.is_a? Integer
       o = Occasion.find(o)
     end
@@ -31,18 +39,21 @@ class Group < ActiveRecord::Base
       Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :group_id => self.id,
-        :state => state
+        :state => state ,
+        :wheelchair => wheelchair
       }
     when Event::ALLOTED_DISTRICT then
       Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :district_id => self.school.district.id,
-        :state => state
+        :state => state ,
+        :wheelchair => wheelchair
       }
     when Event::FREE_FOR_ALL then
         Ticket.count :all , :conditions => {
         :event_id => o.event.id,
-        :state => state
+        :state => state ,
+        :wheelchair => wheelchair
       }  
     end
   end

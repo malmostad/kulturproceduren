@@ -1,7 +1,9 @@
 class OccasionsController < ApplicationController
 
   layout "standard"
-  
+  require "pdf/writer"
+  require "pdf/simpletable"
+
   before_filter :authenticate, :except => [ :index, :show ]
 
   def attlist
@@ -12,6 +14,100 @@ class OccasionsController < ApplicationController
       return
     end
     
+    @groups = Group.find(
+      Ticket.find(
+        :all ,
+        :select => "distinct group_id" ,
+        :conditions => {
+          :occasion_id => 1 ,
+          :state => Ticket::BOOKED
+        } ).map { |t| t.group_id} )
+
+    @brs = BookingRequirement.find_all_by_group_id(
+      @groups.map {|g| g.id} ,
+      :conditions => { :occasion_id => @occasion.id }
+    )
+
+    @ntickets = @groups.map { |g| g.ntickets_by_occasion(@occasion,Ticket::BOOKED) }
+
+    render "attlist"
+
+  end
+
+def attlist_pdf
+    @occasion = Occasion.find(params[:id])
+    if @occasion.nil?
+      flash[:error] = "Felaktiga parametrar"
+      redirect_to "/"
+      return
+    end
+
+    @groups = Group.find(
+      Ticket.find(
+        :all ,
+        :select => "distinct group_id" ,
+        :conditions => {
+          :occasion_id => 1 ,
+          :state => Ticket::BOOKED
+        } ).map { |t| t.group_id} )
+
+    @brs = BookingRequirement.find_all_by_group_id(
+      @groups.map {|g| g.id} ,
+      :conditions => { :occasion_id => @occasion.id }
+    )
+
+    @ntickets = @groups.map { |g| g.ntickets_by_occasion(@occasion,Ticket::BOOKED) }
+
+    pdf = PDF::Writer.new :orientation => :landscape , :paper => "A4"
+    pdf.select_font("Helvetica")
+
+    PDF::SimpleTable.new do |tab|
+      tab.title = "Deltagarlista för #{@occasion.event.name} #{@occasion.date.to_s}".to_iso
+      tab.column_order.push(*%w(group comp comptel att wheel req pres))
+
+      tab.columns["group"] = PDF::SimpleTable::Column.new("group") { |col|
+          col.heading = "Skola / Grupp".to_iso
+      }
+      tab.columns["comp"] = PDF::SimpleTable::Column.new("com") { |col|
+          col.heading = "Medföljande vuxen".to_iso
+      }
+      tab.columns["comptel"] = PDF::SimpleTable::Column.new("comptel") { |col|
+        col.heading = "Telefonnummer"
+      }
+      tab.columns["att"] = PDF::SimpleTable::Column.new("att") { |col|
+        col.heading = "Antal Deltagare"
+      }
+      tab.columns["wheel"] = PDF::SimpleTable::Column.new("wheel") { |col|
+        col.heading = "Antal Rullstolsplatser"
+      }
+      tab.columns["req"]  = PDF::SimpleTable::Column.new("req") { |col|
+        col.heading = "Övriga önskemål".to_iso
+      }
+      tab.columns["pres"]  = PDF::SimpleTable::Column.new("pres") { |col|
+        col.heading = "Antal närvarande".to_iso
+      }
+
+      tab.show_lines    = :all
+      tab.show_headings = true
+      tab.orientation   = :center
+      tab.position      = :center
+
+      data = []
+      @groups.each do |g|
+        row = {}
+        row["group"]   = (g.school.name.to_s + " - " + g.name.to_s).to_iso
+        row["comp"]    = g.companion_by_occasion(@occasion).name.to_iso
+        row["comptel"] = g.companion_by_occasion(@occasion).tel_nr.to_s.to_iso
+        row["att"]     = g.ntickets_by_occasion(@occasion,Ticket::BOOKED).to_s.to_iso
+        row["wheel"]   = g.ntickets_by_occasion(@occasion,Ticket::BOOKED,true).to_s.to_iso
+        row["req"]     = @brs.select { |b| b.group_id == g.id }.map { |b| (b.requirement.to_s + "\n").to_iso  }
+        row["pres"]    = " ".to_iso
+        data << row
+      end
+      tab.data.replace data
+      tab.render_on(pdf)
+    end
+    send_data pdf.render, :filename => "deltagarlista.pdf",:type => "application/pdf"
   end
 
   def index

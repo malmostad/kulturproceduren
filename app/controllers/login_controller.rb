@@ -18,7 +18,6 @@ class LoginController < ApplicationController
     else
       flash[:notice] = "Login successful"
       session[:current_user_id] = u.id
-
       if session[:return_to]
         redirect_to session[:return_to]
         session[:return_to] = nil
