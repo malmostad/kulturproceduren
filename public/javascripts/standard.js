@@ -25,7 +25,7 @@
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
             var request = $.get(
-                kpConfig.schoolList.url,
+                kpConfig.booking.schoolList.url,
                 {
                     district_id: district_id
                 },
@@ -39,7 +39,7 @@
             var schoolId = $("#kp-school_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
             var request = $.get(
-                kpConfig.groupList.url,
+                kpConfig.booking.groupList.url,
                 {
                     school_id: schoolId ,
                     occasion_id : occasionId
@@ -51,7 +51,7 @@
             var groupId = $("#kp-group_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
             var request = $.get(
-                kpConfig.bookingInput.url,
+                kpConfig.booking.bookingInput.url,
                 {
                     group_id: groupId ,
                     occasion_id : occasionId

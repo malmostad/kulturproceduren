@@ -5,6 +5,8 @@ class Event < ActiveRecord::Base
   has_many                :tickets, :dependent => :delete_all
   
   has_many                :districts, :through => :tickets, :uniq => true
+  has_many                :groups, :through => :tickets, :uniq => true
+  
   has_many                :occasions, :order => "date ASC"
   has_and_belongs_to_many :tags
   belongs_to              :culture_provider
@@ -34,7 +36,7 @@ class Event < ActiveRecord::Base
     m.date = Date.new
     occasions.each do |o|
       if o.date > m.date
-         m = o
+        m = o
       end
     end
     return m
@@ -42,5 +44,11 @@ class Event < ActiveRecord::Base
 
   def bookable?
     show_date <= Date.today && !tickets.empty?
+  end
+
+  def not_targeted_group_ids
+    groups.find :all,
+      :select => "distinct groups.id",
+      :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?)", from_age, to_age ]
   end
 end

@@ -1,11 +1,19 @@
 class SchoolsController < ApplicationController
-  layout "admin"
+  layout "admin", :except => [ :options_list ]
   
-  before_filter :authenticate
-  before_filter :require_admin
+  before_filter :authenticate, :except => [ :options_list ]
+  before_filter :require_admin, :except => [ :options_list ]
 
   def index
     @schools = School.all :order => "name ASC", :include => :district
+  end
+
+  def options_list
+    if params[:district_id]
+      @schools = School.all :order => "name ASC", :conditions => { :district_id => params[:district_id] }
+    else
+      @schools = School.all :order => "name ASC"
+    end
   end
 
   def show

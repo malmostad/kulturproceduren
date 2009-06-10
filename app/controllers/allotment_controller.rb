@@ -12,7 +12,7 @@ class AllotmentController < ApplicationController
 
   def assign_params
     session[:allotment] = {}
-    session[:allotment][:num_tickets] = params[:allotment][:num_tickets]
+    session[:allotment][:num_tickets] = params[:allotment][:num_tickets].to_i
     
     if params[:allotment][:district_ids] && params[:allotment][:district_ids].length > 0
       ids = params[:allotment][:district_ids].collect { |id| id.to_i }
@@ -25,6 +25,8 @@ class AllotmentController < ApplicationController
     unless @event.tickets.empty?
       session[:allotment][:district_ids] ||= []
       session[:allotment][:district_ids] |= @event.districts.collect { |d| d.id.to_i }
+
+      session[:allotment][:extra_groups] = @event.not_targeted_group_ids.collect { |g| g.id.to_i }
     end
 
     redirect_to :action => "distribute", :id => params[:id]
@@ -37,39 +39,58 @@ class AllotmentController < ApplicationController
       @districts = District.all :order => "name ASC"
     end
 
-    if @event.tickets.empty?
-      @tickets_left = assign_preliminary_distribution(@event, @districts, session[:allotment][:num_tickets].to_i)
+    if session[:allotment][:extra_groups]
+      @extra_groups = Group.find session[:allotment][:extra_groups],
+        :include => :school
+    end
+
+    if session[:allotment][:working_distribution]
+      @tickets_left = assign_working_distribution(@event, @districts, session[:allotment][:num_tickets])
+    elsif @event.tickets.empty?
+      @tickets_left = assign_preliminary_distribution(@event, @districts, session[:allotment][:num_tickets])
     else
-      assign_current_distribution(@event, @districts)
-      @tickets_left = session[:allotment][:num_tickets].to_i
+      assign_distribution_from_tickets(@event, @districts)
+      @tickets_left = session[:allotment][:num_tickets]
     end
 
   end
 
   def create_tickets
-    @event.tickets.clear
+
     assignment = params[:allotment][:ticket_assignment].reject { |k,v| v.to_i <= 0 }
 
-    groups = Group.find assignment.keys, :include => { :school => :district }
+    if params[:create_tickets]
+      @event.tickets.clear
 
-    groups.each do |group|
-      num = assignment[group.id.to_s].to_i
+      groups = Group.find assignment.keys, :include => { :school => :district }
 
-      1.upto(num) do
-        ticket = Ticket.new do |t|
-          t.group = group
-          t.event = @event
-          t.district = group.school.district
-          t.state = Ticket::UNBOOKED
+      groups.each do |group|
+        num = assignment[group.id.to_s].to_i
+
+        1.upto(num) do
+          ticket = Ticket.new do |t|
+            t.group = group
+            t.event = @event
+            t.district = group.school.district
+            t.state = Ticket::UNBOOKED
+          end
+
+          ticket.save!
         end
-
-        ticket.save!
       end
-    end
 
-    session[:allotment] = nil
-    flash[:notice] = "Biljetter till evenemanget har fördelats."
-    redirect_to @event
+      session[:allotment] = nil
+      flash[:notice] = "Biljetter till evenemanget har fördelats."
+      redirect_to @event
+    elsif params[:add_group_submit]
+      session[:allotment][:extra_groups] ||= []
+      session[:allotment][:extra_groups] << params[:add_group][:group_id].to_i
+      session[:allotment][:extra_groups].uniq!
+
+      session[:allotment][:working_distribution] = assignment
+
+      redirect_to :action => "distribute", :id => params[:id]
+    end
   end
 
 
@@ -116,7 +137,34 @@ class AllotmentController < ApplicationController
     return total_children
   end
 
-  def assign_current_distribution(event, districts)
+  def assign_working_distribution(event, districts, tickets)
+    assign_children(event, districts)
+    assigned_tickets = 0
+    
+    districts.each do |district|
+      district.num_tickets = 0;
+      district.distribution_schools.each do |school|
+        school.num_tickets = 0;
+        school.distribution_groups.each do |group|
+          group.num_tickets = (session[:allotment][:working_distribution][group.id.to_s] || 0).to_i;
+          school.num_tickets += group.num_tickets
+          district.num_tickets += group.num_tickets
+          assigned_tickets += group.num_tickets
+        end
+      end
+    end
+
+    if @extra_groups
+      @extra_groups.each do |group|
+        group.num_tickets = (session[:allotment][:working_distribution][group.id.to_s] || 0).to_i;
+        assigned_tickets += group.num_tickets
+      end
+    end
+
+    return tickets - assigned_tickets
+  end
+
+  def assign_distribution_from_tickets(event, districts)
     assign_children(event, districts)
 
     group_counts = event.tickets.count(:group => "group_id")
@@ -130,6 +178,12 @@ class AllotmentController < ApplicationController
           school.num_tickets += group.num_tickets
           district.num_tickets += group.num_tickets
         end
+      end
+    end
+
+    if @extra_groups
+      @extra_groups.each do |group|
+        group.num_tickets = group_counts[group.id].to_i;
       end
     end
   end

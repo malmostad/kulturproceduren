@@ -1,11 +1,19 @@
 class GroupsController < ApplicationController
-  layout "admin"
+  layout "admin", :except => [ :options_list ]
   
-  before_filter :authenticate
-  before_filter :require_admin
+  before_filter :authenticate, :except => [ :options_list ]
+  before_filter :require_admin, :except => [ :options_list ]
 
   def index
     @groups = Group.all :order => "name ASC", :include => { :school => :district }
+  end
+
+  def options_list
+    if params[:school_id]
+      @groups = Group.all :order => "name ASC", :conditions => { :school_id => params[:school_id] }
+    else
+      @groups = Group.all :order => "name ASC"
+    end
   end
 
   def show

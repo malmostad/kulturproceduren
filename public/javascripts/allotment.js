@@ -65,19 +65,25 @@
             var row = field.parents("tr");
             var rowData = getRowData(row);
             
-            row.removeClass("partial full error");
+            row.removeClass("partial full error overbooked");
 
             if (rowData.numTickets == NaN || rowData.numTickets < 0) {
                 row.addClass("error");
             } else if (rowData.numTickets > 0 && rowData.numTickets < rowData.numChildren) {
                 row.addClass("partial");
-            } else if (rowData.numTickets >= rowData.numChildren) {
+            } else if (rowData.numTickets == rowData.numChildren) {
                 row.addClass("full");
+            } else if (rowData.numTickets > rowData.numChildren) {
+                row.addClass("overbooked");
             }
 
             field.siblings(".num-tickets-display").val(field.val());
-            updateSchoolDisplay(row.attr("className").match(/kp-school-\d+/)[0]);
-            updateDistrictDisplay(row.attr("className").match(/kp-district-\d+/)[0]);
+            try {
+                updateSchoolDisplay(row.attr("className").match(/kp-school-\d+/)[0]);
+            } catch (e) {}
+            try {
+                updateDistrictDisplay(row.attr("className").match(/kp-district-\d+/)[0]);
+            } catch(e) {}
         });
         $("#kp #kp-distribution-list .num-tickets-display").change(function() {
             var field = $(this);
@@ -132,6 +138,50 @@
         $("#kp #kp-distribution-list .district-row .tools .clear").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .clear").trigger("click");
             return false;
+        });
+    });
+
+    $(function() {
+        $("#kp #kp-add_group_district_id").change(function() {
+            var val = parseInt($(this).val());
+
+            if (isNaN(val)) {
+                $("#kp #kp-add_group_school_id, #kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
+            } else {
+                $("#kp #kp-add_group_school_id").load(
+                    kpConfig.schools.list.url,
+                    $.param({ 
+                        district_id: val
+                    }),
+                    function () {
+                        $("#kp #kp-add_group_school_id").removeAttr("disabled");
+                    });
+            }
+        });
+        $("#kp #kp-add_group_school_id").change(function() {
+            var val = parseInt($(this).val());
+
+            if (isNaN(val)) {
+                $("#kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
+            } else {
+                $("#kp #kp-add_group_group_id").load(
+                    kpConfig.groups.list.url,
+                    $.param({
+                        school_id: val
+                    }),
+                    function () {
+                        $("#kp #kp-add_group_group_id").removeAttr("disabled");
+                    });
+            }
+        });
+        $("#kp #kp-add_group_group_id").change(function() {
+            var val = parseInt($(this).val());
+
+            if (isNaN(val)) {
+                $("#kp #kp-add-group-submit").attr("disabled", "disabled");
+            } else {
+                $("#kp #kp-add-group-submit").removeAttr("disabled");
+            }
         });
     });
 })(jQuery);

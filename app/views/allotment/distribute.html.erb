@@ -4,17 +4,58 @@
 
 <% form_tag({ :action => "create_tickets", :id => params[:id] }, { :id => "kp-distribution-form" }) do -%>
 
+  <fieldset>
+    <legend>Lägg till grupp</legend>
+
+    <%= select_tag "add_group[district_id]", "<option>Välj stadsdel</option>" +
+      options_from_collection_for_select(@districts, "id", "name") %>
+    <%= select_tag "add_group[school_id]", '<option>Skolor</option>', :disabled => true %>
+    <%= select_tag "add_group[group_id]", '<option>Grupper</option>', :disabled => true %>
+
+    <input id="kp-add-group-submit" type="submit" name="add_group_submit" value="Lägg till grupp" disabled="disabled"/>
+  </fieldset>
+
   <table id="kp-distribution-list">
     <thead>
       <tr>
-        <th>Namn</th>
-        <th>Antal barn i klassen</th>
-        <th>Antal barn inom åldersspannet</th>
-        <th>Antal biljetter</th>
-        <th></th>
+        <th rowspan="2">Namn</th>
+        <th colspan="2" class="super">Antal barn</th>
+        <th rowspan="2">Antal biljetter</th>
+        <th rowspan="2"></th>
+      </tr>
+      <tr>
+        <th>Totalt i gruppen</th>
+        <th>För fördelning</th>
       </tr>
     </thead>
     <tbody>
+
+      <% if @extra_groups -%>
+        <% @extra_groups.each do |group| -%>
+          <tr class="group-row extra <%= fill_indicator group.total_children, group.num_tickets %>"
+              id="kp-group-<%= group.id %>">
+            <td class="name">
+              <%= h group.school.name -%>
+              -
+              <%= h group.name %>
+            </td>
+            <td class="total-children"><%= h group.total_children %></td>
+            <td class="num-children"><%= h group.total_children %></td>
+            <td class="num-tickets">
+              <input type="text" class="num-tickets-display" value="<%= h group.num_tickets %>"/>
+              <input type="hidden"
+                     class="num-tickets-value"
+                     name="allotment[ticket_assignment[<%= group.id %>]]"
+                     value="0<%= h group.num_tickets %>"/>
+            </td>
+            <td class="tools">
+              <a href="#" class="fill">+</a>
+              <a href="#" class="clear">-</a>
+            </td>
+          </tr>
+        <% end -%>
+      <% end -%>
+
       <% @districts.each do |district| -%>
 
         <tr class="district-row" id="kp-district-<%= district.id %>">
@@ -65,7 +106,7 @@
   </table>
 
   <div class="submit-cnt">
-    <input type="submit" value="Skapa biljetter" name="submit"/>
+    <input type="submit" value="Skapa biljetter" name="create_tickets"/>
   </div>
 
 <% end -%>

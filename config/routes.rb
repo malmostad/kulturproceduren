@@ -6,16 +6,15 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :questions
   map.resources :questionaires 
   map.resources :tags
-  map.resources :roles
   map.resources :events
-  map.resources :tickets
   map.resources :occasions
-  map.resources :events
   map.resources :notification_requests
   map.resources :booking_requirements
   map.resources :districts
-  map.resources :schools
-  map.resources :groups
+  map.resources :schools,
+    :collection => { :options_list => :get }
+  map.resources :groups,
+    :collection => { :options_list => :get }
   map.resources :age_groups, :except => [ :show, :index, :new ]
   map.resources :role_applications,
     :except => [ :new ],

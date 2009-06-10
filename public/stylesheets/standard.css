@@ -36,8 +36,10 @@ body {
 
 #kp table thead th { text-align: left; border-bottom: 1px solid #d3d7cf; }
 #kp table td, #kp table th { padding: 3px 5px; vertical-align: top; }
+#kp table th { vertical-align: bottom; }
 #kp table .alt td { background: #eeeeec; }
 #kp table .selected td { background: #cfc; }
+#kp table th.super { border: 0; text-align: center; }
 
 #kp img { border: 0; padding: 0; margin: 0; }
 
@@ -135,9 +137,10 @@ body {
 #kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
 #kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
 
-#kp #kp-distribution-list td { padding: 3px 0.5em; }
+#kp #kp-distribution-list td { padding: 3px 0.5em; vertical-align: middle; }
 #kp #kp-distribution-list .school-row td.name { padding-left: 2em; }
 #kp #kp-distribution-list .group-row td.name { padding-left: 4em; }
+#kp #kp-distribution-list .extra td.name { padding-left: 0.5em; }
 
 #kp #kp-distribution-list .num-tickets input { width: 3em; }
 #kp #kp-distribution-list .tools a {
@@ -155,6 +158,7 @@ body {
 #kp #kp-distribution-list .tools .fill { margin-right: 1em; }
 
 #kp #kp-distribution-list .full { background: #8ae234; }
+#kp #kp-distribution-list .overbooked { background: #fcaf3e; }
 #kp #kp-distribution-list .partial { background: #fce94f; }
 #kp #kp-distribution-list .error { background: #ef2929; }
 
