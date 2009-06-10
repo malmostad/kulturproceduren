@@ -85,6 +85,7 @@
                 updateDistrictDisplay(row.attr("className").match(/kp-district-\d+/)[0]);
             } catch(e) {}
         });
+        
         $("#kp #kp-distribution-list .num-tickets-display").change(function() {
             var field = $(this);
             var newVal = parseInt($(this).val());
@@ -106,8 +107,6 @@
                 }
         
                 tc = tickets.getAvailable(rowData.numChildren - rowData.numTickets) + rowData.numTickets;
-        
-        
             } else {
                 tickets.change(rowData.numTickets);
             }
@@ -182,6 +181,20 @@
             } else {
                 $("#kp #kp-add-group-submit").removeAttr("disabled");
             }
+        });
+    });
+
+    $(function() {
+        $("#kp #kp-distribution-list .toggler").click(function() {
+            var rows = $("#kp #kp-distribution-list ." + $(this).parents("tr").attr("id"));
+            
+            if (rows.is(":visible")) {
+                rows.hide();
+            } else {
+                rows.show();
+            }
+            
+            return false;
         });
     });
 })(jQuery);

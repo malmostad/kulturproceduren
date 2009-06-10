@@ -46,7 +46,7 @@
               <input type="hidden"
                      class="num-tickets-value"
                      name="allotment[ticket_assignment[<%= group.id %>]]"
-                     value="0<%= h group.num_tickets %>"/>
+                     value="<%= h group.num_tickets %>"/>
             </td>
             <td class="tools">
               <a href="#" class="fill">+</a>
@@ -59,7 +59,7 @@
       <% @districts.each do |district| -%>
 
         <tr class="district-row" id="kp-district-<%= district.id %>">
-          <td class="name"><%= h district.name %></td>
+          <td class="name"><a href="#" class="toggler"><%= h district.name %></a></td>
           <td class="total-children"></td>
           <td class="num-children"><%= h district.num_children %></td>
           <td class="num-tickets"><%= h district.num_tickets %></td>
@@ -72,7 +72,7 @@
         <% district.distribution_schools.each do |school| -%>
 
           <tr class="school-row kp-district-<%= district.id %>" id="kp-school-<%= school.id %>">
-            <td class="name"><%= h school.name %></td>
+            <td class="name"><a href="#" class="toggler"><%= h school.name %></a></td>
             <td class="total-children"></td>
             <td class="num-children"><%= h school.num_children %></td>
             <td class="num-tickets"><%= h school.num_tickets %></td>
