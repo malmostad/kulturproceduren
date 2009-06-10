@@ -47,8 +47,9 @@ class Event < ActiveRecord::Base
   end
 
   def not_targeted_group_ids
-    groups.find :all,
+    groups.find(:all,
       :select => "distinct groups.id",
       :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?)", from_age, to_age ]
+    ).collect { |g| g.id.to_i }
   end
 end

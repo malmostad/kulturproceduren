@@ -26,7 +26,7 @@ class AllotmentController < ApplicationController
       session[:allotment][:district_ids] ||= []
       session[:allotment][:district_ids] |= @event.districts.collect { |d| d.id.to_i }
 
-      session[:allotment][:extra_groups] = @event.not_targeted_group_ids.collect { |g| g.id.to_i }
+      session[:allotment][:extra_groups] = @event.not_targeted_group_ids
     end
 
     redirect_to :action => "distribute", :id => params[:id]

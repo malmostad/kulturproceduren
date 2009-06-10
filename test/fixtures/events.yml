@@ -35,3 +35,17 @@ not_bookable_by_tickets:
     description: Not bookable event
     name: Not bookable event
     show_date: 2009-01-01
+
+with_groups_outside_age_span:
+    id: 20
+    from_age: 11
+    to_age: 11
+    description: With groups outside age span
+    name: With groups outside age span
+
+wo_groups_outside_age_span:
+    id: 21
+    from_age: 11
+    to_age: 11
+    description: Without groups outside age span
+    name: Without groups outside age span
