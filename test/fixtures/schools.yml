@@ -28,3 +28,25 @@ bar_cepa_school:
     name: bar cepa school
     district_id: 2
     elit_id: 5
+
+
+fp1:
+     id: 10
+     name: For prio 1
+     district_id: 10
+fp2:
+     id: 11
+     name: For prio 2
+     district_id: 10
+fp3:
+     id: 12
+     name: For prio 3
+     district_id: 10
+fp4:
+     id: 13
+     name: For prio 4
+     district_id: 10
+fp5:
+     id: 14
+     name: For prio 5
+     district_id: 10

@@ -63,6 +63,7 @@ class AllotmentController < ApplicationController
       @event.tickets.clear
 
       groups = Group.find assignment.keys, :include => { :school => :district }
+      schools = []
 
       groups.each do |group|
         num = assignment[group.id.to_s].to_i
@@ -77,7 +78,11 @@ class AllotmentController < ApplicationController
 
           ticket.save!
         end
+
+        schools << group.school unless schools.include?(group.school)
       end
+
+      schools.each { |s| s.move_last_in_prio }
 
       session[:allotment] = nil
       flash[:notice] = "Biljetter till evenemanget har fördelats."

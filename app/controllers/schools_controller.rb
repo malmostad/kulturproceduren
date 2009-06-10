@@ -40,7 +40,7 @@ class SchoolsController < ApplicationController
       prio = SchoolPrio.new do |p|
         p.school = @school
         p.district = @school.district
-        p.prio = SchoolPrio.max_prio(@school.district) + 1
+        p.prio = SchoolPrio.lowest_prio(@school.district) + 1
       end
       prio.save!
 
@@ -61,7 +61,7 @@ class SchoolsController < ApplicationController
 
       if new_district
         @school.school_prio.district = @school.district
-        @school.school_prio.prio = SchoolPrio.max_prio(@school.district) + 1
+        @school.school_prio.prio = SchoolPrio.lowest_prio(@school.district) + 1
         @school.school_prio.save!
       end
 

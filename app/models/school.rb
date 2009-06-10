@@ -39,4 +39,34 @@ class School < ActiveRecord::Base
       return nil
     end
   end
+
+  def has_highest_prio?
+    school_prio.prio == SchoolPrio.highest_prio(district)
+  end
+
+  def has_lowest_prio?
+    school_prio.prio == SchoolPrio.lowest_prio(district)
+  end
+
+  def move_first_in_prio
+    return if has_highest_prio?
+
+    highest = SchoolPrio.highest_prio district
+    SchoolPrio.update_all "prio = prio + 1",
+      [ "district_id = ? and prio < ?", district.id, school_prio.prio ]
+
+    school_prio.prio = highest
+    school_prio.save!
+  end
+
+  def move_last_in_prio
+    return if has_lowest_prio?
+
+    lowest = SchoolPrio.lowest_prio district
+    SchoolPrio.update_all "prio = prio - 1",
+      [ "district_id = ? and prio > ?", district.id, school_prio.prio ]
+
+    school_prio.prio = lowest
+    school_prio.save!
+  end
 end

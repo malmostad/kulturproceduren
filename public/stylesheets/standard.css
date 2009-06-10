@@ -46,7 +46,7 @@ body {
 #kp .clearer { clear: both; }
 
 /*** Page ***/
-#kp { padding: 1em; width: 640px; }
+#kp { padding: 1em; width: 800px; }
 
 #kp .flash { margin: 0.5em; border: 1px solid #c00; padding: 0.5em; background: #fcc; }
 #kp #kp-flash-notice { border-color: #060; background: #cfc; }
