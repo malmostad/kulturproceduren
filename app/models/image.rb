@@ -22,7 +22,7 @@ class Image < ActiveRecord::Base
     img.change_geometry(Magick::Geometry.new(320,240)) {|c,r,i| img.resize!(c,r) }
     img.write(fname)
     img.change_geometry(Magick::Geometry.new(128,128)) {|c,r,i| img.resize!(c,r) }
-    img.write(self.thumb_name)
+    img.write(Image.thumb_name(fname))
     save_orig
   end
 
@@ -49,7 +49,9 @@ class Image < ActiveRecord::Base
   def self.thumb_name(img)
     regexp = /public\/images\/(\w+?).jpg/
     if img.is_a? String
-      img = Image.find_by_filename(img)
+      f = img
+      img = Image.new
+      img.filename = f
     elsif img.is_a? Integer
       img = Image.find(img)
     else

@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.resources :users
+  map.resources :images
   map.resources :culture_providers
   map.resources :answers
   map.resources :questions
