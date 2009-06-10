@@ -1,0 +1,17 @@
+<h1>Ny bild</h1>
+
+<% form_for(@image , :html => {:multipart => true } ) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= file_field 'upload' , 'datafile'  %>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', images_path %>

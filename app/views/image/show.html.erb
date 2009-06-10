@@ -1,0 +1,15 @@
+<p>
+  <b>Name:</b>
+  <%=h @image.name %>
+</p>
+
+<h3>Thumbnail</h3>
+<img src="<%= @image.thumb_url -%>"/>
+<h3>Full image</h3>
+<img src="<%= @image.image_url -%>"/>
+
+
+
+
+<%= link_to 'Edit', edit_image_path(@image) %> |
+<%= link_to 'Back', images_path %>
