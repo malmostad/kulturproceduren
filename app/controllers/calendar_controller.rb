@@ -13,7 +13,6 @@ class CalendarController < ApplicationController
   end
 
   def calendar
-    puts "IN CALENDER CONTROLLER ACTION CALENDAR"
 
     if ! params[:month].nil?
       month = params[:month].to_i
@@ -40,12 +39,8 @@ class CalendarController < ApplicationController
     @occasions.each do |t|
       @oh[t.date] = t
     end
-
     @dispmonth_sday = Date.new(@dispmonth.year, @dispmonth.month, 1)
-
     @cal_sday = @dispmonth_sday - @dispmonth_sday.cwday
-
-    puts "BEFORE RENDER: nextmonth = #{@nextmonth.to_s}"
   end
   
   private

@@ -4,7 +4,7 @@ class OccasionsController < ApplicationController
   require "pdf/writer"
   require "pdf/simpletable"
 
-  before_filter :authenticate, :except => [ :index, :show ]
+  before_filter :authenticate, :except => [ :index, :show , :attlist , :attlist_pdf]
 
   def attlist
     @occasion = Occasion.find(params[:id])
@@ -107,7 +107,7 @@ def attlist_pdf
       tab.data.replace data
       tab.render_on(pdf)
     end
-    send_data pdf.render, :filename => "deltagarlista.pdf",:type => "application/pdf"
+    send_data pdf.render, :filename => "deltagarlista.pdf",:type => "application/pdf" , :disposition => 'inline'
   end
 
   def index
