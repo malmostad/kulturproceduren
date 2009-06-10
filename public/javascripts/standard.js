@@ -22,6 +22,9 @@
                 }
             }
         });
+    });
+
+    $(function() {
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
             var request = $.get(
@@ -60,8 +63,6 @@
                     $("#kp-input-area").html(data);
                 });
         });
-        
-       
     });
 
     //Drop-down
@@ -79,5 +80,18 @@
         $("#kp-input-area").keyup(changeHandler);
     });
 
+    // Date selectors
+    $(function() {
+        $("#kp .date-input-field").datepicker({ 
+            dateFormat: "yy-mm-dd",
+            minDate: new Date(),
+            firstDay: 1,
+            dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
+            dayNamesMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
+            dayNamesShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
+            monthNames: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
+            monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+        });
+    });
    
 })(jQuery);

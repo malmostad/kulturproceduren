@@ -10,8 +10,8 @@ form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
 
     <ul class="form-elements">
       <li class="date-cnt">
-        <%= f.label :date, nil, :for => "kp-occasion-date-1i" %>
-        <%= f.date_select :date %>
+        <%= f.label :date %>
+        <%= f.text_field :date, :class => "date-input-field" %>
       </li>
 
       <li class="start-time-cnt">

@@ -4,7 +4,7 @@
 
   <% if user_online? -%>
     <ul class="tools">
-      <% if (current_user.can_administrate?(event.culture_provider)) -%>
+      <% if current_user.can_administrate?(event.culture_provider) -%>
         <li><%= link_to 'Redigera', edit_event_path(event) %></li>
       <% end -%>
       <% if current_user.has_role?(:admin) && event.show_date > Date.today -%>
@@ -14,6 +14,10 @@
   <% end -%>
 
   <dl class="meta">
+    <% if event.show_date > Date.today && user_online? && current_user.can_administrate?(event.culture_provider) %>
+      <dt class="show-date">Publiceras</dt>
+      <dd class="show-date"><%= h event.show_date %></dd>
+    <% end -%>
     <% unless empty? event.booking_url -%>
       <dt class="booking-url">Bokning</dt>
       <dd class="booking-url"><%= link_to h(event.booking_url), event.booking_url %></dd>

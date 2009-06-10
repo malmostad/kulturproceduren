@@ -37,10 +37,10 @@
     </dd>
     <% unless is_edit && @event.show_date <= Date.today %>
       <dt>
-        <%= f.label :show_date, nil, :for => "kp-event-show_date-1i" %>
+        <%= f.label :show_date %>
       </dt>
       <dd>
-        <%= f.date_select :show_date, :start_year => Time.now.year %>
+        <%= f.text_field :show_date, :class => "date-input-field" %>
       </dd>
     <% end -%>
     <dt class="textarea-label-cnt">
