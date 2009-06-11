@@ -1,7 +1,7 @@
 class CultureProvider < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_many :events, :order => "show_date ASC"
-  has_many :images, :conditions => 'id != #{main_image_id}'
+  has_many :images, :conditions => 'id != #{main_image_id || 0}'
   belongs_to :main_image, :class_name => "Image", :dependent => :delete
   
   has_many :standing_events, :class_name => "Event",

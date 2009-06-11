@@ -17,6 +17,7 @@ class EventsController < ApplicationController
     uset = Ticket.find(:all,:conditions => "event_id = #{@event.id} and (state = #{Ticket::USED} or state = #{Ticket::BOOKED} )").length
 
     g = Gruff::Pie.new(400)
+    g.font = "/Library/Fonts/Arial.ttf"
     g.right_margin = 10
     g.left_margin = 10
     g.title_font_size = 30
@@ -43,6 +44,7 @@ class EventsController < ApplicationController
         (0..4).each { |i| histogram[i] = 0 }
         answers.each { |a| histogram[a.answer-1] += 1 }
         g = Gruff::Bar.new(350)
+        g.font = "/Library/Fonts/Arial.ttf"
         g.right_margin = 10
         g.left_margin = 10
         g.title_font_size = 30
@@ -161,10 +163,10 @@ class EventsController < ApplicationController
 
   def gen_fname(s)
     numpart = rand(10000)
-    fname = "public/images/" + s + numpart.to_s + ".png"
+    fname = "public/images/graphs/" + s + numpart.to_s + ".png"
     while File.exists?(fname) do
       numpart +=1
-      fname = "public/images/" + s + numpart.to_s + ".png"
+      fname = "public/images/graphs/" + s + numpart.to_s + ".png"
     end
     return fname
   end
