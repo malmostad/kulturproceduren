@@ -11,7 +11,7 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :tags
   belongs_to              :culture_provider
   has_one                 :questionaire
-  has_many                :images
+  has_many                :images, :conditions => 'id != #{main_image_id}'
   belongs_to              :main_image, :class_name => "Image", :dependent => :delete
   
   validates_presence_of :name, :from_age, :to_age, :description

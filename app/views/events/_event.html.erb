@@ -1,5 +1,24 @@
 <div class="model-cnt">
 
+  <% if event.main_image -%>
+    <div class="main-image">
+
+      <% if user_online? && current_user.can_administrate?(event.culture_provider) -%>
+        <ul class="tools">
+          <li><%= link_to "Ladda upp ny logotyp", new_ev_main_img_path(:event_id => event.id) -%></li>
+        </ul>
+      <% end -%>
+
+      <img src="<%= h event.main_image.image_url %>" alt="<%= h event.main_image.name %>"/>
+    </div>
+  <% elsif user_online? && current_user.can_administrate?(event.culture_provider) -%>
+    <div class="main-image">
+      <ul class="tools">
+        <li><%= link_to "Ladda upp ny logotyp", new_ev_main_img_path(:event_id => event.id) -%></li>
+      </ul>
+    </div>
+  <% end -%>
+
   <h1><%= h event.name %></h1>
 
   <% if user_online? -%>
@@ -11,6 +30,35 @@
         <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => event.id %></li>
       <% end -%>
     </ul>
+  <% end -%>
+
+  <% if !event.images.empty? %>
+
+    <div class="images-cnt">
+
+      <% if user_online? && current_user.can_administrate?(event.culture_provider) -%>
+        <ul class="tools">
+          <li><%= link_to "Ladda upp ny bild", new_ev_img_path(:event_id => event.id) -%></li>
+        </ul>
+      <% end -%>
+
+      <ul class="images">
+        <% event.images.each do |image| -%>
+          <li>
+            <img src="<%= h image.thumb_url %>" alt="<%= h image.name %>"/>
+          </li>
+        <% end -%>
+      </ul>
+    </div>
+
+  <% elsif user_online? && current_user.can_administrate?(event.culture_provider) -%>
+
+    <div class="images-cnt">
+      <ul class="tools">
+        <li><%= link_to "Ladda upp ny bild", new_ev_img_path(:event_id => event.id) -%></li>
+      </ul>
+    </div>
+
   <% end -%>
 
   <dl class="meta">

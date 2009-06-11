@@ -65,7 +65,7 @@ ActionController::Routing::Routes.draw do |map|
   map.new_cp_img 'culture_providers/:culture_provider_id/images/new', :controller => 'images', :action => 'new', :type => :normal
   map.new_cp_main_img 'culture_providers/:culture_provider_id/images/new/main', :controller => 'images', :action => 'new', :type => :main
   map.new_ev_img 'events/:event_id/images/new', :controller => 'images', :action => 'new', :type => :normal
-  map.new_ev_main_img 'events/:event_id/images/new', :controller => 'images', :action => 'new', :type => :main
+  map.new_ev_main_img 'events/:event_id/images/new/main', :controller => 'images', :action => 'new', :type => :main
   
   # See how all your routes lay out with "rake routes"
 
