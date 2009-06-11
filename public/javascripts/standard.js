@@ -28,7 +28,7 @@
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
             var request = $.get(
-                kpConfig.booking.schoolList.url,
+                kpConfig.schools.list.url,
                 {
                     district_id: district_id
                 },
@@ -42,7 +42,7 @@
             var schoolId = $("#kp-school_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
             var request = $.get(
-                kpConfig.booking.groupList.url,
+                kpConfig.groups.list.url,
                 {
                     school_id: schoolId ,
                     occasion_id : occasionId

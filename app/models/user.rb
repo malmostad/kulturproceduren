@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   has_many :tickets
   has_many :occasions , :through => :tickets , :uniq => true
-
+  has_many :notification_requests
   
   validates_presence_of :username, :password, :name, :email, :mobil_nr
   validates_uniqueness_of :username

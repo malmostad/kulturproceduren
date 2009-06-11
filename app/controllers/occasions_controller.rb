@@ -58,8 +58,10 @@ def attlist_pdf
 
     @ntickets = @groups.map { |g| g.ntickets_by_occasion(@occasion,Ticket::BOOKED) }
 
-    pdf = PDF::Writer.new :orientation => :landscape , :paper => "A4"
+    pdf = PDF::Writer.new  :paper => "A4" , :orientation => :landscape
     pdf.select_font("Helvetica")
+    pdf.margins_cm(2,2,2,2)
+    
 
     PDF::SimpleTable.new do |tab|
       tab.title = "Deltagarlista för #{@occasion.event.name} #{@occasion.date.to_s}".to_iso
@@ -75,10 +77,10 @@ def attlist_pdf
         col.heading = "Telefonnummer"
       }
       tab.columns["att"] = PDF::SimpleTable::Column.new("att") { |col|
-        col.heading = "Antal Deltagare"
+        col.heading = "Deltagare"
       }
       tab.columns["wheel"] = PDF::SimpleTable::Column.new("wheel") { |col|
-        col.heading = "Antal Rullstolsplatser"
+        col.heading = "Rullstolsplatser"
       }
       tab.columns["req"]  = PDF::SimpleTable::Column.new("req") { |col|
         col.heading = "Övriga önskemål".to_iso
@@ -89,9 +91,12 @@ def attlist_pdf
 
       tab.show_lines    = :all
       tab.show_headings = true
-      tab.orientation   = :center
-      tab.position      = :center
-
+      #tab.orientation   = :right
+      tab.orientation   = 1
+      tab.position      = :left
+      tab.font_size     = 9
+      tab.maximum_width = 1
+      puts "DEBUGG: #{tab.maximum_width}"
       data = []
       @groups.each do |g|
         row = {}

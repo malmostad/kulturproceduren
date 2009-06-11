@@ -31,6 +31,7 @@ class AnswerFormController < ApplicationController
           answer.question_id = qid
           answer.answer = ans.to_i
           answer.answer_form = @answer_form
+          answer.occasion = @answer_form.occasion
           answer.save
         end
         @answer_form.completed = true

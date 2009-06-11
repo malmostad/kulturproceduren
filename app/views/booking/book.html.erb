@@ -23,7 +23,9 @@
         %>
           <%= select_tag("district_id",opt_tag) %>
           <noscript>
-            <input name="commit" type="submit" value="Hämta skolor" /><br/>
+            <% if params[:commit] != "Hämta skolor" and params[:commit] != "Hämta grupper" and params[:commit] != "Välj grupp" %>
+              <input name="commit" type="submit" value="Hämta skolor" /><br/>
+            <% end %>
           </noscript>
         </div>
 
@@ -42,7 +44,9 @@
             <% end %>
           <% end %>
           <noscript>
-            <input name="commit" type="submit" value="Hämta grupper" /><br/>
+            <% if params[:commit] == "Hämta skolor" %>
+              <input name="commit" type="submit" value="Hämta grupper" /><br/>
+            <% end %>
           </noscript>
         </div>
 
@@ -57,16 +61,23 @@
               <select id="kp-group_id" name="group_id"><option>Välj skola först</option></select>
             <% end %>
           <% else %>
-            <select id="kp-group_id" name="group_id"><%=  ("<option>Välj Grupp</option>" + options_for_select(@groups.collect { |g|
-                    [ g.name + " - " + g.ntickets_by_occasion(@occasion).to_s + " biljetter tilldelade" + (g.age_groups.num_children_by_age_span(@occasion.event.from_age , @occasion.event.to_age) == 0 ? " OBS - Olämplig ålder för evenemanget" : "").to_s , g.id]
-                  })).to_s %>
+            <%  if @curgroup.nil? %>
+              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
+            <% else %>
+              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id%>
+            <% end %>
             </select>
           <% end %>
+          <noscript>
+            <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" %>
+              <input name="commit" type="submit" value="Välj grupp" /><br/>
+            <% end %>
+          </noscript>
         </div>
       </dd>
       <div id="kp-input-area">
-        <% if not @groups.nil? %>
-          <%= render :partial => "input_area" , :locals => { :group => nil , :occasion => nil } %>
+        <% if params[:commit] == "Välj grupp" %>
+            <%= render :partial => "input_area" , :locals => { :group => @curgroup , :occasion => @occasion } %>
         <% end %>
       </div>
     </dl>

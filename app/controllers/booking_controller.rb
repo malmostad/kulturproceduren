@@ -6,31 +6,6 @@ class BookingController < ApplicationController
   
   layout "standard"
 
-  def get_schools
-    if params[:district_id].nil?
-      flash[:error] = "Felaktiga parametrar"
-      redirect_to :controller => "booking" , :action => "book"
-      return
-    else
-      @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
-      render :partial => "schools_select"
-    end
-  end
-
-  def get_groups
-    if not params[:occasion_id].nil?
-      @occasion = Occasion.find(params[:occasion_id])
-    end
-    if params[:school_id].nil?
-      flash[:error] = "Felaktiga parametrar"
-      redirect_to :controller => "booking" , :action => "book"
-      return
-    else
-      @groups = Group.find :all , :conditions => { :school_id => params[:school_id] }
-      render :partial => "groups_select"
-    end
-  end
-
   def get_input_area
     @group = Group.find(params[:group_id])
     @occasion = Occasion.find(params[:occasion_id])
@@ -38,25 +13,37 @@ class BookingController < ApplicationController
   end
 
   def book
+
     @user = current_user
+
     if params[:occasion_id].nil? or params[:occasion_id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
       redirect_to "/"
       return
     end
+
     @occasion = Occasion.find(params[:occasion_id].to_i)
 
     if ( @occasion.nil? )
       flash[:error] = "Ingen föreställning angiven"
-      redirect_to :controller => "occasions"
+      redirect_to "/"
       return
     end
+
     if params[:commit] == "Hämta skolor" and not params[:district_id].nil? and params[:district_id].to_i != 0
       @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
     elsif params[:commit] == "Hämta grupper"
       if not params[:district_id].nil? and params[:district_id].to_i != 0 and not params[:school_id].nil? and params[:school_id].to_i != 0
         @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
         @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+      else
+        bork
+      end
+    elsif params[:commit] == "Välj grupp"
+      if not params[:district_id].nil? and params[:district_id].to_i != 0 and not params[:school_id].nil? and params[:school_id].to_i != 0 and not params[:group_id].nil? and params[:group_id].to_i != 0
+        @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
+        @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+        @curgroup = Group.find(params[:group_id])
       else
         bork
       end

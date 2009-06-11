@@ -1,9 +1,12 @@
 development:
     :salt_length: 10
+    :ticket_state_change_days: 14
     :upload_image_path: images/model
 test:
     :salt_length: 10
+    :ticket_state_change_days: 14
     :upload_image_path: images/model
 production:
     :salt_length: 10
+    :ticket_state_change_days: 14
     :upload_image_path: images/model

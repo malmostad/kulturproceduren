@@ -13,6 +13,7 @@ class Event < ActiveRecord::Base
   has_one                 :questionaire
   has_many                :images, :conditions => 'id != #{main_image_id}'
   belongs_to              :main_image, :class_name => "Image", :dependent => :delete
+  has_many                :notification_requests
   
   validates_presence_of :name, :from_age, :to_age, :description
   validates_numericality_of :from_age, :to_age, :only_integer => true

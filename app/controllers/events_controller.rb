@@ -41,7 +41,7 @@ class EventsController < ApplicationController
           })
         histogram = []
         (0..4).each { |i| histogram[i] = 0 }
-        answers.each { |a| histogram[a.answer] += 1 }
+        answers.each { |a| histogram[a.answer-1] += 1 }
         g = Gruff::Bar.new(350)
         g.right_margin = 10
         g.left_margin = 10
