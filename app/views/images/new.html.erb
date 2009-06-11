@@ -1,17 +1,33 @@
-<h1>Ny bild</h1>
 
-<% form_for(@image , :html => {:multipart => true } ) do |f| %>
-  <%= f.error_messages %>
+<h1>Ladda upp bild</h1>
 
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= file_field 'upload' , 'datafile'  %>
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
+<% form_for(@image, :html => { :multipart => true } ) do |f| %>
+
+  <fieldset>
+
+    <%= f.hidden_field :type -%>
+
+    <% if @image.culture_provider -%>
+      <legend>Ladda upp <%= params[:type] == :main ? "logotyp" : "bild" %> för <%= link_to h(@image.culture_provider.name), @image.culture_provider %></legend>
+
+      <%= f.hidden_field :culture_provider_id -%>
+    <% end -%>
+
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+    <dl class="form-elements">
+
+      <dt><%= f.label :name %></dt>
+      <dd><%= f.text_field :name %></dd>
+      
+      <dt><label for="kp-uplad-datafile">Bild</label></dt>
+      <dd><%= file_field 'upload' , 'datafile'  %></dd>
+      
+    </dl>
+
+    <div class="submit-cnt">
+      <%= f.submit 'Ladda upp' %>
+    </div>
+
+  </fieldset>
 <% end %>
-
-<%= link_to 'Back', images_path %>

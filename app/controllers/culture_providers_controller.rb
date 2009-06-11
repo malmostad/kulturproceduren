@@ -9,8 +9,7 @@ class CultureProvidersController < ApplicationController
   end
 
   def show
-    @culture_provider = CultureProvider.find(params[:id])
-    @today = Date.today
+    @culture_provider = CultureProvider.find params[:id], :include => [ :main_image ]
   end
 
   def new

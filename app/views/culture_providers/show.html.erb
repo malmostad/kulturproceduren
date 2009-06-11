@@ -2,9 +2,28 @@
 
 <div class="model-cnt">
 
+  <% if @culture_provider.main_image -%>
+    <div class="main-image">
+      
+      <% if user_online? && current_user.can_administrate?(@culture_provider) -%>
+        <ul class="tools">
+          <li><%= link_to "Ladda upp ny logotyp", new_cp_main_img_path(:culture_provider_id => @culture_provider.id) -%></li>
+        </ul>
+      <% end -%>
+
+      <img src="<%= @culture_provider.main_image.image_url %>" alt="<%= @culture_provider.main_image.name %>"/>
+    </div>
+  <% elsif user_online? && current_user.can_administrate?(@culture_provider) -%>
+    <div class="main-image">
+      <ul class="tools">
+        <li><%= link_to "Ladda upp ny logotyp", new_cp_main_img_path(:culture_provider_id => @culture_provider.id) -%></li>
+      </ul>
+    </div>
+  <% end -%>
+
   <h1><%= h @culture_provider.name %></h1>
 
-  <% if user_online? && (current_user.can_administrate?(@culture_provider)) %>
+  <% if user_online? && current_user.can_administrate?(@culture_provider) %>
     <ul class="tools">
       <li><%= link_to 'Redigera', edit_culture_provider_path(@culture_provider) %></li>
       <li><%= link_to 'Lägg till arrangemang', new_event_path(:culture_provider_id => @culture_provider.id) %></li>

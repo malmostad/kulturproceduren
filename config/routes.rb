@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.resources :users
-  map.resources :images
+  map.resources :images, :only => [ :create, :destroy ]
   map.resources :culture_providers
   map.resources :answers
   map.resources :questions
@@ -61,6 +61,11 @@ ActionController::Routing::Routes.draw do |map|
   map.attlist 'occasions/:id/attlist' , :controller => 'occasions' , :action => 'attlist'
   map.eventstat 'events/:id/statistics' , :controller => "events" , :action => "stats"
   map.attlist_pdf 'occasions/:id/attlist_pdf' , :controller => 'occasions' , :action => 'attlist_pdf'
+
+  map.new_cp_img 'culture_providers/:culture_provider_id/images/new', :controller => 'images', :action => 'new', :type => :normal
+  map.new_cp_main_img 'culture_providers/:culture_provider_id/images/new/main', :controller => 'images', :action => 'new', :type => :main
+  map.new_ev_img 'events/:event_id/images/new', :controller => 'images', :action => 'new', :type => :normal
+  map.new_ev_main_img 'events/:event_id/images/new', :controller => 'images', :action => 'new', :type => :main
   
   # See how all your routes lay out with "rake routes"
 

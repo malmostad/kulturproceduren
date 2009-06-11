@@ -182,6 +182,8 @@ sv:
                 address: Adress
                 opening_hours: Öppettider
                 url: Hemsida
+            image:
+                name: Namn
 
     # Used in array.to_sentence.
     support:

@@ -1,31 +1,43 @@
 class ImagesController < ApplicationController
   
-  layout "default"
+  layout "standard"
 
   before_filter :authenticate, :except => [ :show ]
 
   def new
-     @image = Image.new
-  end
-
-  def create
-    @image = Image.new(params[:image])
-
-    if @image.save(params[:upload])
-      flash[:notice] = "Bilden laddades upp."
-      redirect_to @image
+    @image = Image.new { |i| i.type = params[:type] }
+    
+    if params[:culture_provider_id]
+      @image.culture_provider = CultureProvider.find params[:culture_provider_id]
     else
-      flash[:error] = "Ett fel uppstod när bilden laddades upp"
-      redirect_to new_image_url()
+      flash[:error] = "Felaktigt anrop."
+      redirect_to "/"
     end
   end
 
-  def show
-    @image = Image.find(params[:id])
-  end
+  def create
+    @image = Image.new params[:image]
 
-  def index
-    @images = Image.all
+    if @image.save(params[:upload])
+
+      if @image.culture_provider
+        if params[:image][:type].to_sym == :main
+          begin
+            @image.culture_provider.main_image.destroy if @image.culture_provider.main_image
+          rescue; end
+
+          @image.culture_provider.main_image = @image
+          @image.culture_provider.save!
+        end
+
+        redirect_to @image.culture_provider
+      end
+
+      flash[:notice] = "Bilden laddades upp."
+    else
+      @image.type = params[:image][:type].to_sym
+      render :action => "new"
+    end
   end
 
 end
