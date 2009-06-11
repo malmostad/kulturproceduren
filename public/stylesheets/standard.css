@@ -117,17 +117,19 @@ body {
 
 #kp .model-cnt { border: 1px solid #d3d7cf; padding: 1em; }
 #kp .model-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
-#kp .model-cnt .meta {
+#kp .model-cnt .meta, #kp .model-cnt .images-cnt {
     border: 1px solid #d3d7cf;
     color: #555753;
     padding: 0.5em;
     margin: 0 0 1em 1em;
     list-style-type: none;
     float: right;
+    clear: right;
 }
 #kp .model-cnt .meta li { padding-bottom: 0.3em; }
 
 #kp .model-cnt .main-image { border: 1px solid #d3d7cf; padding: 0.5em; margin: 0 0 1em 0; }
+#kp .model-cnt .images { list-style-type: none; margin: 0; padding: 0; }
 
 /*** Allotment ***/
 
