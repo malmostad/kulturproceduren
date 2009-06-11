@@ -12,6 +12,7 @@ class Event < ActiveRecord::Base
   belongs_to              :culture_provider
   has_one                 :questionaire
   has_many                :images
+  belongs_to              :main_image, :class_name => "Image", :dependent => :delete
   
   validates_presence_of :name, :from_age, :to_age, :description
   validates_numericality_of :from_age, :to_age, :only_integer => true

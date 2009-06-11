@@ -1,6 +1,9 @@
 development:
     :salt_length: 10
+    :upload_image_path: /images/uploaded
 test:
     :salt_length: 10
+    :upload_image_path: /images/uploaded
 production:
     :salt_length: 10
+    :upload_image_path: /images/uploaded

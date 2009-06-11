@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090602130404) do
+ActiveRecord::Schema.define(:version => 20090610112129) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "main_image_id"
   end
 
   create_table "culture_providers_users", :id => false, :force => true do |t|
@@ -104,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
     t.string   "booking_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "main_image_id"
   end
 
   create_table "events_tags", :id => false, :force => true do |t|
@@ -122,6 +124,15 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
   create_table "groups_users", :id => false, :force => true do |t|
     t.integer "group_id"
     t.integer "user_id"
+  end
+
+  create_table "images", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "culture_provider_id"
+    t.string   "name"
+    t.string   "filename"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "notification_requests", :force => true do |t|
@@ -236,7 +247,7 @@ ActiveRecord::Schema.define(:version => 20090602130404) do
     t.integer  "companion_id"
     t.boolean  "adult"
     t.integer  "user_id"
-    t.boolean  "wheelchair"
+    t.boolean  "wheelchair",   :default => false
     t.datetime "booked_when"
     t.datetime "created_at"
     t.datetime "updated_at"

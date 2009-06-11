@@ -10,44 +10,50 @@ class Image < ActiveRecord::Base
 
   def save(upload)
 
-    fname =  Image.gen_fname
-    File.open(fname, "wb") { |f| f.write(upload['datafile'].read) }
-    self.filename = fname
-    img = Magick::Image.read( fname ).first
+    filename = Image.gen_fname
+    File.open(filename, "wb") { |f| f.write(upload['datafile'].read) }
+    
+    img = Magick::Image.read( filename ).first
+    
     if img.nil?
       flash[:error] = "Det gick inte så bra ...."
       redirect_to "/"
       return
     end
+
     img.change_geometry(Magick::Geometry.new(320,240)) {|c,r,i| img.resize!(c,r) }
-    img.write(fname)
+    img.write("#{RAILS_ROOT}/public/#{APP_CONFIG[:upload_image_path]}/#{filename}")
+
     img.change_geometry(Magick::Geometry.new(128,128)) {|c,r,i| img.resize!(c,r) }
-    img.write(Image.thumb_name(fname))
+    img.write("#{RAILS_ROOT}/public/#{APP_CONFIG[:upload_image_path]}/#{Image.thumb_name(filename)}")
+    
     save_orig
   end
 
-  #Generates a unique filename
-
   def image_url
-    self.filename.sub("public","")
+    "#{APP_CONFIG[:upload_image_path]}/#{filename}"
   end
 
   def thumb_url
-    self.thumb_name.sub("public","")
+    "#{APP_CONFIG[:upload_image_path]}/#{thumb_name}"
   end
 
   def self.gen_fname()
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     tempfname = ""
+
     (1..15).each { |i| tempfname << chars[rand(chars.size-1)] }
-    while (File.exists?("public/images/#{tempfname}.jpg"))
+    
+    while (File.exists?("#{RAILS_ROOT}/public/#{APP_CONFIG[:upload_image_path]}/#{tempfname}.jpg"))
       tempfname << chars[rand(chars.size-1)]
     end
-    return "public/images/" + tempfname.to_s + ".jpg"
+    
+    return tempfname.to_s + ".jpg"
   end
 
   def self.thumb_name(img)
-    regexp = /public\/images\/(\w+?).jpg/
+    regexp = /\/(\w+?).jpg$/
+
     if img.is_a? String
       f = img
       img = Image.new
@@ -57,12 +63,13 @@ class Image < ActiveRecord::Base
     else
       return nil
     end
+
     if img.nil?
       return nil
     end
+
     img.filename =~ regexp
-    thumbname = "public/images/thumb." + $1 + ".jpg"
-    return thumbname
+    return "thumb." + $1 + ".jpg"
   end
 
   def thumb_name
