@@ -52,6 +52,11 @@ Rails::Initializer.run do |config|
   config.i18n.default_locale = :sv
 end
 
+Dir.glob(File.join(RAILS_ROOT,'app','models','**','*.rb')).each do |file|
+  require_dependency file
+end
+
+
 # http://kopongo.com/2008/7/25/postgres-ri_constrainttrigger-error
 module ActiveRecord
   module ConnectionAdapters

@@ -63,6 +63,18 @@
                     $("#kp-input-area").html(data);
                 });
         });
+    $(".kp-rbclass").click(function() {
+          if ( this.id == "kp-qtype_questionmchoice")
+              $("#kp-query-mchoice-csv").show("slow");
+          else
+              $("#kp-query-mchoice-csv").hide("slow");
+       
+    });
+       
+    });
+
+    $(document).ready(function(){
+       $("#kp-query-mchoice-csv").hide();
     });
 
     //Drop-down
@@ -92,20 +104,6 @@
             monthNames: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
             monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
         });
-    });
-
-    $(function() {
-        $("#kp .tabs").tabs();
-
-        $("#kp .tabs .preselect").each(function () {
-            var tab = $(this);
-            var tabIdx = tab.parent().children("li").index(tab);
-            tab.parents(".ui-tabs").tabs("select", tabIdx);
-        });
-    });
-
-    $(function() {
-        $("#kp .model-cnt .images-cnt .images").cycle("fade");
     });
 
     $(function() {

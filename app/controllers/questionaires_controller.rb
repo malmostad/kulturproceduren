@@ -22,7 +22,7 @@ class QuestionairesController < ApplicationController
     
     if current_user.has_role?(:admin)
       @questionaire = Questionaire.find(params[:id])
-      @all_q = Question.find(:all)
+      @all_q = Question.allq
       render :admin_view
     else
       @questionaire = Questionaire.find(params[:questionaire_id])

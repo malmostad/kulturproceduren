@@ -1,26 +1,35 @@
 <%
-is_edit = ["edit", "update"].include? params[:action]
-
-form_for( question || Question.new { |q| q.questionaire = [ questionaire ] },
-  :html => { :class => "question-form" }) do |f| -%>
+is_edit = ["edit", "update"].include? params[:action] %>
+<form>
   <fieldset>
     <legend><%= is_edit ? "Redigera" : "Lägg till" %> fråga</legend>
-
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
+    <div class="question-type-cnt">
+      <%= label_tag "Svarstyp på frågan" %><br/>
+      <% 
+      opts = {"Betygssvar" => "QuestionMark", "Fritextsvar" => "QuestionText", "Ja/Nej svar"=> "QuestionBool" , "Flervalsvar" => "QuestionMchoice"}
+      opts.keys.each do |t| %>
+      <%= label_tag t %>
+      <%= radio_button_tag "kp-qtype" , opts["#{t}"] , false , :class => "kp-rbclass"  %>
+      <% end  %>
+    </div>
     <div class="question-cnt">
-      <%= f.label :question %>
-      <%= f.text_field :question %>
+      <%= label_tag "Fråga" %>
+      <%= text_field_tag :question %>
+    </div>
+
+    <div id="kp-query-mchoice-csv" class="mchoice-csv">
+      <%= label_tag "Ange flervalsalternativen, komma-separerat"%>
+      <%= text_field_tag :mchoice %>
     </div>
 
     <div class="istemplate-cnt">
-      <%= f.label :template %>
-      <%= f.check_box :template %>
+      <%= label_tag "Standardfråga" %>
+      <%= check_box_tag :template %>
     </div>
     <div class="submit-cnt">
       <input type="hidden" name="questionaire_id" value="<%= @questionaire.id -%>"/>
-      <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
+      <%= submit_tag(is_edit ? "Uppdatera" : "Lägg till") %>
     </div>
 
   </fieldset>
-<% end -%>
+</form>

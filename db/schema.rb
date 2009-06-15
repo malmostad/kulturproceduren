@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090610112129) do
+ActiveRecord::Schema.define(:version => 20090615114835) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
     t.integer  "answer"
+    t.string   "answer_text"
     t.integer  "occasion_id"
     t.string   "answer_form_id", :limit => 46
     t.datetime "created_at"
@@ -163,6 +164,22 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.integer "user_id"
   end
 
+  create_table "question_mchoices", :force => true do |t|
+    t.boolean  "template"
+    t.string   "question"
+    t.string   "choices_csv"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "question_normals", :force => true do |t|
+    t.boolean  "template"
+    t.string   "question"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "questionaires", :force => true do |t|
     t.integer  "event_id"
     t.text     "description"
@@ -173,13 +190,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
   create_table "questionaires_questions", :id => false, :force => true do |t|
     t.integer "question_id"
     t.integer "questionaire_id"
-  end
-
-  create_table "questions", :force => true do |t|
-    t.boolean  "template"
-    t.text     "question"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "role_applications", :force => true do |t|
