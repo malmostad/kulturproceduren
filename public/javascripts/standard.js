@@ -103,5 +103,9 @@
             tab.parents(".ui-tabs").tabs("select", tabIdx);
         });
     });
+
+    $(function() {
+        $("#kp .model-cnt .images-cnt .images").cycle("fade");
+    });
    
 })(jQuery);
