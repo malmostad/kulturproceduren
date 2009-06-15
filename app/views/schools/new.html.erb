@@ -2,26 +2,28 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<h1><%= is_edit ? "Redigera" : "Skapa ny" %> skola</h1>
+<fieldset>
+  <legend><%= is_edit ? "Redigera" : "Skapa ny" %> skola</legend>
 
-<% if is_edit -%>
-  <p class="details">
-    Redigerar skolan <%= link_to h(@school.name), @school %>, <%= link_to h(@school.district.name), @school.district %>.
-  </p>
-<% end -%>
+  <% if is_edit -%>
+    <p class="details">
+      Redigerar skolan <%= link_to h(@school.name), @school %>, <%= link_to h(@school.district.name), @school.district %>.
+    </p>
+  <% end -%>
 
-<% form_for(@school) do |f| %>
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+  <% form_for(@school) do |f| %>
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-  <dl class="form-elements">
-    <dt><%= f.label :name %></dt>
-    <dd><%= f.text_field :name %></dd>
-    <dt><%= f.label :district_id %></dt>
-    <dd><%= f.collection_select :district_id, @districts, :id, :name %></dd>
-  </dl>
+    <dl class="form-elements">
+      <dt><%= f.label :name %></dt>
+      <dd><%= f.text_field :name %></dd>
+      <dt><%= f.label :district_id %></dt>
+      <dd><%= f.collection_select :district_id, @districts, :id, :name %></dd>
+    </dl>
 
-  <div class="submit-cnt">
-    <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
-  </div>
+    <div class="submit-cnt">
+      <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
+    </div>
 
-<% end %>
+  <% end %>
+</fieldset>

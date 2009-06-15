@@ -2,24 +2,27 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<h1><%= is_edit ? "Redigera" : "Skapa ny" %> stadsdel</h1>
+<fieldset>
+  <legend><%= is_edit ? "Redigera" : "Skapa ny" %> stadsdel</legend>
 
-<% if is_edit -%>
-  <p class="details">
-    Redigerar stadsdelen <%= link_to h(@district.name), @district %>.
-  </p>
-<% end -%>
+  <% if is_edit -%>
+    <p class="details">
+      Redigerar stadsdelen <%= link_to h(@district.name), @district %>.
+    </p>
+  <% end -%>
 
-<% form_for(@district) do |f| %>
+  <% form_for(@district) do |f| %>
 
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-  <dl class="form-elements">
-    <dt><%= f.label :name %></dt>
-    <dd><%= f.text_field :name %></dd>
-  </dl>
+    <dl class="form-elements">
+      <dt><%= f.label :name %></dt>
+      <dd><%= f.text_field :name %></dd>
+    </dl>
 
-  <div class="submit-cnt">
-    <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
-  </div>
-<% end %>
+    <div class="submit-cnt">
+      <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
+    </div>
+  <% end %>
+
+</fieldset>

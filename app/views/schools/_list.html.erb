@@ -24,7 +24,7 @@ show_prio_tools ||= false
 
   <tbody>
     <% schools.each do |school| %>
-      <tr>
+      <tr class="<%= cycle("", "alt") %>">
         <td><%= link_to h(school.name), school %></td>
 
         <% if show_district -%>

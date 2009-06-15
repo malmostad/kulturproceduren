@@ -15,7 +15,7 @@
 
   <tbody>
     <% groups.each do |group| %>
-      <tr>
+      <tr class="<%= cycle("", "alt") %>">
         <td><%= link_to h(group.name), group %></td>
         <% if show_school -%>
           <td><%= link_to h(group.school.name), group.school %></td>

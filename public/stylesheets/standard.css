@@ -35,7 +35,6 @@ body {
     border-collapse: collapse;
     border-spacing: 0;
     border: 1px solid #d3d7cf;
-    width: 100%;
 }
 #kp table thead th { text-align: left; background: #edd400; font-weight: normal; }
 #kp table td, #kp table th { padding: 3px 5px; vertical-align: top; }
@@ -168,7 +167,7 @@ body {
 /*** Models ***/
 
 #kp .model-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
-#kp .model-cnt ul.meta, #kp .model-cnt .images-cnt {
+#kp .model-cnt dl.meta, #kp .model-cnt .images-cnt {
     border: 1px solid #d3d7cf;
     color: #555753;
     padding: 0.5em;

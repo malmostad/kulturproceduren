@@ -19,10 +19,12 @@
   <div class="clearer"></div>
 </div>
 
-<h2>Grupper i skolan</h2>
+<fieldset>
+  <legend>Grupper i skolan</legend>
 
-<ul class="tools">
-  <li><%= link_to 'Lägg till grupp', new_group_path(:school_id => @school.id) %></li>
-</ul>
+  <ul class="tools">
+    <li><%= link_to 'Lägg till grupp', new_group_path(:school_id => @school.id) %></li>
+  </ul>
 
-<%= render :partial => "groups/list", :locals => { :groups => @school.groups } %>
+  <%= render :partial => "groups/list", :locals => { :groups => @school.groups } %>
+</fieldset>

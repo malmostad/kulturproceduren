@@ -2,28 +2,30 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<h1><%= is_edit ? "Redigera" : "Skapa ny" %> grupp</h1>
+<fieldset>
+  <legend><%= is_edit ? "Redigera" : "Skapa ny" %> grupp</legend>
 
-<% if is_edit -%>
-  <p class="details">
-    Redigerar gruppen <%= link_to h(@group.name), @group %>,
-    <%= link_to h(@group.school.name), @group.school %>,
-    <%= link_to h(@group.school.district.name), @group.school.district %>.
-  </p>
-<% end -%>
+  <% if is_edit -%>
+    <p class="details">
+      Redigerar gruppen <%= link_to h(@group.name), @group %>,
+      <%= link_to h(@group.school.name), @group.school %>,
+      <%= link_to h(@group.school.district.name), @group.school.district %>.
+    </p>
+  <% end -%>
 
-<% form_for(@group) do |f| %>
+  <% form_for(@group) do |f| %>
 
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-  <dl class="form-elements">
-    <dt><%= f.label :name %></dt>
-    <dd><%= f.text_field :name %></dd>
-    <dt><%= f.label :school_id %></dt>
-    <dd><%= f.collection_select :school_id, @schools, :id, :name %></dd>
-  </dl>
+    <dl class="form-elements">
+      <dt><%= f.label :name %></dt>
+      <dd><%= f.text_field :name %></dd>
+      <dt><%= f.label :school_id %></dt>
+      <dd><%= f.collection_select :school_id, @schools, :id, :name %></dd>
+    </dl>
 
-  <div class="submit-cnt">
-    <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
-  </div>
-<% end %>
+    <div class="submit-cnt">
+      <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
+    </div>
+  <% end %>
+</fieldset>

@@ -21,12 +21,10 @@
   <div class="clearer"></div>
 </div>
 
-<h2>Åldersgrupper</h2>
+<fieldset>
+  <legend>Åldersgrupper</legend>
 
-<% is_edit = ["edit", "update"].include?(params[:action]) %>
-<% form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
-  <fieldset>
-    <legend><%= is_edit ? "Redigera" : "Lägg till" %> åldersgrupp</legend>
+  <% form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
 
     <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
@@ -35,27 +33,28 @@
     <%= f.label :quantity %>
     <%= f.text_field :quantity %>
     <%= f.hidden_field :group_id %>
-    <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
-  </fieldset>
-<% end %>
-
-<table>
-  <thead>
-    <tr>
-      <th>Ålder</th>
-      <th>Antal elever</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @group.age_groups.each do |age_group| %>
+    <%= f.submit(["edit", "update"].include?(params[:action]) ? "Uppdatera åldersgrupp" : "Lägg till åldersgrupp") %>
+  <% end %>
+  
+  <table>
+    <thead>
       <tr>
-        <td><%= h age_group.age %></td>
-        <td><%= h age_group.quantity %></td>
-        <td><%= link_to 'Redigera', edit_age_group_path(age_group) %></td>
-        <td><%= link_to 'Radera', age_group, :confirm => 'Är du säker på att du vill radera åldersgruppen?', :method => :delete %></td>
+        <th>Ålder</th>
+        <th>Antal elever</th>
+        <th colspan="2"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @group.age_groups.each do |age_group| %>
+        <tr class="<%= cycle("", "alt") %>">
+          <td><%= h age_group.age %></td>
+          <td><%= h age_group.quantity %></td>
+          <td><%= link_to 'Redigera', edit_age_group_path(age_group) %></td>
+          <td><%= link_to 'Radera', age_group, :confirm => 'Är du säker på att du vill radera åldersgruppen?', :method => :delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</fieldset>

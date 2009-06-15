@@ -17,10 +17,13 @@
   <div class="clearer"></div>
 </div>
 
-<h2>Skolor i stadsdelen</h2>
+<fieldset>
+  <legend>Skolor i stadsdelen</legend>
 
-<ul class="tools">
-  <li><%= link_to 'Lägg till skola', new_school_path(:district_id => @district.id) %></li>
-</ul>
+  <ul class="tools">
+    <li><%= link_to 'Lägg till skola', new_school_path(:district_id => @district.id) %></li>
+  </ul>
 
-<%= render :partial => "schools/list", :locals => { :schools => @district.schools, :show_prio_tools => true } %>
+  <%= render :partial => "schools/list", :locals => { :schools => @district.schools, :show_prio_tools => true } %>
+
+</fieldset>
