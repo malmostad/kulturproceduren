@@ -2,87 +2,89 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<h1><%= is_edit ? "Redigera" : "Skapa" %> evenemang</h1>
-
 <% form_for(@event) do |f| %>
 
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+  <fieldset>
+    <legend><%= is_edit ? "Redigera" : "Skapa" %> evenemang</legend>
 
-  <dl class="form-elements">
-    <% unless is_edit -%>
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+    <dl class="form-elements">
+      <% unless is_edit -%>
+        <dt>
+          <%= f.label :culture_provider_id %>
+        </dt>
+        <dd>
+          <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name %>
+        </dd>
+      <% end -%>
       <dt>
-        <%= f.label :culture_provider_id %>
+        <%= f.label :name %>
       </dt>
       <dd>
-        <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name %>
+        <%= f.text_field :name %>
       </dd>
-    <% end -%>
-    <dt>
-      <%= f.label :name %>
-    </dt>
-    <dd>
-      <%= f.text_field :name %>
-    </dd>
-    <dt>
-      <%= f.label :from_age %>
-    </dt>
-    <dd>
-      <%= f.select :from_age, (0..19).to_a %>
-    </dd>
-    <dt>
-      <%= f.label :to_age %>
-    </dt>
-    <dd>
-      <%= f.select :to_age, (0..19).to_a %>
-    </dd>
-    <% unless is_edit && @event.show_date <= Date.today %>
       <dt>
-        <%= f.label :show_date %>
+        <%= f.label :from_age %>
       </dt>
       <dd>
-        <%= f.text_field :show_date, :class => "date-input-field" %>
+        <%= f.select :from_age, (0..19).to_a %>
       </dd>
-    <% end -%>
-    <dt class="textarea-label-cnt">
-      <%= f.label :description %>
-    </dt>
-    <dd class="textarea-cnt">
-      <%= f.text_area :description %>
-    </dd>
-    <dt>
-      <%= f.label :url %>
-    </dt>
-    <dd>
-      <%= f.text_field :url %>
-    </dd>
-    <dt>
-      <%= f.label :booking_url %>
-    </dt>
-    <dd>
-      <%= f.text_field :booking_url %>
-    </dd>
-    <dt>
-      <%= f.label :movie_url %>
-    </dt>
-    <dd>
-      <%= f.text_field :movie_url %>
-    </dd>
-    <dt class="textarea-label-cnt">
-      <%= f.label :opening_hours %>
-    </dt>
-    <dd class="textarea-cnt">
-      <%= f.text_area :opening_hours, :rows => 5 %>
-    </dd>
-    <dt class="textarea-label-cnt">
-      <%= f.label :cost %>
-    </dt>
-    <dd class="textarea-cnt">
-      <%= f.text_area :cost, :rows => 5 %>
-    </dd>
-  </dl>
+      <dt>
+        <%= f.label :to_age %>
+      </dt>
+      <dd>
+        <%= f.select :to_age, (0..19).to_a %>
+      </dd>
+      <% unless is_edit && @event.show_date <= Date.today %>
+        <dt>
+          <%= f.label :show_date %>
+        </dt>
+        <dd>
+          <%= f.text_field :show_date, :class => "date-input-field" %>
+        </dd>
+      <% end -%>
+      <dt class="textarea-label-cnt">
+        <%= f.label :description %>
+      </dt>
+      <dd class="textarea-cnt">
+        <%= f.text_area :description %>
+      </dd>
+      <dt>
+        <%= f.label :url %>
+      </dt>
+      <dd>
+        <%= f.text_field :url %>
+      </dd>
+      <dt>
+        <%= f.label :booking_url %>
+      </dt>
+      <dd>
+        <%= f.text_field :booking_url %>
+      </dd>
+      <dt>
+        <%= f.label :movie_url %>
+      </dt>
+      <dd>
+        <%= f.text_field :movie_url %>
+      </dd>
+      <dt class="textarea-label-cnt">
+        <%= f.label :opening_hours %>
+      </dt>
+      <dd class="textarea-cnt">
+        <%= f.text_area :opening_hours, :rows => 5 %>
+      </dd>
+      <dt class="textarea-label-cnt">
+        <%= f.label :cost %>
+      </dt>
+      <dd class="textarea-cnt">
+        <%= f.text_area :cost, :rows => 5 %>
+      </dd>
+    </dl>
 
-  <div class="submit-cnt">
-    <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
-  </div>
+    <div class="submit-cnt">
+      <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
+    </div>
 
+  </fieldset>
 <% end %>

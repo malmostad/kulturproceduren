@@ -107,5 +107,11 @@
     $(function() {
         $("#kp .model-cnt .images-cnt .images").cycle("fade");
     });
+
+    $(function() {
+        $("#kp fieldset.collapsible legend").click(function() {
+            $(this).parent().toggleClass("collapsed");
+        });
+    });
    
 })(jQuery);

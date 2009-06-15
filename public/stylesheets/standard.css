@@ -78,10 +78,20 @@ body {
     border: 0;
     border-top: none;
     overflow: hidden;
-    padding: 1em;
     clear: both;
 }
-#kp .ui-tabs-panel { border: 1px solid #d3d7cf; border-top: 0; }
+#kp .ui-tabs-panel { border: 1px solid #d3d7cf; border-top: 0; padding: 0.5em; }
+
+/*** Widgets ***/
+#kp fieldset.collapsible legend {
+    font-weight: bold; 
+    background: url(../images/expanded.png) 5px 50% no-repeat;
+    padding-left: 20px;
+    cursor: pointer;
+}
+#kp fieldset.collapsed { border: 0; padding: 0 0 0 1em;}
+#kp fieldset.collapsed legend { background: url(../images/collapsed.png) 5px 50% no-repeat; }
+#kp fieldset.collapsed form { display: none; }
 
 /*** Page ***/
 #kp { padding: 1em; width: 800px; }

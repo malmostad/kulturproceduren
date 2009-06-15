@@ -1,10 +1,13 @@
 <%
+collapsed ||= false
 is_edit = ["edit", "update"].include? params[:action]
+-%>
 
-form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
-  :html => { :class => "occasions-form" }) do |f| -%>
-  <fieldset>
-    <legend><%= is_edit ? "Redigera" : "Lägg till" %> föreställning</legend>
+<fieldset class="collapsible <%= "collapsed" if !@occasion && !collapsed %>">
+  <legend><%= is_edit ? "Redigera" : "Lägg till" %> föreställning</legend>
+
+  <% form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
+    :html => { :class => "occasions-form" }) do |f| -%>
 
     <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
@@ -27,7 +30,7 @@ form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
         <%= f.label :seats %>
         <%= f.text_field :seats %>
       </li>
-      
+
       <li class="wheelchair-seats-cnt">
         <%= f.label :wheelchair_seats %>
         <%= f.text_field :wheelchair_seats %>
@@ -53,5 +56,6 @@ form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
       <%= f.hidden_field :event_id %>
       <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
     </div>
-  </fieldset>
-<% end -%>
+  <% end -%>
+
+</fieldset>
