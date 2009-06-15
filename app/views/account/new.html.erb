@@ -1,7 +1,5 @@
 <%= render :partial => "menu" %>
 
-<h1>Skapa konto</h1>
-
 <% form_for(@user, :url => { :action => "create" }) do |f| %>
 
   <%= f.error_messages :id => nil, :class => "form-error-messages" %>

@@ -22,9 +22,24 @@
     <div id="kp">
 
       <ul class="pri-nav">
-        <li class="pri-nav-districts <%= active_by_controller "districts" %>"><%= link_to "Stadsdelar", districts_path -%></li>
-        <li class="pri-nav-schools <%= active_by_controller "schools" %>"><%= link_to "Skolor", schools_path -%></li>
-        <li class="pri-nav-groups <%= active_by_controller "groups" %>"><%= link_to "Grupper", groups_path -%></li>
+        <li class="pri-nav-districts <%= active_by_controller "districts" %>">
+          <%= link_to "Stadsdelar", districts_path -%>
+        </li>
+        <li class="pri-nav-schools <%= active_by_controller "schools" %>">
+          <%= link_to "Skolor", schools_path -%>
+        </li>
+        <li class="pri-nav-groups <%= active_by_controller "groups" %>">
+          <%= link_to "Grupper", groups_path -%>
+        </li>
+        <li class="pri-nav-users <%= active_by_controller "users" %>">
+          <%= link_to "Användare", users_path -%>
+        </li>
+        <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
+          <%= link_to "Behörighetsansökningar", role_applications_path -%>
+        </li>
+        <li class="pri-nav-home">
+          <%= link_to "Hem", "/" -%>
+        </li>
       </ul>
 
       <%= yield :sec_nav %>

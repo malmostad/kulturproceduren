@@ -1,7 +1,5 @@
 <%= render :partial => "menu" -%>
 
-<h1>Ansökningsarkiv</h1>
-
 <% unless @applications.empty? -%>
   <table>
 
@@ -18,7 +16,7 @@
 
     <tbody>
       <% @applications.each do |application| -%>
-        <tr>
+        <tr class="<%= cycle("", "alt") %>">
           <td>
             <%= type_string(application) %>
 

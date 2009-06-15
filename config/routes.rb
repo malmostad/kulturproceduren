@@ -19,7 +19,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :age_groups, :except => [ :show, :index, :new ]
   map.resources :role_applications,
     :except => [ :new ],
-    :new => { :booker => :get, :culture_worker => :get },
     :collection => { :archive => :get }
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -21,9 +21,15 @@
 
     <div id="kp">
 
+      <h1 id="kp-logo">Kulturproceduren</h1>
+
       <ul class="pri-nav">
-        <li class="pri-nav-calendar <%= active_by_controller "calendar" %>"><%= link_to "Kalenderarium", :controller => "calendar" -%></li>
-        <li class="pri-nav-culture-providers <%= active_by_controller "culture_providers" %>"><%= link_to "Arrangörer", culture_providers_path -%></li>
+        <li class="pri-nav-calendar <%= active_by_controller "calendar" %>">
+          <%= link_to "Kalenderarium", :controller => "calendar" -%>
+        </li>
+        <li class="pri-nav-culture-providers <%= active_by_controller "culture_providers" %>">
+          <%= link_to "Arrangörer", culture_providers_path -%>
+        </li>
 
         <% if user_online? -%>
 
@@ -31,10 +37,16 @@
             <li class="pri-nav-admin"><%= link_to "Administration", :controller => "admin" -%></li>
           <% end -%>
 
-          <li class="pri-nav-users"><%= link_to "Konto", :controller => "account" -%></li>
-          <li class="pri-nav-logout"><%= link_to "Logga ut", :controller => "login", :action => "logout" -%></li>
+          <li class="pri-nav-account <%= active_by_controller "account", "role_applications" %>">
+            <%= link_to "Konto", :controller => "account" -%>
+          </li>
+          <li class="pri-nav-logout">
+            <%= link_to "Logga ut", :controller => "login", :action => "logout" -%>
+          </li>
         <% else -%>
-          <li class="pri-nav-logout"><%= link_to "Logga in", :controller => "login", :action => "index" -%></li>
+          <li class="pri-nav-login <%= active_by_controller "login", "account" %>">
+            <%= link_to "Logga in", :controller => "login", :action => "index" -%>
+          </li>
         <% end -%>
       </ul>
 

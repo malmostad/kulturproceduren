@@ -1,4 +1,4 @@
-<h1>Logga in</h1>
+<%= render :partial => "account/menu" %>
 
 <% if user_online? -%>
 
@@ -8,21 +8,23 @@
 
 <% else -%>
 
-  <% form_for :user, :url => { :action => "login" } do |f| %>
+  <% form_for User.new, :url => { :action => "login" } do |f| %>
     <fieldset>
 
+      <legend>Logga in</legend>
+
       <dl>
-        <dt><label for="kp-user-username">Användarnamn:</label></dt>
+        <dt><%= f.label :username %></dt>
         <dd><%= f.text_field :username %></dd>
 
-        <dt><label for="kp-user-password">Lösenord:</label></dt>
+        <dt><%= f.label :password %></dt>
         <dd><%= f.password_field :password %></dd>
       </dl>
 
       <div>
         <%= f.submit "Logga in" %>
       </div>
-      
+
     </fieldset>
 
     <p>

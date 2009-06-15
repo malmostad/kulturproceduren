@@ -1,7 +1,5 @@
 <%= render :partial => "menu" %>
 
-<h1>Konto</h1>
-
 <% if user_online? %>
   <% form_for(current_user, :url => { :action => "update" }) do |f| %>
 

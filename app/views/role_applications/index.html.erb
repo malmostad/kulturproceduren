@@ -1,11 +1,83 @@
 <%= render :partial => "account/menu" -%>
 
-<h1>Behörighetsansökan</h1>
+<div class="tabs">
+  <ul>
+    <li><a href="#kp-role-application-tab-booker">Ansök om bokningsbehörighet</a></li>
+    <li class="<%= "preselect" if @culture_worker_appl_error %>"><a href="#kp-role-application-tab-culture-worker">Ansök om publiceringsbehörighet</a></li>
+  </ul>
 
-<ul class="tools">
-  <li><%= link_to "Ansök om bokningsbehörighet", booker_new_role_application_path %></li>
-  <li><%= link_to "Ansök om publiceringsbehörighet", culture_worker_new_role_application_path %></li>
-</ul>
+  <div id="kp-role-application-tab-booker">
+    <% form_for(@booker_appl) do |f| -%>
+
+      <p>
+        För att kunna ge dig behörighet att boka evenemang åt elever eller förskolebarn
+        behöver vi veta vilken skola du arbetar på. Var god fyll i namnet på skolan i fältet
+        nedan. Du kan även komplettera med annan information i fältet.
+      </p>
+      <p>
+        Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+      </p>
+
+      <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+      <dl class="form-elements">
+        <dt>
+          <%= f.label :message %>
+        </dt>
+        <dd>
+          <%= f.text_area :message, :size => "40x5" %>
+        </dd>
+      </dl>
+
+      <div class="submit-cnt">
+        <%= f.hidden_field :role_id %>
+        <%= f.submit("Skicka ansökan") %>
+      </div>
+
+    <% end -%>
+  </div>
+
+  <div id="kp-role-application-tab-culture-worker">
+    <% form_for(@culture_worker_appl) do |f| -%>
+
+      <p>
+        För att kunna ge dig behörighet att publicera evenemang åt elever eller förskolebarn
+        behöver vi veta vilken arrangör du arbetar för. Var god välj din arrangör nedan,
+        eller skriv namnet på arrangören om du inte hittar den i listan. Du kan även
+        lämna meddelanden till administratören som hanterar din ansökan.
+      </p>
+      <p>
+        Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+      </p>
+
+      <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+      <dl class="form-elements">
+        <dt>
+          <%= f.label :culture_provider_id %>
+        </dt>
+        <dd>
+          <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
+          eller skriv arrangörens namn:
+          <%= f.text_field :new_culture_provider_name %>
+        </dd>
+        <dt>
+          <%= f.label :message %>
+        </dt>
+        <dd>
+          <%= f.text_area :message, :size => "40x5" %>
+        </dd>
+      </dl>
+
+      <div class="submit-cnt">
+        <%= f.hidden_field :role_id %>
+        <%= f.submit("Skicka ansökan") %>
+      </div>
+
+    <% end -%>
+  </div>
+  
+</div>
 
 <h2>Ansökningshistorik</h2>
 
@@ -24,7 +96,7 @@
 
     <tbody>
       <% current_user.role_applications.each do |application| -%>
-        <tr>
+        <tr class="<%= cycle('', 'alt') %>">
           <td><%= type_string(application) %></td>
           <td><%= l application.created_at, :format => :short %></td>
           <td><%= state_string(application) %></td>

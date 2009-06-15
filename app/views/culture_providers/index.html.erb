@@ -1,7 +1,5 @@
 <%= render :partial => "menu" %>
 
-<h1>Arrangörer</h1>
-
 <table>
   <thead>
     <tr>
@@ -13,8 +11,8 @@
   <tbody>
 
     <% @culture_providers.each do |provider| -%>
-      <tr>
-        <td><%= h(provider.name) %></td>
+      <tr class="<%= cycle('', 'alt') %>">
+        <td><%= link_to h(provider.name), provider %></td>
         <td><%= link_to "Visa", provider %></td>
       </tr>
     <% end -%>

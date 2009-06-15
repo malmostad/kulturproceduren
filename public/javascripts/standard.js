@@ -93,5 +93,15 @@
             monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
         });
     });
+
+    $(function() {
+        $("#kp .tabs").tabs();
+
+        $("#kp .tabs .preselect").each(function () {
+            var tab = $(this);
+            var tabIdx = tab.parent().children("li").index(tab);
+            tab.parents(".ui-tabs").tabs("select", tabIdx);
+        });
+    });
    
 })(jQuery);
