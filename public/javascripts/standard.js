@@ -107,6 +107,18 @@
     });
 
     $(function() {
+        $("#kp .tabs").tabs();
+
+        $("#kp .tabs .preselect").each(function () {
+            var tab = $(this);
+            var tabIdx = tab.parent().children("li").index(tab);
+            tab.parents(".ui-tabs").tabs("select", tabIdx);
+        });
+    });
+
+    $(function() {
+        $("#kp .model-cnt .images-cnt .images").cycle("fade");
+
         $("#kp fieldset.collapsible legend").click(function() {
             $(this).parent().toggleClass("collapsed");
         });
