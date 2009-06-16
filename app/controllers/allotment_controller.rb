@@ -12,21 +12,25 @@ class AllotmentController < ApplicationController
 
   def assign_params
     session[:allotment] = {}
+    session[:allotment][:release_date] = Date.parse(params[:allotment][:release_date])
     session[:allotment][:num_tickets] = params[:allotment][:num_tickets].to_i
-    
-    if params[:allotment][:district_ids] && params[:allotment][:district_ids].length > 0
-      ids = params[:allotment][:district_ids].collect { |id| id.to_i }
-
-      unless ids.include?(-1)
-        session[:allotment][:district_ids] = ids
-      end
-    end
 
     unless @event.tickets.empty?
       session[:allotment][:district_ids] ||= []
-      session[:allotment][:district_ids] |= @event.districts.collect { |d| d.id.to_i }
+      session[:allotment][:district_ids] = @event.districts.collect { |d| d.id.to_i }
 
       session[:allotment][:extra_groups] = @event.not_targeted_group_ids
+    end
+
+    if params[:allotment][:district_ids] && params[:allotment][:district_ids].length > 0
+      ids = params[:allotment][:district_ids].collect { |id| id.to_i }
+
+      if ids.include?(-1)
+        session[:allotment][:district_ids] = nil
+      else
+        session[:allotment][:district_ids] ||= []
+        session[:allotment][:district_ids] |= ids
+      end
     end
 
     redirect_to :action => "distribute", :id => params[:id]
@@ -61,6 +65,9 @@ class AllotmentController < ApplicationController
 
     if params[:create_tickets]
       @event.tickets.clear
+
+      @event.ticket_release_date = session[:allotment][:release_date]
+      @event.save!
 
       groups = Group.find assignment.keys, :include => { :school => :district }
       schools = []
@@ -105,8 +112,8 @@ class AllotmentController < ApplicationController
     begin
       @event = Event.find params[:id], :include => :culture_provider
 
-      if @event.show_date <= Date.today
-        flash[:error] = "Fördelning kan inte göras efter ett evenemangs publiceringsdatum."
+      if @event.ticket_release_date && @event.ticket_release_date <= Date.today
+        flash[:error] = "Fördelning kan inte göras efter ett evenemangs biljettsläpp."
         redirect_to @event
       end
     rescue ActiveRecord::RecordNotFound

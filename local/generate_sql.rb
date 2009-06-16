@@ -237,10 +237,10 @@ dbh.do("DISCARD ALL")
 
 # 8 - Events
 
-puts "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW());"
-dbh.do "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (1,1,'2009-05-01',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW())"
-puts "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (4,1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW());"
-dbh.do "INSERT INTO events (culture_provider_id,ticket_state,show_date,from_age,to_age,name,description,created_at,updated_at) VALUES (4,1,'2009-05-01',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW())"
+puts "INSERT INTO events (culture_provider_id,ticket_state,visible_from,visible_to,from_age,to_age,name,description,created_at,updated_at) VALUES (1,1,'2009-05-01','2009-12-31',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW());"
+dbh.do "INSERT INTO events (culture_provider_id,ticket_state,visible_from,visible_to,from_age,to_age,name,description,created_at,updated_at) VALUES (1,1,'2009-05-01','2009-12-31',4,10,'Mästerkatten i stövlarna', 'En föreställning för de mindre barnen',NOW(),NOW())"
+puts "INSERT INTO events (culture_provider_id,ticket_state,visible_from,visible_to,from_age,to_age,name,description,created_at,updated_at) VALUES (4,1,'2009-05-01','2009-12-31',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW());"
+dbh.do "INSERT INTO events (culture_provider_id,ticket_state,visible_from,visible_to,from_age,to_age,name,description,created_at,updated_at) VALUES (4,1,'2009-05-01','2009-12-31',10,16,'Gustav Mahlers samlade verk', 'En konsert som kan få vem som helst att somna',NOW(),NOW())"
 dbh.do("DISCARD ALL")
 
 # 9 - Occasions

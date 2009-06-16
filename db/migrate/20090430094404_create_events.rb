@@ -5,11 +5,14 @@ class CreateEvents < ActiveRecord::Migration
 
       t.string  :name
       t.text    :description
-      t.date    :show_date
+
+      t.date    :visible_from
+      t.date    :visible_to
 
       t.integer :from_age
       t.integer :to_age
 
+      t.date    :ticket_release_date
       t.integer :ticket_state
 
       t.string  :url

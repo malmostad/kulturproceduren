@@ -63,18 +63,18 @@
                     $("#kp-input-area").html(data);
                 });
         });
-    $(".kp-rbclass").click(function() {
-          if ( this.id == "kp-qtype_questionmchoice")
-              $("#kp-query-mchoice-csv").show("slow");
-          else
-              $("#kp-query-mchoice-csv").hide("slow");
+        $(".kp-rbclass").click(function() {
+            if ( this.id == "kp-qtype_questionmchoice")
+                $("#kp-query-mchoice-csv").show("slow");
+            else
+                $("#kp-query-mchoice-csv").hide("slow");
        
-    });
+        });
        
     });
 
     $(document).ready(function(){
-       $("#kp-query-mchoice-csv").hide();
+        $("#kp-query-mchoice-csv").hide();
     });
 
     //Drop-down
@@ -94,9 +94,24 @@
 
     // Date selectors
     $(function() {
+        var today = new Date();
         $("#kp .date-input-field").datepicker({ 
             dateFormat: "yy-mm-dd",
             minDate: new Date(),
+            firstDay: 1,
+            dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
+            dayNamesMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
+            dayNamesShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
+            monthNames: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
+            monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+        });
+
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        $("#kp #kp-allotment-release_date").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: tomorrow,
             firstDay: 1,
             dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
             dayNamesMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],

@@ -118,7 +118,7 @@ def attlist_pdf
   def index
     @today = Date.today
 
-    @visible_events = Event.find( :all, :conditions => "show_date < '#{@today.to_s}'")
+    @visible_events = Event.visible.find :all
     @visible_occasions = []
 
     @visible_events.each do |e|

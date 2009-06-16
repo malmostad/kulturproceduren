@@ -3,16 +3,19 @@ namespace :kp do
   task( :update_tickets => :environment ) do
     Event.all.each do |e|
       state_change = nil
-      if e.show_date + APP_CONFIG[:ticket_state_change_days] > Date.today
+
+      if e.ticket_release_date + APP_CONFIG[:ticket_state_change_days] > Date.today
         e.ticket_state = Event::ALLOTED_DISTRICT
         state_change = Event::ALLOTED_DISTRICT
         e.save
       end
-      if e.show_date + APP_CONFIG[:ticket_state_change_days] * 2 > Date.today
+
+      if e.ticket_release_date + APP_CONFIG[:ticket_state_change_days] * 2 > Date.today
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
         e.save
       end
+      
       if not state_change.nil?
         case state_change
         when Event::ALLOTED_DISTRICT

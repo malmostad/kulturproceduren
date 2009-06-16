@@ -133,7 +133,8 @@ sv:
                 description: Beskrivning
                 culture_provider: Arrangör
                 culture_provider_id: Arrangör
-                show_date: Publiceringsdatum
+                visible_from: Visas från
+                visible_to: Visas till
                 url: Hemsida
                 booking_info: Bokningsinformation
                 movie_url: Youtube-länk

@@ -61,8 +61,7 @@ class EventsController < ApplicationController
   end
 
   def index
-    @events = Event.find :all,
-      :conditions => [ "show_date <= ?", Date.today ],
+    @events = Event.visible.find :all,
       :order => "created_at DESC",
       :include => :culture_provider
   end

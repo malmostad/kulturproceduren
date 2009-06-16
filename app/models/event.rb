@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
 
   named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
+  named_scope :visible, :conditions => "current_date between visible_from and visible_to"
 
   has_many                :tickets, :dependent => :delete_all
   
@@ -28,10 +29,10 @@ class Event < ActiveRecord::Base
 
 
   def self.visible_events_by_userid(u)
-    today = Date.today
-    u = u.to_i
-    events = Event.find_by_sql "select * from events where show_date < '#{today.to_s}' and id in ( select distinct event_id from tickets,groups_users where user_id=#{u} and tickets.group_id = groups_users.group_id)"
-    return events
+    find :all,
+      :conditions => [
+      "current_date between events.visible_from and events.visible_to and id in (select distinct event_id from tickets,groups_users where user_id = ? and tickets.group_id = groups_users.group_id)",
+      u ]
   end
 
   def last_occasion()
@@ -46,7 +47,8 @@ class Event < ActiveRecord::Base
   end
 
   def bookable?
-    show_date <= Date.today && !tickets.empty?
+    today = Date.today
+    visible_from <= today && visible_to >= today && !tickets.empty?
   end
 
   def not_targeted_group_ids
