@@ -30,8 +30,9 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @questionaire = Questionaire.find(params[:questionaire_id])
     @user = current_user
-    @all_q = Question.find(:all)
-    
+    @all_q = Question.all
+    puts "in questions controller"
+    pp @all_q
     if current_user.has_role?(:admin)
       render :template => "questionaires/admin_view"
     end
@@ -39,7 +40,12 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(params[:question])
+    @question = params[:"kp-qtype"].constantize.new()
+    if params[:"kp-qtype"] == "QuestionMchoice"
+      @question.choices_csv = params[:mchoice]
+    end
+    @question.question = params[:question]
+    @question.template = params[:template]
     res = @question.save
     
     @questionaire = Questionaire.find(params[:questionaire_id])
