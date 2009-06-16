@@ -85,10 +85,10 @@
             <td><%= h @event.show_date %></td>
           </tr>
         <% end -%>
-        <% unless empty? @event.booking_url -%>
-          <tr class="booking-url">
-            <th>Bokning</th>
-            <td><%= link_to h(@event.booking_url), @event.booking_url %></td>
+        <% unless empty? @event.booking_info -%>
+          <tr class="booking-info">
+            <th>Bokningsinformation</th>
+            <td><%= auto_link h(@event.booking_info) %></td>
           </tr>
         <% end -%>
         <% unless empty? @event.cost -%>

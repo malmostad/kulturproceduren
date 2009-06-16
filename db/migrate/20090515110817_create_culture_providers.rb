@@ -1,7 +1,6 @@
 class CreateCultureProviders < ActiveRecord::Migration
   def self.up
     create_table :culture_providers do |t|
-      # TODO images
       t.string :name
       t.text   :description
 

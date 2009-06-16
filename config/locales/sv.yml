@@ -135,7 +135,7 @@ sv:
                 culture_provider_id: Arrangör
                 show_date: Publiceringsdatum
                 url: Hemsida
-                booking_url: Bokningslänk
+                booking_info: Bokningsinformation
                 movie_url: Youtube-länk
                 opening_hours: Öppettider
                 cost: Kostnad

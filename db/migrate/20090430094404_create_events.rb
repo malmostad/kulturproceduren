@@ -16,9 +16,8 @@ class CreateEvents < ActiveRecord::Migration
       t.string  :movie_url
       t.text    :opening_hours
       t.text    :cost
-      t.string  :booking_url
+      t.string  :booking_info
       # TODO: lärarhandledning
-      # TODO: bilder
       
       t.timestamps
     end
