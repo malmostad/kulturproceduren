@@ -15,8 +15,7 @@ class RoleApplication < ActiveRecord::Base
   protected
 
   def must_have_culture_provider
-    if (new_culture_provider_name.nil? || new_culture_provider_name.strip.empty?) &&
-        (culture_provider_id.nil? || culture_provider_id.to_i <= 0)
+    if new_culture_provider_name.blank? && (culture_provider_id.nil? || culture_provider_id.to_i <= 0)
       errors.add :culture_provider_id, "måste väljas eller matas in"
     end
   end

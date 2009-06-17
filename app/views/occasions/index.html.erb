@@ -1,20 +1,18 @@
-
-
 <% @visible_events.each do |e| %>
-  <div class="occasions-event">
-     <div class="occasions-eventname"><%= e.name %></div>
-     <div class="occasions-details">
-     Beskrivning: <%= e.description %> <br/>
-     Åldersintervall: <%= e.from_age %> - <%= e.to_age %> <br/>
-     Kategorier: <% e.tags.each do |t| %>
-                    <%= t.tag %> ,
-                 <%end%> <br/>
-     Föreställningar: <br/>
-     </div>
-     <% e.occasions.each do |o| %>
-        <%=  o.date %> <% if ! @user_events_hash_by_id[o.event_id].nil? %> <a class="occasions-listing" href="/booking/book?occasion_id=<%= o.id %>">BOKA</a><% end %> <br/>
-     <% end %>
-  </div>
-<% end %>
 
-<a href="/login/logout">Logout</a>
+  <div class="occasions-event">
+    <div class="occasions-eventname"><%= e.name %></div>
+    <div class="occasions-details">
+      Beskrivning: <%= e.description %> <br/>
+      Åldersintervall: <%= e.from_age %> - <%= e.to_age %> <br/>
+      Kategorier: <% e.tags.each do |t| %>
+        <%= t.tag %> ,
+      <%end%> <br/>
+      Föreställningar: <br/>
+    </div>
+    <% e.occasions.each do |o| %>
+      <%=  o.date %> <% if ! @user_events_hash_by_id[o.event_id].nil? %> <a class="occasions-listing" href="/booking/book?occasion_id=<%= o.id %>">BOKA</a><% end %> <br/>
+    <% end %>
+  </div>
+  
+<% end %>

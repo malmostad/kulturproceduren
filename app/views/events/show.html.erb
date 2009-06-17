@@ -91,13 +91,13 @@
             </tr>
           <% end -%>
         <% end -%>
-        <% unless empty? @event.booking_info -%>
+        <% unless @event.booking_info.blank? -%>
           <tr class="booking-info">
             <th>Bokningsinformation</th>
             <td><%= auto_link h(@event.booking_info) %></td>
           </tr>
         <% end -%>
-        <% unless empty? @event.cost -%>
+        <% unless @event.cost.blank? -%>
           <tr class="cost">
             <th>Kostnad</th>
             <td><%= linebreakize(@event.cost) %></td>
@@ -111,19 +111,19 @@
           <th>För åldrar</th>
           <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
         </tr>
-        <% unless empty? @event.opening_hours -%>
+        <% unless @event.opening_hours.blank? -%>
           <tr class="opening-hours">
             <th>Öppettider</th>
             <td><%= linebreakize(@event.opening_hours) %></td>
           </tr>
         <% end -%>
-        <% unless empty? @event.url -%>
+        <% unless @event.url.blank? -%>
           <tr class="url">
             <th>Extern länk</th>
             <td><%= link_to h(@event.url), @event.url %></td>
           </tr>
         <% end -%>
-        <% unless empty? @event.movie_url -%>
+        <% unless @event.movie_url.blank? -%>
           <tr class="movie-url">
             <th>Youtube-länk</th>
             <td><%= link_to h(@event.movie_url), @event.movie_url %></td>

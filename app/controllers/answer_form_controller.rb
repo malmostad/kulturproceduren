@@ -7,7 +7,7 @@ class AnswerFormController < ApplicationController
 
   def show
 
-    if ( not AnswerForm.exists?(params[:answer_form_id]) )
+    unless AnswerForm.exists?(params[:answer_form_id])
       flash[:error] = "Ogiltig utvärderingsenkät - kontrollera addressen"
       redirect_to "/"
       return
@@ -28,8 +28,8 @@ class AnswerFormController < ApplicationController
       @qids << k unless @answer["#{k}"].blank?
     end
     
-    if ( not @qids.nil? )
-      if ( (@qids.map { |k| k.to_i } - @answer_form.questionaire.question_ids).empty? )
+    unless @qids.nil?
+      if (@qids.map { |k| k.to_i } - @answer_form.questionaire.question_ids).empty?
         # All questions answered - update answer_form , create answer objects and thank the user
         @answer.each do |qid , ans|
           puts "Creating answer for qid = #{qid} answer = #{ans}"
@@ -39,8 +39,10 @@ class AnswerFormController < ApplicationController
           answer.answer_form = @answer_form
           answer.save
         end
+
         @answer_form.completed = true
         @answer_form.save
+
         flash[:notice] = "Tack för att du svarade på utvärderingsenkäten"
         redirect_to "/"
         return

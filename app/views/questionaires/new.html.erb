@@ -1,12 +1,16 @@
 <% form_for @questionaire do |f| %>
   <fieldset>
     <legend>Skapa ny enkät</legend>
-  <dl>
-    <dd>Utvärderingsenkät för</dd>
-    <dt><%= select_tag "questionaire[event_id]" , options_for_select(Event.all.select { |e| e.questionaire.nil? }.collect { |e| [e.name , e.id ] }) %></dt>
-    <dd><%= f.label :description %></dd>
-    <dt><%= f.text_field :description %></dt>
-  </dl>
-  <%= f.submit "Skapa" %>
+
+    <dl class="form-elements">
+      <dd>Utvärderingsenkät för</dd>
+      <dt><%= select_tag "questionaire[event_id]" , options_for_select(Event.all.select { |e| e.questionaire.nil? }.collect { |e| [e.name , e.id ] }) %></dt>
+      <dd><%= f.label :description %></dd>
+      <dt><%= f.text_field :description %></dt>
+    </dl>
+    
+    <div class="submit-cnt">
+      <%= f.submit "Skapa" %>
+    </div>
   </fieldset>
 <% end %>

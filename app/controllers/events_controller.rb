@@ -11,6 +11,7 @@ class EventsController < ApplicationController
   def stats
     @event = Event.find_by_id(params[:id])
     @tickets_usage = gen_fname("tickets_usage")
+    
     tott = Ticket.find(:all,:conditions => "event_id = #{@event.id}").length
     unbt = Ticket.find(:all,:conditions => "event_id = #{@event.id} and state = #{Ticket::UNBOOKED}").length
     unut = Ticket.find(:all,:conditions => "event_id = #{@event.id} and state = #{Ticket::NOT_USED}").length

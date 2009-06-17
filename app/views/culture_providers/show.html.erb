@@ -76,37 +76,37 @@
     <div id="kp-cp-meta-info">
       <table class="meta">
         <tbody>
-          <% unless empty?(@culture_provider.address) %>
+          <% unless @culture_provider.address.blank? %>
             <tr class="address">
               <th>Adress</th>
               <td><%= linebreakize(@culture_provider.address) %></td>
             </tr>
           <% end -%>
-          <% unless empty?(@culture_provider.contact_person) %>
+          <% unless @culture_provider.contact_person.blank? %>
             <tr class="contact-person">
               <th>Kontaktperson</th>
               <td><%= h(@culture_provider.contact_person) %></td>
             </tr>
           <% end -%>
-          <% unless empty?(@culture_provider.phone) %>
+          <% unless @culture_provider.phone.blank? %>
             <tr class="phone">
               <th>Telefon</th>
               <td><%= h(@culture_provider.phone) %></td>
             </tr>
           <% end -%>
-          <% unless empty?(@culture_provider.email) %>
+          <% unless @culture_provider.email.blank? %>
             <tr class="email">
               <th>Epost</th>
               <td><a href="mailto:<%= u(@culture_provider.email) %>"><%= h(@culture_provider.email) %></a></td>
             </tr>
           <% end -%>
-          <% unless empty?(@culture_provider.url) %>
+          <% unless @culture_provider.url.blank? %>
             <tr class="url">
               <th>Hemsida</th>
               <td><a href="<%= qualified_url(@culture_provider.url) %>"><%= h(@culture_provider.url) %></a></td>
             </tr>
           <% end -%>
-          <% unless empty?(@culture_provider.opening_hours) %>
+          <% unless @culture_provider.opening_hours.blank? %>
             <tr class="opening-hours">
               <th>Öppettider</th>
               <td><%= linebreakize(@culture_provider.opening_hours) %></td>

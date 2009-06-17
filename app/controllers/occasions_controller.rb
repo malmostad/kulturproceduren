@@ -8,6 +8,7 @@ class OccasionsController < ApplicationController
 
   def attlist
     @occasion = Occasion.find(params[:id])
+    
     if @occasion.nil?
       flash[:error] = "Felaktiga parametrar"
       redirect_to "/"
@@ -36,6 +37,7 @@ class OccasionsController < ApplicationController
 
 def attlist_pdf
     @occasion = Occasion.find(params[:id])
+    
     if @occasion.nil?
       flash[:error] = "Felaktiga parametrar"
       redirect_to "/"

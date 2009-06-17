@@ -1,27 +1,29 @@
 
 <h3 class="statistics-pagetitle">
-Statistik för <%= @event.name %>
+  Statistik för <%= @event.name %>
 </h3>
-<p class="statistics-ticket-usage">
-<h4>Biljettanvändning totalt för evenemanget.</h4>
-<img src="<%=@tickets_usage%>" />
-</p>
+
+<div class="statistics-ticket-usage">
+  <h4>Biljettanvändning totalt för evenemanget.</h4>
+  <img src="<%=@tickets_usage%>" />
+</div>
+
 <%oi = 0
-  @event.occasions.each do |o|
-    qi = 0
-    %>
-    <h4> Utvärderingssvar för föreställningen <%= o.date.to_s -%></h4>
-    <%
-    @event.questionaire.questions.each do |q|
-    %>
+@event.occasions.each do |o|
+  qi = 0
+%>
+  <h4> Utvärderingssvar för föreställningen <%= o.date.to_s -%></h4>
+  <%
+  @event.questionaire.questions.each do |q|
+  %>
     <p class ="stats-question-graf">
       Utvärderings svar för frågan <%= q.question -%><br/>
       <img src="<%= @og[oi][qi] -%>">
     </p>
-    
+
     <%
     qi += 1
-    end
-    oi += 1
   end
-  %>
+  oi += 1
+end
+%>

@@ -1,46 +1,54 @@
 <%
-if not group.nil?
+if !group.nil?
   if group.age_groups.num_children_by_age_span(occasion.event.from_age , occasion.event.to_age) == 0 %>
     <p class="booking-warn-age">
       OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
     </p>
-<% end %>
+  <% end %>
   <% if group.ntickets_by_occasion(@occasion) == 0 %>
-     Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
-     <a href="/apa">Klicka här</a> om du vill få ett meddelande ifall biljetter blir tillgängliga senare.
+    <p>
+      Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
+      <a href="/apa">Klicka här</a> om du vill få ett meddelande ifall biljetter blir tillgängliga senare.
+    </p>
   <% else %>
 
-    <legend>
-      Antal platser
-    </legend>
-    <p class="booking-seats">
-      <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
-      <dd><%= text_field_tag "seats_students" ,"", {:class => "seats" , :autocomplete => "off"  } %></dd>
-      <dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
-      <dd><%= text_field_tag "seats_adult"  ,"", { :class => "seats" , :autocomplete => "off"  } %></dd>
-      <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
-      <dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" , :autocomplete => "off"  }  %> <%= @occasion.wheelchair_seats - Ticket.count(:all , :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%> platser tillgängligt på den här föreställningen.</dd>
-     </p>
-     <p id="kp-booking-count" class="booking-count">
-     </p>
-     <p class="booking-companion">
-       <legend>
-         Medföljande vuxen
-       </legend>
-       <dt><%= label_tag "companion_name" , "Namn" %></dt>
-       <dd><%= text_field_tag "companion_name" %></dd>
-       <dt><%= label_tag "companion_email" , "E-mail address" %></dt>
-       <dd><%= text_field_tag "companion_email"  %></dd>
-       <dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
-       <dd><%= text_field_tag "companion_telnr" %></dd>
-     </p>
-     <p class="booking-request">
-      <legend>
-        Speciella krav / Extra information ang. bokning
-      </legend>
-      <dt><%= label_tag "Extra behov" %></dt>
-      <dd><%= text_area_tag "booking_request" %></dd>
-    </p>
-    <%= submit_tag("Boka") %><br/>
+    <fieldset>
+      <legend>Antal platser</legend>
+      <dl class="booking-seats form-elements">
+        <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
+        <dd><%= text_field_tag "seats_students" ,"", {:class => "seats" , :autocomplete => "off"  } %></dd>
+        <dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
+        <dd><%= text_field_tag "seats_adult"  ,"", { :class => "seats" , :autocomplete => "off"  } %></dd>
+        <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
+        <dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" , :autocomplete => "off"  }  %> <%= @occasion.wheelchair_seats - Ticket.count(:all , :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%> platser tillgängligt på den här föreställningen.</dd>
+      </dl>
+
+      <p id="kp-booking-count" class="booking-count"></p>
+    </fieldset>
+
+    <fieldset class="booking-companion">
+      <legend>Medföljande vuxen</legend>
+
+      <dl class="form-elements">
+        <dt><%= label_tag "companion_name" , "Namn" %></dt>
+        <dd><%= text_field_tag "companion_name" %></dd>
+        <dt><%= label_tag "companion_email" , "E-mail address" %></dt>
+        <dd><%= text_field_tag "companion_email"  %></dd>
+        <dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
+        <dd><%= text_field_tag "companion_telnr" %></dd>
+      </dl>
+    </fieldset>
+
+    <fieldset class="booking-request">
+      <legend>Speciella krav / Extra information ang. bokning</legend>
+      <dl class="form-elements">
+        <dt><%= label_tag "Extra behov" %></dt>
+        <dd><%= text_area_tag "booking_request" %></dd>
+      </dl>
+    </fieldset>
+
+    <div class="form-submit-cnt">
+      <%= submit_tag("Boka") %>
+    </div>
   <%  end %>
 <% end %>

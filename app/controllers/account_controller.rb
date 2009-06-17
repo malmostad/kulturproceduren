@@ -44,7 +44,7 @@ class AccountController < ApplicationController
       flash[:error] = "Felaktigt lösenord."
       redirect_to :action => "edit_password"
       return
-    elsif params[:user][:password].length <= 0
+    elsif params[:user][:password].blank?
       flash[:error] = "Lösenordet får inte vara tomt."
       redirect_to :action => "edit_password"
       return

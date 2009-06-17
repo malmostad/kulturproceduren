@@ -1,20 +1,19 @@
 
-<% is_edit = ["edit", "update"].include? params[:action] -%>
-
 <%= render :partial => "questions/form", :locals => { :question => @question , :questionaire => @questionaire } %>
 
 <h1>Utvärderingsformulär för <%= h @questionaire.event.name  %></h1>
 
 <% form_for @questionaire do |f| %>
-<table>
-  <thead>
-    <tr>
-      <th>Inkluderat i enkäten</th>
-      <th>Fråga</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @all_q.each do |q| %>
+  <table>
+    <thead>
+      <tr>
+        <th>Inkluderat i enkäten</th>
+        <th>Fråga</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @all_q.each do |q| %>
         <tr>
           <td><%= check_box_tag "questionaire[question_ids][]" , q.id , @questionaire.question_ids.include?(q.id) -%> </td>
           <td><%= q.question %></td>
@@ -23,11 +22,14 @@
             <%= link_to "Ta bort" , delquest_path( :questionaire_id => @questionaire.id , :question_id => q.id ) , :confirm => "Eru säker?"  %>
           </td>
         </tr>
-    <% end %>
-  </tbody>
-</table>
-<input type="hidden" name="questionaire[id]" value="<%= @questionaire.id -%>"
-<%= f.submit "Uppdatera" %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="submit-cnt">
+    <input type="hidden" name="questionaire[id]" value="<%= @questionaire.id -%>"/>
+    <%= f.submit "Uppdatera" %>
+  </div>
 <% end %>
 
 <a href="/login/logout">Logout</a>

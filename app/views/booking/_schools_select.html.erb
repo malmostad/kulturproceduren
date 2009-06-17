@@ -1,5 +1,2 @@
-<%=
-
-("<option>Välj skola</option>" + options_for_select(@schools.collect { |s| [ s.name , s.id]})).to_s
-
-%>
+<option>Välj skola</option>
+<%= options_for_select(@schools.collect { |s| [ s.name , s.id]}).to_s %>

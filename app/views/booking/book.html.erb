@@ -1,18 +1,24 @@
-<h3> Bokning </h3>
+<h3>Bokning</h3>
+
 <p>
   Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.date.to_s -%>
 </p>
-<form method="post" action="/booking/book">
 
-  <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-  <%= hidden_field_tag 'occasion_id' , @occasion.id %>
+<form method="post" action="<% url_for :controller => "booking", :action => "book" %>">
+
   <fieldset>
-    <legend> Bokning </legend>
-    <dl>
-      <dt><%= label_tag "district_id" , "Välj Stadsdel:"%> </dt>
-      <dd><div id="kp-district-id-cnt">
+    <legend>Bokning</legend>
+
+    <dl class="form-elements">
+      <dt>
+        <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+        <%= hidden_field_tag 'occasion_id' , @occasion.id %>
+        <%= label_tag "district_id" , "Välj Stadsdel:"%>
+      </dt>
+      <dd>
+        <div id="kp-district-id-cnt">
           <%
-          
+
           if params[:district_id].nil?
             opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } )
           else
@@ -28,9 +34,8 @@
             <% end %>
           </noscript>
         </div>
-
-
       </dd>
+
       <dt><%= label_tag "school_id" , "Välj Skola:" %></dt>
       <dd>
         <div id="kp-school-id-cnt">
@@ -49,25 +54,30 @@
             <% end %>
           </noscript>
         </div>
-
       </dd>
+
       <dt><%= label_tag "group_id" , "Välj Grupp:"%></dt>
       <dd>
         <div id="kp-group-id-cnt">
           <% if @groups.nil? %>
+
             <%  if @schools.nil?  %>
               <select id="kp-group_id" name="group_id"><option>Välj stadsdel först</option></select>
             <% else %>
               <select id="kp-group_id" name="group_id"><option>Välj skola först</option></select>
             <% end %>
+
           <% else %>
+
             <%  if @curgroup.nil? %>
               <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
             <% else %>
               <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id%>
-            <% end %>
+              <% end %>
             </select>
+          
           <% end %>
+
           <noscript>
             <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" %>
               <input name="commit" type="submit" value="Välj grupp" /><br/>
@@ -75,9 +85,10 @@
           </noscript>
         </div>
       </dd>
+
       <div id="kp-input-area">
         <% if params[:commit] == "Välj grupp" %>
-            <%= render :partial => "input_area" , :locals => { :group => @curgroup , :occasion => @occasion } %>
+          <%= render :partial => "input_area" , :locals => { :group => @curgroup , :occasion => @occasion } %>
         <% end %>
       </div>
     </dl>

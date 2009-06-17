@@ -12,13 +12,8 @@ dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5433", 'root', 'kp
 
 tables = [
   "questionaires_questions",
-  "CULTURE_ADMINISTRATORS_USERS",
   "BOOKING_REQUIREMENTS",
-  "OCCASIONS_USERS",
-  "GROUPS_USERS",
-  "DISTRICTS_USERS",
   "CULTURE_PROVIDERS_USERS",
-  "ROLES_USERS",
   "EVENTS_TAGS",
   "TAGS",
   "ROLES_USERS",
@@ -440,30 +435,6 @@ cpuids.each do |uid|
 end
 dbh.do "DISCARD ALL"
 
-# districts_users
-
-#sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='Kultursamordnare'"
-#sth.execute
-#ccgid = sth.fetch
-#
-#sth = dbh.prepare "SELECT USER_ID FROM ROLES_USERS WHERE role_id = #{ccgid}"
-#sth.execute
-#ccuids = sth.fetch_all
-#
-#sth = dbh.prepare "SELECT ID FROM DISTRICTS"
-#sth.execute
-#ccids = sth.fetch_all
-#
-#n = 0
-#ccuids.each do |uid|
-#  ccid = ccids[ n % ccids.length ]
-#  puts "INSERT INTO DISTRICTS_USERS (district_id,user_id) VALUES ( #{ccid} , #{uid} )"
-#  dbh.do "INSERT INTO DISTRICTS_USERS (district_id,user_id) VALUES ( #{ccid} , #{uid} )"
-#  n = n+1
-#end
-#dbh.do "DISCARD ALL"
-# events_tags
-
 sth = dbh.prepare "SELECT ID FROM TAGS"
 sth.execute
 tids = sth.fetch_all
@@ -480,50 +451,3 @@ tids.each do  |tid|
   n = n+1
 end
 dbh.do "DISCARD ALL"
-
-# groups_users
-
-sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='booker'"
-sth.execute
-carid = sth.fetch
-
-sth = dbh.prepare "SELECT USER_ID FROM ROLES_USERS WHERE role_id = #{carid}"
-sth.execute
-cauids = sth.fetch_all
-
-sth = dbh.prepare "SELECT ID FROM GROUPS"
-sth.execute
-gids = sth.fetch_all
-
-n = 0
-gids.each do |gid|
-  cauid = cauids[ n % cauids.length ]
-  puts "INSERT INTO GROUPS_USERS (group_id,user_id) VALUES ( #{gid} , #{cauid} )"
-  dbh.do "INSERT INTO GROUPS_USERS (group_id,user_id) VALUES ( #{gid} , #{cauid} )"
-  n = n+1
-end
-dbh.do "DISCARD ALL"
-
-# occasions_users
-
-sth = dbh.prepare "SELECT ID FROM ROLES WHERE NAME='host'"
-sth.execute
-hrid = sth.fetch
-
-sth = dbh.prepare "SELECT USER_ID FROM ROLES_USERS WHERE role_id = #{hrid}"
-sth.execute
-huids = sth.fetch_all
-
-sth = dbh.prepare "SELECT ID FROM OCCASIONS"
-sth.execute
-oids = sth.fetch_all
-
-n = 0
-huids.each do |uid|
-  oid = oids[ n % oids.length ]
-  puts "INSERT INTO OCCASIONS_USERS (occasion_id,user_id) VALUES ( #{oid} , #{uid} )"
-  dbh.do "INSERT INTO OCCASIONS_USERS (occasion_id,user_id) VALUES ( #{oid} , #{uid} )"
-  n = n+1
-end
-dbh.do "DISCARD ALL"
-

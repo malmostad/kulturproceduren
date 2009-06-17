@@ -14,15 +14,18 @@
   </thead>
   <tbody>
     <%  @groups.each do |g| %>
-    <tr>
-      <td> <%= g.school.name -%> / <%= g.name -%> </td>
-      <td> <%= g.companion_by_occasion(@occasion).name -%> </td>
-      <td> <%= g.companion_by_occasion(@occasion).tel_nr -%> </td>
-      <td> <%= g.ntickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
-      <td> <%= g.ntickets_by_occasion(@occasion,Ticket::BOOKED,true) -%> </td>
-      <td> <%= @brs.select { |b| b.group_id == g.id }.map { |b| b.requirement.to_s + "<br/>"  } -%></td>
-    </tr>
+      <tr>
+        <td> <%= g.school.name -%> / <%= g.name -%> </td>
+        <td> <%= g.companion_by_occasion(@occasion).name -%> </td>
+        <td> <%= g.companion_by_occasion(@occasion).tel_nr -%> </td>
+        <td> <%= g.ntickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
+        <td> <%= g.ntickets_by_occasion(@occasion,Ticket::BOOKED,true) -%> </td>
+        <td> <%= @brs.select { |b| b.group_id == g.id }.map { |b| b.requirement.to_s + "<br/>"  } -%></td>
+      </tr>
     <% end %>
   </tbody>
 </table>
-<a href="<%= url_for "attlist_pdf"-%>">Ladda ner som pdf</a>
+
+<p>
+  <a href="<%= url_for "attlist_pdf"-%>">Ladda ner som pdf</a>
+</p>

@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.integer  "question_id"
     t.integer  "answer"
     t.string   "answer_text"
-    t.integer  "occasion_id"
     t.string   "answer_form_id", :limit => 46
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -53,11 +52,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "culture_administrators_users", :id => false, :force => true do |t|
-    t.integer "culture_administrator_id"
-    t.integer "user_id"
   end
 
   create_table "culture_providers", :force => true do |t|
@@ -84,11 +78,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.integer  "elit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "districts_users", :id => false, :force => true do |t|
-    t.integer "district_id"
-    t.integer "user_id"
   end
 
   create_table "events", :force => true do |t|
@@ -124,11 +113,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.datetime "updated_at"
   end
 
-  create_table "groups_users", :id => false, :force => true do |t|
-    t.integer "group_id"
-    t.integer "user_id"
-  end
-
   create_table "images", :force => true do |t|
     t.integer  "event_id"
     t.integer  "culture_provider_id"
@@ -159,11 +143,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.boolean  "telecoil"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "occasions_users", :id => false, :force => true do |t|
-    t.integer "occasion_id"
-    t.integer "user_id"
   end
 
   create_table "questionaires", :force => true do |t|

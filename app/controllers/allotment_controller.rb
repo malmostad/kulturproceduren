@@ -22,7 +22,7 @@ class AllotmentController < ApplicationController
       session[:allotment][:extra_groups] = @event.not_targeted_group_ids
     end
 
-    if params[:allotment][:district_ids] && params[:allotment][:district_ids].length > 0
+    unless params[:allotment][:district_ids].blank?
       ids = params[:allotment][:district_ids].collect { |id| id.to_i }
 
       if ids.include?(-1)
@@ -209,8 +209,6 @@ class AllotmentController < ApplicationController
     districts.each do |district|
       assigned_tickets = ((district.num_children.to_f / total_children.to_f) * tickets).floor
 
-      puts "#{district.name}: #{assigned_tickets} (#{district.num_children} / #{total_children} = (#{district.num_children.to_f / total_children.to_f})) * #{tickets}"
-      
       tickets -= assigned_tickets
 
       district.num_tickets = 0

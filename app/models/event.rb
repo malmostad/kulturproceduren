@@ -35,14 +35,16 @@ class Event < ActiveRecord::Base
       u ]
   end
 
-  def last_occasion()
+  def last_occasion
     m = Occasion.new
     m.date = Date.new
+
     occasions.each do |o|
       if o.date > m.date
         m = o
       end
     end
+    
     return m
   end
 

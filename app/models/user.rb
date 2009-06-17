@@ -4,10 +4,7 @@ require "pp"
 class User < ActiveRecord::Base
 
   has_and_belongs_to_many  :roles
-  has_and_belongs_to_many  :groups            #Role CultureAdministrator
-  has_and_belongs_to_many  :occasions         #Role Host
-  has_and_belongs_to_many  :districts         #Role CultureCoordinator
-  has_and_belongs_to_many  :culture_providers #Role CultureWorker
+  has_and_belongs_to_many  :culture_providers
   has_many :role_applications, :order => "updated_at DESC", :include => [ :role ]
 
   has_many :tickets
