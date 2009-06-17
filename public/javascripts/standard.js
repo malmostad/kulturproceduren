@@ -74,7 +74,10 @@
     });
 
     $(document).ready(function(){
-        $("#kp-query-mchoice-csv").hide();
+        if ($("#kp-qtype_questionmchoice").attr("checked"))
+          $("#kp-query-mchoice-csv").show();
+        else
+          $("#kp-query-mchoice-csv").hide();
     });
 
     //Drop-down

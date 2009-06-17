@@ -2,6 +2,7 @@
 is_edit = ["edit", "update"].include? params[:action] %>
 <% if is_edit %>
   <form method="post" action="/questions/update">
+    <%= hidden_field_tag "question_id" , question.id.to_s %>
 <% else %>
   <form method="post" action="/questions/create">
 <% end %>
@@ -10,25 +11,36 @@ is_edit = ["edit", "update"].include? params[:action] %>
     <div class="question-type-cnt">
       <%= label_tag "Svarstyp på frågan" %><br/>
       <% 
-      opts = {"Betygssvar" => "QuestionMark", "Fritextsvar" => "QuestionText", "Ja/Nej svar"=> "QuestionBool" , "Flervalsvar" => "QuestionMchoice"}
-      opts.keys.each do |t| %>
-      <%= label_tag t %>
-      <%= radio_button_tag "kp-qtype" , opts["#{t}"] , false , :class => "kp-rbclass"  %>
+      Question::QTYPES.keys.each do |t| %>
+        <%= label_tag t %>
+
+        <% if (not question.blank?) and is_edit and question.qtype == Question::QTYPES["#{t}"] %>
+          <%= radio_button_tag "kp-qtype" , Question::QTYPES["#{t}"] , true , :class => "kp-rbclass"  %>
+          <% if question.qtype == "QuestioinMchoice" %>
+            <script> $("#kp-query-mchoice-csv").show</script>
+          <%  end %>
+        <% else %>
+          <%= radio_button_tag "kp-qtype" , Question::QTYPES["#{t}"] , false , :class => "kp-rbclass"  %>
+        <% end  %>
       <% end  %>
     </div>
     <div class="question-cnt">
       <%= label_tag "Fråga" %>
-      <%= text_field_tag :question %>
+      <%= text_field_tag :question , question.blank? ? "" : question.question %>
     </div>
 
     <div id="kp-query-mchoice-csv" class="mchoice-csv">
       <%= label_tag "Ange flervalsalternativen, komma-separerat"%>
-      <%= text_field_tag :mchoice %>
+      <%= text_field_tag :mchoice , question.blank? ? "" : question.choice_csv%>
     </div>
 
     <div class="istemplate-cnt">
       <%= label_tag "Standardfråga" %>
-      <%= check_box_tag :template %>
+      <% if (not question.blank? ) and question.template %>
+        <%= check_box_tag :template , "true" , true %>
+      <% else %>
+        <%= check_box_tag :template , "true" , false %>
+      <% end %>
     </div>
     <div class="submit-cnt">
       <input type="hidden" name="questionaire_id" value="<%= @questionaire.id -%>"/>
@@ -38,3 +50,8 @@ is_edit = ["edit", "update"].include? params[:action] %>
 
   </fieldset>
 </form>
+<form method="get" action="/questionaires/<%= @questionaire.id.to_s -%>">
+<%= submit_tag "Avbryt" %>
+<%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+</form>
+

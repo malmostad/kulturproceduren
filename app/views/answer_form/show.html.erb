@@ -7,23 +7,14 @@ Som du besökte med gruppen <%= @answer_form.group.name -%> , <%= @answer_form.g
 <p class="answer-form-questionaire">
 <form action="/questionaires/<%=params[:answer_form_id]-%>/answer" method="post">
 <% @answer_form.questionaire.questions.each do |q| %>
-    <% if not @qids.nil? %>
-      <% if @qids.keys.include?(q.id.to_s) %>
-        <div class="question-cnt">
-      <% else %>
-        <div class="question-unanswered-cnt">
-          Du måste svara på frågan
-      <% end %>
-    <%  else %>
-      <div class="question-cnt">
-    <% end %>
-    <%= q.question %>
-    </div>
-    <div class="questioin-radiobutton-cnt">
-      <% (1..5).each do |i| %>
-        <%= i.to_s %> <%= radio_button_tag "question_id[#{q.id}]" , i.to_s , ( (not @qids.nil?) and ( @qids["#{q.id}"].to_i == i ) ) %>
-      <%end%>
-    </div>
+  <% if ( not @qids.blank?) and ( not @qids.keys.include?(q.id.to_s) ) %>
+    <div class="question-unanswered-cnt">
+      Du måste svara på frågan
+  <% else  %>
+    <div class="question-cnt">
+  <% end %>
+  <%= to_html(q) %>
+  </div>
 <% end %>
 <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
 <%= submit_tag 'Besvara' %>

@@ -30,7 +30,7 @@ class QuestionairesController < ApplicationController
       @questionaire = Questionaire.find(params[:questionaire_id])
       complete = false
       
-      unless @qids.nil?
+      unless @qids.blank?
         complete = true
         @questionaire.question_ids.sort.collect {|i| i.to_s}.each do |k|
           complete = false unless @qids.keys.include?(k)

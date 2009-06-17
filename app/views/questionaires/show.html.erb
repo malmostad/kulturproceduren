@@ -12,14 +12,8 @@ med gruppen <%= Group.find_by_id(params[:group_id]).school.name %> <%= Group.fin
       Du måste svara på frågan.
   <% end %>
     <div class="question-cnt">
-      <%= q.question %>
+      <%= to_html(q) %>
     </div>
-    <div class="questioin-radiobutton-cnt">
-      <% (1..5).each do |i| %>
-        <%= i.to_s %> <%= radio_button_tag "question_id[#{q.id}]" , i.to_s , ( (not @qids.nil?) and ( @qids["#{q.id}"].to_i == i ) ) %>
-      <%end%>
-    </div>
-  </div>
 <% end %>
 <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
 <%= hidden_field_tag 'group_id', params[:group_id] %>

@@ -40,10 +40,11 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = params[:"kp-qtype"].constantize.new()
+    @question = Question.new
     if params[:"kp-qtype"] == "QuestionMchoice"
-      @question.choices_csv = params[:mchoice]
+      @question.choice_csv = params[:mchoice]
     end
+    @question.qtype = params[:"kp-qtype"]
     @question.question = params[:question]
     @question.template = params[:template]
     res = @question.save
@@ -71,9 +72,13 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question = Question.find(params[:id])
-
-    if @question.update_attributes(params[:question])
+    @question = Question.find(params[:question_id])
+    @question.question = params[:question]
+    @question.template = params[:template]
+    @question.choice_csv = params[:mchoice]
+    @question.qtype = params[:"kp-qtype"]
+    
+    if @question.save
       flash[:notice] = 'Question was successfully updated.'
     else
       flash[:error] = "Frågan kunde inte uppdateras"
