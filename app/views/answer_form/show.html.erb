@@ -1,8 +1,31 @@
 
-<h1>Välkommen <%= @answer_form.companion.name -%></h1>
+<h2>Välkommen <%= @answer_form.companion.name -%></h2>
 
-<p>
-  Utvärderingsenkät för
-  <%= @answer_form.occasion.event.name -%> , föreställningen <%= @answer_form.occasion.date.to_s -%>
-  som du besökte med gruppen <%= @answer_form.group.name -%> , <%= @answer_form.group.school.name -%>
-</p>
+
+Utvärderingsenkät för
+<%= @answer_form.occasion.event.name -%> , föreställningen <%= @answer_form.occasion.date.to_s -%><br/>
+Som du besökte med gruppen <%= @answer_form.group.name -%> , <%= @answer_form.group.school.name -%><br/>
+<p class="answer-form-questionaire">
+<form action="/questionaires/<%=params[:answer_form_id]-%>/answer" method="post">
+<% @answer_form.questionaire.questions.each do |q| %>
+  <% if ( not @qids.blank?) and ( not @qids.keys.include?(q.id.to_s) ) %>
+    <div class="question-unanswered-cnt">
+      Du måste svara på frågan
+  <% else  %>
+    <div class="question-cnt">
+  <% end %>
+  <%
+  pp @answer
+  puts "D: #{q.id}"
+  puts "D2 #{@answer.nil?}"
+  if @answer.nil?  %>
+    <%= question_to_html(q )%>
+  <% else %>
+    <%= question_to_html(q , @answer["#{q.id}"])%>
+  <% end %>
+  </div>
+<% end %>
+<%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+<%= submit_tag 'Besvara' %>
+</form>
+</div>
