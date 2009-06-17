@@ -38,14 +38,14 @@
             <li class="pri-nav-admin"><%= link_to "Administration", :controller => "admin" -%></li>
           <% end -%>
 
-          <li class="pri-nav-account <%= active_by_controller "account", "role_applications" %>">
-            <%= link_to "Konto", :controller => "account" -%>
+          <li class="pri-nav-user <%= active_by_controller "users", "role_applications" %>">
+            <%= link_to "Konto", current_user %>
           </li>
           <li class="pri-nav-logout">
             <%= link_to "Logga ut", :controller => "login", :action => "logout" -%>
           </li>
         <% else -%>
-          <li class="pri-nav-login <%= active_by_controller "login", "account" %>">
+          <li class="pri-nav-login <%= active_by_controller "login" %>">
             <%= link_to "Logga in", :controller => "login", :action => "index" -%>
           </li>
         <% end -%>

@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :users
+  map.resources :users,
+    :member => { :edit_password => :get, :update_password => :put }
   map.resources :images, :only => [ :create, :destroy ]
   map.resources :culture_providers
   map.resources :answers
@@ -66,6 +67,9 @@ ActionController::Routing::Routes.draw do |map|
   map.new_cp_main_img 'culture_providers/:culture_provider_id/images/new/main', :controller => 'images', :action => 'new', :type => :main
   map.new_ev_img 'events/:event_id/images/new', :controller => 'images', :action => 'new', :type => :normal
   map.new_ev_main_img 'events/:event_id/images/new/main', :controller => 'images', :action => 'new', :type => :main
+
+  map.grant_role 'users/:id/grant/:role', :controller => 'users', :action => 'grant'
+  map.revoke_role 'users/:id/revoke/:role', :controller => 'users', :action => 'revoke'
   
   # See how all your routes lay out with "rake routes"
 

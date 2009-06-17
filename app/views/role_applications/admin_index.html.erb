@@ -15,18 +15,7 @@
     <tbody>
       <% @applications.each do |application| -%>
         <tr class="<%= cycle("", "alt") %>">
-          <td>
-            <%= type_string(application) %>
-
-            <% if application.role.symbol_name == :culture_worker -%>
-              för
-              <% if application.culture_provider -%>
-                <%= link_to h(application.culture_provider.name), culture_provider_path(application.culture_provider) %>
-              <% else -%>
-                <%= h application.new_culture_provider_name -%>
-              <% end -%>
-            <% end -%>
-          </td>
+          <td><%= type_string(application) %></td>
           <td><%= h application.message %></td>
           <td><%= l application.created_at, :format => :short %> av <%= h application.user.name %></td>
           <td><%= link_to "Besvara", edit_role_application_path(application) %></td>

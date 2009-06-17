@@ -1,26 +1,32 @@
-<h1>Listing users</h1>
+<%= render :partial => "menu" -%>
 
 <table>
-  <tr>
-    <th>User name</th>
-    <th>Name</th>
-    <th>Mobil nr</th>
-    <th>Email</th>
-  </tr>
 
-<% @users.each do |user| %>
-  <tr>
-    <td><%=h user.username %></td>
-    <td><%=h user.name %></td>
-    <td><%=h user.mobil_nr %></td>
-    <td><%=h user.email %></td>
-    <td><%= link_to 'Show', user %></td>
-    <td><%= link_to 'Edit', edit_user_path(user) %></td>
-    <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <thead>
+    <tr>
+      <th>Användarnamn</th>
+      <th>Namn</th>
+      <th>Mobilnummer</th>
+      <th>Epost</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      
+      <tr>
+        <td><%= h user.username %></td>
+        <td><%= h user.name %></td>
+        <td><%= h user.mobil_nr %></td>
+        <td><%= h user.email %></td>
+        <td><%= link_to 'Visa', user %></td>
+        <td><%= link_to 'Redigera', edit_user_path(user) %></td>
+        <td><%= link_to 'Byt lösenord', edit_password_user_path(user) %></td>
+        <td><%= link_to 'Ta bort', user, :confirm => 'Are you säker?', :method => :delete %></td>
+      </tr>
+
+    <% end %>
+  </tbody>
+  
 </table>
-
-<br />
-
-<%= link_to 'New user', new_user_path %>

@@ -1,28 +1,42 @@
-<h1>Editing user</h1>
+<%= render :partial => "menu" %>
+
+<% if user_online? && current_user.has_role?(:admin) -%>
+  <p>
+    Uppdaterar persondetaljer för <%= link_to h(@user.username), @user %>.
+  </p>
+<% end -%>
 
 <% form_for(@user) do |f| %>
+
   <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-  <p>
-    <%= f.label :user_name %><br />
-    <%= f.text_field :user_name %>
-  </p>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :mobil_nr %><br />
-    <%= f.text_field :mobil_nr %>
-  </p>
-  <p>
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
-  </p>
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
-<% end %>
+  <fieldset>
+    <legend>Personuppgifter</legend>
 
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+    <dl class="form-elements">
+      <dt>
+        <%= f.label :name %>
+      </dt>
+      <dd>
+        <%= f.text_field :name %>
+      </dd>
+      <dt>
+        <%= f.label :email %>
+      </dt>
+      <dd>
+        <%= f.text_field :email %>
+      </dd>
+      <dt>
+        <%= f.label :mobil_nr %>
+      </dt>
+      <dd>
+        <%= f.text_field :mobil_nr %>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <div class="submit-cnt">
+    <%= f.submit("Uppdatera personuppgifter") %>
+  </div>
+
+<% end -%>

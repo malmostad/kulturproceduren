@@ -13,16 +13,19 @@ class LoginController < ApplicationController
     u = User.authenticate params[:user][:username], params[:user][:password]
 
     if u.nil?
-      flash[:error] = "Invalid username or password"
+      flash[:error] = "Felaktigt användarnamn/lösenord"
       render :action => "index"
     else
-      flash[:notice] = "Login successful"
+      flash[:notice] = "Du är nu inloggad som #{CGI.escapeHTML(u.username)}"
       session[:current_user_id] = u.id
+      
       if session[:return_to]
         redirect_to session[:return_to]
         session[:return_to] = nil
+      elsif u.has_role?(:admin)
+        redirect_to :controller => "admin"
       else
-        redirect_to :controller => "account", :action => "index"
+        redirect_to u
       end
     end
   end
@@ -30,7 +33,7 @@ class LoginController < ApplicationController
   def logout
     if user_online?
       session[:current_user_id] = nil
-      flash[:notice] = "Logout successful"
+      flash[:notice] = "Du är nu utloggad."
       redirect_to "/"
     else
       redirect_to :action => "index"

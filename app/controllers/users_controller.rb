@@ -1,87 +1,130 @@
 class UsersController < ApplicationController
-  layout "standard"
+  layout :set_layout
 
-  # GET /users
-  # GET /users.xml
+  before_filter :authenticate, :except => [ :new, :create ]
+  before_filter :require_admin, :only => [ :grant, :revoke, :destroy ]
+  before_filter :load_user, :only => [ :show, :edit, :edit_password, :update, :update_password ]
+
   def index
-    @users = User.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @users }
+    if current_user.has_role?(:admin)
+      @users = User.all
+    else
+      redirect_to current_user
     end
   end
 
-  # GET /users/1
-  # GET /users/1.xml
   def show
-    @user = User.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @user }
-    end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
+  def grant
+    user = User.find(params[:id])
+    role = Role.find_by_symbol(params[:role].to_sym)
+
+    unless user.has_role?(role.symbol_name)
+      user.roles << role
+      flash[:notice] = "Användaren tilldelades rättigheter."
+    end
+
+    redirect_to user
+  end
+  
+  def revoke
+    user = User.find(params[:id])
+    role = Role.find_by_symbol(params[:role].to_sym)
+
+    if user.has_role?(role.symbol_name)
+      user.roles.delete role
+      flash[:notice] = "Användarens rättigheter återkallades."
+    end
+    
+    redirect_to user
+  end
+
   def new
     @user = User.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @user }
-    end
   end
 
-  # GET /users/1/edit
   def edit
-    @user = User.find(params[:id])
   end
 
-  # POST /users
-  # POST /users.xml
+  def edit_password
+    @user.reset_password
+  end
+
   def create
     @user = User.new(params[:user])
 
-    respond_to do |format|
-      if @user.save
-        flash[:notice] = 'User was successfully created.'
-        format.html { redirect_to(@user) }
-        format.xml  { render :xml => @user, :status => :created, :location => @user }
+    if @user.save
+      if user_online? && current_user.has_role?(:admin)
+        flash[:notice] = 'Användaren skapades. Den kan nu logga användarnamn och lösenord.'
+        redirect_to(@user)
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
+        flash[:notice] = 'Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.'
+        redirect_to(:controller => "login")
       end
+    else
+      @user.reset_password
+      render :action => "new"
     end
   end
 
-  # PUT /users/1
-  # PUT /users/1.xml
   def update
-    @user = User.find(params[:id])
-
-    respond_to do |format|
-      if @user.update_attributes(params[:user])
-        flash[:notice] = 'User was successfully updated.'
-        format.html { redirect_to(@user) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-      end
+    @user.name = params[:user][:name]
+    @user.email = params[:user][:email]
+    @user.mobil_nr = params[:user][:mobil_nr]
+    
+    if @user.save
+      flash[:notice] = 'Användaren uppdaterades.'
+      redirect_to(@user)
+    else
+      render :action => "edit"
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.xml
+  def update_password
+    if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:current_password])
+      flash[:error] = "Felaktigt lösenord."
+      redirect_to edit_password_user_url(@user)
+      return
+    elsif params[:user][:password].blank?
+      flash[:error] = "Lösenordet får inte vara tomt."
+      redirect_to edit_password_user_url(@user)
+      return
+    elsif params[:user][:password] != params[:user][:password_confirmation]
+      flash[:error] = "Lösenordsbekräftelsen matchar inte."
+      redirect_to edit_password_user_url(@user)
+      return
+    end
+
+    @user.password = params[:user][:password]
+
+    if @user.save
+      flash[:notice] = "Lösenordet uppdaterades."
+      redirect_to :action => "index"
+    else
+      flash[:error] = "Ett fel uppstod när lösenordet uppdaterades."
+      redirect_to edit_password_user_url(@user)
+    end
+  end
+
   def destroy
     @user = User.find(params[:id])
     @user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(users_url) }
-      format.xml  { head :ok }
+    redirect_to(users_url)
+  end
+
+  private
+
+  def set_layout
+    user_online? && current_user.has_role?(:admin) ? "admin" : "standard"
+  end
+
+  def load_user
+    if current_user.has_role?(:admin)
+      @user = User.find(params[:id])
+    else
+      @user = current_user
     end
   end
 end

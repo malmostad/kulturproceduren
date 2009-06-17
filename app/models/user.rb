@@ -63,11 +63,15 @@ class User < ActiveRecord::Base
 
   
   def password=(pass)
-    write_password(pass)
+    if pass.length > 0
+      self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
+      write_attribute :password, User.encrypt(pass, self.salt)
+    end
   end
 
   def password_confirmation=(pass)
-    write_password(pass, :password_confirmation)
+    self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
+    @password_confirmation = User.encrypt(pass, self.salt)
   end
 
   def reset_password
@@ -80,10 +84,7 @@ class User < ActiveRecord::Base
   private
 
   def write_password(pass, attr = :password)
-    if pass.length > 0
-      self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
-      write_attribute attr, User.encrypt(pass, self.salt)
-    end
+
   end
   
   def self.encrypt(pass, salt)

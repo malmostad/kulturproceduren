@@ -1,27 +1,61 @@
-<h1>New user</h1>
+<%= render :partial => "menu" %>
 
 <% form_for(@user) do |f| %>
+
   <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
-  <p>
-    <%= f.label :user_name %><br />
-    <%= f.text_field :user_name %>
-  </p>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :mobil_nr %><br />
-    <%= f.text_field :mobil_nr %>
-  </p>
-  <p>
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
-  </p>
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
-<% end %>
+  <fieldset>
+    <legend>Personuppgifter</legend>
 
-<%= link_to 'Back', users_path %>
+    <dl class="form-elements">
+      <dt>
+        <%= f.label :name %>
+      </dt>
+      <dd>
+        <%= f.text_field :name %>
+      </dd>
+      <dt>
+        <%= f.label :email %>
+      </dt>
+      <dd>
+        <%= f.text_field :email %>
+      </dd>
+      <dt>
+        <%= f.label :mobil_nr %>
+      </dt>
+      <dd>
+        <%= f.text_field :mobil_nr %>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend>Kontodetaljer</legend>
+
+    <dl class="form-elements">
+      <dt>
+        <%= f.label :username %>
+      </dt>
+      <dd>
+        <%= f.text_field :username %>
+      </dd>
+      <dt>
+        <%= f.label :password %>
+      </dt>
+      <dd>
+        <%= f.password_field :password %>
+      </dd>
+      <dt>
+        <%= f.label :password_confirmation %>
+      </dt>
+      <dd>
+        <%= f.password_field :password_confirmation %>
+      </dd>
+    </dl>
+  </fieldset>
+
+  <div class="submit-cnt">
+    <%= f.submit("Skapa konto") %>
+  </div>
+
+<% end -%>

@@ -1,23 +1,125 @@
-<p>
-  <b>User name:</b>
-  <%=h @user.username %>
-</p>
-
-<p>
-  <b>Name:</b>
-  <%=h @user.name %>
-</p>
-
-<p>
-  <b>Mobil nr:</b>
-  <%=h @user.mobil_nr %>
-</p>
-
-<p>
-  <b>Email:</b>
-  <%=h @user.email %>
-</p>
+<%= render :partial => "menu" %>
 
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<fieldset>
+  <legend>Personuppgifter</legend>
+
+  <ul class="tools">
+    <li><%= link_to "Redigera", edit_user_path(@user) %></li>
+    <% if current_user.has_role?(:admin) %>
+      <li><%= link_to "Radera", @user, :confirm => 'Are you säker?', :method => :delete %></li>
+    <% end -%>
+  </ul>
+
+  <dl>
+    <dt>
+      Namn
+    </dt>
+    <dd>
+      <%= @user.name %>
+    </dd>
+    <dt>
+      Epost
+    </dt>
+    <dd>
+      <%= @user.email %>
+    </dd>
+    <dt>
+      Mobilnummer
+    </dt>
+    <dd>
+      <%= @user.mobil_nr %>
+    </dd>
+  </dl>
+</fieldset>
+
+<fieldset>
+  <legend>Kontodetaljer</legend>
+
+  <dl class="form-elements">
+    <dt>
+      Användarnamn
+    </dt>
+    <dd>
+      <%= h @user.username -%>
+    </dd>
+    <dt>
+      Lösenord
+    </dt>
+    <dd>
+      <%= link_to "Byt lösenord", edit_password_user_path(@user) %>
+    </dd>
+  </dl>
+</fieldset>
+
+<fieldset>
+  <legend>Behörigheter</legend>
+
+  <% denom = current_user.has_role?(:admin) ? "Användaren" : "Du" %>
+
+  <% unless current_user.has_role? :admin %>
+
+    <ul class="tools">
+      <li><%= link_to "Ansök om behörigheter i systemet", role_applications_path %></li>
+    </ul>
+
+  <% end -%>
+
+  <ul>
+
+    <% if @user.roles.empty? -%>
+
+      <li><%= denom %> har inga behörigheter i systemet.</li>
+
+    <% elsif @user.has_role?(:admin) -%>
+
+      <li><%= denom %> är administratör och har fulla rättigheter i systemet.</li>
+
+    <% else -%>
+
+      <% if @user.has_role?(:booker) -%>
+        <li>
+          <%= denom %> kan boka biljetter.
+
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :booker) %></span>
+          <% end -%>
+        </li>
+      <% elsif current_user.has_role?(:admin) -%>
+        <li>
+          <%= denom %> kan inte boka biljetter.
+
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>
+          <% end -%>
+        </li>
+      <% end -%>
+
+      <% if @user.has_role?(:culture_worker) -%>
+        <li>
+          <%= denom %> kan publicera evenemang och administrera profilen för följande arrangörer:
+          <ul>
+            <% @user.culture_providers.each do |provider| -%>
+              <li><%= link_to h(provider.name), provider %></li>
+            <% end -%>
+          </ul>
+
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :culture_worker) %></span>
+          <% end -%>
+        </li>
+      <% elsif current_user.has_role?(:admin) -%>
+        <li>
+          <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
+
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %></span>
+          <% end -%>
+        </li>
+      <% end -%>
+
+    <% end -%>
+
+  </ul>
+
+</fieldset>

@@ -1,5 +1,6 @@
 class RoleApplicationsController < ApplicationController
   layout "standard"
+  
   before_filter :authenticate
   before_filter :deny_admin, :only => [ :booker, :culture_worker, :create ]
   before_filter :require_admin, :only => [ :archive, :edit, :update ]
@@ -11,7 +12,12 @@ class RoleApplicationsController < ApplicationController
         :order => "created_at ASC",
         :include => [ :user, :role, :culture_provider ]
 
-      render :action => "admin_index"
+      render :action => "admin_index", :layout => "admin"
+    else
+      @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
+      @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
+
+      @culture_providers = CultureProvider.find :all, :order => "name"
     end
   end
 
@@ -19,18 +25,6 @@ class RoleApplicationsController < ApplicationController
     @applications = RoleApplication.find :all,
       :order => "updated_at DESC",
       :include => [ :user, :role, :culture_provider ]
-  end
-
-  def booker
-    @application = RoleApplication.new
-    @application.role_id = Role.find_by_symbol(:booker).id
-  end
-
-  def culture_worker
-    @application = RoleApplication.new
-    @application.role_id = Role.find_by_symbol(:culture_worker).id
-
-    @culture_providers = CultureProvider.find :all, :order => "name"
   end
   
   def edit
@@ -45,15 +39,21 @@ class RoleApplicationsController < ApplicationController
 
     if @application.save
       flash[:notice] = "Din ansökan har skickats till administratörerna."
-      redirect_to :controller => "account", :action => "index"
+      redirect_to current_user
     else
+      @culture_providers = CultureProvider.find :all, :order => "name"
+      
       case @application.role.symbol_name
       when :booker
-        render :action => "booker"
+        @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
+        @booker_appl = @application
       when :culture_worker
-        @culture_providers = CultureProvider.find :all, :order => "name"
-        render :action => "culture_worker"
+        @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
+        @culture_worker_appl = @application
+        @culture_worker_appl_error = true
       end
+
+      render :action => "index"
     end
   end
 
@@ -62,17 +62,21 @@ class RoleApplicationsController < ApplicationController
 
     if @application.update_attributes(params[:role_application])
 
-      unless @application.user.roles.any? { |r| r.id == @application.role.id }
-        @application.user.roles << @application.role
-      end
+      if @application.state == RoleApplication::ACCEPTED
 
-      case @application.role.symbol_name
-      when :culture_worker
-        if @application.culture_provider
-          @application.user.culture_providers << @application.culture_provider
-        else
-          @application.user.culture_providers << CultureProvider.create(:name => @application.new_culture_provider_name)
+        unless @application.user.roles.any? { |r| r.id == @application.role.id }
+          @application.user.roles << @application.role
         end
+
+        case @application.role.symbol_name
+        when :culture_worker
+          if @application.culture_provider
+            @application.user.culture_providers << @application.culture_provider
+          else
+            @application.user.culture_providers << CultureProvider.create(:name => @application.new_culture_provider_name)
+          end
+        end
+
       end
 
       flash[:notice] = 'Ansökan besvarades.'
