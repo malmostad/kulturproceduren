@@ -13,7 +13,7 @@ Som du besökte med gruppen <%= @answer_form.group.name -%> , <%= @answer_form.g
   <% else  %>
     <div class="question-cnt">
   <% end %>
-  <%= to_html(q) %>
+  <%= to_html(q , @answer["#{q.id}"])%>
   </div>
 <% end %>
 <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>

@@ -4,7 +4,6 @@ class CreateAnswers < ActiveRecord::Migration
       t.integer :question_id
       t.integer :answer
       t.string  :answer_text
-      t.integer :occasion_id
       t.string :answer_form_id, :limit => 46
       
       t.timestamps

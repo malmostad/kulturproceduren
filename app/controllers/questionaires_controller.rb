@@ -19,7 +19,6 @@ class QuestionairesController < ApplicationController
   def show
     @user = current_user
     @qids = params[:question_id] unless params[:question_id].nil?
-    
     if current_user.has_role?(:admin)
       @questionaire = Questionaire.find(params[:id])
       @all_q = Question.all

@@ -21,17 +21,22 @@ class AnswerFormController < ApplicationController
       return
     end
 
-    @qids = params[:question_id] unless params[:question_id].nil?
+    @answer = params[:answer]
+    pp @answer
+    @qids = []
+    @answer.keys.each do |k|
+      @qids << k unless @answer["#{k}"].blank?
+    end
+    
     if ( not @qids.nil? )
-      if ( (@qids.keys.map { |k| k.to_i } - @answer_form.questionaire.question_ids).empty? )
+      if ( (@qids.map { |k| k.to_i } - @answer_form.questionaire.question_ids).empty? )
         # All questions answered - update answer_form , create answer objects and thank the user
-        @qids.each do |qid , ans|
+        @answer.each do |qid , ans|
           puts "Creating answer for qid = #{qid} answer = #{ans}"
           answer = Answer.new
           answer.question_id = qid
-          answer.answer = ans.to_i
+          answer.answer_text = ans
           answer.answer_form = @answer_form
-          answer.occasion = @answer_form.occasion
           answer.save
         end
         @answer_form.completed = true
