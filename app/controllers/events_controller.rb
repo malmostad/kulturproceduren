@@ -17,7 +17,7 @@ class EventsController < ApplicationController
     unut = Ticket.find(:all,:conditions => "event_id = #{@event.id} and state = #{Ticket::NOT_USED}").length
     uset = Ticket.find(:all,:conditions => "event_id = #{@event.id} and (state = #{Ticket::USED} or state = #{Ticket::BOOKED} )").length
 
-    g = Gruff::Pie.new(400)
+    g = Gruff::Pie.new(500)
     g.font = "/Library/Fonts/Arial.ttf"
     g.right_margin = 10
     g.left_margin = 10
@@ -29,38 +29,19 @@ class EventsController < ApplicationController
     g.write(@tickets_usage.to_s)
     @tickets_usage = @tickets_usage.sub("public","")
 
-    @og = []
+    @img_urls_o_q = []
     oi = 0
     @event.occasions.each do |o|
-      @og[oi] = []
+      @img_urls_o_q[oi] = []
       qi = 0
       @event.questionaire.questions.each do |q|
-        @og[oi][qi] = gen_fname("graf_occasion_" + o.date.to_s + "_question_" + q.id.to_s)
-        answers = Answer.find(:all ,
-          :conditions => {
-            :occasion_id => o.id ,
-            :question_id => q.id
-          })
-        histogram = []
-        (0..4).each { |i| histogram[i] = 0 }
-        answers.each { |a| histogram[a.answer-1] += 1 }
-        g = Gruff::Bar.new(350)
-        g.font = "/Library/Fonts/Arial.ttf"
-        g.right_margin = 10
-        g.left_margin = 10
-        g.title_font_size = 30
-        g.title = q.question.to_s
-        g.sort = false
-        (1..5).each { |n| g.data "#{n}" , histogram[ (n-1)] }
-        g.write @og[oi][qi].to_s
-        @og[oi][qi] = @og[oi][qi].sub("public","")
+        @img_urls_o_q[oi][qi] = question_graph_path :occasion_id => o.id , :question_id => q.id
         qi += 1
       end
       oi += 1
     end
     render :stats
   end
-
   def index
     @events = Event.visible.find :all,
       :order => "created_at DESC",

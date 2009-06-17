@@ -1,5 +1,4 @@
-<%
-is_edit = ["edit", "update"].include? params[:action] %>
+<%  is_edit = (["edit", "update"].include? params[:action] and params[:controller] == "questions") %>
 <% if is_edit %>
   <form method="post" action="/questions/update">
     <%= hidden_field_tag "question_id" , question.id.to_s %>

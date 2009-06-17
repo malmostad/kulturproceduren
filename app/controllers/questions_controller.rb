@@ -1,6 +1,16 @@
 class QuestionsController < ApplicationController
   layout "standard"
   require "pp"
+
+  def stat_graph
+    @question = Question.find(params[:question_id])
+    @occasion = Occasion.find(params[:occasion_id])
+    graph = Question::question_to_graph(@question,@occasion)
+    send_data(graph.to_blob,
+              :disposition => 'inline',
+              :type => 'image/png',
+              :filename => "gruff.png")
+  end
   
   def index
     @questions = Question.all

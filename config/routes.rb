@@ -66,6 +66,7 @@ ActionController::Routing::Routes.draw do |map|
   map.attlist 'occasions/:id/attlist' , :controller => 'occasions' , :action => 'attlist'
   map.eventstat 'events/:id/statistics' , :controller => "events" , :action => "stats"
   map.attlist_pdf 'occasions/:id/attlist_pdf' , :controller => 'occasions' , :action => 'attlist_pdf'
+  map.question_graph 'questions/:question_id/graph/:occasion_id' , :controller => 'questions' , :action => 'stat_graph'
 
   map.new_cp_img 'culture_providers/:culture_provider_id/images/new', :controller => 'images', :action => 'new', :type => :normal
   map.new_cp_main_img 'culture_providers/:culture_provider_id/images/new/main', :controller => 'images', :action => 'new', :type => :main

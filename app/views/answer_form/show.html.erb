@@ -6,25 +6,3 @@
   <%= @answer_form.occasion.event.name -%> , föreställningen <%= @answer_form.occasion.date.to_s -%>
   som du besökte med gruppen <%= @answer_form.group.name -%> , <%= @answer_form.group.school.name -%>
 </p>
-
-<div class="answer-form-questionaire">
-  <form action="<%= ansquest_path :answer_form_id => params[:answer_form_id] %>" method="post">
-
-    <% @answer_form.questionaire.questions.each do |q| %>
-
-      <% if !@qids.blank? && !@qids.keys.include?(q.id.to_s) %>
-        <div class="question-unanswered-cnt">
-        Du måste svara på frågan
-      <% else  %>
-        <div class="question-cnt">
-        <% end %>
-        <%= question_to_html(q , @answer["#{q.id}"])%>
-      </div>
-    <% end %>
-
-    <div class="submit-cnt">
-      <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-      <%= submit_tag 'Besvara' %>
-    </div>
-  </form>
-</div>
