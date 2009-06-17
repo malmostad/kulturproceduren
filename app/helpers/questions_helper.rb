@@ -7,12 +7,12 @@ module QuestionsHelper
 
     case q.qtype 
     when "QuestionMark" then
-      output += "<img src=\"/images/yuck.gif\">"
+      output += "<img src=\"/images/doh2.gif\">"
       (1..4).each do |i|
         output += i.to_s + " "
         output += radio_button_tag "answer[#{q.id}]" , i.to_s , i == predefs.to_i
       end
-      output += "<img src=\"/images/rockout.gif\">"
+      output += "<img src=\"/images/woot.gif\">"
     when "QuestionText"
       output += text_field_tag "answer[#{q.id}]" , predefs
     when "QuestionBool"
