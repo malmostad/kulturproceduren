@@ -1,16 +1,24 @@
 <% content_for :sec_nav do -%>
   <ul class="sec-nav">
     <% if user_online? -%>
+
       <% if current_user.has_role?(:admin) -%>
+
         <li class="<%= active_by_action "users", "index" %>"><%= link_to 'Lista', users_path %></li>
+        <li class="<%= active_by_action "users", "new" %>"><%= link_to 'Skapa användare', new_user_path %></li>
+
       <% else -%>
+
         <li class="<%= active_by_action "users", "show" %>"><%= link_to 'Ditt konto', users_path %></li>
         <li class="<%= active_by_action "users", "edit" %>"><%= link_to 'Uppdatera personuppgifter', edit_user_path(current_user) %></li>
         <li class="<%= active_by_action "users", "edit_password" %>"><%= link_to 'Byt lösenord', edit_password_user_path(current_user) %></li>
         <li class="<%= active_by_action "role_applications", "index" %>"><%= link_to 'Behörighetsansökan', role_applications_path %></li>
+
       <% end -%>
+      
     <% else -%>
       <li class="<%= active_by_action "users", "new" %>"><%= link_to 'Registrera konto', new_user_path %></li>
     <% end -%>
+    
   </ul>
 <% end -%>

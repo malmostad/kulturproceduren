@@ -52,7 +52,7 @@
   </dl>
 </fieldset>
 
-<fieldset>
+<fieldset class="privileges-cnt">
   <legend>Behörigheter</legend>
 
   <% denom = current_user.has_role?(:admin) ? "Användaren" : "Du" %>
@@ -69,7 +69,20 @@
 
     <% if @user.roles.empty? -%>
 
-      <li><%= denom %> har inga behörigheter i systemet.</li>
+      <li>
+        <%= denom %> kan inte boka biljetter.
+
+        <% if current_user.has_role?(:admin) -%>
+          <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>
+        <% end -%>
+      </li>
+      <li>
+        <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
+
+        <% if current_user.has_role?(:admin) -%>
+          <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %></span>
+        <% end -%>
+      </li>
 
     <% elsif @user.has_role?(:admin) -%>
 
@@ -98,11 +111,29 @@
       <% if @user.has_role?(:culture_worker) -%>
         <li>
           <%= denom %> kan publicera evenemang och administrera profilen för följande arrangörer:
+
           <ul>
             <% @user.culture_providers.each do |provider| -%>
-              <li><%= link_to h(provider.name), provider %></li>
+              <li>
+                <%= link_to h(provider.name), provider %>
+                <span class="inline-tool">
+                  <%= link_to "Ta bort", remove_culture_provider_user_path(:id => @user.id, :culture_provider_id => provider.id) %>
+                </span>
+              </li>
+            <% end -%>
+            <% if @user.culture_providers.empty? -%>
+              <li>Inga arrangörer.</li>
             <% end -%>
           </ul>
+
+          <form action="<%= add_culture_provider_user_path(@user) %>" method="post">
+            <div class="inline-form-elements">
+              <label for="kp-culture_provider_id">Arrangör:</label>
+              <%= select_tag "culture_provider_id", options_from_collection_for_select(CultureProvider.all, "id", "name") %>
+              <%= submit_tag("Lägg till arrangör") %>
+              <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+            </div>
+          </form>
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :culture_worker) %></span>

@@ -25,6 +25,8 @@ class RoleApplicationsController < ApplicationController
     @applications = RoleApplication.find :all,
       :order => "updated_at DESC",
       :include => [ :user, :role, :culture_provider ]
+
+    render :layout => "admin"
   end
   
   def edit

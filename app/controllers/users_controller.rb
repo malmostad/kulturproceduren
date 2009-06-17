@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   layout :set_layout
 
   before_filter :authenticate, :except => [ :new, :create ]
-  before_filter :require_admin, :only => [ :grant, :revoke, :destroy ]
+  before_filter :require_admin, :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
   before_filter :load_user, :only => [ :show, :edit, :edit_password, :update, :update_password ]
 
   def index
@@ -108,11 +108,36 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
-    @user.destroy
+    user = User.find(params[:id])
+    user.destroy
 
     redirect_to(users_url)
   end
+
+  def add_culture_provider
+    user = User.find(params[:id])
+    culture_provider = CultureProvider.find params[:culture_provider_id]
+
+    unless user.culture_providers.any? { |cp| cp.id == culture_provider.id }
+      user.culture_providers << culture_provider
+      flash[:notice] = "Användarens rättigheter uppdaterades."
+    end
+
+    redirect_to user
+  end
+
+  def remove_culture_provider
+    user = User.find(params[:id])
+    culture_provider = CultureProvider.find params[:culture_provider_id]
+
+    if user.culture_providers.any? { |cp| cp.id == culture_provider.id }
+      user.culture_providers.delete culture_provider
+      flash[:notice] = "Användarens rättigheter uppdaterades."
+    end
+
+    redirect_to user
+  end
+
 
   private
 

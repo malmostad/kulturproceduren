@@ -27,7 +27,7 @@ body {
 #kp dl { margin: 0 0 1.5em 0; }
 #kp dd { margin-left: 1.5em;}
 
-#kp fieldset { border: 1px solid #d3d7cf; margin: 0 0 1em 0; padding: 1em; }
+#kp fieldset { border: 1px solid #d3d7cf; margin: 0 0 1em 0; padding: 1em 1em 0 1em; }
 #kp legend { padding: 0 1em; }
 
 #kp table {
@@ -165,6 +165,11 @@ body {
     margin: 0;
 }
 
+#kp .inline-form-elements {
+    border: 1px solid #d3d7cf;
+    padding: 3px;
+}
+
 /*** Models ***/
 
 #kp .model-cnt h1 { margin: 0 0 0.5em 0; font-size: 1.5em; }
@@ -262,9 +267,13 @@ body {
 /*** Groups ***/
 #kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }
 
-/** Questionaires **/
+/*** Questionaires ***/
 
 #kp .question-cnt {padding: 0.3em;}
 #kp .question-unanswered-cnt {padding: 0.3em;border: 1px solid #ff0000;background-color: #f0f0f0;}
 #kp .questioin-radiobutton-cnt {margin-left: 0.5em; text-align: left}
 #kp .questionaire-pagetitle {font-size: 1.2em; padding: 0.5em;}
+
+/*** User profile ***/
+
+#kp .privileges-cnt ul li { margin: 0.5em 0; }

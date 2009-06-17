@@ -1,7 +1,11 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.resources :users,
-    :member => { :edit_password => :get, :update_password => :put }
+    :member => {
+    :edit_password => :get,
+    :update_password => :put,
+    :add_culture_provider => :post
+  }
   map.resources :images, :only => [ :create, :destroy ]
   map.resources :culture_providers
   map.resources :answers
@@ -70,7 +74,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.grant_role 'users/:id/grant/:role', :controller => 'users', :action => 'grant'
   map.revoke_role 'users/:id/revoke/:role', :controller => 'users', :action => 'revoke'
-  
+  map.remove_culture_provider_user 'users/:id/remove_culture_provider/:culture_provider_id', :controller => 'users', :action => 'remove_culture_provider'
+
   # See how all your routes lay out with "rake routes"
 
   # Install the default routes as the lowest priority.
