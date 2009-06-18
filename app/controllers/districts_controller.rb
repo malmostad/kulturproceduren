@@ -51,4 +51,16 @@ class DistrictsController < ApplicationController
     flash[:notice] = "Stadsdelen togs bort."
     redirect_to(districts_url)
   end
+
+  protected
+  
+  def sort_column_from_param(p)
+    return "name" if p.blank?
+
+    case p.to_sym
+    when :elit_id then "elit_id"
+    else
+      "name"
+    end
+  end
 end

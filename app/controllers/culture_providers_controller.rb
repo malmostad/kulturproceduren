@@ -62,4 +62,10 @@ class CultureProvidersController < ApplicationController
 
     redirect_to(culture_providers_url)
   end
+
+  protected
+  
+  def sort_column_from_param(p)
+    "name"
+  end
 end

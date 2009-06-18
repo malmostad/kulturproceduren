@@ -91,6 +91,21 @@ class RoleApplicationsController < ApplicationController
       render :action => "edit"
     end
   end
+  
+  protected
+
+  def sort_column_from_param(p)
+    return "created_at" if p.blank?
+
+    case p.to_sym
+    when :role then "roles.name"
+    when :user then "users.name"
+    when :state then "state"
+    when :updated_at then "updated_at"
+    else
+      "created_at"
+    end
+  end
 
   private
 

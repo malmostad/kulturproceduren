@@ -140,6 +140,21 @@ class UsersController < ApplicationController
   end
 
 
+  protected
+
+  def sort_column_from_param(p)
+    return "username" if p.blank?
+
+    case p.to_sym
+    when :name then "name"
+    when :mobil_nr then "mobil_nr"
+    when :email then "email"
+    else
+      "username"
+    end
+  end
+
+
   private
 
   def set_layout

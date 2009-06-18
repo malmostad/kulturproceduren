@@ -68,4 +68,18 @@ class GroupsController < ApplicationController
     flash[:notice] = "Skolan togs bort."
     redirect_to(school)
   end
+
+  private
+
+  def sort_column_from_param(p)
+    return "name" if p.blank?
+
+    case p.to_sym
+    when :district then "districts.name"
+    when :school then "schools.name"
+    when :elit_id then "elit_id"
+    else
+      "name"
+    end
+  end
 end

@@ -1,8 +1,6 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
-require "pp"
-
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -13,9 +11,14 @@ class ApplicationController < ActionController::Base
   protected
 
   def sort_order(default)
-    "#{(params[:c] || default.to_s).gsub(/[\s;'\"]/,'')} #{params[:d] == 'down' ? 'DESC' : 'ASC'}"
+    "#{sort_column_from_param(params[:c] || default)} #{params[:d] == 'down' ? 'DESC' : 'ASC'}"
   end
   helper_method :sort_order
+
+  # Override in subclass to secure column sorting
+  def sort_column_from_param(p)
+    p
+  end
 
   def authenticate
     unless session[:current_user_id]

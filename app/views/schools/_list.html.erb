@@ -9,7 +9,7 @@ show_prio_tools ||= false
       <th><%= sort_link "Namn", "name", :unless => show_prio_tools %></th>
 
       <% if show_district -%>
-        <th><%= sort_link "Stadsdel", "districts.name", :unless => show_prio_tools %></th>
+        <th><%= sort_link "Stadsdel", "district", :unless => show_prio_tools %></th>
       <% end -%>
 
       <% if show_prio_tools -%>
