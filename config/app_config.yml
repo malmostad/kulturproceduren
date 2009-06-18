@@ -1,12 +1,27 @@
 development:
     :salt_length: 10
     :ticket_state_change_days: 14
-    :upload_image_path: images/model
+    :upload_image:
+        :path: images/model
+        :width: 464
+        :height: 174
+        :thumb_width: 212
+        :thumb_height: 80
 test:
     :salt_length: 10
     :ticket_state_change_days: 14
-    :upload_image_path: images/model
+    :upload_image:
+        :path: images/model
+        :width: 464
+        :height: 174
+        :thumb_width: 212
+        :thumb_height: 80
 production:
     :salt_length: 10
     :ticket_state_change_days: 14
-    :upload_image_path: images/model
+    :upload_image:
+        :path: images/model
+        :width: 464
+        :height: 174
+        :thumb_width: 212
+        :thumb_height: 80

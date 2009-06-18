@@ -5,7 +5,8 @@ class CultureProvidersController < ApplicationController
   before_filter :require_admin, :only => [ :new, :create, :destroy ]
   
   def index
-    @culture_providers = CultureProvider.all
+    @culture_providers = CultureProvider.paginate :page => params[:page],
+      :order => sort_order("name")
   end
 
   def show

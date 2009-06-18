@@ -29,10 +29,17 @@ class Image < ActiveRecord::Base
       return
     end
 
-    img.change_geometry(Magick::Geometry.new(320,240)) {|c,r,i| img.resize!(c,r) }
+    img.change_geometry(
+      Magick::Geometry.new(
+        APP_CONFIG[:upload_image][:width],
+        APP_CONFIG[:upload_image][:height])) { |c,r,i| img.resize!(c,r) }
+    
     img.write(self.image_path)
 
-    img.change_geometry(Magick::Geometry.new(128,128)) {|c,r,i| img.resize!(c,r) }
+    img.change_geometry(
+      Magick::Geometry.new(
+        APP_CONFIG[:upload_image][:thumb_width],
+        APP_CONFIG[:upload_image][:thumb_height])) { |c,r,i| img.resize!(c,r) }
     img.write(self.thumb_path)
     
     save_orig
@@ -43,19 +50,19 @@ class Image < ActiveRecord::Base
   end
 
   def image_path
-    "#{RAILS_ROOT}/public/#{APP_CONFIG[:upload_image_path]}/#{self.filename}"
+    "#{Image.path}/#{self.filename}"
   end
 
   def image_url
-    "/#{APP_CONFIG[:upload_image_path]}/#{self.filename}"
+    "#{Image.url}/#{self.filename}"
   end
 
   def thumb_path
-    "#{RAILS_ROOT}/public/#{APP_CONFIG[:upload_image_path]}/#{Image.thumb_name(self.filename)}"
+    "#{Image.path}/#{Image.thumb_name(self.filename)}"
   end
 
   def thumb_url
-    "/#{APP_CONFIG[:upload_image_path]}/#{self.thumb_name}"
+    "#{Image.url}/#{self.thumb_name}"
   end
   
 
@@ -65,7 +72,7 @@ class Image < ActiveRecord::Base
 
     (1..15).each { |i| tempfname << chars[rand(chars.size-1)] }
     
-    while File.exists?("#{RAILS_ROOT}/public/#{APP_CONFIG[:upload_image_path]}/#{tempfname}.jpg")
+    while File.exists?("#{Image.path}/#{tempfname}.jpg")
       tempfname << chars[rand(chars.size-1)]
     end
     
@@ -96,6 +103,13 @@ class Image < ActiveRecord::Base
       File.delete image_path
       File.delete thumb_path
     rescue; end
+  end
+
+  def self.path
+    "#{RAILS_ROOT}/public#{url}"
+  end
+  def self.url
+    "/#{APP_CONFIG[:upload_image][:path]}"
   end
 
 end

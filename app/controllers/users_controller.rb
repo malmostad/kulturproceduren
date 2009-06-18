@@ -7,7 +7,8 @@ class UsersController < ApplicationController
 
   def index
     if current_user.has_role?(:admin)
-      @users = User.all
+      @users = User.paginate :page => params[:page],
+        :order => sort_order("username")
     else
       redirect_to current_user
     end

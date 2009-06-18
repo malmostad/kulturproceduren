@@ -5,7 +5,9 @@ class GroupsController < ApplicationController
   before_filter :require_admin, :except => [ :options_list ]
 
   def index
-    @groups = Group.all :order => "name ASC", :include => { :school => :district }
+    @groups = Group.paginate :page => params[:page],
+      :order => sort_order("name"),
+      :include => { :school => :district }
   end
 
   def options_list

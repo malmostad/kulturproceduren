@@ -6,16 +6,16 @@ show_prio_tools ||= false
 <table>
   <thead>
     <tr>
-      <th>Namn</th>
+      <th><%= sort_link "Namn", "name", :unless => show_prio_tools %></th>
 
       <% if show_district -%>
-        <th>Stadsdel</th>
+        <th><%= sort_link "Stadsdel", "districts.name", :unless => show_prio_tools %></th>
       <% end -%>
-
-      <th>ELIT-ID</th>
 
       <% if show_prio_tools -%>
         <th colspan="2">Prioritering</th>
+      <% else -%>
+        <th><%= sort_link "ELIT-ID", "elit_id", :unles => show_prio_tools %></th>
       <% end -%>
 
       <th colspan="2"></th>
@@ -31,11 +31,11 @@ show_prio_tools ||= false
           <td><%= link_to h(school.district.name), school.district %></td>
         <% end -%>
 
-        <td><%= h school.elit_id %></td>
-
         <% if show_prio_tools -%>
           <td><%= link_to "Upp", :controller => "school_prios", :action => "move_up", :id => school.id %></td>
           <td><%= link_to "Ner", :controller => "school_prios", :action => "move_down", :id => school.id %></td>
+        <% else -%>
+          <td><%= h school.elit_id %></td>
         <% end -%>
 
         <td><%= link_to 'Redigera', edit_school_path(school) %></td>

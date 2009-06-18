@@ -3,7 +3,7 @@
 <table>
   <thead>
     <tr>
-      <th>Namn</th>
+      <th><%= sort_link "Namn", "name" -%></th>
       <th>Detaljer</th>
     </tr>
   </thead>
@@ -19,3 +19,5 @@
 
   </tbody>
 </table>
+
+<%= will_paginate @culture_providers %>

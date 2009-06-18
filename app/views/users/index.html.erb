@@ -4,10 +4,10 @@
 
   <thead>
     <tr>
-      <th>Användarnamn</th>
-      <th>Namn</th>
-      <th>Mobilnummer</th>
-      <th>Epost</th>
+      <th><%= sort_link "Användarnamn", "username" %></th>
+      <th><%= sort_link "Namn", "name" %></th>
+      <th><%= sort_link "Mobilnummer", "mobil_nr" %></th>
+      <th><%= sort_link "Epost", "email" %></th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -30,3 +30,5 @@
   </tbody>
   
 </table>
+
+<%= will_paginate @users -%>

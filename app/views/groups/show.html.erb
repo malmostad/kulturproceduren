@@ -2,23 +2,23 @@
 
 <div class="model-cnt">
 
-  <h1><%= h @group.name %></h1>
-
-  <ul class="tools">
-    <li><%= link_to 'Redigera', edit_group_path(@group) %></li>
-    <li><%= link_to 'Radera', @group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></li>
-  </ul>
+  <h2><%= h @group.name %></h2>
 
   <dl class="meta">
     <dt class="school">Skola:</dt>
     <dd class="school"><%= link_to h(@group.school.name), @group.school %></dd>
     <dt class="district">Stadsdel:</dt>
     <dd class="district"><%= link_to h(@group.school.district.name), @group.school.district %></dd>
-    <dt class="elit-id">ELIT-ID:</dt>
-    <dd class="elit-id"><%= h @group.elit_id || "-" %></dd>
+    <% unless @group.elit_id.blank? -%>
+      <dt class="elit-id">ELIT-ID:</dt>
+      <dd class="elit-id"><%= h @group.elit_id  %></dd>
+    <% end -%>
   </dl>
 
-  <div class="clearer"></div>
+  <ul class="tools">
+    <li><%= link_to 'Redigera', edit_group_path(@group) %></li>
+    <li><%= link_to 'Radera', @group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></li>
+  </ul>
 </div>
 
 <fieldset>
@@ -35,7 +35,7 @@
     <%= f.hidden_field :group_id %>
     <%= f.submit(["edit", "update"].include?(params[:action]) ? "Uppdatera åldersgrupp" : "Lägg till åldersgrupp") %>
   <% end %>
-  
+
   <table>
     <thead>
       <tr>

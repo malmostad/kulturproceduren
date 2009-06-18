@@ -5,7 +5,8 @@ class DistrictsController < ApplicationController
   before_filter :require_admin
 
   def index
-    @districts = District.all
+    @districts = District.paginate :page => params[:page],
+      :order => sort_order("name")
   end
 
   def show

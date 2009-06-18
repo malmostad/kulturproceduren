@@ -5,7 +5,9 @@ class SchoolsController < ApplicationController
   before_filter :require_admin, :except => [ :options_list ]
 
   def index
-    @schools = School.all :order => "name ASC", :include => :district
+    @schools = School.paginate :page => params[:page],
+      :order => sort_order("name"),
+      :include => :district
   end
 
   def options_list
@@ -18,6 +20,8 @@ class SchoolsController < ApplicationController
 
   def show
     @school = School.find(params[:id])
+    @groups = @school.groups.paginate :page => params[:page],
+      :order => sort_order("name")
   end
 
   def new

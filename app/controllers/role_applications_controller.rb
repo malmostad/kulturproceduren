@@ -7,23 +7,27 @@ class RoleApplicationsController < ApplicationController
   
   def index
     if current_user.has_role? :admin
-      @applications = RoleApplication.find :all,
+      @applications = RoleApplication.paginate :page => params[:page],
         :conditions => [ "state = ?", RoleApplication::PENDING ],
-        :order => "created_at ASC",
+        :order => sort_order("created_at"),
         :include => [ :user, :role, :culture_provider ]
 
       render :action => "admin_index", :layout => "admin"
     else
+
       @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
       @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
 
       @culture_providers = CultureProvider.find :all, :order => "name"
+      
     end
   end
 
   def archive
-    @applications = RoleApplication.find :all,
-      :order => "updated_at DESC",
+    params[:d] ||= "down"
+
+    @applications = RoleApplication.paginate :page => params[:page],
+      :order => sort_order("created_at"),
       :include => [ :user, :role, :culture_provider ]
 
     render :layout => "admin"

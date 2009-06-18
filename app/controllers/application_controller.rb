@@ -12,6 +12,11 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def sort_order(default)
+    "#{(params[:c] || default.to_s).gsub(/[\s;'\"]/,'')} #{params[:d] == 'down' ? 'DESC' : 'ASC'}"
+  end
+  helper_method :sort_order
+
   def authenticate
     unless session[:current_user_id]
 

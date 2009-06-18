@@ -2,12 +2,7 @@
 
 <div class="model-cnt">
 
-  <h1><%= h @school.name %></h1>
-
-  <ul class="tools">
-    <li><%= link_to 'Redigera', edit_school_path(@school) %></li>
-    <li><%= link_to 'Radera', @school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></li>
-  </ul>
+  <h2><%= h @school.name %></h2>
 
   <dl class="meta">
     <dt class="district">Stadsdel:</dt>
@@ -16,7 +11,11 @@
     <dd class="elit-id"><%= h @school.elit_id || "-" %></dd>
   </dl>
 
-  <div class="clearer"></div>
+  <ul class="tools">
+    <li><%= link_to 'Redigera', edit_school_path(@school) %></li>
+    <li><%= link_to 'Radera', @school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></li>
+  </ul>
+
 </div>
 
 <fieldset>
@@ -26,5 +25,6 @@
     <li><%= link_to 'Lägg till grupp', new_group_path(:school_id => @school.id) %></li>
   </ul>
 
-  <%= render :partial => "groups/list", :locals => { :groups => @school.groups } %>
+  <%= render :partial => "groups/list", :locals => { :groups => @groups } %>
+  
 </fieldset>

@@ -3,12 +3,12 @@
 <table>
   <thead>
     <tr>
-      <th>Namn</th>
+      <th><%= sort_link "Namn", "name" %></th>
       <% if show_school -%>
-        <th>Skola</th>
-        <th>Stadsdel</th>
+        <th><%= sort_link "Skola", "schools.name" %></th>
+        <th><%= sort_link "Stadsdel", "districts.name" %></th>
       <% end -%>
-      <th>ELIT-ID</th>
+      <th><%= sort_link "ELIT-ID", "elit_id" %></th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -28,3 +28,5 @@
     <% end %>
   </tbody>
 </table>
+
+<%= will_paginate groups %>

@@ -28,4 +28,12 @@ module ApplicationHelper
     text = h(text) if escape
     text.split($/).join("<br/>")
   end
+
+  def sort_link(title, column, options = {})
+    condition = options[:unless] if options.has_key?(:unless)
+    sort_dir = params[:d] == 'up' && params[:c] == column ? 'down' : 'up'
+    link_to_unless condition, title,
+      :overwrite_params => { :c => column, :d => sort_dir }
+  end
+
 end
