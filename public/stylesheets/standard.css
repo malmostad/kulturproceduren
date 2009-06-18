@@ -40,7 +40,7 @@ body {
 #kp table thead th { text-align: left; background: #edd400; font-weight: normal; }
 #kp table td, #kp table th { padding: 3px 5px; vertical-align: top; }
 #kp table th { vertical-align: bottom; }
-#kp table .alt td { background: #eeeeec; }
+#kp table .alt td, #kp table .alt th { background: #eeeeec; }
 #kp table .selected td { background: #cfc; }
 #kp table th.super { border: 0; text-align: center; }
 

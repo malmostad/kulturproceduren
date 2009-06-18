@@ -11,6 +11,8 @@ class Event < ActiveRecord::Base
   has_many :occasions, :order => "date ASC"
   belongs_to :culture_provider
 
+  has_and_belongs_to_many :categories, :include => :category_group
+
   has_one :questionaire
 
   has_many :images, :conditions => 'id != #{main_image_id || 0}'

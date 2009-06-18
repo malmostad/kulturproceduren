@@ -21,7 +21,7 @@
     </div>
   <% end -%>
 
-  <h1><%= h @culture_provider.name %></h1>
+  <h2><%= h @culture_provider.name %></h2>
 
   <% if user_online? && current_user.can_administrate?(@culture_provider) %>
     <ul class="tools">

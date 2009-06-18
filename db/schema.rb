@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.integer "event_id"
   end
 
+  add_index "categories_events", ["category_id", "event_id"], :name => "index_categories_events_on_category_id_and_event_id", :unique => true
+
   create_table "category_groups", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"

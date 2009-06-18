@@ -21,7 +21,7 @@
     </div>
   <% end -%>
 
-  <h1><%= h @event.name %></h1>
+  <h2><%= h @event.name %></h2>
 
   <% if user_online? -%>
     <ul class="tools">
@@ -111,6 +111,20 @@
           <th>För åldrar</th>
           <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
         </tr>
+
+        <% @category_groups.each do |category_group| -%>
+          <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
+
+          <% unless category_names.empty? -%>
+            <tr class="categories">
+              <th><%= h category_group.name %></th>
+              <td>
+                <%= h(category_names.join(", ")) %>
+              </td>
+            </tr>
+          <% end -%>
+        <% end -%>
+
         <% unless @event.opening_hours.blank? -%>
           <tr class="opening-hours">
             <th>Öppettider</th>

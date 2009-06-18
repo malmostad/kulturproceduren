@@ -56,6 +56,26 @@
       <dd class="textarea-cnt">
         <%= f.text_area :description %>
       </dd>
+
+      <% @category_groups.each do |category_group| -%>
+        <% unless category_group.categories.empty? -%>
+          <dt class="checkbox-list-label-cnt"><%= h category_group.name %></dt>
+          <dt class="checkbox-list-cnt">
+            <ul class="checkbox-list">
+              <% category_group.categories.each do |category| -%>
+                <li>
+                  <%= check_box_tag "category_ids[]", category.id,
+                    @event.categories.any? { |c| c.id == category.id },
+                    :id => "kp-event-category_ids-#{category.id}" %>
+                    
+                  <label for="kp-event-category_ids-<%= h category.id %>"><%= h category.name %></label>
+                </li>
+              <% end -%>
+            </ul>
+          </dt>
+        <% end -%>
+      <% end -%>
+
       <dt>
         <%= f.label :url %>
       </dt>

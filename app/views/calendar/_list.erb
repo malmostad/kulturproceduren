@@ -3,7 +3,12 @@
     <tr>
       <th>Tid</th>
       <th>Aktivitet</th>
-      <th>Kulturtyp</th>
+      <th>Arrangör</th>
+
+      <% @category_groups.each do |category_group| -%>
+        <th><%= h category_group.name %></th>
+      <% end -%>
+
       <th>Boka</th>
     </tr>
   </thead>
@@ -15,14 +20,21 @@
 
       <% if prev_date < occasion.date %>
         <tr class="date-row <%= cycle('', 'alt')  %>">
-          <th colspan="4"><%= occasion.date %></th>
+          <th colspan="<%= 4 + @category_groups.size %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 
       <tr class="<%= cycle('', 'alt')  %>">
         <td class="time"><%= l occasion.start_time, :format => :only_time %></td>
         <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
-        <td class="culture-type"></td>
+        <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name) %></td>
+
+        <% @category_groups.each do |category_group| -%>
+          <td class="categories">
+            <%= h(occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")) %>
+          </td>
+        <% end -%>
+
         <td class="booking">
           <% if occasion.event.bookable? %>
             <% if user_online? && current_user.can_book? -%>

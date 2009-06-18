@@ -42,6 +42,7 @@ class EventsController < ApplicationController
     end
     render :stats
   end
+  
   def index
     @events = Event.visible.find :all,
       :order => "created_at DESC",
@@ -50,19 +51,22 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
+    @category_groups = CategoryGroup.all :order => "name ASC"
   end
 
   def new
     @event = Event.new do |e|
       e.to_age = 19
       e.culture_provider_id = params[:culture_provider_id] if params[:culture_provider_id]
-    end
-
+    end  
+    @category_groups = CategoryGroup.all :order => "name ASC"
+    
     load_culture_providers()
   end
 
   def edit
     @event = Event.find(params[:id])
+    @category_groups = CategoryGroup.all :order => "name ASC"
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
@@ -85,9 +89,19 @@ class EventsController < ApplicationController
     load_culture_providers()
 
     if @event.save
+      params[:category_ids] ||= []
+      @event.categories.clear
+
+      params[:category_ids].each do |cid|
+        begin
+          @event.categories << Category.find(cid.to_i)
+        rescue; end
+      end
+
       flash[:notice] = 'Evenemanget skapades.'
       redirect_to(@event)
     else
+      @category_groups = CategoryGroup.all :order => "name ASC"
       render :action => "new"
     end
   end
@@ -102,9 +116,20 @@ class EventsController < ApplicationController
     end
 
     if @event.update_attributes(params[:event])
+
+      params[:category_ids] ||= []
+      @event.categories.clear
+
+      params[:category_ids].each do |cid|
+        begin
+          @event.categories << Category.find(cid.to_i)
+        rescue; end
+      end
+
       flash[:notice] = 'Evenemanget uppdaterades.'
       redirect_to(@event)
     else
+      @category_groups = CategoryGroup.all :order => "name ASC"
       render :action => "new"
     end
   end
