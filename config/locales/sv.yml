@@ -124,6 +124,8 @@ sv:
             age_group: åldersgruppen
             user: användaren
             role_application: ansökan
+            category_group: kategorigruppen
+            category: kategorin
 
         attributes:
             event:
@@ -184,6 +186,12 @@ sv:
                 opening_hours: Öppettider
                 url: Hemsida
             image:
+                name: Namn
+            category:
+                name: Namn
+                category_group: Kategorigrupp
+                category_group_id: Kategorigrupp
+            category_group:
                 name: Namn
 
     # Used in array.to_sentence.

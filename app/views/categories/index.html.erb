@@ -1,0 +1,41 @@
+<%= render :partial => "menu" -%>
+
+<% form_for @category do |f| -%>
+  <fieldset>
+    <legend>Lägg till kategori</legend>
+
+    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+
+    <dl class="form-elements">
+      <dt><%= f.label :category_group_id %></dt>
+      <dt><%= f.collection_select :category_group_id, @category_groups, :id, :name %></dt>
+      <dt><%= f.label :name %></dt>
+      <dd><%= f.text_field :name %></dd>
+    </dl>
+
+    <div class="submit-cnt">
+      <%= f.submit "Ok" %>
+    </div>
+
+  </fieldset>
+<% end -%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Namn</th>
+      <th>Kategorigrupp</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <% @categories.each do |category| %>
+    <tr class="<%= cycle('', 'alt') %>">
+      <td><%= h category.name %></td>
+      <td><%= h category.category_group.name %></td>
+      <td><%= link_to 'Redigera', edit_category_path(category) %></td>
+      <td><%= link_to 'Radera', category, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+
+</table>

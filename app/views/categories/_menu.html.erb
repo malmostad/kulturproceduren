@@ -1,0 +1,10 @@
+<% content_for :sec_nav do -%>
+  <ul class="sec-nav">
+    <li class="<%= active_by_action "categories", "index", "edit", "update", "create" %>">
+      <%= link_to 'Kategorier', categories_path %>
+    </li>
+    <li class="<%= active_by_action "category_groups", "index", "edit", "update", "create" %>">
+      <%= link_to 'Kategorigrupper', category_groups_path %>
+    </li>
+  </ul>
+<% end -%>

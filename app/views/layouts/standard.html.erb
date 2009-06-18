@@ -35,7 +35,7 @@
         <% if user_online? -%>
 
           <% if current_user.has_role?(:admin) -%>
-            <li class="pri-nav-admin"><%= link_to "Administration", :controller => "admin" -%></li>
+            <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
           <% end -%>
 
           <li class="pri-nav-user <%= active_by_controller "users", "role_applications" %>">

@@ -22,7 +22,15 @@
 
     <div id="kp">
 
+      <h1 id="kp-logo">Kulturproceduren - Administration</h1>
+
       <ul class="pri-nav">
+        <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
+          <%= link_to "Behörighetsansökningar", role_applications_path -%>
+        </li>
+        <li class="pri-nav-role-categories <%= active_by_controller "categories" %>">
+          <%= link_to "Kategorier", categories_path -%>
+        </li>
         <li class="pri-nav-districts <%= active_by_controller "districts" %>">
           <%= link_to "Stadsdelar", districts_path -%>
         </li>
@@ -34,9 +42,6 @@
         </li>
         <li class="pri-nav-users <%= active_by_controller "users" %>">
           <%= link_to "Användare", users_path -%>
-        </li>
-        <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
-          <%= link_to "Behörighetsansökningar", role_applications_path -%>
         </li>
         <li class="pri-nav-home">
           <%= link_to "Hem", "/" -%>

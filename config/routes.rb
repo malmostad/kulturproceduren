@@ -13,8 +13,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :questionaires 
   map.resources :tags
   map.resources :events
-  map.resources :occasions
+  map.resources :occasions, :except => [ :index ]
   map.resources :notification_requests
+  map.resources :categories, :except => [ :show, :new ]
+  map.resources :category_groups, :except => [:show, :new ]
   map.resources :booking_requirements
   map.resources :districts
   map.resources :schools,

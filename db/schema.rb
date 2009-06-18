@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090610112129) do
+ActiveRecord::Schema.define(:version => 20090618091654) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -42,6 +42,24 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.text     "requirement"
     t.integer  "occasion_id"
     t.integer  "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories", :force => true do |t|
+    t.integer  "category_group_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories_events", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "event_id"
+  end
+
+  create_table "category_groups", :force => true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -98,11 +116,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "main_image_id"
-  end
-
-  create_table "events_tags", :id => false, :force => true do |t|
-    t.integer "event_id"
-    t.integer "tag_id"
   end
 
   create_table "groups", :force => true do |t|
@@ -215,12 +228,6 @@ ActiveRecord::Schema.define(:version => 20090610112129) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
-  create_table "tags", :force => true do |t|
-    t.string   "tag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "tickets", :force => true do |t|
     t.integer  "state"

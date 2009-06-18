@@ -117,29 +117,6 @@ def attlist_pdf
     send_data pdf.render, :filename => "deltagarlista.pdf",:type => "application/pdf" , :disposition => 'inline'
   end
 
-  def index
-    @today = Date.today
-
-    @visible_events = Event.visible.find :all
-    @visible_occasions = []
-
-    @visible_events.each do |e|
-      o = Occasion.find(:all, :conditions => "event_id = #{e.id}")
-      o.each do |oo|
-        @visible_occasions.push(oo)
-      end
-    end
-
-    @user = current_user
-    @user_events = Event.visible_events_by_userid(@user.id)
-    @user_events_hash_by_id = {}
-
-    @user_events.each do |e|
-      @user_events_hash_by_id[e.id] = e
-    end
-
-  end
-
   def show
     @selected_occasion = Occasion.find(params[:id])
     @event = @selected_occasion.event
