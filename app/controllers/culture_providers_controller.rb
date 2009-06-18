@@ -11,6 +11,7 @@ class CultureProvidersController < ApplicationController
 
   def show
     @culture_provider = CultureProvider.find params[:id], :include => [ :main_image ]
+    @category_groups = CategoryGroup.all :order => "name ASC"
   end
 
   def new

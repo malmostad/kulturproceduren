@@ -1,197 +1,185 @@
 <%= render :partial => "events/menu" -%>
 
-<div class="model-cnt">
+<div id="kp-pri-content">
+  <div class="model-cnt">
 
-  <% if @event.main_image -%>
-    <div class="main-image">
+    <% if !@event.images.empty? %>
 
-      <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
-        <ul class="tools">
-          <li><%= link_to "Ladda upp ny logotyp", new_ev_main_img_path(:event_id => @event.id) -%></li>
+      <div class="images-cnt">
+
+        <ul class="images">
+          <% @event.images.each do |image| -%>
+            <li>
+              <img src="<%= h image.image_url %>" alt="<%= h image.name %>"/>
+            </li>
+          <% end -%>
         </ul>
-      <% end -%>
+      
+        <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
+          <ul class="tools">
+            <li><%= link_to "Ladda upp ny bild", new_ev_img_path(:event_id => @event.id) -%></li>
+          </ul>
+        <% end -%>
 
-      <img src="<%= h @event.main_image.image_url %>" alt="<%= h @event.main_image.name %>"/>
-    </div>
-  <% elsif user_online? && current_user.can_administrate?(@event.culture_provider) -%>
-    <div class="main-image">
-      <ul class="tools">
-        <li><%= link_to "Ladda upp ny logotyp", new_ev_main_img_path(:event_id => @event.id) -%></li>
-      </ul>
-    </div>
-  <% end -%>
+      </div>
 
-  <h2><%= h @event.name %></h2>
+    <% elsif user_online? && current_user.can_administrate?(@event.culture_provider) -%>
 
-  <% if user_online? -%>
-    <ul class="tools">
-      <% if current_user.can_administrate?(@event.culture_provider) -%>
-        <li><%= link_to 'Redigera', edit_event_path(@event) %></li>
-      <% end -%>
-      <% if current_user.has_role?(:admin) && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
-        <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
-      <% end -%>
-    </ul>
-  <% end -%>
-
-  <% if !@event.images.empty? %>
-
-    <div class="images-cnt">
-
-      <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
+      <div class="images-cnt">
         <ul class="tools">
           <li><%= link_to "Ladda upp ny bild", new_ev_img_path(:event_id => @event.id) -%></li>
         </ul>
-      <% end -%>
+      </div>
 
-      <ul class="images">
-        <% @event.images.each do |image| -%>
-          <li>
-            <img src="<%= h image.thumb_url %>" alt="<%= h image.name %>"/>
-          </li>
-        <% end -%>
-      </ul>
-    </div>
+    <% end -%>
 
-  <% elsif user_online? && current_user.can_administrate?(@event.culture_provider) -%>
+    <h2><%= h @event.name %></h2>
 
-    <div class="images-cnt">
+    <% if user_online? -%>
       <ul class="tools">
-        <li><%= link_to "Ladda upp ny bild", new_ev_img_path(:event_id => @event.id) -%></li>
+        <% if current_user.can_administrate?(@event.culture_provider) -%>
+          <li><%= link_to 'Redigera', edit_event_path(@event) %></li>
+        <% end -%>
+        <% if current_user.has_role?(:admin) && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
+          <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
+        <% end -%>
       </ul>
-    </div>
+    <% end -%>
 
-  <% end -%>
+    <%= paragraphize(@event.description, 'class="description"') %>
 
-  <%= paragraphize(@event.description, 'class="description"') %>
+    <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
+      <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+    <% end -%>
 
-  <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
-    <%= render :partial => "occasions/form", :locals => { :event => @event } %>
-  <% end -%>
+    <div class="tabs">
+      <ul>
+        <li><a href="#kp-ev-meta-info">Information</a></li>
+        <% unless @event.occasions.empty? -%>
+          <li class="<%= "preselect" if @selected_occasion %>"><a href="#kp-ev-meta-occasions">Föreställningar</a></li>
+        <% end -%>
+      </ul>
 
-  <div class="tabs">
-    <ul>
-      <li><a href="#kp-ev-meta-info">Information</a></li>
-      <% unless @event.occasions.empty? -%>
-        <li class="<%= "preselect" if @selected_occasion %>"><a href="#kp-ev-meta-occasions">Föreställningar</a></li>
-      <% end -%>
-    </ul>
-
-    <div id="kp-ev-meta-info">
-      <table class="meta">
-        <% if user_online? && current_user.can_administrate?(@event.culture_provider) %>
-          <tr class="show-date">
-            <th>Visas mellan</th>
-            <td><%= h @event.visible_from %> och <%= h @event.visible_to %></td>
-          </tr>
-          <% unless @event.ticket_release_date.blank? -%>
-            <tr class="ticket-release-date">
-              <th>Biljettsläpp</th>
-              <td><%= h @event.ticket_release_date %></td>
+      <div id="kp-ev-meta-info">
+        <table class="meta">
+          <% if user_online? && current_user.can_administrate?(@event.culture_provider) %>
+            <tr class="show-date">
+              <th>Visas mellan</th>
+              <td><%= h @event.visible_from %> och <%= h @event.visible_to %></td>
+            </tr>
+            <% unless @event.ticket_release_date.blank? -%>
+              <tr class="ticket-release-date">
+                <th>Biljettsläpp</th>
+                <td><%= h @event.ticket_release_date %></td>
+              </tr>
+            <% end -%>
+          <% end -%>
+          <% unless @event.booking_info.blank? -%>
+            <tr class="booking-info">
+              <th>Bokningsinformation</th>
+              <td><%= auto_link h(@event.booking_info) %></td>
             </tr>
           <% end -%>
-        <% end -%>
-        <% unless @event.booking_info.blank? -%>
-          <tr class="booking-info">
-            <th>Bokningsinformation</th>
-            <td><%= auto_link h(@event.booking_info) %></td>
-          </tr>
-        <% end -%>
-        <% unless @event.cost.blank? -%>
-          <tr class="cost">
-            <th>Kostnad</th>
-            <td><%= linebreakize(@event.cost) %></td>
-          </tr>
-        <% end -%>
-        <tr class="culture-provider">
-          <th>Arrangör</th>
-          <td><%= link_to h(@event.culture_provider.name), culture_provider_path(@event.culture_provider) %></td>
-        </tr>
-        <tr class="ages">
-          <th>För åldrar</th>
-          <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
-        </tr>
-
-        <% @category_groups.each do |category_group| -%>
-          <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
-
-          <% unless category_names.empty? -%>
-            <tr class="categories">
-              <th><%= h category_group.name %></th>
-              <td>
-                <%= h(category_names.join(", ")) %>
-              </td>
+          <% unless @event.cost.blank? -%>
+            <tr class="cost">
+              <th>Kostnad</th>
+              <td><%= linebreakize(@event.cost) %></td>
             </tr>
           <% end -%>
-        <% end -%>
-
-        <% unless @event.opening_hours.blank? -%>
-          <tr class="opening-hours">
-            <th>Öppettider</th>
-            <td><%= linebreakize(@event.opening_hours) %></td>
+          <tr class="culture-provider">
+            <th>Arrangör</th>
+            <td><%= link_to h(@event.culture_provider.name), culture_provider_path(@event.culture_provider) %></td>
           </tr>
-        <% end -%>
-        <% unless @event.url.blank? -%>
-          <tr class="url">
-            <th>Extern länk</th>
-            <td><%= link_to h(@event.url), @event.url %></td>
+          <tr class="ages">
+            <th>För åldrar</th>
+            <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
           </tr>
-        <% end -%>
-        <% unless @event.movie_url.blank? -%>
-          <tr class="movie-url">
-            <th>Youtube-länk</th>
-            <td><%= link_to h(@event.movie_url), @event.movie_url %></td>
-          </tr>
-        <% end -%>
-      </table>
-    </div>
 
-    <% unless @event.occasions.empty? -%>
-      <div id="kp-ev-meta-occasions">
-        <table class="occasion-list">
-          <thead>
-            <tr>
-              <th>Datum</th>
-              <th>Tid</th>
-              <th>Antal platser</th>
-              <th>Adress</th>
-              <th>Beskrivning</th>
-              <th></th>
-            </tr>
-          </thead>
+          <% @category_groups.each do |category_group| -%>
+            <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
 
-          <tbody>
-            <% @event.occasions.each do |occasion|
-              alt = cycle('', "alt") %>
-              <tr class="<%= alt %> <%= "selected" if @selected_occasion && @selected_occasion.id == occasion.id %>">
-                <td><%= h occasion.date %></td>
-                <td><%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %></td>
+            <% unless category_names.empty? -%>
+              <tr class="categories">
+                <th><%= h category_group.name %></th>
                 <td>
-                  <%= h occasion.seats %>
-                  <% if occasion.wheelchair_seats.to_i > 0 -%>
-                    + <%= h occasion.wheelchair_seats %>
-                  <% end -%>
-                </td>
-                <td><%= linebreakize(occasion.address) %></td>
-                <td><%= paragraphize(occasion.description) %></td>
-                <td>
-                  <% if @event.bookable? && user_online? && current_user.can_book? -%>
-                    <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
-                  <% end -%>
-                  <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
-                    <%= link_to "Redigera", edit_occasion_path(occasion) %>
-                    <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
-                  <% end -%>
+                  <%= h(category_names.join(", ")) %>
                 </td>
               </tr>
             <% end -%>
-          </tbody>
+          <% end -%>
 
+          <% unless @event.opening_hours.blank? -%>
+            <tr class="opening-hours">
+              <th>Öppettider</th>
+              <td><%= linebreakize(@event.opening_hours) %></td>
+            </tr>
+          <% end -%>
+          <% unless @event.url.blank? -%>
+            <tr class="url">
+              <th>Extern länk</th>
+              <td><%= link_to h(@event.url), @event.url %></td>
+            </tr>
+          <% end -%>
+          <% unless @event.movie_url.blank? -%>
+            <tr class="movie-url">
+              <th>Youtube-länk</th>
+              <td><%= link_to h(@event.movie_url), @event.movie_url %></td>
+            </tr>
+          <% end -%>
         </table>
       </div>
-    <% end -%>
+
+      <% unless @event.occasions.empty? -%>
+        <div id="kp-ev-meta-occasions">
+          <table class="occasion-list">
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Tid</th>
+                <th>Antal platser</th>
+                <th>Adress</th>
+                <th>Beskrivning</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @event.occasions.each do |occasion|
+                alt = cycle('', "alt") %>
+                <tr class="<%= alt %> <%= "selected" if @selected_occasion && @selected_occasion.id == occasion.id %>">
+                  <td><%= h occasion.date %></td>
+                  <td><%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %></td>
+                  <td>
+                    <%= h occasion.seats %>
+                    <% if occasion.wheelchair_seats.to_i > 0 -%>
+                      + <%= h occasion.wheelchair_seats %>
+                    <% end -%>
+                  </td>
+                  <td><%= linebreakize(occasion.address) %></td>
+                  <td><%= paragraphize(occasion.description) %></td>
+                  <td>
+                    <% if @event.bookable? && user_online? && current_user.can_book? -%>
+                      <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
+                    <% end -%>
+                    <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
+                      <%= link_to "Redigera", edit_occasion_path(occasion) %>
+                      <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+                    <% end -%>
+                  </td>
+                </tr>
+              <% end -%>
+            </tbody>
+
+          </table>
+        </div>
+      <% end -%>
+
+    </div>
 
   </div>
 
 </div>
 
+<div id="kp-sec-content">
+  <%= render :partial => "culture_providers/info_box", :locals => { :culture_provider => @event.culture_provider } -%>
+</div>

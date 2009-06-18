@@ -1,11 +1,19 @@
+<%
+hide_culture_provider ||= false
+category_groups ||= []
+-%>
+
 <table class="calendar-list">
   <thead>
     <tr>
       <th>Tid</th>
-      <th>Aktivitet</th>
-      <th>Arrangör</th>
+      <th>Evenemang</th>
 
-      <% @category_groups.each do |category_group| -%>
+      <% unless hide_culture_provider -%>
+        <th>Arrangör</th>
+      <% end %>
+
+      <% category_groups.each do |category_group| -%>
         <th><%= h category_group.name %></th>
       <% end -%>
 
@@ -20,16 +28,19 @@
 
       <% if prev_date < occasion.date %>
         <tr class="date-row <%= cycle('', 'alt')  %>">
-          <th colspan="<%= 4 + @category_groups.size %>"><%= occasion.date %></th>
+          <th colspan="<%= 4 + category_groups.size %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 
       <tr class="<%= cycle('', 'alt')  %>">
         <td class="time"><%= l occasion.start_time, :format => :only_time %></td>
         <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
-        <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name) %></td>
 
-        <% @category_groups.each do |category_group| -%>
+        <% unless hide_culture_provider -%>
+          <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name) %></td>
+        <% end -%>
+
+        <% category_groups.each do |category_group| -%>
           <td class="categories">
             <%= h(occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")) %>
           </td>
