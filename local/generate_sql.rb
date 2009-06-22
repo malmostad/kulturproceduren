@@ -14,8 +14,6 @@ tables = [
   "questionaires_questions",
   "BOOKING_REQUIREMENTS",
   "CULTURE_PROVIDERS_USERS",
-  "EVENTS_TAGS",
-  "TAGS",
   "ROLES_USERS",
   "ROLES",
   "TICKETS",
