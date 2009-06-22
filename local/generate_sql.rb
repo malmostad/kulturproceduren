@@ -433,13 +433,13 @@ cpuids.each do |uid|
 end
 dbh.do "DISCARD ALL"
 
-sth = dbh.prepare "SELECT ID FROM TAGS"
-sth.execute
-tids = sth.fetch_all
+#sth = dbh.prepare "SELECT ID FROM TAGS"
+#sth.execute
+#tids = sth.fetch_all
 
-sth = dbh.prepare "SELECT ID FROM EVENTS"
-sth.execute
-eids = sth.fetch_all
+#sth = dbh.prepare "SELECT ID FROM EVENTS"
+#sth.execute
+#eids = sth.fetch_all
 
 n=0
 #tids.each do  |tid|
