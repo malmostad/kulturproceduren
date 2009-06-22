@@ -371,7 +371,7 @@ roles.each do |r|
 end
 dbh.do "DISCARD ALL"
 
-# 17 - Tags
+# 17 - 
 
 tags = [
   "Barnteater",
@@ -383,11 +383,11 @@ tags = [
   "Film"
 ]
 
-tags.each do |t|
-  puts "INSERT INTO TAGS (tag,created_at,updated_at) VALUES ('#{t}',NOW(),NOW())"
-  dbh.do "INSERT INTO TAGS (tag,created_at,updated_at) VALUES ('#{t}',NOW(),NOW())"
-end
-dbh.do "DISCARD ALL"
+#tags.each do |t|
+#  puts "INSERT INTO TAGS (tag,created_at,updated_at) VALUES ('#{t}',NOW(),NOW())"
+#  dbh.do "INSERT INTO TAGS (tag,created_at,updated_at) VALUES ('#{t}',NOW(),NOW())"
+#end
+#dbh.do "DISCARD ALL"
 
 # habtm_join_tables
 
@@ -442,10 +442,10 @@ sth.execute
 eids = sth.fetch_all
 
 n=0
-tids.each do  |tid|
-  eid = eids[ n % eids.length ]
-  puts "INSERT INTO EVENTS_TAGS ( event_id,tag_id) VALUES ( #{eid} , #{tid} )"
-  dbh.do "INSERT INTO EVENTS_TAGS ( event_id,tag_id) VALUES ( #{eid} , #{tid} )"
-  n = n+1
-end
-dbh.do "DISCARD ALL"
+#tids.each do  |tid|
+#  eid = eids[ n % eids.length ]
+#  puts "INSERT INTO EVENTS_TAGS ( event_id,tag_id) VALUES ( #{eid} , #{tid} )"
+#  dbh.do "INSERT INTO EVENTS_TAGS ( event_id,tag_id) VALUES ( #{eid} , #{tid} )"
+#  n = n+1
+#end
+#dbh.do "DISCARD ALL"
