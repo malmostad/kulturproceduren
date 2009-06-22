@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.date     "visible_to"
     t.integer  "from_age"
     t.integer  "to_age"
+    t.boolean  "further_education",   :default => false
     t.date     "ticket_release_date"
     t.integer  "ticket_state"
     t.string   "url"

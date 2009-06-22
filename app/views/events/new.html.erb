@@ -36,6 +36,12 @@
       <dd>
         <%= f.select :to_age, (0..19).to_a %>
       </dd>
+      <dt>
+        <%= f.label :further_education %>
+      </dt>
+      <dd>
+        <%= f.check_box :further_education %>
+      </dd>
       <% unless is_edit && @event.visible_from <= Date.today %>
         <dt>
           <%= f.label :visible_from %>

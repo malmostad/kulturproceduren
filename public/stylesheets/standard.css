@@ -271,6 +271,38 @@ body {
 #kp .calendar-month-nav th.prev { text-align: left; }
 #kp .calendar-month-nav th.next { text-align: right; }
 
+#kp .calendar-filter {
+    border: 1px solid #d3d7cf;
+    border-top: 0;
+    padding: 1em;
+}
+#kp .calendar-filter #kp-calendar-filter-free-text-label { display: block; font-size: 1.2em; font-weight: bold; }
+#kp .calendar-filter .show-advanced-action,
+#kp .calendar-filter .hide-advanced-action { display: block; padding-top: 1em; clear: both; }
+#kp .calendar-filter .advanced { margin-top: 2em; }
+
+#kp .calendar-filter .advanced .target-cnt,
+#kp .calendar-filter .advanced .date-cnt,
+#kp .calendar-filter .advanced .category-cnt {
+    float: left;
+}
+#kp .calendar-filter .advanced .date-cnt {
+    border: 1px solid #d3d7cf;
+    border-width: 0 1px;
+    margin: 0 1em;
+    padding: 0 1em;
+}
+#kp .calendar-filter .advanced ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#kp .calendar-filter .advanced h4 { margin: 0 0 0.3em 0; }
+#kp .calendar-filter .advanced .category-cnt label { font-weight: bold; font-size: 1.2em; }
+#kp .calendar-filter .advanced .category-cnt dt,
+#kp .calendar-filter .advanced .category-cnt dd { padding: 0; margin: 0; }
+#kp .calendar-filter .advanced .category-cnt dd { padding-bottom: 1em; }
+
 /*** Occasions ***/
 
 #kp .occasions-event {padding: 0.5em;}

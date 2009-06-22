@@ -1,3 +1,5 @@
-<%= render :partial => "menu" %>
+<%= render :partial => "filter", :locals => { :category_groups => @category_groups } %>
 
 <%= render :partial => "list", :locals => { :occasions => @occasions, :category_groups => @category_groups } %>
+
+<%= will_paginate @occasions %>

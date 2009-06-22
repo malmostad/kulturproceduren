@@ -14,7 +14,7 @@
             </li>
           <% end -%>
         </ul>
-      
+
         <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
           <ul class="tools">
             <li><%= link_to "Ladda upp ny bild", new_ev_img_path(:event_id => @event.id) -%></li>
@@ -94,6 +94,12 @@
             <th>För åldrar</th>
             <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
           </tr>
+          <% if @event.further_education -%>
+            <tr class="further-education">
+              <th>Fortbildning pedagoger/vuxna</th>
+              <td>Ja</td>
+            </tr>
+          <% end -%>
 
           <% @category_groups.each do |category_group| -%>
             <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>

@@ -75,9 +75,9 @@
 
     $(document).ready(function(){
         if ($("#kp-qtype_questionmchoice").attr("checked"))
-          $("#kp-query-mchoice-csv").show();
+            $("#kp-query-mchoice-csv").show();
         else
-          $("#kp-query-mchoice-csv").hide();
+            $("#kp-query-mchoice-csv").hide();
     });
 
     //Drop-down
@@ -97,10 +97,8 @@
 
     // Date selectors
     $(function() {
-        var today = new Date();
-        $("#kp .date-input-field").datepicker({ 
+        $.datepicker.setDefaults({
             dateFormat: "yy-mm-dd",
-            minDate: new Date(),
             firstDay: 1,
             dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
             dayNamesMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
@@ -109,19 +107,19 @@
             monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
         });
 
+        var today = new Date();
+        $("#kp .date-input-field").datepicker({ 
+            minDate: new Date()
+        });
+
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         
         $("#kp #kp-allotment-release_date").datepicker({
-            dateFormat: "yy-mm-dd",
-            minDate: tomorrow,
-            firstDay: 1,
-            dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
-            dayNamesMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
-            dayNamesShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
-            monthNames: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
-            monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+            minDate: tomorrow
         });
+
+        $("#kp #kp-calendar-filter-from-date, #kp #kp-calendar-filter-to-date").datepicker();
     });
 
     $(function() {
@@ -139,6 +137,21 @@
 
         $("#kp fieldset.collapsible legend").click(function() {
             $(this).parent().toggleClass("collapsed");
+        });
+    });
+
+    $(function() {
+        $("#kp .calendar-filter .show-advanced-action").click(function () {
+            $(this).hide();
+            $("#kp .calendar-filter .advanced").show();
+            $("#kp #kp-calendar-filter-show-advanced").val(1);
+            return false;
+        });
+        $("#kp .calendar-filter .hide-advanced-action").click(function () {
+            $("#kp .calendar-filter .advanced").hide();
+            $("#kp .calendar-filter .show-advanced-action").show();
+            $("#kp #kp-calendar-filter-show-advanced").val(0);
+            return false;
         });
     });
    
