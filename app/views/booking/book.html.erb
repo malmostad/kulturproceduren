@@ -70,22 +70,22 @@
           <% else %>
 
             <%  if @curgroup.nil? %>
-              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
+              <select id="kp-group_id" name="group_id" <%=  @edit.blank? ? "" : "disabled=\"true\"" -%>"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
             <% else %>
-              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id%>
+              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id  %>
               <% end %>
             </select>
 
           <% end %>
 
           <noscript>
-            <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" %>
+            <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" && @curgroup.blank? %>
               <input name="commit" type="submit" value="Välj grupp" /><br/>
             <% end %>
           </noscript>
         </div>
       </dd>
-
+      <% puts "book.html : @edit = #{@edit}" %>
       <div id="kp-input-area">
         <% if params[:commit] == "Välj grupp" %>
           <%= render :partial => "input_area" ,
@@ -96,7 +96,8 @@
             :nticks => @nticks ,
             :naticks => @naticks ,
             :nwticks => @nwticks ,
-            :br => @br
+            :br => @br ,
+            :edit => @edit
           }
         %>
         <% end %>

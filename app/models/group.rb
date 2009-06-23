@@ -74,26 +74,32 @@ class Group < ActiveRecord::Base
     if o.is_a? Integer
       o = Occasion.find(o) or return nil
     end
-    
+    puts "Finding tickets"
+    puts "Occasion ="
+    pp o
+    retval = []
     case o.event.ticket_state
     when Event::ALLOTED_GROUP then
-      Ticket.find( :all , :conditions => {
+      retval = Ticket.find( :all , :conditions => {
           :event_id => o.event.id,
           :group_id => self.id,
           :state => Ticket::UNBOOKED
         } , :lock => lock )
     when Event::ALLOTED_DISTRICT then
-      Ticket.find( :all , :conditions => {
+      retval = Ticket.find( :all , :conditions => {
           :event_id => o.event.id,
           :district_id => self.school.district.id,
           :state => Ticket::UNBOOKED
         } , :lock => true )
     when Event::FREE_FOR_ALL then
-      Ticket.find( :all , :conditions => {
+      retval = Ticket.find( :all , :conditions => {
           :event_id => o.event.id,
           :state => Ticket::UNBOOKED
         } , :lock => lock )
     end
+    puts "retval = "
+    pp retval
+    return retval
   end
 
 end

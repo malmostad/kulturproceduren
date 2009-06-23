@@ -5,7 +5,7 @@ require "dbi"
 require 'digest/sha1'
 
 
-dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5432", 'kp-dev', 'kp-dev')
+dbh = DBI.connect("dbi:Pg:database=kp-dev;host=localhost;port=5433", 'niklas', '')
 
 
 # 0 - Empty db

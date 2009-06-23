@@ -76,5 +76,10 @@ class Occasion < ActiveRecord::Base
       :include => { :event => :culture_provider }
     )
   end
+
+  def available_wheelchair_seats
+    return self.wheelchair_seats - Ticket.count( :all , :conditions => { :occasion_id => self.id , :wheelchair => true , :state => Ticket::BOOKED})
+ 
+  end
  
 end
