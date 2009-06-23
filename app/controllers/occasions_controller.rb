@@ -15,14 +15,14 @@ class OccasionsController < ApplicationController
       return
     end
     
-    @groups = Group.find(
+    @groups = Group.paginate(
       Ticket.find(
         :all ,
         :select => "distinct group_id" ,
         :conditions => {
-          :occasion_id => 1 ,
+          :occasion_id => @occasion.id ,
           :state => Ticket::BOOKED
-        } ).map { |t| t.group_id} )
+        } ).map { |t| t.group_id} ,  :page => params[:page], :order => 'updated_at DESC' )
 
     @brs = BookingRequirement.find_all_by_group_id(
       @groups.map {|g| g.id} ,
@@ -30,6 +30,8 @@ class OccasionsController < ApplicationController
     )
 
     @ntickets = @groups.map { |g| g.ntickets_by_occasion(@occasion,Ticket::BOOKED) }
+
+    pp @groups
 
     render "attlist"
 
@@ -49,7 +51,7 @@ def attlist_pdf
         :all ,
         :select => "distinct group_id" ,
         :conditions => {
-          :occasion_id => 1 ,
+          :occasion_id => @occasion.id ,
           :state => Ticket::BOOKED
         } ).map { |t| t.group_id} )
 

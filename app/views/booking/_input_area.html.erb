@@ -1,4 +1,11 @@
 <%
+
+companion ||= nil
+nticks ||= nil
+naticks ||= nil
+nwticks ||= nil
+br ||= nil
+
 if !group.nil?
   if group.age_groups.num_children_by_age_span(occasion.event.from_age , occasion.event.to_age) == 0 %>
     <p class="booking-warn-age">
@@ -16,11 +23,16 @@ if !group.nil?
       <legend>Antal platser</legend>
       <dl class="booking-seats form-elements">
         <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
-        <dd><%= text_field_tag "seats_students" ,"", {:class => "seats" , :autocomplete => "off"  } %></dd>
+        <dd><%= text_field_tag "seats_students" , nticks.blank? || nticks == 0 ? "" : nticks , {:class => "seats" , :autocomplete => "off"  } %></dd>
         <dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
-        <dd><%= text_field_tag "seats_adult"  ,"", { :class => "seats" , :autocomplete => "off"  } %></dd>
+        <dd><%= text_field_tag "seats_adult"  ,naticks.blank? || naticks == 0 ? "" : naticks, { :class => "seats" , :autocomplete => "off"  } %></dd>
         <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
-        <dd><%= text_field_tag "seats_wheelchair"  ,"", {:class => "seats" , :autocomplete => "off"  }  %> <%= @occasion.wheelchair_seats - Ticket.count(:all , :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%> platser tillgängligt på den här föreställningen.</dd>
+        <dd><%= text_field_tag "seats_wheelchair"  , nwticks.blank? || nwticks == 0 ? "" : nwticks, {:class => "seats" , :autocomplete => "off"  }  -%>
+            <%= nwticks.blank? || nwticks == 0 ? "" : "Ytterligare" -%>
+            <%= @occasion.wheelchair_seats - Ticket.count(
+                  :all ,
+                  :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%>
+             platser tillgängligt på den här föreställningen.</dd>
       </dl>
 
       <p id="kp-booking-count" class="booking-count"></p>
@@ -30,12 +42,12 @@ if !group.nil?
       <legend>Medföljande vuxen</legend>
 
       <dl class="form-elements">
-        <dt><%= label_tag "companion_name" , "Namn" %></dt>
-        <dd><%= text_field_tag "companion_name" %></dd>
+        <dt><%= label_tag "companion_name" , "Namn"  %></dt>
+        <dd><%= text_field_tag "companion_name" , companion.blank? || companion.name.blank? ? "" : companion.name %></dd>
         <dt><%= label_tag "companion_email" , "E-mail address" %></dt>
-        <dd><%= text_field_tag "companion_email"  %></dd>
+        <dd><%= text_field_tag "companion_email"  , companion.blank? || companion.email.blank? ? "" : companion.email %></dd>
         <dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
-        <dd><%= text_field_tag "companion_telnr" %></dd>
+        <dd><%= text_field_tag "companion_telnr" , companion.blank? || companion.tel_nr.blank? ? "" : companion.tel_nr %></dd>
       </dl>
     </fieldset>
 
@@ -43,7 +55,7 @@ if !group.nil?
       <legend>Speciella krav / Extra information ang. bokning</legend>
       <dl class="form-elements">
         <dt><%= label_tag "Extra behov" %></dt>
-        <dd><%= text_area_tag "booking_request" %></dd>
+        <dd><%= text_area_tag "booking_request" , br.blank? || br.requirement.blank? ? "" : br.requirement %></dd>
       </dl>
     </fieldset>
 

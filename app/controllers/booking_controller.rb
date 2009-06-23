@@ -6,10 +6,72 @@ class BookingController < ApplicationController
   
   layout "standard"
 
+  def load_vars
+    @group = Group.find(params[:group_id])
+    @occasion = Occasion.find(params[:occasion_id])
+
+    @companion = Companion.find(
+      Ticket.find(
+        :first ,
+        :select => "distinct companion_id" ,
+        :conditions => {
+          :group_id => @group.id ,
+          :occasion_id => @occasion.id
+        }
+      ).companion_id
+    )
+    @nticks = Ticket.count(
+      :all,
+      :conditions => {
+        :group_id => @group.id,
+        :occasion_id=>@occasion.id ,
+        :state=>Ticket::BOOKED,
+        :wheelchair => false ,
+        :adult=>false
+      }
+    )
+    @naticks = Ticket.count(
+      :all,
+      :conditions => {
+        :group_id => @group.id,
+        :occasion_id=>@occasion.id ,
+        :state=>Ticket::BOOKED,
+        :wheelchair => false ,
+        :adult=>true
+      }
+    )
+    @nwticks = Ticket.count(
+      :all,
+      :conditions => {
+        :group_id => @group.id,
+        :occasion_id=>@occasion.id ,
+        :state=>Ticket::BOOKED,
+        :wheelchair => true ,
+        :adult=>false
+      }
+    )
+    @br = BookingRequirement.find(
+      :first ,
+      :conditions => {
+        :group_id => @group.id ,
+        :occasion_id => @occasion.id
+      }
+    )
+  end
+
   def get_input_area
     @group = Group.find(params[:group_id])
     @occasion = Occasion.find(params[:occasion_id])
-    render :partial => "input_area" , :locals => { :group => @group , :occasion => @occasion }
+    load_vars
+    render :partial => "input_area" , :locals => {
+      :group => @group ,
+      :occasion => @occasion ,
+      :companion => @companion ,
+      :nticks => @nticks ,
+      :naticks => @naticks ,
+      :nwticks => @nwticks ,
+      :br => @br
+    }
   end
 
   def book
@@ -29,7 +91,11 @@ class BookingController < ApplicationController
       redirect_to "/"
       return
     end
-
+    if ( not params[:group_id].blank? ) && @curgroup = Group.find(params[:group_id])
+      params[:commit] = "Välj grupp"
+      params[:district_id] = @curgroup.school.district.id
+      params[:school_id] = @curgroup.school.id
+    end
     if params[:commit] == "Hämta skolor" && !params[:district_id].nil? && params[:district_id].to_i != 0
       @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
     elsif params[:commit] == "Hämta grupper"
@@ -43,11 +109,16 @@ class BookingController < ApplicationController
       if not params[:district_id].nil? && params[:district_id].to_i != 0 && !params[:school_id].nil? && params[:school_id].to_i != 0 && !params[:group_id].nil? && params[:group_id].to_i != 0
         @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
         @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
-        @curgroup = Group.find(params[:group_id])
+        @curgroup = Group.find(params[:group_id].to_i)
+        load_vars()
       else
         bork
       end
     elsif params[:commit] == "Boka"
+      @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
+      @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+      @curgroup = Group.find(params[:group_id])
+      params[:commit] = "Välj grupp"
 
       #"commit"=>"Boka", "seats_adult"=>"1", "district_id"=>"1", "group_id"=>"1", 
       #"seats_wheelchair"=>"1", "companion_telnr"=>"+46-31-868788", 
@@ -62,15 +133,23 @@ class BookingController < ApplicationController
       
       if curgroup.ntickets_by_occasion(@occasion).to_i < ( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )
         flash[:error] = "Du har bara #{curgroup.ntickets_by_occasion(@occasion)} platser du kan boka på den här föreställningen"
-        bork
+        render :book
+        return
       elsif @occasion.wheelchair_seats < params[:seats_wheelchair].to_i
         flash[:error] = "Det finns bara #{@occasion.available_wheelchair_seats} rullstolsplatser du kan boka på den här föreställningen"
-        bork
-      elsif params[:companion_email].nil? || params[:companion_name].nil? || params[:companion_telnr].nil?
+        render :book
+        return
+      elsif params[:companion_email].blank? || params[:companion_name].blank? || params[:companion_telnr].blank?
         flash[:error] = "Du måste fylla i alla fälten för medföljande vuxen"
-        bork
+        render :book
+        return
       else
         #Do booking
+
+        if Ticket.count(:all , :conditions => { :group_id => @curgroup.id , :event_id => @occasion.event.id , :state => Ticket::BOOKED }) > 0
+          flash[:error] = "Gruppen #{@curgroup.name} #{@curgroup.school.name} har redan bookat biljetter på den här evenemanget."
+          redirect_to
+        end
 
         companion = Companion.new
         companion.tel_nr = params[:companion_telnr]
@@ -79,7 +158,8 @@ class BookingController < ApplicationController
         
         unless companion.save
           flash[:error] = "Kunde inte spara värdena för medföljande vuxen ... Försök igen?"
-          bork
+          render :book
+          return
         end
 
         chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
@@ -95,14 +175,18 @@ class BookingController < ApplicationController
         ansform.occasion = @occasion
         ansform.group = curgroup
         ansform.questionaire = @occasion.event.questionaire
-        ansform.save or bork
+        unless ansform.save
+          flash[:error] = "Kunde inte skapa utvärderingsformulär"
+        end
 
         unless params[:booking_request].blank?
           br = BookingRequirement.new
           br.occasion = @occasion
           br.group = curgroup
           br.requirement = params[:booking_request]
-          br.save or bork
+          unless br.save
+            flash[:error] = "Kunde inte spara information ang extra behov!"
+          end
         end
 
 
@@ -113,7 +197,8 @@ class BookingController < ApplicationController
             tickets = curgroup.bookable_tickets(@occasion,true)
             if tickets.length < tot_requested
               flash[:error] = "Du försöker boka fler biljetter än vad som är tilldelat för gruppen på den här föreställningen."
-              bork
+              render :book
+              return
             end
 
             ntickets = 0
@@ -139,8 +224,6 @@ class BookingController < ApplicationController
                 nwheelchair += 1
               end
 
-              pp tickets[ntickets]
-
               unless tickets[ntickets].save
                 transaction_ok = false
                 raise ActiveRecord::Rollback
@@ -156,7 +239,8 @@ class BookingController < ApplicationController
           redirect_to :controller => "booking" , :action => "show"
         else
           flash[:error] = "Kunde inte boka biljetterna ... Försök igen?"
-          bork
+          render :book
+          return
         end
       end
     elsif !params[:commit].nil?
@@ -168,14 +252,9 @@ class BookingController < ApplicationController
   end # method book
 
   def bork
-    
     flash[:notice] = "Felaktiga parametrar"
-
-    #
-    #TODO : skicka med alla not nil? parametrar i redirecten.....
-    #
-    
-    redirect_to :controller => "booking" , :action => "book" , :occasion_id => params[:occasion_id]
+    render :book
+    return
   end
 
   def show
@@ -192,7 +271,11 @@ class BookingController < ApplicationController
       return
     end
 
-    @groups = []
+    @groups = Group.find(
+      Ticket.find(:all ,
+        :select => "distinct group_id" ,
+        :conditions => {:occasion_id => @occasion.id}
+      ).map { |t| t.group_id})
 
     pp @groups
     pp params
@@ -205,13 +288,13 @@ class BookingController < ApplicationController
 
       if group.nil?
         flash[:error] = "Ingen grupp angiven"
-        redirect_to :controller => "booking", :action => "book", :occasion_id => params[:occasion_id]
+        redirect_to :controller => "booking", :action => "unbook", :occasion_id => params[:occasion_id]
         return
       end
 
-      if params[:no_tickets].nil? || params[:no_tickets].to_i < 0
+      if params[:no_tickets].blank? || params[:no_tickets].to_i < 0
         flash[:error] = "Du måte ange antal biljetter du vill avboka"
-        redirect_to :controller => "booking", :action => "book", :occasion_id => params[:occasion_id]
+        redirect_to :controller => "booking", :action => "unbook", :occasion_id => params[:occasion_id]
         return
       end
 

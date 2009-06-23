@@ -75,7 +75,7 @@
               <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id%>
               <% end %>
             </select>
-          
+
           <% end %>
 
           <noscript>
@@ -88,7 +88,17 @@
 
       <div id="kp-input-area">
         <% if params[:commit] == "Välj grupp" %>
-          <%= render :partial => "input_area" , :locals => { :group => @curgroup , :occasion => @occasion } %>
+          <%= render :partial => "input_area" ,
+            :locals => {
+            :group => @curgroup ,
+            :occasion => @occasion ,
+            :companion => @companion ,
+            :nticks => @nticks ,
+            :naticks => @naticks ,
+            :nwticks => @nwticks ,
+            :br => @br
+          }
+        %>
         <% end %>
       </div>
     </dl>

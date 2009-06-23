@@ -18,7 +18,7 @@ class Group < ActiveRecord::Base
   validates_associated      :school
 
   attr_accessor :num_children, :num_tickets
-
+  
 
   def total_children
     @total_children ||= age_groups.sum "quantity"
@@ -74,10 +74,6 @@ class Group < ActiveRecord::Base
     if o.is_a? Integer
       o = Occasion.find(o) or return nil
     end
-
-    puts "Inside mytickets"
-    puts "group = #{self.id}"
-    puts "occasion = #{o.id}"
     
     case o.event.ticket_state
     when Event::ALLOTED_GROUP then
