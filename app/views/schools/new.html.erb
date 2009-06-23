@@ -12,13 +12,18 @@
   <% end -%>
 
   <% form_for(@school) do |f| %>
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
 
     <dl class="form-elements">
       <dt><%= f.label :name %></dt>
-      <dd><%= f.text_field :name %></dd>
+      <dd>
+        <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
+      </dd>
       <dt><%= f.label :district_id %></dt>
-      <dd><%= f.collection_select :district_id, @districts, :id, :name %></dd>
+      <dd>
+        <%= f.collection_select :district_id, @districts, :id, :name %>
+        <%= f.error_message_on :district_id %>
+      </dd>
     </dl>
 
     <div class="submit-cnt">

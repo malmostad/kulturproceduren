@@ -6,7 +6,7 @@ class Image < ActiveRecord::Base
   belongs_to :event
   belongs_to :culture_provider
 
-  validates_presence_of :name
+  validates_presence_of :name, :message => "Namnet får inte vara tomt"
 
   after_destroy :cleanup
 

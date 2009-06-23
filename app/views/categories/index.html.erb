@@ -1,23 +1,37 @@
 <%= render :partial => "menu" -%>
 
-<% form_for @category do |f| -%>
-  <fieldset>
-    <legend>Lägg till kategori</legend>
+<% unless @category_groups.empty? %>
 
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+  <% form_for @category do |f| -%>
+    <fieldset>
+      <legend>Lägg till kategori</legend>
 
-    <dl class="form-elements">
-      <dt><%= f.label :category_group_id %></dt>
-      <dt><%= f.collection_select :category_group_id, @category_groups, :id, :name %></dt>
-      <dt><%= f.label :name %></dt>
-      <dd><%= f.text_field :name %></dd>
-    </dl>
+      <dl class="form-elements">
+        <dt><%= f.label :category_group_id %></dt>
+        <dt><%= f.collection_select :category_group_id, @category_groups, :id, :name %></dt>
 
-    <div class="submit-cnt">
-      <%= f.submit "Ok" %>
-    </div>
+        <dt><%= f.label :name %></dt>
+        <dd>
+          <%= f.text_field :name %>
+          <%= f.error_message_on :name %>
+        </dd>
+      </dl>
 
-  </fieldset>
+      <div class="submit-cnt">
+        <%= f.submit "Ok" %>
+      </div>
+
+    </fieldset>
+  <% end -%>
+
+<% else -%>
+
+  <p>
+    Du kan inte lägga till kategorier innan det finns minst en kategorigrupp.
+    <%= link_to "Klicka här", :controller => "category_groups" %> för att lägga
+    till kategorigrupper.
+  </p>
+
 <% end -%>
 
 <table>

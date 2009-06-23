@@ -153,7 +153,9 @@ def attlist_pdf
       flash[:notice] = 'Föreställningen skapades.'
       redirect_to(@occasion.event)
     else
+      flash.now[:error] = 'Fel uppstod när föreställningen skulle skapas.'
       @event = @occasion.event
+      @category_groups = CategoryGroup.all :order => "name ASC"
       render :template => "events/show"
     end
   end
@@ -171,7 +173,9 @@ def attlist_pdf
       flash[:notice] = 'Föreställningen uppdaterades.'
       redirect_to(@occasion.event)
     else
+      flash.now[:error] = 'Fel uppstod när föreställningen skulle uppdateras.'
       @event = @occasion.event
+      @category_groups = CategoryGroup.all :order => "name ASC"
       render :template => "events/show"
     end
   end
@@ -185,6 +189,7 @@ def attlist_pdf
       flash[:error] = "Du har inte behörighet att komma åt sidan."
     end
 
+    flash[:notice] = 'Föreställningen togs bort.'
     redirect_to(@occasion.event)
   end
 end

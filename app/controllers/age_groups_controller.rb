@@ -17,6 +17,7 @@ class AgeGroupsController < ApplicationController
       flash[:notice] = 'Åldersgruppen skapades.'
       redirect_to(@age_group.group)
     else
+      flash.now[:error] = 'Fel uppstod när åldersgruppen skulle skapas.'
       @group = @age_group.group
       render :template => "groups/show"
     end
@@ -29,6 +30,7 @@ class AgeGroupsController < ApplicationController
       flash[:notice] = 'Åldersgruppen uppdaterades.'
       redirect_to(@age_group.group)
     else
+      flash.now[:error] = 'Fel uppstod när åldersgruppen skulle uppdateras.'
       @group = @age_group.group
       render :template => "groups/show"
     end

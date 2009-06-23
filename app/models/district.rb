@@ -16,8 +16,7 @@ class District < ActiveRecord::Base
   has_and_belongs_to_many :users  #Role Culture Coordinator
   has_many    :school_prios
 
-  validates_presence_of :name
-  validates_associated  :schools, :tickets
+  validates_presence_of :name, :message => "Namnet får inte vara tomt."
 
   attr_accessor :num_children, :num_tickets, :distribution_schools
 end

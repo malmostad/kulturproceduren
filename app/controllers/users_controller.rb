@@ -57,13 +57,14 @@ class UsersController < ApplicationController
 
     if @user.save
       if user_online? && current_user.has_role?(:admin)
-        flash[:notice] = 'Användaren skapades. Den kan nu logga användarnamn och lösenord.'
+        flash[:notice] = 'Användaren skapades. Den kan nu logga in med användarnamn och lösenord.'
         redirect_to(@user)
       else
         flash[:notice] = 'Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.'
         redirect_to(:controller => "login")
       end
     else
+      flash.now[:error] = 'Fel uppstod när användaren skulle skapas.'
       @user.reset_password
       render :action => "new"
     end
@@ -78,6 +79,7 @@ class UsersController < ApplicationController
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
+      flash.now[:error] = 'Fel uppstod när användaren skulle uppdateras.'
       render :action => "edit"
     end
   end

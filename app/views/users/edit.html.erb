@@ -8,8 +8,6 @@
 
 <% form_for(@user) do |f| %>
 
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
   <fieldset>
     <legend>Personuppgifter</legend>
 
@@ -19,18 +17,21 @@
       </dt>
       <dd>
         <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
       </dd>
       <dt>
         <%= f.label :email %>
       </dt>
       <dd>
         <%= f.text_field :email %>
+        <%= f.error_message_on :email %>
       </dd>
       <dt>
         <%= f.label :mobil_nr %>
       </dt>
       <dd>
         <%= f.text_field :mobil_nr %>
+        <%= f.error_message_on :mobil_nr %>
       </dd>
     </dl>
   </fieldset>

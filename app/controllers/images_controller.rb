@@ -49,7 +49,7 @@ class ImagesController < ApplicationController
 
       flash[:notice] = "Bilden laddades upp."
     else
-      
+      flash.now[:error] = "Fel uppstod när bilden skulle laddas upp."
       render :action => "new"
     end
   end

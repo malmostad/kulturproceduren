@@ -26,14 +26,15 @@
 
   <% form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
 
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
     <%= f.label :age %>
     <%= f.text_field :age %>
     <%= f.label :quantity %>
     <%= f.text_field :quantity %>
     <%= f.hidden_field :group_id %>
     <%= f.submit(["edit", "update"].include?(params[:action]) ? "Uppdatera åldersgrupp" : "Lägg till åldersgrupp") %>
+
+    <%= f.error_message_on :age %>
+    <%= f.error_message_on :quantity %>
   <% end %>
 
   <table>

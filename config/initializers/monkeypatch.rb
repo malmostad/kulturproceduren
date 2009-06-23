@@ -59,6 +59,32 @@ module ActionView
         "kp-" + name.to_s.gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
       end
     end
+
+    # More graceful field errors
+    module ActiveRecordHelper
+      def error_message_on(object, method, *args)
+        options = args.extract_options!
+        unless args.empty?
+          ActiveSupport::Deprecation.warn('error_message_on takes an option hash instead of separate ' +
+              'prepend_text, append_text, and css_class arguments', caller)
+
+          options[:prepend_text] = args[0] || ''
+          options[:append_text] = args[1] || ''
+          options[:css_class] = args[2] || 'error'
+        end
+        options.reverse_merge!(:prepend_text => '', :append_text => '', :css_class => 'error')
+
+        if (obj = (object.respond_to?(:errors) ? object : instance_variable_get("@#{object}"))) &&
+            (errors = obj.errors.on(method))
+          content_tag("span",
+            "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}",
+            :class => options[:css_class]
+          )
+        else
+          ''
+        end
+      end
+    end
   end
 end
 
@@ -82,19 +108,3 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
   end
   html_tag
 end
-
-
-require 'cgi'
-require 'action_view/helpers/tag_helper'
-
-module ActionView
-  module Helpers
-    # Provides a number of methods for creating form tags that doesn't rely on an Active Record object assigned to the template like
-    # FormHelper does. Instead, you provide the names and values manually.
-    #
-    # NOTE: The HTML options <tt>disabled</tt>, <tt>readonly</tt>, and <tt>multiple</tt> can all be treated as booleans. So specifying
-    # <tt>:disabled => true</tt> will give <tt>disabled="disabled"</tt>.
-
-  end
-end
-

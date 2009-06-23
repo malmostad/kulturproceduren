@@ -18,11 +18,10 @@
         Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
       </p>
 
-      <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
       <dl class="form-elements">
         <dt>
           <%= f.label :message %>
+          <%= f.error_message_on :message %>
         </dt>
         <dd>
           <%= f.text_area :message, :size => "40x5" %>
@@ -50,11 +49,10 @@
         Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
       </p>
 
-      <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
       <dl class="form-elements">
         <dt>
           <%= f.label :culture_provider_id %>
+          <%= f.error_message_on :culture_provider_id %>
         </dt>
         <dd>
           <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
@@ -63,6 +61,7 @@
         </dd>
         <dt>
           <%= f.label :message %>
+          <%= f.error_message_on :message %>
         </dt>
         <dd>
           <%= f.text_area :message, :size => "40x5" %>

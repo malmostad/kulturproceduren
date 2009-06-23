@@ -29,6 +29,7 @@ class DistrictsController < ApplicationController
       flash[:notice] = 'Stadsdelen skapades.'
       redirect_to(@district)
     else
+      flash.now[:error] = 'Fel uppstod när stadsdelen skulle skapas.'
       render :action => "new"
     end
   end
@@ -40,6 +41,7 @@ class DistrictsController < ApplicationController
       flash[:notice] = 'Stadsdelen uppdaterades.'
       redirect_to(@district)
     else
+      flash.now[:error] = 'Fel uppstod när stadsdelen skulle uppdateras.'
       render :action => "new"
     end
   end

@@ -6,14 +6,13 @@
   <fieldset>
     <legend><%= is_edit ? "Redigera" : "Lägg till" %> arrangör</legend>
     
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
     <dl class="form-elements">
       <dt>
         <%= f.label :name %>
       </dt>
       <dd>
         <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
       </dd>
       <dt>
         <%= f.label :description %>

@@ -14,7 +14,7 @@ class Group < ActiveRecord::Base
   has_many                  :booking_requirements
   belongs_to                :school
   
-  validates_presence_of     :name
+  validates_presence_of     :name, :message => "Namnet får inte vara tomt"
   validates_associated      :school
 
   attr_accessor :num_children, :num_tickets

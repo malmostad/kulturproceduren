@@ -43,6 +43,7 @@ class GroupsController < ApplicationController
       flash[:notice] = 'Gruppen skapades.'
       redirect_to(@group)
     else
+      flash.now[:error] = 'Fel uppstod när gruppen skulle skapas.'
       @schools = School.all :order => "name ASC"
       render :action => "new"
     end
@@ -52,9 +53,10 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
 
     if @group.update_attributes(params[:group])
-      flash[:notice] = 'Group was successfully updated.'
+      flash[:notice] = 'Gruppen uppdaterades.'
       redirect_to(@group)
     else
+      flash.now[:error] = 'Fel uppstod när gruppen skulle uppdateras.'
       @schools = School.all :order => "name ASC"
       render :action => "new"
     end
@@ -65,7 +67,7 @@ class GroupsController < ApplicationController
     school = @group.school
     @group.destroy
 
-    flash[:notice] = "Skolan togs bort."
+    flash[:notice] = "Gruppen togs bort."
     redirect_to(school)
   end
 

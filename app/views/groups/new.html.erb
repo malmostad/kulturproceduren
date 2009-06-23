@@ -15,11 +15,12 @@
 
   <% form_for(@group) do |f| %>
 
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
     <dl class="form-elements">
       <dt><%= f.label :name %></dt>
-      <dd><%= f.text_field :name %></dd>
+      <dd>
+        <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
+      </dd>
       <dt><%= f.label :school_id %></dt>
       <dd><%= f.collection_select :school_id, @schools, :id, :name %></dd>
     </dl>

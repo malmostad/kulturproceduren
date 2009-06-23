@@ -11,9 +11,13 @@ class User < ActiveRecord::Base
   has_many :occasions , :through => :tickets , :uniq => true
   has_many :notification_requests
   
-  validates_presence_of :username, :password, :name, :email, :mobil_nr
-  validates_uniqueness_of :username
-  validates_confirmation_of :password
+  validates_presence_of :username, :message => "Användarnamnet får inte vara tomt"
+  validates_presence_of :password, :message => "Lösenordet får inte vara tomt"
+  validates_presence_of :name, :message => "Namnet får inte vara tomt"
+  validates_presence_of :email, :message => "Epostadressen får inte vara tom"
+  validates_presence_of :mobil_nr, :message => "Mobilnumret får inte vara tomt"
+  validates_uniqueness_of :username, :message => "Användarnamnet är redan taget"
+  validates_confirmation_of :password, :message => "Lösenordsbekräftelsen matchar inte lösenordet"
 
   attr_protected :id, :salt
 

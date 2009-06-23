@@ -7,8 +7,6 @@
   <fieldset>
     <legend><%= is_edit ? "Redigera" : "Skapa" %> evenemang</legend>
 
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
     <dl class="form-elements">
       <% unless is_edit -%>
         <dt>
@@ -23,18 +21,21 @@
       </dt>
       <dd>
         <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
       </dd>
       <dt>
         <%= f.label :from_age %>
       </dt>
       <dd>
         <%= f.select :from_age, (0..19).to_a %>
+        <%= f.error_message_on :from_age %>
       </dd>
       <dt>
         <%= f.label :to_age %>
       </dt>
       <dd>
         <%= f.select :to_age, (0..19).to_a %>
+        <%= f.error_message_on :to_age %>
       </dd>
       <dt>
         <%= f.label :further_education %>
@@ -58,6 +59,7 @@
       </dd>
       <dt class="textarea-label-cnt">
         <%= f.label :description %>
+        <%= f.error_message_on :description %>
       </dt>
       <dd class="textarea-cnt">
         <%= f.text_area :description %>

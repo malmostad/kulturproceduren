@@ -101,6 +101,7 @@ class EventsController < ApplicationController
       flash[:notice] = 'Evenemanget skapades.'
       redirect_to(@event)
     else
+      flash.now[:error] = 'Fel uppstod när evenemanget skulle skapas.'
       @category_groups = CategoryGroup.all :order => "name ASC"
       render :action => "new"
     end
@@ -129,6 +130,7 @@ class EventsController < ApplicationController
       flash[:notice] = 'Evenemanget uppdaterades.'
       redirect_to(@event)
     else
+      flash.now[:error] = 'Fel uppstod när evenemanget skulle uppdateras.'
       @category_groups = CategoryGroup.all :order => "name ASC"
       render :action => "new"
     end

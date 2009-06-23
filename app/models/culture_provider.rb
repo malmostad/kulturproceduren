@@ -12,7 +12,7 @@ class CultureProvider < ActiveRecord::Base
     :conditions => "current_date between events.visible_from and events.visible_to and occasions.date >= current_date",
     :order => "occasions.date ASC"
 
-  validates_presence_of :name
+  validates_presence_of :name, :message => "Namnet får inte vara tomt."
 
   default_scope :order => 'name ASC'
 end

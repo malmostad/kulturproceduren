@@ -5,7 +5,6 @@
 
   <fieldset>
 
-    <%= f.hidden_field :type -%>
 
     <% if @image.culture_provider -%>
       <legend>Ladda upp <%= params[:type] == :main ? "logotyp" : "bild" %> för <%= link_to h(@image.culture_provider.name), @image.culture_provider %></legend>
@@ -17,19 +16,21 @@
       <%= f.hidden_field :event_id -%>
     <% end -%>
 
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
     <dl class="form-elements">
 
       <dt><%= f.label :name %></dt>
-      <dd><%= f.text_field :name %></dd>
+      <dd>
+        <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
+      </dd>
 
-      <dt><label for="kp-uplad-datafile">Bild</label></dt>
+      <dt><label for="kp-upload-datafile">Bild</label></dt>
       <dd><%= file_field 'upload' , 'datafile'  %></dd>
 
     </dl>
 
     <div class="submit-cnt">
+      <%= f.hidden_field :type -%>
       <%= f.submit 'Ladda upp' %>
     </div>
 

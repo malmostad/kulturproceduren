@@ -11,7 +11,8 @@ class School < ActiveRecord::Base
   belongs_to :district
   has_one :school_prio, :dependent => :destroy
 
-  validates_presence_of  :name, :district_id
+  validates_presence_of  :name, :message => "Namnet får inte vara tomt"
+  validates_presence_of  :district_id, :message => "Skolan måste tillhöra en stadsdel"
 
   attr_accessor :num_children, :num_tickets, :distribution_groups
 

@@ -7,8 +7,10 @@ class Occasion < ActiveRecord::Base
   has_many :groups, :through => :tickets , :uniq => true
   belongs_to :answer
 
-  validates_presence_of   :date, :seats, :address
-  validates_numericality_of :seats, :only_integer => true
+  validates_presence_of :date, :message => "Datumet får inte vara tom"
+  validates_presence_of :address, :message => "Adressen får inte vara tom"
+  
+  validates_numericality_of :seats, :only_integer => true, :message => "Antalet platser måste vara ett giltigt heltal"
 
 
   def self.search(filter, page)

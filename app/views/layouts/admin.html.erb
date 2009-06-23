@@ -28,7 +28,7 @@
         <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
           <%= link_to "Behörighetsansökningar", role_applications_path -%>
         </li>
-        <li class="pri-nav-role-categories <%= active_by_controller "categories" %>">
+        <li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
           <%= link_to "Kategorier", categories_path -%>
         </li>
         <li class="pri-nav-districts <%= active_by_controller "districts" %>">

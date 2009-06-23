@@ -13,11 +13,12 @@
 
   <% form_for(@district) do |f| %>
 
-    <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
     <dl class="form-elements">
       <dt><%= f.label :name %></dt>
-      <dd><%= f.text_field :name %></dd>
+      <dd>
+        <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
+      </dd>
     </dl>
 
     <div class="submit-cnt">

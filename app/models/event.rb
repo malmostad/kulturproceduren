@@ -20,8 +20,9 @@ class Event < ActiveRecord::Base
   
   has_many :notification_requests
   
-  validates_presence_of :name, :from_age, :to_age, :description
-  validates_numericality_of :from_age, :to_age, :only_integer => true
+  validates_presence_of :name, :message => "Namnet får inte vara tomt"
+  validates_presence_of :description, :message => "Beskrivningen får inte vara tom"
+  validates_numericality_of :from_age, :to_age, :only_integer => true, :message => "Åldern måste vara ett giltigt heltal."
 
   # Ticket states
   CREATED          = 0

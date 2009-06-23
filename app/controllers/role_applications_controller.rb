@@ -35,6 +35,7 @@ class RoleApplicationsController < ApplicationController
   
   def edit
     @application = RoleApplication.find params[:id]
+    render :layout => "admin"
   end
 
   def create
@@ -59,6 +60,7 @@ class RoleApplicationsController < ApplicationController
         @culture_worker_appl_error = true
       end
 
+      flash.now[:error] = "Fel uppstod när ansökan skulle skickas."
       render :action => "index"
     end
   end
@@ -88,7 +90,8 @@ class RoleApplicationsController < ApplicationController
       flash[:notice] = 'Ansökan besvarades.'
       redirect_to :action => "index"
     else
-      render :action => "edit"
+      flash.now[:error] = "Fel uppstod när ansökan skulle besvaras."
+      render :action => "edit", :layout => "admin"
     end
   end
   
