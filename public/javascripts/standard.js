@@ -135,7 +135,14 @@
     });
 
     $(function() {
-        $("#kp .model-cnt .images-cnt .images").cycle("fade");
+        $("#kp .model-cnt .images-cnt .images").cycle("fade")
+        $("<a href=\"#\" class=\"play-pause-action playing\">Spela/Pausa</a>").appendTo("#kp .model-cnt .images-cnt").toggle(
+            function() {
+                $(this).removeClass("playing").addClass("paused").siblings(".images").cycle("pause");
+            },
+            function() {
+                $(this).removeClass("paused").addClass("playing").siblings(".images").cycle("resume", true);
+            });
 
         $("#kp fieldset.collapsible legend").click(function() {
             $(this).parent().toggleClass("collapsed");

@@ -224,10 +224,21 @@ body {
     padding: 3px;
     margin: 0 0 1em 0;
     list-style-type: none;
+    position: relative;
 }
 #kp .model-cnt .images-cnt .tools { margin: 0; padding: 3px 0 0 0; }
-#kp .model-cnt .images { list-style-type: none; margin: 0; padding: 0; }
-#kp .model-cnt .images img { display: block; }
+#kp .model-cnt .images-cnt .images img { display: block; }
+#kp .model-cnt .images-cnt .play-pause-action {
+    position: absolute;
+    display: block;
+    bottom: 1em;
+    right: 1em;
+    text-indent: -1000px;
+    width: 20px;
+    height: 20px;
+}
+#kp .model-cnt .images-cnt .play-pause-action { background: url(../images/icon_pause.png) no-repeat; }
+#kp .model-cnt .images-cnt .paused { background: url(../images/icon_play.png) no-repeat; }
 
 #kp .model-title .meta { font-size: 0.6em; color: #babdb6; font-weight: normal; }
 
