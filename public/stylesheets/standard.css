@@ -154,6 +154,13 @@ body {
 #kp .pri-nav a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
 #kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
 
+#kp .pri-nav li.pri-nav-logout {
+    background: transparent;
+    border: 0;
+    font-size: 1em;
+    font-weight: normal;
+}
+
 /*** Section subcontent ***/
 
 #kp .section-nav, #kp .section-info {
