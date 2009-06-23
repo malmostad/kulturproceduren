@@ -1,5 +1,5 @@
-<% content_for :sec_nav do -%>
-  <ul class="sec-nav">
+<% content_for :section_sub do -%>
+  <ul class="section-nav">
     <li class="<%= active_by_action "groups", "index" %>"><%= link_to 'Lista', groups_path %></li>
     <li class="<%= active_by_action "groups", "new" %>"><%= link_to 'Ny grupp', new_group_path %></li>
   </ul>

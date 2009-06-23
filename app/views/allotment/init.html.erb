@@ -22,7 +22,13 @@
 
     <dl class="form-elements">
       <dt><label for="kp-allotment-release_date">Biljettsläpp</label></dt>
-      <dd><input type="text" id="kp-allotment-release_date" name="allotment[release_date]" value="<%= h @event.ticket_release_date %>"/></dd>
+      <dd>
+        <input type="text"
+               id="kp-allotment-release_date"
+               name="allotment[release_date]"
+               class="date-field"
+               value="<%= h @event.ticket_release_date %>"/>
+      </dd>
 
       <dt><label for="kp-allotment-num_tickets">Antal <%= is_edit ? "ytterligare" : "inköpta" %> biljetter</label></dt>
       <dd><input type="text" id="kp-allotment-num_tickets" name="allotment[num_tickets]"/></dd>

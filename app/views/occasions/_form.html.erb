@@ -12,7 +12,7 @@ is_edit = ["edit", "update"].include? params[:action]
     <ul class="form-elements">
       <li class="date-cnt">
         <%= f.label :date %>
-        <%= f.text_field :date, :class => "date-input-field" %>
+        <%= f.text_field :date, :class => "date-field auto" %>
         <%= f.error_message_on :date %>
       </li>
 

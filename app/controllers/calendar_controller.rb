@@ -29,13 +29,13 @@ class CalendarController < ApplicationController
     categories = params[:filter][:categories] || []
     calendar_filter[:categories] = categories.map{ |i| i.to_i }.select { |i| i != -1 }
 
-    session[:show_advanced] = params[:show_advanced].to_i == 1 ? 1 : 0
+    session[:show_filter] = params[:show_filter].to_i == 1 ? 1 : 0
 
     redirect_to :action => "index"
   end
 
   def clear_filter
-    session[:show_advanced] = 0
+    session[:show_filter] = 0
     session[:calendar_filter] = { :from_date => Date.today }
     redirect_to :action => "index"
   end

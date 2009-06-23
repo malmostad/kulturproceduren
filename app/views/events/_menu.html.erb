@@ -1,5 +1,5 @@
-<% content_for :sec_nav do -%>
-  <ul class="sec-nav">
+<% content_for :section_sub do -%>
+  <ul class="section-nav">
     <li class="<%= active_by_action "events", "index" %>"><%= link_to 'Lista', events_path %></li>
     <% if user_online? && (current_user.has_role?(:admin) || current_user.has_role?(:culture_worker)) %>
       <li class="<%= active_by_action "events", "new" %>"><%= link_to 'Nytt evenemang', new_event_path %></li>

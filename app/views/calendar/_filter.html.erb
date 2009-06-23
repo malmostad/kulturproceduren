@@ -1,19 +1,27 @@
-<% content_for :sec_nav do -%>
+<% content_for :section_sub do -%>
 
-  <div class="calendar-filter">
-    <form action="<%= url_for :controller => "calendar", :action => "apply_filter" -%>" method="post">
-      <div class="normal">
-        <label for="kp-calendar-filter-free-text" id="kp-calendar-filter-free-text-label">Fritext:</label>
-        <input type="text" id="kp-calendar-filter-free-text" name="filter[free_text]" value="<%= h calendar_filter[:free_text] %>" />
-        <input type="submit" name="do_filter" value="Filtrera evenemang"/>
-        <%= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter" %>
+  <div class="section-info">
 
-        <a href="#" class="show-advanced-action">Detaljerad filtrering</a>
-        <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-        <input type="hidden" id="kp-calendar-filter-show-advanced" name="show_advanced" value="<%= session[:show_advanced] || 0 %>"/>
-      </div>
+    <a href="#" class="show-calendar-filter-action" <%= 'style="display: none;"' if session[:show_filter] == 1 %>>Visa filtrering</a>
 
-      <div class="advanced" <%= 'style="display: none;"' unless session[:show_advanced] == 1 %>
+    <p class="description">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
+      justo rhoncus fringilla ullamcorper, velit ante mattis sapien, sed congue
+      sapien metus nec tellus. Cras fermentum quam risus, eget ultrices nunc.
+      Mauris iaculis est at ligula volutpat tristique.
+    </p>
+
+    <div class="calendar-filter" <%= 'style="display: none;"' unless session[:show_filter] == 1 %>>
+      <form action="<%= url_for :controller => "calendar", :action => "apply_filter" -%>" method="post">
+        <div class="free-text-cnt">
+          <label for="kp-calendar-filter-free-text" id="kp-calendar-filter-free-text-label">Fritext:</label>
+          <input type="text" id="kp-calendar-filter-free-text" name="filter[free_text]" value="<%= h calendar_filter[:free_text] %>" />
+          <input type="submit" name="do_filter" value="Filtrera evenemang"/>
+          <%= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter" %>
+
+          <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+          <input type="hidden" id="kp-calendar-filter-show" name="show_filter" value="<%= session[:show_filter] || 0 %>"/>
+        </div>
 
         <div class="target-cnt">
           <h4>För vem:</h4>
@@ -28,11 +36,11 @@
 
               <select name="filter[from_age]" id="kp-calendar-filter-from-age">
                 <option value="-1">Från ålder</option>
-                <%= options_for_select((0..19).to_a, calendar_filter[:from_age]) %>
+                <%= options_for_select((0..19).to_a.map{ |i| [ "#{i} år", i ]}, calendar_filter[:from_age]) %>
               </select>
               <select name="filter[to_age]" id="kp-calendar-filter-to-age">
                 <option value="-1">Till ålder</option>
-                <%= options_for_select((0..19).to_a, calendar_filter[:to_age]) %>
+                <%= options_for_select((0..19).to_a.map{ |i| [ "#{i} år", i ]}, calendar_filter[:to_age]) %>
               </select>
             </li>
             <li>
@@ -56,6 +64,7 @@
               <input type="text"
                      name="filter[from_date]"
                      id="kp-calendar-filter-from-date"
+                     class="date-field"
                      value="<%= h calendar_filter[:from_date] %>"/>
             </li>
 
@@ -102,6 +111,7 @@
               <input type="text"
                      name="filter[to_date]"
                      id="kp-calendar-filter-to-date"
+                     class="date-field"
                      value="<%= h calendar_filter[:to_date] %>"/>
             </li>
           </ul>
@@ -126,9 +136,10 @@
           </dl>
         <% end -%>
 
-        <a href="#" class="hide-advanced-action">Förenklad filtrering</a>
-      </div>
-    </form>
+        <a href="#" class="hide-calendar-filter-action">Dölj filtrering</a>
+      </form>
+    </div>
+
   </div>
 
 <% end -%>

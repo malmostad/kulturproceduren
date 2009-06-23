@@ -100,6 +100,8 @@
         $.datepicker.setDefaults({
             dateFormat: "yy-mm-dd",
             firstDay: 1,
+            showOn: "both",
+            buttonText: "Visa kalender",
             dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
             dayNamesMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
             dayNamesShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
@@ -108,7 +110,7 @@
         });
 
         var today = new Date();
-        $("#kp .date-input-field").datepicker({ 
+        $("#kp .date-field.auto").datepicker({
             minDate: new Date()
         });
 
@@ -141,17 +143,28 @@
     });
 
     $(function() {
-        $("#kp .calendar-filter .show-advanced-action").click(function () {
+        $("#kp .show-calendar-filter-action").click(function () {
             $(this).hide();
-            $("#kp .calendar-filter .advanced").show();
-            $("#kp #kp-calendar-filter-show-advanced").val(1);
+            $("#kp .calendar-filter").show();
+            $("#kp #kp-calendar-filter-show").val(1);
             return false;
         });
-        $("#kp .calendar-filter .hide-advanced-action").click(function () {
-            $("#kp .calendar-filter .advanced").hide();
-            $("#kp .calendar-filter .show-advanced-action").show();
-            $("#kp #kp-calendar-filter-show-advanced").val(0);
+        $("#kp .calendar-filter .hide-calendar-filter-action").click(function () {
+            $("#kp .calendar-filter").hide();
+            $("#kp .show-calendar-filter-action").show();
+            $("#kp #kp-calendar-filter-show").val(0);
             return false;
+        });
+
+        $("#kp #kp-calendar-filter-further-education-true").change(function() {
+            if ($(this).is(":checked")) {
+                $("#kp #kp-calendar-filter-from-age, #kp #kp-calendar-filter-to-age").attr("disabled", "disabled");
+            }
+        });
+        $("#kp #kp-calendar-filter-further-education-false").change(function() {
+            if ($(this).is(":checked")) {
+                $("#kp #kp-calendar-filter-from-age, #kp #kp-calendar-filter-to-age").removeAttr("disabled");
+            }
         });
     });
    
