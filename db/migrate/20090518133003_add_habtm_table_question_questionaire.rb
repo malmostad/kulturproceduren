@@ -4,7 +4,7 @@ class AddHabtmTableQuestionQuestionaire < ActiveRecord::Migration
       t.references :question, :questionaire
     end
 
-    add_index :questionaires_questions, [ :questionaires_id, :question_id ], :unique => true
+    add_index :questionaires_questions, [ :questionaire_id, :question_id ], :unique => true
   end
 
   def self.down
