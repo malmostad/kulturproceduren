@@ -167,12 +167,12 @@ class BookingController < ApplicationController
         #Do booking
 
 
-        companion = Companion.new
-        companion.tel_nr = params[:companion_telnr]
-        companion.email = params[:companion_email]
-        companion.name  = params[:companion_name]
+        @companion = Companion.new
+        @companion.tel_nr = params[:companion_telnr]
+        @companion.email = params[:companion_email]
+        @companion.name  = params[:companion_name]
         
-        unless companion.save
+        unless @companion.save
           flash[:error] = "Kunde inte spara värdena för medföljande vuxen ... Försök igen?"
           render :book
           return
@@ -204,8 +204,8 @@ class BookingController < ApplicationController
             flash[:error] = "Kunde inte spara information ang extra behov!"
           end
         end
-        tot_requested = params[:seats_students] + params[:seats_adult] + params[:seats_wheelchair]
-        if book_ticks(params[:seats_students],params[:seats_adult],params[:seats_wheelchair])
+        tot_requested = params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i
+        if book_ticks(params[:seats_students].to_i,params[:seats_adult].to_i,params[:seats_wheelchair].to_i)
           flash[:notice] = "Du har bokat #{tot_requested} platser"
           redirect_to :controller => "booking" , :action => "show"
         else
@@ -218,7 +218,7 @@ class BookingController < ApplicationController
       pp params
     elsif params[:commit] == "Ändra bokning"
       puts "Ändra bokning"
-      if not check_nticks(params[:seats_students],params[:seats_adult],params[:seats_wheelchair])
+      if not check_nticks(params[:seats_students].to_i,params[:seats_adult].to_i,params[:seats_wheelchair].to_i)
         render :book
         return
       else
@@ -320,10 +320,21 @@ class BookingController < ApplicationController
 
         puts "booked_tickets = #{booked_tickets}"
         puts "tot_requested = #{tot_requested}"
-        pp tickets
 
         while booked_tickets < tot_requested
           puts "Försöker boka biljett"
+          puts "Group = "
+          pp @group
+          puts "companion = "
+          pp @companion
+          puts "user="
+          pp @user
+          puts "Occasion = "
+          pp @occasion
+          puts "now = #{DateTime.now}"
+          
+          pp tickets[booked_tickets]
+          puts "Uppdaterar"
           tickets[booked_tickets].state = Ticket::BOOKED
           tickets[booked_tickets].group = @group
           tickets[booked_tickets].companion = @companion
@@ -332,25 +343,37 @@ class BookingController < ApplicationController
           tickets[booked_tickets].wheelchair = false
           tickets[booked_tickets].adult = false
           tickets[booked_tickets].booked_when = DateTime.now
-
-          if booked_adult_tickets < nreq_aticks
+          puts "Uppdatering klar - kollar a och w"
+          pp tickets[booked_tickets]
+          puts "Snoppen"
+          puts "booked_adult_tickets=#{booked_adult_tickets}"
+          puts "nreq_aticks = #{nreq_aticks}"
+          puts "nreq_wticks = #{nreq_wticks}"
+          
+          if booked_adult_tickets.to_i < nreq_aticks.to_i
             tickets[booked_tickets].adult = true
             booked_adult_tickets += 1
-          elsif booked_wheelchair_tickets < nreq_wticks
+          elsif booked_wheelchair_tickets.to_i < nreq_wticks.to_i
             tickets[booked_tickets].wheelchair = true
             booked_wheelchair_tickets += 1
           end
+
+          puts "korv"
           puts "Försöker boka biljett 2"
+
           pp tickets[booked_tickets]
-          unless tickets[booked_tickets].save
+          retval = tickets[booked_tickets].save
+          puts "Försökte spara biljetten och det gick = #{retval}"
+          unless retval
             transaction_ok = false
             puts "Biljett-bajs ...."
             raise ActiveRecord::Rollback
           end
           booked_tickets +=1
+          puts "Klar med en blijett"
         end
       end
-    rescue Exception
+
     end
     puts "boka biljetter transaction_ok = #{transaction_ok}"
     return transaction_ok
