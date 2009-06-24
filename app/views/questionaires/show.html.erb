@@ -1,9 +1,9 @@
 <%= render :partial => "questionaires/menu" %>
 
 <div class="model-cnt">
-  <h2>Utvärderingsformulär för <%= link_to h(@questionaire.event.name) %></h2>
+  <h2>Utvärderingsformulär för <%= link_to h(@questionaire.event.name), @questionaire.event %></h2>
 
-  <ul class="tools">
+  <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_questionaire_path(@questionaire) %></li>
     <li><%= link_to "Radera", @questionaire, :confirm => "Är du säker?", :method => :delete %></li>
   </ul>
@@ -12,7 +12,7 @@
     <%= h(@questionaire.description) %>
   </p>
 
-  <fieldset class="collapsible add-question-cnt">
+  <fieldset class="add-question-cnt">
     <legend>Lägg till fråga</legend>
 
     <% unless @template_questions.empty? %>

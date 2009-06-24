@@ -31,7 +31,7 @@ body {
 #kp legend { padding: 0 1em; }
 
 #kp table {
-    margin: 1em 0;
+    margin: 0 0 1em 0;
     border-collapse: collapse;
     border-spacing: 0;
     border: 1px solid #d3d7cf;
@@ -255,6 +255,17 @@ body {
 #kp .info-box .meta th { vertical-align: top; }
 #kp .info-box .image .tools { padding: 3px; margin: 0; }
 
+/*** Admin tools ***/
+
+#kp .admin-tools { border: 1px solid #d3d7cf; padding: 0.5em; margin: 0 0 1em ; }
+#kp ul.admin-tools { list-style-type: none; border: 0; }
+#kp div.admin-tools h4 { margin: 0 0 0.5em 0; padding: 0; font-size: 1em; }
+#kp div.admin-tools ul { list-style-type: none; margin: 0; padding: 0; }
+#kp .admin-tools li { display: inline; padding-right: 0.5em; }
+#kp .admin-tools a, #kp a.admin-tool { border: 1px solid #d3d7cf; padding: 1px 0.5em; text-decoration: none; }
+#kp .admin-tools a:hover, #kp .admin-tools a:active,
+#kp a.admin-tool:hover, #kp a.admin-tool:active { background: #D9EBD2; }
+
 /*** Allotment ***/
 
 #kp #kp-allotment-init-form .allotment-district-list { list-style-type: none; margin: 0; padding: 0; }
@@ -370,6 +381,8 @@ body {
 
 /*** Questionaires ***/
 
+#kp .add-question-cnt .description { display: block; padding-bottom: 0.5em; font-weight: bold; }
+#kp .add-template-question-form { margin-bottom: 1em; }
 #kp .question-form div { padding: 3px 0.5em; }
 
 /*** User profile ***/

@@ -42,12 +42,6 @@ class EventsController < ApplicationController
     end
     render :stats
   end
-  
-  def index
-    @events = Event.visible.find :all,
-      :order => "created_at DESC",
-      :include => :culture_provider
-  end
 
   def show
     @event = Event.find(params[:id])

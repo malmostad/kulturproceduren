@@ -17,7 +17,7 @@ ActionController::Routing::Routes.draw do |map|
     questionaire.resources :questions, :except => [ :show, :new ]
   end
   map.resources :tags
-  map.resources :events
+  map.resources :events, :except => [ :index ]
   map.resources :occasions, :except => [ :index ]
   map.resources :notification_requests
   map.resources :categories, :except => [ :show, :new ]

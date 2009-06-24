@@ -1,6 +1,17 @@
 <%= render :partial => "menu" %>
 
+<% if user_online? && current_user.can_administrate?(@culture_provider) %>
+  <div class="admin-tools">
+    <h4>Administrera <%= h @culture_provider.name %></h4>
+    <ul>
+      <li><%= link_to 'Redigera', edit_culture_provider_path(@culture_provider) %></li>
+      <li><%= link_to 'Lägg till evenemang', new_event_path(:culture_provider_id => @culture_provider.id) %></li>
+    </ul>
+  </div>
+<% end -%>
+
 <div id="kp-pri-content">
+
   <div class="model-cnt">
 
     <% if !@culture_provider.images.empty? %>
@@ -13,30 +24,19 @@
         </div>
 
         <% if user_online? && current_user.can_administrate?(@culture_provider) -%>
-          <ul class="tools">
-            <li><%= link_to "Ladda upp ny bild", new_cp_img_path(:culture_provider_id => @culture_provider.id) -%></li>
-          </ul>
+          <%= link_to "Ladda upp ny bild", new_cp_img_path(:culture_provider_id => @culture_provider.id), :class => "admin-tool" -%>
         <% end -%>
       </div>
 
     <% elsif user_online? && current_user.can_administrate?(@culture_provider) -%>
 
       <div class="images-cnt">
-        <ul class="tools">
-          <li><%= link_to "Ladda upp ny bild", new_cp_img_path(:culture_provider_id => @culture_provider.id) -%></li>
-        </ul>
+        <%= link_to "Ladda upp ny bild", new_cp_img_path(:culture_provider_id => @culture_provider.id), :class => "admin-tool" -%>
       </div>
 
     <% end -%>
 
     <h2><%= h @culture_provider.name %></h2>
-
-    <% if user_online? && current_user.can_administrate?(@culture_provider) %>
-      <ul class="tools">
-        <li><%= link_to 'Redigera', edit_culture_provider_path(@culture_provider) %></li>
-        <li><%= link_to 'Lägg till arrangemang', new_event_path(:culture_provider_id => @culture_provider.id) %></li>
-      </ul>
-    <% end -%>
 
     <%= paragraphize(@culture_provider.description, 'class="description"') %>
 
@@ -47,10 +47,10 @@
           <li><a href="#kp-cp-meta-occasions">Kommande föreställningar</a></li>
         <% end -%>
         <% unless @culture_provider.standing_events.empty? -%>
-          <li><a href="#kp-cp-meta-events">Stående arrangemang</a></li>
+          <li><a href="#kp-cp-meta-events">Stående evenemang</a></li>
         <% end -%>
         <% if user_online? && current_user.can_administrate?(@culture_provider) && !@culture_provider.events.empty? -%>
-          <li><a href="#kp-cp-meta-all-events">Alla arrangemang</a></li>
+          <li><a href="#kp-cp-meta-all-events">Alla evenemang</a></li>
         <% end -%>
       </ul>
 

@@ -4,7 +4,7 @@
 <fieldset>
   <legend>Personuppgifter</legend>
 
-  <ul class="tools">
+  <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_user_path(@user) %></li>
     <% if current_user.has_role?(:admin) %>
       <li><%= link_to "Radera", @user, :confirm => 'Are you säker?', :method => :delete %></li>
@@ -59,7 +59,7 @@
 
   <% unless current_user.has_role? :admin %>
 
-    <ul class="tools">
+    <ul class="admin-tools">
       <li><%= link_to "Ansök om behörigheter i systemet", role_applications_path %></li>
     </ul>
 

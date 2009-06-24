@@ -11,7 +11,7 @@
     </dl>
   <% end -%>
 
-  <ul class="tools">
+  <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_district_path(@district) %></li>
     <li><%= link_to 'Radera', @district, :confirm => 'Är du säker på att du vill radera stadsdelen', :method => :delete %></li>
   </ul>
@@ -21,7 +21,7 @@
 <fieldset>
   <legend>Skolor i stadsdelen</legend>
 
-  <ul class="tools">
+  <ul class="admin-tools">
     <li><%= link_to 'Lägg till skola', new_school_path(:district_id => @district.id) %></li>
   </ul>
 

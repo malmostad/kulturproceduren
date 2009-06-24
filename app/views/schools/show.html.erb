@@ -11,7 +11,7 @@
     <dd class="elit-id"><%= h @school.elit_id || "-" %></dd>
   </dl>
 
-  <ul class="tools">
+  <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_school_path(@school) %></li>
     <li><%= link_to 'Radera', @school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></li>
   </ul>
@@ -21,7 +21,7 @@
 <fieldset>
   <legend>Grupper i skolan</legend>
 
-  <ul class="tools">
+  <ul class="admin-tools">
     <li><%= link_to 'Lägg till grupp', new_group_path(:school_id => @school.id) %></li>
   </ul>
 
