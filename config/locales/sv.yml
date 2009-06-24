@@ -194,6 +194,12 @@ sv:
                 category_group_id: Kategorigrupp
             category_group:
                 name: Namn
+            questionaire:
+                description: Beskrivning
+                event_id: Evenemang
+            question:
+                question: Fråga
+                choice_csv: Flervalsalternativ
 
     # Used in array.to_sentence.
     support:

@@ -1,10 +1,18 @@
 class Question < ActiveRecord::Base
 
-  QTYPES = {"Betygssvar" => "QuestionMark", "Fritextsvar" => "QuestionText", "Ja/Nej svar"=> "QuestionBool" , "Flervalsvar" => "QuestionMchoice"}
+  QTYPES = {
+    "Betygssvar" => "QuestionMark",
+    "Fritextsvar" => "QuestionText",
+    "Ja/Nej svar" => "QuestionBool" ,
+    "Flervalsvar" => "QuestionMchoice"
+  }
+    
   BLABB = 3
   GRAPH_WIDTH = 500
   has_and_belongs_to_many :questionaire 
   has_one                 :answer
+
+  validates_presence_of :question, :message => "Frågan får inte vara tom"
 
   def self.question_to_graph(q,o)
     ans = Answer.find_by_sql( [
@@ -14,26 +22,26 @@ class Question < ActiveRecord::Base
 
     case q.qtype
     when "QuestionBool"
-        n = 0
-        y = 0
-        ans.each do |a|
-          if a.answer_text == "y"
-            y += 1
-          elsif a.answer_text == "n"
-            n += 1
-          else
-            puts "AAAAAAAAAAAAARRRRRRRRRRRRRRGGGHHHHHH"
-          end
+      n = 0
+      y = 0
+      ans.each do |a|
+        if a.answer_text == "y"
+          y += 1
+        elsif a.answer_text == "n"
+          n += 1
+        else
+          puts "AAAAAAAAAAAAARRRRRRRRRRRRRRGGGHHHHHH"
         end
-        g = Gruff::Pie.new(GRAPH_WIDTH)
-        g.font = "/Library/Fonts/Arial.ttf"
-        g.right_margin = 10
-        g.left_margin = 10
-        g.title_font_size = 30
-        g.title = q.question.to_s
-        g.sort = false
-        g.data "Ja" , y
-        g.data "Nej" , n
+      end
+      g = Gruff::Pie.new(GRAPH_WIDTH)
+      g.font = "/Library/Fonts/Arial.ttf"
+      g.right_margin = 10
+      g.left_margin = 10
+      g.title_font_size = 30
+      g.title = q.question.to_s
+      g.sort = false
+      g.data "Ja" , y
+      g.data "Nej" , n
     when "QuestionMchoice"
       vals = {}
       if ans.length > 0

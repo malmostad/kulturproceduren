@@ -62,22 +62,18 @@
                 function(data) {
                     $("#kp-input-area").html(data);
                 });
-        });
-        $(".kp-rbclass").click(function() {
-            if ( this.id == "kp-qtype_questionmchoice")
-                $("#kp-query-mchoice-csv").show("slow");
-            else
-                $("#kp-query-mchoice-csv").hide("slow");
-       
-        });
-       
+        });      
     });
 
-    $(document).ready(function(){
-        if ($("#kp-qtype_questionmchoice").attr("checked"))
-            $("#kp-query-mchoice-csv").show();
-        else
-            $("#kp-query-mchoice-csv").hide();
+    // Multiple choice container toggle
+    $(function() {
+        $("#kp .question-form .type-cnt :radio").change(function() {
+            if ($(this).val() == "QuestionMchoice") {
+                $("#kp .question-form .choice-csv-cnt").show("slow");
+            } else {
+                $("#kp .question-form .choice-csv-cnt").hide("slow")
+            }
+        });
     });
 
     //Drop-down

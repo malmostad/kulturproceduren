@@ -1,0 +1,76 @@
+<%= render :partial => "questionaires/menu" %>
+
+<div class="model-cnt">
+  <h2>Utvärderingsformulär för <%= link_to h(@questionaire.event.name) %></h2>
+
+  <ul class="tools">
+    <li><%= link_to "Redigera", edit_questionaire_path(@questionaire) %></li>
+    <li><%= link_to "Radera", @questionaire, :confirm => "Är du säker?", :method => :delete %></li>
+  </ul>
+
+  <p class="description">
+    <%= h(@questionaire.description) %>
+  </p>
+
+  <fieldset class="collapsible add-question-cnt">
+    <legend>Lägg till fråga</legend>
+
+    <% unless @template_questions.empty? %>
+      <span class="description">Välj en mallfråga</span>
+
+      <form action="<%= add_template_question_questionaire_path(@questionaire) %>"
+            method="post"
+            class="add-template-question-form"
+            name="add_template_question_form">
+        <div>
+          <select name="question_id">
+            <%= options_from_collection_for_select @template_questions, :id, :question %>
+          </select>
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
+          <input type="submit" value="Lägg till mallfråga" name="do_submit"/>
+        </div>
+      </form>
+
+      <span class="description">eller lägg till en ny fråga</span>
+    <% end -%>
+
+    <%= render :partial => "questions/form", :locals => { :question => @question, :questionaire => @questionaire } %>
+
+  </fieldset>
+
+  <% unless @questionaire.questions.empty? -%>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Fråga</th>
+          <th>Mallfråga</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% @questionaire.questions.each do |question| -%>
+          <tr class="<%= cycle("", "alt") %>">
+            <td><%= h question.question %></td>
+            <td><%= "Ja" if question.template %></td>
+            <td><%= link_to "Redigera", edit_questionaire_question_path(@questionaire, question) unless question.template %></td>
+            <% if question.template -%>
+              <td>
+                <%= link_to "Ta bort från enkät", remove_template_question_questionaire_path(@questionaire, :question_id => question.id), :method => :delete %>
+              </td>
+            <% else -%>
+              <td>
+                <%= link_to "Ta bort från enkät", questionaire_question_path(@questionaire, question), :confirm => "Är du säker?", :method => :delete %>
+              </td>
+            <% end -%>
+          </tr>
+        <% end -%>
+
+      </tbody>
+    </table>
+
+  <% end -%>
+
+</div>

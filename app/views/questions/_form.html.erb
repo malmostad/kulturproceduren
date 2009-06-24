@@ -1,56 +1,42 @@
-<%  is_edit = (["edit", "update"].include? params[:action] and params[:controller] == "questions") %>
-<% if is_edit %>
-  <form method="post" action="/questions/update">
-    <%= hidden_field_tag "question_id" , question.id.to_s %>
-<% else %>
-  <form method="post" action="/questions/create">
-<% end %>
-  <fieldset>
-    <legend><%= is_edit ? "Redigera" : "Lägg till" %> fråga</legend>
-    <div class="question-type-cnt">
-      <%= label_tag "Svarstyp på frågan" %><br/>
-      <% 
-      Question::QTYPES.keys.each do |t| %>
-        <%= label_tag t %>
+<%
+questionaire ||= false
+is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions"
 
-        <% if (not question.blank?) and is_edit and question.qtype == Question::QTYPES["#{t}"] %>
-          <%= radio_button_tag "kp-qtype" , Question::QTYPES["#{t}"] , true , :class => "kp-rbclass"  %>
-          <% if question.qtype == "QuestioinMchoice" %>
-            <script> $("#kp-query-mchoice-csv").show</script>
-          <%  end %>
-        <% else %>
-          <%= radio_button_tag "kp-qtype" , Question::QTYPES["#{t}"] , false , :class => "kp-rbclass"  %>
-        <% end  %>
-      <% end  %>
-    </div>
-    <div class="question-cnt">
-      <%= label_tag "Fråga" %>
-      <%= text_field_tag :question , question.blank? ? "" : question.question %>
-    </div>
+form_url = nil
 
-    <div id="kp-query-mchoice-csv" class="mchoice-csv">
-      <%= label_tag "Ange flervalsalternativen, komma-separerat"%>
-      <%= text_field_tag :mchoice , question.blank? ? "" : question.choice_csv%>
-    </div>
+if questionaire
+  form_url = is_edit ? questionaire_question_path(questionaire, question) : questionaire_questions_path(questionaire)
+end
 
-    <div class="istemplate-cnt">
-      <%= label_tag "Standardfråga" %>
-      <% if (not question.blank? ) and question.template %>
-        <%= check_box_tag :template , "true" , true %>
-      <% else %>
-        <%= check_box_tag :template , "true" , false %>
-      <% end %>
-    </div>
-    <div class="submit-cnt">
-      <input type="hidden" name="questionaire_id" value="<%= @questionaire.id -%>"/>
-      <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-      <%= submit_tag(is_edit ? "Uppdatera" : "Lägg till") %>
-    </div>
+%>
 
-  </fieldset>
-</form>
-<form method="get" action="/questionaires/<%= @questionaire.id.to_s -%>">
-<%= submit_tag "Avbryt" %>
-<%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-</form>
+<% form_for question, :url => form_url, :html => { :class => "question-form" } do |f| -%>
 
+  <div class="type-cnt">
+    <span class="group-label">Svarstyp på frågan:</span>
+    <% Question::QTYPES.keys.each do |type|
+      val = h(Question::QTYPES[type.to_s])
+      -%>
+      <%= f.radio_button :qtype, val %>
+      <label for="kp-question-qtype_<%= val.downcase %>"><%= h(type) %></label>
+    <% end -%>
+  </div>
+
+  <div class="question-cnt">
+    <%= f.label :question %>
+    <%= f.text_field :question %>
+    <%= f.error_message_on :question %>
+  </div>
+
+  <div class="choice-csv-cnt" style="<%= "display: none;" unless question.qtype == "QuestionMchoice" %>">
+    <%= f.label :choice_csv %>
+    <%= f.text_field :choice_csv -%>
+    <span class="help">Ange alternativen separerade med kommatecken</span>
+  </div>
+
+  <div class="submit-cnt">
+    <%= f.hidden_field :template -%>
+    <%= submit_tag(is_edit ? "Uppdatera" : "Lägg till") %>
+  </div>
+
+<% end -%>

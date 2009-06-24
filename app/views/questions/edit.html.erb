@@ -1,20 +1,7 @@
-<h1>Editing question</h1>
+<%= render :partial => "questionaires/menu" -%>
 
-<% form_for(@question) do |f| %>
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
+<fieldset>
+  <legend>Uppdatera fråga</legend>
 
-  <p>
-    <%= f.label :template %><br />
-    <%= f.check_box :template %>
-  </p>
-  <p>
-    <%= f.label :question %><br />
-    <%= f.text_area :question %>
-  </p>
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
-<% end %>
-
-<%= link_to 'Show', @question %> |
-<%= link_to 'Back', questions_path %>
+  <%= render :partial => "form", :locals => { :question => @question, :questionaire => @questionaire } %>
+</fieldset>

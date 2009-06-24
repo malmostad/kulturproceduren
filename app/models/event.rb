@@ -2,6 +2,7 @@ class Event < ActiveRecord::Base
 
   named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
   named_scope :visible, :conditions => "current_date between visible_from and visible_to"
+  named_scope :without_questionaires, :conditions => 'id not in (select event_id from questionaires)'
 
   has_many :tickets, :dependent => :delete_all
   

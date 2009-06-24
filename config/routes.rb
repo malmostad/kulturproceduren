@@ -9,8 +9,13 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :images, :only => [ :create, :destroy ]
   map.resources :culture_providers
   map.resources :answers
-  map.resources :questions
-  map.resources :questionaires 
+  map.resources :questions, :except => [ :show, :new ]
+  map.resources :questionaires, :member => {
+    :add_template_question => :post,
+    :remove_template_question => :delete
+  } do |questionaire|
+    questionaire.resources :questions, :except => [ :show, :new ]
+  end
   map.resources :tags
   map.resources :events
   map.resources :occasions, :except => [ :index ]

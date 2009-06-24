@@ -1,16 +1,38 @@
-<% form_for @questionaire do |f| %>
-  <fieldset>
-    <legend>Skapa ny enkät</legend>
+<%= render :partial => "menu" %>
 
-    <dl class="form-elements">
-      <dd>Utvärderingsenkät för</dd>
-      <dt><%= select_tag "questionaire[event_id]" , options_for_select(Event.all.select { |e| e.questionaire.nil? }.collect { |e| [e.name , e.id ] }) %></dt>
-      <dd><%= f.label :description %></dd>
-      <dt><%= f.text_field :description %></dt>
-    </dl>
-    
-    <div class="submit-cnt">
-      <%= f.submit "Skapa" %>
-    </div>
-  </fieldset>
-<% end %>
+<% is_edit = ["edit", "update"].include?(params[:action]) -%>
+
+<% if is_edit || !@events.empty? %>
+
+  <% if is_edit -%>
+    <p>Redigerar enkät för <%= h @questionaire.event.name %></p>
+  <% end -%>
+
+  <% form_for @questionaire do |f| %>
+    <fieldset>
+      <legend><%= is_edit ? "Redigera" : "Lägg till" %> enkät</legend>
+
+      <dl class="form-elements">
+        <% unless is_edit -%>
+          <dt><%= f.label :event_id %></dt>
+          <dd>
+            <%= f.collection_select :event_id, @events, :id, :name %>
+          </dd>
+        <% end -%>
+        <dt><%= f.label :description %></dt>
+        <dd><%= f.text_field :description %></dd>
+      </dl>
+
+      <div class="submit-cnt">
+        <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
+      </div>
+    </fieldset>
+  <% end %>
+
+<% else -%>
+
+  <p>
+    Alla evenemang har redan enkäter.
+  </p>
+
+<% end -%>

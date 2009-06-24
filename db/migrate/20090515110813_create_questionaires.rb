@@ -1,7 +1,7 @@
 class CreateQuestionaires < ActiveRecord::Migration
   def self.up
     create_table :questionaires do |t|
-      t.integer :event_id
+      t.references :event
       t.text :description
 
       t.timestamps

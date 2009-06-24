@@ -370,10 +370,7 @@ body {
 
 /*** Questionaires ***/
 
-#kp .question-cnt {padding: 0.3em;}
-#kp .question-unanswered-cnt {padding: 0.3em;border: 1px solid #ff0000;background-color: #f0f0f0;}
-#kp .questioin-radiobutton-cnt {margin-left: 0.5em; text-align: left}
-#kp .questionaire-pagetitle {font-size: 1.2em; padding: 0.5em;}
+#kp .question-form div { padding: 3px 0.5em; }
 
 /*** User profile ***/
 

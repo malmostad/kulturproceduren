@@ -1,22 +1,20 @@
-<h1>Listing questionaires</h1>
+<%= render :partial => "menu" -%>
 
 <table>
-  <tr>
-    <th>Event</th>
-    <th>Description</th>
-  </tr>
+  <thead>
+    <tr>
+      <th><%= sort_link "Arrangemang", "event" %></th>
+      <th>Beskrivning</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
 
-<% @questionaires.each do |questionaire| %>
-  <tr>
-    <td><%=h questionaire.event_id %></td>
-    <td><%=h questionaire.description %></td>
-    <td><%= link_to 'Show', questionaire %></td>
-    <td><%= link_to 'Edit', edit_questionaire_path(questionaire) %></td>
-    <td><%= link_to 'Destroy', questionaire, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <% @questionaires.each do |questionaire| %>
+    <tr>
+      <td><%= link_to h(questionaire.event.name), questionaire.event %></td>
+      <td><%= h questionaire.description %></td>
+      <td><%= link_to 'Visa enkät', questionaire %></td>
+      <td><%= link_to 'Radera enkät', questionaire, :confirm => 'Är du säker?', :method => :delete %></td>
+    </tr>
+  <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New questionaire', new_questionaire_path %>

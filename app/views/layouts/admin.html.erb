@@ -28,6 +28,9 @@
         <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
           <%= link_to "Behörighetsansökningar", role_applications_path -%>
         </li>
+        <li class="pri-nav-questionaires <%= active_by_controller "questionaires", "questions" %>">
+          <%= link_to "Enkäter", questionaires_path -%>
+        </li>
         <li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
           <%= link_to "Kategorier", categories_path -%>
         </li>
