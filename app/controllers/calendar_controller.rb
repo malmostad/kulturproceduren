@@ -15,8 +15,8 @@ class CalendarController < ApplicationController
   def apply_filter
     calendar_filter[:free_text] = params[:filter][:free_text]
     
-    calendar_filter[:from_age] = params[:filter][:from_age].to_i
-    calendar_filter[:to_age] = params[:filter][:to_age].to_i
+    calendar_filter[:from_age] = (params[:filter][:from_age] || -1).to_i
+    calendar_filter[:to_age] = (params[:filter][:to_age] || -1).to_i
     calendar_filter[:further_education] = params[:filter][:further_education].to_i == 1
 
     calendar_filter[:from_date] = parse_date(params[:filter][:from_date])
@@ -34,15 +34,12 @@ class CalendarController < ApplicationController
     categories = params[:filter][:categories] || []
     calendar_filter[:categories] = categories.map{ |i| i.to_i }.select { |i| i != -1 }
 
-    session[:show_filter] = params[:show_filter].to_i == 1 ? 1 : 0
-
     redirect_to :action => "filter"
   end
 
   def clear_filter
-    session[:show_filter] = 0
     session[:calendar_filter] = { :from_date => Date.today }
-    redirect_to :action => "index"
+    redirect_to :action => "filter"
   end
 
 

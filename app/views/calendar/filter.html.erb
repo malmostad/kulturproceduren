@@ -8,7 +8,7 @@
       Mauris iaculis est at ligula volutpat tristique.
     </p>
 
-    <div class="calendar-filter" <%= 'style="display: none;"' unless session[:show_filter] == 1 %>>
+    <div class="calendar-filter">
       <form action="<%= url_for :controller => "calendar", :action => "apply_filter" -%>" method="post">
         <div class="free-text-cnt">
           <label for="kp-calendar-filter-free-text" id="kp-calendar-filter-free-text-label">Fritext:</label>
@@ -17,7 +17,6 @@
           <%= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter" %>
 
           <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-          <input type="hidden" id="kp-calendar-filter-show" name="show_filter" value="<%= session[:show_filter] || 0 %>"/>
         </div>
 
         <div class="target-cnt">
@@ -31,11 +30,11 @@
                      value="0"
                      <%= 'checked="checked"' unless calendar_filter[:further_education] %>/>
 
-              <select name="filter[from_age]" id="kp-calendar-filter-from-age">
+              <select name="filter[from_age]" id="kp-calendar-filter-from-age" <%= disabled_if calendar_filter[:further_education] %>>
                 <option value="-1">Från ålder</option>
                 <%= options_for_select((0..19).to_a.map{ |i| [ "#{i} år", i ]}, calendar_filter[:from_age]) %>
               </select>
-              <select name="filter[to_age]" id="kp-calendar-filter-to-age">
+              <select name="filter[to_age]" id="kp-calendar-filter-to-age" <%= disabled_if calendar_filter[:further_education] %>>
                 <option value="-1">Till ålder</option>
                 <%= options_for_select((0..19).to_a.map{ |i| [ "#{i} år", i ]}, calendar_filter[:to_age]) %>
               </select>
