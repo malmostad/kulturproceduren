@@ -1,8 +1,5 @@
 <% content_for :section_sub do -%>
-
   <div class="section-info">
-
-    <a href="#" class="show-calendar-filter-action" <%= 'style="display: none;"' if session[:show_filter] == 1 %>>Visa filtrering</a>
 
     <p class="description">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
@@ -117,9 +114,9 @@
           </ul>
         </div>
 
-        <% if !category_groups.blank? -%>
+        <% if !@category_groups.blank? -%>
           <dl class="category-cnt form-elements">
-            <% category_groups.each do |category_group| -%>
+            <% @category_groups.each do |category_group| -%>
               <dt><label for="kp-calendar-filter-category-group-<%= h category_group.id %>"><%= h category_group.name %>:</label></dt>
               <dd>
                 <select name="filter[categories][]" id="kp-calendar-filter-category-group-<%= h category_group.id %>">
@@ -136,10 +133,13 @@
           </dl>
         <% end -%>
 
-        <a href="#" class="hide-calendar-filter-action">Dölj filtrering</a>
+        <%= link_to "Ingen filtrering", { :action => "index" }, { :class => "hide-calendar-filter-action" } %>
       </form>
     </div>
 
   </div>
-
 <% end -%>
+
+<%= render :partial => "list", :locals => { :occasions => @occasions, :category_groups => @category_groups } %>
+
+<%= will_paginate @occasions %>

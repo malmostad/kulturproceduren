@@ -1,4 +1,17 @@
-<%= render :partial => "filter", :locals => { :category_groups => @category_groups } %>
+<% content_for :section_sub do -%>
+  <div class="section-info">
+
+    <%= link_to "Detaljerad filtrering", { :action => "filter" }, { :class => "show-calendar-filter-action" } %>
+
+    <p class="description">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
+      justo rhoncus fringilla ullamcorper, velit ante mattis sapien, sed congue
+      sapien metus nec tellus. Cras fermentum quam risus, eget ultrices nunc.
+      Mauris iaculis est at ligula volutpat tristique.
+    </p>
+
+  </div>
+<% end -%>
 
 <%= render :partial => "list", :locals => { :occasions => @occasions, :category_groups => @category_groups } %>
 

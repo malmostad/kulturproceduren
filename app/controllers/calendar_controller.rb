@@ -3,6 +3,11 @@ class CalendarController < ApplicationController
   layout "standard"
   
   def index
+    @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
+    @category_groups = CategoryGroup.all :order => "name ASC"
+  end
+
+  def filter
     @occasions = Occasion.search calendar_filter, params[:page]
     @category_groups = CategoryGroup.all :order => "name ASC"
   end
@@ -31,7 +36,7 @@ class CalendarController < ApplicationController
 
     session[:show_filter] = params[:show_filter].to_i == 1 ? 1 : 0
 
-    redirect_to :action => "index"
+    redirect_to :action => "filter"
   end
 
   def clear_filter
