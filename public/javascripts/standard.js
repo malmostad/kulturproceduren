@@ -73,6 +73,12 @@
                     $("#kp-by_group_school_id").html(data);
                 }
                 );
+            var request2 = $.get(
+                kpConfig.by_group.byGroupList.url,
+                { },
+                function(data) {
+                    $("#kp-booking-by-group").html(data);
+                });
             $("#kp-by_group_group_id").html("<option>Välj skola först</option>");
         });
         $("#kp-by_group_school_id").change(function() {
@@ -84,6 +90,13 @@
                 }, function(data) {
                     $("#kp-by_group_group_id").html(data);
                 });
+            var request2 = $.get(
+                kpConfig.by_group.byGroupList.url,
+                { },
+                function(data) {
+                    $("#kp-booking-by-group").html(data);
+                });
+
         });
         $("#kp-by_group_group_id").change(function() {
             var groupId = $("#kp-by_group_group_id option:selected").val();

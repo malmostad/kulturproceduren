@@ -76,7 +76,14 @@ class BookingController < ApplicationController
       oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
       @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
       #TODO : rescue
+    rescue ActiveRecord::RecordNotFound
     end
+    unless oids.blank?
+      @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
+    else
+      @occasions = []
+    end
+
     render :partial => "by_group_list" ,
       :locals => {
       :occasions => @occasions ,
@@ -406,15 +413,18 @@ class BookingController < ApplicationController
         params[:by_group_district_id] = @group.school.district.id
         @schools = School.find :all , :conditions => { :district_id => @group.school.district.id }
         @groups  = Group.find :all , :conditions => { :school_id => @group.school.id }
-        @curgroup = Group.find(params[:by_group_group_id])
+        @curgroup = Group.find(params[:group_id])
         params[:commit] = "Välj grupp"
+        @bookings = {}
+        @bookings["#{@group.id}"] = @occasions
+        pp @bookings
         #TODO : rescue
       end
     elsif not ( params[:school_id].blank? or params[:school_id] == "Välj stadsdel först" or params[:school_id] == "Hämta grupper" )
-        @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
-        @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+      @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
+      @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
     elsif not ( params[:by_group_district_id].blank? or params[:by_group_district_id] == "Välj stadsdel först" )
-        @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
+      @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
     else
       params[:commit] = "inge bra"
     end
@@ -422,15 +432,20 @@ class BookingController < ApplicationController
 
   def unbook
     @user = current_user
+    if params[:return_to].blank?
+      return_to = "show"
+    else
+      return_to = params[:return_to]
+    end
     load_vars
     if @occasion.nil?
       flash[:error] = "Ingen föreställning angiven"
-      redirect_to :controller => "booking" , :action => "show"
+      redirect_to :controller => "booking" , :action => return_to
       return
     end
     if @group.nil?
       flash[:error] = "Ingen grupp angiven"
-      redirect_to :controller => "booking" , :action => "show"
+      redirect_to :controller => "booking" , :action => return_to
       return
     end
 
@@ -445,7 +460,7 @@ class BookingController < ApplicationController
         end
       end
     end
-    redirect_to :controller => "booking" , :action => "show"
+    redirect_to :controller => "booking" , :action => return_to , :group_id => @group.id
   end
 
   private

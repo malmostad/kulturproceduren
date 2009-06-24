@@ -21,8 +21,14 @@
         opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
       %>
 
-        <%= select_tag("by_group_district_id",opt_tag) %>
+          <% if @schools.blank? %>
+            <%= select_tag("by_group_district_id",opt_tag) %>
+          <% else  %>
+            <%= select_tag("by_group_district_id",opt_tag, :disabled => true ) %>
+            <input type="hidden" name="by_group_district_id" value="<%= params[:by_group_district_id] -%>">
+          <% end %>
         <noscript>
+
           <% if params[:commit] != "Hämta skolor" and params[:commit] != "Hämta grupper" and params[:commit] != "Välj grupp" %>
             <input name="commit" type="submit" value="Hämta skolor" /><br/>
           <% end %>
@@ -39,12 +45,13 @@
           <%  if params[:school_id].nil? or params[:school_id].to_i == 0 %>
             <select id="kp-by_group_school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} ) %></select>
           <% else %>
-            <select id="kp-by_group_school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} , School.find(params[:school_id]).id.to_s ) %></select>
+            <select id="kp-by_group_school_id" disabled="true" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} , School.find(params[:school_id]).id.to_s ) %></select>
+            <input type="hidden" name="school_id" value="<%= params[:school_id] -%>">
           <% end %>
         <% end %>
         <noscript>
           <% if params[:commit] == "Hämta skolor" %>
-            <input name="commit" type="submit" value="Hämta grupper" /><br/>
+            <input name="commit" type="submit" value="Hämta grupper" /> <%= link_to "Börja om" , :controller => "booking" , :action=> "by_group" -%><br/>
           <% end %>
         </noscript>
       </div>
@@ -63,18 +70,18 @@
 
         <% else %>
 
-          <%  if @curgroup.nil? %>
+          <%  if @group.nil? %>
             <select id="kp-by_group_group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
           <% else %>
-            <select id="kp-by_group_group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id  %>
+            <select id="kp-by_group_group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @group.id  %>
             <% end %>
           </select>
 
         <% end %>
 
         <noscript>
-          <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" or @group.blank? %>
-            <input name="commit" type="submit" value="Välj grupp" /><br/>
+          <% if ( @group.blank? and params[:commit] == "Hämta grupper") or not @group.blank? %>
+            <input name="commit" type="submit" value="Välj grupp" /> <%= link_to "Börja om" , :controller => "booking" , :action=> "by_group" -%><br/>
           <% end %>
         </noscript>
       </div>
@@ -82,13 +89,10 @@
   </fieldset>
 </form>
 <div id="kp-booking-by-group">
-  <% if not ( @group.blank? or @occasions.blank? ) %>
-    <%= render :partial => "by_group_list" ,
-      :locals => {
-      :occasions => @occasions ,
-      :group => @group
-    }
-  %>
-  <% end %>
+  <%= render :partial => "by_group_list" ,
+    :locals => {
+    :occasions => @occasions ,
+    :group => @group
+  }  %>
 </div>
 
