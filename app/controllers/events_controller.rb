@@ -29,18 +29,21 @@ class EventsController < ApplicationController
     g.write(@tickets_usage.to_s)
     @tickets_usage = @tickets_usage.sub("public","")
 
-    @img_urls_o_q = []
-    oi = 0
-    @event.occasions.each do |o|
-      @img_urls_o_q[oi] = []
-      qi = 0
-      @event.questionaire.questions.each do |q|
-        @img_urls_o_q[oi][qi] = question_graph_path :occasion_id => o.id , :question_id => q.id
-        qi += 1
+    if @event.questionaire
+      @img_urls_o_q = []
+      oi = 0
+
+      @event.occasions.each do |o|
+        @img_urls_o_q[oi] = []
+        qi = 0
+        
+        @event.questionaire.questions.each do |q|
+          @img_urls_o_q[oi][qi] = question_graph_path :occasion_id => o.id , :question_id => q.id
+          qi += 1
+        end
+        oi += 1
       end
-      oi += 1
     end
-    render :stats
   end
 
   def show

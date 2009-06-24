@@ -34,6 +34,12 @@
 
         <% if user_online? -%>
 
+          <% if current_user.has_role?(:admin, :booker) -%>
+            <li class="pri-nav-booking  <%= active_by_controller "booking" %>">
+              <%= link_to "Bokning", :controller => "booking", :action => "show" -%>
+            </li>
+          <% end -%>
+
           <% if current_user.has_role?(:admin) -%>
             <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
           <% end -%>

@@ -9,6 +9,9 @@
         <% if current_user.has_role?(:admin) && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
           <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
         <% end -%>
+        <% if current_user.has_role?(:admin) -%>
+          <li><%= link_to "Statistik", stats_event_path(@event) %></li>
+        <% end -%>
       </ul>
     </div>
   <% end -%>
@@ -167,6 +170,7 @@
                     <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
                       <%= link_to "Redigera", edit_occasion_path(occasion) %>
                       <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+                      <%= link_to "Närvarolista", attlist_occasion_path(occasion) %>
                     <% end -%>
                   </td>
                 </tr>

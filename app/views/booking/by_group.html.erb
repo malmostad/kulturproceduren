@@ -1,3 +1,5 @@
+<%= render :partial => "menu" -%>
+
 <form method="post" action="<% url_for :controller => "booking", :action => "by_group" %>">
 
   <fieldset>
@@ -21,12 +23,12 @@
         opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
       %>
 
-          <% if @schools.blank? %>
-            <%= select_tag("by_group_district_id",opt_tag) %>
-          <% else  %>
-            <%= select_tag("by_group_district_id",opt_tag, :disabled => true ) %>
-            <input type="hidden" name="by_group_district_id" value="<%= params[:by_group_district_id] -%>">
-          <% end %>
+        <% if @schools.blank? %>
+          <%= select_tag("by_group_district_id",opt_tag) %>
+        <% else  %>
+          <%= select_tag("by_group_district_id",opt_tag, :disabled => true ) %>
+          <input type="hidden" name="by_group_district_id" value="<%= params[:by_group_district_id] -%>">
+        <% end %>
         <noscript>
 
           <% if params[:commit] != "Hämta skolor" and params[:commit] != "Hämta grupper" and params[:commit] != "Välj grupp" %>
@@ -88,11 +90,16 @@
     </dd>
   </fieldset>
 </form>
+
 <div id="kp-booking-by-group">
-  <%= render :partial => "by_group_list" ,
-    :locals => {
-    :occasions => @occasions ,
-    :group => @group
-  }  %>
+
+  <% if not ( @group.blank? or @occasions.blank? ) %>
+    <%= render :partial => "by_group_list" ,
+      :locals => {
+      :occasions => @occasions ,
+      :group => @group
+    } %>
+  <% end %>
+
 </div>
 

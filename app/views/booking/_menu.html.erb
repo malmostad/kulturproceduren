@@ -1,0 +1,6 @@
+<% content_for :section_sub do -%>
+  <ul class="section-nav">
+    <li class="<%= active_by_action "booking", "show" %>"><%= link_to 'Mina biljettbokningar', :action => "show" %></li>
+    <li class="<%= active_by_action "booking", "by_group" %>"><%= link_to 'Bokningar per grupp', :action => "by_group" %></li>
+  </ul>
+<% end -%>
