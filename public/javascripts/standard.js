@@ -40,12 +40,10 @@
         });
         $("#kp-school_id").change(function() {
             var schoolId = $("#kp-school_id option:selected").val();
-            var occasionId = $("#kp-occasion_id").val();
             var request = $.get(
                 kpConfig.groups.list.url,
                 {
-                    school_id: schoolId ,
-                    occasion_id : occasionId
+                    school_id: schoolId
                 }, function(data) {
                     $("#kp-group_id").html(data);
                 });
@@ -62,7 +60,50 @@
                 function(data) {
                     $("#kp-input-area").html(data);
                 });
-        });      
+        });
+        
+        $("#kp-by_group_district_id").change(function() {
+            var district_id = $("#kp-by_group_district_id option:selected").val();
+            var request = $.get(
+                kpConfig.schools.list.url,
+                {
+                    district_id: district_id
+                },
+                function(data) {
+                    $("#kp-by_group_school_id").html(data);
+                }
+                );
+            $("#kp-by_group_group_id").html("<option>Välj skola först</option>");
+        });
+        $("#kp-by_group_school_id").change(function() {
+            var schoolId = $("#kp-by_group_school_id option:selected").val();
+            var request = $.get(
+                kpConfig.groups.list.url,
+                {
+                    school_id: schoolId
+                }, function(data) {
+                    $("#kp-by_group_group_id").html(data);
+                });
+        });
+        $("#kp-by_group_group_id").change(function() {
+            var groupId = $("#kp-by_group_group_id option:selected").val();
+            var request = $.get(
+                kpConfig.by_group.byGroupList.url,
+                {
+                    group_id: groupId
+                },
+                function(data) {
+                    $("#kp-booking-by-group").html(data);
+                });
+        });
+        $(".kp-rbclass").click(function() {
+            if ( this.id == "kp-qtype_questionmchoice")
+                $("#kp-query-mchoice-csv").show("slow");
+            else
+                $("#kp-query-mchoice-csv").hide("slow");
+       
+        });
+       
     });
 
     // Multiple choice container toggle

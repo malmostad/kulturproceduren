@@ -77,7 +77,7 @@ class Question < ActiveRecord::Base
     when "QuestionMark"
       histogram = []
       (0..3).each { |i| histogram[i] = 0 }
-      ans.each  { |a| histogram[a.answer_text.to_i] += 1 }
+      ans.each  { |a| histogram[(a.answer_text.to_i-1)] += 1 }
       g = Gruff::Bar.new(GRAPH_WIDTH)
       g.font = "/Library/Fonts/Arial.ttf"
       g.right_margin = 10

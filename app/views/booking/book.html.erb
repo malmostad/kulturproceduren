@@ -22,7 +22,7 @@
           if params[:district_id].nil?
             opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } )
           else
-            my_d = District.find(params[:district_id])
+            my_d = District.find(params[:district_id].to_i)
             opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } , my_d.id.to_s )
           end
           opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag

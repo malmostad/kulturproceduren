@@ -8,66 +8,81 @@ class BookingController < ApplicationController
 
   def load_vars
     begin
-      @group = Group.find(params[:group_id])
-      @occasion = Occasion.find(params[:occasion_id])
+      @group = Group.find(params[:group_id].to_i)
+      @occasion = Occasion.find(params[:occasion_id].to_i)
       t = Ticket.find(
         :first ,
-        :select => "distinct companion_id" ,
         :conditions => {
           :group_id => @group.id ,
           :occasion_id => @occasion.id
         }
       )
     rescue ActiveRecord::RecordNotFound
-      puts "Det blev bajs"
-      flash[:error] = "Kunde inte hitta .... hem?"
+      puts "Inga biljetter bokade"
     end
-    unless t.blank? || t.companion_id == 0
-      @companion = Companion.find(t.companion_id)
-    end
-    @nticks = Ticket.count(
-      :all,
-      :conditions => {
-        :group_id => @group.id,
-        :occasion_id=>@occasion.id ,
-        :state=>Ticket::BOOKED,
-        :wheelchair => false ,
-        :adult=>false
-      }
-    )
-    @naticks = Ticket.count(
-      :all,
-      :conditions => {
-        :group_id => @group.id,
-        :occasion_id=>@occasion.id ,
-        :state=>Ticket::BOOKED,
-        :wheelchair => false ,
-        :adult=>true
-      }
-    )
-    @nwticks = Ticket.count(
-      :all,
-      :conditions => {
-        :group_id => @group.id,
-        :occasion_id=>@occasion.id ,
-        :state=>Ticket::BOOKED,
-        :wheelchair => true ,
-        :adult=>false
-      }
-    )
-    @br = BookingRequirement.find(
-      :first ,
-      :conditions => {
-        :group_id => @group.id ,
-        :occasion_id => @occasion.id
-      }
-    )
-    
-    if Ticket.count(:all , :conditions => { :group_id => @group.id , :event_id => @occasion.event.id , :state => Ticket::BOOKED }) > 0
-      @edit = true
-    else
+    if t.blank?
       @edit = false
+    else
+      @edit = true
+      begin
+        @companion = Companion.find(t.companion_id)
+        @br = BookingRequirement.find(
+          :first ,
+          :conditions => {
+            :group_id => @group.id ,
+            :occasion_id => @occasion.id
+          }
+        )
+        @nticks = Ticket.count(
+          :all,
+          :conditions => {
+            :group_id => @group.id,
+            :occasion_id=>@occasion.id ,
+            :state=>Ticket::BOOKED,
+            :wheelchair => false ,
+            :adult=>false
+          }
+        )
+        @naticks = Ticket.count(
+          :all,
+          :conditions => {
+            :group_id => @group.id,
+            :occasion_id=>@occasion.id ,
+            :state=>Ticket::BOOKED,
+            :wheelchair => false ,
+            :adult=>true
+          }
+        )
+        @nwticks = Ticket.count(
+          :all,
+          :conditions => {
+            :group_id => @group.id,
+            :occasion_id=>@occasion.id ,
+            :state=>Ticket::BOOKED,
+            :wheelchair => true ,
+            :adult=>false
+          }
+        )    
+      rescue ActiveRecord::RecordNotFound
+        puts "Inga extra behov eller ingen companion på denna bokning"
+      end
     end
+  end
+
+  def get_by_group_list
+
+    begin
+      @group = Group.find(params[:group_id])
+      oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
+      @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
+      #TODO : rescue
+    end
+    render :partial => "by_group_list" ,
+      :locals => {
+      :occasions => @occasions ,
+      :group => @group
+    }
+
   end
 
   def get_input_area
@@ -218,43 +233,42 @@ class BookingController < ApplicationController
       pp params
     elsif params[:commit] == "Ändra bokning"
       puts "Ändra bokning"
-      if not check_nticks(params[:seats_students].to_i,params[:seats_adult].to_i,params[:seats_wheelchair].to_i)
-        render :book
-        return
-      else
-        #      {"commit"=>"Ändra bokning",   #   "companion_name"=>"1",    #  "seats_adult"=>"1", # "authenticity_token"=>"c5nxGL7lDEtT7O5B7PHA+U1Kadpv7H+M4Gb53WLwYkI=",
-        #        "action"=>"book", #        "companion_telnr"=>"1",  #        "seats_wheelchair"=>"1", #        "group_id"=>"2", #        "district_id"=>"1",
-        #        "controller"=>"booking", #        "occasion_id"=>"1", #        "booking_request"=>"1",#        "companion_email"=>"1",#        "seats_students"=>"2",
-        #        "school_id"=>"1"}
-        load_vars
-        if ( not @companion.blank? or @companion.name != params[:companion_name] or @companion.email != params[:companion_email] or @companion.tel_nr != params[:companion_telnr]  )
-          @companion.name = params[:companion_name]
-          @companion.email = params[:companion_email]
-          @companion.tel_nr = params[:companion_telnr]
-          @companion.save or flash[:error] += "<br/> Kunde inte spara information ang medföljande vuxen"
-        end
-        if not params[:booking_request].blank?
-          begin
-            br = BookingRequirement.find(:conditions => {:occasion_id => @occasion.id , :group_id => @group.id})
-          rescue ActiveRecord::RecordNotFound
-            puts "bokning utan br ..."
-          end
-          if not br.blank?
-            br.requirement=params[:booking_request]
-            br.save or flash[:error] += "<br/> Kunde inte uppdatera information ang extra behov."
-          end
-        end
-        if params[:seats_students].to_i != nticks || params[:seats_adult] != naticks || params[:seats_wheelchair] != nwticks
+      load_vars 
+      if ( not @companion.blank? or @companion.name != params[:companion_name] or @companion.email != params[:companion_email] or @companion.tel_nr != params[:companion_telnr]  )
+        @companion.name = params[:companion_name]
+        @companion.email = params[:companion_email]
+        @companion.tel_nr = params[:companion_telnr]
+        @companion.save or flash[:error] = "Kunde inte spara information ang medföljande vuxen"
+      end
+      begin
+        br = BookingRequirement.find(:first , :conditions => {:occasion_id => @occasion.id , :group_id => @group.id})
+      rescue ActiveRecord::RecordNotFound
+        br = nil
+      end
+      if params[:booking_request].blank? and ( not br.blank? )
+        br.delete
+      end
+      if not params[:booking_request].blank? && params[:booking_request] != br.requirement
+        br.requirement = params[:booking_request]
+        br.save or flash[:error] = "Kunde inte spara information ang. extra behov"
+      end
+      begin
+        if params[:seats_students].to_i != @nticks || params[:seats_adult] != @naticks || params[:seats_wheelchair] != @nwticks
           Ticket.transaction do
-            if unbok_all_ticks() && book_ticks(params[:seats_students],params[:seats_adult],params[:seats_wheelchair])
-              flash[:info] += "<br/> Antalet bokade biljetter uppdaterade"
-            else
-              flash[:error] += "<br/> Kunde inte förändra antalet bokade biljetter"
+            if not unbook_all_ticks()
+              flash[:error] = "Kunde inte förändra antalet bokade biljetter"
+              raise ActiveRecord::Rollback
+            end
+            if not book_ticks(params[:seats_students].to_i,params[:seats_adult].to_i,params[:seats_wheelchair].to_i)
+              flash[:error] = "Kunde inte förändra antalet bokade biljetter"
               raise ActiveRecord::Rollback
             end
           end #transaction
         end
-      end #check_nticks
+      rescue Exception
+        redirect_to :controller => "booking" , :action => "book"
+      end
+      redirect_to :controller => "booking" , :action => "show"
     elsif !params[:commit].nil?
       # unrecognized commit parameter - generate error
       flash[:error] = "Och vad ville du egentligen göra nu????"
@@ -295,6 +309,9 @@ class BookingController < ApplicationController
   end
 
   def book_ticks(nreq_ticks , nreq_aticks , nreq_wticks )
+    nreq_ticks = nreq_ticks.to_i
+    nreq_aticks = nreq_aticks.to_i
+    nreq_wticks = nreq_wticks.to_i
     if not check_nticks(nreq_ticks.to_i , nreq_aticks.to_i , nreq_wticks.to_i )
       return false
     end
@@ -304,9 +321,6 @@ class BookingController < ApplicationController
       Ticket.transaction do
         #Dubbelkoll inne i transaktionen
         tickets = @group.bookable_tickets(@occasion,true)
-        puts "==============================================================="
-        puts "Bookable tickets = "
-        pp tickets
         
         if tickets.length < tot_requested
           flash[:error] = "Du försöker boka fler biljetter än vad som är tilldelat för gruppen på den här föreställningen."
@@ -318,23 +332,7 @@ class BookingController < ApplicationController
         booked_adult_tickets = 0
         booked_wheelchair_tickets = 0
 
-        puts "booked_tickets = #{booked_tickets}"
-        puts "tot_requested = #{tot_requested}"
-
         while booked_tickets < tot_requested
-          puts "Försöker boka biljett"
-          puts "Group = "
-          pp @group
-          puts "companion = "
-          pp @companion
-          puts "user="
-          pp @user
-          puts "Occasion = "
-          pp @occasion
-          puts "now = #{DateTime.now}"
-          
-          pp tickets[booked_tickets]
-          puts "Uppdaterar"
           tickets[booked_tickets].state = Ticket::BOOKED
           tickets[booked_tickets].group = @group
           tickets[booked_tickets].companion = @companion
@@ -343,13 +341,6 @@ class BookingController < ApplicationController
           tickets[booked_tickets].wheelchair = false
           tickets[booked_tickets].adult = false
           tickets[booked_tickets].booked_when = DateTime.now
-          puts "Uppdatering klar - kollar a och w"
-          pp tickets[booked_tickets]
-          puts "Snoppen"
-          puts "booked_adult_tickets=#{booked_adult_tickets}"
-          puts "nreq_aticks = #{nreq_aticks}"
-          puts "nreq_wticks = #{nreq_wticks}"
-          
           if booked_adult_tickets.to_i < nreq_aticks.to_i
             tickets[booked_tickets].adult = true
             booked_adult_tickets += 1
@@ -357,25 +348,17 @@ class BookingController < ApplicationController
             tickets[booked_tickets].wheelchair = true
             booked_wheelchair_tickets += 1
           end
-
-          puts "korv"
-          puts "Försöker boka biljett 2"
-
-          pp tickets[booked_tickets]
           retval = tickets[booked_tickets].save
-          puts "Försökte spara biljetten och det gick = #{retval}"
           unless retval
             transaction_ok = false
-            puts "Biljett-bajs ...."
             raise ActiveRecord::Rollback
           end
           booked_tickets +=1
-          puts "Klar med en blijett"
         end
       end
-
+    rescue Exception
+      transaction_ok = false
     end
-    puts "boka biljetter transaction_ok = #{transaction_ok}"
     return transaction_ok
   end
 
@@ -403,85 +386,67 @@ class BookingController < ApplicationController
     @user = current_user
   end
 
-  def unbook
+  def by_group
+    load_vars
     @user = current_user
-    @occasion = Occasion.find_by_id(params[:occasion_id])
-    
-    if @occasion.nil?
-      flash[:error] = "Ingen föreställning angiven"
-      redirect_to :controller => "occasions"
-      return
+    begin
+      @group = Group.find(params[:by_group_group_id])
+    rescue ActiveRecord::RecordNotFound
+      #Fall through and render default screen.....
     end
-
-    @groups = Group.find(
-      Ticket.find(:all ,
-        :select => "distinct group_id" ,
-        :conditions => {:occasion_id => @occasion.id}
-      ).map { |t| t.group_id})
-
-    pp @groups
-    pp params
-
-    if params[:what] == "unbook" then
-      #TODO : ta bort alla eller inga biljetter - annars gå via "ändra bokning"
-      # Utför bokning och omdirigera till visa bokningar
-
-      group = Group.find_by_id(params[:group_id])
-
-      if group.nil?
-        flash[:error] = "Ingen grupp angiven"
-        redirect_to :controller => "booking", :action => "unbook", :occasion_id => params[:occasion_id]
-        return
-      end
-
-      if params[:no_tickets].blank? || params[:no_tickets].to_i < 0
-        flash[:error] = "Du måte ange antal biljetter du vill avboka"
-        redirect_to :controller => "booking", :action => "unbook", :occasion_id => params[:occasion_id]
-        return
-      end
-
-      tickets = Ticket.find(:all,
-        :conditions => {
-          :occasion_id => @occasion.id,
-          :group_id => group.id,
-          :state => Ticket::BOOKED
-        })
-
-      if params[:no_tickets].to_i > tickets.length
-        flash[:error] = "Du kan bara avboka #{tickets.length}"
-        redirect_to :controller => "booking", :action => "unbook", :occasion_id => params[:occasion_id]
-        return
-      else
-        # Borde detta göras mha sql-update pga prestandaskäl?
-        ntick = 0
-
-        while (ntick < params[:no_tickets].to_i ) do
-          tickets[ntick].occasion_id = nil
-          tickets[ntick].state = Ticket::UNBOOKED
-          tickets[ntick].save
-          ntick += 1
+    if not @group.blank?
+      begin
+        oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
+        unless oids.blank?
+          @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
+          pp @occasions
+        else
+          @occasions = []
         end
-
-        redirect_to :controller => "booking", :action => "show"
-        return
+        params[:by_group_district_id] = @group.school.district.id
+        @schools = School.find :all , :conditions => { :district_id => @group.school.district.id }
+        @groups  = Group.find :all , :conditions => { :school_id => @group.school.id }
+        @curgroup = Group.find(params[:by_group_group_id])
+        params[:commit] = "Välj grupp"
+        #TODO : rescue
       end
+    elsif not ( params[:school_id].blank? or params[:school_id] == "Välj stadsdel först" or params[:school_id] == "Hämta grupper" )
+        @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
+        @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+    elsif not ( params[:by_group_district_id].blank? or params[:by_group_district_id] == "Välj stadsdel först" )
+        @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
     else
-      ## Visa avbokingsmöjligheter
-      @unbookable_tickets = {}
-      
-      @groups.each do |g|
-        @unbookable_tickets["#{g.id}"] = Ticket.find(:all,
-          :conditions => {
-            :group_id => g.id,
-            :occasion_id => @occasion.id,
-            :state => Ticket::BOOKED
-          })
-      end
-      
-      pp @bookable_tickets
+      params[:commit] = "inge bra"
     end
   end
 
+  def unbook
+    @user = current_user
+    load_vars
+    if @occasion.nil?
+      flash[:error] = "Ingen föreställning angiven"
+      redirect_to :controller => "booking" , :action => "show"
+      return
+    end
+    if @group.nil?
+      flash[:error] = "Ingen grupp angiven"
+      redirect_to :controller => "booking" , :action => "show"
+      return
+    end
+
+    if @nticks.blank? or @nticks == 0
+      flash[:info] = "Ingen bokning gjord för #{@group.name}, #{@group.school.name} på denna föreställning"
+    else
+      begin
+        if @companion.delete and @br.delete and unbook_all_ticks()
+          flash[:info] = "Bokning borttagen"
+        else
+          flash[:error] = "Kunde inte avboka"
+        end
+      end
+    end
+    redirect_to :controller => "booking" , :action => "show"
+  end
 
   private
 

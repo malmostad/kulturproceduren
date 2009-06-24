@@ -1,0 +1,13 @@
+<ul>
+<%  occasions.each do |o|%>
+  <li>
+    <%= group.school.name  -%> , <%= group.name  -%>
+    <%= o.event.name -%> ,
+    <%= o.date.to_s -%> -
+    <%= group.ntickets_by_occasion(o,Ticket::BOOKED) -%> biljetter bokade.
+    <a href="<%= url_for :controller => "booking" , :action => "book" , :occasion_id =>  o.id , :group_id => group.id , :commit => "Välj grupp" -%>">Ändra bokning</a>
+    <%= link_to "Avboka" , { :controller => "booking" , :action => "unbook" ,  :occasion_id =>  o.id , :group_id => group.id  } , :confirm => "Är du säker?" -%>
+  </li>
+<%  end %>
+</ul>
+
