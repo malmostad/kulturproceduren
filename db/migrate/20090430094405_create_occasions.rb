@@ -6,7 +6,7 @@ class CreateOccasions < ActiveRecord::Migration
       t.time    :start_time
       t.time    :stop_time
       t.integer :seats
-      t.integer :wheelchair_seats
+      t.integer :wheelchair_seats, :default => 0
       t.text    :address
       t.text    :description
       t.boolean :telecoil

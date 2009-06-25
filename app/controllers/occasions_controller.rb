@@ -136,7 +136,7 @@ def attlist_pdf
     end
 
     @event = @occasion.event
-
+    @category_groups = CategoryGroup.all :order => "name ASC"
     render :template => "events/show"
   end
 

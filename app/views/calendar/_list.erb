@@ -37,7 +37,7 @@ category_groups ||= []
         <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
 
         <% unless hide_culture_provider -%>
-          <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name) %></td>
+          <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name), occasion.event.culture_provider %></td>
         <% end -%>
 
         <% category_groups.each do |category_group| -%>
