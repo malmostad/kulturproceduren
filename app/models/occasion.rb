@@ -12,6 +12,12 @@ class Occasion < ActiveRecord::Base
   
   validates_numericality_of :seats, :only_integer => true, :message => "Antalet platser måste vara ett giltigt heltal"
 
+  def ticket_usage
+    return [
+      Ticket.count( :conditions => { :occasion_id => self.id } ) ,
+      Ticket.count( :conditions => { :occasion_id => self.id  , :state => Ticket::BOOKED})
+    ]
+  end
 
   def self.search(filter, page)
 

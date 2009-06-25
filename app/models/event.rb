@@ -38,7 +38,12 @@ class Event < ActiveRecord::Base
     today = Date.today
     visible_from <= today && visible_to >= today && !tickets.empty?
   end
-
+  def ticket_usage
+    return [
+      Ticket.count( :conditions => { :event_id => self.id } ) ,
+      Ticket.count( :conditions => { :event_id => self.id  , :state => Ticket::BOOKED})
+    ]
+  end
   def not_targeted_group_ids
     groups.find(:all,
       :select => "distinct groups.id",

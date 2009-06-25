@@ -143,6 +143,11 @@ class BookingController < ApplicationController
         bork
       end
     elsif params[:commit] == "Välj grupp"
+      load_vars
+      if not @group.blank?
+        params[:district_id] = @group.school.district.id
+        params[:school_id] = @group.school.id
+      end
       if not params[:district_id].nil? && params[:district_id].to_i != 0 && !params[:school_id].nil? && params[:school_id].to_i != 0 && !params[:group_id].nil? && params[:group_id].to_i != 0
         @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
         @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
@@ -180,6 +185,11 @@ class BookingController < ApplicationController
       puts "DEGUBB: #{@curgroup.ntickets_by_occasion(@occasion).to_i}"
       puts "DEGUBB2: #{( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )}"
 
+      if params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i == 0
+        flash[:error] = "Du måste boka minst 1 biljett"
+        render :book
+        return
+      end
       #check_ntick sets flash-error message
 
       if not check_nticks(params[:seats_students],params[:seats_adult],params[:seats_wheelchair])
@@ -275,6 +285,7 @@ class BookingController < ApplicationController
       rescue Exception
         redirect_to :controller => "booking" , :action => "book"
       end
+      #TODO - return_to parameter
       redirect_to :controller => "booking" , :action => "show"
     elsif !params[:commit].nil?
       # unrecognized commit parameter - generate error

@@ -4,7 +4,7 @@
   Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.date.to_s -%>
 </p>
 
-<form method="post" action="<% url_for :controller => "booking", :action => "book" %>">
+<form method="post" action="<%= url_for :controller => "booking", :action => "book" %>">
 
   <fieldset>
     <legend>Bokning</legend>

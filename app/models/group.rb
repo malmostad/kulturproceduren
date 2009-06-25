@@ -31,7 +31,19 @@ class Group < ActiveRecord::Base
         :state => Ticket::BOOKED
       }).companion
   end
-  
+
+  def booked_tickets_by_occasion(o)
+    if o.is_a? Integer
+      o = Occasion.find(o)
+    end
+
+    return Ticket.count(:all,
+    :conditions => {
+      :group_id => self.id ,
+      :occasion_id => o.id ,
+      :state => Ticket::BOOKED
+    })
+  end
   def ntickets_by_occasion(o, state=Ticket::UNBOOKED, wheelchair=false)
 
     if o.is_a? Integer

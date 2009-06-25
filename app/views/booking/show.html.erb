@@ -14,12 +14,13 @@
 
   <tbody>
     <% @user.bookings.each do |b|%>
+      <% pp b  %>
       <tr class="<%= cycle('', 'alt') %>">
         <td><%= b["group"].school.name -%></td>
         <td><%= b["group"].name -%></td>
         <td><%= b["occasion"].event.name -%></td>
         <td><%= b["occasion"].date.to_s -%></td>
-        <td><%= b["group"].ntickets_by_occasion(b["occasion"],Ticket::BOOKED) -%> biljetter bokade</td>
+        <td><%= b["group"].booked_tickets_by_occasion(b["occasion"]) -%> biljetter bokade</td>
         <td>
           <a href="<%= url_for :controller => "booking" , :action => "book" , :occasion_id =>  b["occasion"].id , :group_id => b["group"].id , :commit => "Välj grupp" -%>">Ändra bokning</a>
         </td>

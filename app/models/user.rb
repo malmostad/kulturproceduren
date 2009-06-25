@@ -38,7 +38,10 @@ class User < ActiveRecord::Base
   def bookings
     ret = []
     self.occasions.each do |o|
-      Ticket.find(:all , :select => "distinct group_id" , :conditions => { :user_id => self.id , :occasion_id => o.id}).each do |t|
+      Ticket.find(:all ,
+        :select => "distinct group_id" ,
+        :conditions => { :user_id => self.id , :occasion_id => o.id}
+      ).each do |t|
         ret << { "occasion" => o , "group" => Group.find(t.group_id) }
       end
     end
