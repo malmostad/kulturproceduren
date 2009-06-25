@@ -49,29 +49,30 @@ class Group < ActiveRecord::Base
     if o.is_a? Integer
       o = Occasion.find(o)
     end
-    
+    m = o.seats
     case o.event.ticket_state
     when Event::ALLOTED_GROUP then
-      Ticket.count :all , :conditions => {
+      n = Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :group_id => self.id,
         :state => state ,
         :wheelchair => wheelchair
       }
     when Event::ALLOTED_DISTRICT then
-      Ticket.count :all , :conditions => {
+      n = Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :district_id => self.school.district.id,
         :state => state ,
         :wheelchair => wheelchair
       }
     when Event::FREE_FOR_ALL then
-      Ticket.count :all , :conditions => {
+      n = Ticket.count :all , :conditions => {
         :event_id => o.event.id,
         :state => state ,
         :wheelchair => wheelchair
       }  
     end
+    return ( m > n ? n : m )
   end
 
   def bookings()

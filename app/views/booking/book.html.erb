@@ -4,11 +4,6 @@
   Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.date.to_s -%>
 </p>
 
-<p id="kp-booking-seatsavail">
-  <%  if not @groups.blank? %>
-    Det finns ytterligare <%= @group.ntickets_by_occasion(@occasion) -%> biljetter tillgängligt att boka.
-  <%  end %>
-</p>
 
 <form method="post" action="<%= url_for :controller => "booking", :action => "book" %>">
 

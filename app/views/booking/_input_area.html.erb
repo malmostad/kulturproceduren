@@ -6,6 +6,7 @@ naticks ||= nil
 nwticks ||= nil
 br ||= nil
 edit ||= nil
+group ||= nil
 
 puts "_input_area : edit = #{edit}"
 
@@ -15,7 +16,13 @@ if !group.nil?
       OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
     </p>
   <% end %>
-  <% if group.ntickets_by_occasion(@occasion) == 0 && ( not edit ) %>
+  <p id="kp-booking-seatsavail">
+    <%  if not group.blank? %>
+      Det finns ytterligare <%= group.ntickets_by_occasion(occasion) -%> biljetter tillgängligt att boka.
+    <%  end %>
+  </p>
+
+  <% if group.ntickets_by_occasion(occasion) == 0 && ( not edit ) %>
     <p>
       Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
       <a href="/apa">Klicka här</a> om du vill få ett meddelande ifall biljetter blir tillgängliga senare.
@@ -31,11 +38,11 @@ if !group.nil?
         <dd><%= text_field_tag "seats_adult"  ,naticks.blank? || naticks == 0 ? "" : naticks, { :class => "seats" , :autocomplete => "off"  } %></dd>
         <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
         <dd><%= text_field_tag "seats_wheelchair"  , nwticks.blank? || nwticks == 0 ? "" : nwticks, {:class => "seats" , :autocomplete => "off"  }  -%>
-            <%= nwticks.blank? || nwticks == 0 ? "" : "Ytterligare" -%>
-            <%= @occasion.wheelchair_seats - Ticket.count(
-                  :all ,
-                  :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%>
-             platser tillgängligt på den här föreställningen.</dd>
+          <%= nwticks.blank? || nwticks == 0 ? "" : "Ytterligare" -%>
+          <%= @occasion.wheelchair_seats - Ticket.count(
+            :all ,
+            :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%>
+        platser tillgängligt på den här föreställningen.</dd>
       </dl>
 
       <p id="kp-booking-count" class="booking-count"></p>

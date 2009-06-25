@@ -28,7 +28,6 @@ class Image < ActiveRecord::Base
       redirect_to "/"
       return
     end
-    puts "Ny bild med geo: #{img.geometry}"
     
     img.change_geometry(
       Magick::Geometry.new(
