@@ -157,7 +157,7 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.time     "start_time"
     t.time     "stop_time"
     t.integer  "seats"
-    t.integer  "wheelchair_seats"
+    t.integer  "wheelchair_seats", :default => 0
     t.text     "address"
     t.text     "description"
     t.boolean  "telecoil"
