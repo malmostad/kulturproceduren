@@ -134,6 +134,10 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.integer  "culture_provider_id"
     t.string   "name"
     t.string   "filename"
+    t.integer  "width"
+    t.integer  "height"
+    t.integer  "thumb_width"
+    t.integer  "thumb_height"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -172,6 +176,8 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.integer "question_id"
     t.integer "questionaire_id"
   end
+
+  add_index "questionaires_questions", ["question_id", "questionaire_id"], :name => "index_questionaires_questions_on_questionaire_id_and_question_i", :unique => true
 
   create_table "questions", :force => true do |t|
     t.string   "qtype"

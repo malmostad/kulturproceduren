@@ -19,7 +19,7 @@
       <div class="images-cnt">
         <div class="images">
           <% @culture_provider.images.each do |image| -%>
-            <img src="<%= h image.image_url %>" alt="<%= h image.name %>"/>
+            <img src="<%= h image.image_url %>" alt="<%= h image.name %>" width="<%= h image.width %>" height="<%= h image.height %>"/>
           <% end -%>
         </div>
 
@@ -126,7 +126,7 @@
               <% end -%>
             </tbody>
           </table>
-        </div
+        </div>
       <% end -%>
 
       <% if user_online? && current_user.can_administrate?(@culture_provider) && !@culture_provider.events.empty? -%>

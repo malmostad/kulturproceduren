@@ -25,7 +25,7 @@
         <ul class="images">
           <% @event.images.each do |image| -%>
             <li>
-              <img src="<%= h image.image_url %>" alt="<%= h image.name %>"/>
+              <img src="<%= h image.image_url %>" alt="<%= h image.name %>" width="<%= h image.width %>" height="<%= h image.height %>"/>
             </li>
           <% end -%>
         </ul>

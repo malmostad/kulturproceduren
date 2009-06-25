@@ -4,6 +4,10 @@ class CreateImages < ActiveRecord::Migration
       t.references :event, :culture_provider
       t.string  :name
       t.string  :filename
+      t.integer :width
+      t.integer :height
+      t.integer :thumb_width
+      t.integer :thumb_height
 
       t.timestamps
     end
