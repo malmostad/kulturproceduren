@@ -4,8 +4,8 @@
     <% if culture_provider.main_image -%>
       <img src="<%= h culture_provider.main_image.thumb_url %>"
            alt="<%= h culture_provider.main_image.name %>"
-           width="<%= h culture_provider.main_image.width %>"
-           height="<%= h culture_provider.main_image.height %>"/>
+           width="<%= h culture_provider.main_image.thumb_width %>"
+           height="<%= h culture_provider.main_image.thumb_height %>"/>
     <% end -%>
 
     <% if user_online? && current_user.can_administrate?(culture_provider) -%>
