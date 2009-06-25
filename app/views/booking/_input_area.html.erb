@@ -15,7 +15,7 @@ if !group.nil?
       OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
     </p>
   <% end %>
-  <% if group.ntickets_by_occasion(@occasion) == 0 %>
+  <% if group.ntickets_by_occasion(@occasion) == 0 && ( not edit ) %>
     <p>
       Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
       <a href="/apa">Klicka här</a> om du vill få ett meddelande ifall biljetter blir tillgängliga senare.
