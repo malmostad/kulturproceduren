@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :events, :except => [ :index ], :member => { :stats => :get } do |e|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
   end
-  map.resources :occasions, :except => [ :index ], :member => { :attlist => :get, :attlist_pdf => :get }
+  map.resources :occasions, :except => [ :index ], :member => { :attendants => :get }
 
   map.resources :booking_requirements
   map.resources :notification_requests
