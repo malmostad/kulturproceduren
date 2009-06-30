@@ -7,6 +7,7 @@ development:
         :height: 174
         :thumb_width: 212
         :thumb_height: 80
+    :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
 test:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -16,6 +17,7 @@ test:
         :height: 174
         :thumb_width: 212
         :thumb_height: 80
+    :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
 production:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -25,3 +27,4 @@ production:
         :height: 174
         :thumb_width: 212
         :thumb_height: 80
+    :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html

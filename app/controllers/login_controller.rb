@@ -22,10 +22,8 @@ class LoginController < ApplicationController
       if session[:return_to]
         redirect_to session[:return_to]
         session[:return_to] = nil
-      elsif u.has_role?(:admin)
-        redirect_to :controller => "role_applications"
       else
-        redirect_to u
+        redirect_to "/"
       end
     end
   end
