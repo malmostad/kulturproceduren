@@ -20,6 +20,7 @@ bookable:
     name: Bookable event
     visible_from: 2009-01-01
     visible_to: <%= Date.today + 10 %>
+    ticket_release_date: <%= Date.today - 1 %>
 
 not_bookable_by_date:
     id: 11
@@ -29,6 +30,7 @@ not_bookable_by_date:
     name: Not bookable event
     visible_from: <%= Date.today + 10 %>
     visible_to: <%= Date.today + 20 %>
+    ticket_release_date: <%= Date.today - 1 %>
 
 not_bookable_by_tickets:
     id: 12
@@ -38,6 +40,17 @@ not_bookable_by_tickets:
     name: Not bookable event
     visible_from: 2009-01-01
     visible_to: <%= Date.today + 10 %>
+    ticket_release_date: <%= Date.today - 1 %>
+
+not_bookable_by_release_date:
+    id: 13
+    from_age: 1
+    to_age: 10
+    description: Not bookable event
+    name: Not bookable event
+    visible_from: 2009-01-01
+    visible_to: <%= Date.today + 10 %>
+    ticket_release_date: <%= Date.today + 1 %>
 
 with_groups_outside_age_span:
     id: 20

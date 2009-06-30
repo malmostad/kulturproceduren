@@ -10,6 +10,7 @@ module RoleApplicationsHelper
   def type_string(application)
     case application.role.symbol_name
     when :booker then return "Bokning"
+    when :host then return "Evenemangsvärd"
     when :culture_worker
       if application.culture_provider
         return "Publicering för #{h(application.culture_provider.name)}"

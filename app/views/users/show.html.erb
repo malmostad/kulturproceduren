@@ -77,6 +77,13 @@
         <% end -%>
       </li>
       <li>
+        <%= denom %> är inte evenemangsvärd.
+
+        <% if current_user.has_role?(:admin) -%>
+          <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %></span>
+        <% end -%>
+      </li>
+      <li>
         <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
 
         <% if current_user.has_role?(:admin) -%>
@@ -104,6 +111,24 @@
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>
+          <% end -%>
+        </li>
+      <% end -%>
+
+      <% if @user.has_role?(:host) -%>
+        <li>
+          <%= denom %> är evenemangsvärd.
+
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :host) %></span>
+          <% end -%>
+        </li>
+      <% elsif current_user.has_role?(:admin) -%>
+        <li>
+          <%= denom %> är inte evenemangsvärd.
+
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %></span>
           <% end -%>
         </li>
       <% end -%>

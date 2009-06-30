@@ -2,8 +2,9 @@
 
 <div class="tabs">
   <ul>
-    <li><a href="#kp-role-application-tab-booker">Ansök om bokningsbehörighet</a></li>
-    <li class="<%= "preselect" if @culture_worker_appl_error %>"><a href="#kp-role-application-tab-culture-worker">Ansök om publiceringsbehörighet</a></li>
+    <li class="<%= "preselect" if @application_type == :booker %>"><a href="#kp-role-application-tab-booker">Ansök om bokningsbehörighet</a></li>
+    <li class="<%= "preselect" if @application_type == :culture_worker %>"><a href="#kp-role-application-tab-culture-worker">Ansök om publiceringsbehörighet</a></li>
+    <li class="<%= "preselect" if @application_type == :host %>"><a href="#kp-role-application-tab-host">Ansök om värdbehörighet</a></li>
   </ul>
 
   <div id="kp-role-application-tab-booker">
@@ -75,7 +76,31 @@
 
     <% end -%>
   </div>
-  
+
+  <div id="kp-role-application-tab-host">
+    <% form_for(@host_appl) do |f| -%>
+
+      <p>
+        Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+      </p>
+
+      <dl class="form-elements">
+        <dt>
+          <%= f.label :message %>
+        </dt>
+        <dd>
+          <%= f.text_area :message, :size => "40x5" %>
+        </dd>
+      </dl>
+
+      <div class="submit-cnt">
+        <%= f.hidden_field :role_id %>
+        <%= f.submit("Skicka ansökan") %>
+      </div>
+
+    <% end -%>
+  </div>
+
 </div>
 
 <h2>Ansökningshistorik</h2>

@@ -2,7 +2,7 @@ class RoleApplicationsController < ApplicationController
   layout "standard"
   
   before_filter :authenticate
-  before_filter :deny_admin, :only => [ :booker, :culture_worker, :create ]
+  before_filter :deny_admin, :only => [ :create ]
   before_filter :require_admin, :only => [ :archive, :edit, :update ]
   
   def index
@@ -17,6 +17,7 @@ class RoleApplicationsController < ApplicationController
 
       @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
       @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
+      @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
 
       @culture_providers = CultureProvider.find :all, :order => "name"
       
@@ -49,15 +50,20 @@ class RoleApplicationsController < ApplicationController
       redirect_to current_user
     else
       @culture_providers = CultureProvider.find :all, :order => "name"
+
+      @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
+      @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
+      @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
+
+      @application_type = @application.role.symbol_name
       
-      case @application.role.symbol_name
+      case @application_type
       when :booker
-        @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
         @booker_appl = @application
       when :culture_worker
-        @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
         @culture_worker_appl = @application
-        @culture_worker_appl_error = true
+      when :host
+        @host_appl = @application
       end
 
       flash.now[:error] = "Fel uppstod när ansökan skulle skickas."

@@ -12,6 +12,7 @@ class EventTest < ActiveSupport::TestCase
     assert Event.find(events(:bookable).id).bookable?
     assert !Event.find(events(:not_bookable_by_date).id).bookable?
     assert !Event.find(events(:not_bookable_by_tickets).id).bookable?
+    assert !Event.find(events(:not_bookable_by_release_date).id).bookable?
   end
 
   test "not targeted group ids" do

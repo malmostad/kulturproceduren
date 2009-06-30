@@ -9,7 +9,7 @@ namespace :kp do
   namespace :bootstrap do
     desc "Create system roles if the do not exist"
     task(:create_system_roles => :environment) do
-      [:admin, :booker, :culture_worker].each do |role|
+      [:admin, :booker, :culture_worker, :host].each do |role|
         unless Role.find_by_symbol role
           r = Role.new
           r.name = role.to_s
