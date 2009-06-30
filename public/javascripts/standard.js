@@ -185,15 +185,23 @@
     });
 
     $(function() {
-        var imgContainers = $("#kp .model-cnt .images-cnt .images").cycle("fade").parent();
-        
-        $("<a href=\"#\" class=\"play-pause-action playing\">Spela/Pausa</a>").appendTo(imgContainers).toggle(
-            function() {
-                $(this).removeClass("playing").addClass("paused").siblings(".images").cycle("pause");
-            },
-            function() {
-                $(this).removeClass("paused").addClass("playing").siblings(".images").cycle("resume", true);
-            });
+        $("#kp .model-cnt .images-cnt").each(function() {
+            var c = $(this);
+            var imgs = c.find("img");
+
+            if (imgs.length > 1) {
+                    
+                c.find(".images").cycle("fade");
+
+                $("<a href=\"#\" class=\"play-pause-action playing\">Spela/Pausa</a>").appendTo(c).toggle(
+                    function() {
+                        $(this).removeClass("playing").addClass("paused").siblings(".images").cycle("pause");
+                    },
+                    function() {
+                        $(this).removeClass("paused").addClass("playing").siblings(".images").cycle("resume", true);
+                    });
+            }
+        });
     });
 
     $(function() {
