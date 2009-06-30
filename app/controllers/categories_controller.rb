@@ -11,6 +11,7 @@ class CategoriesController < ApplicationController
     @category_groups = CategoryGroup.all
     
     @category = Category.new
+    @category.category_group_id = session[:selected_category_group] if session[:selected_category_group]
   end
 
   def edit
@@ -24,6 +25,8 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(params[:category])
+
+    session[:selected_category_group] = @category.category_group_id
 
     if @category.save
       flash[:notice] = 'Kategorin skapades.'
