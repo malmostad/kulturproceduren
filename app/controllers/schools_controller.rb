@@ -12,10 +12,29 @@ class SchoolsController < ApplicationController
 
   def options_list
     if params[:district_id]
-      @schools = School.all :order => "name ASC", :conditions => { :district_id => params[:district_id] }
+      if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
+        @schools = School.all :order => "name ASC", :conditions => { :district_id => params[:district_id] }
+      else
+        @occasion = Occasion.find(params[:occasion_id])
+        @schools = School.find(
+          :all ,
+          :conditions => { :district_id => params[:district_id] }
+        ).select { |s|
+          s.available_tickets_per_occasion(@occasion) > 0
+        }
+      end
     else
-      @schools = School.all :order => "name ASC"
+      if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
+        @schools = School.all :order => "name ASC"
+      else
+        @occasion = Occasion.find(params[:occasion_id])
+        @schools = School.all.select { |s|
+          s.available_tickets_per_occasion(@occasion) > 0
+        }
+      end
     end
+    puts "Shools = "
+    pp @schools
   end
 
   def show

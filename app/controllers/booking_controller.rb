@@ -70,7 +70,6 @@ class BookingController < ApplicationController
   end
 
   def get_by_group_list
-
     begin
       @group = Group.find(params[:group_id])
       oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
@@ -108,11 +107,50 @@ class BookingController < ApplicationController
     }
   end
 
+  def populate_districts_list
+    if @occasion.blank?
+      return nil
+    end
+    @districts = District.all.select { |d| 
+      d.available_tickets_per_occasion(@occasion) > 0 
+    }
+  end
+
+  def populate_schools_list
+    if @occasion.blank?
+      return nil
+    end
+    if params[:district_id].blank? or params[:district_id].to_i == 0
+      return nil
+    end
+    @schools = School.find(
+      :all ,
+      :conditions => { :district_id => params[:district_id] }
+    ).select { |s|
+      s.available_tickets_per_occasion(@occasion) > 0
+    }
+  end
+
+  def populate_groups_list
+    if @occasion.blank?
+      return nil
+    end
+    if params[:school_id].blank? or params[:school_id].to_i == 0
+      return nil
+    end
+    @groups = Group.find(
+      :all ,
+      :conditions => { :school_id => params[:school_id] }
+    ).select { |g|
+      g.ntickets_by_occasion(@occasion) > 0
+    }
+  end
+
   def book
 
     @user = current_user
 
-    if params[:occasion_id].nil? || params[:occasion_id].to_i == 0
+    if params[:occasion_id].blank? || params[:occasion_id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
       redirect_to "/"
       return
@@ -127,6 +165,15 @@ class BookingController < ApplicationController
       return
     end
 
+    if @occasion.event.ticket_release_date > Date.today
+      flash[:error] = "Föreställningen är inte bokningsbar före #{@occasion.event.ticket_release_date}"
+      redirect_to "/"
+      return
+    end
+    
+    populate_districts_list
+    puts "In booking controller - method book districts ="
+    pp @districts
     #    if ( not params[:group_id].blank? ) && @curgroup = Group.find(params[:group_id])
     #      params[:commit] = "Välj grupp"
     #      params[:district_id] = @curgroup.school.district.id
@@ -134,11 +181,11 @@ class BookingController < ApplicationController
     #    end
 
     if params[:commit] == "Hämta skolor" && !params[:district_id].nil? && params[:district_id].to_i != 0
-      @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
+      populate_schools_list
     elsif params[:commit] == "Hämta grupper"
       if not params[:district_id].nil? && params[:district_id].to_i != 0 && !params[:school_id].nil? && params[:school_id].to_i != 0
-        @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
-        @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+        populate_schools_list
+        populate_groups_list
       else
         bork
       end
@@ -149,8 +196,8 @@ class BookingController < ApplicationController
         params[:school_id] = @group.school.id
       end
       if not params[:district_id].nil? && params[:district_id].to_i != 0 && !params[:school_id].nil? && params[:school_id].to_i != 0 && !params[:group_id].nil? && params[:group_id].to_i != 0
-        @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
-        @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+        populate_schools_list
+        populate_groups_list
         @curgroup = Group.find(params[:group_id].to_i)
         if Ticket.count(:all , :conditions => { :group_id => @curgroup.id , :event_id => @occasion.event.id , :state => Ticket::BOOKED }) > 0
           flash[:info] = "Gruppen #{@curgroup.name} #{@curgroup.school.name} har redan bookat biljetter på den här evenemanget."
@@ -164,8 +211,8 @@ class BookingController < ApplicationController
       end
     elsif params[:commit] == "Boka"
       puts "Do booking inside method book"
-      @schools = School.find :all , :conditions => { :district_id => params[:district_id] }
-      @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
+      populate_schools_list
+      populate_groups_list
       @curgroup = Group.find(params[:group_id])
       params[:commit] = "Välj grupp"
       load_vars
@@ -186,6 +233,17 @@ class BookingController < ApplicationController
       puts "DEGUBB2: #{( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )}"
 
       if params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i == 0
+        @nticks  = params[:seats_students].to_i
+        @naticks = params[:seats_adult].to_i
+        @nwticks = params[:seats_wheelchair].to_i
+        @companion = Companion.new
+        @companion.tel_nr = params[:companion_telnr]
+        @companion.email = params[:companion_email]
+        @companion.name  = params[:companion_name]
+        @br = BookingRequirement.new
+        @br.occasion = @occasion
+        @br.group = @curgroup
+        @br.requirement = params[:booking_request]
         flash[:error] = "Du måste boka minst 1 biljett"
         render :book
         return
@@ -210,21 +268,22 @@ class BookingController < ApplicationController
           return
         end
 
-        chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-        tempid = ""
-        (1..45).each { |i| tempid << chars[rand(chars.size-1)] }
+        unless @occasion.event.questionaire.blank?
+          chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+          tempid = ""
+          (1..45).each { |i| tempid << chars[rand(chars.size-1)] }
 
-        puts "DEBUG: genererat ansformid = #{tempid}"
-        
-        ansform = AnswerForm.new
-        ansform.id = tempid
-        ansform.completed = false
-        ansform.companion = @companion
-        ansform.occasion = @occasion
-        ansform.group = @curgroup
-        ansform.questionaire = @occasion.event.questionaire
-        unless ansform.save
-          flash[:error] = "Kunde inte skapa utvärderingsformulär"
+          puts "DEBUG: genererat ansformid = #{tempid}"
+          ansform = AnswerForm.new
+          ansform.id = tempid
+          ansform.completed = false
+          ansform.companion = @companion
+          ansform.occasion = @occasion
+          ansform.group = @curgroup
+          ansform.questionaire = @occasion.event.questionaire
+          unless ansform.save
+            flash[:error] = "Kunde inte skapa utvärderingsformulär"
+          end
         end
 
         unless params[:booking_request].blank?
@@ -236,6 +295,7 @@ class BookingController < ApplicationController
             flash[:error] = "Kunde inte spara information ang extra behov!"
           end
         end
+
         tot_requested = params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i
         if book_ticks(params[:seats_students].to_i,params[:seats_adult].to_i,params[:seats_wheelchair].to_i)
           flash[:notice] = "Du har bokat #{tot_requested} platser"

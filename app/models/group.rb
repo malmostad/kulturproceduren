@@ -38,18 +38,18 @@ class Group < ActiveRecord::Base
     end
 
     return Ticket.count(:all,
-    :conditions => {
-      :group_id => self.id ,
-      :occasion_id => o.id ,
-      :state => Ticket::BOOKED
-    })
+      :conditions => {
+        :group_id => self.id ,
+        :occasion_id => o.id ,
+        :state => Ticket::BOOKED
+      })
   end
   def ntickets_by_occasion(o, state=Ticket::UNBOOKED, wheelchair=false)
 
     if o.is_a? Integer
       o = Occasion.find(o)
     end
-    m = o.seats
+
     case o.event.ticket_state
     when Event::ALLOTED_GROUP then
       n = Ticket.count :all , :conditions => {
@@ -72,7 +72,12 @@ class Group < ActiveRecord::Base
         :wheelchair => wheelchair
       }  
     end
-    return ( m > n ? n : m )
+    if state == Ticket::UNBOOKED
+      m = o.seats - Ticket.count(:conditions => { :occasion_id => o.id , :state => Ticket::BOOKED } )
+      return ( m > n ? n : m )
+    else
+      return n
+    end
   end
 
   def bookings()

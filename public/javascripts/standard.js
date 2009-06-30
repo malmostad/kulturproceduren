@@ -27,10 +27,12 @@
     $(function() {
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
+            var occasion_id = $("#kp-occasion_id").val();
             var request = $.get(
                 kpConfig.schools.list.url,
                 {
-                    district_id: district_id
+                    district_id: district_id ,
+                    occasion_id: occasion_id
                 },
                 function(data) {
                     $("#kp-school_id").html(data);
@@ -40,10 +42,12 @@
         });
         $("#kp-school_id").change(function() {
             var schoolId = $("#kp-school_id option:selected").val();
+            var occasion_id = $("#kp-occasion_id").val();
             var request = $.get(
                 kpConfig.groups.list.url,
                 {
-                    school_id: schoolId
+                    school_id: schoolId ,
+                    occasion_id: occasion_id
                 }, function(data) {
                     $("#kp-group_id").html(data);
                 });

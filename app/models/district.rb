@@ -19,4 +19,46 @@ class District < ActiveRecord::Base
   validates_presence_of :name, :message => "Namnet får inte vara tomt."
 
   attr_accessor :num_children, :num_tickets, :distribution_schools
+
+  def available_tickets_per_occasion(o)
+    if o.is_a? Integer
+      o = Occasion.find(o)
+    end
+    unless o.is_a? Occasion
+      return nil
+    end
+    retval = 0
+    puts "District model - counting available tickets for district #{self.name}"
+    case o.event.ticket_state
+    when Event::ALLOTED_GROUP
+      puts "Checking with condition district_id"
+      retval =  Ticket.count(
+        :conditions => {
+          :event_id => o.event.id ,
+          :district_id => self.id ,
+          :state => Ticket::UNBOOKED
+        }
+      )
+    when Event::ALLOTED_DISTRICT
+      # Same as above ...
+      puts "Checking with condition district_id"
+      retval =  Ticket.count(
+        :conditions => {
+          :event_id => o.event.id ,
+          :district_id => self.id ,
+          :state => Ticket::UNBOOKED
+        }
+      )
+    when Event::FREE_FOR_ALL
+      puts "Checking without condition district_id"
+      retval = Ticket.count(
+        :conditions => {
+          :event_id => o.event.id ,
+          :state => Ticket::UNBOOKED
+        }
+      )
+    end
+    puts "Returning #{retval} tickets available"
+    return retval
+  end
 end

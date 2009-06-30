@@ -17,7 +17,7 @@ if !group.nil?
     </p>
   <% end %>
   <p id="kp-booking-seatsavail">
-    <%  if not group.blank? %>
+    <%  if not ( group.blank? || occasion.event.ticket_state == Event::FREE_FOR_ALL )   %>
       Det finns ytterligare <%= group.ntickets_by_occasion(occasion) -%> biljetter tillgängligt att boka.
     <%  end %>
   </p>

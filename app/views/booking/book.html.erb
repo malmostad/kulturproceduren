@@ -4,6 +4,11 @@
   Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.date.to_s -%>
 </p>
 
+<% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
+  <p>
+    Det finns totalt <%= [ Ticket.count(:conditions => {:event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ) , ( @occasion.seats - Ticket.count(:conditions => {:occasion_id => @occasion.id , :state => Ticket::BOOKED} ) ) ].sort.first -%> biljetter tillgängligt att boka
+  </p>
+<%  end %>
 
 <form method="post" action="<%= url_for :controller => "booking", :action => "book" %>">
 
@@ -21,10 +26,10 @@
           <%
 
           if params[:district_id].nil?
-            opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } )
+            opt_tag = options_for_select( @districts.collect { |d| [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " - " + d.available_tickets_per_occasion(@occasion).to_s : "" ) , d.id.to_s] } )
           else
             my_d = District.find(params[:district_id].to_i)
-            opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } , my_d.id.to_s )
+            opt_tag = options_for_select( @districts.collect { |d| [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " - " + d.available_tickets_per_occasion(@occasion).to_s : "" ), d.id.to_s] } , my_d.id.to_s )
           end
           opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
         %>
@@ -71,9 +76,9 @@
           <% else %>
 
             <%  if @curgroup.nil? %>
-              <select id="kp-group_id" name="group_id" <%=  @edit.blank? ? "" : "disabled=\"true\"" -%>"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
+              <select id="kp-group_id" name="group_id" <%=  @edit.blank? ? "" : "disabled=\"true\"" -%>"> <option>Välj grupp</option> <%= options_for_select( @groups.map { |g| [ g.name + ( @occasion.event.ticket_state == Event::ALLOTED_GROUP ? " - " + g.ntickets_by_occasion(@occasion).to_s : "" ) , g.id ] } )   %>
             <% else %>
-              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @curgroup.id  %>
+              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_for_select( @groups.map { |g| [ g.name + ( @occasion.event.ticket_state == Event::ALLOTED_GROUP ? " - " + g.ntickets_by_occasion(@occasion).to_s : "" ) , g.id ] } , @curgroup.id)  %>
               <% end %>
             </select>
 

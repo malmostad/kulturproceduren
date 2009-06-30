@@ -12,9 +12,22 @@ class GroupsController < ApplicationController
 
   def options_list
     if params[:school_id]
-      @groups = Group.all :order => "name ASC", :conditions => { :school_id => params[:school_id] }
+      if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
+        @groups = Group.all :order => "name ASC", :conditions => { :school_id => params[:school_id] }
+      else
+        @occasion = Occasion.find(params[:occasion_id])
+        @groups = Group.find(
+          :all ,
+          :conditions => { :school_id => params[:school_id] }
+        ).select { |g| g.ntickets_by_occasion(@occasion) > 0 }
+      end
     else
-      @groups = Group.all :order => "name ASC"
+      if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
+        @occasion = Occasion.find(params[:occasion_id])
+        Group.all.select { |g| g.ntickets_by_occasion(@occasion) > 0 }
+      else
+        @groups = Group.all :order => "name ASC"
+      end
     end
   end
 

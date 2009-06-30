@@ -70,4 +70,36 @@ class School < ActiveRecord::Base
     school_prio.prio = lowest
     school_prio.save!
   end
+
+  def available_tickets_per_occasion(o)
+    if o.is_a? Integer
+      o = Occasion.find(o)
+    end
+    unless o.is_a? Occasion
+      return nil
+    end
+    retval = 0
+    case o.event.ticket_state
+    when Event::ALLOTED_GROUP
+      self.groups.each { |g| retval += g.ntickets_by_occasion(o) }
+    when Event::ALLOTED_DISTRICT
+      retval =  Ticket.count(
+        :conditions => {
+          :event_id => o.event.id ,
+          :district_id => self.district.id ,
+          :state => Ticket::UNBOOKED
+        }
+      )
+    when Event::FREE_FOR_ALL
+      retval = Ticket.count(
+        :conditions => {
+          :event_id => o.event.id ,
+          :state => Ticket::UNBOOKED
+        }
+      )
+    end
+    puts "Schools#available_tickets_per_occasion returning retval = #{retval}"
+    return retval
+  end
+  
 end
