@@ -1,0 +1,85 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    Hantera bilder för
+    <% if @image.culture_provider -%>
+      <%= link_to h(@image.culture_provider.name), @image.culture_provider %>.
+    <% elsif @image.event -%>
+      <%= link_to h(@image.event.name), @image.event %>.
+    <% end -%>
+  </div>
+<% end -%>
+
+<%
+if @image.culture_provider
+  form_url = culture_provider_images_path(@image.culture_provider)
+elsif @image.event
+  form_url = event_images_path(@image.event)
+end
+
+form_for(@image, :url => form_url, :html => { :multipart => true } ) do |f| %>
+
+  <fieldset>
+    <legend>Ladda upp ny bild</legend>
+
+    <dl class="form-elements">
+
+      <dt><%= f.label :name %></dt>
+      <dd>
+        <%= f.text_field :name %>
+        <%= f.error_message_on :name %>
+      </dd>
+
+      <dt><label for="kp-upload-datafile">Bild</label></dt>
+      <dd><%= file_field 'upload' , 'datafile'  %></dd>
+
+    </dl>
+
+    <div class="submit-cnt">
+      <%= f.hidden_field :type -%>
+      <%= f.submit 'Ladda upp' %>
+    </div>
+  </fieldset>
+<% end %>
+
+<% unless @images.blank? -%>
+  <table class="image-list">
+    <thead>
+      <tr>
+        <th>Bild</th>
+        <th>Namn</th>
+        <th<%= ' colspan="2"' if @image.culture_provider %>></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @images.each do |img| -%>
+
+        <%
+        if img.culture_provider
+          is_logo = img.id == img.culture_provider.main_image_id
+        else
+          is_logo = false
+        end
+        -%>
+
+        <tr class="<%= cycle('', 'alt') %> <%= 'logo' if is_logo %>">
+          <td>
+            <img src="<%= h img.thumb_url %>"
+                 alt="<%= h img.name %>"
+                 width="<%= h img.thumb_width %>"
+                 height="<%= h img.thumb_height %>"/>
+          </td>
+          <td><%= h img.name %></td>
+
+          <% if img.culture_provider -%>
+            <td><%= link_to 'Använd som logotyp', set_main_culture_provider_image_path(img.culture_provider, img) unless is_logo -%></td>
+            <td><%= link_to 'Ta bort', culture_provider_image_path(img.culture_provider, img), :confirm => "Är du säker?", :method => :delete %></td>
+          <% elsif img.event -%>
+            <td><%= link_to 'Ta bort', event_image_path(img.event, img), :confirm => "Är du säker?", :method => :delete %></td>
+          <% end -%>
+
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+<% end -%>

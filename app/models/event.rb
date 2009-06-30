@@ -16,7 +16,8 @@ class Event < ActiveRecord::Base
 
   has_one :questionaire
 
-  has_many :images, :conditions => 'id != #{main_image_id || 0}'
+  has_many :images
+  has_many :images_excluding_main, :class_name => "Image", :conditions => 'id != #{main_image_id || 0}'
   belongs_to :main_image, :class_name => "Image", :dependent => :delete
   
   has_many :notification_requests

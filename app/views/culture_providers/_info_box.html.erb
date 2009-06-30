@@ -1,17 +1,12 @@
 <div class="info-box">
-
-  <div class="image">
-    <% if culture_provider.main_image -%>
+  <% if culture_provider.main_image -%>
+    <div class="image">
       <img src="<%= h culture_provider.main_image.thumb_url %>"
            alt="<%= h culture_provider.main_image.name %>"
            width="<%= h culture_provider.main_image.thumb_width %>"
            height="<%= h culture_provider.main_image.thumb_height %>"/>
-    <% end -%>
-
-    <% if user_online? && current_user.can_administrate?(culture_provider) -%>
-      <%= link_to "Ladda upp ny logotyp", new_cp_main_img_path(:culture_provider_id => culture_provider.id), :class => "admin-tool" -%>
-    <% end -%>
-  </div>
+    </div>
+  <% end -%>
 
   <h4><%= h culture_provider.name %></h4>
 
