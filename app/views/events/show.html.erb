@@ -158,9 +158,14 @@
                         <%= link_to "Redigera", edit_occasion_path(occasion) %>
                         <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
                       <% end -%>
-                      
-                      <%= link_to "Närvarolista", attendants_occasion_path(occasion) %>
-                    <% end -%>
+                      <% if occasion.date > Date.today %>
+                        <%= link_to "Närvarolista", attendants_occasion_path(occasion) %>
+                      <% else %>
+                        <% if current_user.has_role?(:admin) or current_user.has_role?(:host) %>
+                          <%= link_to "Rapportera närvaro" , :controller => "occasions" , :action => "report_show" , :id => occasion.id -%>
+                        <% end %>
+                      <% end -%>
+                    <% end %>
                   </td>
                 </tr>
               <% end -%>

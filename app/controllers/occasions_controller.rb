@@ -6,6 +6,99 @@ class OccasionsController < ApplicationController
 
   before_filter :authenticate, :except => [ :index, :show ]
 
+  def report_show
+    @user = current_user
+    if not ( @user.has_role?(:host) || @user.has_role?(:admin) )
+      flash[:error] = "Du har inte behörighet att rapportera närvaro"
+      redirect_to "/"
+      return
+    end
+    if params[:id].blank? or params[:id].to_i == 0
+      flash[:error] = "Ingen föreställning angiven"
+      redirect_to "/"
+      return
+    end
+    begin
+      @occasion = Occasion.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = "Kunde inte hitta angiven föreställning"
+      redirect_to "/"
+      return
+    end
+    if @occasion.date > Date.today
+      flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
+      redirect_to "/"
+      return
+    end
+
+    @groups = Group.find Ticket.find(
+      :all ,
+      :select => "distinct group_id" ,
+      :conditions => {
+        :occasion_id => @occasion.id ,
+        :state => Ticket::BOOKED
+      } ).map { |t| t.group_id }
+    render :report
+  end
+
+  def report_create
+    @user = current_user
+    if not ( @user.has_role?(:host) || @user.has_role?(:admin) )
+      flash[:error] = "Du har inte behörighet att rapportera närvaro"
+      redirect_to "/"
+      return
+    end
+    if params[:id].blank? or params[:id].to_i == 0
+      flash[:error] = "Ingen föreställning angiven"
+      redirect_to "/"
+      return
+    end
+    begin
+      @occasion = Occasion.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = "Kunde inte hitta angiven föreställning"
+      redirect_to "/"
+      return
+    end
+    if @occasion.date > Date.today
+      flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
+      redirect_to "/"
+      return
+    end
+
+    @groups = Group.find Ticket.find(
+      :all ,
+      :select => "distinct group_id" ,
+      :conditions => {
+        :occasion_id => @occasion.id ,
+        :state => Ticket::BOOKED
+      } ).map { |t| t.group_id }
+    if not params[:groups].blank?
+      @report_complete = params[:groups].keys.map {|k| k.to_i }.sort == @groups.map {|g| g.id}.sort
+      if @report_complete
+        @groups.each do |group|
+          tickets = Ticket.find(:all , :conditions => {:occasion_id => @occasion.id , :group_id => group.id } )
+          n = 0
+          tickets.each do |ticket|
+            if n < params[:groups]["#{group.id}"].to_i
+              ticket.state = Ticket::USED
+            else
+              ticket.state = Ticket::NOT_USED
+            end
+            ticket.save or flash[:error] = "Kunde inte uppdatera närvarostatistiken ..."
+            n += 1
+          end
+        end
+        flash[:notice] = "Tack för närvarorapporten"
+        redirect_to "/"
+      else
+        flash[:error] = "Rapporten inkomplett"
+        render :report
+      end
+    end
+  end
+
+
   def attendants
     @occasion = Occasion.find(params[:id])
 

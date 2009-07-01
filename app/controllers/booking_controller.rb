@@ -20,6 +20,18 @@ class BookingController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       puts "Inga biljetter bokade"
     end
+    @nticks  = params[:seats_students].to_i
+    @naticks = params[:seats_adult].to_i
+    @nwticks = params[:seats_wheelchair].to_i
+    @companion = Companion.new
+    @companion.tel_nr = params[:companion_telnr]
+    @companion.email = params[:companion_email]
+    @companion.name  = params[:companion_name]
+    @br = BookingRequirement.new
+    @br.occasion = @occasion
+    @br.group = @curgroup
+    @br.requirement = params[:booking_request]
+
     if t.blank?
       @edit = false
     else
@@ -233,17 +245,6 @@ class BookingController < ApplicationController
       puts "DEGUBB2: #{( params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i )}"
 
       if params[:seats_students].to_i + params[:seats_adult].to_i + params[:seats_wheelchair].to_i == 0
-        @nticks  = params[:seats_students].to_i
-        @naticks = params[:seats_adult].to_i
-        @nwticks = params[:seats_wheelchair].to_i
-        @companion = Companion.new
-        @companion.tel_nr = params[:companion_telnr]
-        @companion.email = params[:companion_email]
-        @companion.name  = params[:companion_name]
-        @br = BookingRequirement.new
-        @br.occasion = @occasion
-        @br.group = @curgroup
-        @br.requirement = params[:booking_request]
         flash[:error] = "Du måste boka minst 1 biljett"
         render :book
         return

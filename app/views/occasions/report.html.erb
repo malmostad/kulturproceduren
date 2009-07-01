@@ -1,0 +1,44 @@
+
+<h3>
+  Närvarande vid
+  <%= link_to h(@occasion.event.name), @occasion.event -%>
+  <%= h @occasion.date -%>
+  <%= l @occasion.start_time, :format => :only_time %>
+</h3>
+
+<% form_tag({ :action => :report_create }  )  do %>
+  <%= hidden_field_tag "id" , @occasion.id %>
+  <table class="attendant-list" >
+    <thead>
+      <tr>
+        <th> Skola </th>
+        <th> Grupp </th>
+        <th> Antal anmälda deltagare </th>
+        <th> Antal närvarande deltagare </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @groups.each do |group| %>
+        <tr class="<%= cycle('', 'alt') %>">
+          <td> <%= h group.school.name -%> </td>
+          <td> <%= h group.name -%> </td>
+          <td> <%= h group.ntickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
+          <td>
+            <% have_group_value =  ( not params[:groups].blank? ) && ( not params[:groups]["#{group.id}"].blank? ) %>
+            <% if not params[:commit].blank? and params[:groups]["#{group.id}"].blank? %>
+              <span class="unans-report">
+            <% else %>
+              <span class="ans-report">
+            <% end %>
+            <%= text_field_tag "groups[#{group.id}]" ,  have_group_value ? params[:groups]["#{group.id}"] : "" -%>
+            <% if not params[:commit].blank? and not have_group_value  %>
+              Du måste fylla antal närvarande
+            <%  end %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= submit_tag "Rapportera närvaro" %>
+<% end %>
