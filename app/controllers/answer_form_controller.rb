@@ -22,6 +22,7 @@ class AnswerFormController < ApplicationController
     end
 
     @answer = params[:answer]
+    puts "answer = "
     pp @answer
     @qids = []
 
@@ -30,10 +31,12 @@ class AnswerFormController < ApplicationController
         @qids << k unless @answer["#{k}"].blank?
       end
     end
-    
+
+
     if ( not @qids.blank? )
-      if ( (@qids.map { |k| k.to_i } - @answer_form.questionaire.question_ids).empty? )
-        # All questions answered - update answer_form , create answer objects and thank the user
+      @non_answered_mandatory_questions =  @answer_form.questionaire.questions.select { |q| q.mandatory }.map {|q| q.id } - @qids.map { |k| k.to_i }.sort
+      if (  @non_answered_mandatory_questions.blank? )
+        # All mandatory questions answered - update answer_form , create answer objects and thank the user
         @answer.each do |qid , ans|
           puts "Creating answer for qid = #{qid} answer = #{ans}"
           answer = Answer.new
@@ -49,6 +52,8 @@ class AnswerFormController < ApplicationController
         flash[:notice] = "Tack för att du svarade på utvärderingsenkäten"
         redirect_to "/"
         return
+      else
+        #brappa?
       end
     end
 

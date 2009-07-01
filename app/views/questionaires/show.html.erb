@@ -45,6 +45,7 @@
         <tr>
           <th>Fråga</th>
           <th>Mallfråga</th>
+          <th>Obligatorisk</th>
           <th colspan="2"></th>
         </tr>
       </thead>
@@ -55,6 +56,7 @@
           <tr class="<%= cycle("", "alt") %>">
             <td><%= h question.question %></td>
             <td><%= "Ja" if question.template %></td>
+            <td><%= "Ja" if question.mandatory -%></td>
             <td><%= link_to "Redigera", edit_questionaire_question_path(@questionaire, question) unless question.template %></td>
             <% if question.template -%>
               <td>

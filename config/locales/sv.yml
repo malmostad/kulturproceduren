@@ -200,6 +200,7 @@ sv:
             question:
                 question: Fråga
                 choice_csv: Flervalsalternativ
+                mandatory:  Obligatorisk
 
     # Used in array.to_sentence.
     support:

@@ -57,7 +57,7 @@ class QuestionairesController < ApplicationController
 
   def create
     @questionaire = Questionaire.new(params[:questionaire])
-    
+    @questionaire.questions = Question.find(:all , :conditions => { :template => true })
     if @questionaire.save
       flash[:notice] = 'Enkäten skapades.'
       redirect_to @questionaire 

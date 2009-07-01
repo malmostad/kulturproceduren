@@ -33,6 +33,12 @@ end
     <%= f.text_field :choice_csv -%>
     <span class="help">Ange alternativen separerade med kommatecken</span>
   </div>
+  
+  <div class="question-mandatory">
+    <%= f.label :mandatory %>
+    <%= f.check_box :mandatory %>
+    <%= f.error_message_on :mandatory %>
+  </div>
 
   <div class="submit-cnt">
     <%= f.hidden_field :template -%>

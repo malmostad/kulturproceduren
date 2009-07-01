@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.string   "question"
     t.string   "choice_csv"
     t.boolean  "template"
+    t.boolean  "mandatory"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

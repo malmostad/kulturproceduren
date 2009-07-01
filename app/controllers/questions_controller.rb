@@ -17,6 +17,7 @@ class QuestionsController < ApplicationController
       :order => sort_order("question")
     @question = Question.new do |q|
       q.template = true
+      q.mandatory = true
       q.qtype = "QuestionMark"
     end
   end
