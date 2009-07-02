@@ -75,9 +75,10 @@ class OccasionsController < ApplicationController
       } ).map { |t| t.group_id }
     if not params[:groups].blank?
       @report_complete = false
+      @reported_groups = {}
       #allow only numerical gids and number of attendees
       params[:groups].select { |gid,nattend|
-        nattend.is_a? Integer and gid.is_a? Integer
+        nattend.to_i > 0 and gid.to_i > 0
       }.map { |gids,nattends|
         @reported_groups["#{gids}"] = nattends
       }
@@ -104,7 +105,6 @@ class OccasionsController < ApplicationController
       render :report
     end
   end
-end
 
 
 def attendants
