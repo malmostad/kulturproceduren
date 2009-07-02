@@ -1,0 +1,12 @@
+
+<br>
+<p>
+  Hur vill du få information när det finns fler biljetter att boka?
+</p>
+<p>
+  <%= form.check_box  :send_mail %> <%=form.label "Via mail" %><br/>
+  <%= form.check_box  :send_sms %> <%=form.label "Via sms" %><br/>
+</p>
+<p>
+  <%= form.submit "Skapa förfrågan" %> <%= form.submit "Börja om" %>
+</p>

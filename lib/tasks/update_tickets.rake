@@ -4,7 +4,7 @@ namespace :kp do
     Event.all.each do |e|
       state_change = nil
 
-      if e.ticket_release_date + APP_CONFIG[:ticket_state_change_days] > Date.today
+      if e.ticket_release_date + APP_CONFIG[:ticket_state_change_days] > Date.today and e.ticket_state != Event::FREE_FOR_ALL
         e.ticket_state = Event::ALLOTED_DISTRICT
         state_change = Event::ALLOTED_DISTRICT
         e.save

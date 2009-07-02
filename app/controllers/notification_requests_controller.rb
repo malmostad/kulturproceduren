@@ -1,6 +1,39 @@
 class NotificationRequestsController < ApplicationController
   layout "standard"
-  
+  before_filter :check_occasion , :only => [ :new , :create ]
+  before_filter :check_user , :only => [ :new , :create , :get_input_area ]
+
+  def check_user
+    @user = current_user
+    if not @user.can_book?
+      flash[:error] = "Du har inte behörighet att boka biljetter"
+      redirect_to "/"
+      return
+    end
+  end
+
+  def check_occasion
+    if params[:occasion_id].blank? and not params[:notification_request]["occasion_id"].blank?
+      params[:occasion_id] = params[:notification_request]["occasion_id"]
+    end
+    if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
+      flash[:error] = "Ingen föreställning angiven"
+      redirect_to "/"
+      return
+    end
+    begin
+      @occasion = Occasion.find(params[:occasion_id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = "Kunde inte hitta angiven föreställning"
+      redirect_to "/"
+      return
+    end
+  end
+
+  def get_input_area
+    render :partial => "input_area_js"
+  end
+
   # GET /notification_requests
   # GET /notification_requests.xml
   def index
@@ -27,11 +60,8 @@ class NotificationRequestsController < ApplicationController
   # GET /notification_requests/new.xml
   def new
     @notification_request = NotificationRequest.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @notification_request }
-    end
+    @notification_request.occasion = @occasion
+    @notification_request.user = @user
   end
 
   # GET /notification_requests/1/edit
@@ -39,20 +69,33 @@ class NotificationRequestsController < ApplicationController
     @notification_request = NotificationRequest.find(params[:id])
   end
 
+  
   # POST /notification_requests
   # POST /notification_requests.xml
   def create
-    @notification_request = NotificationRequest.new(params[:notification_request])
-
-    respond_to do |format|
+    if params[:commit] == "Skapa förfrågan"
+      @notification_request = NotificationRequest.new(params[:notification_request])
       if @notification_request.save
-        flash[:notice] = 'NotificationRequest was successfully created.'
-        format.html { redirect_to(@notification_request) }
-        format.xml  { render :xml => @notification_request, :status => :created, :location => @notification_request }
+        flash[:info] = "Du kommer att få medelande när det finns fler biljetter att boka"
+        redirect_to "/"
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @notification_request.errors, :status => :unprocessable_entity }
+        flash[:error] = "Kunde inte spara ..."
+        redirect_to "/"
       end
+    else
+      @notification_request = NotificationRequest.new
+      @notification_request.occasion = @occasion
+      @notification_request.user = @user
+      if not params[:district_id].blank? or params[:district_id].to_i == 0
+        @schools = School.find(:all , :conditions => { :district_id => params[:district_id] } )
+      end
+      if not ( params[:school_id].blank? or params[:school_id].to_i == 0 )
+        @groups = Group.find(:all , :conditions => {:school_id => params[:school_id] } )
+      end
+      if not ( params[:notification_request].blank? or params[:notification_request][:group_id].blank? or params[:notification_request][:group_id].to_i == 0)
+        @notification_request.group = Group.find(params[:notification_request][:group_id])
+      end
+      render :new
     end
   end
 

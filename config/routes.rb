@@ -17,6 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :occasions, :except => [ :index ], :member => { :attendants => :get }
 
   map.resources :booking_requirements
+  map.notreq_input_area 'notification_requests/get_input_area' , :controller => "notification_requests" , :action => "get_input_area"
   map.resources :notification_requests
 
   map.resources :questionaires, :member => {
@@ -51,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
   map.grant_role 'users/:id/grant/:role', :controller => 'users', :action => 'grant'
   map.revoke_role 'users/:id/revoke/:role', :controller => 'users', :action => 'revoke'
   map.remove_culture_provider_user 'users/:id/remove_culture_provider/:culture_provider_id', :controller => 'users', :action => 'remove_culture_provider'
-
+  
   
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

@@ -20,8 +20,6 @@ class Event < ActiveRecord::Base
   has_many :images_excluding_main, :class_name => "Image", :conditions => 'id != #{main_image_id || 0}'
   belongs_to :main_image, :class_name => "Image", :dependent => :delete
   
-  has_many :notification_requests
-  
   validates_presence_of :name, :message => "Namnet får inte vara tomt"
   validates_presence_of :description, :message => "Beskrivningen får inte vara tom"
   validates_numericality_of :from_age, :to_age, :only_integer => true, :message => "Åldern måste vara ett giltigt heltal."

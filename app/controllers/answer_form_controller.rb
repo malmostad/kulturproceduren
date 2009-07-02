@@ -21,9 +21,8 @@ class AnswerFormController < ApplicationController
       return
     end
 
-    @answer = params[:answer]
-    puts "answer = "
-    pp @answer
+    @answer = params[:answer].blank? ? {} : params[:answer]
+
     @qids = []
 
     if not @answer.blank? 
@@ -38,7 +37,6 @@ class AnswerFormController < ApplicationController
       if (  @non_answered_mandatory_questions.blank? )
         # All mandatory questions answered - update answer_form , create answer objects and thank the user
         @answer.each do |qid , ans|
-          puts "Creating answer for qid = #{qid} answer = #{ans}"
           answer = Answer.new
           answer.question_id = qid
           answer.answer_text = ans

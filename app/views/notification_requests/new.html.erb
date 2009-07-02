@@ -1,27 +1,33 @@
-<h1>New notification_request</h1>
-
-<% form_for(@notification_request) do |f| %>
-  <%= f.error_messages :id => nil, :class => "form-error-messages" %>
-
-  <p>
-    <%= f.label :send_mail %><br />
-    <%= f.check_box :send_mail %>
-  </p>
-  <p>
-    <%= f.label :send_sms %><br />
-    <%= f.check_box :send_sms %>
-  </p>
-  <p>
-    <%= f.label :group_id %><br />
-    <%= f.text_field :group_id %>
-  </p>
-  <p>
-    <%= f.label :occasion_id %><br />
-    <%= f.text_field :occasion_id %>
-  </p>
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
+<p>
+  Få information när fler biljetter blir tillgängliga för föreställningen <%= @occasion.event.name -%> , <%=  @occasion.date.to_s -%>
+</p>
+<p>
+Välj vilken grupp du vill boka för:
+</p>
+<% form_for @notification_request do |form| %>
+  <%= form.hidden_field  :occasion_id %>
+  <%= form.hidden_field  :user_id %>
+  <%=
+  render(
+    :partial => "group_select" ,
+    :locals => {
+      :district_id => params[:district_id] ,
+      :school_id   => params[:school_id] ,
+      :schools     => @schools ,
+      :group_id    => @notification_request.group.blank? ? nil : @notification_request.group.id ,
+      :groups      => @groups ,
+      :form        => form
+    })
+%>
+  <div id="kp-notreq-input-area">
+    <% if  not @notification_request.group.blank? %>
+      <%= render(
+        :partial => "input_area" ,
+        :locals => {
+          :notification_request => @notification_request ,
+          :form                 => form
+        })
+    %>
+    <% end %>
+  </div>
 <% end %>
-
-<%= link_to 'Back', notification_requests_path %>

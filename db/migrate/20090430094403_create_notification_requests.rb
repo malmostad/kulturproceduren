@@ -5,7 +5,8 @@ class CreateNotificationRequests < ActiveRecord::Migration
       t.boolean :send_sms
       t.integer :group_id
       t.integer :occasion_id
-
+      t.integer :user_id
+      
       t.timestamps
     end
   end
