@@ -24,13 +24,13 @@
           <td> <%= h group.name -%> </td>
           <td> <%= h group.ntickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
           <td>
-            <% have_group_value =  ( not params[:groups].blank? ) && ( not params[:groups]["#{group.id}"].blank? ) %>
-            <% if not params[:commit].blank? and params[:groups]["#{group.id}"].blank? %>
+            <% have_group_value =  ( not @reported_groups.blank? ) && ( not @reported_groups["#{group.id}"].blank? ) %>
+            <% if not params[:commit].blank? and @reported_groups["#{group.id}"].blank? %>
               <span class="unans-report">
             <% else %>
               <span class="ans-report">
             <% end %>
-            <%= text_field_tag "groups[#{group.id}]" ,  have_group_value ? params[:groups]["#{group.id}"] : "" -%>
+            <%= text_field_tag "groups[#{group.id}]" ,  have_group_value ? @reported_groups["#{group.id}"] : "" -%>
             <% if not params[:commit].blank? and not have_group_value  %>
               Du måste fylla antal närvarande
             <%  end %>
