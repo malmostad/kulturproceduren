@@ -1,81 +1,99 @@
-<%
+<% form_tag( :action=>"create", :controller=>"notification_requests"  ) do  %>
+  <%
 
-district_id ||= nil
+  district_id ||= nil
 
-school_id   ||= nil
-schools     ||= nil
+  school_id   ||= nil
+  schools     ||= nil
 
-group_id    ||= nil
-groups      ||= nil
+  group_id    ||= nil
+  groups      ||= nil
 
+  districts_select_disabled = ( not groups.blank? or not schools.blank? )
+  schools_select_disabled = ( not groups.blank? )
+  groups_select_disabled = ( not ( group_id.blank? or group_id.to_i == 0 ) )
 
-if district_id.blank?
-  opt_tag_districts = options_for_select( District.all.collect { |d| [d.name  , d.id.to_s] } )
-else
-  curdistrict = District.find(district_id.to_i)
-  opt_tag_districts = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } , curdistrict.id.to_s )
-end
-opt_tag_districts = "<option>Välj Stadsdel</option>\n" + opt_tag_districts
-
-%>
-
-<%= select_tag("district_id",opt_tag_districts,{:id => "kp-notreq-district_id"}) %>
-
-<noscript>
-<% if schools.blank? and groups.blank? %>
-    <input name="commit" type="submit" value="Hämta skolor" /><br/>
-<% else %>
-    <br/>
-<% end %>
-</noscript>
-<%
-
-if schools.blank?
-  opt_tag_schools = "<option>Välj stadsdel först</option>"
-else
-  if school_id.blank? or school_id.to_i == 0
-    opt_tag_schools = options_for_select( schools.collect { |d| [d.name  , d.id.to_s] } )
+  if district_id.blank?
+    opt_tag_districts = options_for_select( District.all.collect { |d| [d.name  , d.id.to_s] } )
   else
-    curschool = School.find(school_id.to_i)
-    opt_tag_schools = options_for_select( schools.collect { |d| [d.name , d.id.to_s] } , curschool.id.to_s )
+    curdistrict = District.find(district_id.to_i)
+    opt_tag_districts = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } , curdistrict.id.to_s )
   end
-  opt_tag_schools = "<option>Välj skola</option>\n" + opt_tag_schools
-end
+  opt_tag_districts = "<option>Välj Stadsdel</option>\n" + opt_tag_districts
+
 %>
-<%= select_tag("school_id",opt_tag_schools,{:id => "kp-notreq-shool_id"}) %>
 
-<noscript>
-<% if ( not schools.blank? ) and groups.blank? %>
-    <input name="commit" type="submit" value="Hämta grupper" /><br/>
-<% else %>
-    <br/>
-<% end %>
-</noscript>
+  <%= hidden_field_tag "occasion_id" , occasion.id %>
+<%= hidden_field_tag "user_id" , user.id %>
 
-<%
-if groups.blank? and schools.blank?
-  opt_tag_groups = "Välj stadsdel först"%>
-  <%= form.select(:group_id , opt_tag_groups ) %><%
-elsif groups.blank?
-  opt_tag_groups = "Välj skola först"%>
-  <%= form.select(:group_id , opt_tag_groups ) %><%
-else
-  puts "BAPP: group_id = #{group_id}"
-  if group_id.blank? or group_id.to_i == 0
-    opt_tag_groups = groups.collect { |d| [d.name  , d.id.to_s] } %>
-    <%= form.select(:group_id , opt_tag_groups ) %><%
+  <% if districts_select_disabled %>
+    <%= select_tag("district_id",opt_tag_districts,{:id => "kp-notreq-district_id" , :disabled => true }) %>
+    <%= hidden_field_tag "district_id" , district_id %>
+  <% else %>
+    <%= select_tag("district_id",opt_tag_districts,{:id => "kp-notreq-district_id"}) %>
+  <% end %>
+
+  <noscript>
+    <% if schools.blank? and groups.blank? %>
+      <%= submit_tag "Hämta skolor" %><br/>
+    <% else %>
+      <br/>
+    <% end %>
+  </noscript>
+  <%
+
+  if schools.blank?
+    opt_tag_schools = "<option>Välj stadsdel först</option>"
   else
-    opt_tag_groups =  groups.collect { |d| [d.name , d.id.to_s] }
-  %>
-    <%= form.select( :group_id , opt_tag_groups , { :selected => group_id.to_s } ) %><%
+    if school_id.blank? or school_id.to_i == 0
+      opt_tag_schools = options_for_select( schools.collect { |d| [d.name  , d.id.to_s] } )
+    else
+      curschool = School.find(school_id.to_i)
+      opt_tag_schools = options_for_select( schools.collect { |d| [d.name , d.id.to_s] } , curschool.id.to_s )
+    end
+    opt_tag_schools = "<option>Välj skola</option>\n" + opt_tag_schools
   end
-  opt_tag_groups.insert 0, "Välj grupp\n"
-end
 %>
-<noscript>
-<% if ( not schools.blank? ) and (not groups.blank? ) and ( group_id.blank? or group_id.to_i == 0 )  %>
-    <input name="commit" type="submit" value="Välj grupp" /><br/>
-<% else %>
-  <br/>
+  <% if schools_select_disabled %>
+    <%= select_tag("school_id",opt_tag_schools,{:id => "kp-notreq-shool_id" , :disabled => true}) %>
+    <%= hidden_field_tag "school_id" , school_id %>
+  <% else %>
+    <%= select_tag("school_id",opt_tag_schools,{:id => "kp-notreq-shool_id"}) %>
+  <% end %>
+
+  <noscript>
+    <% if ( not schools.blank? ) and groups.blank? %>
+      <%= submit_tag "Hämta grupper" %><br/>
+    <% else %>
+      <br/>
+    <% end %>
+  </noscript>
+
+  <%
+  if groups.blank? and schools.blank?
+    opt_tag_groups = "<option>Välj stadsdel först</option>"%>
+    <%= select_tag("group_id" , opt_tag_groups , { :id => "kp-notification_request-group_id"} ) %><%
+  elsif groups.blank?
+    opt_tag_groups = "<option>Välj skola först</option>" %>
+    <%= select_tag("group_id" , opt_tag_groups ) %><%
+  else
+    if group_id.blank? or group_id.to_i == 0
+      opt_tag_groups = options_for_select(groups.collect { |d| [d.name  , d.id.to_s] } ) 
+      opt_tag_groups = "<option>Välj grupp</option>" + opt_tag_groups%>
+      <%= select_tag(:group_id , opt_tag_groups ) %><%
+    else
+      opt_tag_groups =  options_for_select( groups.collect { |d| [d.name , d.id.to_s] } , group_id.to_s )
+      opt_tag_groups = "<option>Välj grupp</option>" + opt_tag_groups
+    %>
+      <%= select_tag( "group_id" , opt_tag_groups , {:disabled => true } ) %><%
+    end
+  end
+%>
+  <noscript>
+    <% if ( not schools.blank? ) and (not groups.blank? ) and ( group_id.blank? or group_id.to_i == 0 )  %>
+      <%= submit_tag "Välj grupp" %><br/>
+    <% else %>
+      <br/>
+    <% end %>
+  </noscript>
 <% end %>
-</noscript>

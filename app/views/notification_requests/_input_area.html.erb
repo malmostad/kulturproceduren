@@ -1,12 +1,15 @@
-
-<br>
+<% form_for @notification_request do |form| %>
+<%= form.hidden_field :occasion_id %>
+<%= form.hidden_field :group_id %>
+<%= form.hidden_field :user_id %>
 <p>
-  Hur vill du få information när det finns fler biljetter att boka?
+Hur vill du få information när det finns fler biljetter att boka?
 </p>
 <p>
-  <%= form.check_box  :send_mail %> <%=form.label "Via mail" %><br/>
-  <%= form.check_box  :send_sms %> <%=form.label "Via sms" %><br/>
+<%= form.check_box :send_mail %> <%=label_tag "Via mail" %><br/>
+<%= form.check_box :send_sms %> <%=  label_tag "Via sms" %><br/>
 </p>
 <p>
-  <%= form.submit "Skapa förfrågan" %> <%= form.submit "Börja om" %>
+<%= submit_tag "Skapa förfrågan" %>
 </p>
+<% end  %>

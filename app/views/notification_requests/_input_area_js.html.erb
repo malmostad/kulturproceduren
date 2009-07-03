@@ -1,10 +1,15 @@
+<% form_for @notification_request do |form| %>
+<%= form.hidden_field :occasion_id %>
+<%= form.hidden_field :group_id %>
+<%= form.hidden_field :user_id %>
 <p>
 Hur vill du få information när det finns fler biljetter att boka?
 </p>
 <p>
-<%= check_box_tag  "notification_request[send_mail]" %> <%=label_tag "Via mail" %><br/>
-<%= check_box_tag  "notification_request[send_sms]" %> <%=  label_tag "Via sms" %><br/>
+<%= form.check_box :send_mail %> <%=label_tag "Via mail" %><br/>
+<%= form.check_box :send_sms %> <%=  label_tag "Via sms" %><br/>
 </p>
 <p>
-<%= submit_tag "Skapa förfrågan" %> <%= submit_tag "Börja om" %>
+<%= submit_tag "Skapa förfrågan" %>
 </p>
+<% end  %>

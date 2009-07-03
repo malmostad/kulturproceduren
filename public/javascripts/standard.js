@@ -93,12 +93,14 @@
         });
         $("#kp-notification_request-group_id").change(function() {
             var groupId = $("#kp-notification_request-group_id option:selected").val();
-            var occasionId = $("#kp-notification_request-occasion_id").val();
+            var occasionId = $("#kp-occasion_id").val();
+            var userId = $("#kp-user_id").val();
             var request = $.get(
                 kpConfig.notreq.notreqInput.url,
                 {
                     group_id: groupId ,
-                    occasion_id : occasionId
+                    occasion_id : occasionId ,
+                    user_id : userId
                 },
                 function(data) {
                     $("#kp-notreq-input-area").html(data);

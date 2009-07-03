@@ -2,32 +2,35 @@
   Få information när fler biljetter blir tillgängliga för föreställningen <%= @occasion.event.name -%> , <%=  @occasion.date.to_s -%>
 </p>
 <p>
-Välj vilken grupp du vill boka för:
+  Välj vilken grupp du vill boka för:
 </p>
-<% form_for @notification_request do |form| %>
-  <%= form.hidden_field  :occasion_id %>
-  <%= form.hidden_field  :user_id %>
-  <%=
-  render(
-    :partial => "group_select" ,
-    :locals => {
-      :district_id => params[:district_id] ,
-      :school_id   => params[:school_id] ,
-      :schools     => @schools ,
-      :group_id    => @notification_request.group.blank? ? nil : @notification_request.group.id ,
-      :groups      => @groups ,
-      :form        => form
-    })
+<%=
+render(
+  :partial => "group_select" ,
+  :locals => {
+    :district_id => params[:district_id] ,
+    :school_id   => params[:school_id] ,
+    :schools     => @schools ,
+    :group_id    => params[:group_id] ,
+    :groups      => @groups ,
+    :occasion    => @occasion ,
+    :user        => @user
+  })
 %>
-  <div id="kp-notreq-input-area">
-    <% if  not @notification_request.group.blank? %>
-      <%= render(
-        :partial => "input_area" ,
-        :locals => {
-          :notification_request => @notification_request ,
-          :form                 => form
-        })
-    %>
-    <% end %>
-  </div>
-<% end %>
+<div id="kp-notreq-input-area">
+  <% if  not @notification_request.group.blank? %>
+    <%= render(
+      :partial => "input_area" ,
+      :locals => {
+        :notification_request => @notification_request 
+      })
+  %>
+  <% end %>
+  <br/>
+</div>
+<p>
+  <% form_tag( { :action=>"new", :controller=>"notification_requests"} , :method => "get" ) do  %>
+    <%= submit_tag "Börja om" %>
+  <% end %>
+</p>
+

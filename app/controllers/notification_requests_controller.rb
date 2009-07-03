@@ -1,6 +1,6 @@
 class NotificationRequestsController < ApplicationController
   layout "standard"
-  before_filter :check_occasion , :only => [ :new , :create ]
+  before_filter :check_occasion , :only => [ :new , :create , :get_input_area ]
   before_filter :check_user , :only => [ :new , :create , :get_input_area ]
 
   def check_user
@@ -31,7 +31,15 @@ class NotificationRequestsController < ApplicationController
   end
 
   def get_input_area
-    render :partial => "input_area_js"
+    @notification_request = NotificationRequest.new
+    @notification_request.user = @user
+    if params[:group_id].blank? or params[:group_id].to_i == 0
+      render :text => "Otacksamma unge!"
+      return
+    end
+    @notification_request.group = Group.find(params[:group_id])
+    @notification_request.occasion = @occasion
+    render :partial => "input_area"
   end
 
   # GET /notification_requests
@@ -76,12 +84,15 @@ class NotificationRequestsController < ApplicationController
     if params[:commit] == "Skapa förfrågan"
       @notification_request = NotificationRequest.new(params[:notification_request])
       if @notification_request.save
-        flash[:info] = "Du kommer att få medelande när det finns fler biljetter att boka"
+        flash[:notice] = "Du kommer att få medelande när det finns fler biljetter att boka"
         redirect_to "/"
       else
         flash[:error] = "Kunde inte spara ..."
         redirect_to "/"
       end
+    elsif params[:commit] == "Börja om"
+      redirect_to :action => "new" , :occasion_id => @occasion.id
+      return
     else
       @notification_request = NotificationRequest.new
       @notification_request.occasion = @occasion
@@ -92,8 +103,8 @@ class NotificationRequestsController < ApplicationController
       if not ( params[:school_id].blank? or params[:school_id].to_i == 0 )
         @groups = Group.find(:all , :conditions => {:school_id => params[:school_id] } )
       end
-      if not ( params[:notification_request].blank? or params[:notification_request][:group_id].blank? or params[:notification_request][:group_id].to_i == 0)
-        @notification_request.group = Group.find(params[:notification_request][:group_id])
+      if not ( params[:group_id].blank? or params[:group_id].to_i == 0)
+        @notification_request.group = Group.find(params[:group_id])
       end
       render :new
     end

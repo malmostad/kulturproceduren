@@ -9,12 +9,16 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :culture_providers do |cp|
     cp.resources :images, :except => [ :show, :edit, :update, :new ],
-      :member => { :set_main, :get }
+      :member => { :set_main => :get }
   end
+
   map.resources :events, :except => [ :index ], :member => { :stats => :get } do |e|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
   end
-  map.resources :occasions, :except => [ :index ], :member => { :attendants => :get }
+  
+  map.resources :occasions , :except => [ :index ], :member => { :attendants => :get } do |oc|
+    oc.resources :notification_requests , :except => [ :index , :edit , :update , :show ] , :collection => { :get_input_area => :get }
+  end
 
   map.resources :booking_requirements
   map.notreq_input_area 'notification_requests/get_input_area' , :controller => "notification_requests" , :action => "get_input_area"
