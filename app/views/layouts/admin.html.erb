@@ -59,6 +59,12 @@
         </div>
       <% end -%>
 
+      <% if flash[:warning] -%>
+        <div id="kp-flash-warning" class="flash">
+          <%= flash[:warning] %>
+        </div>
+      <% end -%>
+
       <% if flash[:error] -%>
         <div id="kp-flash-error" class="flash">
           <%= flash[:error] %>

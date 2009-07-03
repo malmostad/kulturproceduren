@@ -180,7 +180,6 @@ class OccasionsController < ApplicationController
       flash[:notice] = 'Föreställningen skapades.'
       redirect_to(@occasion.event)
     else
-      flash.now[:error] = 'Fel uppstod när föreställningen skulle skapas.'
       @event = @occasion.event
       @category_groups = CategoryGroup.all :order => "name ASC"
       render :template => "events/show"
@@ -200,7 +199,6 @@ class OccasionsController < ApplicationController
       flash[:notice] = 'Föreställningen uppdaterades.'
       redirect_to(@occasion.event)
     else
-      flash.now[:error] = 'Fel uppstod när föreställningen skulle uppdateras.'
       @event = @occasion.event
       @category_groups = CategoryGroup.all :order => "name ASC"
       render :template => "events/show"

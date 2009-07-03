@@ -4,29 +4,27 @@
 
 <% if is_edit || !@events.empty? %>
 
-  <% if is_edit -%>
-    <p>Redigerar enkät för <%= h @questionaire.event.name %></p>
-  <% end -%>
+  <% form_for @questionaire, :builder => KPFormBuilder, :html => { :class => "questionaire-form" } do |f| %>
 
-  <% form_for @questionaire do |f| %>
-    <fieldset>
-      <legend><%= is_edit ? "Redigera" : "Lägg till" %> enkät</legend>
+    <%= f.title(is_edit ? "Redigera enkät" : "Lägg till enkät") -%>
 
-      <dl class="form-elements">
-        <% unless is_edit -%>
-          <dt><%= f.label :event_id %></dt>
-          <dd>
-            <%= f.collection_select :event_id, @events, :id, :name %>
-          </dd>
-        <% end -%>
-        <dt><%= f.label :description %></dt>
-        <dd><%= f.text_field :description %></dd>
-      </dl>
+    <% f.conditional_hint is_edit do -%>
+      Redigerar enkät för <%= link_to h(@questionaire.event.name), @questionaire %>
+    <% end -%>
 
-      <div class="submit-cnt">
+    <%= f.validation_error_indicator -%>
+
+    <% f.fields do -%>
+      <% unless is_edit -%>
+        <%= f.collection_select :event_id, @events, :id, :name %>
+      <% end -%>
+      <%= f.text_field :description %>
+
+      <% f.buttons do -%>
         <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
-      </div>
-    </fieldset>
+      <% end -%>
+    <% end -%>
+
   <% end %>
 
 <% else -%>

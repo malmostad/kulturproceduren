@@ -177,6 +177,7 @@ sv:
                 message: Meddelande
                 response: Svarsmeddelande
                 culture_provider_id: Arrangör
+                new_culture_provider_name: eller skriv arrangörens namn
             culture_provider:
                 name: Namn
                 description: Beskrivning

@@ -13,7 +13,7 @@ class LoginController < ApplicationController
     u = User.authenticate params[:user][:username], params[:user][:password]
 
     if u.nil?
-      flash[:error] = "Felaktigt användarnamn/lösenord"
+      flash[:warning] = "Felaktigt användarnamn/lösenord"
       render :action => "index"
     else
       flash[:notice] = "Du är nu inloggad som #{CGI.escapeHTML(u.username)}"

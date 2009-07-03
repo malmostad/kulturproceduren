@@ -29,9 +29,6 @@ class ImagesController < ApplicationController
 
       flash[:notice] = "Bilden laddades upp."
     else
-      render :text => "<pre>#{params.to_yaml}</pre>"
-      return
-      flash.now[:error] = "Fel uppstod när bilden skulle laddas upp."
       render :action => "index"
     end
   end

@@ -1,43 +1,23 @@
 <%= render :partial => "menu" %>
 
-<% if user_online? && current_user.has_role?(:admin) -%>
-  <p>
+<% form_for(@user, :builder => KPFormBuilder, :html => { :class => "user-form" }) do |f| %>
+
+  <%= f.title "Redigera personuppgifter" -%>
+
+  <% f.conditional_hint user_online? && current_user.has_role?(:admin) do -%>
     Uppdaterar persondetaljer för <%= link_to h(@user.username), @user %>.
-  </p>
-<% end -%>
+  <% end -%>
 
-<% form_for(@user) do |f| %>
+  <%= f.validation_error_indicator -%>
 
-  <fieldset>
-    <legend>Personuppgifter</legend>
+  <% f.fields do -%>
+    <%= f.text_field :name %>
+    <%= f.text_field :email %>
+    <%= f.text_field :mobil_nr %>
+  <% end -%>
 
-    <dl class="form-elements">
-      <dt>
-        <%= f.label :name %>
-      </dt>
-      <dd>
-        <%= f.text_field :name %>
-        <%= f.error_message_on :name %>
-      </dd>
-      <dt>
-        <%= f.label :email %>
-      </dt>
-      <dd>
-        <%= f.text_field :email %>
-        <%= f.error_message_on :email %>
-      </dd>
-      <dt>
-        <%= f.label :mobil_nr %>
-      </dt>
-      <dd>
-        <%= f.text_field :mobil_nr %>
-        <%= f.error_message_on :mobil_nr %>
-      </dd>
-    </dl>
-  </fieldset>
-
-  <div class="submit-cnt">
+  <% f.buttons do -%>
     <%= f.submit("Uppdatera personuppgifter") %>
-  </div>
+  <% end -%>
 
 <% end -%>

@@ -53,8 +53,6 @@ class QuestionsController < ApplicationController
         redirect_to :action => "index"
       end
     else
-      flash.now[:error] = 'Fel uppstod när frågan skulle skapas.'
-      
       if params[:questionaire_id]
         @questionaire = Questionaire.find params[:questionaire_id]
         @template_questions = Question.find :all,
@@ -85,8 +83,6 @@ class QuestionsController < ApplicationController
         redirect_to :action => "index"
       end
     else      
-      flash.now[:error] = 'Fel uppstod när frågan skulle uppdateras.'
-
       if params[:questionaire_id]
         @questionaire = Questionaire.find params[:questionaire_id]
         @template_questions = Question.find :all,

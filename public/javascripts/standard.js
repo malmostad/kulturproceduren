@@ -168,11 +168,11 @@
 
     // Multiple choice container toggle
     $(function() {
-        $("#kp .question-form .type-cnt :radio").change(function() {
+        $("#kp .question-form .types-field-row :radio").change(function() {
             if ($(this).val() == "QuestionMchoice") {
-                $("#kp .question-form .choice-csv-cnt").show("slow");
+                $("#kp .question-form .choice_csv-field-row").show("slow");
             } else {
-                $("#kp .question-form .choice-csv-cnt").hide("slow")
+                $("#kp .question-form .choice_csv-field-row").hide("slow")
             }
         });
     });

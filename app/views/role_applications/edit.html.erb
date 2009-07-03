@@ -1,6 +1,6 @@
 <%= render :partial => "menu" -%>
 
-<h1>Besvara ansökan</h1>
+<h2>Besvara ansökan</h2>
 
 <dl class="info">
   <dt>Typ av ansökan:</dt>
@@ -22,33 +22,20 @@
   <dd><%= h(@application.message) %></dd>
 </dl>
 
-<% form_for(@application) do |f| -%>
+<% form_for(@application, :builder => KPFormBuilder, :html => { :class => "role-application-form" }) do |f| -%>
 
-  <fieldset>
+  <%= f.title "Besvara ansökan" -%>
 
-    <legend>Besvara ansökan</legend>
+  <%= f.validation_error_indicator %>
 
-    <dl class="form-elements">
-      <dt>
-        Svar
-      </dt>
-      <dd>
-        <%= f.radio_button :state, RoleApplication::ACCEPTED, :checked => true %>
-        <label for="kp-role_application-state_<%= RoleApplication::ACCEPTED %>">Godkänn</label>
-        <%= f.radio_button :state, RoleApplication::DENIED %>
-        <label for="kp-role_application-state_<%= RoleApplication::DENIED %>">Neka</label>
-      </dd>
-      <dt>
-        <%= f.label :response %>
-      </dt>
-      <dd>
-        <%= f.text_area :response %>
-      </dd>
-    </dl>
+  <% f.fields do -%>
+    
+    <%= f.radio_button :state, RoleApplication::ACCEPTED, :checked => true, :label => "Godkänn" %>
+    <%= f.radio_button :state, RoleApplication::DENIED, :label => "Neka" %>
+    <%= f.text_area :response %>
 
-    <div class="submit-cnt">
+    <% f.buttons do -%>
       <%= f.submit("Besvara ansökan") %>
-    </div>
-  </fieldset>
-
+    <% end -%>
+  <% end -%>
 <% end -%>

@@ -10,39 +10,31 @@ end
 
 %>
 
-<% form_for question, :url => form_url, :html => { :class => "question-form" } do |f| -%>
+<% form_for question, :url => form_url, :builder => KPFormBuilder, :html => { :class => "question-form" } do |f| -%>
 
-  <div class="type-cnt">
-    <span class="group-label">Svarstyp på frågan:</span>
-    <% Question::QTYPES.keys.each do |type|
-      val = h(Question::QTYPES[type.to_s])
-      -%>
-      <%= f.radio_button :qtype, val %>
-      <label for="kp-question-qtype_<%= val.downcase %>"><%= h(type) %></label>
+  <%= f.validation_error_indicator -%>
+
+  <% f.row '', 'types-field-row' do -%>
+    <label>Svarstyp på frågan:</label>
+
+    <% f.field do -%>
+      <% Question::QTYPES.keys.each do |type|
+        val = h(Question::QTYPES[type.to_s])
+        -%>
+        <%= f.single_radio_button :qtype, val %>
+        <label for="kp-question-qtype_<%= val.downcase %>"><%= h(type) %></label>
+      <% end -%>
     <% end -%>
-  </div>
 
-  <div class="question-cnt">
-    <%= f.label :question %>
-    <%= f.text_field :question %>
-    <%= f.error_message_on :question %>
-  </div>
+  <% end -%>
 
-  <div class="choice-csv-cnt" style="<%= "display: none;" unless question.qtype == "QuestionMchoice" %>">
-    <%= f.label :choice_csv %>
-    <%= f.text_field :choice_csv -%>
-    <span class="help">Ange alternativen separerade med kommatecken</span>
-  </div>
-  
-  <div class="question-mandatory">
-    <%= f.label :mandatory %>
-    <%= f.check_box :mandatory %>
-    <%= f.error_message_on :mandatory %>
-  </div>
+  <%= f.text_field :question %>
+  <%= f.text_field :choice_csv, :field_help => "Ange alternativen separerade med kommatecken", :row_hidden => (question.qtype != "QuestionMchoice") -%>
+  <%= f.check_box :mandatory %>
 
-  <div class="submit-cnt">
+  <% f.buttons do -%>
     <%= f.hidden_field :template -%>
     <%= submit_tag(is_edit ? "Uppdatera" : "Lägg till") %>
-  </div>
+  <% end -%>
 
 <% end -%>

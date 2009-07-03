@@ -41,7 +41,6 @@ class CultureProvidersController < ApplicationController
       flash[:notice] = 'Arrangören skapades.'
       redirect_to(@culture_provider)
     else
-      flash.now[:error] = 'Fel uppstod när arrangören skulle skapas.'
       render :action => "edit"
     end
   end
@@ -53,7 +52,6 @@ class CultureProvidersController < ApplicationController
       flash[:notice] = 'Arrangören uppdaterades.'
       redirect_to(@culture_provider)
     else
-      flash.now[:error] = 'Fel uppstod när arrangören skulle uppdateras.'
       render :action => "edit"
     end
   end

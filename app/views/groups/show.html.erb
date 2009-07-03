@@ -31,6 +31,7 @@
     <%= f.label :quantity %>
     <%= f.text_field :quantity %>
     <%= f.hidden_field :group_id %>
+    
     <%= f.submit(["edit", "update"].include?(params[:action]) ? "Uppdatera åldersgrupp" : "Lägg till åldersgrupp") %>
 
     <%= f.error_message_on :age %>

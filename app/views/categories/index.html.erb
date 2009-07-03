@@ -1,27 +1,23 @@
 <%= render :partial => "menu" -%>
 
+<% is_edit = ["edit", "update"].include?(params[:action]) -%>
+
 <% unless @category_groups.empty? %>
 
-  <% form_for @category do |f| -%>
-    <fieldset>
-      <legend>Lägg till kategori</legend>
+  <% form_for @category, :builder => KPFormBuilder, :html => { :class => "category-form context-form" } do |f| -%>
 
-      <dl class="form-elements">
-        <dt><%= f.label :category_group_id %></dt>
-        <dt><%= f.collection_select :category_group_id, @category_groups, :id, :name %></dt>
+    <%= f.title(is_edit ? "Redigera kategori" : "Lägg till kategori") %>
 
-        <dt><%= f.label :name %></dt>
-        <dd>
-          <%= f.text_field :name %>
-          <%= f.error_message_on :name %>
-        </dd>
-      </dl>
+    <%= f.validation_error_indicator %>
 
-      <div class="submit-cnt">
+    <% f.fields do -%>
+      <%= f.collection_select :category_group_id, @category_groups, :id, :name %>
+      <%= f.text_field :name %>
+
+      <% f.buttons do -%>
         <%= f.submit "Ok" %>
-      </div>
-
-    </fieldset>
+      <% end -%>
+    <% end %>
   <% end -%>
 
 <% else -%>

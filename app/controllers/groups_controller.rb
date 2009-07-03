@@ -56,7 +56,6 @@ class GroupsController < ApplicationController
       flash[:notice] = 'Gruppen skapades.'
       redirect_to(@group)
     else
-      flash.now[:error] = 'Fel uppstod när gruppen skulle skapas.'
       @schools = School.all :order => "name ASC"
       render :action => "new"
     end
@@ -69,7 +68,6 @@ class GroupsController < ApplicationController
       flash[:notice] = 'Gruppen uppdaterades.'
       redirect_to(@group)
     else
-      flash.now[:error] = 'Fel uppstod när gruppen skulle uppdateras.'
       @schools = School.all :order => "name ASC"
       render :action => "new"
     end

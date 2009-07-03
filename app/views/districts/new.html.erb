@@ -2,28 +2,22 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<fieldset>
-  <legend><%= is_edit ? "Redigera" : "Skapa ny" %> stadsdel</legend>
+<% form_for(@district, :builder => KPFormBuilder, :html => { :class => "district-form" }) do |f| %>
 
-  <% if is_edit -%>
-    <p class="details">
-      Redigerar stadsdelen <%= link_to h(@district.name), @district %>.
-    </p>
-  <% end -%>
+  <%= f.title(is_edit ? "Redigera stadsdel" : "Skapa ny stadsdel") -%>
 
-  <% form_for(@district) do |f| %>
-
-    <dl class="form-elements">
-      <dt><%= f.label :name %></dt>
-      <dd>
-        <%= f.text_field :name %>
-        <%= f.error_message_on :name %>
-      </dd>
-    </dl>
-
-    <div class="submit-cnt">
-      <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
-    </div>
+  <% f.conditional_hint is_edit do %>
+    Redigerar stadsdelen <%= link_to h(@district.name), @district %>.
   <% end %>
 
-</fieldset>
+  <%= f.validation_error_indicator %>
+
+  <% f.fields do -%>
+    <%= f.text_field :name %>
+
+    <% f.buttons do %>
+      <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
+    <% end -%>
+  <% end -%>
+<% end -%>
+

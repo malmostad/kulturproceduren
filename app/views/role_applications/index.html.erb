@@ -8,96 +8,78 @@
   </ul>
 
   <div id="kp-role-application-tab-booker">
-    <% form_for(@booker_appl) do |f| -%>
 
-      <p>
-        För att kunna ge dig behörighet att boka evenemang åt elever eller förskolebarn
-        behöver vi veta vilken skola du arbetar på. Var god fyll i namnet på skolan i fältet
-        nedan. Du kan även komplettera med annan information i fältet.
-      </p>
-      <p>
-        Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
-      </p>
+    <p>
+      För att kunna ge dig behörighet att boka evenemang åt elever eller förskolebarn
+      behöver vi veta vilken skola du arbetar på. Var god fyll i namnet på skolan i fältet
+      nedan. Du kan även komplettera med annan information i fältet.
+    </p>
+    <p>
+      Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+    </p>
 
-      <dl class="form-elements">
-        <dt>
-          <%= f.label :message %>
-          <%= f.error_message_on :message %>
-        </dt>
-        <dd>
-          <%= f.text_area :message, :size => "40x5" %>
-        </dd>
-      </dl>
+    <% form_for(@booker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-booker-form" }) do |f| -%>
 
-      <div class="submit-cnt">
-        <%= f.hidden_field :role_id %>
-        <%= f.submit("Skicka ansökan") %>
-      </div>
+      <%= f.validation_error_indicator %>
 
+      <% f.fields do -%>
+        <%= f.text_area :message, :size => "40x5" %>
+
+        <% f.buttons do -%>
+          <%= f.hidden_field :role_id %>
+          <%= f.submit("Skicka ansökan") %>
+        <% end -%>
+      <% end -%>
     <% end -%>
   </div>
 
   <div id="kp-role-application-tab-culture-worker">
-    <% form_for(@culture_worker_appl) do |f| -%>
 
-      <p>
-        För att kunna ge dig behörighet att publicera evenemang åt elever eller förskolebarn
-        behöver vi veta vilken arrangör du arbetar för. Var god välj din arrangör nedan,
-        eller skriv namnet på arrangören om du inte hittar den i listan. Du kan även
-        lämna meddelanden till administratören som hanterar din ansökan.
-      </p>
-      <p>
-        Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
-      </p>
+    <p>
+      För att kunna ge dig behörighet att publicera evenemang åt elever eller förskolebarn
+      behöver vi veta vilken arrangör du arbetar för. Var god välj din arrangör nedan,
+      eller skriv namnet på arrangören om du inte hittar den i listan. Du kan även
+      lämna meddelanden till administratören som hanterar din ansökan.
+    </p>
+    <p>
+      Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+    </p>
 
-      <dl class="form-elements">
-        <dt>
-          <%= f.label :culture_provider_id %>
-          <%= f.error_message_on :culture_provider_id %>
-        </dt>
-        <dd>
-          <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
-          eller skriv arrangörens namn:
-          <%= f.text_field :new_culture_provider_name %>
-        </dd>
-        <dt>
-          <%= f.label :message %>
-          <%= f.error_message_on :message %>
-        </dt>
-        <dd>
-          <%= f.text_area :message, :size => "40x5" %>
-        </dd>
-      </dl>
+    <% form_for(@culture_worker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-culture-worker-form" }) do |f| -%>
 
-      <div class="submit-cnt">
-        <%= f.hidden_field :role_id %>
-        <%= f.submit("Skicka ansökan") %>
-      </div>
+      <%= f.validation_error_indicator %>
+
+      <% f.fields do -%>
+        <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
+        <%= f.text_field :new_culture_provider_name %>
+        <%= f.text_area :message, :size => "40x5" %>
+
+        <% f.buttons do -%>
+          <%= f.hidden_field :role_id %>
+          <%= f.submit("Skicka ansökan") %>
+        <% end -%>
+      <% end -%>
 
     <% end -%>
   </div>
 
   <div id="kp-role-application-tab-host">
-    <% form_for(@host_appl) do |f| -%>
 
-      <p>
-        Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
-      </p>
+    <p>
+      Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
+    </p>
 
-      <dl class="form-elements">
-        <dt>
-          <%= f.label :message %>
-        </dt>
-        <dd>
-          <%= f.text_area :message, :size => "40x5" %>
-        </dd>
-      </dl>
+    <% form_for(@host_appl, :builder => KPFormBuilder, :html => { :class => "role-application-host-form" }) do |f| -%>
+      <%= f.validation_error_indicator -%>
 
-      <div class="submit-cnt">
-        <%= f.hidden_field :role_id %>
-        <%= f.submit("Skicka ansökan") %>
-      </div>
+      <% f.fields do -%>
+        <%= f.text_area :message, :size => "40x5" %>
 
+        <% f.buttons do -%>
+          <%= f.hidden_field :role_id %>
+          <%= f.submit("Skicka ansökan") %>
+        <% end -%>
+      <% end -%>
     <% end -%>
   </div>
 

@@ -1,22 +1,18 @@
 <%= render :partial => "categories/menu" -%>
 
-<% form_for @category_group do |f| -%>
-  <fieldset>
-    <legend><%= @category_group.id.to_i > 0 ? "Redigera" : "Lägg till" %> kategorigrupp</legend>
+<% form_for @category_group, :builder => KPFormBuilder, :html => { :class => "category-group-form context-form" } do |f| -%>
 
-    <dl class="form-elements">
-      <dt><%= f.label :name %></dt>
-      <dd>
-        <%= f.text_field :name %>
-        <%= f.error_message_on :name  %>
-      </dd>
-    </dl>
+  <%= f.title(@category_group.id.to_i > 0 ? "Redigera kategorigrupp" : "Lägg till kategorigrupp")  %>
 
-    <div class="submit-cnt">
+  <%= f.validation_error_indicator %>
+
+  <% f.fields do -%>
+    <%= f.text_field :name %>
+
+    <% f.buttons do %>
       <%= f.submit "Ok" %>
-    </div>
-
-  </fieldset>
+    <% end -%>
+  <% end -%>
 <% end -%>
 
 <table>

@@ -70,7 +70,6 @@ class SchoolsController < ApplicationController
       flash[:notice] = 'Skolan skapades.'
       redirect_to(@school)
     else
-      flash.now[:error] = 'Fel uppstod när skolan skulle skapas.'
       @districts = District.all
       render :action => "new"
     end
@@ -92,7 +91,6 @@ class SchoolsController < ApplicationController
       flash[:notice] = 'Skolan uppdaterades.'
       redirect_to(@school)
     else
-      flash.now[:error] = 'Fel uppstod när skolan skulle uppdateras.'
       @districts = District.all
       render :action => "new"
     end

@@ -70,9 +70,9 @@ module ActionView
 
           options[:prepend_text] = args[0] || ''
           options[:append_text] = args[1] || ''
-          options[:css_class] = args[2] || 'error'
+          options[:css_class] = args[2] || 'validation-error-message'
         end
-        options.reverse_merge!(:prepend_text => '', :append_text => '', :css_class => 'error')
+        options.reverse_merge!(:prepend_text => '', :append_text => '', :css_class => 'validation-error-message')
 
         if (obj = (object.respond_to?(:errors) ? object : instance_variable_get("@#{object}"))) &&
             (errors = obj.errors.on(method))
@@ -97,14 +97,6 @@ module ActionController
   end
 end
 
-# More graceful field error indication
 ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-  if html_tag =~ /<(input|textarea|select|label)[^>]+class=/
-    class_attribute = html_tag =~ /class=['"]/
-    html_tag.insert(class_attribute + 7, "error ")
-  elsif html_tag =~ /<(input|textarea|select|label)/
-    first_whitespace = html_tag =~ /\s/
-    html_tag[first_whitespace] = " class=\"error\" "
-  end
   html_tag
 end

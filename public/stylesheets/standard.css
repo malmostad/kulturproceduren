@@ -122,6 +122,7 @@ body {
 
 #kp .flash { margin: 0.5em; border: 1px solid #c00; padding: 0.5em; background: #fcc; }
 #kp #kp-flash-notice { border-color: #060; background: #cfc; }
+#kp #kp-flash-warning { background: #fff7df; border: 1px solid #ffd867; }
 
 #kp ul.tools {
     list-style-type: none;
@@ -180,18 +181,30 @@ body {
 
 /*** Forms ***/
 
-#kp form .errorExplanation {
-    margin: 0.5em;
+#kp form.context-form { border: 1px solid #d3d7cf; padding: 1em 1em 0 1em; margin-bottom: 1em; }
+
+#kp form h3 { margin: 0 0 0.7em 0; font-size: 1.2em; }
+#kp form fieldset { border: 0; margin: 0 0 1em 0; padding: 0; }
+#kp form fieldset legend { display: block; margin: 0 0 0.5em 0; padding: 0; position: static; font-weight: bold; }
+#kp form .form-row { padding-bottom: 0.5em; clear: both; }
+#kp form .form-row label { display: block; float: left; }
+#kp form .form-row .input-container label,
+#kp form .post-label-row label { float: none; display: inline; }
+#kp form .input-container .help { display: block; font-size: 0.9em; }
+
+#kp form .validation-error-indicator {
+    background: #fff7df;
+    border: 1px solid #ffd867;
     padding: 0.5em;
-    border: 1px solid #c00;
-    background: #fcc;
+    margin: 0 0 1em 0; }
+#kp form .validation-error-message {
+    display: block;
+    background: #fff7df;
+    border: 1px solid #ffd867;
+    padding: 0.5em;
+    margin: 0.3em 0 0 0;
 }
-
-#kp form .errorExplanation h2 { font-size: 1.2em; margin: 0 0 1em 0; }
-#kp form .errorExplanation p { margin: 0 0 0.5em 0; padding: 0; }
-#kp form .errorExplanation ul { margin: 0 0 0 2em; padding: 0; }
-
-#kp form input.error { background: #fcc; }
+#kp form .validation-error input { background: #fff7d4; }
 
 #kp ul.form-elements {
     list-style-type: none;
@@ -211,6 +224,65 @@ body {
 }
 
 #kp form .date-field { width: 7em; }
+#kp form .checkbox-list { list-style-type: none; margin: 0; padding: 0; }
+
+
+/* Age group form */
+#kp form.age-group-form { padding-bottom: 1em; }
+/* Category form */
+#kp form.category-form label { width: 7em; }
+#kp form.category-form .input-container { padding-left: 7em; }
+/* Category group form */
+#kp form.category-group-form label { width: 5em; }
+#kp form.category-group-form .input-container { padding-left: 5em; }
+/* Culture provider form */
+#kp form.culture-provider-form label { width: 8em; }
+#kp form.culture-provider-form .input-container { padding-left: 8em; }
+/* District form */
+#kp form.district-form label { width: 4em; }
+#kp form.district-form .input-container { padding-left: 4em; }
+/* Event form */
+#kp form.event-form label { width: 10em; }
+#kp form.event-form .input-container,
+#kp form.event-form .checkbox-list,
+#kp form.event-form .post-label-row { padding-left: 10em; }
+#kp form.event-form .form-row .checkbox-list label { float: none; display: inline; }
+/* Group form */
+#kp form.group-form label { width: 4em; }
+#kp form.group-form .input-container { padding-left: 4em; }
+/* Image form */
+#kp form.image-form label { width: 4em; }
+#kp form.image-form .input-container { padding-left: 4em; }
+/* Login form */
+#kp form.login-form label { width: 8em; }
+#kp form.login-form .input-container { padding-left: 8em; }
+/* Occasion form */
+#kp form.occasion-form label { width: 10em; }
+#kp form.occasion-form .post-label-row,
+#kp form.occasion-form .input-container { padding-left: 10em; }
+/* Questionaire form */
+#kp form.questionaire-form label { width: 6em; }
+#kp form.questionaire-form .input-container { padding-left: 6em; }
+/* Question form */
+#kp form.question-form label { width: 10em; }
+#kp form.question-form .post-label-row,
+#kp form.question-form .input-container { padding-left: 10em; }
+/* Role application forms */
+#kp form.role-application-booker-form label { width: 6em; }
+#kp form.role-application-booker-form .input-container { padding-left: 6em; }
+#kp form.role-application-culture-worker-form label { width: 14em; }
+#kp form.role-application-culture-worker-form .input-container { padding-left: 14em; }
+#kp form.role-application-host-form label { width: 6em; }
+#kp form.role-application-host-form .input-container { padding-left: 6em; }
+#kp form.role-application-form label { width: 8em; }
+#kp form.role-application-form .post-label-row,
+#kp form.role-application-form .input-container { padding-left: 8em; }
+/* School form */
+#kp form.school-form label { width: 5em; }
+#kp form.school-form .input-container { padding-left: 5em; }
+/* User forms */
+#kp form.user-form label { width: 9em; }
+#kp form.user-form .input-container { padding-left: 9em; }
 
 /*** Models ***/
 
@@ -355,15 +427,6 @@ body {
 
 #kp .occasions-event {padding: 0.5em;}
 #kp .occasions-listing {padding-left: 1em;}
-
-#kp .occasions-form textarea { height: 5em; width: 15em; }
-#kp #kp-occasion-seats, #kp #kp-occasion-wheelchair_seats { width: 5em; }
-#kp .occasions-form .start-time-cnt,
-#kp .occasions-form .seats-cnt,
-#kp .occasions-form .address-cnt { float: left; padding-right: 1em; }
-#kp .occasions-form .address-cnt label,
-#kp .occasions-form .description-cnt label { display: block; }
-#kp .occasions-form .submit-cnt { clear: both; }
 
 #kp .occasion-list td p { margin: 0; }
 

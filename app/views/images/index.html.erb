@@ -16,29 +16,25 @@ elsif @image.event
   form_url = event_images_path(@image.event)
 end
 
-form_for(@image, :url => form_url, :html => { :multipart => true } ) do |f| %>
+form_for(@image, :url => form_url, :builder => KPFormBuilder, :html => { :multipart => true, :class => "image-form context-form" } ) do |f| %>
 
-  <fieldset>
-    <legend>Ladda upp ny bild</legend>
+  <%= f.title "Ladda upp ny bild" -%>
 
-    <dl class="form-elements">
+  <%= f.validation_error_indicator %>
 
-      <dt><%= f.label :name %></dt>
-      <dd>
-        <%= f.text_field :name %>
-        <%= f.error_message_on :name %>
-      </dd>
+  <% f.fields do -%>
 
-      <dt><label for="kp-upload-datafile">Bild</label></dt>
-      <dd><%= file_field 'upload' , 'datafile'  %></dd>
+    <%= f.text_field :name %>
 
-    </dl>
+    <% f.row do -%>
+      <label for="kp-upload-datafile">Bild</label>
+      <%= f.field file_field('upload' , 'datafile') %>
+    <% end -%>
 
-    <div class="submit-cnt">
-      <%= f.hidden_field :type -%>
+    <% f.buttons do -%>
       <%= f.submit 'Ladda upp' %>
-    </div>
-  </fieldset>
+    <% end -%>
+  <% end -%>
 <% end %>
 
 <% unless @images.blank? -%>

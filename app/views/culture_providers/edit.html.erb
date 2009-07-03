@@ -2,65 +2,24 @@
 
 <% is_edit = !@culture_provider.id.nil? %>
 
-<% form_for(@culture_provider) do |f| %>
-  <fieldset>
-    <legend><%= is_edit ? "Redigera" : "Lägg till" %> arrangör</legend>
-    
-    <dl class="form-elements">
-      <dt>
-        <%= f.label :name %>
-      </dt>
-      <dd>
-        <%= f.text_field :name %>
-        <%= f.error_message_on :name %>
-      </dd>
-      <dt>
-        <%= f.label :description %>
-      </dt>
-      <dd>
-        <%= f.text_area :description %>
-      </dd>
-      <dt>
-        <%= f.label :contact_person %>
-      </dt>
-      <dd>
-        <%= f.text_field :contact_person %>
-      </dd>
-      <dt>
-        <%= f.label :email %>
-      </dt>
-      <dd>
-        <%= f.text_field :email %>
-      </dd>
-      <dt>
-        <%= f.label :phone %>
-      </dt>
-      <dd>
-        <%= f.text_field :phone %>
-      </dd>
-      <dt>
-        <%= f.label :address %>
-      </dt>
-      <dd>
-        <%= f.text_area :address, :rows => 5 %>
-      </dd>
-      <dt>
-        <%= f.label :opening_hours %>
-      </dt>
-      <dd>
-        <%= f.text_area :opening_hours, :rows => 5 %>
-      </dd>
-      <dt>
-        <%= f.label :url %>
-      </dt>
-      <dd>
-        <%= f.text_field :url %>
-      </dd>
-    </dl>
+<% form_for(@culture_provider, :builder => KPFormBuilder, :html => { :class => "culture-provider-form" }) do |f| %>
 
-    <div class="submit-cnt">
+  <%= f.title(is_edit ? "Redigera arrangör" : "Lägg till arrangör") %>
+
+  <%= f.validation_error_indicator %>
+
+  <% f.fields do -%>
+    <%= f.text_field :name %>
+    <%= f.text_area :description %>
+    <%= f.text_field :contact_person %>
+    <%= f.text_field :email %>
+    <%= f.text_field :phone %>
+    <%= f.text_area :address, :rows => 5 %>
+    <%= f.text_area :opening_hours, :rows => 5 %>
+    <%= f.text_field :url %>
+
+    <% f.buttons do -%>
       <%= f.submit(is_edit ? "Uppdatera arrangör" : "Skapa arrangör") %>
-    </div>
-
-  </fieldset>
+    <% end -%>
+  <% end -%>
 <% end %>

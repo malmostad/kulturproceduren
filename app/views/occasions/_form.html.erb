@@ -4,59 +4,33 @@ is_edit = ["edit", "update"].include? params[:action]
 -%>
 
 <fieldset class="collapsible <%= "collapsed" if !@occasion && !collapsed %>">
+
   <legend><%= is_edit ? "Redigera" : "Lägg till" %> föreställning</legend>
 
   <% form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
-    :html => { :class => "occasions-form" }) do |f| -%>
+    :builder => KPFormBuilder,
+    :html => { :class => "occasion-form" }) do |f| -%>
 
-    <ul class="form-elements">
-      <li class="date-cnt">
-        <%= f.label :date %>
-        <%= f.text_field :date, :class => "date-field auto" %>
-        <%= f.error_message_on :date %>
-      </li>
+    <%= f.validation_error_indicator -%>
 
-      <li class="start-time-cnt">
-        <%= f.label :start_time, nil, :for => "kp-occasion-start_time-4i" %>
-        <%= f.time_select :start_time, :minute_step => 5 %>
-      </li>
-      <li class="stop-time-cnt">
-        <%= f.label :stop_time, nil, :for => "kp-occasion-stop_time-4i" %>
-        <%= f.time_select :stop_time, :minute_step => 5 %>
-      </li>
+    <% f.fields do %>
 
-      <li class="seats-cnt">
-        <%= f.label :seats %>
-        <%= f.text_field :seats %>
-        <%= f.error_message_on :seats %>
-      </li>
+      <%= f.text_field :date, :class => "date-field auto" %>
+      <%= f.time_select :start_time, :minute_step => 5 %>
+      <%= f.time_select :stop_time, :minute_step => 5 %>
+      <%= f.text_field :seats %>
+      <%= f.text_field :wheelchair_seats %>
+      <%= f.text_area :address, :rows => 5 %>
+      <%= f.text_area :description, :rows => 5 %>
+      <%= f.check_box :telecoil %>
 
-      <li class="wheelchair-seats-cnt">
-        <%= f.label :wheelchair_seats %>
-        <%= f.text_field :wheelchair_seats %>
-      </li>
+      <% f.buttons do %>
+        <%= f.hidden_field :event_id %>
+        <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
+      <% end %>
 
-      <li class="address-cnt">
-        <%= f.label :address %>
-        <%= f.error_message_on :address %>
-        <%= f.text_area :address %>
-      </li>
+    <% end %>
 
-      <li class="description-cnt">
-        <%= f.label :description %>
-        <%= f.text_area :description %>
-      </li>
-
-      <li class="telecoil-cnt">
-        <%= f.check_box :telecoil %>
-        <%= f.label :telecoil %>
-      </li>
-    </ul>
-
-    <div class="submit-cnt">
-      <%= f.hidden_field :event_id %>
-      <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
-    </div>
   <% end -%>
 
 </fieldset>

@@ -64,7 +64,6 @@ class UsersController < ApplicationController
         redirect_to(:controller => "login")
       end
     else
-      flash.now[:error] = 'Fel uppstod när användaren skulle skapas.'
       @user.reset_password
       render :action => "new"
     end
@@ -79,22 +78,21 @@ class UsersController < ApplicationController
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
-      flash.now[:error] = 'Fel uppstod när användaren skulle uppdateras.'
       render :action => "edit"
     end
   end
 
   def update_password
     if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:current_password])
-      flash[:error] = "Felaktigt lösenord."
+      flash[:warning] = "Felaktigt lösenord."
       redirect_to edit_password_user_url(@user)
       return
     elsif params[:user][:password].blank?
-      flash[:error] = "Lösenordet får inte vara tomt."
+      flash[:warning] = "Lösenordet får inte vara tomt."
       redirect_to edit_password_user_url(@user)
       return
     elsif params[:user][:password] != params[:user][:password_confirmation]
-      flash[:error] = "Lösenordsbekräftelsen matchar inte."
+      flash[:warning] = "Lösenordsbekräftelsen matchar inte."
       redirect_to edit_password_user_url(@user)
       return
     end
@@ -105,7 +103,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Lösenordet uppdaterades."
       redirect_to :action => "index"
     else
-      flash[:error] = "Ett fel uppstod när lösenordet uppdaterades."
+      flash[:warning] = "Ett fel uppstod när lösenordet uppdaterades."
       redirect_to edit_password_user_url(@user)
     end
   end

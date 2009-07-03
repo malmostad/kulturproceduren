@@ -62,7 +62,6 @@ class QuestionairesController < ApplicationController
       flash[:notice] = 'Enkäten skapades.'
       redirect_to @questionaire 
     else
-      flash.now[:error] = 'Fel uppstod när enkäten skulle skapas.'
       render :action => "new" 
     end
   end
@@ -74,7 +73,6 @@ class QuestionairesController < ApplicationController
       flash[:notice] = 'Enkäten uppdaterades.'
       redirect_to(@questionaire) 
     else
-      flash.now[:error] = 'Fel uppstod när enkäten skulle uppdateras.'
       render :action => "new"
     end
   end

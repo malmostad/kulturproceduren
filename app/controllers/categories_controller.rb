@@ -32,7 +32,6 @@ class CategoriesController < ApplicationController
       flash[:notice] = 'Kategorin skapades.'
       redirect_to :action => "index"
     else
-      flash.now[:error] = 'Fel uppstod när kategorin skulle skapas.'
       @categories = Category.all :include => :category_group
       @category_groups = CategoryGroup.all
       render :action => "index"
@@ -46,7 +45,6 @@ class CategoriesController < ApplicationController
       flash[:notice] = 'Kategorin uppdaterades.'
       redirect_to :action => "index"
     else
-      flash.now[:error] = 'Fel uppstod när kategorin skulle uppdateras.'
       @categories = Category.all :include => :category_group
       @category_groups = CategoryGroup.all
       render :action => "index"

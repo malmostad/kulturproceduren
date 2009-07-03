@@ -8,28 +8,22 @@
 
 <% else -%>
 
-  <% form_for User.new, :url => { :action => "login" } do |f| %>
-    <fieldset>
+  <% form_for User.new, :url => { :action => "login" }, :builder => KPFormBuilder, :html => { :class => "login-form" } do |f| %>
+    <% f.title "Logga in" -%>
 
-      <legend>Logga in</legend>
+    <% f.fields do -%>
+      <%= f.text_field :username %>
+      <%= f.password_field :password %>
 
-      <dl>
-        <dt><%= f.label :username %></dt>
-        <dd><%= f.text_field :username %></dd>
-
-        <dt><%= f.label :password %></dt>
-        <dd><%= f.password_field :password %></dd>
-      </dl>
-
-      <div class="submit-cnt">
+      <% f.buttons do -%>
         <%= f.submit "Logga in" %>
-      </div>
+      <% end -%>
 
-    </fieldset>
+    <% end -%>
 
-    <p>
+    <% f.hint do -%>
       Om du inte har ett konto kan du registrera ett <%= link_to "här", new_user_path %>.
-    </p>
+    <% end -%>
   <% end %>
 
 <% end -%>
