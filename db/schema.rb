@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.boolean  "send_sms"
     t.integer  "group_id"
     t.integer  "occasion_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -32,6 +32,23 @@
 
       <dt><label for="kp-allotment-num_tickets">Antal <%= is_edit ? "ytterligare" : "inköpta" %> biljetter</label></dt>
       <dd><input type="text" id="kp-allotment-num_tickets" name="allotment[num_tickets]"/></dd>
+      
+      <% unless is_edit -%>
+        <dt>
+          <label for="kp-allotment-ticket_state">Fördelningsnivå</label>
+        </dt>
+        <dd>
+          <select id="kp-allotment-ticket_state" name="allotment[ticket_state]">
+            <option value="<%= Event::ALLOTED_GROUP %>">Grupp</option>
+            <option value="<%= Event::ALLOTED_DISTRICT %>">Stadsdel</option>
+            <option value="<%= Event::FREE_FOR_ALL %>">Hela staden</option>
+          </select>
+        </dd>
+      <% end -%>
+      
+      <dt>
+        <label for="kp-allotment-ticket_state"></label>
+      </dt>
 
       <dt><label for="kp-allotment-district_id-all">Stadsdelar</label></dt>
       <dd>
