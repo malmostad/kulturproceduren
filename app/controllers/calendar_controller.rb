@@ -1,14 +1,24 @@
 class CalendarController < ApplicationController
 
   layout "standard"
+
+  before_filter :set_list
   
   def index
-    @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
     @category_groups = CategoryGroup.all :order => "name ASC"
+    if @calendar_list == :events
+      @events = Event.search_standing({ :from_date => Date.today }, params[:page])
+    else
+      @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
+    end
   end
 
   def filter
-    @occasions = Occasion.search calendar_filter, params[:page]
+    if @calendar_list == :events
+      @events = Event.search_standing(calendar_filter, params[:page])
+    else
+      @occasions = Occasion.search(calendar_filter, params[:page])
+    end
     @category_groups = CategoryGroup.all :order => "name ASC"
   end
 
@@ -34,12 +44,12 @@ class CalendarController < ApplicationController
     categories = params[:filter][:categories] || []
     calendar_filter[:categories] = categories.map{ |i| i.to_i }.select { |i| i != -1 }
 
-    redirect_to :action => "filter"
+    redirect_to :action => "filter", :list => @calendar_list
   end
 
   def clear_filter
     session[:calendar_filter] = { :from_date => Date.today }
-    redirect_to :action => "filter"
+    redirect_to :action => "filter", :list => @calendar_list
   end
 
 
@@ -53,6 +63,10 @@ class CalendarController < ApplicationController
 
 
   private
+
+  def set_list
+    @calendar_list = params[:list] == 'events' ? :events : :occasions
+  end
 
   def parse_date(date_str)
     if date_str =~ /^\d{4}-\d{2}-\d{2}$/

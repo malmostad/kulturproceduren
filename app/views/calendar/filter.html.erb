@@ -9,12 +9,12 @@
     </p>
 
     <div class="calendar-filter">
-      <form action="<%= url_for :controller => "calendar", :action => "apply_filter" -%>" method="post">
+      <form action="<%= url_for :controller => "calendar", :action => "apply_filter", :list => @calendar_list -%>" method="post">
         <div class="free-text-cnt">
           <label for="kp-calendar-filter-free-text" id="kp-calendar-filter-free-text-label">Fritext:</label>
           <input type="text" id="kp-calendar-filter-free-text" name="filter[free_text]" value="<%= h calendar_filter[:free_text] %>" />
           <input type="submit" name="do_filter" value="Filtrera evenemang"/>
-          <%= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter" %>
+          <%= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter", :list => @calendar_list %>
 
           <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
         </div>
@@ -132,13 +132,11 @@
           </dl>
         <% end -%>
 
-        <%= link_to "Ingen filtrering", { :action => "index" }, { :class => "hide-calendar-filter-action" } %>
+        <%= link_to "Ingen filtrering", { :action => "index", :list => @calendar_list }, { :class => "hide-calendar-filter-action" } %>
       </form>
     </div>
 
   </div>
 <% end -%>
 
-<%= render :partial => "list", :locals => { :occasions => @occasions, :category_groups => @category_groups } %>
-
-<%= will_paginate @occasions %>
+<%= render :partial => "list" %>

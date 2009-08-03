@@ -1,7 +1,7 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
 
-    <%= link_to "Detaljerad filtrering", { :action => "filter" }, { :class => "show-calendar-filter-action" } %>
+    <%= link_to "Detaljerad filtrering", { :action => "filter", :list => @calendar_list }, { :class => "show-calendar-filter-action" } %>
 
     <p class="description">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
@@ -13,6 +13,4 @@
   </div>
 <% end -%>
 
-<%= render :partial => "list", :locals => { :occasions => @occasions, :category_groups => @category_groups } %>
-
-<%= will_paginate @occasions %>
+<%= render :partial => 'list' %>

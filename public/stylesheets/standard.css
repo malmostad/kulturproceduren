@@ -375,6 +375,24 @@ body {
 
 /*** Calendar ***/
 
+#kp .calendar-list-tabs {
+    list-style-type: none;
+    margin: 0 0 1em 0;
+    padding: 0;
+    border-bottom: 1px solid #d3d7cf;
+}
+#kp .calendar-list-tabs li {
+    display: inline-block;
+    margin-right: 0.2em;
+    border: 1px solid #d3d7cf;
+    border-bottom: 0;
+    font-size: 1em;
+    font-weight: bold;
+    background: #d9ebd2;
+}
+#kp .calendar-list-tabs a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
+#kp .calendar-list-tabs li.active, #kp .calendar-list-tabs li.active a { background: #fff; }
+
 #kp .calendar-list th, #kp .calendar-list td { padding: 5px; }
 #kp .calendar-list .date-row th { border-top: 1px solid #dcd7cf; }
 
