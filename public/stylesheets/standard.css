@@ -27,18 +27,18 @@ body {
 #kp dl { margin: 0 0 1.5em 0; }
 #kp dd { margin-left: 1.5em;}
 
-#kp fieldset { border: 1px solid #d3d7cf; margin: 0 0 1em 0; padding: 1em 1em 0 1em; }
+#kp fieldset { border: 1px solid #c0c0c0; margin: 0 0 1em 0; padding: 1em 1em 0 1em; }
 #kp legend { padding: 0 1em; }
 
 #kp table {
     margin: 0 0 1em 0;
     border-collapse: collapse;
     border-spacing: 0;
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     width: 100%;
 }
-#kp table thead th { background: #edd400; font-weight: normal; }
-#kp table td, #kp table th { padding: 3px 5px; vertical-align: top; }
+#kp table thead th { background: #ffcf3d url(../images/list_header.png) repeat-x; font-weight: normal; }
+#kp table td, #kp table th { padding: 2px 4px 3px 4px; vertical-align: top; }
 #kp table th { text-align: left; vertical-align: bottom; }
 #kp table .alt td, #kp table .alt th { background: #eeeeec; }
 #kp table .selected td { background: #cfc; }
@@ -65,14 +65,14 @@ body {
     list-style: none;
     background: transparent;
     border: 0;
-    border-bottom: 1px solid #d3d7cf;
+    border-bottom: 1px solid #c0c0c0;
     margin: 0;
 }
 #kp ul.ui-tabs-nav li { float: left; background: #fff; margin-right: .3em; border: 0; position: relative; top: 1px; }
 #kp ul.ui-tabs-nav li a {
     display: block;
     background: #d9ebd2;
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     padding: .2em 1em;
     cursor: pointer;
 }
@@ -89,7 +89,7 @@ body {
     overflow: hidden;
     clear: both;
 }
-#kp .ui-tabs-panel { border: 1px solid #d3d7cf; border-top: 0; padding: 0.5em; }
+#kp .ui-tabs-panel { border: 1px solid #c0c0c0; border-top: 0; padding: 0.5em; }
 
 #kp .ui-datepicker-trigger {
     border: 0;
@@ -110,7 +110,7 @@ body {
 #kp fieldset.collapsed form { display: none; }
 
 #kp .pagination span, #kp .pagination a {
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     padding: 3px 0.5em;
 }
 #kp .pagination .current, #kp .pagination a:hover { background: #d9ebd2; }
@@ -141,12 +141,12 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #d3d7cf;
+    border-bottom: 1px solid #c0c0c0;
 }
 #kp .pri-nav li {
     display: inline-block;
     margin-right: 0.2em;
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     border-bottom: 0;
     font-size: 1.1em;
     font-weight: bold;
@@ -167,7 +167,7 @@ body {
 #kp .section-nav, #kp .section-info {
     margin: 0;
     padding: 0;
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     border-top: 0;
     clear: both;
 }
@@ -181,7 +181,7 @@ body {
 
 /*** Forms ***/
 
-#kp form.context-form { border: 1px solid #d3d7cf; padding: 1em 1em 0 1em; margin-bottom: 1em; }
+#kp form.context-form { border: 1px solid #c0c0c0; padding: 1em 1em 0 1em; margin-bottom: 1em; }
 
 #kp form h3 { margin: 0 0 0.7em 0; font-size: 1.2em; }
 #kp form fieldset { border: 0; margin: 0 0 1em 0; padding: 0; }
@@ -219,7 +219,7 @@ body {
 #kp .submit-cnt { margin-bottom: 1em; }
 
 #kp .inline-form-elements {
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     padding: 3px;
 }
 
@@ -280,9 +280,12 @@ body {
 /* School form */
 #kp form.school-form label { width: 5em; }
 #kp form.school-form .input-container { padding-left: 5em; }
-/* User forms */
+/* User form */
 #kp form.user-form label { width: 9em; }
 #kp form.user-form .input-container { padding-left: 9em; }
+/* Allotment forms */
+#kp form.allotment-init-form label { width: 12em; }
+#kp form.allotment-init-form .input-container { padding-left: 12em; }
 
 /*** Models ***/
 
@@ -298,7 +301,7 @@ body {
 #kp .model-cnt table.meta th { vertical-align: top; }
 
 #kp .model-cnt .images-cnt {
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     color: #555753;
     padding: 3px;
     margin: 0 0 1em 0;
@@ -321,7 +324,7 @@ body {
 
 #kp .model-title .meta { font-size: 0.6em; color: #babdb6; font-weight: normal; }
 
-#kp .info-box { border: 1px solid #d3d7cf; }
+#kp .info-box { border: 1px solid #c0c0c0; }
 #kp .info-box h4 { font-size: 1.1em; margin: 0; padding: 3px; background: #eeeeec; }
 #kp .info-box .meta { border: 0; margin: 0; }
 #kp .info-box .meta th { vertical-align: top; }
@@ -329,12 +332,12 @@ body {
 
 /*** Admin tools ***/
 
-#kp .admin-tools { border: 1px solid #d3d7cf; padding: 0.5em; margin: 0 0 1em ; }
+#kp .admin-tools { border: 1px solid #c0c0c0; padding: 0.5em; margin: 0 0 1em ; }
 #kp ul.admin-tools { list-style-type: none; border: 0; }
 #kp div.admin-tools h4 { margin: 0 0 0.5em 0; padding: 0; font-size: 1em; }
 #kp div.admin-tools ul { list-style-type: none; margin: 0; padding: 0; }
 #kp .admin-tools li { display: inline; padding-right: 0.5em; }
-#kp .admin-tools a, #kp a.admin-tool { border: 1px solid #d3d7cf; padding: 1px 0.5em; text-decoration: none; }
+#kp .admin-tools a, #kp a.admin-tool { border: 1px solid #c0c0c0; padding: 1px 0.5em; text-decoration: none; }
 #kp .admin-tools a:hover, #kp .admin-tools a:active,
 #kp a.admin-tool:hover, #kp a.admin-tool:active { background: #D9EBD2; }
 
@@ -344,7 +347,7 @@ body {
 #kp #kp-allotment-init-form .allotment-district-list li { width: 15em; float: left;  }
 #kp #kp-allotment-init-form .submit-cnt { padding-top: 1em; clear: both; }
 
-#kp #kp-distribution-meta { background: #fff; border: 1px solid #d3d7cf; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
+#kp #kp-distribution-meta { background: #fff; border: 1px solid #c0c0c0; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
 #kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
 #kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
 
@@ -359,7 +362,7 @@ body {
     width: 1.5em;
     height: 1.5em;
     float: left;
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     text-align: center;
     text-decoration: none;
     font-weight: bold;
@@ -379,12 +382,12 @@ body {
     list-style-type: none;
     margin: 0 0 1em 0;
     padding: 0;
-    border-bottom: 1px solid #d3d7cf;
+    border-bottom: 1px solid #c0c0c0;
 }
 #kp .calendar-list-tabs li {
     display: inline-block;
     margin-right: 0.2em;
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     border-bottom: 0;
     font-size: 1em;
     font-weight: bold;
@@ -393,7 +396,6 @@ body {
 #kp .calendar-list-tabs a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
 #kp .calendar-list-tabs li.active, #kp .calendar-list-tabs li.active a { background: #fff; }
 
-#kp .calendar-list th, #kp .calendar-list td { padding: 5px; }
 #kp .calendar-list .date-row th { border-top: 1px solid #dcd7cf; }
 
 #kp .calendar-table { width: 100%; }
@@ -425,7 +427,7 @@ body {
     float: left;
 }
 #kp .calendar-filter .date-cnt {
-    border: 1px solid #d3d7cf;
+    border: 1px solid #c0c0c0;
     border-width: 0 1px;
     margin: 1em 1em 0 1em;
     padding: 0 1em;
