@@ -95,7 +95,7 @@ class BookingController < ApplicationController
       @occasions = []
     end
 
-    render :partial => "by_group_list" ,
+    render :partial => "by_group_list", :content_type => "text/plain",
       :locals => {
       :occasions => @occasions ,
       :group => @group
@@ -116,7 +116,7 @@ class BookingController < ApplicationController
       :nwticks => @nwticks ,
       :br => @br ,
       :edit => @edit
-    }
+    }, :content_type => 'text/plain'
   end
 
   def populate_districts_list

@@ -852,7 +852,7 @@ INSERT INTO events (id, culture_provider_id, name, description, visible_from, vi
 
 Sagan om det röda äppletNär Obanteatern tolkar historien blir det rolig och underfundig teater. Lööfs fantastiska bilder finns kvar på scenen i form av projektioner på en videovägg som också är föreställningens fond. Med hjälp av modern animationsteknik får bilderna liv och tar sin rättmätiga plats i teaterföreställningen. En upplevelse för både barn och vuxna.
 
-Föreställningen är producerad med bidrag från Malmö kulturstöd och Sparbanksstiftelsen Skåne.', '2009-06-25', '2010-01-23', 4, 8, false, '2009-06-26', 3, 'http://www.obanteatern.se/Contents.asp?id=770', 'http://www.youtube.com/watch?v=cXGI6vTvabg', 'n/a', 'Vid spelning utanför Skåne tillkommer resa, logi & traktamente    (3 pers).
+Föreställningen är producerad med bidrag från Malmö kulturstöd och Sparbanksstiftelsen Skåne.', '2009-07-25', '2010-01-23', 4, 8, false, '2009-07-26', 3, 'http://www.obanteatern.se/Contents.asp?id=770', 'http://www.youtube.com/watch?v=cXGI6vTvabg', 'n/a', 'Vid spelning utanför Skåne tillkommer resa, logi & traktamente    (3 pers).
 Priserna gäller 100 personer/ föreställning.
 (Vid skolföreställningar 100 barn/föreställning).
 Vi spelar maximalt 3 föreställningar/dag.', 'Tel 040-30 65 70  Mobil 0730-47 92 49', '2009-06-25 12:28:01.109066', '2009-06-25 12:56:53.249724', NULL);
@@ -862,7 +862,7 @@ Föreställningen bygger på boken med samma namn som är skriven och illustrera
 
 Boken Den sista blomman är illustrerad och berättelsen förmedlas gemensamt av både text och bilder. Bilderna är mest informativa, något som tagits tillvara i föreställningen. Historien byggs upp kring olika skeenden och händelseförlopp, snarare än kring ett par få huvudpersoner. Detta gestaltas i form av flera olika karaktärer, bl a tre hundar som återkommer flera gånger och ger ett något annorlunda perspektiv på hur världen fungerar.
 
-I sann Obanteateranda har allvaret, men även humorn tagits fasta på i denna fysiskt gestaltade, tänkvärda och underhållande föreställning.', '2009-06-25', '2009-12-31', 12, 19, false, '2009-06-26', NULL, 'http://www.obanteatern.se/Contents.asp?id=824', '', '', '', 'http://www.obanteatern.se/Form.asp?id=766', '2009-06-25 12:59:55.061394', '2009-06-25 13:08:38.237782', NULL);
+I sann Obanteateranda har allvaret, men även humorn tagits fasta på i denna fysiskt gestaltade, tänkvärda och underhållande föreställning.', '2009-07-25', '2009-12-31', 12, 19, false, '2009-07-26', NULL, 'http://www.obanteatern.se/Contents.asp?id=824', '', '', '', 'http://www.obanteatern.se/Form.asp?id=766', '2009-06-25 12:59:55.061394', '2009-06-25 13:08:38.237782', NULL);
 
 
 --
@@ -901,9 +901,9 @@ INSERT INTO images (id, event_id, culture_provider_id, name, filename, width, he
 -- Data for Name: occasions; Type: TABLE DATA; Schema: public; Owner: root
 --
 
-INSERT INTO occasions (id, event_id, date, start_time, stop_time, seats, wheelchair_seats, address, description, telecoil, created_at, updated_at) VALUES (1, 1, '2009-07-02', '14:00:00', '15:00:00', 30, 0, 'Falsterbogatan 17, 214 36 Malmö', 'Sagan om det röda äpplet', false, '2009-06-25 12:46:47.794536', '2009-06-25 12:46:47.794536');
-INSERT INTO occasions (id, event_id, date, start_time, stop_time, seats, wheelchair_seats, address, description, telecoil, created_at, updated_at) VALUES (2, 1, '2009-07-03', '14:00:00', '15:00:00', 30, 0, 'Falsterbogatan 17, 214 36 Malmö', 'Sagan om det röda äpplet', false, '2009-06-25 12:54:42.542439', '2009-06-25 12:55:35.412882');
-INSERT INTO occasions (id, event_id, date, start_time, stop_time, seats, wheelchair_seats, address, description, telecoil, created_at, updated_at) VALUES (3, 2, '2009-08-03', '13:00:00', '14:00:00', 75, 5, 'Falsterbogatan 17, 214 36 Malmö', '', true, '2009-06-25 13:07:05.14237', '2009-06-25 13:07:05.14237');
+INSERT INTO occasions (id, event_id, date, start_time, stop_time, seats, wheelchair_seats, address, description, telecoil, created_at, updated_at) VALUES (1, 1, '2009-09-02', '14:00:00', '15:00:00', 30, 0, 'Falsterbogatan 17, 214 36 Malmö', 'Sagan om det röda äpplet', false, '2009-06-25 12:46:47.794536', '2009-06-25 12:46:47.794536');
+INSERT INTO occasions (id, event_id, date, start_time, stop_time, seats, wheelchair_seats, address, description, telecoil, created_at, updated_at) VALUES (2, 1, '2009-09-03', '14:00:00', '15:00:00', 30, 0, 'Falsterbogatan 17, 214 36 Malmö', 'Sagan om det röda äpplet', false, '2009-06-25 12:54:42.542439', '2009-06-25 12:55:35.412882');
+INSERT INTO occasions (id, event_id, date, start_time, stop_time, seats, wheelchair_seats, address, description, telecoil, created_at, updated_at) VALUES (3, 2, '2009-09-03', '13:00:00', '14:00:00', 75, 5, 'Falsterbogatan 17, 214 36 Malmö', '', true, '2009-06-25 13:07:05.14237', '2009-06-25 13:07:05.14237');
 
 
 --

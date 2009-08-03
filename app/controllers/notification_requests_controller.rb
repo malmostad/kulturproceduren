@@ -39,7 +39,7 @@ class NotificationRequestsController < ApplicationController
     end
     @notification_request.group = Group.find(params[:group_id])
     @notification_request.occasion = @occasion
-    render :partial => "input_area"
+    render :partial => "input_area", :content_type => "text/plain"
   end
 
   # GET /notification_requests

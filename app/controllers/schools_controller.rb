@@ -33,8 +33,8 @@ class SchoolsController < ApplicationController
         }
       end
     end
-    puts "Shools = "
-    pp @schools
+
+    render :action => "options_list", :content_type => 'text/plain'
   end
 
   def show

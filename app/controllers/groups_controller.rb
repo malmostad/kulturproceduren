@@ -29,6 +29,8 @@ class GroupsController < ApplicationController
         @groups = Group.all :order => "name ASC"
       end
     end
+
+    render :action => "options_list", :content_type => 'text/plain'
   end
 
   def show
