@@ -30,6 +30,7 @@ class GroupsController < ApplicationController
       end
     end
 
+    sleep 3
     render :action => "options_list", :content_type => 'text/plain'
   end
 

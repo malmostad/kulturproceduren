@@ -120,9 +120,20 @@ body {
 
 #kp #kp-logo { margin: 0 0 0.5em 0; }
 
-#kp .flash { margin: 0.5em; border: 1px solid #c00; padding: 0.5em; background: #fcc; }
-#kp #kp-flash-notice { border-color: #060; background: #cfc; }
-#kp #kp-flash-warning { background: #fff7df; border: 1px solid #ffd867; }
+#kp .flash {
+    margin: 0.5em;
+    border: 1px solid #f00;
+    padding: 0.5em 0.5em 0.5em 2.3em;
+    background: #ffeae0 url(../images/exclamation.png) no-repeat 0.5em 0.4em;
+}
+#kp #kp-flash-notice {
+    border-color: #acdfa7;
+    background: #eaffe0 url(../images/accept.png) no-repeat 0.5em 0.4em;
+}
+#kp #kp-flash-warning {
+    border-color: #ffd867;
+    background: #fff7df url(../images/error.png) no-repeat 0.5em 0.4em;
+}
 
 #kp ul.tools {
     list-style-type: none;
@@ -130,6 +141,13 @@ body {
     padding: 0;
 }
 #kp ul.tools li { display: inline; margin-right: 1em; }
+
+#kp .load-indicator {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url(../images/ajax-loader.gif) no-repeat;
+}
 
 #kp #kp-content { margin-top: 1em; }
 
@@ -193,10 +211,11 @@ body {
 #kp form .input-container .help { display: block; font-size: 0.9em; }
 
 #kp form .validation-error-indicator {
-    background: #fff7df;
+    background: #fff7df url(../images/error.png) no-repeat 0.5em 0.4em;
     border: 1px solid #ffd867;
-    padding: 0.5em;
-    margin: 0 0 1em 0; }
+    padding: 0.5em 0.5em 0.5em 2.3em;
+    margin: 0 0 1em 0;
+}
 #kp form .validation-error-message {
     display: block;
     background: #fff7df;

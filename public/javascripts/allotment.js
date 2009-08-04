@@ -147,32 +147,41 @@
         $("#kp #kp-add_group_district_id").change(function() {
             var val = parseInt($(this).val());
 
-            if (isNaN(val)) {
-                $("#kp #kp-add_group_school_id, #kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
-            } else {
-                $("#kp #kp-add_group_school_id").load(
+            $("#kp #kp-add_group_school_id, #kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
+
+            if (!isNaN(val)) {
+                var field = $("#kp #kp-add_group_school_id");
+
+                field.parent().append('<div class="load-indicator"></div>');
+
+                field.load(
                 kpConfig.schools.list.url,
                 $.param({ 
                     district_id: val
                 }),
-                function () {
-                    $("#kp #kp-add_group_school_id").removeAttr("disabled");
+                function() {
+                    $("#kp #kp-add_group_school_id").removeAttr("disabled").
+                    parent().find('.load-indicator').remove();
                 });
             }
         });
         $("#kp #kp-add_group_school_id").change(function() {
             var val = parseInt($(this).val());
 
-            if (isNaN(val)) {
-                $("#kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
-            } else {
-                $("#kp #kp-add_group_group_id").load(
+            $("#kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
+
+            if (!isNaN(val)) {
+                var field = $("#kp #kp-add_group_group_id");
+                field.parent().append('<div class="load-indicator"></div>');
+                
+                field.load(
                 kpConfig.groups.list.url,
                 $.param({
                     school_id: val
                 }),
-                function () {
-                    $("#kp #kp-add_group_group_id").removeAttr("disabled");
+                function() {
+                    $("#kp #kp-add_group_group_id").removeAttr("disabled").
+                    parent().find('.load-indicator').remove();
                 });
             }
         });
