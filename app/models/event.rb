@@ -36,7 +36,7 @@ class Event < ActiveRecord::Base
 
   def bookable?
     today = Date.today
-    visible_from <= today && visible_to >= today && ticket_release_date <= today && !tickets.empty?
+    visible_from <= today && visible_to >= today && !ticket_release_date.nil? && ticket_release_date <= today && !tickets.empty?
   end
 
   def ticket_usage

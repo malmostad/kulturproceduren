@@ -110,6 +110,8 @@ class AllotmentController < ApplicationController
       @event.ticket_state = session[:allotment][:ticket_state]
       @event.save!
 
+      tickets_created = 0
+
       if session[:allotment][:ticket_state] == Event::ALLOTED_GROUP
         groups = Group.find assignment.keys, :include => { :school => :district }
         schools = []
@@ -126,6 +128,7 @@ class AllotmentController < ApplicationController
             end
 
             ticket.save!
+            tickets_created += 1
           end
 
           schools << group.school unless schools.include?(group.school)
@@ -146,8 +149,19 @@ class AllotmentController < ApplicationController
             end
 
             ticket.save!
+            tickets_created += 1
           end
         end
+      end
+
+      # Create extra tickets
+      tickets_created.upto(session[:allotment][:num_tickets] - 1) do
+        ticket = Ticket.new do |t|
+          t.event = @event
+          t.state = Ticket::UNBOOKED
+        end
+
+        ticket.save!
       end
 
       session[:allotment] = nil
