@@ -462,6 +462,8 @@ body {
 #kp .calendar-filter .category-cnt dd { padding: 0; margin: 0; }
 #kp .calendar-filter .category-cnt dd { padding-bottom: 1em; }
 
+#kp .calendar-filter .form-buttons { clear: both; text-align: right; padding: 0.5em 20px; }
+
 /*** Occasions ***/
 
 #kp .occasions-event {padding: 0.5em;}

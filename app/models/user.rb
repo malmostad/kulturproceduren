@@ -1,5 +1,4 @@
 require 'digest/sha1'
-require "pp"
 
 class User < ActiveRecord::Base
 
