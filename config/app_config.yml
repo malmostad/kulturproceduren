@@ -8,6 +8,12 @@ development:
         :thumb_width: 212
         :thumb_height: 80
     :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
+    :ldap:
+        :address:
+        :port: 389
+        :admin:
+            :dn:
+            :password:
 test:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -18,6 +24,12 @@ test:
         :thumb_width: 212
         :thumb_height: 80
     :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
+    :ldap:
+        :address:
+        :port: 389
+        :admin:
+            :dn:
+            :password:
 production:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -28,3 +40,9 @@ production:
         :thumb_width: 212
         :thumb_height: 80
     :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
+    :ldap:
+        :address:
+        :port: 389
+        :admin:
+            :dn:
+            :password:

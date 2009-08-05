@@ -426,15 +426,18 @@ body {
 #kp .calendar-month-nav th.prev { text-align: left; }
 #kp .calendar-month-nav th.next { text-align: right; }
 
-#kp .show-calendar-filter-action,
-#kp .hide-calendar-filter-action {
+#kp .show-calendar-filter-action {
     display: block;
+    float: right;
     clear: both;
-    text-align: right;
     padding-right: 20px;
+    background: url(../images/show.png) no-repeat 100% 50%;
+    text-align: right;
+}
+#kp .hide-calendar-filter-action {
+    padding: 0 20px 0 20px;
     background: url(../images/hide.png) no-repeat 100% 50%;
 }
-#kp .show-calendar-filter-action { float: right; background: url(../images/show.png) no-repeat 100% 50%; }
 
 #kp .calendar-filter { margin-top: 1em; }
 #kp .calendar-filter #kp-calendar-filter-free-text-label { display: block; font-size: 1.2em; font-weight: bold; }
@@ -462,7 +465,11 @@ body {
 #kp .calendar-filter .category-cnt dd { padding: 0; margin: 0; }
 #kp .calendar-filter .category-cnt dd { padding-bottom: 1em; }
 
-#kp .calendar-filter .form-buttons { clear: both; text-align: right; padding: 0.5em 20px; }
+#kp .calendar-filter .form-buttons {
+    clear: both;
+    text-align: right;
+    padding: 0.5em 0;
+}
 
 /*** Occasions ***/
 
