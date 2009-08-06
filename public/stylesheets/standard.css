@@ -121,7 +121,7 @@ body {
 #kp #kp-logo { margin: 0 0 0.5em 0; }
 
 #kp .flash {
-    margin: 0.5em;
+    margin: 0.5em 0;
     border: 1px solid #f00;
     padding: 0.5em 0.5em 0.5em 2.3em;
     background: #ffeae0 url(../images/exclamation.png) no-repeat 0.5em 0.4em;
@@ -173,12 +173,14 @@ body {
 #kp .pri-nav a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
 #kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
 
-#kp .pri-nav li.pri-nav-logout {
+#kp .pri-nav li.pri-nav-logout, #kp .pri-nav li.pri-nav-leave-logout {
     background: transparent;
     border: 0;
     font-size: 1em;
     font-weight: normal;
 }
+#kp .pri-nav li.pri-nav-leave-logout { padding: 0; margin: 0; }
+#kp .pri-nav li.pri-nav-leave-logout a { margin-left: 5px; padding: 0; text-align: right; }
 
 /*** Section subcontent ***/
 

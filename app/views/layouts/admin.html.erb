@@ -27,27 +27,21 @@
       <ul class="pri-nav">
         <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
           <%= link_to "Behörighetsansökningar", role_applications_path -%>
-        </li>
-        <li class="pri-nav-questionaires <%= active_by_controller "questionaires", "questions" %>">
+        </li><li class="pri-nav-questionaires <%= active_by_controller "questionaires", "questions" %>">
           <%= link_to "Enkäter", questionaires_path -%>
-        </li>
-        <li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
+        </li><li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
           <%= link_to "Kategorier", categories_path -%>
-        </li>
-        <li class="pri-nav-districts <%= active_by_controller "districts" %>">
+        </li><li class="pri-nav-districts <%= active_by_controller "districts" %>">
           <%= link_to "Stadsdelar", districts_path -%>
-        </li>
-        <li class="pri-nav-schools <%= active_by_controller "schools" %>">
+        </li><li class="pri-nav-schools <%= active_by_controller "schools" %>">
           <%= link_to "Skolor", schools_path -%>
-        </li>
-        <li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
+        </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
           <%= link_to "Grupper", groups_path -%>
-        </li>
-        <li class="pri-nav-users <%= active_by_controller "users" %>">
+        </li><li class="pri-nav-users <%= active_by_controller "users" %>">
           <%= link_to "Användare", users_path -%>
-        </li>
-        <li class="pri-nav-home">
-          <%= link_to "Hem", "/" -%>
+        </li><li class="pri-nav-leave-logout">
+          <%= link_to "Lämna administrationen", "/" -%>
+          <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
         </li>
       </ul>
 
