@@ -179,8 +179,14 @@ body {
     font-size: 1em;
     font-weight: normal;
 }
-#kp .pri-nav li.pri-nav-leave-logout { padding: 0; margin: 0; }
-#kp .pri-nav li.pri-nav-leave-logout a { margin-left: 5px; padding: 0; text-align: right; }
+#kp .pri-nav li.pri-nav-leave-logout {
+    padding: 0;
+    margin: 0;
+    float: right;
+    position: relative;
+    top: -7px;
+}
+#kp .pri-nav li.pri-nav-leave-logout a { padding: 0; text-align: right; }
 
 /*** Section subcontent ***/
 
