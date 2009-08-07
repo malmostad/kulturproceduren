@@ -171,7 +171,7 @@ sv:
                 password: Lösenord
                 name: Namn
                 email: Epost
-                mobil_nr: Mobilnummer
+                cellphone: Mobilnummer
                 password_confirmation: Bekräfta lösenord
             role_application:
                 message: Meddelande

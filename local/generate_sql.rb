@@ -188,10 +188,10 @@ enames = ["Andersson", "Johansson", "Al-Kasaam", "Rajko", "Bivinge", "Karlsson",
   salt = "aBcDeFgH"
   password = Digest::SHA1.hexdigest("trumpet" + salt)
   puts "INSERT INTO
-        USERS   (username   ,  password     , salt      , name                , email      , mobil_nr   , created_at , updated_at)
+        USERS   (username   ,  password     , salt      , name                , email      , cellphone   , created_at , updated_at)
         VALUES  ('#{uname}' , '#{password}' , '#{salt}' , '#{fname} #{ename}' , '#{email}' , '#{mobil}' , NOW()      , NOW())"
   dbh.do("INSERT INTO
-          USERS   (username   ,  password     , salt      , name                , email      , mobil_nr   , created_at , updated_at)
+          USERS   (username   ,  password     , salt      , name                , email      , cellphone   , created_at , updated_at)
           VALUES  ('#{uname}' , '#{password}' , '#{salt}' , '#{fname} #{ename}' , '#{email}' , '#{mobil}' , NOW()      , NOW())")
 end
 dbh.do("DISCARD ALL")

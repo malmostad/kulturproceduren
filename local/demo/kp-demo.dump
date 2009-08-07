@@ -1333,7 +1333,7 @@ INSERT INTO tickets (id, state, group_id, event_id, occasion_id, district_id, co
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: root
 --
 
-INSERT INTO users (id, username, "password", salt, name, email, mobil_nr, created_at, updated_at) VALUES (1, 'admin', '9d9a3a2cd935832b696e2a9929918ca05f1e1381', 'wweHbmCxwo', 'Admin', 'admin@admin.com', '0', '2009-06-25 11:58:36.167511', '2009-06-25 11:58:36.167511');
+INSERT INTO users (id, username, "password", salt, name, email, cellphone, created_at, updated_at) VALUES (1, 'admin', '9d9a3a2cd935832b696e2a9929918ca05f1e1381', 'wweHbmCxwo', 'Admin', 'admin@admin.com', '0', '2009-06-25 11:58:36.167511', '2009-06-25 11:58:36.167511');
 
 
 --

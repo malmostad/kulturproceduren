@@ -261,7 +261,7 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.string   "salt"
     t.string   "name"
     t.string   "email"
-    t.string   "mobil_nr"
+    t.string   "cellphone"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

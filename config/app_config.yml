@@ -11,7 +11,8 @@ development:
     :ldap:
         :address:
         :port: 389
-        :admin:
+        :base_dn:
+        :bind:
             :dn:
             :password:
 test:
@@ -27,7 +28,8 @@ test:
     :ldap:
         :address:
         :port: 389
-        :admin:
+        :base_dn:
+        :bind:
             :dn:
             :password:
 production:
@@ -43,6 +45,7 @@ production:
     :ldap:
         :address:
         :port: 389
-        :admin:
+        :base_dn:
+        :bind:
             :dn:
             :password:

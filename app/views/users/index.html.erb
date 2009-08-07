@@ -6,7 +6,7 @@
     <tr>
       <th><%= sort_link "Användarnamn", "username" %></th>
       <th><%= sort_link "Namn", "name" %></th>
-      <th><%= sort_link "Mobilnummer", "mobil_nr" %></th>
+      <th><%= sort_link "Mobilnummer", "cellphone" %></th>
       <th><%= sort_link "Epost", "email" %></th>
       <th colspan="4"></th>
     </tr>
@@ -18,7 +18,7 @@
       <tr class="<%= cycle('', 'alt') %>">
         <td><%= h user.username %></td>
         <td><%= h user.name %></td>
-        <td><%= h user.mobil_nr %></td>
+        <td><%= h user.cellphone %></td>
         <td><%= h user.email %></td>
         <td><%= link_to 'Visa', user %></td>
         <td><%= link_to 'Redigera', edit_user_path(user) %></td>

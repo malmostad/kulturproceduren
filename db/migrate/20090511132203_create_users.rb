@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :salt
       t.string :name
       t.string :email
-      t.string :mobil_nr
+      t.string :cellphone
       t.timestamps
     end
 

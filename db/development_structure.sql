@@ -1,6 +1,6 @@
 CREATE TABLE "age_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "age" integer, "quantity" integer, "group_id" integer, "created_at" datetime, "updated_at" datetime);
 CREATE TABLE "booking_requirements" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "requirement" text, "occasion_id" integer, "group_id" integer, "created_at" datetime, "updated_at" datetime);
-CREATE TABLE "culture_administrators" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "mobil_nr" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime);
+CREATE TABLE "culture_administrators" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "cellphone" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime);
 CREATE TABLE "districts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "elit_id" integer, "created_at" datetime, "updated_at" datetime);
 CREATE TABLE "events" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "from_age" integer, "to_age" integer, "description" text, "created_at" datetime, "updated_at" datetime);
 CREATE TABLE "groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "elit_id" integer, "school_id" integer, "created_at" datetime, "updated_at" datetime);

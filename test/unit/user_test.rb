@@ -37,7 +37,7 @@ class UserTest < ActiveSupport::TestCase
     u.password = pass
     u.name = "Test"
     u.email = "test@test.com"
-    u.mobil_nr = "0702345678"
+    u.cellphone = "0702345678"
 
     assert u.save
 

@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :message => "Lösenordet får inte vara tomt"
   validates_presence_of :name, :message => "Namnet får inte vara tomt"
   validates_presence_of :email, :message => "Epostadressen får inte vara tom"
-  validates_presence_of :mobil_nr, :message => "Mobilnumret får inte vara tomt"
+  validates_presence_of :cellphone, :message => "Mobilnumret får inte vara tomt"
   validates_uniqueness_of :username, :message => "Användarnamnet är redan taget"
   validates_confirmation_of :password, :message => "Lösenordsbekräftelsen matchar inte lösenordet"
 

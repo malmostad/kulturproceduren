@@ -183,9 +183,9 @@ class AllotmentController < ApplicationController
 
   def load_working_districts
     if session[:allotment][:district_ids]
-      return District.find session[:allotment][:district_ids], :order => "name ASC"
+      return District.find(session[:allotment][:district_ids], :order => "name ASC")
     else
-      return District.all :order => "name ASC"
+      return District.all(:order => "name ASC")
     end
   end
 

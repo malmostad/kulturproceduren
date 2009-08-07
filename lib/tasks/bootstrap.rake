@@ -26,7 +26,7 @@ namespace :kp do
         u.password = "admin"
         u.name = "Admin"
         u.email = "admin@admin.com"
-        u.mobil_nr = "0"
+        u.cellphone = "0"
         u.save!
 
         u.roles << Role.find_by_symbol(:admin)

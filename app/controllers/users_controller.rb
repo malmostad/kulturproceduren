@@ -55,7 +55,13 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
 
-    if @user.save
+    if ldap_user_exists(params[:user][:username])
+      @user.valid?
+      @user.errors.add(:username,
+                       :taken,
+                       :default => "Användarnamnet är redan taget",
+                       :value => params[:user][:username])
+    elsif @user.save
       if user_online? && current_user.has_role?(:admin)
         flash[:notice] = 'Användaren skapades. Den kan nu logga in med användarnamn och lösenord.'
         redirect_to(@user)
@@ -63,17 +69,19 @@ class UsersController < ApplicationController
         flash[:notice] = 'Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.'
         redirect_to(:controller => "login")
       end
-    else
-      @user.reset_password
-      render :action => "new"
+
+      return
     end
+
+    @user.reset_password
+    render :action => "new"
   end
 
   def update
     @user.name = params[:user][:name]
     @user.email = params[:user][:email]
-    @user.mobil_nr = params[:user][:mobil_nr]
-    
+    @user.cellphone = params[:user][:cellphone]
+
     if @user.save
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
@@ -147,7 +155,7 @@ class UsersController < ApplicationController
 
     case p.to_sym
     when :name then "name"
-    when :mobil_nr then "mobil_nr"
+    when :cellphone then "cellphone"
     when :email then "email"
     else
       "username"
@@ -167,5 +175,15 @@ class UsersController < ApplicationController
     else
       @user = current_user
     end
+  end
+
+  def ldap_user_exists(username)
+    ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
+      APP_CONFIG[:ldap][:port],
+      APP_CONFIG[:ldap][:base_dn],
+      APP_CONFIG[:ldap][:bind][:dn],
+      APP_CONFIG[:ldap][:bind][:password]
+
+    return !ldap.get_user(username).nil?
   end
 end
