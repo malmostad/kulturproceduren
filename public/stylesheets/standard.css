@@ -156,10 +156,11 @@ body {
 
 /*** Navigation ***/
 #kp .pri-nav {
-    list-style-type: none;
+    position: relative;
     margin: 0;
     padding: 0;
     border-bottom: 1px solid #c0c0c0;
+    list-style-type: none;
 }
 #kp .pri-nav li {
     display: inline-block;
@@ -180,6 +181,9 @@ body {
     font-weight: normal;
 }
 #kp .pri-nav li.pri-nav-leave-logout {
+    position: absolute;
+    bottom: 3px;
+    right: 0;
     padding: 0;
     margin: 0;
 }
