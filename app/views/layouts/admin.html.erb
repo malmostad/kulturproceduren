@@ -37,7 +37,7 @@
           <%= link_to "Skolor", schools_path -%>
         </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
           <%= link_to "Grupper", groups_path -%>
-        </li><li class="pri-nav-users <%= active_by_controller "users" %>">
+        </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
           <%= link_to "Användare", users_path -%>
         </li><li class="pri-nav-leave-logout">
           <%= link_to "Lämna administrationen", "/" -%>

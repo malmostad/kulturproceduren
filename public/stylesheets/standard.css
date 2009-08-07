@@ -307,6 +307,9 @@ body {
 /* Allotment forms */
 #kp form.allotment-init-form label { width: 12em; }
 #kp form.allotment-init-form .input-container { padding-left: 12em; }
+/* Ldap search form */
+#kp form.ldap-search-form label { width: 8em; }
+#kp form.ldap-search-form .input-container { padding-left: 8em; }
 
 /*** Models ***/
 

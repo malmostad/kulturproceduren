@@ -1,0 +1,40 @@
+
+<% form_tag(ldap_search_path, { :id => "kp-ldap-search-form", :class => "ldap-search-form" }) do -%>
+  <fieldset>
+    <legend>Sök i Malmö Stads interna katalog</legend>
+
+    <div class="form-row name-field-row">
+      <label for="kp-ldapquery-name">Namn</label>
+      <div class="input-container">
+        <input type="text"
+               id="kp-ldapquery-name"
+               name="ldapquery[name]"
+               value="<%= h params[:ldapquery][:name] if params[:ldapquery] && params[:ldapquery][:name] %>"/>
+      </div>
+    </div>
+
+    <div class="form-row email-field-row">
+      <label for="kp-ldapquery-email">Epost</label>
+      <div class="input-container">
+        <input type="text"
+               id="kp-ldapquery-email"
+               name="ldapquery[email]"
+               value="<%= h params[:ldapquery][:email] if params[:ldapquery] && params[:ldapquery][:email] %>"/>
+      </div>
+    </div>
+
+    <div class="form-row username-field-row">
+      <label for="kp-ldapquery-username">Användarnamn</label>
+      <div class="input-container">
+        <input type="text"
+               id="kp-ldapquery-username"
+               name="ldapquery[username]"
+               value="<%= h params[:ldapquery][:username] if params[:ldapquery] && params[:ldapquery][:username] %>"/>
+      </div>
+    </div>
+
+    <div class="form-buttons">
+      <input type="submit" value="Sök" name="submit"/>
+    </div>
+  </fieldset>
+<% end %>

@@ -58,6 +58,10 @@ ActionController::Routing::Routes.draw do |map|
   map.grant_role 'users/:id/grant/:role', :controller => 'users', :action => 'grant'
   map.revoke_role 'users/:id/revoke/:role', :controller => 'users', :action => 'revoke'
   map.remove_culture_provider_user 'users/:id/remove_culture_provider/:culture_provider_id', :controller => 'users', :action => 'remove_culture_provider'
+
+  map.ldap 'ldap/', :controller => 'ldap', :action => 'index'
+  map.ldap_search 'ldap/search', :controller => 'ldap', :action => 'search'
+  map.ldap_handle 'ldap/handle/:username', :controller => 'ldap', :action => 'handle'
   
   
   map.connect ':controller/:action/:id'

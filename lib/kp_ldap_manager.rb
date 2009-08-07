@@ -2,7 +2,7 @@ require 'ldap'
 require 'pp'
 
 class KPLdapManager
-  attr :max_results
+  attr_accessor :max_results
 
   def initialize(address, port, base_dn, bind_dn, bind_password)
     @address = address
@@ -41,9 +41,9 @@ class KPLdapManager
   def search(params)
     conditions = []
 
-    conditions << "(uid=*#{e(params[:username])}*)" unless params[:username].nil? || params[:username].empty?
-    conditions << "(cn=*#{e(params[:name])}*)" unless params[:name].nil? || params[:email].empty?
-    conditions << "(mail=*#{e(params[:email])}*)" unless params[:email].nil? || params[:email].empty?
+    conditions << "(uid=*#{e(params[:username])}*)" if !params[:username].nil? && !params[:username].empty?
+    conditions << "(cn=*#{e(params[:name])}*)" if !params[:name].nil? && !params[:name].empty?
+    conditions << "(mail=*#{e(params[:email])}*)" if !params[:email].nil? && !params[:email].empty?
 
     return [] if conditions.empty?
 

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   layout :set_layout
 
   before_filter :authenticate, :except => [ :new, :create ]
-  before_filter :require_admin, :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
+  before_filter :require_admin, :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider, :ldap_search ]
   before_filter :load_user, :only => [ :show, :edit, :edit_password, :update, :update_password ]
 
   def index

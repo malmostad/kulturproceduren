@@ -6,6 +6,7 @@
 
         <li class="<%= active_by_action "users", "index" %>"><%= link_to 'Lista', users_path %></li>
         <li class="<%= active_by_action "users", "new" %>"><%= link_to 'Skapa användare', new_user_path %></li>
+        <li class="<%= active_by_action "ldap", "index" %>"><%= link_to 'Katalogsökning', ldap_path %></li>
 
       <% else -%>
 
