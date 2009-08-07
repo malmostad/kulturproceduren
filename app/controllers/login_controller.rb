@@ -38,6 +38,11 @@ class LoginController < ApplicationController
     end
   end
 
+  def session_fix
+    user_online?
+    render :text => "", :content_type => "text/plain"
+  end
+
 
   private
 

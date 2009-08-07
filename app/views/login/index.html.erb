@@ -1,3 +1,7 @@
+<% content_for :head do %>
+    <%= javascript_include_tag "sessionfix.js" %>
+<% end %>
+
 <%= render :partial => "users/menu" %>
 
 <% if user_online? -%>

@@ -1,5 +1,8 @@
 <script type="text/javascript">
   kpConfig = {
+    sessionfix: {
+      url: "<%= url_for :controller => "login", :action => "session_fix" %>"
+    },
     schools: {
       list: { url: "<%= options_list_schools_path %>" }
     },
