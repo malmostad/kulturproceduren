@@ -1,7 +1,7 @@
 class LoginController < ApplicationController
 
   layout "standard"
-  
+
   def index
   end
 
@@ -11,14 +11,14 @@ class LoginController < ApplicationController
     end
 
     u = authenticate_user()
-    
+
     if u.nil?
       flash[:warning] = "Felaktigt användarnamn/lösenord"
       render :action => "index"
     else
       flash[:notice] = "Du är nu inloggad som #{CGI.escapeHTML(u.username)}"
       session[:current_user_id] = u.id
-      
+
       if session[:return_to]
         redirect_to session[:return_to]
         session[:return_to] = nil
@@ -39,8 +39,16 @@ class LoginController < ApplicationController
   end
 
   def session_fix
-    user_online?
-    render :text => "", :content_type => "text/plain"
+    session_cookie = {
+      :name => request.session_options[:key],
+      :value => cookies[request.session_options[:key]],
+      :options => {
+      :path => request.session_options[:path],
+      :domain => request.session_options[:domain],
+      :secure => request.session_options[:secure]
+    }
+    }
+    render :json => session_cookie.to_json
   end
 
 
