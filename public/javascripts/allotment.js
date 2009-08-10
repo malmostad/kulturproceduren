@@ -1,11 +1,15 @@
 (function($) {
     $(function() {
 
-        // Datastruktur för fördelningens tillstånd
+        // Data structure for the allotment state
         var tickets = {
-            // Totalt antal tillgängliga biljetter
+            // Amount of available tickets
             total: parseInt($("#kp #kp-distribution-meta .available-tickets").html()),
-            // Funktion för att hämta num st tillgängliga biljetter
+            /**
+             * Gets tickets from the pool of available tickets.
+             *
+             * @param num The number of tickets to get
+             */
             getAvailable: function(num) {
                 var added = 0;
 
@@ -19,26 +23,33 @@
                 this.updateDisplay();
                 return added;
             },
-            // Funktion för att uppdatera antalet tillgängliga biljetter
+            /**
+             * Updates the amount of available tickets.
+             *
+             * @param num The number of tickets to add (or subtract) to the amount
+             */
             change: function(num) {
                 this.total += num;
                 this.updateDisplay();
             },
-            // Uppdaterar gränssnittet med antalet tillgängliga biljetter
+            /**
+             * Updates the UI display with the amount of available tickets
+             */
             updateDisplay: function() {
                 $("#kp #kp-distribution-meta .available-tickets").html(this.total);
             }
         };
 
         /**
-         * Uppdaterar antalet tilldelade biljetter på en stadsdelsrad.
+         * Updates the number of allotted ticket on a district row,
+         * based on the number of allotted tickets in child rows
          *
-         * @param districtId Stadsdelens id
+         * @param districtId The id of the district
          */
         function updateDistrictDisplay(districtId) {
             var sum = 0;
 
-            // Summera alla grupprader som är barn till stadsdelsraden
+            // Sum all group rows that are children to the district
             $("." + districtId + " .num-tickets-value").each(function() {
                 sum += parseInt($(this).val());
             });
@@ -47,14 +58,15 @@
         }
 
         /**
-         * Uppdaterar antalet tilldelade biljetter på en skolrad.
+         * Updates the number of allotted ticket on a school row,
+         * based on the number of allotted tickets in child rows
          *
-         * @param schoolId Skolans id
+         * @param schoolId The id of the school
          */
         function updateSchoolDisplay(schoolId) {
             var sum = 0;
 
-            // Summera alla grupprader som är barn till skolan
+            // Sum all group rows that are children to the district
             $("." + schoolId + " .num-tickets-value").each(function() {
                 sum += parseInt($(this).val());
             });
@@ -63,9 +75,10 @@
         }
 
         /**
-         * Hämtar antalet barn och antalet fördelade biljetter på en given rad
+         * Gets the number of children and amount of allotted tickets
+         * on a given row.
          *
-         * @param row Raden data ska hämtas ifrån
+         * @param row The row the data should be fetched from
          */
         function getRowData(row) {
             var data = {
@@ -82,14 +95,15 @@
         }
 
         /**
-         * Trigger för när antalet biljetter förändras på en rad via hidden-fältet.
+         * Triggers when the amount of allotted tickets is changed in the hidden
+         * value field.
          */
         $("#kp #kp-distribution-list .num-tickets-value").change(function() {
             var field = $(this);
             var row = field.parents("tr");
             var rowData = getRowData(row);
 
-            // Uppdatera fyll-indikatorn
+            // Update fill indicator
             row.removeClass("partial full error overbooked");
 
             if (rowData.numTickets == NaN || rowData.numTickets < 0) {
@@ -102,10 +116,10 @@
                 row.addClass("overbooked");
             }
 
-            // Uppdatera textfältet
+            // Update text field
             field.siblings(".num-tickets-display").val(field.val());
 
-            // Uppdatera föräldrar
+            // Update parents
             if (field.hasClass("group-row")) {
                 try {
                     updateSchoolDisplay(row.attr("className").match(/kp-school-\d+/)[0]);
@@ -117,24 +131,24 @@
         });
 
         /**
-         * Trigger för när antalet biljetter förändras på en rad via textfältet.
+         * Triggers when the amount of allotted tickets is changed via the text field
          */
         $("#kp #kp-distribution-list .num-tickets-display").change(function() {
             var field = $(this);
             var newVal = parseInt($(this).val());
             var rowData = getRowData(field.parents("tr"));
 
-            // Uppdatera totala värdet
+            // Update the total amount
             tickets.change(rowData.numTickets - newVal);
             rowData.ticketCnt.val(newVal).trigger("change");
         });
 
 
         /**
-         * Gemensam funktion för att via tool-knappar fylla/tömma en rads fördelning.
+         * Common function for tool buttons. Fills/clears a row's allotted tickets.
          *
-         * @param link Tool-knappen som klickades
-         * @param fill Indikator för huruvida raden ska fyllas eller tömmas
+         * @param link The clicked tool button
+         * @param fill Indicates if the row should be filled or emptied
          */
         function changeAmount(link, fill) {
             var rowData = getRowData($(link).parents("tr"));
@@ -155,44 +169,44 @@
         }
 
         /**
-         * Trigger för tool-knappen "fyll" på en grupprad eller en stadsdelsrad beroende
-         * på vilken nivå fördelningen görs.
+         * Triggers when the "fill" tool button is pressed on a group row or a district
+         * row depending on the mode of the allotment.
          */
         $("#kp #kp-distribution-list .group-row .tools .fill, #kp #kp-distribution-list .editable-district-row .tools .fill").click(function() {
             changeAmount(this, true);
             return false;
         });
         /**
-         * Trigger för tool-knappen "töm" på en grupprad eller en stadsdelsrad beroende
-         * på vilken nivå fördelningen görs.
+         * Triggers when the "clear" tool button is pressed on a group row or a district
+         * row depending on the mode of the allotment.
          */
         $("#kp #kp-distribution-list .group-row .tools .clear, #kp #kp-distribution-list .editable-district-row .tools .clear").click(function() {
             changeAmount(this, false);
             return false;
         });
         /**
-         * Trigger för tool-knappen "fyll" på en skolrad.
+         * Triggers when the "fill" tool button is pressed on a school row.
          */
         $("#kp #kp-distribution-list .school-row .tools .fill").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .fill").trigger("click");
             return false;
         });
         /**
-         * Trigger för tool-knappen "töm" på en skolrad.
+         * Triggers when the "clear" tool button is pressed on a school row.
          */
         $("#kp #kp-distribution-list .school-row .tools .clear").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .clear").trigger("click");
             return false;
         });
         /**
-         * Trigger för tool-knappen "fyll" på en stadsdelsrad.
+         * Triggers when the "fill" tool button is pressed on a district row.
          */
         $("#kp #kp-distribution-list .district-row .tools .fill").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .fill").trigger("click");
             return false;
         });
         /**
-         * Trigger för tool-knappen "töm" på en stadsdelsrad.
+         * Triggers when the "clear" tool button is pressed on a district row.
          */
         $("#kp #kp-distribution-list .district-row .tools .clear").click(function() {
             $("." + $(this).parents("tr").attr("id") + " .clear").trigger("click");
@@ -202,12 +216,13 @@
 
     $(function() {
         /**
-         * Trigger för Ajax-hämtning av skolor när dropdownen för stadsdelar ändras.
+         * Ajax functionality for fetching a district's schools when the chosen
+         * district is changed.
          */
         $("#kp #kp-add_group_district_id").change(function() {
             var val = parseInt($(this).val());
 
-            // Disabla övriga fält när man ändrar vald stadsdel
+            // Disable all subsequent fields when changing district
             $("#kp #kp-add_group_school_id, #kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
 
             if (!isNaN(val)) {
@@ -227,12 +242,13 @@
             }
         });
         /**
-         * Trigger för Ajax-hämnting av grupper när dropdownen för skolor ändras.
+         * Ajax functionality for fetching a school's groups when the
+         * chosen school is changed.
          */
         $("#kp #kp-add_group_school_id").change(function() {
             var val = parseInt($(this).val());
 
-            // Disabla efterföljande fält när man ändrar vald skola.
+            // Disable all subsequent fields when changing school
             $("#kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
 
             if (!isNaN(val)) {
@@ -251,7 +267,7 @@
             }
         });
         /**
-         * Trigger för att enabla/disabla submitknappen när man har valt en grupp.
+         * Enables/disables the submit button when the selected group is changed.
          */
         $("#kp #kp-add_group_group_id").change(function() {
             var val = parseInt($(this).val());
@@ -266,7 +282,7 @@
 
     $(function() {
         /**
-         * Trigger för att kollapsa/expandera barnen till en stadsdel/skola.
+         * Expands/collapses the children of the selected district/school
          */
         $("#kp #kp-distribution-list .toggler").click(function() {
             var rows = $("#kp #kp-distribution-list ." + $(this).parents("tr").attr("id"));
