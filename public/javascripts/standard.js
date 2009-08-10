@@ -1,12 +1,18 @@
 (function($) {
     $(function() {
-
-        // Checkbox lists
+        /**
+         * Trigger för när checkboxar förändras i en checkboxlista.
+         * 
+         * Hanterar när man väljer "Alla"-checkboxen, samt att uppdatera
+         * värdet på "Alla"-checkboxen när någon av de andra checkboxarna
+         * förändras.
+         */
         $(".checkbox-list :checkbox").change(function() {
             var cb = $(this);
             var l = cb.parents(".checkbox-list");
 
             if (cb.hasClass("all-toggler")) {
+                // "Alla"-checkbox
                 if (cb.is(":checked")) {
                     l.find(":checkbox:not(:checked)").attr("checked", true);
                 } else {
@@ -25,6 +31,9 @@
     });
 
     $(function() {
+        /**
+         * Trigger för Ajax-hämtning av skolor när man väljer stadsdel i bokningsvyn.
+         */
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
             var occasion_id = $("#kp-occasion_id").val();
@@ -40,6 +49,9 @@
                 );
             $("#kp-group_id").html("<option>Välj skola först</option>");
         });
+        /**
+         * Trigger för Ajax-hämtning av grupper när man väljer skola i bokningsvyn.
+         */
         $("#kp-school_id").change(function() {
             var schoolId = $("#kp-school_id option:selected").val();
             var occasion_id = $("#kp-occasion_id").val();
@@ -52,6 +64,9 @@
                     $("#kp-group_id").html(data);
                 });
         });
+        /**
+         * Trigger för Ajax-hämtning av formulär när man väljer en grupp i bokningsvyn.
+         */
         $("#kp-group_id").change(function() {
             var groupId = $("#kp-group_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
@@ -67,7 +82,9 @@
         });
 
 
-        //begin
+        /**
+         * Trigger för Ajax-hämtning av skolor när man väljer stadsdel i notifieringsvyn.
+         */
         $("#kp-notreq-district_id").change(function() {
             var district_id = $("#kp-notreq-district_id option:selected").val();
             var request = $.get(
@@ -81,6 +98,9 @@
                 );
             $("#kp-notification_request-group_id").html("<option>Välj skola först</option>");
         });
+        /**
+         * Trigger för Ajax-hämtning av grupper när man väljer skola i notifieringsvyn.
+         */
         $("#kp-notreq-shool_id").change(function() {
             var schoolId = $("#kp-notreq-shool_id option:selected").val();
             var request = $.get(
@@ -91,6 +111,9 @@
                     $("#kp-notification_request-group_id").html(data);
                 });
         });
+        /**
+         * Trigger för Ajax-hämtning av formulär när man väljer grupp i notifieringsvyn.
+         */
         $("#kp-notification_request-group_id").change(function() {
             var groupId = $("#kp-notification_request-group_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
@@ -106,9 +129,11 @@
                     $("#kp-notreq-input-area").html(data);
                 });
         });
-        //end
 
 
+        /**
+         * Trigger för Ajaxhämtning av skolor när man väljer stadsdel i bokningslistningsvyn.
+         */
         $("#kp-by_group_district_id").change(function() {
             var district_id = $("#kp-by_group_district_id option:selected").val();
             var request = $.get(
@@ -128,6 +153,9 @@
                 });
             $("#kp-by_group_group_id").html("<option>Välj skola först</option>");
         });
+        /**
+         * Trigger för Ajaxhämtning av grupper när man väljer skola i bokningslistningsvyn.
+         */
         $("#kp-by_group_school_id").change(function() {
             var schoolId = $("#kp-by_group_school_id option:selected").val();
             var request = $.get(
@@ -145,6 +173,9 @@
                 });
 
         });
+        /**
+         * Trigger för Ajaxhämtning av bokningar när man väljer grupp i bokningslistningsvyn.
+         */
         $("#kp-by_group_group_id").change(function() {
             var groupId = $("#kp-by_group_group_id option:selected").val();
             var request = $.get(
@@ -156,18 +187,12 @@
                     $("#kp-booking-by-group").html(data);
                 });
         });
-        $(".kp-rbclass").click(function() {
-            if ( this.id == "kp-qtype_questionmchoice")
-                $("#kp-query-mchoice-csv").show("slow");
-            else
-                $("#kp-query-mchoice-csv").hide("slow");
-       
-        });
-       
     });
 
-    // Multiple choice container toggle
     $(function() {
+        /**
+         * Trigger för att visa flervalsfält när man väljer typen flerval på en fråga.
+         */
         $("#kp .question-form .types-field-row :radio").change(function() {
             if ($(this).val() == "QuestionMchoice") {
                 $("#kp .question-form .choice_csv-field-row").show("slow");
@@ -177,23 +202,30 @@
         });
     });
 
-    //Drop-down
     $(function() {
+        /**
+         * Summerar antalet bokade biljetter i bokningsvyn.
+         */
         var changeHandler = function() {
             var inputs = $(".seats");
             var i;
             var sum = 0;
+
             for ( i = 0 ; i < inputs.length ; i++) {
                 sum += Number(inputs[i].value);
             };
+
             $("#kp-booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
         };
+
         $("#kp-input-area").change(changeHandler);
         $("#kp-input-area").keyup(changeHandler);
     });
 
-    // Date selectors
     $(function() {
+        /**
+         * Defaultinställningar för datepicker.
+         */
         $.datepicker.setDefaults({
             dateFormat: "yy-mm-dd",
             firstDay: 1,
@@ -206,11 +238,13 @@
             monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
         });
 
+        // Minsta datum idag på auto-datumfält
         var today = new Date();
         $("#kp .date-field.auto").datepicker({
             minDate: new Date()
         });
 
+        // Minsta datum imorgon på biljettsläppdatumet vid fördelningen
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         
@@ -218,12 +252,17 @@
             minDate: tomorrow
         });
 
+        // Standardinställningar på datumfälten i filterformuläret
         $("#kp #kp-calendar-filter-from-date, #kp #kp-calendar-filter-to-date").datepicker();
     });
 
     $(function() {
+        // Tabbar
         $("#kp .tabs").tabs();
 
+        /**
+         * Trigger för att välja en tabb per default.
+         */
         $("#kp .tabs .preselect").each(function () {
             var tab = $(this);
             var tabIdx = tab.parent().children("li").index(tab);
@@ -232,6 +271,9 @@
     });
 
     $(function() {
+        /**
+         * Hantering av bildrotering.
+         */
         $("#kp .model-cnt .images-cnt").each(function() {
             var c = $(this);
             var imgs = c.find("img");
@@ -240,6 +282,7 @@
                     
                 c.find(".images").cycle("fade");
 
+                // Trigger för att spela/pausa bildroteringen.
                 $("<a href=\"#\" class=\"play-pause-action playing\">Spela/Pausa</a>").appendTo(c).toggle(
                     function() {
                         $(this).removeClass("playing").addClass("paused").siblings(".images").cycle("pause");
@@ -252,17 +295,26 @@
     });
 
     $(function() {
+        /**
+         * Trigger för att kollapsa ett fieldset
+         */
         $("#kp fieldset.collapsible legend").click(function() {
             $(this).parent().toggleClass("collapsed");
         });
     });
 
     $(function() {
+        /**
+         * Trigger för att disabla åldersfiltren när man väljer vidareutbildning.
+         */
         $("#kp #kp-calendar-filter-further-education-true").change(function() {
             if ($(this).is(":checked")) {
                 $("#kp #kp-calendar-filter-from-age, #kp #kp-calendar-filter-to-age").attr("disabled", "disabled");
             }
         });
+        /**
+         * Trigger för att disabla åldersfiltren när man väljer vidareutbildning.
+         */
         $("#kp #kp-calendar-filter-further-education-false").change(function() {
             if ($(this).is(":checked")) {
                 $("#kp #kp-calendar-filter-from-age, #kp #kp-calendar-filter-to-age").removeAttr("disabled");
