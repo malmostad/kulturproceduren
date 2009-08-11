@@ -382,6 +382,7 @@ body {
 #kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
 #kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
 
+#kp #kp-distribution-list { width: auto; }
 #kp #kp-distribution-list td { padding: 3px 0.5em; vertical-align: middle; }
 #kp #kp-distribution-list .school-row td.name { padding-left: 2em; }
 #kp #kp-distribution-list .group-row td.name { padding-left: 4em; }
@@ -406,6 +407,8 @@ body {
 #kp #kp-distribution-list .overbooked { background: #fcaf3e; }
 #kp #kp-distribution-list .partial { background: #fce94f; }
 #kp #kp-distribution-list .error { background: #ef2929; }
+
+#kp #kp-distribution-list .proximity { font-weight: bold; text-decoration: underline; }
 
 /*** Calendar ***/
 

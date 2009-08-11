@@ -96,18 +96,33 @@
 
             <% school.distribution_groups.each do |group| -%>
               <tr class="group-row kp-district-<%= district.id %> kp-school-<%= school.id%> <%= fill_indicator group.num_children, group.num_tickets %>"
-                                                                                             id="kp-group-<%= group.id %>">
+                  id="kp-group-<%= group.id %>">
+
                 <td class="name"><%= h group.name %></td>
-                <td class="total-children"><%= h group.total_children %></td>
-                <td class="num-children"><%= h group.num_children %></td>
+
+                <%
+                  proximity_indicator = (
+                    group.total_children > group.num_children &&
+                    (group.total_children - group.num_children) <= APP_CONFIG[:allotment][:proximity_boundary]
+                  )
+                %>
+                <td class="total-children <%= "proximity" if proximity_indicator %>">
+                  <%= h group.total_children %>
+                </td>
+                <td class="num-children <%= "proximity" if proximity_indicator %>">
+                  <%= h group.num_children %>
+                </td>
+
                 <td class="num-tickets">
                   <input type="text" class="num-tickets-display" value="<%= h group.num_tickets %>"/>
                   <input type="hidden" class="num-tickets-value" name="allotment[ticket_assignment[<%= group.id %>]]" value="<%= h group.num_tickets %>"/>
                 </td>
+
                 <td class="tools">
                   <a href="#" class="fill">+</a>
                   <a href="#" class="clear">-</a>
                 </td>
+
               </tr>
             <% end -%>
           <% end -%>

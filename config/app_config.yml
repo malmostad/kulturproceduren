@@ -16,6 +16,8 @@ development:
             :dn:
             :password:
         :max_search_results: 25
+    :allotment:
+        :proximity_boundary: 3
 test:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -34,6 +36,8 @@ test:
             :dn:
             :password:
         :max_search_results: 25
+    :allotment:
+        :proximity_boundary: 3
 production:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -52,3 +56,5 @@ production:
             :dn:
             :password:
         :max_search_results: 25
+    :allotment:
+        :proximity_boundary: 3
