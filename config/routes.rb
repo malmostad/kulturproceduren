@@ -16,7 +16,12 @@ ActionController::Routing::Routes.draw do |map|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
   end
   
-  map.resources :occasions , :except => [ :index ], :member => { :attendants => :get } do |oc|
+  map.resources :occasions , :except => [ :index ],
+    :member => {
+    :attendants => :get,
+    :report_show => :get,
+    :report_create => :post
+  } do |oc|
     oc.resources :notification_requests , :except => [ :index , :edit , :update , :show ] , :collection => { :get_input_area => :get }
   end
 
