@@ -2,24 +2,39 @@
 
 <%
 
-  state = :no_selection
+state = :no_selection
 
-  case params[:commit]
-  when "Hämta skolor"
-    state = :district_selected
-  when "Hämta grupper"
-    state = :school_selected
-  when "Välj grupp"
-    state = :group_selected
-  end
+case params[:commit]
+when "Hämta skolor"
+  state = :district_selected
+when "Hämta grupper"
+  state = :school_selected
+when "Välj grupp"
+  state = :group_selected
+end
 
 %>
 
-<h2>
+<% puts "Errors = " %>
+<% pp @errors %>
+<% puts "asdf = #{@errors.keys.length}" %>
+
+<%#
+
+<div class="form-row name-field-row validation-error " style="">
+<label for="kp-category-name">Namn</label>
+<div class="input-container">
+<input id="kp-category-name" name="category[name]" size="30" type="text" value="" />
+</div>
+<span class="validation-error-message">Namnet får inte vara tomt</span>
+</div>
+
+%>
+<h3>
   Boka biljetter för
   <%= link_to h(@occasion.event.name), @occasion.event -%>,
   föreställningen <%= h @occasion.date -%>
-</h2>
+</h3>
 
 <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
   <p class="message response">
@@ -33,6 +48,9 @@
 <%  end %>
 
 <% form_tag({ :controller => "booking", :action => "book" }, { :class => "booking-form" }) do -%>
+  <% if @errors.keys.length > 0 %>
+    <div class="validation-error-indicator"> Vänligen korrigera markerade uppgifter nedan.</div>
+  <% end %>
 
   <fieldset>
     <%= hidden_field_tag 'occasion_id' , @occasion.id %>
@@ -44,13 +62,13 @@
 
         <div class="input-container">
           <%
-            opt_tag = "<option>Välj Stadsdel</option>"
-            opt_tag += options_for_select(
-              @districts.collect { |d|
+          opt_tag = "<option>Välj Stadsdel</option>"
+          opt_tag += options_for_select(
+            @districts.collect { |d|
               [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " (#{d.available_tickets_per_occasion(@occasion)} biljetter)" : "" ), d.id.to_s ]
             }, params[:district_id].to_s
-            )
-          %>
+          )
+        %>
 
           <%= select_tag "district_id", opt_tag %>
 
@@ -100,15 +118,18 @@
           <% else %>
 
             <select id="kp-group_id" name="group_id" <%= @edit.blank? ? "" : 'disabled="disabled"' -%>>
+
               <option>Välj grupp</option>
               <% selected = @curgroup ? @curgroup.id : nil %>
               <%= options_for_select(
                 @groups.map { |g|
-                [ g.name + (@occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.ntickets_by_occasion(@occasion)} biljetter)" : "") , g.id ]
-              }, (@curgroup ? @curgroup.id : nil)
+                  [ g.name + (@occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.ntickets_by_occasion(@occasion)} biljetter)" : "") , g.id ]
+                }, (@curgroup ? @curgroup.id : nil)
               ) %>
             </select>
-
+            <% if not @edit.blank? %>
+              <%=  hidden_field_tag 'group_id' , @group.id %>
+            <% end %>
           <% end %>
 
           <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" && @curgroup.blank? %>
@@ -119,19 +140,27 @@
         </div>
       </div>
     </fieldset>
+    <%
 
+    puts "Debugg3ri"
+    puts "edit = #{@edit}"
+    puts "commit = #{params[:commit]}"
+
+  %>
     <div id="kp-input-area">
-      <%= render(:partial => "input_area" ,
-                 :locals => {
-        :group => @curgroup ,
-        :occasion => @occasion ,
-        :companion => @companion ,
-        :nticks => @nticks ,
-        :naticks => @naticks ,
-        :nwticks => @nwticks ,
-        :br => @br ,
-        :edit => @edit
-      }) if params[:commit] == "Välj grupp" %>
+      <% if ( params[:commit] == "Välj grupp" )  or @edit %>
+        <%= render(:partial => "input_area" ,
+          :locals => {
+            :group => @curgroup ,
+            :occasion => @occasion ,
+            :companion => @companion ,
+            :nticks => @nticks ,
+            :naticks => @naticks ,
+            :nwticks => @nwticks ,
+            :br => @br ,
+            :edit => @edit
+          }) %>
+      <% end %>
     </div>
 
   </fieldset>

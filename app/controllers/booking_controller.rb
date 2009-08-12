@@ -23,14 +23,29 @@ class BookingController < ApplicationController
     @nticks  = params[:seats_students].to_i
     @naticks = params[:seats_adult].to_i
     @nwticks = params[:seats_wheelchair].to_i
+    check_nticks( @nticks, @naticks, @nwticks)
     @companion = Companion.new
-    @companion.tel_nr = params[:companion_telnr]
-    @companion.email = params[:companion_email]
-    @companion.name  = params[:companion_name]
+
     @br = BookingRequirement.new
     @br.occasion = @occasion
     @br.group = @curgroup
     @br.requirement = params[:booking_request]
+
+    if params[:companion_telnr].blank? && ( params[:commit] == "Ändra bokning" or params[:commit] == "Boka" )
+      @errors["companion_telnr"] = "Du måste ange telefonnummer för medföljande vuxen"
+    end
+    @companion.tel_nr = params[:companion_telnr]
+
+    if params[:companion_email].blank? and ( params[:commit] == "Ändra bokning" or params[:commit] == "Boka" )
+      @errors["companion_email"] = "Du måste ange epostaddress för medföljande vuxen"
+    end
+    @companion.email = params[:companion_email]
+
+    if params[:companion_name].blank? && ( params[:commit] == "Ändra bokning" or params[:commit] == "Boka" )
+      @errors["companion_name"] = "Du måste ange namn för medföljande vuxen"
+    end
+    
+    @companion.name  = params[:companion_name]
 
     if t.blank?
       @edit = false
@@ -106,6 +121,7 @@ class BookingController < ApplicationController
   def get_input_area
     @group = Group.find(params[:group_id])
     @occasion = Occasion.find(params[:occasion_id])
+    @errors = Hash.new
     load_vars
     render :partial => "input_area" , :locals => {
       :group => @group ,
@@ -161,7 +177,7 @@ class BookingController < ApplicationController
   def book
 
     @user = current_user
-
+    @errors = {}
     if params[:occasion_id].blank? || params[:occasion_id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
       redirect_to "/"
@@ -185,7 +201,7 @@ class BookingController < ApplicationController
     
     populate_districts_list
     puts "In booking controller - method book districts ="
-    pp @districts
+    
     #    if ( not params[:group_id].blank? ) && @curgroup = Group.find(params[:group_id])
     #      params[:commit] = "Välj grupp"
     #      params[:district_id] = @curgroup.school.district.id
@@ -226,8 +242,8 @@ class BookingController < ApplicationController
       populate_schools_list
       populate_groups_list
       @curgroup = Group.find(params[:group_id])
-      params[:commit] = "Välj grupp"
       load_vars
+      params[:commit] = "Välj grupp"
       if Ticket.count(:all , :conditions => { :group_id => @curgroup.id , :event_id => @occasion.event.id , :state => Ticket::BOOKED }) > 0
         flash[:error] = "Gruppen #{@curgroup.name} #{@curgroup.school.name} har redan bookat biljetter på den här evenemanget."
         redirect_to "/"
@@ -257,14 +273,10 @@ class BookingController < ApplicationController
       else
         #Do booking
 
-
-        @companion = Companion.new
-        @companion.tel_nr = params[:companion_telnr]
-        @companion.email = params[:companion_email]
-        @companion.name  = params[:companion_name]
-        
         unless @companion.save
-          flash[:error] = "Kunde inte spara värdena för medföljande vuxen ... Försök igen?"
+          if @errors.keys.length == 0
+            flash[:error] = "Kunde inte spara värdena för medföljande vuxen ... Försök igen?"
+          end
           render :book
           return
         end
@@ -310,13 +322,28 @@ class BookingController < ApplicationController
     elsif params[:commit] == "Börja om"
       pp params
     elsif params[:commit] == "Ändra bokning"
+      populate_schools_list
+      populate_groups_list
       puts "Ändra bokning"
-      load_vars 
+      load_vars
+      params[:commit] = "Välj grupp"
       if ( not @companion.blank? or @companion.name != params[:companion_name] or @companion.email != params[:companion_email] or @companion.tel_nr != params[:companion_telnr]  )
+        @curgroup = @group
         @companion.name = params[:companion_name]
         @companion.email = params[:companion_email]
         @companion.tel_nr = params[:companion_telnr]
-        @companion.save or flash[:error] = "Kunde inte spara information ang medföljande vuxen"
+
+        if not @companion.save
+          if @errors.keys.length == 0
+            flash[:error] = "Kunde inte spara information ang med följande vuxen"
+          end
+          render :book
+          return
+        end
+        if not check_nticks(params[:seats_students],params[:seats_adult],params[:seats_wheelchair])
+          render :book
+          return
+        end
       end
       begin
         br = BookingRequirement.find(:first , :conditions => {:occasion_id => @occasion.id , :group_id => @group.id})
@@ -445,10 +472,10 @@ class BookingController < ApplicationController
   def check_nticks(nticks , naticks , nwticks )
     ok = true
     if @group.ntickets_by_occasion(@occasion).to_i < ( nticks.to_i + naticks.to_i + nwticks.to_i  )
-      flash[:error] = "Du har bara #{@group.ntickets_by_occasion(@occasion)} platser du kan boka på den här föreställningen"
+      @errors["nticks"] = "Du har bara #{@group.ntickets_by_occasion(@occasion)} platser du kan boka på den här föreställningen"
       ok = false
     elsif @occasion.wheelchair_seats < nwticks.to_i
-      flash[:error] = "Det finns bara #{@occasion.available_wheelchair_seats} rullstolsplatser du kan boka på den här föreställningen"
+      @errors["nwticks"] = "Det finns bara #{@occasion.available_wheelchair_seats} rullstolsplatser du kan boka på den här föreställningen"
       ok = false
     end
     return ok

@@ -164,6 +164,7 @@
             function(data) {
                 $("#kp-booking-by-group").html(data);
             });
+                $("#kp-school_id").removeAttr('disabled');
             $("#kp-by_group_group_id").html("<option>Välj skola först</option>");
         });
         /**
@@ -219,6 +220,7 @@
     $(function() {
         /**
          * Sums the number of booked tickets in the booking view.
+         * TODO: handle non-number input
          */
         var changeHandler = function() {
             var inputs = $(".seats");
