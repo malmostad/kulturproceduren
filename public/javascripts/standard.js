@@ -36,17 +36,22 @@
         $("#kp-district_id").change(function() {
             var district_id = $("#kp-district_id option:selected").val();
             var occasion_id = $("#kp-occasion_id").val();
+
+            $("#kp-district_id").parent().append('<div class="load-indicator"></div>');
+
+            $("#kp-school_id").attr('disabled', 'disabled');
+            $("#kp-group_id").html("<option>Välj skola först</option>").attr('disabled', 'disabled');
+
             var request = $.get(
-                kpConfig.schools.list.url,
-                {
-                    district_id: district_id ,
-                    occasion_id: occasion_id
-                },
-                function(data) {
-                    $("#kp-school_id").html(data);
-                }
-                );
-            $("#kp-group_id").html("<option>Välj skola först</option>");
+            kpConfig.schools.list.url,
+            {
+                district_id: district_id ,
+                occasion_id: occasion_id
+            },
+            function(data) {
+                $("#kp-school_id").html(data).removeAttr("disabled");
+                $("#kp-district_id").parent().find('.load-indicator').remove();
+            });
         });
         /**
          * Fetches groups by Ajax when choosing a school in the booking view.
@@ -54,14 +59,19 @@
         $("#kp-school_id").change(function() {
             var schoolId = $("#kp-school_id option:selected").val();
             var occasion_id = $("#kp-occasion_id").val();
+
+            $("#kp-school_id").parent().append('<div class="load-indicator"></div>');
+            $("#kp-group_id").attr('disabled', 'disabled');
+
             var request = $.get(
-                kpConfig.groups.list.url,
-                {
-                    school_id: schoolId ,
-                    occasion_id: occasion_id
-                }, function(data) {
-                    $("#kp-group_id").html(data);
-                });
+            kpConfig.groups.list.url,
+            {
+                school_id: schoolId ,
+                occasion_id: occasion_id
+            }, function(data) {
+                $("#kp-group_id").html(data).removeAttr("disabled");
+                $("#kp-school_id").parent().find('.load-indicator').remove();
+            });
         });
         /**
          * Fetches the form by Ajax when choosing a group in the booking view.
@@ -69,15 +79,19 @@
         $("#kp-group_id").change(function() {
             var groupId = $("#kp-group_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
+
+            $("#kp-group_id").parent().append('<div class="load-indicator"></div>');
+
             var request = $.get(
-                kpConfig.booking.bookingInput.url,
-                {
-                    group_id: groupId ,
-                    occasion_id : occasionId
-                },
-                function(data) {
-                    $("#kp-input-area").html(data);
-                });
+            kpConfig.booking.bookingInput.url,
+            {
+                group_id: groupId ,
+                occasion_id : occasionId
+            },
+            function(data) {
+                $("#kp-input-area").html(data);
+                $("#kp-group_id").parent().find('.load-indicator').remove();
+            });
         });
 
 
@@ -87,14 +101,14 @@
         $("#kp-notreq-district_id").change(function() {
             var district_id = $("#kp-notreq-district_id option:selected").val();
             var request = $.get(
-                kpConfig.schools.list.url,
-                {
-                    district_id: district_id ,
-                },
-                function(data) {
-                    $("#kp-notreq-shool_id").html(data);
-                }
-                );
+            kpConfig.schools.list.url,
+            {
+                district_id: district_id ,
+            },
+            function(data) {
+                $("#kp-notreq-shool_id").html(data);
+            }
+            );
             $("#kp-notification_request-group_id").html("<option>Välj skola först</option>");
         });
         /**
@@ -103,12 +117,12 @@
         $("#kp-notreq-shool_id").change(function() {
             var schoolId = $("#kp-notreq-shool_id option:selected").val();
             var request = $.get(
-                kpConfig.groups.list.url,
-                {
-                    school_id: schoolId ,
-                }, function(data) {
-                    $("#kp-notification_request-group_id").html(data);
-                });
+            kpConfig.groups.list.url,
+            {
+                school_id: schoolId ,
+            }, function(data) {
+                $("#kp-notification_request-group_id").html(data);
+            });
         });
         /**
          * Fetches the form by Ajax when choosing a group in the notification request view.
@@ -118,15 +132,15 @@
             var occasionId = $("#kp-occasion_id").val();
             var userId = $("#kp-user_id").val();
             var request = $.get(
-                kpConfig.notreq.notreqInput.url,
-                {
-                    group_id: groupId ,
-                    occasion_id : occasionId ,
-                    user_id : userId
-                },
-                function(data) {
-                    $("#kp-notreq-input-area").html(data);
-                });
+            kpConfig.notreq.notreqInput.url,
+            {
+                group_id: groupId ,
+                occasion_id : occasionId ,
+                user_id : userId
+            },
+            function(data) {
+                $("#kp-notreq-input-area").html(data);
+            });
         });
 
 
@@ -136,20 +150,20 @@
         $("#kp-by_group_district_id").change(function() {
             var district_id = $("#kp-by_group_district_id option:selected").val();
             var request = $.get(
-                kpConfig.schools.list.url,
-                {
-                    district_id: district_id
-                },
-                function(data) {
-                    $("#kp-by_group_school_id").html(data);
-                }
-                );
+            kpConfig.schools.list.url,
+            {
+                district_id: district_id
+            },
+            function(data) {
+                $("#kp-by_group_school_id").html(data);
+            }
+            );
             var request2 = $.get(
-                kpConfig.by_group.byGroupList.url,
-                { },
-                function(data) {
-                    $("#kp-booking-by-group").html(data);
-                });
+            kpConfig.by_group.byGroupList.url,
+            { },
+            function(data) {
+                $("#kp-booking-by-group").html(data);
+            });
             $("#kp-by_group_group_id").html("<option>Välj skola först</option>");
         });
         /**
@@ -158,18 +172,18 @@
         $("#kp-by_group_school_id").change(function() {
             var schoolId = $("#kp-by_group_school_id option:selected").val();
             var request = $.get(
-                kpConfig.groups.list.url,
-                {
-                    school_id: schoolId
-                }, function(data) {
-                    $("#kp-by_group_group_id").html(data);
-                });
+            kpConfig.groups.list.url,
+            {
+                school_id: schoolId
+            }, function(data) {
+                $("#kp-by_group_group_id").html(data);
+            });
             var request2 = $.get(
-                kpConfig.by_group.byGroupList.url,
-                { },
-                function(data) {
-                    $("#kp-booking-by-group").html(data);
-                });
+            kpConfig.by_group.byGroupList.url,
+            { },
+            function(data) {
+                $("#kp-booking-by-group").html(data);
+            });
 
         });
         /**
@@ -178,13 +192,13 @@
         $("#kp-by_group_group_id").change(function() {
             var groupId = $("#kp-by_group_group_id option:selected").val();
             var request = $.get(
-                kpConfig.by_group.byGroupList.url,
-                {
-                    group_id: groupId
-                },
-                function(data) {
-                    $("#kp-booking-by-group").html(data);
-                });
+            kpConfig.by_group.byGroupList.url,
+            {
+                group_id: groupId
+            },
+            function(data) {
+                $("#kp-booking-by-group").html(data);
+            });
         });
     });
 
@@ -247,7 +261,7 @@
         // The minimum date is tomorrow on the ticket release date field
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        
+
         $("#kp #kp-allotment-release_date").datepicker({
             minDate: tomorrow
         });
@@ -279,17 +293,17 @@
             var imgs = c.find("img");
 
             if (imgs.length > 1) {
-                    
+
                 c.find(".images").cycle("fade");
 
                 // Trigger for playing/pausing the cycling.
                 $("<a href=\"#\" class=\"play-pause-action playing\">Spela/Pausa</a>").appendTo(c).toggle(
-                    function() {
-                        $(this).removeClass("playing").addClass("paused").siblings(".images").cycle("pause");
-                    },
-                    function() {
-                        $(this).removeClass("paused").addClass("playing").siblings(".images").cycle("resume", true);
-                    });
+                function() {
+                    $(this).removeClass("playing").addClass("paused").siblings(".images").cycle("pause");
+                },
+                function() {
+                    $(this).removeClass("paused").addClass("playing").siblings(".images").cycle("resume", true);
+                });
             }
         });
     });
@@ -321,5 +335,5 @@
             }
         });
     });
-   
+
 })(jQuery);

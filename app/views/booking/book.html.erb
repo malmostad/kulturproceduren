@@ -1,5 +1,20 @@
 <%= render :partial => "menu" %>
 
+<%
+
+  state = :no_selection
+
+  case params[:commit]
+  when "Hämta skolor"
+    state = :district_selected
+  when "Hämta grupper"
+    state = :school_selected
+  when "Välj grupp"
+    state = :group_selected
+  end
+
+%>
+
 <h3>
   Boka biljetter för
   <%= link_to h(@occasion.event.name), @occasion.event -%>,
@@ -39,7 +54,7 @@
 
           <%= select_tag "district_id", opt_tag %>
 
-          <% if params[:commit] != "Hämta skolor" && params[:commit] != "Hämta grupper" && params[:commit] != "Välj grupp" %>
+          <% if state == :no_selection %>
             <noscript>
               <input name="commit" type="submit" value="Hämta skolor" />
             </noscript>
@@ -53,14 +68,16 @@
 
         <div class="input-container">
           <% if @schools.nil? %>
-            <select id="kp-school_id" name="school_id"><option>Välj stadsdel först</option></select>
+            <select id="kp-school_id" name="school_id" disabled="disabled">
+              <option>Välj stadsdel först</option>
+            </select>
           <% else %>
             <select id="kp-school_id" name="school_id">
               <%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]}, params[:school_id].to_s) %>
             </select>
           <% end %>
 
-          <% if params[:commit] == "Hämta skolor" %>
+          <% if state == :district_selected %>
             <noscript>
               <input name="commit" type="submit" value="Hämta grupper" /><br/>
             </noscript>
@@ -75,9 +92,9 @@
           <% if @groups.nil? %>
 
             <%  if @schools.nil?  %>
-              <select id="kp-group_id" name="group_id"><option>Välj stadsdel först</option></select>
+              <select id="kp-group_id" name="group_id" disabled="disabled"><option>Välj stadsdel först</option></select>
             <% else %>
-              <select id="kp-group_id" name="group_id"><option>Välj skola först</option></select>
+              <select id="kp-group_id" name="group_id" disabled="disabled"><option>Välj skola först</option></select>
             <% end %>
 
           <% else %>
