@@ -44,7 +44,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
   def validation_error_indicator
     unless @object.errors.empty?
-      @template.content_tag(:div, "Vänligen korrigera markerade uppgifter nedan.", :class => "validation-error-indicator")
+      @template.content_tag(:div, "Vänligen korrigera markerade uppgifter nedan.", :class => "validation-error-indicator alert")
     else
       ""
     end
@@ -97,7 +97,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def title(text)
-    @template.content_tag(:h3, text)
+    @template.content_tag(:h2, text)
   end
 
   def hint(&block)

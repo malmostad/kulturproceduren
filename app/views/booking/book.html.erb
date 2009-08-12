@@ -15,14 +15,14 @@
 
 %>
 
-<h3>
+<h2>
   Boka biljetter för
   <%= link_to h(@occasion.event.name), @occasion.event -%>,
   föreställningen <%= h @occasion.date -%>
-</h3>
+</h2>
 
 <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
-  <p class="message notice">
+  <p class="message response">
     Det finns totalt
     <%= [
       Ticket.count(:conditions => { :event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ),

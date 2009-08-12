@@ -109,7 +109,7 @@
               <%
               reset_cycle()
               @culture_provider.standing_events.each do |event| -%>
-                <tr class="<%= cycle("", "alt") %>">
+                <tr class="<%= cycle("", "even") %>">
                   <td><%= link_to h(event.name), event -%></td>
                 </tr>
               <% end -%>
@@ -131,7 +131,7 @@
 
             <tbody>
               <% @culture_provider.events.each do |event| -%>
-                <tr class="<%= cycle("", "alt") %>">
+                <tr class="<%= cycle("", "even") %>">
                   <td><%= link_to h(event.name), event -%></td>
                   <td><%= l event.visible_from, :format => :long %></td>
                   <td><%= l event.visible_to, :format => :long %></td>

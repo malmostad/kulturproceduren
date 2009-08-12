@@ -14,7 +14,7 @@
 
   <tbody>
     <% @user.bookings.each do |b|%>
-      <tr class="<%= cycle('', 'alt') %>">
+      <tr class="<%= cycle('', 'even') %>">
         <td><%= b["group"].school.name -%></td>
         <td><%= b["group"].name -%></td>
         <td><%= b["occasion"].event.name -%></td>

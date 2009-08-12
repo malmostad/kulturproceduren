@@ -23,7 +23,7 @@
     <% qtypes = Question::QTYPES.invert %>
     
     <% @questions.each do |question| -%>
-      <tr class="<%= cycle('', 'alt') %>">
+      <tr class="<%= cycle('', 'even') %>">
         <td><%= h question.question %></td>
         <td><%= h qtypes[question.qtype] %></td>
         <td><%= "Ja" if question.mandatory %>

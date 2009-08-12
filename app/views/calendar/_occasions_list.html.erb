@@ -27,12 +27,12 @@ category_groups ||= []
     <% occasions.each do |occasion| -%>
 
       <% if prev_date < occasion.date %>
-        <tr class="date-row <%= cycle('', 'alt')  %>">
+        <tr class="date-row <%= cycle('', 'even')  %>">
           <th colspan="<%= 4 + category_groups.size %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 
-      <tr class="<%= cycle('', 'alt')  %>">
+      <tr class="<%= cycle('', 'even')  %>">
         <td class="time"><%= l occasion.start_time, :format => :only_time %></td>
         <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
 

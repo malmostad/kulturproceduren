@@ -77,9 +77,9 @@ module ActionView
 
           options[:prepend_text] = args[0] || ''
           options[:append_text] = args[1] || ''
-          options[:css_class] = args[2] || 'validation-error-message'
+          options[:css_class] = args[2] || 'validation-error-message alert-field'
         end
-        options.reverse_merge!(:prepend_text => '', :append_text => '', :css_class => 'validation-error-message')
+        options.reverse_merge!(:prepend_text => '', :append_text => '', :css_class => 'validation-error-message alert-field')
 
         if (obj = (object.respond_to?(:errors) ? object : instance_variable_get("@#{object}"))) &&
           (errors = obj.errors.on(method))

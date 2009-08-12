@@ -1,7 +1,7 @@
-<h3>
+<h2>
   Utvärderingsenkät för
   <%= h(@answer_form.occasion.event.name) %>
-</h3>
+</h2>
 
 <p>
   Denna utvärderingsenkät är utformad för
@@ -17,7 +17,7 @@
 <% form_tag({ :action => "submit", :answer_form_id => params[:answer_form_id] }, { :class => "evaluation-form" }) do %>
 
   <% unless @non_answered_mandatory_questions.blank? %>
-    <div class="validation-error-indicator">
+    <div class="validation-error-indicator alert">
       Vänligen korrigera uppgifter nedan.
     </div>
   <% end %>
@@ -39,7 +39,7 @@
         </div>
 
         <% if @non_answered_mandatory_questions.include?(question.id) %>
-          <span class="validation-error-message">Frågan är obligatorisk</span>
+          <span class="validation-error-message alert-field">Frågan är obligatorisk</span>
         <% end %>
       </div>
     <% end %>

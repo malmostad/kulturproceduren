@@ -53,7 +53,7 @@
       <tbody>
 
         <% @questionaire.questions.each do |question| -%>
-          <tr class="<%= cycle("", "alt") %>">
+          <tr class="<%= cycle("", "even") %>">
             <td><%= h question.question %></td>
             <td><%= "Ja" if question.template %></td>
             <td><%= "Ja" if question.mandatory -%></td>

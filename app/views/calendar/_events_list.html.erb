@@ -19,7 +19,7 @@ category_groups ||= []
 
     <% events.each do |event| -%>
 
-      <tr class="<%= cycle('', 'alt')  %>">
+      <tr class="<%= cycle('', 'even')  %>">
         <td class="date"><%= l event.visible_from %> - <%= l event.visible_to %></td>
         <td class="event"><%= link_to h(event.name), event %></td>
 

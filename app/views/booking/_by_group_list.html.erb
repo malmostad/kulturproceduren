@@ -27,7 +27,7 @@ occasion ||= nil
 
     <tbody>
       <% occasions.each do |o|%>
-        <tr class="<%= cycle('', 'alt') %>">
+        <tr class="<%= cycle('', 'even') %>">
           <td><%= h group.school.name  -%></td>
           <td><%= h group.name  -%></td>
           <td><%= h o.event.name -%></td>

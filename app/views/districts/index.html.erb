@@ -11,7 +11,7 @@
 
   <tbody>
     <% @districts.each do |district| %>
-      <tr class="<%= cycle("", "alt") %>">
+      <tr class="<%= cycle("", "even") %>">
         <td><%= link_to h(district.name), district %></td>
         <td><%=h district.elit_id %></td>
         <td><%= link_to 'Redigera', edit_district_path(district) %></td>

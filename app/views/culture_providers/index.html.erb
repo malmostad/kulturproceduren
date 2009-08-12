@@ -11,7 +11,7 @@
   <tbody>
 
     <% @culture_providers.each do |provider| -%>
-      <tr class="<%= cycle('', 'alt') %>">
+      <tr class="<%= cycle('', 'even') %>">
         <td><%= link_to h(provider.name), provider %></td>
         <td><%= link_to "Visa", provider %></td>
       </tr>

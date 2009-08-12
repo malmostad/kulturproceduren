@@ -40,7 +40,7 @@
   </thead>
 
   <% @categories.each do |category| %>
-    <tr class="<%= cycle('', 'alt') %>">
+    <tr class="<%= cycle('', 'even') %>">
       <td><%= h category.name %></td>
       <td><%= h category.category_group.name %></td>
       <td><%= link_to 'Redigera', edit_category_path(category) %></td>

@@ -136,7 +136,7 @@
 
             <tbody>
               <% @event.occasions.each do |occasion|
-                alt = cycle('', "alt") %>
+                alt = cycle('', "even") %>
                 <tr class="<%= alt %> <%= "selected" if @selected_occasion && @selected_occasion.id == occasion.id %>">
                   <td><%= h occasion.date %></td>
                   <td><%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %></td>

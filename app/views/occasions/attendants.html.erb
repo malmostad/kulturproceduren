@@ -1,10 +1,10 @@
 
-<h3>
+<h2>
   Närvarande vid
   <%= link_to h(@occasion.event.name), @occasion.event -%>
   <%= h @occasion.date -%>
   <%= l @occasion.start_time, :format => :only_time %>
-</h3>
+</h2>
 
 <% if current_user.has_role?(:host, :admin) -%>
   <p>
@@ -28,7 +28,7 @@
   </thead>
   <tbody>
     <% @groups.each do |group| %>
-      <tr class="<%= cycle('', 'alt') %>">
+      <tr class="<%= cycle('', 'even') %>">
         <td> <%= h group.school.name -%> </td>
         <td> <%= h group.name -%> </td>
         <td> <%= h group.companion_by_occasion(@occasion).name -%> </td>

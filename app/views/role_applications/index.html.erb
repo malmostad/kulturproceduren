@@ -102,7 +102,7 @@
 
     <tbody>
       <% current_user.role_applications.each do |application| -%>
-        <tr class="<%= cycle('', 'alt') %>">
+        <tr class="<%= cycle('', 'even') %>">
           <td><%= type_string(application) %></td>
           <td><%= l application.created_at, :format => :short %></td>
           <td><%= state_string(application) %></td>

@@ -11,14 +11,14 @@
   if group
     if group.age_groups.num_children_by_age_span(occasion.event.from_age, occasion.event.to_age) == 0 %>
 
-    <p class="message warning">
+    <p class="message alert">
       OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
     </p>
 
   <% end %>
 
   <% if group && occasion.event.ticket_state != Event::FREE_FOR_ALL %>
-    <p class="message notice">
+    <p class="message response">
       <strong><%= h group.school.name %>, <%= h group.name %></strong>
       har <strong><%= group.ntickets_by_occasion(occasion) -%></strong>
       biljetter tillgängliga för bokning.
@@ -26,7 +26,7 @@
   <% end %>
 
   <% if group.ntickets_by_occasion(occasion) == 0 && ( not edit ) %>
-    <p class="message warning">
+    <p class="message alert">
       Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
       <a href="#">Klicka här</a> om du vill få ett meddelande om biljetter blir tillgängliga senare.
     </p>
@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <p id="kp-booking-count" class="booking-count message notice">Du har bokat sammanlagt 0 biljetter.</p>
+      <p id="kp-booking-count" class="booking-count message response">Du har bokat sammanlagt 0 biljetter.</p>
     </fieldset>
 
     <fieldset class="booking-companion">
@@ -115,7 +115,8 @@
         <%= label_tag "Extra behov" %>
         <div class="input-container">
           <%= text_area_tag "booking_request",
-            br.blank? || br.requirement.blank? ? "" : br.requirement
+            br.blank? || br.requirement.blank? ? "" : br.requirement,
+            :rows => 7, :cols => 35
           %>
         </div>
       </div>

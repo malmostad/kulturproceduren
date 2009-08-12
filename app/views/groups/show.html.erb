@@ -49,7 +49,7 @@
 
     <tbody>
       <% @group.age_groups.each do |age_group| %>
-        <tr class="<%= cycle("", "alt") %>">
+        <tr class="<%= cycle("", "even") %>">
           <td><%= h age_group.age %></td>
           <td><%= h age_group.quantity %></td>
           <td><%= link_to 'Redigera', edit_age_group_path(age_group) %></td>

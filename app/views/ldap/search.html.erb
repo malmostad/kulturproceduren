@@ -15,7 +15,7 @@
 
     <tbody>
       <% @result.each do |userdata| -%>
-        <tr class="<%= cycle('', 'alt') %>">
+        <tr class="<%= cycle('', 'even') %>">
           <td><%= h userdata[:name] %></td>
           <td><%= h userdata[:email] %></td>
           <td><%= h userdata[:cellphone] %></td>
