@@ -313,9 +313,9 @@ class AllotmentController < ApplicationController
       if ticket_state == Event::ALLOTED_GROUP
         district.distribution_schools.each do |school|
           school.distribution_groups.each do |group|
-            if assigned_tickets > group.num_children
-              assigned_tickets -= group.num_children
-              distribution[group.id] = group.num_children
+            if assigned_tickets > group.num_children + 1
+              assigned_tickets -= group.num_children + 1
+              distribution[group.id] = group.num_children + 1
             end
           end
         end

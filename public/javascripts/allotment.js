@@ -104,16 +104,14 @@
             var rowData = getRowData(row);
 
             // Update fill indicator
-            row.removeClass("partial full error overbooked");
+            row.removeClass("partial full error");
 
             if (rowData.numTickets == NaN || rowData.numTickets < 0) {
                 row.addClass("error");
             } else if (rowData.numTickets > 0 && rowData.numTickets < rowData.numChildren) {
                 row.addClass("partial");
-            } else if (rowData.numTickets == rowData.numChildren) {
+            } else if (rowData.numTickets >= rowData.numChildren) {
                 row.addClass("full");
-            } else if (rowData.numTickets > rowData.numChildren) {
-                row.addClass("overbooked");
             }
 
             // Update text field
@@ -157,10 +155,10 @@
 
             if (fill) {
                 if (rowData.numTickets >= rowData.numChildren) {
-                    return;
+                    tc = tickets.getAvailable(1) + rowData.numTickets;
+                } else {
+                    tc = tickets.getAvailable(rowData.numChildren - rowData.numTickets) + rowData.numTickets;
                 }
-
-                tc = tickets.getAvailable(rowData.numChildren - rowData.numTickets) + rowData.numTickets;
             } else {
                 tickets.change(rowData.numTickets);
             }
