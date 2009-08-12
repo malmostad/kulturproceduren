@@ -212,7 +212,7 @@ class BookingController < ApplicationController
         populate_groups_list
         @curgroup = Group.find(params[:group_id].to_i)
         if Ticket.count(:all , :conditions => { :group_id => @curgroup.id , :event_id => @occasion.event.id , :state => Ticket::BOOKED }) > 0
-          flash[:info] = "Gruppen #{@curgroup.name} #{@curgroup.school.name} har redan bookat biljetter på den här evenemanget."
+          flash[:notice] = "Gruppen #{@curgroup.name} #{@curgroup.school.name} har redan bokat biljetter på den här evenemanget."
           @edit = true
           load_vars()
         end

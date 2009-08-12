@@ -1,77 +1,131 @@
 <%
 
-companion ||= nil
-nticks ||= nil
-naticks ||= nil
-nwticks ||= nil
-br ||= nil
-edit ||= nil
-group ||= nil
+  companion ||= nil
+  nticks ||= nil
+  naticks ||= nil
+  nwticks ||= nil
+  br ||= nil
+  edit ||= nil
+  group ||= nil
 
-puts "_input_area : edit = #{edit}"
+  if group
+    if group.age_groups.num_children_by_age_span(occasion.event.from_age, occasion.event.to_age) == 0 %>
 
-if !group.nil?
-  if group.age_groups.num_children_by_age_span(occasion.event.from_age , occasion.event.to_age) == 0 %>
-    <p class="booking-warn-age">
+    <p class="message warning">
       OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
     </p>
+
   <% end %>
-  <p id="kp-booking-seatsavail">
-    <%  if not ( group.blank? || occasion.event.ticket_state == Event::FREE_FOR_ALL )   %>
-      Det finns ytterligare <%= group.ntickets_by_occasion(occasion) -%> biljetter tillgängligt att boka.
-    <%  end %>
-  </p>
+
+  <% if group && occasion.event.ticket_state != Event::FREE_FOR_ALL %>
+    <p class="message notice">
+      <strong><%= h group.school.name %>, <%= h group.name %></strong>
+      har <strong><%= group.ntickets_by_occasion(occasion) -%></strong>
+      biljetter tillgängliga för bokning.
+    </p>
+  <% end %>
 
   <% if group.ntickets_by_occasion(occasion) == 0 && ( not edit ) %>
-    <p>
+    <p class="message warning">
       Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
-      <a href="/apa">Klicka här</a> om du vill få ett meddelande ifall biljetter blir tillgängliga senare.
+      <a href="#">Klicka här</a> om du vill få ett meddelande om biljetter blir tillgängliga senare.
     </p>
   <% else %>
 
-    <fieldset>
+    <fieldset class="booking-seats-container">
       <legend>Antal platser</legend>
-      <dl class="booking-seats form-elements">
-        <dt><%= label_tag "seats_students" , "Antal platser för elever: " %></dt>
-        <dd><%= text_field_tag "seats_students" , nticks.blank? || nticks == 0 ? "" : nticks , {:class => "seats" , :autocomplete => "off"  } %></dd>
-        <dt><%= label_tag "seats_adult" , "Antal platser för vuxna: " %></dt>
-        <dd><%= text_field_tag "seats_adult"  ,naticks.blank? || naticks == 0 ? "" : naticks, { :class => "seats" , :autocomplete => "off"  } %></dd>
-        <dt><%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %></dt>
-        <dd><%= text_field_tag "seats_wheelchair"  , nwticks.blank? || nwticks == 0 ? "" : nwticks, {:class => "seats" , :autocomplete => "off"  }  -%>
-          <%= nwticks.blank? || nwticks == 0 ? "" : "Ytterligare" -%>
-          <%= @occasion.wheelchair_seats - Ticket.count(
-            :all ,
-            :conditions => { :occasion_id => @occasion.id , :wheelchair => true }) -%>
-        platser tillgängligt på den här föreställningen.</dd>
-      </dl>
 
-      <p id="kp-booking-count" class="booking-count"></p>
+      <div class="form-row seats_students-field-row">
+        <%= label_tag "seats_students", "Antal platser för elever: " %>
+
+        <div class="input-container">
+          <%= text_field_tag "seats_students",
+            nticks.blank? || nticks == 0 ? "" : nticks,
+            { :class => "seats" }
+          %>
+        </div>
+      </div>
+
+      <div class="form-row seats_adult-field-row">
+        <%= label_tag "seats_adult", "Antal platser för vuxna: " %>
+
+        <div class="input-container">
+          <%= text_field_tag "seats_adult",
+            naticks.blank? || naticks == 0 ? "" : naticks,
+            { :class => "seats" }
+          %>
+        </div>
+      </div>
+
+      <div class="form-row seats_wheelchair-field-row">
+        <%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %>
+        <div class="input-container">
+          <%= text_field_tag "seats_wheelchair",
+            nwticks.blank? || nwticks == 0 ? "" : nwticks,
+            {:class => "seats" }
+          -%>
+          <span class="field-help">
+            <%= nwticks.blank? || nwticks == 0 ? "" : "Ytterligare" -%>
+            <%= @occasion.wheelchair_seats - Ticket.count(
+              :all,
+              :conditions => { :occasion_id => @occasion.id , :wheelchair => true })
+            -%>
+          platser tillgängligt på den här föreställningen.</span>
+        </div>
+      </div>
+
+      <p id="kp-booking-count" class="booking-count message notice">Du har bokat sammanlagt 0 biljetter.</p>
     </fieldset>
 
     <fieldset class="booking-companion">
       <legend>Medföljande vuxen</legend>
 
-      <dl class="form-elements">
-        <dt><%= label_tag "companion_name" , "Namn"  %></dt>
-        <dd><%= text_field_tag "companion_name" , companion.blank? || companion.name.blank? ? "" : companion.name %></dd>
-        <dt><%= label_tag "companion_email" , "E-mail address" %></dt>
-        <dd><%= text_field_tag "companion_email"  , companion.blank? || companion.email.blank? ? "" : companion.email %></dd>
-        <dt><%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %></dt>
-        <dd><%= text_field_tag "companion_telnr" , companion.blank? || companion.tel_nr.blank? ? "" : companion.tel_nr %></dd>
-      </dl>
+      <div class="form-row companion_name-field-row">
+        <%= label_tag "companion_name" , "Namn"  %>
+        <div class="input-container">
+          <%= text_field_tag "companion_name",
+            companion.blank? || companion.name.blank? ? "" : companion.name
+          %>
+        </div>
+      </div>
+      
+      <div class="form-row companion_email-field-row">
+        <%= label_tag "companion_email" , "E-mail address" %>
+        <div class="input-container">
+          <%= text_field_tag "companion_email",
+            companion.blank? || companion.email.blank? ? "" : companion.email
+          %>
+        </div>
+      </div>
+
+      <div class="form-row companion_telnr-field-row">
+        <%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %>
+        <div class="input-container">
+          <%= text_field_tag "companion_telnr",
+            companion.blank? || companion.tel_nr.blank? ? "" : companion.tel_nr
+          %>
+        </div>
+      </div>
     </fieldset>
 
     <fieldset class="booking-request">
       <legend>Speciella krav / Extra information ang. bokning</legend>
-      <dl class="form-elements">
-        <dt><%= label_tag "Extra behov" %></dt>
-        <dd><%= text_area_tag "booking_request" , br.blank? || br.requirement.blank? ? "" : br.requirement %></dd>
-      </dl>
+
+      <div class="form-row booking_request-field-row">
+        <%= label_tag "Extra behov" %>
+        <div class="input-container">
+          <%= text_area_tag "booking_request",
+            br.blank? || br.requirement.blank? ? "" : br.requirement
+          %>
+        </div>
+      </div>
     </fieldset>
 
-    <span class="form-submit-cnt">
+    <div class="form-buttons">
       <%= edit.blank? ? submit_tag("Boka") : submit_tag("Ändra bokning") %>
       <%= submit_tag("Börja om") -%>
-    </span>
-  <%  end %>
+    </div>
+
+  <% end %>
+
 <% end %>

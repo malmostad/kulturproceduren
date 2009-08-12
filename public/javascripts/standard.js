@@ -215,7 +215,7 @@
                 sum += Number(inputs[i].value);
             };
 
-            $("#kp-booking-count").html("<span class=\"booking-no-tickets\">Du har totalt bokat " + String(sum) + " biljetter.</span>");
+            $("#kp-booking-count").html("Du har bokat sammanlagt " + String(sum) + " biljetter.");
         };
 
         $("#kp-input-area").change(changeHandler);

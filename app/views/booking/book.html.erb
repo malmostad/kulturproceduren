@@ -1,10 +1,10 @@
 <%= render :partial => "menu" %>
 
-<h3>Bokning</h3>
-
-<p>
-  Bokning för <%= @occasion.event.name -%> , föreställningen den <%= @occasion.date.to_s -%>
-</p>
+<h3>
+  Boka biljetter för
+  <%= link_to h(@occasion.event.name), @occasion.event -%>,
+  föreställningen <%= h @occasion.date -%>
+</h3>
 
 <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
   <p>
@@ -12,61 +12,61 @@
   </p>
 <%  end %>
 
-<form method="post" action="<%= url_for :controller => "booking", :action => "book" %>">
+<% form_tag({ :controller => "booking", :action => "book" }, { :class => "booking-form" }) do -%>
 
   <fieldset>
-    <legend>Bokning</legend>
+    <%= hidden_field_tag 'occasion_id' , @occasion.id %>
 
-    <dl class="form-elements">
-      <dt>
-        <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-        <%= hidden_field_tag 'occasion_id' , @occasion.id %>
+    <fieldset class="group-selector-container">
+
+      <div class="form-row district_id-field-row">
         <%= label_tag "district_id" , "Välj Stadsdel:"%>
-      </dt>
-      <dd>
-        <div id="kp-district-id-cnt">
+
+        <div class="input-container">
           <%
+            opt_tag = "<option>Välj Stadsdel</option>"
+            opt_tag += options_for_select(
+              @districts.collect { |d|
+              [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " (#{d.available_tickets_per_occasion(@occasion)} biljetter)" : "" ), d.id.to_s ]
+            }, params[:district_id].to_s
+            )
+          %>
 
-          if params[:district_id].nil?
-            opt_tag = options_for_select( @districts.collect { |d| [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " - " + d.available_tickets_per_occasion(@occasion).to_s : "" ) , d.id.to_s] } )
-          else
-            my_d = District.find(params[:district_id].to_i)
-            opt_tag = options_for_select( @districts.collect { |d| [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " - " + d.available_tickets_per_occasion(@occasion).to_s : "" ), d.id.to_s] } , my_d.id.to_s )
-          end
-          opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
-        %>
-          <%= select_tag("district_id",opt_tag) %>
-          <noscript>
-            <% if params[:commit] != "Hämta skolor" and params[:commit] != "Hämta grupper" and params[:commit] != "Välj grupp" %>
-              <input name="commit" type="submit" value="Hämta skolor" /><br/>
-            <% end %>
-          </noscript>
+          <%= select_tag "district_id", opt_tag %>
+
+          <% if params[:commit] != "Hämta skolor" && params[:commit] != "Hämta grupper" && params[:commit] != "Välj grupp" %>
+            <noscript>
+              <input name="commit" type="submit" value="Hämta skolor" />
+            </noscript>
+          <% end %>
+
         </div>
-      </dd>
+      </div>
 
-      <dt><%= label_tag "school_id" , "Välj Skola:" %></dt>
-      <dd>
-        <div id="kp-school-id-cnt">
+      <div class="form-row school_id-field-row">
+        <%= label_tag "school_id" , "Välj Skola:" %>
+
+        <div class="input-container">
           <% if @schools.nil? %>
             <select id="kp-school_id" name="school_id"><option>Välj stadsdel först</option></select>
           <% else %>
-            <%  if params[:school_id].nil? or params[:school_id].to_i == 0 %>
-              <select id="kp-school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} ) %></select>
-            <% else %>
-              <select id="kp-school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} , School.find(params[:school_id]).id.to_s ) %></select>
-            <% end %>
+            <select id="kp-school_id" name="school_id">
+              <%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]}, params[:school_id].to_s) %>
+            </select>
           <% end %>
-          <noscript>
-            <% if params[:commit] == "Hämta skolor" %>
-              <input name="commit" type="submit" value="Hämta grupper" /><br/>
-            <% end %>
-          </noscript>
-        </div>
-      </dd>
 
-      <dt><%= label_tag "group_id" , "Välj Grupp:"%></dt>
-      <dd>
-        <div id="kp-group-id-cnt">
+          <% if params[:commit] == "Hämta skolor" %>
+            <noscript>
+              <input name="commit" type="submit" value="Hämta grupper" /><br/>
+            </noscript>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-row group_id-field-row">
+        <%= label_tag "group_id" , "Välj Grupp:"%>
+
+        <div class="input-container">
           <% if @groups.nil? %>
 
             <%  if @schools.nil?  %>
@@ -77,43 +77,41 @@
 
           <% else %>
 
-            <%  if @curgroup.nil? %>
-              <select id="kp-group_id" name="group_id" <%=  @edit.blank? ? "" : "disabled=\"true\"" -%>"> <option>Välj grupp</option> <%= options_for_select( @groups.map { |g| [ g.name + ( @occasion.event.ticket_state == Event::ALLOTED_GROUP ? " - " + g.ntickets_by_occasion(@occasion).to_s : "" ) , g.id ] } )   %>
-            <% else %>
-              <select id="kp-group_id" name="group_id"> <option>Välj grupp</option> <%= options_for_select( @groups.map { |g| [ g.name + ( @occasion.event.ticket_state == Event::ALLOTED_GROUP ? " - " + g.ntickets_by_occasion(@occasion).to_s : "" ) , g.id ] } , @curgroup.id)  %>
-              <% end %>
+            <select id="kp-group_id" name="group_id" <%= @edit.blank? ? "" : 'disabled="disabled"' -%>>
+              <option>Välj grupp</option>
+              <% selected = @curgroup ? @curgroup.id : nil %>
+              <%= options_for_select(
+                @groups.map { |g|
+                [ g.name + (@occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.ntickets_by_occasion(@occasion)} biljetter)" : "") , g.id ]
+              }, (@curgroup ? @curgroup.id : nil)
+              ) %>
             </select>
 
           <% end %>
 
-          <noscript>
-            <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" && @curgroup.blank? %>
+          <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" && @curgroup.blank? %>
+            <noscript>
               <input name="commit" type="submit" value="Välj grupp" /><br/>
-            <% end %>
-          </noscript>
+            </noscript>
+          <% end %>
         </div>
-      </dd>
-      <% puts "book.html : @edit = #{@edit}" %>
-      <div id="kp-input-area">
-        <% if params[:commit] == "Välj grupp" %>
-          <%= render :partial => "input_area" ,
-            :locals => {
-            :group => @curgroup ,
-            :occasion => @occasion ,
-            :companion => @companion ,
-            :nticks => @nticks ,
-            :naticks => @naticks ,
-            :nwticks => @nwticks ,
-            :br => @br ,
-            :edit => @edit
-          }
-        %>
-        <% end %>
       </div>
-    </dl>
-  </fieldset>
-</form>
+    </fieldset>
 
-<ul>
-  <li><%= link_to "Boka kulturbuss", APP_CONFIG[:culture_bus_link] %></li>
-</ul>
+    <div id="kp-input-area">
+      <%= render(:partial => "input_area" ,
+                 :locals => {
+        :group => @curgroup ,
+        :occasion => @occasion ,
+        :companion => @companion ,
+        :nticks => @nticks ,
+        :naticks => @naticks ,
+        :nwticks => @nwticks ,
+        :br => @br ,
+        :edit => @edit
+      }) if params[:commit] == "Välj grupp" %>
+    </div>
+
+  </fieldset>
+<% end %>
+

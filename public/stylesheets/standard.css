@@ -134,6 +134,14 @@ body {
     border-color: #ffd867;
     background: #fff7df url(../images/error.png) no-repeat 0.5em 0.4em;
 }
+#kp .message {
+    margin: 0.5em 0;
+    border: 1px solid #f00;
+    padding: 0.5em;
+    background: #ffeae0;
+}
+#kp .notice { border-color: #acdfa7; background: #eaffe0; }
+#kp .warning { border-color: #ffd867; background: #fff7df; }
 
 #kp ul.tools {
     list-style-type: none;
@@ -217,7 +225,7 @@ body {
 #kp form .form-row label { display: block; float: left; }
 #kp form .form-row .input-container label,
 #kp form .post-label-row label { float: none; display: inline; }
-#kp form .input-container .help { display: block; font-size: 0.9em; }
+#kp form .input-container .field-help { display: block; font-size: 0.9em; }
 
 #kp form .validation-error-indicator {
     background: #fff7df url(../images/error.png) no-repeat 0.5em 0.4em;
@@ -317,6 +325,11 @@ body {
 /* Ldap search form */
 #kp form.ldap-search-form label { width: 8em; }
 #kp form.ldap-search-form .input-container { padding-left: 8em; }
+/* Booking form */
+#kp form.booking-form .group-selector-container label { width: 8em; }
+#kp form.booking-form .group-selector-container .input-container { padding-left: 8em; }
+#kp form.booking-form #kp-input-area label { width: 16em; }
+#kp form.booking-form #kp-input-area .input-container { padding-left: 16em; }
 
 /*** Models ***/
 
@@ -493,16 +506,8 @@ body {
 
 #kp .occasion-list td p { margin: 0; }
 
-/*** Booking ***/
-#kp .kp-booking-pagetitle {font-size: 1.5em; font-weight: bold;}
-#kp .kp-booking-pageheader { font-size: 1.1em;}
-#kp .kp-booking-form {width: 75%;}
-#kp .kp-booking-overflow-warning {color: red;}
-#kp .booking-count {padding: 0.7em;}
-#kp .booking-no-tickets { margin: 0.2em; ; border: 1px solid navy; padding: 0.5em; background: yellow; }
-#kp .booking-warn-age { margin: 0.2em; ; border: 1px solid navy; padding: 0.5em; background: yellow; }
-
 /*** Groups ***/
+
 #kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }
 
 /*** Questionaires ***/
@@ -514,3 +519,8 @@ body {
 /*** User profile ***/
 
 #kp .privileges-cnt ul li { margin: 0.5em 0; }
+
+/*** Booking ***/
+#kp .booking-form .booking-seats-container { position: relative; }
+#kp .booking-form #kp-booking-count { position: absolute; top: 1em; left: 40em; }
+

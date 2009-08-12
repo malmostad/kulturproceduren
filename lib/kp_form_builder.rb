@@ -118,7 +118,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
   def field_help(text)
     unless text.blank?
-      @template.content_tag(:span, text, :class => "help")
+      @template.content_tag(:span, text, :class => "field-help")
     else
       ''
     end
