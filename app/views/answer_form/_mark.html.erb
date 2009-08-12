@@ -1,0 +1,6 @@
+<%= image_tag "doh2.gif" %>
+<% (1..4).each do |i| -%>
+  <%= radio_button_tag "answer[#{question.id}]", i, i == value %>
+  <%= label_tag "answer_#{question.id}_#{i}", i %>
+<% end %>
+<%= image_tag "woot.gif" %>

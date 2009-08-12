@@ -229,6 +229,7 @@ body {
 #kp form .form-row .input-container label,
 #kp form .post-label-row label { float: none; display: inline; }
 #kp form .input-container .field-help { display: block; font-size: 0.9em; }
+#kp form .form-buttons { clear: both; padding-top: 1em; }
 
 #kp form .validation-error-indicator {
     background: #fff7df url(../images/error.png) no-repeat 0.5em 0.4em;
@@ -254,8 +255,6 @@ body {
     padding: 0 0 0.5em 0;
     margin: 0;
 }
-
-#kp .submit-cnt { margin-bottom: 1em; }
 
 #kp .inline-form-elements {
     border: 1px solid #c0c0c0;
@@ -333,6 +332,12 @@ body {
 #kp form.booking-form .group-selector-container .input-container { padding-left: 8em; }
 #kp form.booking-form #kp-input-area label { width: 16em; }
 #kp form.booking-form #kp-input-area .input-container { padding-left: 16em; }
+/* Evaluation form */
+#kp form.evaluation-form label { width: 24em; text-align: right; padding: 2px 1em 0 0; }
+#kp form.evaluation-form .form-buttons,
+#kp form.evaluation-form .input-container { padding-left: 25em; }
+#kp form.evaluation-form .input-container label { padding: 0; }
+#kp form.evaluation-form .validation-error-message { margin-left: 25em; }
 
 /*** Models ***/
 

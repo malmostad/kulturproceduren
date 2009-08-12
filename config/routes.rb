@@ -56,8 +56,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.calendar 'calendar/:action/:list', :controller => 'calendar'
 
-  map.delquest 'questionaires/:questionaire_id/destroy/:question_id' , :controller => "questions" , :action => "destroy"
-  map.ansquest 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'show'
+  map.answer_questionaire 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'submit'
   map.question_graph 'questions/:question_id/graph/:occasion_id' , :controller => 'questions' , :action => 'stat_graph'
 
   map.grant_role 'users/:id/grant/:role', :controller => 'users', :action => 'grant'

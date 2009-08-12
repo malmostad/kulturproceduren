@@ -55,6 +55,13 @@ module ActionView
 
         content_tag :textarea, content, { "name" => name, "id" => sanitize_to_id(name) }.update(options.stringify_keys)
       end
+      def radio_button_tag(name, value, checked = false, options = {})
+        pretty_tag_value = value.to_s.gsub(/\s/, "_").gsub(/(?!-)\W/, "").downcase
+        pretty_name = name.to_s.gsub(/\[/, "_").gsub(/\]/, "")
+        html_options = { "type" => "radio", "name" => name, "id" => "kp-#{pretty_name}_#{pretty_tag_value}", "value" => value }.update(options.stringify_keys)
+        html_options["checked"] = "checked" if checked
+        tag :input, html_options
+      end
       def sanitize_to_id(name)
         "kp-" + name.to_s.gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
       end
@@ -66,7 +73,7 @@ module ActionView
         options = args.extract_options!
         unless args.empty?
           ActiveSupport::Deprecation.warn('error_message_on takes an option hash instead of separate ' +
-              'prepend_text, append_text, and css_class arguments', caller)
+                                          'prepend_text, append_text, and css_class arguments', caller)
 
           options[:prepend_text] = args[0] || ''
           options[:append_text] = args[1] || ''
@@ -75,11 +82,11 @@ module ActionView
         options.reverse_merge!(:prepend_text => '', :append_text => '', :css_class => 'validation-error-message')
 
         if (obj = (object.respond_to?(:errors) ? object : instance_variable_get("@#{object}"))) &&
-            (errors = obj.errors.on(method))
+          (errors = obj.errors.on(method))
           content_tag("span",
-            "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}",
-            :class => options[:css_class]
-          )
+                      "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}",
+                      :class => options[:css_class]
+                     )
         else
           ''
         end

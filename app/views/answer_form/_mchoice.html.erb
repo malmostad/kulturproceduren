@@ -1,0 +1,4 @@
+<% question.choice_csv.split(',').each do |option| %>
+  <%= check_box_tag "answer[#{question.id}][#{option}]", (value ? value.include?(option) : false) %>
+  <%= label_tag "answer[#{question.id}][#{option}]", option %>
+<% end %>

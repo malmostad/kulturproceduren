@@ -1,0 +1,51 @@
+<h3>
+  Utvärderingsenkät för
+  <%= h(@answer_form.occasion.event.name) %>
+</h3>
+
+<p>
+  Denna utvärderingsenkät är utformad för
+  <%= @answer_form.group.school.name %>, <%= @answer_form.group.name %>
+  som besökte
+  <%= h(@answer_form.occasion.event.name) %>
+  <%= @answer_form.occasion.date %>,
+  <%= l @answer_form.occasion.start_time, :format => :only_time %> -
+  <%= l @answer_form.occasion.stop_time, :format => :only_time %>.
+</p>
+
+
+<% form_tag({ :action => "submit", :answer_form_id => params[:answer_form_id] }, { :class => "evaluation-form" }) do %>
+
+  <% unless @non_answered_mandatory_questions.blank? %>
+    <div class="validation-error-indicator">
+      Vänligen korrigera uppgifter nedan.
+    </div>
+  <% end %>
+
+  <fieldset>
+    <% @answer_form.questionaire.questions.each do |question| %>
+      <div class="form-row">
+        <label>
+          <%= h question.question %>
+          <% if question.mandatory %>
+            <span class="mandatory-indicator">*</span>
+          <% end %>
+        </label>
+
+        <div class="input-container">
+          <%= render :partial => get_question_fragment(question),
+            :locals => { :question => question, :value => @answer["#{question.id}"] }
+          %>
+        </div>
+
+        <% if @non_answered_mandatory_questions.include?(question.id) %>
+          <span class="validation-error-message">Frågan är obligatorisk</span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-buttons">
+      <%= submit_tag 'Besvara' %>
+    </div>
+  </fieldset>
+<% end %>

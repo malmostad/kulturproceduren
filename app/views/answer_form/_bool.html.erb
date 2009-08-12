@@ -1,0 +1,4 @@
+<%= radio_button_tag "answer[#{question.id}]", "y", value %>
+<%= label_tag "answer_#{question.id}_y", "Ja" %>
+<%= radio_button_tag "answer[#{question.id}]", "n", !value %>
+<%= label_tag "answer_#{question.id}_n", "Nej" %>
