@@ -7,8 +7,13 @@
 </h3>
 
 <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
-  <p>
-    Det finns totalt <%= [ Ticket.count(:conditions => {:event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ) , ( @occasion.seats - Ticket.count(:conditions => {:occasion_id => @occasion.id , :state => Ticket::BOOKED} ) ) ].sort.first -%> biljetter tillgängligt att boka
+  <p class="message notice">
+    Det finns totalt
+    <%= [
+      Ticket.count(:conditions => { :event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ),
+      ( @occasion.seats - Ticket.count(:conditions => { :occasion_id => @occasion.id, :state => Ticket::BOOKED} ) )
+    ].sort.first -%>
+    biljetter tillgängliga för bokning.
   </p>
 <%  end %>
 
