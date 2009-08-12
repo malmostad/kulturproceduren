@@ -25,6 +25,10 @@
   <fieldset>
     <% @answer_form.questionaire.questions.each do |question| %>
       <div class="form-row">
+        <% if @non_answered_mandatory_questions.include?(question.id) %>
+          <div class="validation-error-message alert-field">Frågan är obligatorisk</div>
+        <% end %>
+
         <label>
           <%= h question.question %>
           <% if question.mandatory %>
@@ -37,10 +41,6 @@
             :locals => { :question => question, :value => @answer["#{question.id}"] }
           %>
         </div>
-
-        <% if @non_answered_mandatory_questions.include?(question.id) %>
-          <span class="validation-error-message alert-field">Frågan är obligatorisk</span>
-        <% end %>
       </div>
     <% end %>
 

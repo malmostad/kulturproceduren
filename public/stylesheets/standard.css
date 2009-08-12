@@ -4,8 +4,6 @@
 #kp h4 { margin-bottom: 1.25em; }
 #kp h5 { margin-bottom: 1.5em; }
 
-#kp p { margin: 0 0 1.5em; }
-
 #kp li ul,
 #kp li ol { margin:0 1.5em; }
 #kp ul, ol { margin: 0 1.5em 1.5em 1.5em; }
@@ -95,7 +93,6 @@
 #kp .pagination .current, #kp .pagination a:hover { background: #d9ebd2; }
 
 /*** Page ***/
-#kp .flash { margin: 0.5em 0; }
 #kp .message { margin: 0 0 1em 0; padding: 0.5em; background-image: none; }
 
 #kp .specification-info dt { font-weight: bold; float: left; text-align: right; }
@@ -184,8 +181,6 @@
 #kp form .post-label-row label { float: none; display: inline; }
 #kp form .input-container .field-help { display: block; font-size: 0.9em; }
 #kp form .form-buttons { clear: both; padding-top: 1em; }
-
-#kp form .validation-error-message { display: block; margin-top: 0.3em; }
 
 #kp ul.form-elements {
     list-style-type: none;

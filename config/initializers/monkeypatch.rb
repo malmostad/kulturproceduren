@@ -83,10 +83,11 @@ module ActionView
 
         if (obj = (object.respond_to?(:errors) ? object : instance_variable_get("@#{object}"))) &&
           (errors = obj.errors.on(method))
-          content_tag("span",
-                      "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}",
-                      :class => options[:css_class]
-                     )
+          content_tag(
+            "div",
+            "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}",
+            :class => options[:css_class]
+          )
         else
           ''
         end
