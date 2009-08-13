@@ -228,7 +228,9 @@
             var sum = 0;
 
             for ( i = 0 ; i < inputs.length ; i++) {
-                sum += Number(inputs[i].value);
+                if (!isNaN(Number(inputs[i].value))) {
+			sum += Number(inputs[i].value);
+		}
             };
 
             $("#kp-booking-count").html("Du har bokat sammanlagt " + String(sum) + " biljetter.");
