@@ -3,7 +3,7 @@
 <% is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions" %>
 
 <fieldset>
-  <legend><%= is_edit ? "Uppdatera" : "Lägg till" %> mallfråga</legend>
+  <legend><span><%= is_edit ? "Uppdatera" : "Lägg till" %> mallfråga</span></legend>
 
   <%= render :partial => "form", :locals => { :question => @question } %>
 </fieldset>

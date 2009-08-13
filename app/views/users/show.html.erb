@@ -2,7 +2,7 @@
 
 
 <fieldset>
-  <legend>Personuppgifter</legend>
+  <legend><span>Personuppgifter</span></legend>
 
   <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_user_path(@user) %></li>
@@ -34,7 +34,7 @@
 </fieldset>
 
 <fieldset>
-  <legend>Kontodetaljer</legend>
+  <legend><span>Kontodetaljer</span></legend>
 
   <dl class="form-elements">
     <dt>
@@ -53,7 +53,7 @@
 </fieldset>
 
 <fieldset class="privileges-cnt">
-  <legend>Behörigheter</legend>
+  <legend><span>Behörigheter</span></legend>
 
   <% denom = current_user.has_role?(:admin) ? "Användaren" : "Du" %>
 

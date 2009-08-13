@@ -33,7 +33,7 @@
   <% else %>
 
     <fieldset class="booking-seats-container">
-      <legend>Antal platser</legend>
+      <legend><span>Antal platser</span></legend>
 
       <div class="form-row seats_students-field-row">
         <%= label_tag "seats_students", "Antal platser för elever:" %>
@@ -78,7 +78,7 @@
     </fieldset>
 
     <fieldset class="booking-companion">
-      <legend>Medföljande vuxen</legend>
+      <legend><span>Medföljande vuxen</span></legend>
 
 
       <div class="form-row companion_name-field-row <%= "validation-error" unless @errors["companion_email"].blank? %>">
@@ -126,7 +126,7 @@
     </fieldset>
 
     <fieldset class="booking-request">
-      <legend>Speciella krav / Extra information ang. bokning</legend>
+      <legend><span>Speciella krav / Extra information ang. bokning</span></legend>
 
       <div class="form-row booking_request-field-row">
         <%= label_tag "Extra behov:" %>

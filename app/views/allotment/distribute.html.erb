@@ -9,7 +9,7 @@
   <% if is_group_distribution -%>
 
     <fieldset>
-      <legend>Lägg till grupp</legend>
+      <legend><span>Lägg till grupp</span></legend>
 
       <%= select_tag "add_group[district_id]", "<option>Välj stadsdel</option>" + options_from_collection_for_select(@districts, "id", "name") %>
       <%= select_tag "add_group[school_id]", '<option>Skolor</option>', :disabled => true %>
