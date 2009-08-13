@@ -16,7 +16,7 @@
     </p>
 
   <% end %>
-  Hej
+
   <% if group && occasion.event.ticket_state != Event::FREE_FOR_ALL %>
     <p class="message response">
       <strong><%= h group.school.name %>, <%= h group.name %></strong>
@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <p id="kp-booking-count" class="booking-count message response">Du har bokat sammanlagt 0 biljetter.</p>
+      <p id="kp-booking-count" class="booking-count message response">Du har angett totalt 0 biljetter.</p>
     </fieldset>
 
     <fieldset class="booking-companion">

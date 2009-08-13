@@ -173,9 +173,17 @@
 
 #kp form.context-form { border: 1px solid #c0c0c0; padding: 1em 1em 0 1em; margin-bottom: 1em; }
 
-#kp form h3 { margin: 0 0 0.7em 0; font-size: 1.2em; }
+#kp form h2 { padding: 0.3em 0.5em; background: #ffcf3d url(../images/list_header.png) repeat-x; }
 #kp form fieldset { border: 0; margin: 0 0 1em 0; padding: 0; }
-#kp form fieldset legend { display: block; margin: 0 0 0.5em 0; padding: 0; position: static; font-weight: bold; }
+#kp form fieldset legend {
+    display: block;
+    float: left;
+    width: 100%;
+    margin: 0 0 0.5em 0;
+    padding: 0;
+    background: #ffcf3d url(../images/list_header.png) repeat-x;
+    font-weight: bold;
+}
 #kp form .form-row { padding-bottom: 0.5em; clear: both; }
 #kp form .form-row label { display: block; float: left; }
 #kp form .form-row .input-container label,
