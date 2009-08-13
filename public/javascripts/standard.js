@@ -100,28 +100,41 @@
          */
         $("#kp-notreq-district_id").change(function() {
             var district_id = $("#kp-notreq-district_id option:selected").val();
+
+            $("#kp-notreq-district_id").parent().append('<div class="load-indicator"></div>');
+
+            $("#kp-notreq-school_id").attr("disabled", "disabled");
+            $("#kp-notification_request-group_id").html("<option>Välj skola först</option>").attr("disabled", "disabled");
+
             var request = $.get(
             kpConfig.schools.list.url,
             {
                 district_id: district_id ,
             },
             function(data) {
-                $("#kp-notreq-shool_id").html(data);
+                $("#kp-notreq-school_id").html(data).removeAttr("disabled");
+                $("#kp-notreq-district_id").parent().find('.load-indicator').remove();
             }
             );
-            $("#kp-notification_request-group_id").html("<option>Välj skola först</option>");
+
         });
         /**
          * Fetches groups by Ajax when choosing a school in the notification request view.
          */
-        $("#kp-notreq-shool_id").change(function() {
-            var schoolId = $("#kp-notreq-shool_id option:selected").val();
+        $("#kp-notreq-school_id").change(function() {
+            var schoolId = $("#kp-notreq-school_id option:selected").val();
+
+            $("#kp-notreq-school_id").parent().append('<div class="load-indicator"></div>');
+            $("#kp-notification_request-group_id").attr("disabled", "disabled");
+
             var request = $.get(
             kpConfig.groups.list.url,
             {
                 school_id: schoolId ,
-            }, function(data) {
-                $("#kp-notification_request-group_id").html(data);
+            },
+            function(data) {
+                $("#kp-notification_request-group_id").html(data).removeAttr("disabled");
+                $("#kp-notreq-school_id").parent().find('.load-indicator').remove();
             });
         });
         /**
@@ -130,16 +143,15 @@
         $("#kp-notification_request-group_id").change(function() {
             var groupId = $("#kp-notification_request-group_id option:selected").val();
             var occasionId = $("#kp-occasion_id").val();
-            var userId = $("#kp-user_id").val();
+
+            $("#kp-notification_request-group_id").parent().append('<div class="load-indicator"></div>');
+
             var request = $.get(
             kpConfig.notreq.notreqInput.url,
-            {
-                group_id: groupId ,
-                occasion_id : occasionId ,
-                user_id : userId
-            },
+            { group_id: groupId },
             function(data) {
                 $("#kp-notreq-input-area").html(data);
+                $("#kp-notification_request-group_id").parent().find('.load-indicator').remove();
             });
         });
 

@@ -22,12 +22,12 @@ ActionController::Routing::Routes.draw do |map|
     :report_show => :get,
     :report_create => :post
   } do |oc|
-    oc.resources :notification_requests , :except => [ :index , :edit , :update , :show ] , :collection => { :get_input_area => :get }
+    oc.resources :notification_requests,
+      :only => [ :new , :create ],
+      :collection => { :get_input_area => :get }
   end
 
   map.resources :booking_requirements
-  map.notreq_input_area 'notification_requests/get_input_area' , :controller => "notification_requests" , :action => "get_input_area"
-  map.resources :notification_requests
 
   map.resources :questionaires, :member => {
     :add_template_question => :post,

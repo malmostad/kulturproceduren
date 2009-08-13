@@ -36,7 +36,7 @@
         <% if user_online? -%>
 
           <% if current_user.has_role?(:admin, :booker) -%>
-            <li class="pri-nav-booking  <%= active_by_controller "booking" %>">
+            <li class="pri-nav-booking  <%= active_by_controller "booking", "notification_requests" %>">
               <%= link_to "Bokning", :controller => "booking", :action => "show" -%>
             </li>
           <% end -%>

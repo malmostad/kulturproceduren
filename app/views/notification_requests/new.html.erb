@@ -1,11 +1,17 @@
+<%= render :partial => "booking/menu" %>
+
+<h2 class="form-title">
+  Meddelande vid biljettsläpp
+</h2>
+
 <p>
-  Få information när fler biljetter blir tillgängliga för föreställningen <%= @occasion.event.name -%> , <%=  @occasion.date.to_s -%>
+  Om den grupp du vill boka biljetter för inte har fått biljetter till
+  <%= link_to @occasion.event.name, @occasion.event %>
+  tilldelade till sig så kan du här registrera dig så att du får ett
+  meddelande när biljetter blir tillgängliga.
 </p>
-<p>
-  Välj vilken grupp du vill boka för:
-</p>
-<%=
-render(
+
+<%= render(
   :partial => "group_select" ,
   :locals => {
     :district_id => params[:district_id] ,
@@ -17,20 +23,12 @@ render(
     :user        => @user
   })
 %>
+
 <div id="kp-notreq-input-area">
-  <% if  not @notification_request.group.blank? %>
     <%= render(
       :partial => "input_area" ,
       :locals => {
         :notification_request => @notification_request 
-      })
+      }) unless @notification_request.group.blank?
   %>
-  <% end %>
-  <br/>
 </div>
-<p>
-  <% form_tag( { :action=>"new", :controller=>"notification_requests"} , :method => "get" ) do  %>
-    <%= submit_tag "Börja om" %>
-  <% end %>
-</p>
-

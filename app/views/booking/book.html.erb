@@ -59,7 +59,7 @@
     <fieldset class="group-selector-container">
 
       <div class="form-row district_id-field-row">
-        <%= label_tag "district_id" , "Välj Stadsdel:"%>
+        <%= label_tag "district_id" , "Välj stadsdel:"%>
 
         <div class="input-container">
           <%
@@ -83,7 +83,7 @@
       </div>
 
       <div class="form-row school_id-field-row">
-        <%= label_tag "school_id" , "Välj Skola:" %>
+        <%= label_tag "school_id" , "Välj skola:" %>
 
         <div class="input-container">
           <% if @schools.nil? %>
@@ -98,14 +98,14 @@
 
           <% if state == :district_selected %>
             <noscript>
-              <input name="commit" type="submit" value="Hämta grupper" /><br/>
+              <input name="commit" type="submit" value="Hämta grupper" />
             </noscript>
           <% end %>
         </div>
       </div>
 
       <div class="form-row group_id-field-row">
-        <%= label_tag "group_id" , "Välj Grupp:"%>
+        <%= label_tag "group_id" , "Välj grupp:"%>
 
         <div class="input-container">
           <% if @groups.nil? %>
@@ -135,10 +135,20 @@
 
           <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" && @curgroup.blank? %>
             <noscript>
-              <input name="commit" type="submit" value="Välj grupp" /><br/>
+              <input name="commit" type="submit" value="Välj grupp" />
             </noscript>
           <% end %>
         </div>
+      </div>
+
+      <div class="notification-request-info">
+        <p>
+          Hittar du inte din grupp?
+        </p>
+        <p>
+          <%= link_to "Klicka här", new_occasion_notification_request_path(@occasion) %>
+          för att få ett meddelande när biljetter blir tillgängliga.
+        </p>
       </div>
     </fieldset>
     <%

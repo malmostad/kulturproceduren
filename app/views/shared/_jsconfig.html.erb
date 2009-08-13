@@ -17,11 +17,13 @@
 
     by_group: {
       byGroupList: {url: "/booking/get_by_group_list"}
-    },
-    
-    notreq: {
-      notreqInput: {url: "/notification_requests/get_input_area"}
     }
+    
+    <% if @occasion %>
+    ,notreq: {
+      notreqInput: { url: "<%= get_input_area_occasion_notification_requests_path(@occasion) %>" }
+    }
+    <% end %>
 
   };
 </script>

@@ -202,6 +202,12 @@ sv:
                 question: "Fråga:"
                 choice_csv: "Flervalsalternativ:"
                 mandatory:  "Obligatorisk:"
+            notification_request:
+                send_mail: "Via mail"
+                send_sms: "Via sms"
+                group_id: "Grupp:"
+                occasion_id: "Föreställning:"
+                user_id: "Användare:"
 
     # Used in array.to_sentence.
     support:
