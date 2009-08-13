@@ -129,79 +129,79 @@ sv:
 
         attributes:
             event:
-                name: Namn
-                from_age: Från ålder
-                to_age: Till ålder
-                description: Beskrivning
-                culture_provider: Arrangör
-                culture_provider_id: Arrangör
-                visible_from: Visas från
-                visible_to: Visas till
-                url: Hemsida
-                booking_info: Bokningsinformation
-                movie_url: Youtube-länk
-                opening_hours: Öppettider
-                cost: Kostnad
-                further_education: Fortbildning pedagoger/vuxna
+                name: "Namn:"
+                from_age: "Från ålder:"
+                to_age: "Till ålder:"
+                description: "Beskrivning:"
+                culture_provider: "Arrangör:"
+                culture_provider_id: "Arrangör:"
+                visible_from: "Visas från:"
+                visible_to: "Visas till:"
+                url: "Hemsida:"
+                booking_info: "Bokningsinformation:"
+                movie_url: "Youtube-länk:"
+                opening_hours: "Öppettider:"
+                cost: "Kostnad:"
+                further_education: "Fortbildning pedagoger/vuxna:"
             occasion:
-                date: Datum
-                seats: Antal platser
-                address: Adress
-                description: Beskrivning
-                start_time: Starttid
-                stop_time: Sluttid
-                wheelchair_seats: Antal rullstolsplatser
-                telecoil: Hörselslinga
+                date: "Datum:"
+                seats: "Antal platser:"
+                address: "Adress:"
+                description: "Beskrivning:"
+                start_time: "Starttid:"
+                stop_time: "Sluttid:"
+                wheelchair_seats: "Antal rullstolsplatser:"
+                telecoil: "Hörselslinga:"
             district:
-                name: Namn
-                elit_id: ELIT-ID
+                name: "Namn:"
+                elit_id: "ELIT-ID:"
             school:
-                name: Namn
-                elit_id: ELIT-ID
-                district_id: Stadsdel
+                name: "Namn:"
+                elit_id: "ELIT-ID:"
+                district_id: "Stadsdel:"
             group:
-                name: Namn
-                elit_id: ELIT-ID
-                school_id: Skola
+                name: "Namn:"
+                elit_id: "ELIT-ID:"
+                school_id: "Skola:"
             age_group:
-                age: Ålder
-                quantity: Antal
+                age: "Ålder:"
+                quantity: "Antal:"
             user:
-                username: Användarnamn
-                password: Lösenord
-                name: Namn
-                email: Epost
-                cellphone: Mobilnummer
-                password_confirmation: Bekräfta lösenord
+                username: "Användarnamn:"
+                password: "Lösenord:"
+                name: "Namn:"
+                email: "Epost:"
+                cellphone: "Mobilnummer:"
+                password_confirmation: "Bekräfta lösenord:"
             role_application:
-                message: Meddelande
-                response: Svarsmeddelande
-                culture_provider_id: Arrangör
-                new_culture_provider_name: eller skriv arrangörens namn
+                message: "Meddelande:"
+                response: "Svarsmeddelande:"
+                culture_provider_id: "Arrangör:"
+                new_culture_provider_name: "eller skriv arrangörens namn:"
             culture_provider:
-                name: Namn
-                description: Beskrivning
-                contact_person: Kontaktperson
-                email: Epost
-                phone: Telefon
-                address: Adress
-                opening_hours: Öppettider
-                url: Hemsida
+                name: "Namn:"
+                description: "Beskrivning:"
+                contact_person: "Kontaktperson:"
+                email: "Epost:"
+                phone: "Telefon:"
+                address: "Adress:"
+                opening_hours: "Öppettider:"
+                url: "Hemsida:"
             image:
-                name: Namn
+                name: "Namn:"
             category:
-                name: Namn
-                category_group: Kategorigrupp
-                category_group_id: Kategorigrupp
+                name: "Namn:"
+                category_group: "Kategorigrupp:"
+                category_group_id: "Kategorigrupp:"
             category_group:
-                name: Namn
+                name: "Namn:"
             questionaire:
-                description: Beskrivning
-                event_id: Evenemang
+                description: "Beskrivning:"
+                event_id: "Evenemang:"
             question:
-                question: Fråga
-                choice_csv: Flervalsalternativ
-                mandatory:  Obligatorisk
+                question: "Fråga:"
+                choice_csv: "Flervalsalternativ:"
+                mandatory:  "Obligatorisk:"
 
     # Used in array.to_sentence.
     support:

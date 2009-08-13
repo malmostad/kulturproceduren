@@ -1,15 +1,15 @@
 <%
 
-companion ||= nil
-nticks ||= nil
-naticks ||= nil
-nwticks ||= nil
-br ||= nil
-edit ||= nil
-group ||= nil
+  companion ||= nil
+  nticks ||= nil
+  naticks ||= nil
+  nwticks ||= nil
+  br ||= nil
+  edit ||= nil
+  group ||= nil
 
-if group
-  if group.age_groups.num_children_by_age_span(occasion.event.from_age, occasion.event.to_age) == 0 %>
+  if group
+    if group.age_groups.num_children_by_age_span(occasion.event.from_age, occasion.event.to_age) == 0 %>
 
     <p class="message alert">
       OBS - Den valda gruppen har elever vars ålder inte är rekomenderad för det här evenemanget!
@@ -36,29 +36,29 @@ if group
       <legend>Antal platser</legend>
 
       <div class="form-row seats_students-field-row">
-        <%= label_tag "seats_students", "Antal platser för elever: " %>
+        <%= label_tag "seats_students", "Antal platser för elever:" %>
 
         <div class="input-container">
           <%= text_field_tag "seats_students",
             nticks.blank? || nticks == 0 ? "" : nticks,
             { :class => "seats" }
-        %>
+          %>
         </div>
       </div>
 
       <div class="form-row seats_adult-field-row">
-        <%= label_tag "seats_adult", "Antal platser för vuxna: " %>
+        <%= label_tag "seats_adult", "Antal platser för vuxna:" %>
 
         <div class="input-container">
           <%= text_field_tag "seats_adult",
             naticks.blank? || naticks == 0 ? "" : naticks,
             { :class => "seats" }
-        %>
+          %>
         </div>
       </div>
 
       <div class="form-row seats_wheelchair-field-row">
-        <%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser: " %>
+        <%= label_tag "seats_wheelchair" , "Antal rullstolsanpassade platser:" %>
         <div class="input-container">
           <%= text_field_tag "seats_wheelchair",
             nwticks.blank? || nwticks == 0 ? "" : nwticks,
@@ -81,65 +81,60 @@ if group
       <legend>Medföljande vuxen</legend>
 
 
-      <% if @errors["companion_email"].blank? %>
-        <div class="form-row companion_name-field-row">
-      <% else %>
-        <div class="form-row companion_name-field-row validation-error " style="" >
-      <%  end %>
-        <%= label_tag "companion_name" , "Name" %>
+      <div class="form-row companion_name-field-row <%= "validation-error" unless @errors["companion_email"].blank? %>">
+
+        <% if not @errors["companion_name"].blank? %>
+          <div class="validation-error-message alert-field"><%= @errors["companion_name"] -%></div>
+        <% end %>
+
+        <%= label_tag "companion_name" , "Namn:" %>
+
         <div class="input-container">
           <%= text_field_tag "companion_name",
             companion.blank? || companion.name.blank? ? "" : companion.name
-        %>
+          %>
         </div>
-      <% if not @errors["companion_name"].blank? %>
-        <span class="validation-error-message"><%= @errors["companion_name"] -%></span>
-      <% end %>
       </div>
 
+      <div class="form-row companion_email-field-row <%= "validation-error" unless @errors["companion_email"].blank? %>">
+        <% if not @errors["companion_email"].blank? %>
+          <div class="validation-error-message alert-field"><%= @errors["companion_email"] -%></div>
+        <% end %>
 
-      <% if @errors["companion_email"].blank? %>
-        <div class="form-row companion_email-field-row">
-      <% else %>
-        <div class="form-row companion_email-field-row validation-error " style="" >
-      <%  end %>
-        <%= label_tag "companion_email" , "E-mail address" %>
+        <%= label_tag "companion_email" , "Epost:" %>
+
         <div class="input-container">
           <%= text_field_tag "companion_email",
             companion.blank? || companion.email.blank? ? "" : companion.email
-        %>
+          %>
         </div>
-      <% if not @errors["companion_email"].blank? %>
-        <span class="validation-error-message"><%= @errors["companion_email"] -%></span>
-      <% end %>
       </div>
 
-      <% if @errors["companion_telnr"].blank? %>
-        <div class="form-row companion_telnr-field-row">
-      <% else %>
-        <div class="form-row companion_telnr-field-row validation-error " style="" >
-      <%  end %>
-        <%= label_tag "companion_telnr" , "Telefonnummer (mobil)" %>
+      <div class="form-row companion_telnr-field-row <%= "validation_error" unless @errors["companion_telnr"].blank? %>">
+        <% if not @errors["companion_telnr"].blank? %>
+          <div class="validation-error-message alert-field"><%= @errors["companion_telnr"] -%></div>
+        <% end %>
+
+        <%= label_tag "companion_telnr", "Telefonnummer (mobil):" %>
+
         <div class="input-container">
           <%= text_field_tag "companion_telnr",
             companion.blank? || companion.tel_nr.blank? ? "" : companion.tel_nr
-        %>
+          %>
         </div>
-      <% if not @errors["companion_telnr"].blank? %>
-        <span class="validation-error-message"><%= @errors["companion_telnr"] -%></span>
-      <% end %>
+      </div>
     </fieldset>
 
     <fieldset class="booking-request">
       <legend>Speciella krav / Extra information ang. bokning</legend>
 
       <div class="form-row booking_request-field-row">
-        <%= label_tag "Extra behov" %>
+        <%= label_tag "Extra behov:" %>
         <div class="input-container">
           <%= text_area_tag "booking_request",
             br.blank? || br.requirement.blank? ? "" : br.requirement,
             :rows => 7, :cols => 35
-        %>
+          %>
         </div>
       </div>
     </fieldset>

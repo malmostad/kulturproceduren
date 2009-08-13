@@ -27,7 +27,7 @@ form_for(@image, :url => form_url, :builder => KPFormBuilder, :html => { :multip
     <%= f.text_field :name %>
 
     <% f.row do -%>
-      <label for="kp-upload-datafile">Bild</label>
+      <label for="kp-upload-datafile">Bild:</label>
       <%= f.field file_field('upload' , 'datafile') %>
     <% end -%>
 

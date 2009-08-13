@@ -29,7 +29,7 @@
     <% @category_groups.each do |category_group| -%>
       <% unless category_group.categories.empty? -%>
         <% f.row do -%>
-          <label><%= h category_group.name %></label>
+          <label><%= h category_group.name %>:</label>
 
           <ul class="checkbox-list">
             <% category_group.categories.each do |category| -%>

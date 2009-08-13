@@ -29,12 +29,7 @@
           <div class="validation-error-message alert-field">Frågan är obligatorisk</div>
         <% end %>
 
-        <label>
-          <%= h question.question %>
-          <% if question.mandatory %>
-            <span class="mandatory-indicator">*</span>
-          <% end %>
-        </label>
+        <label><%= h question.question %>:</label>
 
         <div class="input-container">
           <%= render :partial => get_question_fragment(question),

@@ -9,9 +9,9 @@
     <legend>Boka biljetter</legend>
 
     <dl class="form-elements">
-      <dt><%= f.label :group_id, 'Välj grupp' %></dt>
+      <dt><%= f.label :group_id, 'Välj grupp:' %></dt>
       <dd><%= select("group_id","", @unbookable_tickets.keys.collect {|k| [Group.find_by_id(k).name + " - " + @unbookable_tickets["#{k}"].length.to_s + " biljetter", k ]})  %></dd>
-      <dt><%= f.label :no_tickets , 'Antal Biljetter att avboka' %></dt>
+      <dt><%= f.label :no_tickets , 'Antal biljetter att avboka:' %></dt>
       <dd><input name="no_tickets"></dd>
     </dl>
 

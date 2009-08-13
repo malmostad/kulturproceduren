@@ -93,6 +93,7 @@
 #kp .pagination .current, #kp .pagination a:hover { background: #d9ebd2; }
 
 /*** Page ***/
+#kp .flkash { margin: 1em 0; }
 #kp .message { margin: 0 0 1em 0; padding: 0.5em; background-image: none; }
 
 #kp .specification-info dt { font-weight: bold; float: left; text-align: right; }
@@ -269,11 +270,8 @@
 #kp form.booking-form #kp-input-area label { width: 16em; }
 #kp form.booking-form #kp-input-area .input-container { padding-left: 16em; }
 /* Evaluation form */
-#kp form.evaluation-form label { width: 24em; text-align: right; padding: 2px 1em 0 0; }
-#kp form.evaluation-form .form-buttons,
-#kp form.evaluation-form .input-container { padding-left: 25em; }
-#kp form.evaluation-form .input-container label { padding: 0; }
-#kp form.evaluation-form .validation-error-message { margin-left: 25em; }
+#kp form.evaluation-form label { width: 15em; }
+#kp form.evaluation-form .input-container { padding-left: 15em; }
 
 /*** Models ***/
 
