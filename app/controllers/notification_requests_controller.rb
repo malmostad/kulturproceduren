@@ -10,6 +10,10 @@ class NotificationRequestsController < ApplicationController
       redirect_to "/"
       return
     end
+    if @user.email.blank? or @user.cellphone.blank?
+      flash[:notice] = "Du måste ange mobiltelefon nummer och e-mail adress för att kunna få information om kommande föreställningar"
+      redirect_to @user
+    end
   end
 
   def check_occasion
