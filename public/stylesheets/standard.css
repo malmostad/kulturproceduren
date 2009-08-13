@@ -93,7 +93,7 @@
 #kp .pagination .current, #kp .pagination a:hover { background: #d9ebd2; }
 
 /*** Page ***/
-#kp .flkash { margin: 1em 0; }
+#kp .flash { margin: 1em 0; }
 #kp .message { margin: 0 0 1em 0; padding: 0.5em; background-image: none; }
 
 #kp .specification-info dt { font-weight: bold; float: left; text-align: right; }
