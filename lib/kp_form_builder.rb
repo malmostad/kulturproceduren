@@ -87,7 +87,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     contents = @template.capture(&block)
     title = @template.content_tag(:legend, @template.content_tag(:span, title)) unless title.blank?
 
-    @template.concat @template.content_tag(:fieldset, contents + title)
+    @template.concat @template.content_tag(:fieldset, title + contents)
   end
 
   def buttons(&block)

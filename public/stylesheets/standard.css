@@ -175,12 +175,16 @@
 
 #kp form h2,
 #kp h2.form-title { padding: 0.3em 0.5em; background: #ffcf3d url(../images/list_header.png) repeat-x; }
-#kp form fieldset { border: 0; margin: 0 0 1em 0; padding: 0; }
-#kp form fieldset legend { display: block; margin: 0 0 2em 0; padding: 0; font-weight: bold; }
+#kp form fieldset { border: 0; margin: 0 0 1em 0; padding: 0; position: relative; }
+#kp form fieldset legend {
+    margin: 0 0 3em 0;
+    padding: 0;
+    font-weight: bold;
+}
 #kp form fieldset legend span {
     position: absolute;
     display: block;
-    width: 100%;
+    width: 98%;
     padding: 0.2em 0.5em;
     background: #ffcf3d url(../images/list_header.png) repeat-x;
 }
@@ -190,6 +194,12 @@
 #kp form .post-label-row label { float: none; display: inline; }
 #kp form .input-container .field-help { display: block; font-size: 0.9em; }
 #kp form .form-buttons { clear: both; padding-top: 1em; }
+#kp form .form-row .input-container input,
+#kp form .form-row .input-container select,
+#kp form .form-row .input-container textarea { width: 275px; }
+#kp form .post-label-row .input-container input,
+#kp form .post-label-row .input-container select,
+#kp form .post-label-row .input-container textarea { width: auto; }
 
 #kp ul.form-elements {
     list-style-type: none;
@@ -250,6 +260,7 @@
 #kp form.question-form label { width: 10em; }
 #kp form.question-form .post-label-row,
 #kp form.question-form .input-container { padding-left: 10em; }
+#kp form.question-form .types-field-row input { width: auto; }
 /* Role application forms */
 #kp form.role-application-booker-form label { width: 6em; }
 #kp form.role-application-booker-form .input-container { padding-left: 6em; }
@@ -273,8 +284,8 @@
 #kp form.ldap-search-form label { width: 8em; }
 #kp form.ldap-search-form .input-container { padding-left: 8em; }
 /* Booking form */
-#kp form.booking-form .group-selector-container label { width: 8em; }
-#kp form.booking-form .group-selector-container .input-container { padding-left: 8em; }
+#kp form.booking-form .group-selector-container label { width: 16em; }
+#kp form.booking-form .group-selector-container .input-container { padding-left: 16em; }
 #kp form.booking-form #kp-input-area label { width: 16em; }
 #kp form.booking-form #kp-input-area .input-container { padding-left: 16em; }
 /* Evaluation form */
@@ -422,6 +433,7 @@
 
 #kp .calendar-filter { margin-top: 1em; }
 #kp .calendar-filter #kp-calendar-filter-free-text-label { display: block; font-size: 1.2em; font-weight: bold; }
+#kp .calendar-filter #kp-calendar-filter-free-text { width: 40em; }
 
 #kp .calendar-filter .target-cnt,
 #kp .calendar-filter .date-cnt,
@@ -477,7 +489,7 @@
 #kp .booking-form .group-selector-container,
 #kp .booking-form .booking-seats-container { position: relative; }
 #kp .booking-form #kp-booking-count { position: absolute; top: 1em; left: 40em; }
-#kp .booking-form .notification-request-info { position: absolute; top: 0.5em; left: 25em; width: 20em; }
+#kp .booking-form .notification-request-info { position: absolute; top: 0.5em; left: 40em; width: 20em; }
 #kp .booking-form .notification-request-info p { margin: 0; }
 
 /*** Role application ***/

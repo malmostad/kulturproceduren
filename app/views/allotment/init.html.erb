@@ -26,6 +26,7 @@
                id="kp-allotment-release_date"
                name="allotment[release_date]"
                class="date-field"
+               size="30"
                value="<%= h @event.ticket_release_date %>"/>
       </div>
     </div>
@@ -33,7 +34,7 @@
     <div class="form-row num_tickets-field-row">
       <label for="kp-allotment-num_tickets">Antal <%= is_edit ? "ytterligare" : "inköpta" %> biljetter:</label>
       <div class="input-container">
-        <input type="text" id="kp-allotment-num_tickets" name="allotment[num_tickets]"/>
+        <input type="text" size="30" id="kp-allotment-num_tickets" name="allotment[num_tickets]"/>
       </div>
     </div>
 
