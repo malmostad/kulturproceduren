@@ -151,7 +151,7 @@ sv:
                 start_time: "Starttid:"
                 stop_time: "Sluttid:"
                 wheelchair_seats: "Antal rullstolsplatser:"
-                telecoil: "Hörselslinga:"
+                telecoil: "Hörselslinga"
             district:
                 name: "Namn:"
                 elit_id: "ELIT-ID:"

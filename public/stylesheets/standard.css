@@ -253,6 +253,7 @@
 #kp form.occasion-form label { width: 10em; }
 #kp form.occasion-form .post-label-row,
 #kp form.occasion-form .input-container { padding-left: 10em; }
+#kp form.occasion-form .input-container select { width: auto; }
 /* Questionaire form */
 #kp form.questionaire-form label { width: 6em; }
 #kp form.questionaire-form .input-container { padding-left: 6em; }
