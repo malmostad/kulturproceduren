@@ -1,4 +1,5 @@
 module RoleApplicationsHelper
+  # Converts a role application state into a string readable for humans.
   def state_string(application)
     case application.state
     when RoleApplication::PENDING then return "Inskickad"
@@ -7,6 +8,7 @@ module RoleApplicationsHelper
     end
   end
 
+  # Converts a role application role name to a string readable for humans.
   def type_string(application)
     case application.role.symbol_name
     when :booker then return "Bokning"
