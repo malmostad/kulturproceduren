@@ -1,7 +1,3 @@
 <option>Välj skola</option>
-<% if @occasion.blank? %>
-  <%= options_from_collection_for_select @schools, :id, :name %>
-<% else %>
-  <%= options_for_select( @schools.map { |s| [ s.name , s.id ] } ) %>
-<%  end %>
+<%= options_from_collection_for_select @schools, :id, :name %>
 

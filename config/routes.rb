@@ -41,9 +41,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :categories, :except => [ :show, :new ]
   map.resources :category_groups, :except => [:show, :new ]
 
-  map.resources :districts
-  map.resources :schools, :collection => { :options_list => :get }
-  map.resources :groups, :collection => { :options_list => :get }
+  map.resources :districts, :collection => { :select => [ :get, :post ] }
+  map.resources :schools, :collection => { :options_list => :get, :select => [ :get, :post ] }
+  map.resources :groups, :collection => { :options_list => :get, :select => [ :get, :post ] }
   map.resources :age_groups, :except => [ :show, :index, :new ]
 
   map.resources :role_applications,

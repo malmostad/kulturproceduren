@@ -1,8 +1,8 @@
 class SchoolsController < ApplicationController
   layout "admin", :except => [ :options_list ]
   
-  before_filter :authenticate, :except => [ :options_list ]
-  before_filter :require_admin, :except => [ :options_list ]
+  before_filter :authenticate, :except => [ :options_list, :select ]
+  before_filter :require_admin, :except => [ :options_list, :select ]
 
   def index
     @schools = School.paginate :page => params[:page],
@@ -10,32 +10,6 @@ class SchoolsController < ApplicationController
       :include => :district
   end
 
-  def options_list
-    if params[:district_id]
-      if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
-        @schools = School.all :order => "name ASC", :conditions => { :district_id => params[:district_id] }
-      else
-        @occasion = Occasion.find(params[:occasion_id])
-        @schools = School.find(
-          :all ,
-          :conditions => { :district_id => params[:district_id] }
-        ).select { |s|
-          s.available_tickets_per_occasion(@occasion) > 0
-        }
-      end
-    else
-      if params[:occasion_id].blank? or params[:occasion_id].to_i == 0
-        @schools = School.all :order => "name ASC"
-      else
-        @occasion = Occasion.find(params[:occasion_id])
-        @schools = School.all.select { |s|
-          s.available_tickets_per_occasion(@occasion) > 0
-        }
-      end
-    end
-
-    render :action => "options_list", :content_type => 'text/plain'
-  end
 
   def show
     @school = School.find(params[:id])
@@ -105,11 +79,54 @@ class SchoolsController < ApplicationController
     redirect_to(district)
   end
 
+
+  def select
+    session[:group_selection] = { :district_id => session[:group_selection][:district_id] }
+    session[:group_selection][:school_id] = params[:school_id].to_i
+
+    if request.xhr?
+      render :text => "", :content_type => "text/plain"
+    else
+      redirect_to params[:return_to]
+    end
+  end
+
+  def options_list
+    conditions = {}
+
+    district_id = params[:district_id].to_i
+    occasion_id = params[:occasion_id].to_i
+
+    if (params[:district_id] && district_id <= 0) || (params[:occasion_id] && occasion_id <= 0)
+      render :text => "", :content_type => 'text/plain', :status => 404
+      return
+    end
+
+    if district_id > 0
+      conditions[:district_id] = district_id
+      session[:group_selection] = {}
+      session[:group_selection][:district_id] = district_id
+    end
+
+    if occasion_id > 0
+      occasion = Occasion.find occasion_id
+      @schools = School.find(:all, :conditions => conditions).select { |s|
+        s.available_tickets_per_occasion(occasion) > 0
+      }
+    else
+      @schools = School.all :order => "name ASC", :conditions => conditions
+    end
+
+    render :action => "options_list", :content_type => 'text/plain'
+  rescue
+    render :text => "", :content_type => 'text/plain', :status => 404
+  end
+
   protected
 
   def sort_column_from_param(p)
     return "name" if p.blank?
-    
+
     case p.to_sym
     when :district then "districts.name"
     when :elit_id then "elit_id"

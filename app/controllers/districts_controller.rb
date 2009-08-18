@@ -2,7 +2,7 @@ class DistrictsController < ApplicationController
   layout "admin"
   
   before_filter :authenticate
-  before_filter :require_admin
+  before_filter :require_admin, :except => [ :select ]
 
   def index
     @districts = District.paginate :page => params[:page],
@@ -50,6 +50,18 @@ class DistrictsController < ApplicationController
 
     flash[:notice] = "Stadsdelen togs bort."
     redirect_to(districts_url)
+  end
+
+
+  def select
+    session[:group_selection] = {}
+    session[:group_selection][:district_id] = params[:district_id].to_i
+
+    if request.xhr?
+      render :text => "", :content_type => "text/plain"
+    else
+      redirect_to params[:return_to]
+    end
   end
 
   protected

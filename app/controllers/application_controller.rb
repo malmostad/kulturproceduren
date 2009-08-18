@@ -10,6 +10,28 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def load_group_selection_collections
+    session[:group_selection] ||= {}
+
+    @group_selection_collections = {
+      :districts => District.find(:all, :order => "name")
+    }
+
+    if session[:group_selection][:district_id]
+      @group_selection_collections[:schools] = School.find(
+        :all,
+        :order => "name",
+        :conditions => { :district_id => session[:group_selection][:district_id] })
+    end
+
+    if session[:group_selection][:school_id]
+      @group_selection_collections[:groups] = Group.find(
+        :all,
+        :order => "name",
+        :conditions => { :school_id => session[:group_selection][:school_id] })
+    end
+  end
+
   def sort_order(default)
     "#{sort_column_from_param(params[:c] || default)} #{params[:d] == 'down' ? 'DESC' : 'ASC'}"
   end

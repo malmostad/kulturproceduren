@@ -1,0 +1,85 @@
+<fieldset id="kp-group-selection-form" class="form-fieldset">
+  <legend><span>Välj grupp</span></legend>
+
+  <div class="form-row district_id-field-row">
+    <%= label_tag "group_selection-district_id", "Välj stadsdel:" %>
+
+    <div class="input-container">
+      <% form_tag({ :controller => "districts", :action => "select" }) do %>
+        <%= hidden_field_tag "return_to", url_for(:overwrite_params => {}, :only_path => false) %>
+
+        <%= select_tag(
+          "district_id",
+          "<option>Välj stadsdel</option>" +
+          options_from_collection_for_select(@group_selection_collections[:districts], :id, :name, session[:group_selection][:district_id]),
+          { :id => "kp-group_selection-district_id" })
+        %>
+
+        <noscript>
+          <%= submit_tag "Välj stadsdel" %>
+        </noscript>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-row school_id-field-row">
+    <%= label_tag "group_selection-school_id", "Välj skola:" %>
+
+    <div class="input-container">
+      <% if @group_selection_collections[:schools] %>
+        <% form_tag({ :controller => "schools", :action => "select" }) do %>
+          <%= hidden_field_tag "return_to", url_for(:overwrite_params => {}, :only_path => false) %>
+
+          <%= select_tag(
+            "school_id",
+            "<option>Välj skola</option>" +
+            options_from_collection_for_select(@group_selection_collections[:schools], :id, :name, session[:group_selection][:school_id]),
+            { :id => "kp-group_selection-school_id" })
+          %>
+
+          <noscript>
+            <%= submit_tag "Välj skola" %>
+          </noscript>
+
+        <% end %>
+      <% else %>
+        <%= select_tag(
+          "school_id",
+          "<option>Välj stadsdel först</option>",
+          :disabled => true, :id => "kp-group_selection-school_id")
+        %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-row group_id-field-row">
+    <%= label_tag "group_selection-group_id", "Välj grupp:" %>
+
+    <div class="input-container">
+      <% if @group_selection_collections[:groups] %>
+        <% form_tag({ :controller => "groups", :action => "select" }) do %>
+          <%= hidden_field_tag "return_to", url_for(:overwrite_params => {}, :only_path => false) %>
+
+          <%= select_tag(
+            "group_id",
+            "<option>Välj grupp</option>" +
+            options_from_collection_for_select(@group_selection_collections[:groups], :id, :name, session[:group_selection][:group_id]),
+            { :id => "kp-group_selection-group_id" })
+          %>
+
+          <noscript>
+            <%= submit_tag "Välj grupp" %>
+          </noscript>
+
+        <% end %>
+      <% else %>
+        <%= select_tag(
+          "group_id",
+          "<option>Välj skola först</option>",
+          :disabled => true, :id => "kp-group_selection-group_id")
+        %>
+      <% end %>
+    </div>
+  </div>
+
+</fieldset>

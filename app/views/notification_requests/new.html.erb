@@ -11,24 +11,23 @@
   meddelande när biljetter blir tillgängliga.
 </p>
 
-<%= render(
-  :partial => "group_select" ,
-  :locals => {
-    :district_id => params[:district_id] ,
-    :school_id   => params[:school_id] ,
-    :schools     => @schools ,
-    :group_id    => params[:group_id] ,
-    :groups      => @groups ,
-    :occasion    => @occasion ,
-    :user        => @user
-  })
-%>
-
-<div id="kp-notreq-input-area">
-    <%= render(
-      :partial => "input_area" ,
-      :locals => {
-        :notification_request => @notification_request 
-      }) unless @notification_request.group.blank?
-  %>
+<div class="notification-request-group-selection">
+  <%= render :partial => "shared/group_selection" %>
 </div>
+
+<% disabled = @notification_request.group_id.nil? %>
+
+<% form_for @notification_request, :url => occasion_notification_requests_path(@occasion), :builder => KPFormBuilder, :html => { :class => "notification-request-form" } do |form| %>
+
+  <% form.fields("Välj meddelandetyp") do %>
+    <%= form.hidden_field :group_id %>
+
+    <%= form.check_box :send_mail, :disabled => disabled %>
+    <%= form.check_box :send_sms, :disabled => disabled %>
+
+    <% form.buttons do %>
+      <%= form.submit "Registrera", :disabled => disabled %>
+    <% end %>
+  <% end %>
+
+<% end  %>

@@ -4,21 +4,24 @@
 
 <h1>Fördelning</h1>
 
+<% if is_group_distribution -%>
+  <div class="allotment-group-selection">
+    <%= render :partial => "shared/group_selection" %>
+  </div>
+<% end -%>
+
 <% form_tag({ :action => "create_tickets", :id => params[:id] }, { :id => "kp-distribution-form" }) do -%>
 
-  <% if is_group_distribution -%>
-
-    <fieldset>
-      <legend><span>Lägg till grupp</span></legend>
-
-      <%= select_tag "add_group[district_id]", "<option>Välj stadsdel</option>" + options_from_collection_for_select(@districts, "id", "name") %>
-      <%= select_tag "add_group[school_id]", '<option>Skolor</option>', :disabled => true %>
-      <%= select_tag "add_group[group_id]", '<option>Grupper</option>', :disabled => true %>
-
-      <input id="kp-add-group-submit" type="submit" name="add_group_submit" value="Lägg till grupp" disabled="disabled"/>
-    </fieldset>
-
-  <% end -%>
+  <% if is_group_distribution %>
+    <div class="allotment-group-selection">
+      <%= hidden_field_tag "add_group[group_id]", session[:group_selection][:group_id] %>
+      <%= submit_tag "Lägg till grupp",
+        :name => "add_group_submit",
+        :id => "kp-add-group-submit",
+        :disabled => true
+      %>
+    </div>
+  <% end %>
 
   <table id="kp-distribution-list">
 
@@ -45,7 +48,7 @@
         <% if @extra_groups -%>
           <% @extra_groups.each do |group| -%>
             <tr class="group-row extra <%= fill_indicator group.total_children, group.num_tickets %>"
-                                        id="kp-group-<%= group.id %>">
+                id="kp-group-<%= group.id %>">
               <td class="name">
                 <%= h group.school.name -%>
                 -
@@ -58,7 +61,7 @@
                 <input type="hidden"
                        class="num-tickets-value"
                        name="allotment[ticket_assignment[<%= group.id %>]]"
-                     value="<%= h group.num_tickets %>"/>
+                       value="<%= h group.num_tickets %>"/>
               </td>
               <td class="tools">
                 <a href="#" class="fill">+</a>
@@ -132,16 +135,16 @@
 
         <% @districts.each do |district| -%>
           <tr class="editable-district-row <%= fill_indicator district.num_children, district.num_tickets -%>"
-                                            id="kp-district-<%= district.id %>">
+              id="kp-district-<%= district.id %>">
             <td class="name"><a href="#" class="toggler"><%= h district.name %></a></td>
             <td class="num-children"><%= h district.num_children %></td>
             <td class="num-tickets">
               <input type="text"
                      class="num-tickets-display"
-                   value="<%= h district.num_tickets %>"/>
+                     value="<%= h district.num_tickets %>"/>
               <input type="hidden"
                      class="num-tickets-value"
-                   name="allotment[ticket_assignment[<%= district.id %>]]" value="<%= h district.num_tickets %>"/>
+                     name="allotment[ticket_assignment[<%= district.id %>]]" value="<%= h district.num_tickets %>"/>
             </td>
             <td class="tools">
               <a href="#" class="fill">+</a>

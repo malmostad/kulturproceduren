@@ -38,7 +38,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
 
-      row error + super + label + field_help(help), row_class(field, !error.blank?, "post-label-row"), row_hidden
+      row error + super + label + field_help(help), row_class(field, !error.blank?, "post-label-form-row"), row_hidden
     end
   end
 

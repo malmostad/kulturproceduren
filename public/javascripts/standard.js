@@ -29,6 +29,91 @@
         });
     });
 
+    $(function () {
+        if ($("#kp-group-selection-form").length > 0) {
+            /**
+             * Fetches schools by Ajax when choosing a district in the group selection fragment
+             */
+            $("#kp-group_selection-district_id").change(function() {
+                var districtId = $("#kp-group_selection-district_id option:selected").val();
+
+                $("#kp-group_selection-district_id").parent().append('<div class="load-indicator"></div>');
+
+                $("#kp-group_selection-school_id").attr("disabled", "disabled");
+                $("#kp-group_selection-group_id").html("<option>Välj skola först</option>").attr("disabled", "disabled");
+
+                var request = $.ajax({
+                    url: kpConfig.schools.list.url,
+                    data: { district_id: districtId },
+                    success: function(data) {
+                        $("#kp-group_selection-school_id").html(data).removeAttr("disabled");
+                    },
+                    error: function() {
+                        $("#kp-group_selection-school_id").html("<option>Välj stadsdel först</option>");
+                    },
+                    complete: function() {
+                        $("#kp-group-selection-form").trigger("districtSelected", [ districtId ]);
+                        $("#kp-group_selection-district_id").parent().find('.load-indicator').remove();
+                    }
+                });
+
+            });
+            /**
+             * Fetches groups by Ajax when choosing a school in the group selection fragment
+             */
+            $("#kp-group_selection-school_id").change(function() {
+                var schoolId = $("#kp-group_selection-school_id option:selected").val();
+
+                $("#kp-group_selection-school_id").parent().append('<div class="load-indicator"></div>');
+                $("#kp-group_selection-group_id").attr("disabled", "disabled");
+
+                var request = $.ajax({
+                    url: kpConfig.groups.list.url,
+                    data: { school_id: schoolId },
+                    success: function(data, textStatus) {
+                        $("#kp-group_selection-group_id").html(data).removeAttr("disabled");
+                    },
+                    error: function() {
+                        $("#kp-group_selection-group_id").html("<option>Välj skola först</option>");
+                    },
+                    complete: function() {
+                        $("#kp-group_selection-school_id").parent().find('.load-indicator').remove();
+                        $("#kp-group-selection-form").trigger("schoolSelected", [ schoolId ]);
+                    }
+                });
+            });
+            /**
+             * Triggers the event groupSelected on the group selection fragment when selecting
+             * a group.
+             */
+            $("#kp-group_selection-group_id").change(function() {
+                var groupId = parseInt($("#kp-group_selection-group_id option:selected").val());
+                $("#kp-group-selection-form").trigger("groupSelected", [ groupId ])
+                $.get(kpConfig.groups.select.url, { group_id: groupId });
+            });
+        }
+    });
+
+    $(function() {
+        /**
+         * Listeners for group selection fragment events for the notification request form
+         */
+        $("#kp .notification-request-group-selection #kp-group-selection-form"
+        ).bind("groupSelected", function(e, groupId) {
+            if (!isNaN(groupId)) {
+                // Set the groupId in the form
+                $("#kp-notification_request-group_id").val(groupId);
+                $("#kp .notification-request-form input").removeAttr("disabled");
+            } else {
+                // Disable the form
+                $("#kp .notification-request-form input").attr("disabled", "disabled");
+            }
+        }).bind("districtSelected schoolSelected", function(e, id){
+            // Disable the form
+            $("#kp .notification-request-form input").attr("disabled", "disabled");
+        });
+    });
+
     $(function() {
         /**
          * Fetches schools by Ajax when choosing a district in the booking view.
@@ -95,65 +180,6 @@
         });
 
 
-        /**
-         * Fetches schools by Ajax when choosing a district in the notification request view.
-         */
-        $("#kp-notreq-district_id").change(function() {
-            var district_id = $("#kp-notreq-district_id option:selected").val();
-
-            $("#kp-notreq-district_id").parent().append('<div class="load-indicator"></div>');
-
-            $("#kp-notreq-school_id").attr("disabled", "disabled");
-            $("#kp-notification_request-group_id").html("<option>Välj skola först</option>").attr("disabled", "disabled");
-
-            var request = $.get(
-            kpConfig.schools.list.url,
-            {
-                district_id: district_id ,
-            },
-            function(data) {
-                $("#kp-notreq-school_id").html(data).removeAttr("disabled");
-                $("#kp-notreq-district_id").parent().find('.load-indicator').remove();
-            }
-            );
-
-        });
-        /**
-         * Fetches groups by Ajax when choosing a school in the notification request view.
-         */
-        $("#kp-notreq-school_id").change(function() {
-            var schoolId = $("#kp-notreq-school_id option:selected").val();
-
-            $("#kp-notreq-school_id").parent().append('<div class="load-indicator"></div>');
-            $("#kp-notification_request-group_id").attr("disabled", "disabled");
-
-            var request = $.get(
-            kpConfig.groups.list.url,
-            {
-                school_id: schoolId ,
-            },
-            function(data) {
-                $("#kp-notification_request-group_id").html(data).removeAttr("disabled");
-                $("#kp-notreq-school_id").parent().find('.load-indicator').remove();
-            });
-        });
-        /**
-         * Fetches the form by Ajax when choosing a group in the notification request view.
-         */
-        $("#kp-notification_request-group_id").change(function() {
-            var groupId = $("#kp-notification_request-group_id option:selected").val();
-            var occasionId = $("#kp-occasion_id").val();
-
-            $("#kp-notification_request-group_id").parent().append('<div class="load-indicator"></div>');
-
-            var request = $.get(
-            kpConfig.notreq.notreqInput.url,
-            { group_id: groupId },
-            function(data) {
-                $("#kp-notreq-input-area").html(data);
-                $("#kp-notification_request-group_id").parent().find('.load-indicator').remove();
-            });
-        });
 
 
         /**

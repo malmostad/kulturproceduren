@@ -214,67 +214,21 @@
 
     $(function() {
         /**
-         * Ajax functionality for fetching a district's schools when the chosen
-         * district is changed.
+         * Listeners for group selection fragment events for the allotment form
          */
-        $("#kp #kp-add_group_district_id").change(function() {
-            var val = parseInt($(this).val());
-
-            // Disable all subsequent fields when changing district
-            $("#kp #kp-add_group_school_id, #kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
-
-            if (!isNaN(val)) {
-                var field = $("#kp #kp-add_group_school_id");
-
-                field.parent().append('<div class="load-indicator"></div>');
-
-                field.load(
-                kpConfig.schools.list.url,
-                $.param({ 
-                    district_id: val
-                }),
-                function() {
-                    $("#kp #kp-add_group_school_id").removeAttr("disabled").
-                    parent().find('.load-indicator').remove();
-                });
-            }
-        });
-        /**
-         * Ajax functionality for fetching a school's groups when the
-         * chosen school is changed.
-         */
-        $("#kp #kp-add_group_school_id").change(function() {
-            var val = parseInt($(this).val());
-
-            // Disable all subsequent fields when changing school
-            $("#kp #kp-add_group_group_id, #kp #kp-add-group-submit").attr("disabled", "disabled");
-
-            if (!isNaN(val)) {
-                var field = $("#kp #kp-add_group_group_id");
-                field.parent().append('<div class="load-indicator"></div>');
-
-                field.load(
-                kpConfig.groups.list.url,
-                $.param({
-                    school_id: val
-                }),
-                function() {
-                    $("#kp #kp-add_group_group_id").removeAttr("disabled").
-                    parent().find('.load-indicator').remove();
-                });
-            }
-        });
-        /**
-         * Enables/disables the submit button when the selected group is changed.
-         */
-        $("#kp #kp-add_group_group_id").change(function() {
-            var val = parseInt($(this).val());
-
-            if (isNaN(val)) {
+        $("#kp .allotment-group-selection #kp-group-selection-form"
+        ).bind("groupSelected", function(e, groupId) {
+            if (isNaN(groupId)) {
+                // Disable the form
                 $("#kp #kp-add-group-submit").attr("disabled", "disabled");
             } else {
+                // Set the group id in the form
+                $("#kp #kp-add_group_group_id").val(groupId);
                 $("#kp #kp-add-group-submit").removeAttr("disabled");
             }
+        }).bind("districtSelected schoolSelected", function(e, id) {
+            // Disable the form
+            $("#kp #kp-add-group-submit").attr("disabled", "disabled");
         });
     });
 

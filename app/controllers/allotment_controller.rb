@@ -83,6 +83,7 @@ class AllotmentController < ApplicationController
 
   def distribute
     #     render(:text => "<pre>#{session[:allotment].to_yaml}</pre>") and return
+    load_group_selection_collections()
     @districts = load_working_districts()
 
     if session[:allotment][:extra_groups]
