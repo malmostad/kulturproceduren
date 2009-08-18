@@ -21,7 +21,11 @@
         <td><%= b["occasion"].date.to_s -%></td>
         <td><%= b["group"].booked_tickets_by_occasion(b["occasion"]) -%> biljetter bokade</td>
         <td>
-          <a href="<%= url_for :controller => "booking" , :action => "book" , :occasion_id =>  b["occasion"].id , :group_id => b["group"].id , :commit => "Välj grupp" -%>">Ändra bokning</a>
+          <%= link_to "Ändra bokning",
+            select_groups_path(
+              :group_id => b["group"].id,
+              :return_to => booking_path(b["occasion"].id)
+          ) %>
         </td>
         <td>
           <%= link_to "Avboka" , { :controller => "booking" , :action => "unbook" , :return_to => "show", :occasion_id =>  b["occasion"].id , :group_id => b["group"].id  } , :confirm => "Är du säker?" -%>

@@ -72,7 +72,6 @@ class BookingController < ApplicationController
     if params[:create_booking]
 
       @curgroup = Group.find(params[:group_id])
-
       load_vars
 
       if Ticket.count(:all , :conditions => { :group_id => @curgroup.id , :event_id => @occasion.event.id , :state => Ticket::BOOKED }) > 0
@@ -206,8 +205,10 @@ class BookingController < ApplicationController
 
       #TODO - return_to parameter
       redirect_to :controller => "booking" , :action => "show"
-    else
-      @curgroup = Group.find(session[:group_selection][:group_id]) if session[:group_selection][:group_id]
+    elsif session[:group_selection][:group_id]
+      @curgroup = Group.find(session[:group_selection][:group_id])
+      params[:group_id] = @curgroup.id
+      load_vars()
     end
 
   end
@@ -385,6 +386,7 @@ class BookingController < ApplicationController
         end
       end
     end
+
     redirect_to :controller => "booking" , :action => return_to , :group_id => @group.id
   end
 
