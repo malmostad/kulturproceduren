@@ -54,9 +54,10 @@ class DistrictsController < ApplicationController
 
 
   def select
-    session[:group_selection] = {}
-    session[:group_selection][:district_id] = params[:district_id].to_i
-
+    district = District.find params[:district_id]
+    session[:group_selection] = { :district_id => district.id }
+  rescue
+  ensure
     if request.xhr?
       render :text => "", :content_type => "text/plain"
     else

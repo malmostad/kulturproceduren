@@ -290,15 +290,17 @@
 #kp form.ldap-search-form label { width: 8em; }
 #kp form.ldap-search-form .input-container { padding-left: 8em; }
 /* Booking form */
-#kp form.booking-form .group-selector-container label { width: 16em; }
-#kp form.booking-form .group-selector-container .input-container { padding-left: 16em; }
+#kp .booking-group-selection label,
 #kp form.booking-form #kp-input-area label { width: 16em; }
+#kp .booking-group-selection .input-container,
 #kp form.booking-form #kp-input-area .input-container { padding-left: 16em; }
 /* Evaluation form */
 #kp form.evaluation-form label { width: 15em; }
 #kp form.evaluation-form .input-container { padding-left: 15em; }
 /* Notification request forms */
+#kp .notification-request-group-selection label,
 #kp form.notification-request-group-form label { width: 8em; }
+#kp .notification-request-group-selection .input-container,
 #kp form.notification-request-form .post-label-form-row,
 #kp form.notification-request-group-form .input-container { padding-left: 8em; }
 
@@ -501,11 +503,16 @@
 #kp .privileges-cnt ul li { margin: 0.5em 0; }
 
 /*** Booking ***/
-#kp .booking-form .group-selector-container,
+#kp .booking-group-selection,
 #kp .booking-form .booking-seats-container { position: relative; }
 #kp .booking-form #kp-booking-count { position: absolute; top: 1em; left: 40em; }
-#kp .booking-form .notification-request-info { position: absolute; top: 0.5em; left: 40em; width: 20em; }
-#kp .booking-form .notification-request-info p { margin: 0; }
+#kp .booking-group-selection .notification-request-info {
+    position: absolute;
+    top: 3em;
+    left: 40em;
+    width: 20em;
+}
+#kp .booking-group-selection .notification-request-info p { margin: 0; }
 
 /*** Role application ***/
 #kp .role-application-specification dt { width: 8em; }

@@ -33,8 +33,8 @@
         <td> <%= h group.name -%> </td>
         <td> <%= h group.companion_by_occasion(@occasion).name -%> </td>
         <td> <%= h group.companion_by_occasion(@occasion).tel_nr -%> </td>
-        <td> <%= h group.ntickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
-        <td> <%= h group.ntickets_by_occasion(@occasion,Ticket::BOOKED, true) -%> </td>
+        <td> <%= h group.available_tickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
+        <td> <%= h group.available_tickets_by_occasion(@occasion,Ticket::BOOKED, true) -%> </td>
         <% if current_user.has_role?(:host, :admin) -%>
           <td> <%= @booking_reqs.select { |b| b.group_id == group.id }.map { |b| b.requirement.to_s + "<br/>" } -%></td>
         <% end %>

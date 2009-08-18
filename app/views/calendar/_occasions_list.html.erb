@@ -49,7 +49,7 @@ category_groups ||= []
         <td class="booking">
           <% if occasion.event.bookable? %>
             <% if user_online? && current_user.can_book? -%>
-              <%= link_to "Boka", :controller => "booking", :action => "book", :occasion_id => occasion.id %>
+              <%= link_to "Boka", booking_path(occasion.id) %>
             <% else -%>
               Logga in för att boka
             <% end -%>

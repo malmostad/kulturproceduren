@@ -10,25 +10,37 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def load_group_selection_collections
+  def load_group_selection_collections(occasion = nil)
     session[:group_selection] ||= {}
 
-    @group_selection_collections = {
+    gsc = {
       :districts => District.find(:all, :order => "name")
     }
 
     if session[:group_selection][:district_id]
-      @group_selection_collections[:schools] = School.find(
+      gsc[:schools] = School.find(
         :all,
         :order => "name",
         :conditions => { :district_id => session[:group_selection][:district_id] })
     end
 
     if session[:group_selection][:school_id]
-      @group_selection_collections[:groups] = Group.find(
+      gsc[:groups] = Group.find(
         :all,
         :order => "name",
         :conditions => { :school_id => session[:group_selection][:school_id] })
+    end
+
+    if occasion
+      @group_selection_collections = {}
+
+      gsc.each_pair do |key, coll|
+        @group_selection_collections[key] = coll.select do |i|
+          i.available_tickets_by_occasion(occasion) > 0
+        end
+      end
+    else
+      @group_selection_collections = gsc
     end
   end
 

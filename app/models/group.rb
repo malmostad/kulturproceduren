@@ -44,7 +44,7 @@ class Group < ActiveRecord::Base
         :state => Ticket::BOOKED
       })
   end
-  def ntickets_by_occasion(o, state=Ticket::UNBOOKED, wheelchair=false)
+  def available_tickets_by_occasion(o, state=Ticket::UNBOOKED, wheelchair=false)
 
     if o.is_a? Integer
       o = Occasion.find(o)

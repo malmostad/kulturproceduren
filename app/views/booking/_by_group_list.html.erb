@@ -32,7 +32,7 @@ occasion ||= nil
           <td><%= h group.name  -%></td>
           <td><%= h o.event.name -%></td>
           <td><%= h o.date.to_s -%></td>
-          <td><%= group.ntickets_by_occasion(o,Ticket::BOOKED) -%> biljetter bokade</td>
+          <td><%= group.available_tickets_by_occasion(o,Ticket::BOOKED) -%> biljetter bokade</td>
           <td>
             <a href="<%= url_for :controller => "booking" , :action => "book" , :occasion_id =>  o.id , :group_id => group.id , :commit => "Välj grupp" -%>">Ändra bokning</a>
           </td>

@@ -1,3 +1,5 @@
+<% occasion ||= nil %>
+
 <fieldset id="kp-group-selection-form" class="form-fieldset">
   <legend><span>Välj grupp</span></legend>
 
@@ -6,7 +8,8 @@
 
     <div class="input-container">
       <% form_tag({ :controller => "districts", :action => "select" }) do %>
-        <%= hidden_field_tag "return_to", url_for(:overwrite_params => {}, :only_path => false) %>
+        <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+        <%= hidden_field_tag("occasion_id", occasion.id) if occasion  %>
 
         <%= select_tag(
           "district_id",
@@ -28,7 +31,8 @@
     <div class="input-container">
       <% if @group_selection_collections[:schools] %>
         <% form_tag({ :controller => "schools", :action => "select" }) do %>
-          <%= hidden_field_tag "return_to", url_for(:overwrite_params => {}, :only_path => false) %>
+          <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+          <%= hidden_field_tag("occasion_id", occasion.id) if occasion %>
 
           <%= select_tag(
             "school_id",
@@ -58,12 +62,34 @@
     <div class="input-container">
       <% if @group_selection_collections[:groups] %>
         <% form_tag({ :controller => "groups", :action => "select" }) do %>
-          <%= hidden_field_tag "return_to", url_for(:overwrite_params => {}, :only_path => false) %>
+          <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+
+          <%
+            if occasion
+          %>
+          <%= hidden_field_tag("occasion_id", occasion.id) %>
+          <%
+            opts = options_for_select(
+              @group_selection_collections[:groups].map { |g|
+              [
+                g.name + (occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.available_tickets_by_occasion(occasion)} biljetter)" : ""),
+                g.id
+              ]
+            },
+              session[:group_selection][:group_id]
+            )
+            else
+              opts = options_from_collection_for_select(
+                @group_selection_collections[:groups],
+                :id,
+                :name,
+                session[:group_selection][:group_id])
+            end
+          %>
 
           <%= select_tag(
             "group_id",
-            "<option>Välj grupp</option>" +
-            options_from_collection_for_select(@group_selection_collections[:groups], :id, :name, session[:group_selection][:group_id]),
+            "<option>Välj grupp</option>" + opts,
             { :id => "kp-group_selection-group_id" })
           %>
 

@@ -267,8 +267,8 @@ class OccasionsController < ApplicationController
         row["group"]   = (g.school.name.to_s + " - " + g.name.to_s).to_iso
         row["comp"]    = g.companion_by_occasion(@occasion).name.to_iso
         row["comptel"] = g.companion_by_occasion(@occasion).tel_nr.to_s.to_iso
-        row["att"]     = g.ntickets_by_occasion(@occasion,Ticket::BOOKED).to_s.to_iso
-        row["wheel"]   = g.ntickets_by_occasion(@occasion,Ticket::BOOKED,true).to_s.to_iso
+        row["att"]     = g.available_tickets_by_occasion(@occasion,Ticket::BOOKED).to_s.to_iso
+        row["wheel"]   = g.available_tickets_by_occasion(@occasion,Ticket::BOOKED,true).to_s.to_iso
         row["req"]     = @booking_reqs.select { |b| b.group_id == g.id }.map { |b| (b.requirement.to_s + "\n").to_iso  }
         row["pres"]    = " ".to_iso
         data << row

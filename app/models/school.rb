@@ -71,7 +71,7 @@ class School < ActiveRecord::Base
     school_prio.save!
   end
 
-  def available_tickets_per_occasion(o)
+  def available_tickets_by_occasion(o)
     if o.is_a? Integer
       o = Occasion.find(o)
     end
@@ -81,7 +81,7 @@ class School < ActiveRecord::Base
     retval = 0
     case o.event.ticket_state
     when Event::ALLOTED_GROUP
-      self.groups.each { |g| retval += g.ntickets_by_occasion(o) }
+      self.groups.each { |g| retval += g.available_tickets_by_occasion(o) }
     when Event::ALLOTED_DISTRICT
       retval =  Ticket.count(
         :conditions => {
@@ -98,7 +98,7 @@ class School < ActiveRecord::Base
         }
       )
     end
-    puts "Schools#available_tickets_per_occasion returning retval = #{retval}"
+    puts "Schools#available_tickets_by_occasion returning retval = #{retval}"
     return retval
   end
   

@@ -20,7 +20,7 @@ class District < ActiveRecord::Base
 
   attr_accessor :num_children, :num_tickets, :distribution_schools
 
-  def available_tickets_per_occasion(o)
+  def available_tickets_by_occasion(o)
     if o.is_a? Integer
       o = Occasion.find(o)
     end

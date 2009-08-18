@@ -56,6 +56,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.calendar 'calendar/:action/:list', :controller => 'calendar'
 
+  map.booking 'booking/book/:occasion_id', :controller => 'booking', :action => 'book'
+
   map.answer_questionaire 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'submit'
   map.question_graph 'questions/:question_id/graph/:occasion_id' , :controller => 'questions' , :action => 'stat_graph'
 

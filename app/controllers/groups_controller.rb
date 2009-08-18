@@ -63,8 +63,14 @@ class GroupsController < ApplicationController
 
 
   def select
-    session[:group_selection][:group_id] = params[:group_id].to_i
-
+    group = Group.find params[:group_id], :include => :school
+    session[:group_selection] = {
+      :district_id => group.school.district_id,
+      :school_id => group.school.id,
+      :group_id => group.id
+    }
+  rescue
+  ensure
     if request.xhr?
       render :text => "", :content_type => "text/plain"
     else
@@ -85,14 +91,18 @@ class GroupsController < ApplicationController
 
     if school_id > 0
       conditions[:school_id] = school_id
-      session[:group_selection] = { :district_id => session[:group_selection][:district_id] }
-      session[:group_selection][:school_id] = school_id
+
+      school = School.find params[:school_id]
+      session[:group_selection] = {
+        :district_id => school.district_id,
+        :school_id => school.id
+      }
     end
 
     if occasion_id > 0
       @occasion = Occasion.find params[:occasion_id]
       @groups = Group.find(:all, :conditions => conditions).select { |g|
-        g.ntickets_by_occasion(@occasion) > 0
+        g.available_tickets_by_occasion(@occasion) > 0
       }
     else
       @groups = Group.all :order => "name ASC", :conditions => conditions

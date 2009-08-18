@@ -20,12 +20,12 @@
   <% if group && occasion.event.ticket_state != Event::FREE_FOR_ALL %>
     <p class="message response">
       <strong><%= h group.school.name %>, <%= h group.name %></strong>
-      har <strong><%= group.ntickets_by_occasion(occasion) -%></strong>
+      har <strong><%= group.available_tickets_by_occasion(occasion) -%></strong>
       biljetter tillgängliga för bokning.
     </p>
   <% end %>
 
-  <% if group.ntickets_by_occasion(occasion) == 0 && ( not edit ) %>
+  <% if group.available_tickets_by_occasion(occasion) == 0 && !edit %>
     <p class="message alert">
       Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
       <a href="#">Klicka här</a> om du vill få ett meddelande om biljetter blir tillgängliga senare.
@@ -143,8 +143,8 @@
     </fieldset>
 
     <div class="form-buttons">
-      <%= edit.blank? ? submit_tag("Boka") : submit_tag("Ändra bokning") %>
-      <%= submit_tag("Börja om") -%>
+      <%= hidden_field_tag 'group_id' , group.id %>
+      <%= edit.blank? ? submit_tag("Boka", :name => "create_booking") : submit_tag("Ändra bokning", :name => "update_booking") %>
     </div>
 
   <% end %>

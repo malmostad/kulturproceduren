@@ -15,162 +15,62 @@
 
 %>
 
-<% puts "Errors = " %>
-<% pp @errors %>
-<% puts "asdf = #{@errors.keys.length}" %>
+<h2 class="form-title">
+  Boka biljetter för
+  <%= link_to h(@occasion.event.name), @occasion.event -%>,
+  föreställningen <%= h @occasion.date -%>
+</h2>
 
-<%#
+<% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
+  <p class="message response">
+    Det finns totalt
+    <%= [
+      Ticket.count(:conditions => { :event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ),
+      ( @occasion.seats - Ticket.count(:conditions => { :occasion_id => @occasion.id, :state => Ticket::BOOKED} ) )
+    ].sort.first -%>
+    biljetter tillgängliga för bokning.
+  </p>
+<% end %>
 
-  <div class="form-row name-field-row validation-error " style="">
-  <label for="kp-category-name">Namn</label>
-  <div class="input-container">
-  <input id="kp-category-name" name="category[name]" size="30" type="text" value="" />
+<div class="booking-group-selection">
+  <%= render :partial => "shared/group_selection", :locals => { :occasion => @occasion } %>
+
+  <div class="notification-request-info">
+    <p>
+      Hittar du inte din grupp?
+    </p>
+    <p>
+      <%= link_to "Klicka här", new_occasion_notification_request_path(@occasion) %>
+      för att få ett meddelande när biljetter blir tillgängliga.
+    </p>
   </div>
-  <span class="validation-error-message">Namnet får inte vara tomt</span>
-  </div>
 
-%>
+</div>
 
 <% form_tag({ :controller => "booking", :action => "book" }, { :class => "booking-form" }) do -%>
-  <h2>
-    Boka biljetter för
-    <%= link_to h(@occasion.event.name), @occasion.event -%>,
-    föreställningen <%= h @occasion.date -%>
-  </h2>
-
-  <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
-    <p class="message response">
-      Det finns totalt
-      <%= [
-        Ticket.count(:conditions => { :event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ),
-        ( @occasion.seats - Ticket.count(:conditions => { :occasion_id => @occasion.id, :state => Ticket::BOOKED} ) )
-      ].sort.first -%>
-      biljetter tillgängliga för bokning.
-    </p>
-  <% end %>
-
-  <% if @errors.keys.length > 0 %>
-    <div class="validation-error-indicator"> Vänligen korrigera markerade uppgifter nedan.</div>
-  <% end %>
-
   <fieldset>
+
+    <% if @errors.keys.length > 0 %>
+      <div class="validation-error-indicator alert"> Vänligen korrigera markerade uppgifter nedan.</div>
+    <% end %>
+
     <%= hidden_field_tag 'occasion_id' , @occasion.id %>
 
-    <fieldset class="group-selector-container">
-
-      <div class="form-row district_id-field-row">
-        <%= label_tag "district_id" , "Välj stadsdel:"%>
-
-        <div class="input-container">
-          <%
-            opt_tag = "<option>Välj Stadsdel</option>"
-            opt_tag += options_for_select(
-              @districts.collect { |d|
-              [d.name + ( @occasion.event.ticket_state == Event::ALLOTED_DISTRICT ? " (#{d.available_tickets_per_occasion(@occasion)} biljetter)" : "" ), d.id.to_s ]
-            }, params[:district_id].to_s
-            )
-          %>
-
-          <%= select_tag "district_id", opt_tag %>
-
-          <% if state == :no_selection %>
-            <noscript>
-              <input name="commit" type="submit" value="Hämta skolor" />
-            </noscript>
-          <% end %>
-
-        </div>
-      </div>
-
-      <div class="form-row school_id-field-row">
-        <%= label_tag "school_id" , "Välj skola:" %>
-
-        <div class="input-container">
-          <% if @schools.nil? %>
-            <select id="kp-school_id" name="school_id" disabled="disabled">
-              <option>Välj stadsdel först</option>
-            </select>
-          <% else %>
-            <select id="kp-school_id" name="school_id">
-              <%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]}, params[:school_id].to_s) %>
-            </select>
-          <% end %>
-
-          <% if state == :district_selected %>
-            <noscript>
-              <input name="commit" type="submit" value="Hämta grupper" />
-            </noscript>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="form-row group_id-field-row">
-        <%= label_tag "group_id" , "Välj grupp:"%>
-
-        <div class="input-container">
-          <% if @groups.nil? %>
-
-            <%  if @schools.nil?  %>
-              <select id="kp-group_id" name="group_id" disabled="disabled"><option>Välj stadsdel först</option></select>
-            <% else %>
-              <select id="kp-group_id" name="group_id" disabled="disabled"><option>Välj skola först</option></select>
-            <% end %>
-
-          <% else %>
-
-            <select id="kp-group_id" name="group_id" <%= @edit.blank? ? "" : 'disabled="disabled"' -%>>
-
-              <option>Välj grupp</option>
-              <% selected = @curgroup ? @curgroup.id : nil %>
-              <%= options_for_select(
-                @groups.map { |g|
-                [ g.name + (@occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.ntickets_by_occasion(@occasion)} biljetter)" : "") , g.id ]
-              }, (@curgroup ? @curgroup.id : nil)
-              ) %>
-            </select>
-            <% if not @edit.blank? %>
-              <%=  hidden_field_tag 'group_id' , @group.id %>
-            <% end %>
-          <% end %>
-
-          <% if params[:commit] == "Hämta grupper" or params[:commit] == "Välj grupp" && @curgroup.blank? %>
-            <noscript>
-              <input name="commit" type="submit" value="Välj grupp" />
-            </noscript>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="notification-request-info">
-        <p>
-          Hittar du inte din grupp?
-        </p>
-        <p>
-          <%= link_to "Klicka här", new_occasion_notification_request_path(@occasion) %>
-          för att få ett meddelande när biljetter blir tillgängliga.
-        </p>
-      </div>
-    </fieldset>
-    <%
-
-      puts "Debugg3ri"
-      puts "edit = #{@edit}"
-      puts "commit = #{params[:commit]}"
-
-    %>
     <div id="kp-input-area">
-      <% if ( params[:commit] == "Välj grupp" )  or @edit %>
-        <%= render(:partial => "input_area" ,
-                   :locals => {
-          :group => @curgroup ,
-          :occasion => @occasion ,
-          :companion => @companion ,
-          :nticks => @nticks ,
-          :naticks => @naticks ,
-          :nwticks => @nwticks ,
-          :br => @br ,
+      <% if session[:group_selection][:group_id] || @edit %>
+
+        <%= render :partial => "input_area",
+          :locals => {
+          :group => @curgroup,
+          :occasion => @occasion,
+          :companion => @companion,
+          :nticks => @nticks,
+          :naticks => @naticks,
+          :nwticks => @nwticks,
+          :br => @br,
           :edit => @edit
-        }) %>
+        } %>
+
       <% end %>
     </div>
 
