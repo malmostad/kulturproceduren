@@ -282,7 +282,7 @@
                 }
             };
 
-            $("#kp-booking-count").html("Du har bokat sammanlagt " + String(sum) + " biljetter.");
+            $("#kp-booking-count").html("<span>Du har angett totalt " + String(sum) + " biljetter.</span>");
         };
 
         $("#kp-input-area").change(changeHandler);

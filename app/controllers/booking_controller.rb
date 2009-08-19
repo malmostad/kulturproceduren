@@ -208,7 +208,7 @@ class BookingController < ApplicationController
     elsif session[:group_selection][:group_id]
       @curgroup = Group.find(session[:group_selection][:group_id])
       params[:group_id] = @curgroup.id
-      load_vars()
+      load_vars(false)
     end
 
   end
@@ -392,7 +392,7 @@ class BookingController < ApplicationController
 
   private
 
-  def load_vars
+  def load_vars(validate = true)
     begin
       @group = Group.find(params[:group_id])
       @occasion = Occasion.find(params[:occasion_id])
@@ -421,18 +421,18 @@ class BookingController < ApplicationController
     @br.group = @curgroup
     @br.requirement = params[:booking_request]
 
-    if params[:companion_telnr].blank?
+    if validate && params[:companion_telnr].blank?
       @errors["companion_telnr"] = "Du måste ange telefonnummer för medföljande vuxen"
     end
 
     @companion.tel_nr = params[:companion_telnr]
 
-    if params[:companion_email].blank?
+    if validate && params[:companion_email].blank?
       @errors["companion_email"] = "Du måste ange epostaddress för medföljande vuxen"
     end
     @companion.email = params[:companion_email]
 
-    if params[:companion_name].blank?
+    if validate && params[:companion_name].blank?
       @errors["companion_name"] = "Du måste ange namn för medföljande vuxen"
     end
     
