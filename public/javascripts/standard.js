@@ -141,114 +141,24 @@
             // Disable the form
             $("#kp .notification-request-form input").attr("disabled", "disabled");
         });
-    });
-
-    $(function() {
+        
         /**
-         * Fetches schools by Ajax when choosing a district in the booking view.
+         * Listeners for group selection fragment events for the group bookings listing
          */
-        $("#kp-district_id").change(function() {
-            var district_id = $("#kp-district_id option:selected").val();
-            var occasion_id = $("#kp-occasion_id").val();
-
-            $("#kp-district_id").parent().append('<div class="load-indicator"></div>');
-
-            $("#kp-school_id").attr('disabled', 'disabled');
-            $("#kp-group_id").html("<option>Välj skola först</option>").attr('disabled', 'disabled');
-
-            var request = $.get(
-            kpConfig.schools.list.url,
-            {
-                district_id: district_id,
-                occasion_id: occasion_id
-            },
-            function(data) {
-                $("#kp-school_id").html(data).removeAttr("disabled");
-                $("#kp-district_id").parent().find('.load-indicator').remove();
-            });
-        });
-        /**
-         * Fetches groups by Ajax when choosing a school in the booking view.
-         */
-        $("#kp-school_id").change(function() {
-            var schoolId = $("#kp-school_id option:selected").val();
-            var occasion_id = $("#kp-occasion_id").val();
-
-            $("#kp-school_id").parent().append('<div class="load-indicator"></div>');
-            $("#kp-group_id").attr('disabled', 'disabled');
-
-            var request = $.get(
-            kpConfig.groups.list.url,
-            {
-                school_id: schoolId ,
-                occasion_id: occasion_id
-            }, function(data) {
-                $("#kp-group_id").html(data).removeAttr("disabled");
-                $("#kp-school_id").parent().find('.load-indicator').remove();
-            });
-        });
-        /**
-         * Fetches the form by Ajax when choosing a group in the booking view.
-         */
-        $("#kp-group_id").change(function() {
-        });
-
-        /**
-         * Fetches schools by Ajax when choosing a district in the booking list view.
-         */
-        $("#kp-by_group_district_id").change(function() {
-            var district_id = $("#kp-by_group_district_id option:selected").val();
-            var request = $.get(
-            kpConfig.schools.list.url,
-            {
-                district_id: district_id
-            },
-            function(data) {
-                $("#kp-by_group_school_id").html(data);
+        $("#kp .group-bookings-group-selection #kp-group-selection-form"
+        ).bind("groupSelected", function(e, groupId) {
+            if (!isNaN(groupId)) {
+                // Load the group booking list
+                var request = $.get(kpConfig.by_group.byGroupList.url,
+                { group_id: groupId },
+                function(data) {
+                    $("#kp-booking-by-group").html(data);
+                });
+            } else {
+                $("#kp-booking-by-group").html("");
             }
-            );
-            var request2 = $.get(
-            kpConfig.by_group.byGroupList.url,
-            { },
-            function(data) {
-                $("#kp-booking-by-group").html(data);
-            });
-            $("#kp-school_id").removeAttr('disabled');
-            $("#kp-by_group_group_id").html("<option>Välj skola först</option>");
-        });
-        /**
-         * Fetches groups by Ajax when choosing a school in the booking list view.
-         */
-        $("#kp-by_group_school_id").change(function() {
-            var schoolId = $("#kp-by_group_school_id option:selected").val();
-            var request = $.get(
-            kpConfig.groups.list.url,
-            {
-                school_id: schoolId
-            }, function(data) {
-                $("#kp-by_group_group_id").html(data);
-            });
-            var request2 = $.get(
-            kpConfig.by_group.byGroupList.url,
-            { },
-            function(data) {
-                $("#kp-booking-by-group").html(data);
-            });
-
-        });
-        /**
-         * Fetches the booking list by Ajax when choosing a group in the booking list view.
-         */
-        $("#kp-by_group_group_id").change(function() {
-            var groupId = $("#kp-by_group_group_id option:selected").val();
-            var request = $.get(
-            kpConfig.by_group.byGroupList.url,
-            {
-                group_id: groupId
-            },
-            function(data) {
-                $("#kp-booking-by-group").html(data);
-            });
+        }).bind("districtSelected schoolSelected", function(e, id){
+            $("#kp-booking-by-group").html("");
         });
     });
 

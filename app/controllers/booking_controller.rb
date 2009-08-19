@@ -313,42 +313,24 @@ class BookingController < ApplicationController
 
   def by_group
     @user = current_user
+    load_group_selection_collections()
 
     begin
-      @group = Group.find(params[:by_group_group_id])
+      @group = Group.find(session[:group_selection][:group_id])
     rescue ActiveRecord::RecordNotFound
       #Fall through and render default screen.....
     end
 
     if !@group.blank?
-      load_vars()
-
-      begin
-        oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
-        unless oids.blank?
-          @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
-          pp @occasions
-        else
-          @occasions = []
-        end
-        params[:by_group_district_id] = @group.school.district.id
-        @schools = School.find :all , :conditions => { :district_id => @group.school.district.id }
-        @groups  = Group.find :all , :conditions => { :school_id => @group.school.id }
-        @curgroup = Group.find(params[:group_id])
-
-        @bookings = {}
-        @bookings["#{@group.id}"] = @occasions
-        pp @bookings
-        #TODO : rescue
+      oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
+      unless oids.blank?
+        @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
+      else
+        @occasions = []
       end
 
-    elsif not ( params[:school_id].blank? or params[:school_id] == "Välj stadsdel först" or params[:school_id] == "Hämta grupper" )
-      @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
-      @groups  = Group.find :all , :conditions => { :school_id => params[:school_id] }
-    elsif not ( params[:by_group_district_id].blank? or params[:by_group_district_id] == "Välj stadsdel först" )
-      @schools = School.find :all , :conditions => { :district_id => params[:by_group_district_id] }
-    else
-      params[:commit] = "inge bra"
+      @bookings = {}
+      @bookings["#{@group.id}"] = @occasions
     end
   end
 

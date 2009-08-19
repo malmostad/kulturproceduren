@@ -303,6 +303,9 @@
 #kp .notification-request-group-selection .input-container,
 #kp form.notification-request-form .post-label-form-row,
 #kp form.notification-request-group-form .input-container { padding-left: 8em; }
+/* Booking listing form */
+#kp .group-bookings-group-selection label { width: 7em; }
+#kp .group-bookings-group-selection .input-container { margin-left: 7em; }
 
 /*** Models ***/
 

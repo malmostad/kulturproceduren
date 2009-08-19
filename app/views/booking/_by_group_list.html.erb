@@ -4,11 +4,11 @@ occasion ||= nil
 %>
 
 <% if group.blank? %>
-  <p>
+  <p class="message alert">
     Ingen grupp vald
   </p>
 <% elsif occasions.blank? %>
-  <p>
+  <p class="message alert">
     Inga bokningar för vald grupp
   </p>
 <% else %>
@@ -34,10 +34,13 @@ occasion ||= nil
           <td><%= h o.date.to_s -%></td>
           <td><%= group.available_tickets_by_occasion(o,Ticket::BOOKED) -%> biljetter bokade</td>
           <td>
-            <a href="<%= url_for :controller => "booking" , :action => "book" , :occasion_id =>  o.id , :group_id => group.id , :commit => "Välj grupp" -%>">Ändra bokning</a>
+            <%= link_to "Ändra bokning", booking_path(o.id) %>
           </td>
           <td>
-            <%= link_to "Avboka" , { :controller => "booking" , :action => "unbook" ,  :occasion_id =>  o.id , :group_id => group.id  } , :confirm => "Är du säker?" -%>
+            <%= link_to "Avboka",
+              { :controller => "booking", :action => "unbook",  :occasion_id => o.id, :group_id => group.id },
+              :confirm => "Är du säker?"
+            -%>
           </td>
         </tr>
       <% end %>

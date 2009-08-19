@@ -1,99 +1,12 @@
 <%= render :partial => "menu" -%>
 
-<form method="post" action="<% url_for :controller => "booking", :action => "by_group" %>">
-
-  <fieldset>
-    <legend><span>Visa bokningar för grupp</span></legend>
-
-    <dl class="form-elements">
-    <dt>
-      <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-      <%= label_tag "district_id" , "Välj Stadsdel:"%>
-    </dt>
-    <dd>
-      <div id="kp-district-id-cnt">
-        <%
-
-        if params[:by_group_district_id].nil?
-          opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } )
-        else
-          my_d = District.find(params[:by_group_district_id].to_i)
-          opt_tag = options_for_select( District.all.collect { |d| [d.name , d.id.to_s] } , my_d.id.to_s )
-        end
-        opt_tag = "<option>Välj Stadsdel</option>\n" + opt_tag
-      %>
-
-        <% if @schools.blank? %>
-          <%= select_tag("by_group_district_id",opt_tag) %>
-        <% else  %>
-          <%= select_tag("by_group_district_id",opt_tag, :disabled => true ) %>
-          <input type="hidden" name="by_group_district_id" value="<%= params[:by_group_district_id] -%>">
-        <% end %>
-        <noscript>
-
-          <% if params[:commit] != "Hämta skolor" and params[:commit] != "Hämta grupper" and params[:commit] != "Välj grupp" %>
-            <input name="commit" type="submit" value="Hämta skolor" /><br/>
-          <% end %>
-        </noscript>
-      </div>
-    </dd>
-
-    <dt><%= label_tag "school_id" , "Välj Skola:" %></dt>
-    <dd>
-      <div id="kp-school-id-cnt">
-        <% if @schools.nil? %>
-          <select id="kp-by_group_school_id" name="school_id"><option>Välj stadsdel först</option></select>
-        <% else %>
-          <%  if params[:school_id].nil? or params[:school_id].to_i == 0 %>
-            <select id="kp-by_group_school_id" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} ) %></select>
-          <% else %>
-            <select id="kp-by_group_school_id" disabled="true" name="school_id"><%= options_for_select(@schools.collect { |s| [ s.name , s.id.to_s ]} , School.find(params[:school_id]).id.to_s ) %></select>
-            <input type="hidden" name="school_id" value="<%= params[:school_id] -%>">
-          <% end %>
-        <% end %>
-        <noscript>
-          <% if params[:commit] == "Hämta skolor" %>
-            <input name="commit" type="submit" value="Hämta grupper" /> <%= link_to "Börja om" , :controller => "booking" , :action=> "by_group" -%><br/>
-          <% end %>
-        </noscript>
-      </div>
-    </dd>
-
-    <dt><%= label_tag "group_id" , "Välj Grupp:"%></dt>
-    <dd>
-      <div id="kp-group-id-cnt">
-        <% if @groups.nil? %>
-
-          <%  if @schools.nil?  %>
-            <select id="kp-by_group_group_id" name="group_id"><option>Välj stadsdel först</option></select>
-          <% else %>
-            <select id="kp-by_group_group_id" name="group_id"><option>Välj skola först</option></select>
-          <% end %>
-
-        <% else %>
-
-          <%  if @group.nil? %>
-            <select id="kp-by_group_group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name %>
-          <% else %>
-            <select id="kp-by_group_group_id" name="group_id"> <option>Välj grupp</option> <%= options_from_collection_for_select @groups, :id, :name  , @group.id  %>
-            <% end %>
-          </select>
-
-        <% end %>
-
-        <noscript>
-          <% if ( @group.blank? and params[:commit] == "Hämta grupper") or not @group.blank? %>
-            <input name="commit" type="submit" value="Välj grupp" /> <%= link_to "Börja om" , :controller => "booking" , :action=> "by_group" -%><br/>
-          <% end %>
-        </noscript>
-      </div>
-    </dd>
-  </fieldset>
-</form>
+<div class="group-bookings-group-selection">
+  <%= render :partial => "shared/group_selection" %>
+</div>
 
 <div id="kp-booking-by-group">
 
-  <% if not ( @group.blank? or @occasions.blank? ) %>
+  <% if !@group.blank? || @occasions.blank? %>
     <%= render :partial => "by_group_list" ,
       :locals => {
       :occasions => @occasions ,
