@@ -1,9 +1,18 @@
 require 'ldap'
-require 'pp'
 
+# Model responsible for managing the LDAP connection from the application
+#
+# The search methods in this class all return the same result structure,
+# a hash with the following keys:
+#
+# [+:name+] The name in the LDAP entry
+# [+:email+] The email address in the LDAP entry
+# [+:cellphone+] The cellphone number in the LDAP entry
+# [+:username+] The username in the LDAP entry
 class KPLdapManager
   attr_accessor :max_results
 
+  # Creates a new manager posed to connect using the given arguments.
   def initialize(address, port, base_dn, bind_dn, bind_password)
     @address = address
     @port = port
@@ -13,6 +22,7 @@ class KPLdapManager
     @max_results = 0
   end
 
+  # Authenticates against the LDAP using the given username and password.
   def authenticate(username, password)
     connection.bind("uid=#{e(username)},#{@base_dn}", password) { |conn| }
     return username
@@ -20,6 +30,7 @@ class KPLdapManager
     return nil
   end
 
+  # Fetches details of the user with the given username from the LDAP.
   def get_user(username)
     ldapdata = nil
 
@@ -38,6 +49,13 @@ class KPLdapManager
     return ldapdata.nil? ? nil : entry_to_result(ldapdata)
   end
 
+  # Searches the LDAP for matches to the parameters.
+  #
+  # Parameters:
+  #
+  # [+:username+] adds a filter for the username
+  # [+:name+] adds a filter for the name
+  # [+:mail+] adds a filter for the email address
   def search(params)
     conditions = []
 
@@ -67,6 +85,7 @@ class KPLdapManager
     return result
   end
 
+  # Escapes a search conditions
   def self.escape(str)
     str.gsub(/([\\()*\x00])/, "\\\\\\1")
   end
@@ -74,16 +93,19 @@ class KPLdapManager
 
   private
 
+  # Creates a new connection using the initialization parameters
   def connection
     conn = LDAP::Conn.new(@address, @port)
     conn.set_option(LDAP::LDAP_OPT_SIZELIMIT, @max_results) if @max_results > 0
     return conn
   end
 
+  # Shorthand convenience method for escaping search conditions
   def e(str)
     KPLdapManager.escape(str)
   end
 
+  # Creates a result has from an entry returned from an LDAP query.
   def entry_to_result(entry)
     return {
       :name => entry["cn"].join(' '),

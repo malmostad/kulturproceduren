@@ -5,6 +5,7 @@
 # [+:admin+] Administrators, full privileges
 # [+:booker+] Booking privileges, the user can book tickets for groups
 # [+:culture_worker+] Culture worker privileges, the user can administrate the profiles for specific culture providers
+# [+:host+] Host privileges, the user can handle the attendance lists on occasions
 class Role < ActiveRecord::Base
   has_and_belongs_to_many :users
   validates_presence_of   :name

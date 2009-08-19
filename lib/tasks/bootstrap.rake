@@ -1,3 +1,4 @@
+# Bootstrapping methods for the application
 namespace :kp do
 
   desc "Call all bootstrap tasks"
@@ -7,7 +8,9 @@ namespace :kp do
   end
 
   namespace :bootstrap do
-    desc "Create system roles if the do not exist"
+
+    # Creates all system roles required in the application
+    desc "Create system roles if they do not exist"
     task(:create_system_roles => :environment) do
       [:admin, :booker, :culture_worker, :host].each do |role|
         unless Role.find_by_symbol role
@@ -18,6 +21,7 @@ namespace :kp do
       end
     end
 
+    # Creates an administrator account in the application
     desc "Create admin account if it does not exist"
     task(:create_admin_account => :environment) do
       unless User.find_by_name "admin"
