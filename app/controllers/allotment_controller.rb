@@ -1,3 +1,5 @@
+# Controller for doing the allotment of tickets to groups for a specific
+# event
 class AllotmentController < ApplicationController
 
   layout "standard"
@@ -6,10 +8,14 @@ class AllotmentController < ApplicationController
   before_filter :require_admin
   before_filter :load_event
 
+  # Intializing view for the allotment process, displays a form
+  # for allotment parameters
   def init
     @districts = District.all :order => "name ASC"
   end
 
+  # Stores the allotment parameters in the session and redirects
+  # to the distribution view
   def assign_params
 
     session[:allotment] = {}
@@ -18,16 +24,20 @@ class AllotmentController < ApplicationController
     session[:allotment][:ticket_state] = params[:allotment][:ticket_state].to_i
 
     unless @event.tickets.empty?
+      # Add the number of tickets already assigned to an event
       session[:allotment][:num_tickets] += @event.tickets.size
       session[:allotment][:ticket_state] = @event.ticket_state
 
+      # Load the districts from the event
       session[:allotment][:district_ids] ||= []
       session[:allotment][:district_ids] = @event.districts.collect { |d| d.id.to_i }
 
+      # Load any extra groups from the event
       session[:allotment][:extra_groups] = @event.not_targeted_group_ids
     end
 
     unless params[:allotment][:district_ids].blank?
+      # Collect the selected districts ids and store them in the session
       ids = params[:allotment][:district_ids].collect { |id| id.to_i }
 
       if ids.include?(-1)
@@ -39,15 +49,19 @@ class AllotmentController < ApplicationController
     end
 
     if session[:allotment][:ticket_state] == Event::FREE_FOR_ALL
+      # If the selected ticket state is free for all, we don't need to do any
+      # distribution
       redirect_to :action => "create_free_for_all_tickets", :id => params[:id]
       return
     elsif @event.tickets.empty?
+      # Store the preliminary distribution in the session as the working distribution
       session[:allotment][:working_distribution] =
         get_preliminary_distribution(@event,
                                     load_working_districts(),
                                     session[:allotment][:num_tickets],
                                     session[:allotment][:ticket_state])
     else
+      # Store the existing distribution in the session as the working distribution
       session[:allotment][:working_distribution] =
         get_ticket_distribution(@event,
                                 load_working_districts(),
@@ -55,12 +69,11 @@ class AllotmentController < ApplicationController
                                 session[:allotment][:ticket_state])
     end
 
-#     render(:text => "<pre>#{session[:allotment].to_yaml}</pre>") and return
     redirect_to :action => "distribute", :id => params[:id]
   end
 
+  # Creates tickets that are in the free for all state
   def create_free_for_all_tickets
-#     render(:text => "<pre>#{session[:allotment].to_yaml}</pre>") and return
     @event.tickets.clear
 
     @event.ticket_release_date = session[:allotment][:release_date]
@@ -81,8 +94,8 @@ class AllotmentController < ApplicationController
     redirect_to @event
   end
 
+  # Renders a view for distributing the tickets
   def distribute
-    #     render(:text => "<pre>#{session[:allotment].to_yaml}</pre>") and return
     load_group_selection_collections()
     @districts = load_working_districts()
 
@@ -97,14 +110,16 @@ class AllotmentController < ApplicationController
                                                 session[:allotment][:ticket_state])
   end
 
+  # Creates tickets based on the current working distribution,
+  # or adds an extra group to the working data depending on the incoming
+  # submission
   def create_tickets
-
-    # render(:text => "<pre>#{params[:allotment].to_yaml}</pre>") and return
 
     assignment = {}
     params[:allotment][:ticket_assignment].each { |k,v| assignment[k.to_i] = v.to_i if v.to_i > 0 }
 
     if params[:create_tickets]
+      # Update the event
       @event.tickets.clear
 
       @event.ticket_release_date = session[:allotment][:release_date]
@@ -114,6 +129,7 @@ class AllotmentController < ApplicationController
       tickets_created = 0
 
       if session[:allotment][:ticket_state] == Event::ALLOTED_GROUP
+        # Assign the tickets to groups
         groups = Group.find assignment.keys, :include => { :school => :district }
         schools = []
 
@@ -137,6 +153,7 @@ class AllotmentController < ApplicationController
 
         schools.each { |s| s.move_last_in_prio }
       elsif session[:allotment][:ticket_state] == Event::ALLOTED_DISTRICT
+        # Assign the tickets to districts
         districts = District.find assignment.keys
 
         districts.each do |district|
@@ -155,7 +172,8 @@ class AllotmentController < ApplicationController
         end
       end
 
-      # Create extra tickets
+      # Create extra tickets for tickets that have not been assigned to a specific
+      # district or group
       tickets_created.upto(session[:allotment][:num_tickets] - 1) do
         ticket = Ticket.new do |t|
           t.event = @event
@@ -182,6 +200,7 @@ class AllotmentController < ApplicationController
 
   private
 
+  # Loads the working districts from the session
   def load_working_districts
     if session[:allotment][:district_ids]
       return District.find(session[:allotment][:district_ids], :order => "name ASC")
@@ -190,6 +209,7 @@ class AllotmentController < ApplicationController
     end
   end
 
+  # Load the current event
   def load_event
     begin
       @event = Event.find params[:id], :include => :culture_provider
@@ -205,6 +225,11 @@ class AllotmentController < ApplicationController
   end
 
 
+  # Assign the children count to the districts, schools and groups.
+  #
+  # This method counts the number of children in the target age span
+  # in the groups in the given districts, and then sums these amounts
+  # in the parent school and district
   def assign_children(event, districts)
     total_children = 0
 
@@ -231,6 +256,10 @@ class AllotmentController < ApplicationController
     return total_children
   end
 
+  # Assigns the working distribution from the session
+  #
+  # This stores the number of allotted tickets directly in the group objects,
+  # and the sum of allotted tickets is stored in the schools and districts
   def assign_working_distribution(event, districts, tickets, ticket_state)
     assign_children(event, districts)
     assigned_tickets = 0
@@ -270,7 +299,7 @@ class AllotmentController < ApplicationController
   end
 
 
-
+  # Creates a working distribution from the current ticket distribution on an event
   def get_ticket_distribution(event, districts, extra_group_ids, ticket_state)
     distribution = {}
     assign_children(event, districts)
@@ -301,6 +330,8 @@ class AllotmentController < ApplicationController
     return distribution
   end
 
+  # Creates a working distribution from a preliminary distribution based on
+  # the number of tickets and the number of children in each district
   def get_preliminary_distribution(event, districts, tickets, ticket_state)
     distribution = {}
 

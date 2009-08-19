@@ -1,15 +1,19 @@
+# Controller for managing age groups
 class AgeGroupsController < ApplicationController
   layout "admin"
 
   before_filter :authenticate
   before_filter :require_admin
 
+  # Renders the age group's group's view, since the age group administration
+  # is done entirely within its group's view.
   def edit
     @age_group = AgeGroup.find(params[:id])
     @group = @age_group.group
     render :template => "groups/show"
   end
   
+  # Any errors is rendered in the age group's group's view
   def create
     @age_group = AgeGroup.new(params[:age_group])
 
@@ -22,6 +26,7 @@ class AgeGroupsController < ApplicationController
     end
   end
 
+  # Any errors is rendered in the age group's group's view
   def update
     @age_group = AgeGroup.find(params[:id])
 

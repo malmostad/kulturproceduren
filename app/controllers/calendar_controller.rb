@@ -1,9 +1,11 @@
+# Controller for displaying the welcoming occasion/event calendar for the user
 class CalendarController < ApplicationController
 
   layout "standard"
 
   before_filter :set_list
   
+  # Displays a regular calendar for occasions/events without any search filter
   def index
     @category_groups = CategoryGroup.all :order => "name ASC"
     if @calendar_list == :events
@@ -13,6 +15,7 @@ class CalendarController < ApplicationController
     end
   end
 
+  # Displays a regular calendar for occasions/events with a search filter
   def filter
     if @calendar_list == :events
       @events = Event.search_standing(calendar_filter, params[:page])
@@ -22,6 +25,7 @@ class CalendarController < ApplicationController
     @category_groups = CategoryGroup.all :order => "name ASC"
   end
 
+  # Stores the search parameters from the calendar filter in the session
   def apply_filter
     if params[:clear_filter]
       session[:calendar_filter] = { :from_date => Date.today }
@@ -51,6 +55,7 @@ class CalendarController < ApplicationController
     redirect_to :action => "filter", :list => @calendar_list
   end
 
+  # Removes all search parameters from the session
   def clear_filter
     session[:calendar_filter] = { :from_date => Date.today }
     redirect_to :action => "filter", :list => @calendar_list
@@ -59,6 +64,7 @@ class CalendarController < ApplicationController
 
   protected
 
+  # Convenience accessor for the calendar filter in the session
   def calendar_filter
     session[:calendar_filter] ||= { :from_date => Date.today }
     session[:calendar_filter]
@@ -68,10 +74,12 @@ class CalendarController < ApplicationController
 
   private
 
+  # Sets the list to used based on the incoming list parameter
   def set_list
     @calendar_list = params[:list] == 'events' ? :events : :occasions
   end
 
+  # Parses a date from a string, returning nil if the date is not of the correct format
   def parse_date(date_str)
     if date_str =~ /^\d{4}-\d{2}-\d{2}$/
       return Date.parse(date_str)

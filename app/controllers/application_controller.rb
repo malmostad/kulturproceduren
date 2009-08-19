@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # Loads the appropriate data for the group selection fragment
+  #
+  # If occasion is given, the data is restricted to districts/schools/groups
+  # that have tickets on the given occasion
   def load_group_selection_collections(occasion = nil)
     session[:group_selection] ||= {}
 
@@ -44,6 +48,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Method for getting the SQL sort order from paging parameters
   def sort_order(default)
     "#{sort_column_from_param(params[:c] || default)} #{params[:d] == 'down' ? 'DESC' : 'ASC'}"
   end
@@ -54,6 +59,7 @@ class ApplicationController < ActionController::Base
     p
   end
 
+  # Ensures that the user is authenticated, used as a +before_filter+
   def authenticate
     unless session[:current_user_id]
 
@@ -64,6 +70,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Ensures that the user is an administrator, used as a +before_filter+
   def require_admin
     unless current_user.has_role? :admin
       flash[:notice] = "Du har inte behörighet att komma åt sidan."
@@ -72,11 +79,13 @@ class ApplicationController < ActionController::Base
   end
 
 
+  # Helper method for checking whether the current user is logged in or not.
   def user_online?
     !session[:current_user_id].nil?
   end
   helper_method :user_online?
 
+  # Accessor method for getting the current user.
   def current_user
     @current_user ||= User.find(session[:current_user_id])
   end

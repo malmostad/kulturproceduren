@@ -1,11 +1,16 @@
+# Controller for managing category groups
 class CategoryGroupsController < ApplicationController
   layout "admin"
 
+  # Displays a list of all categories in the system as well as a
+  # form for adding new category groups
   def index
     @category_groups = CategoryGroup.all
     @category_group = CategoryGroup.new
   end
 
+  # Displays a form for editing the given category group in the listing
+  # from the index action
   def edit
     @category_groups = CategoryGroup.all
     @category_group = CategoryGroup.find params[:id]

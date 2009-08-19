@@ -1,3 +1,4 @@
+# Controller for managing bookings
 class BookingController < ApplicationController
   require "pp"
   
@@ -7,14 +8,16 @@ class BookingController < ApplicationController
   layout "standard"
 
 
+  # Returns the listing of bookings for a specific group as a fragment for
+  # use in an Ajax call.
   def get_by_group_list
     begin
       @group = Group.find(params[:group_id])
       oids = Ticket.find(:all , :select => "distinct occasion_id" , :conditions => { :group_id => @group.id , :state => Ticket::BOOKED})
       @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
-      #TODO : rescue
     rescue ActiveRecord::RecordNotFound
     end
+
     unless oids.blank?
       @occasions = Occasion.find( :all , oids.map{ |t| t.occasion_id } )
     else
@@ -26,9 +29,9 @@ class BookingController < ApplicationController
       :occasions => @occasions ,
       :group => @group
     }
-
   end
 
+  # Returns the booking form for use in an Ajax call
   def get_input_area
     @group = Group.find(params[:group_id])
     @occasion = Occasion.find(params[:occasion_id])
@@ -48,6 +51,7 @@ class BookingController < ApplicationController
     }, :content_type => 'text/plain'
   end
 
+  # Common method for displaying the booking form and doing the actual booking.
   def book
 
     begin
@@ -203,114 +207,20 @@ class BookingController < ApplicationController
         redirect_to :controller => "booking" , :action => "book"
       end
 
-      #TODO - return_to parameter
       redirect_to :controller => "booking" , :action => "show"
     elsif session[:group_selection][:group_id]
       @curgroup = Group.find(session[:group_selection][:group_id])
       params[:group_id] = @curgroup.id
       load_vars(false)
     end
-
   end
 
-  def unbook_all_ticks
-    trans_ok = true
-    if @occasion.blank? or @group.blank?
-      return false
-    end
-    begin
-      Ticket.transaction do
-        tickets = Ticket.find(:all,
-          :conditions => {
-            :occasion_id => @occasion.id,
-            :group_id => @group.id,
-            :state => Ticket::BOOKED
-          })
-        tickets.each do |t|
-          t.state = Ticket::UNBOOKED
-          t.occasion = nil
-          t.companion = nil
-          t.adult = false
-          t.wheelchair = false
-          t.booked_when = nil
-          t.save or trans_ok = false
-        end
-        if not trans_ok
-          raise ActiveRecord::Rollback
-        end
-      end
-    rescue Exception
-    end
-    return trans_ok
-  end
-
-  def book_ticks(nreq_ticks , nreq_aticks , nreq_wticks )
-    nreq_ticks = nreq_ticks.to_i
-    nreq_aticks = nreq_aticks.to_i
-    nreq_wticks = nreq_wticks.to_i
-
-    if not check_nticks(nreq_ticks.to_i , nreq_aticks.to_i , nreq_wticks.to_i )
-      return false
-    end
-
-    tot_requested = nreq_ticks.to_i + nreq_aticks.to_i + nreq_wticks.to_i
-    transaction_ok = true
-
-    begin
-      Ticket.transaction do
-        #Dubbelkoll inne i transaktionen
-        tickets = @group.bookable_tickets(@occasion,true)
-        
-        if tickets.length < tot_requested
-          flash.now[:error] = "Du försöker boka fler biljetter än vad som är tilldelat för gruppen på den här föreställningen."
-          render :book
-          return
-        end
-
-        booked_tickets = 0
-        booked_adult_tickets = 0
-        booked_wheelchair_tickets = 0
-
-        while booked_tickets < tot_requested
-
-          tickets[booked_tickets].state = Ticket::BOOKED
-          tickets[booked_tickets].group = @group
-          tickets[booked_tickets].companion = @companion
-          tickets[booked_tickets].user = @user
-          tickets[booked_tickets].occasion = @occasion
-          tickets[booked_tickets].wheelchair = false
-          tickets[booked_tickets].adult = false
-          tickets[booked_tickets].booked_when = DateTime.now
-
-          if booked_adult_tickets.to_i < nreq_aticks.to_i
-            tickets[booked_tickets].adult = true
-            booked_adult_tickets += 1
-          elsif booked_wheelchair_tickets.to_i < nreq_wticks.to_i
-            tickets[booked_tickets].wheelchair = true
-            booked_wheelchair_tickets += 1
-          end
-
-          retval = tickets[booked_tickets].save
-
-          unless retval
-            transaction_ok = false
-            raise ActiveRecord::Rollback
-          end
-          
-          booked_tickets +=1
-        end
-      end
-    rescue Exception
-      transaction_ok = false
-    end
-
-    return transaction_ok
-  end
-
+  # Displays all bookings made by a specific user
   def show
     @user = current_user
   end
 
+  # Displays a list of bookings by group
   def by_group
     @user = current_user
     load_group_selection_collections()
@@ -334,6 +244,7 @@ class BookingController < ApplicationController
     end
   end
 
+  # Unbooks tickets
   def unbook
     @user = current_user
 
@@ -374,6 +285,7 @@ class BookingController < ApplicationController
 
   private
 
+  # Loads various variables for use in the different actions.
   def load_vars(validate = true)
     begin
       @group = Group.find(params[:group_id])
@@ -472,6 +384,7 @@ class BookingController < ApplicationController
     end
   end
 
+  # Checks that the number of tickets is valid
   def check_nticks(nticks, naticks, nwticks)
     ok = true
 
@@ -485,11 +398,111 @@ class BookingController < ApplicationController
     return ok
   end
 
+  # Makes sure you can only book if you have booking privileges. For use in +before_filter+
   def require_booker
     unless current_user.can_book?
       flash[:error] = "Du har inte behörighet att komma åt sidan."
       redirect_to "/"
     end
   end
+
+  # Unbooks all tickets
+  def unbook_all_ticks
+    trans_ok = true
+
+    if @occasion.blank? or @group.blank?
+      return false
+    end
+
+    begin
+      Ticket.transaction do
+        tickets = Ticket.find(:all,
+          :conditions => {
+            :occasion_id => @occasion.id,
+            :group_id => @group.id,
+            :state => Ticket::BOOKED
+          })
+        tickets.each do |t|
+          t.state = Ticket::UNBOOKED
+          t.occasion = nil
+          t.companion = nil
+          t.adult = false
+          t.wheelchair = false
+          t.booked_when = nil
+          t.save or trans_ok = false
+        end
+        if not trans_ok
+          raise ActiveRecord::Rollback
+        end
+      end
+    rescue Exception
+    end
+    return trans_ok
+  end
+
+  # Books tickets
+  def book_ticks(nreq_ticks, nreq_aticks, nreq_wticks )
+    nreq_ticks = nreq_ticks.to_i
+    nreq_aticks = nreq_aticks.to_i
+    nreq_wticks = nreq_wticks.to_i
+
+    if not check_nticks(nreq_ticks.to_i , nreq_aticks.to_i , nreq_wticks.to_i )
+      return false
+    end
+
+    tot_requested = nreq_ticks.to_i + nreq_aticks.to_i + nreq_wticks.to_i
+    transaction_ok = true
+
+    begin
+      Ticket.transaction do
+        #Dubbelkoll inne i transaktionen
+        tickets = @group.bookable_tickets(@occasion,true)
+        
+        if tickets.length < tot_requested
+          flash.now[:error] = "Du försöker boka fler biljetter än vad som är tilldelat för gruppen på den här föreställningen."
+          render :book
+          return
+        end
+
+        booked_tickets = 0
+        booked_adult_tickets = 0
+        booked_wheelchair_tickets = 0
+
+        while booked_tickets < tot_requested
+
+          tickets[booked_tickets].state = Ticket::BOOKED
+          tickets[booked_tickets].group = @group
+          tickets[booked_tickets].companion = @companion
+          tickets[booked_tickets].user = @user
+          tickets[booked_tickets].occasion = @occasion
+          tickets[booked_tickets].wheelchair = false
+          tickets[booked_tickets].adult = false
+          tickets[booked_tickets].booked_when = DateTime.now
+
+          if booked_adult_tickets.to_i < nreq_aticks.to_i
+            tickets[booked_tickets].adult = true
+            booked_adult_tickets += 1
+          elsif booked_wheelchair_tickets.to_i < nreq_wticks.to_i
+            tickets[booked_tickets].wheelchair = true
+            booked_wheelchair_tickets += 1
+          end
+
+          retval = tickets[booked_tickets].save
+
+          unless retval
+            transaction_ok = false
+            raise ActiveRecord::Rollback
+          end
+          
+          booked_tickets +=1
+        end
+      end
+    rescue Exception
+      transaction_ok = false
+    end
+
+    return transaction_ok
+  end
+
 end
 

@@ -1,3 +1,4 @@
+# Controller for managing categories
 class CategoriesController < ApplicationController
 
   layout "admin"
@@ -5,6 +6,8 @@ class CategoriesController < ApplicationController
   before_filter :authenticate
   before_filter :require_admin
 
+  # Displays a list of all categories currently in the system, as well
+  # as a form for adding new categories
   def index
     @categories = Category.all :include => :category_group,
       :order => "category_groups.name ASC, categories.name ASC"
@@ -14,6 +17,8 @@ class CategoriesController < ApplicationController
     @category.category_group_id = session[:selected_category_group] if session[:selected_category_group]
   end
 
+  # Displays a form for editing the given category instead of
+  # the new category form in the index action.
   def edit
     @categories = Category.all :include => :category_group
     @category_groups = CategoryGroup.all

@@ -1,6 +1,8 @@
+# Controller for managing answer forms
 class AnswerFormController < ApplicationController
   layout "standard"
 
+  # Saves the answers to a questionnaire
   def submit
     unless AnswerForm.exists?(params[:answer_form_id])
       flash[:error] = "Ogiltig utvärderingsenkät"
