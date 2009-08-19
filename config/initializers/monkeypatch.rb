@@ -1,32 +1,41 @@
 # Monkeypatching of Rails default classes
+#
+# Used to coerce the Rails classes into conforming to the markup
+# guidelines for malmo.se
 
-# Prefixed form ids
 module ActionView
   module Helpers
     class InstanceTag
+      # Fixes the id generation to include stripping of dashes
       def to_radio_button_tag(tag_value, options = {})
         options = DEFAULT_RADIO_OPTIONS.merge(options.stringify_keys)
         options["type"]     = "radio"
         options["value"]    = tag_value
+
         if options.has_key?("checked")
           cv = options.delete "checked"
           checked = cv == true || cv == "checked"
         else
           checked = self.class.radio_button_checked?(value(object), tag_value)
         end
+
         options["checked"]  = "checked" if checked
         pretty_tag_value    = tag_value.to_s.gsub(/\s/, "_").gsub(/[^A-Za-z0-9-]/, "").downcase
         options["id"]     ||= defined?(@auto_index) ?
           "#{tag_id_with_index(@auto_index)}_#{pretty_tag_value}" :
           "#{tag_id}_#{pretty_tag_value}"
+
         add_default_name_and_id(options)
+
         tag("input", options)
       end
 
       private
+      # Overrides the method generating the DOM ID for a field
       def tag_id
         "kp-#{sanitized_object_name}-#{sanitized_method_name}"
       end
+      # Overrides the method generating the DOM ID for a field with an index
       def tag_id_with_index(index)
         "kp-#{sanitized_object_name}-#{index}-#{sanitized_method_name}"
       end
@@ -34,18 +43,21 @@ module ActionView
 
     class DateTimeSelector
       private
+      # Overrides the DOM ID generator for date/time selectors
       def input_id_from_type(type)
         "kp-" + input_name_from_type(type).gsub(/([\[\(])|(\]\[)/, '-').gsub(/[\]\)]/, '')
       end
     end
 
     class FormBuilder
+      # Overrides the method generating the submit button, prefixing the submit button's DOM ID.
       def submit(value = "Save changes", options = {})
         @template.submit_tag(value, options.reverse_merge(:id => "kp-#{object_name}_submit"))
       end
     end
 
     module FormTagHelper
+      # Adds ID sanitation when creating the DOM Id.
       def text_area_tag(name, content = nil, options = {})
         options.stringify_keys!
 
@@ -55,6 +67,8 @@ module ActionView
 
         content_tag :textarea, content, { "name" => name, "id" => sanitize_to_id(name) }.update(options.stringify_keys)
       end
+
+      # Overrides the DOM ID generation, prefixing the ID
       def radio_button_tag(name, value, checked = false, options = {})
         pretty_tag_value = value.to_s.gsub(/\s/, "_").gsub(/(?!-)\W/, "").downcase
         pretty_name = name.to_s.gsub(/\[/, "_").gsub(/\]/, "")
@@ -62,13 +76,16 @@ module ActionView
         html_options["checked"] = "checked" if checked
         tag :input, html_options
       end
+
+      # Overrides the DOM ID generation to prefix the ID
       def sanitize_to_id(name)
         "kp-" + name.to_s.gsub(']','').gsub(/[^-a-zA-Z0-9:.]/, "_")
       end
     end
 
-    # More graceful field errors
     module ActiveRecordHelper
+      # Overrides the error message for a specific field to adhere to
+      # the markup guidelines for malmo.se
       def error_message_on(object, method, *args)
         options = args.extract_options!
         unless args.empty?
@@ -98,6 +115,7 @@ end
 
 module ActionController
   module RecordIdentifier
+    # Overrides the DOM class generator to prefix the class
     def dom_class(record_or_class, prefix = nil)
       singular = singular_class_name(record_or_class)
       prefix ? "kp-#{prefix}#{JOIN}#{singular}" : "kp-#{singular}"
@@ -105,6 +123,7 @@ module ActionController
   end
 end
 
+# No reporting of field errors in the summary in the beginnning of the form
 ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
   html_tag
 end

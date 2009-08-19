@@ -54,20 +54,33 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "calendar"
 
-  map.calendar 'calendar/:action/:list', :controller => 'calendar'
+  map.calendar 'calendar/:action/:list',
+    :controller => 'calendar'
 
-  map.booking 'booking/book/:occasion_id', :controller => 'booking', :action => 'book'
+  map.booking 'booking/book/:occasion_id',
+    :controller => 'booking', :action => 'book'
 
-  map.answer_questionaire 'questionaires/:answer_form_id/answer' , :controller => 'answer_form' , :action => 'submit'
-  map.question_graph 'questions/:question_id/graph/:occasion_id' , :controller => 'questions' , :action => 'stat_graph'
+  # Questionnaires
+  map.answer_questionaire 'questionaires/:answer_form_id/answer',
+    :controller => 'answer_form' , :action => 'submit'
+  map.question_graph 'questions/:question_id/graph/:occasion_id',
+    :controller => 'questions' , :action => 'stat_graph'
 
-  map.grant_role 'users/:id/grant/:role', :controller => 'users', :action => 'grant'
-  map.revoke_role 'users/:id/revoke/:role', :controller => 'users', :action => 'revoke'
-  map.remove_culture_provider_user 'users/:id/remove_culture_provider/:culture_provider_id', :controller => 'users', :action => 'remove_culture_provider'
+  # Role granting
+  map.grant_role 'users/:id/grant/:role',
+    :controller => 'users', :action => 'grant'
+  map.revoke_role 'users/:id/revoke/:role',
+    :controller => 'users', :action => 'revoke'
+  map.remove_culture_provider_user 'users/:id/remove_culture_provider/:culture_provider_id',
+    :controller => 'users', :action => 'remove_culture_provider'
 
-  map.ldap 'ldap/', :controller => 'ldap', :action => 'index'
-  map.ldap_search 'ldap/search', :controller => 'ldap', :action => 'search'
-  map.ldap_handle 'ldap/handle/:username', :controller => 'ldap', :action => 'handle'
+  # LDAP views
+  map.ldap 'ldap/',
+    :controller => 'ldap', :action => 'index'
+  map.ldap_search 'ldap/search',
+    :controller => 'ldap', :action => 'search'
+  map.ldap_handle 'ldap/handle/:username',
+    :controller => 'ldap', :action => 'handle'
   
   
   map.connect ':controller/:action/:id'
