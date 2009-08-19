@@ -1,10 +1,14 @@
 class QuestionsController < ApplicationController
+
+  BLABB = 3
+  GRAPH_WIDTH = 500
+
   layout "admin"
 
   def stat_graph
     @question = Question.find(params[:question_id])
     @occasion = Occasion.find(params[:occasion_id])
-    graph = Question::question_to_graph(@question,@occasion)
+    graph = question_to_graph(@question, @occasion)
     send_data(graph.to_blob,
       :disposition => 'inline',
       :type => 'image/png',
@@ -124,5 +128,75 @@ class QuestionsController < ApplicationController
     else
       "question"
     end
+  end
+
+  private
+  
+  def self.question_to_graph(question, occasion)
+    answers = Answer.find_by_sql(
+      [
+        "SELECT a.id,a.question_id,a.answer,a.answer_text,a.answer_form_id,a.created_at,a.updated_at
+         FROM answers a , answer_forms b
+         WHERE a.answer_form_id = b.id AND b.occasion_id = ? AND a.question_id = ?",
+         occasion.id , question.id
+    ])
+
+    case question.qtype
+    when "QuestionBool"
+      num_no = 0
+      num_yes = 0
+
+      answers.each do |a|
+        if a.answer_text == "y"
+          num_yes += 1
+        elsif a.answer_text == "n"
+          num_no += 1
+        end
+      end
+
+      graph = Gruff::Pie.new(GRAPH_WIDTH)
+      graph.data "Ja" , num_yes
+      graph.data "Nej" , num_no
+    when "QuestionMchoice"
+      vals = {}
+
+      if answers.length > 0
+        keys = YAML.load(answers[0].answer_text).keys
+        answers.each do |a|
+          YAML.load(a.answer_text).keys.each do |k|
+            if vals["#{k}"].blank?
+              vals["#{k}"] = 1
+            else
+              vals["#{k}"] += 1
+            end
+          end
+        end
+      end
+
+      graph = Gruff::Bar.new(GRAPH_WIDTH)
+      vals.keys.each { |k| graph.data k , vals["#{k}"].to_i }
+      graph.minimum_value = 0
+
+    when "QuestionText"
+      graph = Gruff::Bar.new(GRAPH_WIDTH)
+
+    when "QuestionMark"
+      histogram = []
+      (0..3).each { |i| histogram[i] = 0 }
+
+      answers.each { |a| histogram[(a.answer_text.to_i-1)] += 1 }
+
+      graph = Gruff::Bar.new(GRAPH_WIDTH)
+      (0..3).each { |i| graph.data( (i+1).to_s , histogram[i]) }
+    end
+
+    graph.font = "/Library/Fonts/Arial.ttf"
+    graph.right_margin = 10
+    graph.left_margin = 10
+    graph.title_font_size = 30
+    graph.title = question.question.to_s
+    graph.sort = false
+
+    return graph
   end
 end

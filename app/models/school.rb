@@ -1,3 +1,4 @@
+# Model for schools. A schools belongs to a district and has many groups within it.
 class School < ActiveRecord::Base
   
   has_many :groups, :dependent => :destroy do
@@ -11,12 +12,17 @@ class School < ActiveRecord::Base
   belongs_to :district
   has_one :school_prio, :dependent => :destroy
 
-  validates_presence_of  :name, :message => "Namnet får inte vara tomt"
-  validates_presence_of  :district_id, :message => "Skolan måste tillhöra en stadsdel"
+  validates_presence_of :name,
+    :message => "Namnet får inte vara tomt"
+  validates_presence_of :district_id,
+    :message => "Skolan måste tillhöra en stadsdel"
 
+  # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups
 
   
+  # Finds the school that is directly above this school in priority. Returns +nil+ if
+  # this school is the top prioritized school.
   def above_in_prio
     prio = SchoolPrio.first :conditions => [ "district_id = ? and prio < ?", district_id, school_prio.prio ],
       :order => "prio DESC",
@@ -29,6 +35,8 @@ class School < ActiveRecord::Base
     end
   end
 
+  # Finds the school that is directly below this school in priority. Returns +nil+ if
+  # this school is the bottom prioritized school.
   def below_in_prio
     prio = SchoolPrio.first :conditions => [ "district_id = ? and prio > ?", district_id, school_prio.prio ],
       :order => "prio ASC",
@@ -41,14 +49,17 @@ class School < ActiveRecord::Base
     end
   end
 
+  # Returns true if this school has the highest priority in its district.
   def has_highest_prio?
     school_prio.prio == SchoolPrio.highest_prio(district)
   end
 
+  # Returns true if this school has the lowest priority in its district.
   def has_lowest_prio?
     school_prio.prio == SchoolPrio.lowest_prio(district)
   end
 
+  # Moves this school to the top of the priority list in its district.
   def move_first_in_prio
     return if has_highest_prio?
 
@@ -60,6 +71,7 @@ class School < ActiveRecord::Base
     school_prio.save!
   end
 
+  # Moves this school to the bottom of the priority list in its district.
   def move_last_in_prio
     return if has_lowest_prio?
 
@@ -71,35 +83,33 @@ class School < ActiveRecord::Base
     school_prio.save!
   end
 
-  def available_tickets_by_occasion(o)
-    if o.is_a? Integer
-      o = Occasion.find(o)
-    end
-    unless o.is_a? Occasion
-      return nil
-    end
-    retval = 0
-    case o.event.ticket_state
+  # Returns the number of available tickets on the given occasion for this school.
+  def available_tickets_by_occasion(occasion)
+    occasion = Occasion.find(occasion) if occasion.is_a?(Integer)
+    return nil unless occasion.is_a?(Occasion)
+
+    num_tickets = 0
+    case occasion.event.ticket_state
     when Event::ALLOTED_GROUP
-      self.groups.each { |g| retval += g.available_tickets_by_occasion(o) }
+      self.groups.each { |g| num_tickets += g.available_tickets_by_occasion(occasion) }
     when Event::ALLOTED_DISTRICT
-      retval =  Ticket.count(
+      num_tickets =  Ticket.count(
         :conditions => {
-          :event_id => o.event.id ,
+          :event_id => occasion.event.id ,
           :district_id => self.district.id ,
           :state => Ticket::UNBOOKED
         }
       )
     when Event::FREE_FOR_ALL
-      retval = Ticket.count(
+      num_tickets = Ticket.count(
         :conditions => {
-          :event_id => o.event.id ,
+          :event_id => occasion.event.id ,
           :state => Ticket::UNBOOKED
         }
       )
     end
-    puts "Schools#available_tickets_by_occasion returning retval = #{retval}"
-    return retval
+
+    return num_tickets
   end
   
 end

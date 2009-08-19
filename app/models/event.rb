@@ -1,4 +1,13 @@
 # A culture event, possibly with bookable occasions.
+#
+# An event can be in in several states significant for the booking of tickets:
+#
+#  * Alloted on a specific group so that only the group can book the tickets
+#  * Alloted on a specific district so that only groups in the district can book the tickets
+#  * Free for all so that all groups in the system can book the tickets
+#
+# The transition between the different states are done on a timed basis using a
+# Rake task.
 class Event < ActiveRecord::Base
 
   # Scope for operating on events without tickets

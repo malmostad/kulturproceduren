@@ -1,3 +1,5 @@
+# An occasion is a specific occasion where an event is shown. An occasion can
+# be booked if there are tickets available on the event.
 class Occasion < ActiveRecord::Base
 
   belongs_to :event
@@ -8,11 +10,16 @@ class Occasion < ActiveRecord::Base
   has_many :groups, :through => :tickets , :uniq => true
   belongs_to :answer
 
-  validates_presence_of :date, :message => "Datumet får inte vara tom"
-  validates_presence_of :address, :message => "Adressen får inte vara tom"
-  
-  validates_numericality_of :seats, :only_integer => true, :message => "Antalet platser måste vara ett giltigt heltal"
+  validates_presence_of :date,
+    :message => "Datumet får inte vara tom"
+  validates_presence_of :address,
+    :message => "Adressen får inte vara tom"
+  validates_numericality_of :seats, :only_integer => true,
+    :message => "Antalet platser måste vara ett giltigt heltal"
 
+  # Returns an array of the ticket usage on this occasion. The first element
+  # in the array contains the total amount of tickets on this occasion, and the
+  # second the total amount of booked tickets on this occasion.
   def ticket_usage
     return [
       Ticket.count( :conditions => { :occasion_id => self.id } ) ,
@@ -20,6 +27,17 @@ class Occasion < ActiveRecord::Base
     ]
   end
 
+  # Search method for occasions. Returns a paginated result.
+  #
+  # Filters:
+  # [+:free_text+] Free text search in the occasion's event's name and description
+  # [+:further_education+] If true, the search should be restricted to events that are marked as further education
+  # [+:from_age+] Sets a lower limit on the age of the returned events, not applicable if +:further_education+ is set.
+  # [+:to_age+] Sets an upper limit on the age of the returned events, not applicable if +:further_education+ is set.
+  # [+:from_date+] Sets a lower limit on the date of the returned occasions, defaults to the current date.
+  # [+:date_span+] Sets a date span limit from +from_date+, can be +:day+, +:week+, +:month+ and +:date+
+  # [+:to_age+] If +:date_span+ is +:date+, this value sets an upper limit on the date of the returned events.
+  # [+:categories+] An array of the categories to limit the search to
   def self.search(filter, page)
 
     conditions = [ " current_date between events.visible_from and events.visible_to " ]
@@ -84,6 +102,7 @@ class Occasion < ActiveRecord::Base
     )
   end
 
+  # Returns the amount of available wheelchair seats on this occasion.
   def available_wheelchair_seats
     return self.wheelchair_seats - Ticket.count( :all , :conditions => { :occasion_id => self.id , :wheelchair => true , :state => Ticket::BOOKED})
  

@@ -1,19 +1,28 @@
 require "rubygems"
 require "RMagick"
 
+# Container class for images associated with different models in the system.
+#
+# An image consists of two different images, one full size and one thumbnail.
 class Image < ActiveRecord::Base
 
   belongs_to :event
   belongs_to :culture_provider
 
-  validates_presence_of :name, :message => "Namnet får inte vara tomt"
+  validates_presence_of :name,
+    :message => "Namnet får inte vara tomt"
 
   after_destroy :cleanup
 
   attr_accessor :type
 
 
+  # Keep a reference to the original ActiveRecord save method
   alias :save_orig  :save
+
+  # Override the save method. This method resizes an uploaded
+  # image and creates the image's thumbnail before saving the
+  # ActiveRecord data.
   def save(upload)
 
     return false unless valid?
@@ -24,9 +33,7 @@ class Image < ActiveRecord::Base
     img = Magick::Image.read(self.image_path).first
     
     if img.nil?
-      flash[:error] = "Det gick inte så bra ...."
-      redirect_to "/"
-      return
+      raise "Could not read the uploaded image."
     end
     
     img.change_geometry(
@@ -51,27 +58,33 @@ class Image < ActiveRecord::Base
     save_orig
   end
 
+  # Generates the name for the thumbnail
   def thumb_name
     Image.thumb_name(self.filename)
   end
 
+  # Generates the filesystem path to the image file
   def image_path
     "#{Image.path}/#{self.filename}"
   end
 
+  # Generates the URL to the image file
   def image_url
     "#{Image.url}/#{self.filename}"
   end
 
+  # Generates the filesystem path to the thumbnail file
   def thumb_path
     "#{Image.path}/#{Image.thumb_name(self.filename)}"
   end
 
+  # Generates the URL to the thumbnail file
   def thumb_url
     "#{Image.url}/#{self.thumb_name}"
   end
   
 
+  # Generates a random filename for the image and thumbnail.
   def self.gen_fname()
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     tempfname = ""
@@ -85,6 +98,7 @@ class Image < ActiveRecord::Base
     return tempfname.to_s + ".jpg"
   end
 
+  # Creates a thumbnail name for an image
   def self.thumb_name(img)
     regexp = /(\w+?).jpg$/
 
@@ -104,6 +118,7 @@ class Image < ActiveRecord::Base
 
   protected
 
+  # On-destroy callback for deleting the image files.
   def cleanup
     begin
       File.delete image_path
@@ -111,9 +126,11 @@ class Image < ActiveRecord::Base
     rescue; end
   end
 
+  # Base filesystem path for the image files
   def self.path
     "#{RAILS_ROOT}/public#{url}"
   end
+  # Base URLs for the image files
   def self.url
     "/#{APP_CONFIG[:upload_image][:path]}"
   end

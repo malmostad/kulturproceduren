@@ -1,30 +1,42 @@
 require 'digest/sha1'
 
+# Model for a user in the system.
 class User < ActiveRecord::Base
 
-  has_and_belongs_to_many  :roles
-  has_and_belongs_to_many  :culture_providers
+  has_and_belongs_to_many :roles
+  has_and_belongs_to_many :culture_providers
   has_many :role_applications, :order => "updated_at DESC", :include => [ :role ]
 
   has_many :tickets
-  has_many :occasions , :through => :tickets , :uniq => true
+  has_many :occasions, :through => :tickets, :uniq => true
   has_many :notification_requests
   
-  validates_presence_of :username, :message => "Användarnamnet får inte vara tomt"
-  validates_presence_of :password, :message => "Lösenordet får inte vara tomt"
-  validates_presence_of :name, :message => "Namnet får inte vara tomt"
-  validates_presence_of :email, :message => "Epostadressen får inte vara tom"
-  validates_presence_of :cellphone, :message => "Mobilnumret får inte vara tomt"
-  validates_uniqueness_of :username, :message => "Användarnamnet är redan taget"
-  validates_confirmation_of :password, :message => "Lösenordsbekräftelsen matchar inte lösenordet"
+  validates_presence_of :username,
+    :message => "Användarnamnet får inte vara tomt"
+  validates_presence_of :password,
+    :message => "Lösenordet får inte vara tomt"
+  validates_presence_of :name,
+    :message => "Namnet får inte vara tomt"
+  validates_presence_of :email,
+    :message => "Epostadressen får inte vara tom"
+  validates_presence_of :cellphone,
+    :message => "Mobilnumret får inte vara tomt"
+  validates_uniqueness_of :username,
+    :message => "Användarnamnet är redan taget"
+  validates_confirmation_of :password,
+    :message => "Lösenordsbekräftelsen matchar inte lösenordet"
 
+  # The id and salt is automatically generated and should not be changed.
   attr_protected :id, :salt
 
 
+  # Returns true if this user is authenticated when using the given password
   def authenticate(password)
     User.encrypt(password, self.salt) == self.password
   end
 
+  # Returns the user with the given name if authentication using the username
+  # and password succeeds.
   def self.authenticate(username, password)
     u = find :first, :conditions => { :username => username }
     
@@ -34,19 +46,23 @@ class User < ActiveRecord::Base
     nil
   end
 
+  # Returns the bookings a user has made
   def bookings
-    ret = []
+    bookings = []
+
     self.occasions.each do |o|
       Ticket.find(:all ,
         :select => "distinct group_id" ,
-        :conditions => { :user_id => self.id , :occasion_id => o.id}
+        :conditions => { :user_id => self.id , :occasion_id => o.id }
       ).each do |t|
-        ret << { "occasion" => o , "group" => Group.find(t.group_id) }
+        bookings << { "occasion" => o , "group" => t.group }
       end
     end
-    return ret
+
+    return bookings
   end
 
+  # Returns true if this user has one of the given roles
   def has_role?(*rs)
     rs.each do |r|
       return true if roles.exists? [ "lower(name) = ?", r.to_s.downcase ]
@@ -54,6 +70,8 @@ class User < ActiveRecord::Base
     return false
   end
 
+  # Returns true if the user can administrate the given entity.
+  # Used to check if a user can administrate a given culture provider
   def can_administrate?(e)
     case e
     when CultureProvider
@@ -63,11 +81,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Returns true if this user has booking privileges
   def can_book?
     return has_role?(:admin, :booker)
   end
 
   
+  # Sets the password of a user.
+  #
+  # This method generates a new salt if there are no salt, and encrypts
+  # the password.
   def password=(pass)
     if pass.length > 0
       self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
@@ -75,11 +98,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Accessor for the password confirmation used in the UI.
   def password_confirmation=(pass)
     self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
     @password_confirmation = User.encrypt(pass, self.salt)
   end
 
+  # Sets all password related data to nil.
   def reset_password
     self.salt = nil
     write_attribute :password, nil
@@ -89,14 +114,12 @@ class User < ActiveRecord::Base
   
   private
 
-  def write_password(pass, attr = :password)
-
-  end
-  
+  # Encrypts a password and a salt using SHA1
   def self.encrypt(pass, salt)
     Digest::SHA1.hexdigest(pass + salt)
   end
 
+  # Generates a random string of the given length.
   def self.random_string(len)
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
 

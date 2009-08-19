@@ -21,10 +21,16 @@ class District < ActiveRecord::Base
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt."
 
+  # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_schools
 
   # Returns the number of avaliable tickets for the district in
   # the given occasion.
+  #
+  # When the occasion's event is in the free for all state, this
+  # method returns the total amount of available tickets on the
+  # event, otherwise only tickets associated with this district
+  # is counted.
   def available_tickets_by_occasion(o)
     o = Occasion.find(o) if o.is_a?(Integer)
     return nil unless o.is_a?(Occasion)
