@@ -1,10 +1,13 @@
+# Controller for managin login and logout
 class LoginController < ApplicationController
 
   layout "standard"
 
+  # Display a form for logging in
   def index
   end
 
+  # Authenticates the user
   def login
     if user_online?
       redirect_to :action => "index"
@@ -28,6 +31,7 @@ class LoginController < ApplicationController
     end
   end
 
+  # Logs out the user
   def logout
     if user_online?
       session[:current_user_id] = nil
@@ -38,6 +42,17 @@ class LoginController < ApplicationController
     end
   end
 
+  # Workaround for session problems when using the application as a proxy
+  # portlet.
+  #
+  # When the first access to the application is via a portal, the session cookie
+  # is not set on the client but rather in the portal. This is problematic when going
+  # to a standalone application, because since the session cookie is not stored
+  # on the client, access to the session from the portal will not be possible.
+  #
+  # In order to fix this, we provide a method that sends the cookie parameters for
+  # the session cookie as JSON data, for use in an Ajax call that sets the cookie
+  # on the client.
   def session_fix
     session_cookie = {
       :name => request.session_options[:key],
@@ -55,6 +70,7 @@ class LoginController < ApplicationController
   private
 
 
+  # Authenticates the user by first checking the LDAP, then the local user database.
   def authenticate_user
     ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
       APP_CONFIG[:ldap][:port],

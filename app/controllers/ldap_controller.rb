@@ -1,3 +1,4 @@
+# Controller for managing the LDAP integration
 class LdapController < ApplicationController
   layout "admin"
 
@@ -7,6 +8,8 @@ class LdapController < ApplicationController
   def index
   end
 
+  # Displays a form for searching in the LDAP as well as a list
+  # of search results.
   def search
     ldap = get_ldap()
     ldap.max_results = APP_CONFIG[:ldap][:max_search_results] + 1
@@ -21,6 +24,8 @@ class LdapController < ApplicationController
     end
   end
 
+  # Creates a local user object from the data in the LDAP if the local
+  # user object does not exist
   def handle
     ldap = get_ldap()
     user = User.find :first, :conditions => { :username => params[:username] }
@@ -44,6 +49,7 @@ class LdapController < ApplicationController
 
   private
 
+  # Creates a new LDAP manager
   def get_ldap
     return KPLdapManager.new APP_CONFIG[:ldap][:address],
       APP_CONFIG[:ldap][:port],

@@ -1,24 +1,29 @@
+# Controller for managing culture providers
 class CultureProvidersController < ApplicationController
   layout "standard"
 
   before_filter :authenticate, :except => [ :index, :show ]
   before_filter :require_admin, :only => [ :new, :create, :destroy ]
   
+  # Displays a paginated list of all culture providers
   def index
     @culture_providers = CultureProvider.paginate :page => params[:page],
       :order => sort_order("name")
   end
 
+  # Displays a culture provider's presentation page
   def show
     @culture_provider = CultureProvider.find params[:id], :include => [ :main_image ]
     @category_groups = CategoryGroup.all :order => "name ASC"
   end
 
+  # Displays a form for adding a culture provider
   def new
     @culture_provider = CultureProvider.new
     render :action => "edit"
   end
 
+  # Displays a form for edtiing an existing culture provider
   def edit
     @culture_provider = CultureProvider.find(params[:id])
 
@@ -65,6 +70,7 @@ class CultureProvidersController < ApplicationController
 
   protected
   
+  # Always sort by the culture provider's name
   def sort_column_from_param(p)
     "name"
   end

@@ -1,3 +1,4 @@
+# Controller for managing images
 class ImagesController < ApplicationController
   
   layout "standard"
@@ -5,9 +6,12 @@ class ImagesController < ApplicationController
   before_filter :authenticate
   before_filter :load_image, :only => [ :index, :create ]
 
+  # Displays an administration interface for the images
+  # associated with a culture provider or an event
   def index
   end
 
+  # Sets the main image (logotype) of a culture provider.
   def set_main
     culture_provider = CultureProvider.find params[:culture_provider_id]
     image = Image.find params[:id]
@@ -55,6 +59,7 @@ class ImagesController < ApplicationController
 
   protected
 
+  # Load the working image, the culture provider/event and all its images.
   def load_image
     @image = Image.new params[:image]
 

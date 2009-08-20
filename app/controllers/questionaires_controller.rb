@@ -1,3 +1,4 @@
+# Controller for managing quiestionnaires.
 class QuestionairesController < ApplicationController
 
   layout "admin"
@@ -5,12 +6,15 @@ class QuestionairesController < ApplicationController
   before_filter :authenticate
   before_filter :require_admin
   
+  # Displays a list of all questionnaires in the system.
   def index
     @questionaires = Questionaire.paginate :page => params[:page],
       :include => :event,
       :order => sort_order("events.name")
   end
 
+  # Displays details about a questionnaire, as well as a form
+  # for adding questions to the questionnaire.
   def show
     @questionaire = Questionaire.find params[:id], :include => :event
     @question = Question.new do |q|
@@ -87,6 +91,7 @@ class QuestionairesController < ApplicationController
 
   protected
 
+  # Sort the questionnaires by the name of the events they belong to.
   def sort_column_from_param(p)
     return "events.name"
   end

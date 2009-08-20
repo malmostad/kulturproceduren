@@ -1,3 +1,4 @@
+# Controller for managing role applications
 class RoleApplicationsController < ApplicationController
   layout "standard"
   
@@ -5,6 +6,10 @@ class RoleApplicationsController < ApplicationController
   before_filter :deny_admin, :only => [ :create ]
   before_filter :require_admin, :only => [ :archive, :edit, :update ]
   
+  # For administrators: displays a list of all incoming unanswered role applications.
+  #
+  # For regular users, displays forms for requesting roles as well as a list
+  # of all the user's applications
   def index
     if current_user.has_role? :admin
       @applications = RoleApplication.paginate :page => params[:page],
@@ -24,6 +29,7 @@ class RoleApplicationsController < ApplicationController
     end
   end
 
+  # Displays a list of all answered appliations
   def archive
     params[:d] ||= "down"
 
@@ -39,6 +45,7 @@ class RoleApplicationsController < ApplicationController
     render :layout => "admin"
   end
 
+  # Submits a role application from a user
   def create
 
     @application = RoleApplication.new(params[:role_application])
@@ -70,6 +77,7 @@ class RoleApplicationsController < ApplicationController
     end
   end
 
+  # Answers a role application
   def update
     @application = RoleApplication.find(params[:id])
 
@@ -101,6 +109,7 @@ class RoleApplicationsController < ApplicationController
   
   protected
 
+  # Sort by the creation date by default
   def sort_column_from_param(p)
     return "created_at" if p.blank?
 
@@ -116,6 +125,7 @@ class RoleApplicationsController < ApplicationController
 
   private
 
+  # Denies access to admins. For use in +before_filter+.
   def deny_admin
     if current_user.has_role? :admin
       flash[:notice] = "Du har redan administratörsbehörigheter och kan därför inte ansöka om behörigheter."

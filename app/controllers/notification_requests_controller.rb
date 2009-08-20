@@ -1,3 +1,4 @@
+# Controller for managing notification requests
 class NotificationRequestsController < ApplicationController
   layout "standard"
 
@@ -23,6 +24,7 @@ class NotificationRequestsController < ApplicationController
 
   private
 
+  # Makes sure the user has privileges to book tickets. For use in +before_filter+
   def require_booker
     user = current_user
     unless user.can_book?
@@ -37,6 +39,7 @@ class NotificationRequestsController < ApplicationController
     end
   end
 
+  # Loads the selected occasion
   def load_occasion
     @occasion = Occasion.find(params[:occasion_id])
   rescue ActiveRecord::RecordNotFound

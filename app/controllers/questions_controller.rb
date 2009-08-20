@@ -1,3 +1,4 @@
+# Controller for managing questions in a questionnaire.
 class QuestionsController < ApplicationController
 
   BLABB = 3
@@ -5,6 +6,7 @@ class QuestionsController < ApplicationController
 
   layout "admin"
 
+  # Display statistical graphs over the answers to a question.
   def stat_graph
     @question = Question.find(params[:question_id])
     @occasion = Occasion.find(params[:occasion_id])
@@ -15,6 +17,8 @@ class QuestionsController < ApplicationController
       :filename => "gruff.png")
   end
   
+  # Lists all questions in the system as well as a form
+  # for adding template questions.
   def index
     @questions = Question.find :all,
       :conditions => { :template => true },
@@ -120,6 +124,7 @@ class QuestionsController < ApplicationController
 
   protected
 
+  # Sort by the questions by default.
   def sort_column_from_param(p)
     return "question" if p.blank?
 
@@ -132,6 +137,7 @@ class QuestionsController < ApplicationController
 
   private
   
+  # Converts a question to a graph over the answers to the question.
   def self.question_to_graph(question, occasion)
     answers = Answer.find_by_sql(
       [

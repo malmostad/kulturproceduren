@@ -1,3 +1,4 @@
+# Controller for managing school priorities.
 class SchoolPriosController < ApplicationController
 
   before_filter :authenticate
@@ -17,6 +18,7 @@ class SchoolPriosController < ApplicationController
 
   private
 
+  # Swaps the priorites of two schools.
   def swap(s1, s2)
     return unless s1 && s2
     s1.school_prio.prio, s2.school_prio.prio = s2.school_prio.prio, s1.school_prio.prio
@@ -25,6 +27,7 @@ class SchoolPriosController < ApplicationController
     s2.school_prio.save!
   end
 
+  # Loads the requested school from the database
   def load_school
     begin
       @school = School.find params[:id], :include => :school_prio

@@ -1,24 +1,20 @@
+# Controller for managing occasions
 class OccasionsController < ApplicationController
 
   layout "standard"
+  
   require "pdf/writer"
   require "pdf/simpletable"
 
   before_filter :authenticate, :except => [ :index, :show ]
-  before_filter :is_host? , :only => [:report_show , :report_create]
+  before_filter :require_culture_worker, :only => [ :create, :edit, :update, :destroy ]
+  before_filter :require_host, :only => [ :report_show , :report_create ]
 
-  def is_host?
-    @user = current_user
-    if not ( @user.has_role?(:host) || @user.has_role?(:admin) )
-      flash[:error] = "Du har inte behörighet att rapportera närvaro"
-      redirect_to "/"
-      return
-    end
-  end
 
+  # Displays a form for reporting the attendance on an occasion
   def report_show
 
-    if params[:id].blank? or params[:id].to_i == 0
+    if params[:id].blank? || params[:id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
       redirect_to "/"
       return
@@ -50,12 +46,14 @@ class OccasionsController < ApplicationController
 
   end
 
+  # Creates an attendace report from the form parameters
   def report_create
     if params[:id].blank? or params[:id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
       redirect_to "/"
       return
     end
+
     begin
       @occasion = Occasion.find(params[:id])
     rescue ActiveRecord::RecordNotFound
@@ -63,6 +61,7 @@ class OccasionsController < ApplicationController
       redirect_to "/"
       return
     end
+
     if @occasion.date > Date.today
       flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
       redirect_to "/"
@@ -76,10 +75,13 @@ class OccasionsController < ApplicationController
         :occasion_id => @occasion.id ,
         :state => Ticket::BOOKED
       } ).map { |t| t.group_id }
-    if not params[:groups].blank?
+
+    if !params[:groups].blank?
       @report_complete = false
       @reported_groups = {}
+
       #allow only numerical gids and number of attendees
+      #
       params[:groups].select { |gid,nattend|
         nattend.to_i > 0 and gid.to_i > 0
       }.map { |gids,nattends|
@@ -87,6 +89,7 @@ class OccasionsController < ApplicationController
       }
       @report_complete = @reported_groups.keys.map {|k| k.to_i }.sort == @groups.map {|g| g.id}.sort
     end
+
     if @report_complete
       @groups.each do |group|
         tickets = Ticket.find(
@@ -97,13 +100,16 @@ class OccasionsController < ApplicationController
             :state => Ticket::BOOKED
           }
         )
+
         n = 0
+
         tickets.each do |ticket|
           if n < params[:groups]["#{group.id}"].to_i
             ticket.state = Ticket::USED
           else
             ticket.state = Ticket::NOT_USED
           end
+
           ticket.save or flash[:error] = "Kunde inte uppdatera närvarostatistiken ..."
           n += 1
         end
@@ -117,6 +123,8 @@ class OccasionsController < ApplicationController
   end
 
 
+  # Displays a list of the groups attending the occasion,
+  # as a HTML page or a PDF.
   def attendants
     @occasion = Occasion.find(params[:id])
 
@@ -146,6 +154,7 @@ class OccasionsController < ApplicationController
 
   end
 
+  # Displays a specific occasion as the part of an event presentation
   def show
     @selected_occasion = Occasion.find(params[:id])
     @event = @selected_occasion.event
@@ -153,29 +162,15 @@ class OccasionsController < ApplicationController
     render :template => "events/show"
   end
 
+  # Displays an editing form in place of the new occasion form in the
+  # event presentation
   def edit
-    @occasion = Occasion.find(params[:id])
-
-    unless current_user.can_administrate?(@occasion.event.culture_provider)
-      flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to @occasion.event
-      return
-    end
-
     @event = @occasion.event
     @category_groups = CategoryGroup.all :order => "name ASC"
     render :template => "events/show"
   end
 
   def create
-    @occasion = Occasion.new(params[:occasion])
-
-    unless current_user.can_administrate?(@occasion.event.culture_provider)
-      flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to @occasion.event
-      return
-    end
-
     if @occasion.save
       flash[:notice] = 'Föreställningen skapades.'
       redirect_to(@occasion.event)
@@ -187,14 +182,6 @@ class OccasionsController < ApplicationController
   end
 
   def update
-    @occasion = Occasion.find(params[:id])
-
-    unless current_user.can_administrate?(@occasion.event.culture_provider)
-      flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to @occasion.event
-      return
-    end
-
     if @occasion.update_attributes(params[:occasion])
       flash[:notice] = 'Föreställningen uppdaterades.'
       redirect_to(@occasion.event)
@@ -206,13 +193,7 @@ class OccasionsController < ApplicationController
   end
 
   def destroy
-    @occasion = Occasion.find(params[:id])
-
-    if current_user.can_administrate?(@occasion.event.culture_provider)
-      @occasion.destroy
-    else
-      flash[:error] = "Du har inte behörighet att komma åt sidan."
-    end
+    @occasion.destroy
 
     flash[:notice] = 'Föreställningen togs bort.'
     redirect_to(@occasion.event)
@@ -221,6 +202,7 @@ class OccasionsController < ApplicationController
 
   private
 
+  # Creates a pdf document of the attendants on an occasion
   def get_pdf
 
     pdf = PDF::Writer.new  :paper => "A4" , :orientation => :landscape
@@ -260,8 +242,10 @@ class OccasionsController < ApplicationController
       tab.position      = :left
       tab.font_size     = 9
       tab.maximum_width = 1
+
       puts "DEBUGG: #{tab.maximum_width}"
       data = []
+
       @groups.each do |g|
         row = {}
         row["group"]   = (g.school.name.to_s + " - " + g.name.to_s).to_iso
@@ -278,5 +262,27 @@ class OccasionsController < ApplicationController
     end
 
     return pdf
+  end
+
+  # Checks if the user is a host. For use in +before_filter+.
+  def require_host
+    @user = current_user
+
+    unless @user.has_role?(:host) || @user.has_role?(:admin)
+      flash[:error] = "Du har inte behörighet att rapportera närvaro"
+      redirect_to "/"
+      return
+    end
+  end
+
+  # Checks if the user has administration privileges on the occasion.
+  # For use in +before_filter+.
+  def require_culture_worker
+    @occasion = Occasion.find(params[:id])
+
+    unless current_user.can_administrate?(@occasion.event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @occasion.event
+    end
   end
 end

@@ -6,6 +6,10 @@
 # [text] The answer is free text
 # [bool] The answer is of the form yes/no
 # [mchoice] The answer is one of multiple choices. The choices are stored in a CSV field in this model.
+#
+# A question can be a template question, which means that it is a
+# general question available to multiple questionnaires. This way, a
+# base template for all questionnaires can be created.
 class Question < ActiveRecord::Base
 
   QTYPES = {

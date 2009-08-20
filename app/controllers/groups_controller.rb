@@ -1,3 +1,4 @@
+# Controller for managing groups
 class GroupsController < ApplicationController
   layout "admin", :except => [ :options_list ]
   
@@ -62,6 +63,8 @@ class GroupsController < ApplicationController
   end
 
 
+  # Selects a group for the working session. Used by the select group
+  # fragment.
   def select
     group = Group.find params[:group_id], :include => :school
     session[:group_selection] = {
@@ -78,6 +81,7 @@ class GroupsController < ApplicationController
     end
   end
 
+  # Renders HTML select options as a fragment for use in Ajax calls.
   def options_list
     conditions = {}
 
@@ -115,6 +119,7 @@ class GroupsController < ApplicationController
 
   private
 
+  # Sort by the name by default
   def sort_column_from_param(p)
     return "name" if p.blank?
 

@@ -2,12 +2,14 @@ require "pp"
 require 'rubygems'
 require 'gruff'
 
+# Controller for managing events
 class EventsController < ApplicationController
   layout "standard"
 
   before_filter :authenticate, :except => [ :index, :show ]
   before_filter :check_roles, :except => [ :index, :show ]
 
+  # Displays statistics about an event
   def stats
     @event = Event.find_by_id(params[:id])
     @tickets_usage = gen_fname("tickets_usage")
@@ -46,6 +48,7 @@ class EventsController < ApplicationController
     end
   end
 
+  # Displays the presentation page for an event
   def show
     @event = Event.find(params[:id])
     @category_groups = CategoryGroup.all :order => "name ASC"
@@ -149,6 +152,10 @@ class EventsController < ApplicationController
 
   private
 
+  # Loads the culture providers for the event creation sequence.
+  # If the user is an admin, he/she can create events for all culture
+  # provders, while culture workers only can create events for the
+  # culture providers they are associated with.
   def load_culture_providers
     if current_user.has_role?(:admin)
       @culture_providers = CultureProvider.all :order => "name ASC"
@@ -157,6 +164,8 @@ class EventsController < ApplicationController
     end
   end
 
+  # Makes sure the user has privileges for administrating culture providers.
+  # For use in +before_filter+
   def check_roles
     unless current_user.has_role?(:admin) || current_user.has_role?(:culture_worker)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
@@ -164,6 +173,7 @@ class EventsController < ApplicationController
     end
   end
 
+  # Generates random filenames for the generated graphs
   def gen_fname(s)
     numpart = rand(10000)
     fname = "public/images/graphs/" + s + numpart.to_s + ".png"

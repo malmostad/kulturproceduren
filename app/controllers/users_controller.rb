@@ -1,3 +1,4 @@
+# Controller for managing users.
 class UsersController < ApplicationController
   layout :set_layout
 
@@ -5,6 +6,7 @@ class UsersController < ApplicationController
   before_filter :require_admin, :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider, :ldap_search ]
   before_filter :load_user, :only => [ :show, :edit, :edit_password, :update, :update_password ]
 
+  # Displays a list of users in the system.
   def index
     if current_user.has_role?(:admin)
       @users = User.paginate :page => params[:page],
@@ -14,9 +16,12 @@ class UsersController < ApplicationController
     end
   end
 
+  # Displays a user's details. If the user is not an administrator,
+  # the user's own details is always displayed.
   def show
   end
 
+  # Grant roles to a user.
   def grant
     user = User.find(params[:id])
     role = Role.find_by_symbol(params[:role].to_sym)
@@ -29,6 +34,7 @@ class UsersController < ApplicationController
     redirect_to user
   end
   
+  # Revoke roles from a user.
   def revoke
     user = User.find(params[:id])
     role = Role.find_by_symbol(params[:role].to_sym)
@@ -48,6 +54,7 @@ class UsersController < ApplicationController
   def edit
   end
 
+  # Displays a form for changing a user's password.
   def edit_password
     @user.reset_password
   end
@@ -90,6 +97,8 @@ class UsersController < ApplicationController
     end
   end
 
+  # Updates a user's password. If the user is not an administrator, the user's
+  # current password is required in order to change it.
   def update_password
     if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:current_password])
       flash[:warning] = "Felaktigt lösenord."
@@ -123,6 +132,7 @@ class UsersController < ApplicationController
     redirect_to(users_url)
   end
 
+  # Associates a user with a culture provider.
   def add_culture_provider
     user = User.find(params[:id])
     culture_provider = CultureProvider.find params[:culture_provider_id]
@@ -135,6 +145,7 @@ class UsersController < ApplicationController
     redirect_to user
   end
 
+  # Removes the association between a culture_provider and a user.
   def remove_culture_provider
     user = User.find(params[:id])
     culture_provider = CultureProvider.find params[:culture_provider_id]
@@ -150,6 +161,7 @@ class UsersController < ApplicationController
 
   protected
 
+  # Sort users by their username by default.
   def sort_column_from_param(p)
     return "username" if p.blank?
 
@@ -165,10 +177,12 @@ class UsersController < ApplicationController
 
   private
 
+  # Use the admin layout if the user is an administrator.
   def set_layout
     user_online? && current_user.has_role?(:admin) ? "admin" : "standard"
   end
 
+  # Loads the requested user from the database.
   def load_user
     if current_user.has_role?(:admin)
       @user = User.find(params[:id])
@@ -177,6 +191,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Checks if a username exists in the LDAP.
   def ldap_user_exists(username)
     ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
       APP_CONFIG[:ldap][:port],

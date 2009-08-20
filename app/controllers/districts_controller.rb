@@ -1,3 +1,4 @@
+# Controller for managing districts
 class DistrictsController < ApplicationController
   layout "admin"
   
@@ -53,6 +54,9 @@ class DistrictsController < ApplicationController
   end
 
 
+  # Selects a district for a working session. This is used
+  # by the select group fragment to initialize the selection
+  # process by selecting a district.
   def select
     district = District.find params[:district_id]
     session[:group_selection] = { :district_id => district.id }
@@ -67,6 +71,7 @@ class DistrictsController < ApplicationController
 
   protected
   
+  # Sort by the name by default
   def sort_column_from_param(p)
     return "name" if p.blank?
 

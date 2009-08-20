@@ -1,3 +1,4 @@
+# Controller for managing schools.
 class SchoolsController < ApplicationController
   layout "admin", :except => [ :options_list ]
   
@@ -80,6 +81,8 @@ class SchoolsController < ApplicationController
   end
 
 
+  # Selects a school for the working session. Used by the select group fragment
+  # as step two when selecting district-school-group.
   def select
     school = School.find params[:school_id]
     session[:group_selection] = {
@@ -95,6 +98,7 @@ class SchoolsController < ApplicationController
     end
   end
 
+  # Renders a HTML select option list as a fragment for use in an Ajax call.
   def options_list
     conditions = {}
 
@@ -129,6 +133,7 @@ class SchoolsController < ApplicationController
 
   protected
 
+  # Sort schools by their names by default.
   def sort_column_from_param(p)
     return "name" if p.blank?
 
