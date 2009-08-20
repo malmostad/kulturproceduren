@@ -197,6 +197,10 @@
 
         $("#kp-input-area").change(changeHandler);
         $("#kp-input-area").keyup(changeHandler);
+
+        $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
+        "#kp-input-area .booking-seats-container")
+        changeHandler();
     });
 
     $(function() {

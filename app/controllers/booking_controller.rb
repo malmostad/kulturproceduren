@@ -37,7 +37,7 @@ class BookingController < ApplicationController
     @occasion = Occasion.find(params[:occasion_id])
     @errors = Hash.new
 
-    load_vars
+    load_vars(false)
 
     render :partial => "input_area" , :locals => {
       :group => @group,
