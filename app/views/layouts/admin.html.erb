@@ -49,19 +49,19 @@
       <%= yield :section_sub %>
 
       <% if flash[:notice] -%>
-        <div id="kp-flash-notice" class="flash">
+        <div class="flash response">
           <%= flash[:notice] %>
         </div>
       <% end -%>
 
       <% if flash[:warning] -%>
-        <div id="kp-flash-warning" class="flash">
+        <div class="flash alert">
           <%= flash[:warning] %>
         </div>
       <% end -%>
 
       <% if flash[:error] -%>
-        <div id="kp-flash-error" class="flash">
+        <div class="flash error">
           <%= flash[:error] %>
         </div>
       <% end -%>

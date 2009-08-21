@@ -2,6 +2,7 @@ class CreateGroups < ActiveRecord::Migration
   def self.up
     create_table :groups do |t|
       t.string :name
+      t.string :contacts
       t.integer :elit_id
       t.integer :school_id
 

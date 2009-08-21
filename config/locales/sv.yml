@@ -154,13 +154,16 @@ sv:
                 telecoil: "Hörselslinga"
             district:
                 name: "Namn:"
+                contacts: "Kontaktadresser:"
                 elit_id: "ELIT-ID:"
             school:
                 name: "Namn:"
+                contacts: "Kontaktadresser:"
                 elit_id: "ELIT-ID:"
                 district_id: "Stadsdel:"
             group:
                 name: "Namn:"
+                contacts: "Kontaktadresser:"
                 elit_id: "ELIT-ID:"
                 school_id: "Skola:"
             age_group:

@@ -4,12 +4,12 @@
 
   <h2><%= h @district.name %></h2>
 
-  <% unless @district.elit_id.blank? -%>
-    <dl class="meta">
-      <dt class="elit-id">ELIT-ID:</dt>
-      <dd class="elit-id"><%= h @district.elit_id %></dd>
-    </dl>
-  <% end -%>
+  <dl class="meta">
+    <dt class="contacts">Kontaktadresser:</dt>
+    <dd class="contacts"><%= h(@district.contacts) %></dd>
+    <dt class="elit-id">ELIT-ID:</dt>
+    <dd class="elit-id"><%= h @district.elit_id || "-" %></dd>
+  </dl>
 
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_district_path(@district) %></li>

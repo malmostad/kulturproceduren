@@ -14,6 +14,7 @@
 
   <% f.fields do -%>
     <%= f.text_field :name %>
+    <%= f.text_field :contacts, :field_help => "Ange epostadresser, separerade med kommatecken." %>
 
     <% f.buttons do %>
       <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
