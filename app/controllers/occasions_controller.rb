@@ -7,7 +7,7 @@ class OccasionsController < ApplicationController
   require "pdf/simpletable"
 
   before_filter :authenticate, :except => [ :index, :show ]
-  before_filter :require_culture_worker, :only => [ :create, :edit, :update, :destroy ]
+  before_filter :require_culture_worker, :only => [ :edit, :update, :destroy ]
   before_filter :require_host, :only => [ :report_show , :report_create ]
 
 
@@ -171,6 +171,14 @@ class OccasionsController < ApplicationController
   end
 
   def create
+    @occasion = Occasion.new(params[:occasion])
+
+    unless current_user.can_administrate?(@occasion.event.culture_provider)
+      flash[:error] = "Du har inte behörighet att komma åt sidan."
+      redirect_to @occasion.event
+      return
+    end
+
     if @occasion.save
       flash[:notice] = 'Föreställningen skapades.'
       redirect_to(@occasion.event)
