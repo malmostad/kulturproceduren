@@ -29,11 +29,11 @@
     <%= label_tag "group_selection-school_id", "Välj skola:" %>
 
     <div class="input-container">
-      <% if @group_selection_collections[:schools] %>
-        <% form_tag({ :controller => "schools", :action => "select" }) do %>
-          <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
-          <%= hidden_field_tag("occasion_id", occasion.id) if occasion %>
+      <% form_tag({ :controller => "schools", :action => "select" }) do %>
+        <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+        <%= hidden_field_tag("occasion_id", occasion.id) if occasion %>
 
+        <% if @group_selection_collections[:schools] %>
           <%= select_tag(
             "school_id",
             "<option>Välj skola</option>" +
@@ -45,13 +45,15 @@
             <%= submit_tag "Välj skola" %>
           </noscript>
 
+        <% else %>
+
+          <%= select_tag(
+            "school_id",
+            "<option>Välj stadsdel först</option>",
+            :disabled => true, :id => "kp-group_selection-school_id")
+          %>
+
         <% end %>
-      <% else %>
-        <%= select_tag(
-          "school_id",
-          "<option>Välj stadsdel först</option>",
-          :disabled => true, :id => "kp-group_selection-school_id")
-        %>
       <% end %>
     </div>
   </div>
@@ -60,10 +62,10 @@
     <%= label_tag "group_selection-group_id", "Välj grupp:" %>
 
     <div class="input-container">
-      <% if @group_selection_collections[:groups] %>
-        <% form_tag({ :controller => "groups", :action => "select" }) do %>
-          <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+      <% form_tag({ :controller => "groups", :action => "select" }) do %>
+        <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
 
+        <% if @group_selection_collections[:groups] %>
           <%
             if occasion
           %>
@@ -97,13 +99,13 @@
             <%= submit_tag "Välj grupp" %>
           </noscript>
 
+        <% else %>
+          <%= select_tag(
+            "group_id",
+            "<option>Välj skola först</option>",
+            :disabled => true, :id => "kp-group_selection-group_id")
+          %>
         <% end %>
-      <% else %>
-        <%= select_tag(
-          "group_id",
-          "<option>Välj skola först</option>",
-          :disabled => true, :id => "kp-group_selection-group_id")
-        %>
       <% end %>
     </div>
   </div>
