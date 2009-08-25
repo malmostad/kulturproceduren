@@ -1,0 +1,241 @@
+"Centrum":
+  "Johannesskolan":
+    :from: 0
+    :to: 9
+  "Monbijouskolan":
+    :from: 0
+    :to: 6
+  "Rönnenskolan":
+    :from: 7
+    :to: 9
+  "Rörsjöskolan":
+    :from: 0
+    :to: 5
+  "Rörsjöskolan, Zenith":
+    :from: 6
+    :to: 9
+  "Västra skolan ":
+    :from: 0
+    :to: 6
+  "Västra Hamnenskolan":
+    :from: 0
+    :to: 0
+  "Österportskolan":
+    :from: 0
+    :to: 5
+
+"Södra Innerstaden":
+  "Möllevångsskolan":
+    :from: 0
+    :to: 9
+  "Sofielundskolan":
+    :from: 0
+    :to: 9
+  "Nya Stenkulaskolan":
+    :from: 0
+    :to: 9
+  "Sorgenfriskolan ":
+    :from: 0
+    :to: 9
+
+"Västra Innerstaden":
+  "Dammfriskolan":
+    :from: 0
+    :to: 9
+  "Ribersborgskolan":
+    :from: 0
+    :to: 6
+  "Fridhemsskolan":
+    :from: 0
+    :to: 5
+  "Slottsstadens skola":
+    :from: 6
+    :to: 9
+  "Mellanhedsskolan":
+    :from: 0
+    :to: 5
+  "Resursskolorna":
+    :from: 0
+    :to: 9
+
+"Limhamn-Bunkeflo":
+  "Ängslättskolan":
+    :from: 0
+    :to: 5
+  "Sundsbroskolan":
+    :from: 6
+    :to: 9
+  "Tygelsjöskolan":
+    :from: 0
+    :to: 5
+  "Klagshamnsskolan":
+    :from: 0
+    :to: 5
+  "Djupadalsskolan":
+    :from: 0
+    :to: 5
+  "Hyllieskolan":
+    :from: 1
+    :to: 2
+  "Geijerskolan":
+    :from: 0
+    :to: 5
+  "Skolan på Ön":
+    :from: 0
+    :to: 5
+  "Karl Johanskolan":
+    :from: 0
+    :to: 5
+  "Bergaskolan":
+    :from: 0
+    :to: 5
+  "Bergaskolan":
+    :from: 6
+    :to: 9
+  "Linnéskolan":
+    :from: 6
+    :to: 9
+  "Axeltorp skoldaghem":
+    :from: 1
+    :to: 6
+  "Bunkeflo skoldaghem":
+    :from: 1
+    :to: 6
+  "Strandskolan":
+    :from: 5
+    :to: 9
+
+"Hyllie":
+  "Holmaskolan":
+    :from: 0
+    :to: 5
+  "Kroksbäcksskolan":
+    :from: 0
+    :to: 9
+  "Kulladalskolan ":
+    :from: 0
+    :to: 5
+  "Lindeborgsskolan":
+    :from: 0
+    :to: 9
+  "Lorensborgsskolan.":
+    :from: 0
+    :to: 6
+  "Annebergsskolan":
+    :from: 0
+    :to: 6
+
+"Fosie":
+  "Högaholmsskolan":
+    :from: 0
+    :to: 5
+  "Lindängeskolan":
+    :from: 0
+    :to: 9
+  "Munkhätteskolan":
+    :from: 0
+    :to: 9
+  "Eriksfältsskolan":
+    :from: 7
+    :to: 9
+  "Nydalaskolan":
+    :from: 0
+    :to: 6
+  "Söderkullaskolan":
+    :from: 0
+    :to: 9
+  "Fosietorpskolan":
+    :from: 0
+    :to: 1
+  "Augustenborgsskolan":
+    :from: 0
+    :to: 9
+  "Gullviksskolan":
+    :from: 0
+    :to: 6
+  "Rosenholmsskolan":
+    :from: 0
+    :to: 2
+  "Hermodsdalsskolan":
+    :from: 0
+    :to: 6
+  "Hindby skoldaghem":
+    :from: 7
+    :to: 9
+
+"Oxie":
+  "Blankebäcksskolan":
+    :from: 0
+    :to: 6
+  "Kungshögsskolan":
+    :from: 0
+    :to: 6
+  "Oxievångsskolan":
+    :from: 7
+    :to: 9
+  "Tingdammsskolan":
+    :from: 0
+    :to: 6
+
+"Rosengård":
+  "Apelgårdsskolan":
+    :from: 0
+    :to: 9
+  "Kryddgårdsskolan":
+    :from: 0
+    :to: 6
+  "Rosengårdsskolan":
+    :from: 0
+    :to: 9
+  "Värner Rydénsskolan":
+    :from: 0
+    :to: 9
+  "Örtagårdsskolan":
+    :from: 0
+    :to: 9
+
+"Husie":
+  "Bäckagårdsskolan":
+    :from: 0
+    :to: 9
+  "Husieskolan":
+    :from: 0
+    :to: 6
+  "Höjaskolan":
+    :from: 0
+    :to: 9
+  "Jägersroskolan":
+    :from: 0
+    :to: 2
+  "Videdalsskolan":
+    :from: 0
+    :to: 9
+  "Risebergaskolan":
+    :from: 0
+    :to: 3
+
+"Kirseberg":
+  "Kirsebergskolan":
+    :from: 0
+    :to: 9
+  "Karlshögsskolan":
+    :from: 0
+    :to: 3
+  "Bulltoftaskolan":
+    :from: 0
+    :to: 6
+  "Mölletoftaskolan":
+    :from: 0
+    :to: 3
+  "Segevångsskolan":
+    :from: 0
+    :to: 9
+  "Östergårds skoldaghem":
+    :from: 6
+    :to: 9
+  "Västergårds skoldaghem":
+    :from: 6
+    :to: 9
+  "Vårsångens skola":
+    :from: 6
+    :to: 9

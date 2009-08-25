@@ -1,0 +1,16 @@
+:nyfikna:
+  :question: "Hur nyfikna upplever du att barnen/ungdomarna blivit på arrangemangets ämnesområde?"
+  :type: "QuestionMark"
+:upplevelseord:
+  :question: "Vilka av följande ord stämmer bäst överens med barnens/ungdomarnas upplevelse av arrangemanget?"
+  :type: "QuestionMchoice"
+  :choices: "Roligt,Tråkigt,Spännande,Läskigt,Intressant,Lärorikt,Överraskande,Inspirerande,Ingenting"
+:rekommendera:
+  :question: "Skulle du rekommendera detta arrangemang till dina kollegor?"
+  :type: "QuestionBool"
+:info:
+  :question: "Upplever du att du i förväg fått tillräcklig information kring arrangemanget?"
+  :type: "QuestionBool"
+:info_missing:
+  :question: "Om nej, vad har saknats?"
+  :type: "QuestionText"
