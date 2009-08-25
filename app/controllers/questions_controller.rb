@@ -1,3 +1,5 @@
+require "pp"
+
 # Controller for managing questions in a questionnaire.
 class QuestionsController < ApplicationController
 
@@ -10,7 +12,7 @@ class QuestionsController < ApplicationController
   def stat_graph
     @question = Question.find(params[:question_id])
     @occasion = Occasion.find(params[:occasion_id])
-    graph = question_to_graph(@question, @occasion)
+    graph = QuestionsController.question_to_graph(@question, @occasion)
     send_data(graph.to_blob,
       :disposition => 'inline',
       :type => 'image/png',
@@ -141,11 +143,15 @@ class QuestionsController < ApplicationController
   def self.question_to_graph(question, occasion)
     answers = Answer.find_by_sql(
       [
-        "SELECT a.id,a.question_id,a.answer,a.answer_text,a.answer_form_id,a.created_at,a.updated_at
+        "SELECT a.*
          FROM answers a , answer_forms b
          WHERE a.answer_form_id = b.id AND b.occasion_id = ? AND a.question_id = ?",
          occasion.id , question.id
     ])
+
+    pp answers
+
+    graph = nil
 
     case question.qtype
     when "QuestionBool"
@@ -194,6 +200,7 @@ class QuestionsController < ApplicationController
 
       graph = Gruff::Bar.new(GRAPH_WIDTH)
       (0..3).each { |i| graph.data( (i+1).to_s , histogram[i]) }
+
     end
 
     graph.font = "/Library/Fonts/Arial.ttf"

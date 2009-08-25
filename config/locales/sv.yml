@@ -204,7 +204,7 @@ sv:
             question:
                 question: "Fråga:"
                 choice_csv: "Flervalsalternativ:"
-                mandatory:  "Obligatorisk:"
+                mandatory:  "Obligatorisk"
             notification_request:
                 send_mail: "Via mail"
                 send_sms: "Via sms"

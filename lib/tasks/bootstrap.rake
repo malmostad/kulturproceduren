@@ -16,6 +16,8 @@ namespace :kp do
         unless Role.find_by_symbol role
           r = Role.new
           r.name = role.to_s
+
+          puts "Role: #{role.to_s}"
           r.save!
         end
       end
@@ -31,6 +33,8 @@ namespace :kp do
         u.name = "Admin"
         u.email = "admin@admin.com"
         u.cellphone = "0"
+
+        puts "User: #{user.username}"
         u.save!
 
         u.roles << Role.find_by_symbol(:admin)
