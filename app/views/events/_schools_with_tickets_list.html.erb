@@ -1,0 +1,12 @@
+<div class="schools-with-tickets-container">
+  <% if @show_description %>
+    <p class="description">
+      Skolor med tilldelade eller bokade biljetter till evenemanget.
+    </p>
+  <% end %>
+  <ul class="schools-with-tickets-list">
+    <% @schools.each do |school| -%>
+      <li><%= h school.name %></li>
+    <% end %>
+  </ul>
+</div>

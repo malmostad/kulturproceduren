@@ -150,6 +150,24 @@ class EventsController < ApplicationController
   end
 
 
+  # Renders a fragment of the schools that have groups
+  # with alloted tickets to the event. For use in an Ajax request.
+  def schools_with_tickets
+    @event = Event.find(params[:id], :include => :culture_provider)
+    
+    if @event.tickets.empty?
+      render :text => "", :content_type => "text/plain", :status => 404
+    else
+      @schools = School.find_with_tickets_to_event(@event)
+
+      if request.xhr?
+        @show_description = true
+        render :partial => "schools_with_tickets_list", :layout => false
+      end
+    end
+  end
+
+
   private
 
   # Loads the culture providers for the event creation sequence.

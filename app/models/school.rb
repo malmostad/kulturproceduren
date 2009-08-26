@@ -111,5 +111,15 @@ class School < ActiveRecord::Base
 
     return num_tickets
   end
-  
+
+  # Returns all schools that have groups that have tickets (alloted or booked) to
+  # the given event.
+  def self.find_with_tickets_to_event(event)
+    find :all, :include => :district, :order => "schools.name ASC",
+      :conditions => [
+        "schools.id in (select g.school_id from tickets t left join groups g on g.id = t.group_id where t.event_id = ?)",
+        event.id
+    ]
+  end
+
 end

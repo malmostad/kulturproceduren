@@ -303,4 +303,38 @@
         });
     });
 
+    $(function() {
+        /**
+         * Hijacks the link going to the list with schools with tickets in the calendar
+         * and displays the list using Ajax.
+         */
+        $("#kp .calendar-list .schools-with-tickets-link").click(function() {
+            var link = $(this);
+            var url = link.attr("href");
+            var container = link.parent();
+
+            link.hide();
+            container.append('<div class="load-indicator"></div>');
+
+            $.get(url, function(data) {
+                container.append(data);
+                container.find(".load-indicator").remove();
+                container.find(".schools-with-tickets-close-link").show();
+            });
+
+            return false;
+        });
+        /**
+         * Closes the list with schools with tickets.
+         */
+        $("#kp .calendar-list .schools-with-tickets-close-link").click(function() {
+            var link = $(this);
+            var container = link.parent();
+            container.find(".schools-with-tickets-container").remove();
+            link.hide();
+            container.find(".schools-with-tickets-link").show();
+            return false;
+        });
+    });
+
 })(jQuery);

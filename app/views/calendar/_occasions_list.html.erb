@@ -49,7 +49,22 @@ category_groups ||= []
         <td class="booking">
           <% if occasion.event.bookable? %>
             <% if user_online? && current_user.can_book? -%>
+
               <%= link_to "Boka", booking_path(occasion.id) %>
+
+              <div class="schools-with-tickets">
+                <a href="<%= schools_with_tickets_event_path(occasion.event) %>"
+                   class="schools-with-tickets-link"
+                   title="Skolor med grupper som har tilldelade eller bokade biljetter till evenemanget">
+                  <%= image_tag "information.png", :alt => "Skolor med biljetter" %>
+                </a>
+                <a href="<%= schools_with_tickets_event_path(occasion.event) %>"
+                   class="schools-with-tickets-close-link"
+                   title="Stäng listan">
+                  <%= image_tag "cancel.png", :alt => "Stäng listan" %>
+                </a>
+              </div>
+
             <% else -%>
               Logga in för att boka
             <% end -%>

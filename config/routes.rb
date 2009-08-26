@@ -12,7 +12,8 @@ ActionController::Routing::Routes.draw do |map|
       :member => { :set_main => :get }
   end
 
-  map.resources :events, :except => [ :index ], :member => { :stats => :get } do |e|
+  map.resources :events, :except => [ :index ],
+    :member => { :stats => :get, :schools_with_tickets => :get } do |e|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
   end
   
