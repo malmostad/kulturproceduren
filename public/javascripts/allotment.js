@@ -106,12 +106,12 @@
             // Update fill indicator
             row.removeClass("partial full error");
 
-            if (rowData.numTickets == NaN || rowData.numTickets < 0) {
-                row.addClass("error");
+            if (isNaN(rowData.numTickets) || rowData.numTickets < 0) {
+                row.addClass("error").attr("title", "Felaktigt antal biljetter");
             } else if (rowData.numTickets > 0 && rowData.numTickets < rowData.numChildren) {
-                row.addClass("partial");
+                row.addClass("partial").attr("title", "Gruppen har blivit tilldelad biljetter, men färre än antalet barn i gruppen");
             } else if (rowData.numTickets >= rowData.numChildren) {
-                row.addClass("full");
+                row.addClass("full").attr("title", "Gruppen har blivit tilldelad biljetter så att alla barn i gruppen får en biljett");
             }
 
             // Update text field

@@ -210,9 +210,6 @@ namespace :kp do
           e.visible_from = Date.today - rand(120).days
           e.visible_to = Date.today + rand(120).days
 
-          e.ticket_release_date = e.visible_from
-          e.ticket_state = [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT, Event::FREE_FOR_ALL][rand(3)]
-
           ages = [rand(20), rand(20)]
           e.from_age = ages.min
           e.to_age = ages.max
@@ -247,8 +244,6 @@ namespace :kp do
           occasions << occasion
           occasion_date += (1 + rand(7)).days
         end
-
-
       end
     end
 
@@ -266,6 +261,10 @@ namespace :kp do
       event = Event.find ENV["event_id"]
 
       if event.tickets.empty?
+        event.ticket_release_date = e.visible_from
+        event.ticket_state = [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT, Event::FREE_FOR_ALL][rand(3)]
+        event.save!
+
         occasions = event.occasions.find(:all)
 
         groups = Group.all :conditions => [
@@ -339,7 +338,7 @@ namespace :kp do
           query = "select distinct t.occasion_id, t.companion_id, t.group_id from tickets t left join occasions o on o.id = t.occasion_id where t.event_id = #{event.id} and o.date < now() and t.state in (2,3)"
           data = Ticket.connection.select_all(query)
           chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-          
+
           data.each do |d|
 
             tempid = ""
