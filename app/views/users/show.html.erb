@@ -141,9 +141,12 @@
             <% @user.culture_providers.each do |provider| -%>
               <li>
                 <%= link_to h(provider.name), provider %>
-                <span class="inline-tool">
-                  <%= link_to "Ta bort", remove_culture_provider_user_path(:id => @user.id, :culture_provider_id => provider.id) %>
-                </span>
+
+                <% if current_user.has_role?(:admin) %>
+                  <span class="inline-tool">
+                    <%= link_to "Ta bort", remove_culture_provider_user_path(:id => @user.id, :culture_provider_id => provider.id) %>
+                  </span>
+                <% end %>
               </li>
             <% end -%>
             <% if @user.culture_providers.empty? -%>
@@ -151,17 +154,19 @@
             <% end -%>
           </ul>
 
-          <form action="<%= add_culture_provider_user_path(@user) %>" method="post">
-            <div class="inline-form-elements">
-              <label for="kp-culture_provider_id">Arrangör:</label>
-              <%= select_tag "culture_provider_id", options_from_collection_for_select(CultureProvider.all, "id", "name") %>
-              <%= submit_tag("Lägg till arrangör") %>
-              <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
-            </div>
-          </form>
-
           <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :culture_worker) %></span>
+            <form action="<%= add_culture_provider_user_path(@user) %>" method="post">
+              <div class="inline-form-elements">
+                <label for="kp-culture_provider_id">Arrangör:</label>
+                <%= select_tag "culture_provider_id", options_from_collection_for_select(CultureProvider.all, "id", "name") %>
+                <%= submit_tag("Lägg till arrangör") %>
+                <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
+              </div>
+            </form>
+
+            <span class="inline-tool">
+              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :culture_worker) %>
+            </span>
           <% end -%>
         </li>
       <% elsif current_user.has_role?(:admin) -%>

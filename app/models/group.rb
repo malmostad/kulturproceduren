@@ -118,7 +118,7 @@ class Group < ActiveRecord::Base
         }, :lock => true )
     when Event::FREE_FOR_ALL
       tickets = Ticket.find( :all , :conditions => {
-          :event_id => o.event.id,
+          :event_id => occasion.event.id,
           :state => Ticket::UNBOOKED
         }, :lock => lock )
     end

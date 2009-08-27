@@ -42,7 +42,13 @@ class RoleApplicationsController < ApplicationController
   
   def edit
     @application = RoleApplication.find params[:id]
-    render :layout => "admin"
+
+    if @application.state != RoleApplication::PENDING
+      flash[:warning] = "Behörighetsansökan är redan besvarad"
+      redirect_to :action => "archive"
+    else
+      render :layout => "admin"
+    end
   end
 
   # Submits a role application from a user

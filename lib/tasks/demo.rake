@@ -261,7 +261,7 @@ namespace :kp do
       event = Event.find ENV["event_id"]
 
       if event.tickets.empty?
-        event.ticket_release_date = e.visible_from
+        event.ticket_release_date = event.visible_from
         event.ticket_state = [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT, Event::FREE_FOR_ALL][rand(3)]
         event.save!
 
