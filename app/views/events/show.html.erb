@@ -141,9 +141,9 @@
                   <td><%= h occasion.date %></td>
                   <td><%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %></td>
                   <td>
-                    <%= h occasion.seats %>
+                    <%= h(occasion.seats + occasion.wheelchair_seats) %>
                     <% if occasion.wheelchair_seats.to_i > 0 -%>
-                      + <%= h occasion.wheelchair_seats %>
+                      <%= image_tag "user_go.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats > 0 %>
                     <% end -%>
                   </td>
                   <td><%= linebreakize(occasion.address) %></td>
