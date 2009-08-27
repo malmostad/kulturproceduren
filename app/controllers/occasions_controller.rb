@@ -180,6 +180,7 @@ class OccasionsController < ApplicationController
     end
 
     if @occasion.save
+      session[:last_occasion_added] = params[:occasion]
       flash[:notice] = 'Föreställningen skapades.'
       redirect_to(@occasion.event)
     else

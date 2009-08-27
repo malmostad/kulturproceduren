@@ -22,7 +22,7 @@ class Event < ActiveRecord::Base
   has_many :districts, :through => :tickets, :uniq => true
   has_many :groups, :through => :tickets, :uniq => true
   
-  has_many :occasions, :order => "date ASC"
+  has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC"
   belongs_to :culture_provider
 
   has_and_belongs_to_many :categories, :include => :category_group

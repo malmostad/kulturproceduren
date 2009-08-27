@@ -7,7 +7,7 @@ is_edit = ["edit", "update"].include? params[:action]
 
   <legend><%= is_edit ? "Redigera" : "Lägg till" %> föreställning</legend>
 
-  <% form_for(@occasion || Occasion.new { |o| o.event_id = event.id },
+  <% form_for(@occasion || Occasion.new(session[:last_occasion_added]) { |o| o.event_id = event.id },
     :builder => KPFormBuilder,
     :html => { :class => "occasion-form" }) do |f| -%>
 
