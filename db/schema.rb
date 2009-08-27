@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090618091654) do
+ActiveRecord::Schema.define(:version => 20090827063452) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
-    t.text     "answer_text"
     t.string   "answer_form_id", :limit => 46
+    t.text     "answer_text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -249,8 +249,8 @@ ActiveRecord::Schema.define(:version => 20090618091654) do
     t.integer  "occasion_id"
     t.integer  "district_id"
     t.integer  "companion_id"
-    t.boolean  "adult"
     t.integer  "user_id"
+    t.boolean  "adult"
     t.boolean  "wheelchair",   :default => false
     t.datetime "booked_when"
     t.datetime "created_at"

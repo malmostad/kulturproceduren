@@ -7,9 +7,10 @@ class CreateTickets < ActiveRecord::Migration
       t.integer  :occasion_id
       t.integer  :district_id
       t.integer  :companion_id
-      t.boolean  :adult
       t.integer  :user_id
-      t.boolean  :wheelchair , :default => false
+
+      t.boolean  :adult
+      t.boolean  :wheelchair, :default => false
       t.datetime :booked_when
 
       t.timestamps

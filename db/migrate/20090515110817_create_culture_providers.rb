@@ -8,7 +8,6 @@ class CreateCultureProviders < ActiveRecord::Migration
       t.string :email
       t.string :phone
       t.text   :address
-      # TODO coordinates?
       t.text   :opening_hours
       t.string :url
       

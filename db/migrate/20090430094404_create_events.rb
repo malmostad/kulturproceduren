@@ -21,7 +21,6 @@ class CreateEvents < ActiveRecord::Migration
       t.text    :opening_hours
       t.text    :cost
       t.string  :booking_info
-      # TODO: lärarhandledning
       
       t.timestamps
     end

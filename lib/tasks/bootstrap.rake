@@ -34,7 +34,7 @@ namespace :kp do
         u.email = "admin@admin.com"
         u.cellphone = "0"
 
-        puts "User: #{user.username}"
+        puts "User: #{u.username}"
         u.save!
 
         u.roles << Role.find_by_symbol(:admin)
