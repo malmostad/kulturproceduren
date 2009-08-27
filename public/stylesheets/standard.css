@@ -428,6 +428,7 @@
 #kp .calendar-list-tabs li.active, #kp .calendar-list-tabs li.active a { background: #fff; }
 
 #kp .calendar-list .date-row th { border-top: 1px solid #dcd7cf; }
+#kp .calendar-list .icon-indicator { width: 1%; white-space: nowrap; }
 
 #kp .calendar-table { width: 100%; }
 #kp .calendar-table td, #kp .calendar-table th { text-align: center; }

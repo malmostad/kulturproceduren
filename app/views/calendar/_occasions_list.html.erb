@@ -6,6 +6,7 @@ category_groups ||= []
 <table class="calendar-list">
   <thead>
     <tr>
+      <th class="icon-indicator"></th>
       <th>Tid</th>
       <th>Evenemang</th>
 
@@ -28,11 +29,17 @@ category_groups ||= []
 
       <% if prev_date < occasion.date %>
         <tr class="date-row <%= cycle('', 'even')  %>">
-          <th colspan="<%= 4 + category_groups.size %>"><%= occasion.date %></th>
+          <th colspan="<%= 5 + category_groups.size %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 
       <tr class="<%= cycle('', 'even')  %>">
+
+        <td class="icon-indicator">
+          <%= image_tag "user_go.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats > 0 %>
+          <%= image_tag "sound.png", :alt => "Hörselslinga finns", :title => "Hörselslinga finns" if occasion.telecoil %>
+        </td>
+
         <td class="time"><%= l occasion.start_time, :format => :only_time %></td>
         <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
 
