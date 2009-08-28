@@ -19,7 +19,7 @@
     <%= f.select :to_age, (0..19).to_a %>
     <%= f.check_box :further_education %>
 
-    <% if !is_edit || event.ticket_release_date.nil? || @event.ticket_release_date > Date.today %>
+    <% if !is_edit || @event.ticket_release_date.nil? || @event.ticket_release_date > Date.today %>
       <%= f.text_field :visible_from, :class => "date-field auto" %>
     <% end -%>
 
