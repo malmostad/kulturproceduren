@@ -1,0 +1,7 @@
+<h1>Behörighetsansökan hanterad</h1>
+
+<p>
+  Din behörighetsansökan har behandlats av administratörer.
+  <%= link_to "Logga in på Kulturproceduren", user_url(@role_application.user, :host => APP_CONFIG[:mailers][:base_url]) %>
+  för att se resultatet.
+</p>

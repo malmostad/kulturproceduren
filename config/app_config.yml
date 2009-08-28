@@ -7,7 +7,7 @@ development:
         :height: 174
         :thumb_width: 212
         :thumb_height: 80
-    :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
+    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
     :ldap:
         :address:
         :port: 389
@@ -18,6 +18,9 @@ development:
         :max_search_results: 25
     :allotment:
         :proximity_boundary: 3
+    :mailers:
+        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
+        :base_url: "localhost:3000"
 test:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -27,7 +30,7 @@ test:
         :height: 174
         :thumb_width: 212
         :thumb_height: 80
-    :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
+    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
     :ldap:
         :address:
         :port: 389
@@ -38,6 +41,9 @@ test:
         :max_search_results: 25
     :allotment:
         :proximity_boundary: 3
+    :mailers:
+        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
+        :base_url: "localhost:3000"
 production:
     :salt_length: 10
     :ticket_state_change_days: 14
@@ -47,7 +53,7 @@ production:
         :height: 174
         :thumb_width: 212
         :thumb_height: 80
-    :culture_bus_link: http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html
+    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
     :ldap:
         :address:
         :port: 389
@@ -58,3 +64,6 @@ production:
         :max_search_results: 25
     :allotment:
         :proximity_boundary: 3
+    :mailers:
+        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
+        :base_url: "localhost:3000"

@@ -1,0 +1,10 @@
+<h1>Behörighetsansökan inkommen</h1>
+
+<p>
+  Användaren <%= h @role_application.user.name %> har skickat in en ansökan
+  om utökade behörigheter i Kulturproceduren.
+</p>
+
+<p>
+  <%= link_to "Besvara ansökan", edit_role_application_url(@role_application, :host => APP_CONFIG[:mailers][:base_url]) %>.
+</p>
