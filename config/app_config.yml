@@ -1,6 +1,8 @@
 development:
     :salt_length: 10
     :ticket_state_change_days: 14
+    :upload_attachment:
+        :path: uploads/attachments
     :upload_image:
         :path: images/model
         :width: 464
@@ -24,6 +26,8 @@ development:
 test:
     :salt_length: 10
     :ticket_state_change_days: 14
+    :upload_attachment:
+        :path: uploads/attachments
     :upload_image:
         :path: images/model
         :width: 464
@@ -47,6 +51,8 @@ test:
 production:
     :salt_length: 10
     :ticket_state_change_days: 14
+    :upload_attachment:
+        :path: uploads/attachments
     :upload_image:
         :path: images/model
         :width: 464

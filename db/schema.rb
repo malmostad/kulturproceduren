@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090827063452) do
+ActiveRecord::Schema.define(:version => 20090828070100) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(:version => 20090827063452) do
     t.integer  "question_id"
     t.string   "answer_form_id", :limit => 46
     t.text     "answer_text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "attachments", :force => true do |t|
+    t.integer  "event_id"
+    t.string   "description"
+    t.string   "filename"
+    t.string   "content_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

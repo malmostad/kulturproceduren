@@ -306,6 +306,9 @@
 /* Booking listing form */
 #kp .group-bookings-group-selection label { width: 7em; }
 #kp .group-bookings-group-selection .input-container { margin-left: 7em; }
+/* Attachment form */
+#kp form.attachment-form label { width: 7em; }
+#kp form.attachment-form .input-container { padding-left: 7em; }
 
 /*** Models ***/
 
@@ -502,6 +505,10 @@
     margin: 0;
     padding: 0 0 0 2em;
 }
+
+/*** Events ***/
+#kp #kp-ev-meta-info .attachments ul { margin: 0; padding: 0; list-style-type: none; }
+#kp #kp-ev-meta-info .attachments ul li { margin: 0; padding: 0; }
 
 /*** Occasions ***/
 

@@ -35,6 +35,8 @@ class Event < ActiveRecord::Base
   has_many :images_excluding_main, :class_name => "Image", :conditions => 'id != #{main_image_id || 0}'
   # The main image (logotype)
   belongs_to :main_image, :class_name => "Image", :dependent => :delete
+
+  has_many :attachments, :order => "filename ASC"
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"

@@ -49,6 +49,8 @@ class AddForeignKeys < ActiveRecord::Migration
     add_foreign_key :categories, :category_group
     add_foreign_key :categories_events, :category
     add_foreign_key :categories_events, :event
+
+    add_foreign_key :attachments, :event
   end
 
   def self.down
@@ -101,6 +103,8 @@ class AddForeignKeys < ActiveRecord::Migration
     remove_foreign_key :categories, :category_group
     remove_foreign_key :categories_events, :category
     remove_foreign_key :categories_events, :event
+    
+    remove_foreign_key :attachments, :event
   end
 
   private

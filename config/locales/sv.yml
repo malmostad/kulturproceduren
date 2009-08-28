@@ -211,6 +211,8 @@ sv:
                 group_id: "Grupp:"
                 occasion_id: "Föreställning:"
                 user_id: "Användare:"
+            attachment:
+                description: "Beskrivning:"
 
     # Used in array.to_sentence.
     support:

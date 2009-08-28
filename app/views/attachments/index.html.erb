@@ -1,0 +1,61 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    Hantera lärarhandlending för
+    <%= link_to h(@event.name), @event %>.
+  </div>
+<% end -%>
+
+<% form_for(
+  @attachment,
+  :url => event_attachments_path(@event),
+  :builder => KPFormBuilder,
+  :html => { :multipart => true, :class => "attachment-form context-form" }
+) do |f| %>
+
+  <%= f.title "Ladda upp dokument" -%>
+
+  <%= f.validation_error_indicator %>
+
+  <% f.fields do -%>
+
+    <%= f.text_field :description %>
+
+    <% f.row do -%>
+      <label for="kp-upload-document">Dokument:</label>
+      <%= f.field file_field('upload' , 'document') %>
+    <% end -%>
+
+    <% f.buttons do -%>
+      <%= f.submit 'Ladda upp' %>
+    <% end -%>
+  <% end -%>
+<% end %>
+
+<% unless @event.attachments.blank? -%>
+  <table class="attachments-list">
+    <thead>
+      <tr>
+        <th>Filnamn</th>
+        <th>Beskrivning</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @event.attachments.each do |attachment| -%>
+        <tr class="<%= cycle('', 'even') %>">
+          <td><%= h attachment.filename %></td>
+          <td><%= h attachment.description %></td>
+          <td><%= link_to "Ladda ner", event_attachment_path(@event, attachment) %></td>
+          <td>
+            <%= link_to "Ta bort",
+              event_attachment_path(@event, attachment),
+              :method => :delete,
+              :confirm => "Är du säker på att du vill ta bort lärarhandledningen?"
+            %>
+          </td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+<% end -%>
