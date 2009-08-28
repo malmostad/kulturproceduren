@@ -6,11 +6,21 @@
       <h4>Administrera <%= h @event.name %></h4>
       <ul>
         <li><%= link_to 'Redigera', edit_event_path(@event) %></li>
+
+        <% if @event.ticket_release_date.nil? || @event.ticket_release_date > Date.today %>
+          <li>
+            <%= link_to 'Radera', event_path(@event), :method => :delete, :confirm => "Är du säker på att du vill radera evenemanget?" %>
+
+          </li>
+        <% end %>
+
         <li><%= link_to 'Hantera bilder', event_images_path(@event) %></li>
         <li><%= link_to 'Hantera lärarhandledning', event_attachments_path(@event) %></li>
+
         <% if current_user.has_role?(:admin) && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
           <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
         <% end -%>
+
         <% if current_user.has_role?(:admin) -%>
           <li><%= link_to "Statistik", stats_event_path(@event) %></li>
         <% end -%>

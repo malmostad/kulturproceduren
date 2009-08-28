@@ -2,7 +2,7 @@
 class Questionaire < ActiveRecord::Base
   belongs_to                :event
   has_and_belongs_to_many   :questions
-  has_many                  :answer_forms
+  has_many                  :answer_forms, :dependent => :destroy
 
   # Returns an array of the numbers of answers. The first element is the number of answers
   # that are not submitted, and the second is the number of submitted.

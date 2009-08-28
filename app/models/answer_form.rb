@@ -4,7 +4,7 @@ class AnswerForm < ActiveRecord::Base
   # Answer forms have ASCII-ID:s for URL obfuscation
   set_primary_key "id"
   
-  has_many :answers
+  has_many :answers, :dependent => :destroy
   belongs_to :occasion
   belongs_to :companion
   belongs_to :questionaire

@@ -139,14 +139,15 @@ class EventsController < ApplicationController
     
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to :action => "index"
+      redirect_to @event
       return
     end
 
+    @event.questionaire.destroy
     @event.destroy
 
     flash[:notice] = "Evenemanget raderades."
-    redirect_to(events_url)
+    redirect_to "/"
   end
 
 

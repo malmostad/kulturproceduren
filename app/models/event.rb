@@ -22,21 +22,21 @@ class Event < ActiveRecord::Base
   has_many :districts, :through => :tickets, :uniq => true
   has_many :groups, :through => :tickets, :uniq => true
   
-  has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC"
+  has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC", :dependent => :destroy
   belongs_to :culture_provider
 
   has_and_belongs_to_many :categories, :include => :category_group
 
-  has_one :questionaire
+  has_one :questionaire, :dependent => :destroy
 
   # All images
-  has_many :images
+  has_many :images, :dependent => :destroy
   # All images, excluding the main image (logotype)
   has_many :images_excluding_main, :class_name => "Image", :conditions => 'id != #{main_image_id || 0}'
   # The main image (logotype)
-  belongs_to :main_image, :class_name => "Image", :dependent => :delete
+  belongs_to :main_image, :class_name => "Image", :dependent => :destroy
 
-  has_many :attachments, :order => "filename ASC"
+  has_many :attachments, :order => "filename ASC", :dependent => :destroy
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
