@@ -182,7 +182,7 @@
          * TODO: handle non-number input
          */
         var changeHandler = function() {
-            var inputs = $(".seats");
+            var inputs = $("#kp #kp-booking-form-container .num-seats");
             var i;
             var sum = 0;
 
@@ -195,11 +195,11 @@
             $("#kp-booking-count").html("<span>Du har angett totalt " + String(sum) + " biljetter.</span>");
         };
 
-        $("#kp-input-area").change(changeHandler);
-        $("#kp-input-area").keyup(changeHandler);
+        $("#kp-booking-form-container").change(changeHandler);
+        $("#kp-booking-form-container").keyup(changeHandler);
 
         $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
-        "#kp-input-area .booking-seats-container")
+        "#kp-booking-form-container .seats-container")
         changeHandler();
     });
 
