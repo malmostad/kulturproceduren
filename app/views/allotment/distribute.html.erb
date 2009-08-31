@@ -23,6 +23,21 @@
     </div>
   <% end %>
 
+  <div id="kp-distribution-meta">
+    <h4><%= @event.name -%></h4>
+
+    <ul>
+      <li>
+        Totalt antal biljetter:
+        <span class="total-tickets">
+          <%= session[:allotment][:num_tickets] %>
+        </span>
+      </li>
+      <li>Tillgängliga biljetter: <span class="available-tickets"><%= @tickets_left %></span></li>
+      <li>Biljettsläpp: <%= h session[:allotment][:release_date] %></li>
+    </ul>
+  </div>
+
   <table id="kp-distribution-list">
 
     <thead>
@@ -65,7 +80,7 @@
               </td>
               <td class="tools">
                 <a href="#" class="fill" title="Fyll gruppens tilldelade biljetter">+</a>
-                <a href="#" class="clear" title="Töm gruppens tilldelade biljetter">-</a>
+                <a href="#" class="clear" title="Töm gruppens tilldelade biljetter">&#x2212;</a>
               </td>
             </tr>
           <% end -%>
@@ -80,7 +95,7 @@
             <td class="num-tickets"><%= h district.num_tickets %></td>
             <td class="tools">
               <a href="#" class="fill" title="Fyll stadsdelens tilldelade biljetter så långt som möjligt">+</a>
-              <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">-</a>
+              <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">&#x2212;</a>
             </td>
           </tr>
 
@@ -93,7 +108,7 @@
               <td class="num-tickets"><%= h school.num_tickets %></td>
               <td class="tools">
                 <a href="#" class="fill" title="Fyll skolans tilldelade biljetter så långt som möjligt">+</a>
-                <a href="#" class="clear" title="Töm skolans tilldelade biljetter">-</a>
+                <a href="#" class="clear" title="Töm skolans tilldelade biljetter">&#x2212;</a>
               </td>
             </tr>
 
@@ -124,7 +139,7 @@
 
                 <td class="tools">
                   <a href="#" class="fill" title="Fyll gruppens tilldelade biljetter">+</a>
-                  <a href="#" class="clear" title="Töm gruppens tilldelade biljetter">-</a>
+                  <a href="#" class="clear" title="Töm gruppens tilldelade biljetter">&#x2212;</a>
                 </td>
 
               </tr>
@@ -149,7 +164,7 @@
             </td>
             <td class="tools">
               <a href="#" class="fill" title="Fyll stadsdelens tilldelade biljetter">+</a>
-              <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">-</a>
+              <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">&#x2212;</a>
             </td>
           </tr>
         <% end -%>
@@ -164,20 +179,6 @@
 
 <% end -%>
 
-<div id="kp-distribution-meta">
-  <h4><%= @event.name -%></h4>
-
-  <ul>
-    <li>
-      Totalt antal biljetter:
-      <span class="total-tickets">
-        <%= session[:allotment][:num_tickets] %>
-      </span>
-    </li>
-    <li>Tillgängliga biljetter: <span class="available-tickets"><%= @tickets_left %></span></li>
-    <li>Biljettsläpp: <%= h session[:allotment][:release_date] %></li>
-  </ul>
-</div>
 
 <% content_for :head do -%>
   <%= javascript_include_tag "allotment.js" %>

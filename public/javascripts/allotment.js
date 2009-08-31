@@ -51,7 +51,9 @@
 
             // Sum all group rows that are children to the district
             $("." + districtId + " .num-tickets-value").each(function() {
-                sum += parseInt($(this).val());
+                var val = parseInt($(this).val());
+                if (!isNaN(val))
+                    sum += val
             });
 
             $("#" + districtId + " .num-tickets").html(sum);
@@ -68,7 +70,9 @@
 
             // Sum all group rows that are children to the district
             $("." + schoolId + " .num-tickets-value").each(function() {
-                sum += parseInt($(this).val());
+                var val = parseInt($(this).val());
+                if (!isNaN(val))
+                    sum += val
             });
 
             $("#" + schoolId + " .num-tickets").html(sum);
@@ -118,7 +122,7 @@
             field.siblings(".num-tickets-display").val(field.val());
 
             // Update parents
-            if (field.hasClass("group-row")) {
+            if (row.hasClass("group-row")) {
                 try {
                     updateSchoolDisplay(row.attr("className").match(/kp-school-\d+/)[0]);
                 } catch (e) {}
@@ -134,10 +138,18 @@
         $("#kp #kp-distribution-list .num-tickets-display").change(function() {
             var field = $(this);
             var newVal = parseInt($(this).val());
+
             var rowData = getRowData(field.parents("tr"));
 
             // Update the total amount
-            tickets.change(rowData.numTickets - newVal);
+            if (!isNaN(newVal) && !isNaN(rowData.numTickets)) {
+                tickets.change(rowData.numTickets - newVal);
+            } else if (!isNaN(newVal)) {
+                tickets.change(0 - newVal);
+            } else if (!isNaN(rowData.numTickets)) {
+                tickets.change(rowData.numTickets);
+            }
+
             rowData.ticketCnt.val(newVal).trigger("change");
         });
 
@@ -246,6 +258,30 @@
             }
 
             return false;
+        });
+    });
+
+    $(function() {
+        /**
+         * Position the meta display to the right of the distribution list,
+         * and keep it visible when scrolling.
+         */
+        var meta = $("#kp #kp-distribution-meta");
+        meta.css("position", "absolute");
+
+        var distList = $("#kp #kp-distribution-list");
+        var distPos  = distList.offset();
+
+        var top = Math.round(distPos.top)
+        var left = distPos.left + distList.width() + 10;
+
+        meta.css({
+            "top":  top + "px",
+            "left": left + "px"
+        });
+
+        $(window).scroll(function() {
+            meta.css("top", Math.max($(window).scrollTop() + 10, top) + "px");
         });
     });
 })(jQuery);

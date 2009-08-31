@@ -370,7 +370,7 @@
 #kp #kp-allotment-init-form .allotment-district-list li { width: 15em; float: left;  }
 #kp #kp-allotment-init-form .submit-cnt { padding-top: 1em; clear: both; }
 
-#kp #kp-distribution-meta { background: #fff; border: 1px solid #c0c0c0; padding: 0.5em; position: fixed; top: 1em; right: 1em; }
+#kp #kp-distribution-meta { background: #fff; border: 1px solid #c0c0c0; padding: 0.5em; margin-bottom: 1em; }
 #kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
 #kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
 
@@ -383,23 +383,28 @@
 #kp #kp-distribution-list .num-tickets input { width: 3em; }
 #kp #kp-distribution-list .tools a {
     display: block;
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.2em;
+    height: 1.2em;
     float: left;
     border: 1px solid #c0c0c0;
     text-align: center;
     text-decoration: none;
+    font-size: 1.2em;
     font-weight: bold;
     background: #fff;
     color: #2e3436;
 }
+#kp #kp-distribution-list .tools a:hover { background: #007133; color: #fff !important; text-decoration: none !important; }
 #kp #kp-distribution-list .tools .fill { margin-right: 1em; }
 
-#kp #kp-distribution-list .full { background: #8ae234; }
-#kp #kp-distribution-list .partial { background: #fce94f; }
-#kp #kp-distribution-list .error { background: #ef2929; }
+#kp #kp-distribution-list .toggler { color: inherit !important; }
+
+#kp #kp-distribution-list .full { background: #eaffe0; }
+#kp #kp-distribution-list .partial { background: #fffae0; }
+#kp #kp-distribution-list .error { background: #ffeae0; }
 
 #kp #kp-distribution-list .proximity { font-weight: bold; text-decoration: underline; }
+
 
 #kp .allotment-group-selection label { display: none; }
 #kp .allotment-group-selection div, #kp .allotment-group-selection form { display: inline; }
