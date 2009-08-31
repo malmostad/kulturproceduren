@@ -86,14 +86,6 @@ class Group < ActiveRecord::Base
     end
   end
 
-  # Returns all booked occasions belonging to this group
-  def bookings
-    Ticket.find(:all ,
-      :select => "distinct occasion_id" ,
-      :conditions => { :group_id => self.id, :state => Ticket::BOOKED }
-    ).collect {|t| Occasion.find(t.occasion_id) }
-  end
-
   # Returns the bookable tickets this group has on the given occasion
   def bookable_tickets(occasion, lock = false)
     
@@ -115,7 +107,7 @@ class Group < ActiveRecord::Base
           :event_id => occasion.event.id,
           :district_id => self.school.district.id,
           :state => Ticket::UNBOOKED
-        }, :lock => true )
+        }, :lock => lock )
     when Event::FREE_FOR_ALL
       tickets = Ticket.find( :all , :conditions => {
           :event_id => occasion.event.id,

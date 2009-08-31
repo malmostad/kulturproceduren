@@ -1,0 +1,93 @@
+<%= render :partial => "menu" %>
+
+<h2 class="form-title">
+  Bokningsbekräftelse för
+  <%= h @group.school.name %>, <%= h @group.name %> till
+  <%= link_to h(@occasion.event.name), @occasion.event -%>,
+  föreställningen <%= h @occasion.date -%>
+</h2>
+
+<div class="admin-tools">
+  <ul>
+    <li><%= link_to "Ändra bokning", edit_occasion_booking_path(@occasion.id, @group.id) %></li>
+    <li>
+      <%= link_to "Avboka",
+        occasion_booking_path(@occasion.id, @group.id),
+        :method => :delete,
+        :confirm => "Är du säker?"
+      %>
+    </li>
+  </ul>
+</div>
+
+<table class="booking-confirmation-list">
+  <tbody>
+    <tr class="occasion-header">
+      <th colspan="2">Arrangemang</th>
+    </tr>
+    <tr class="event">
+      <th>Namn:</th>
+      <td><%= link_to h(@occasion.event.name), @occasion.event %></td>
+    </tr>
+    <tr class="occasion-date">
+      <th>Datum:</th>
+      <td><%= h @occasion.date %></td>
+    </tr>
+    <tr class="occasion-time">
+      <th>Tid:</th>
+      <td><%= l @occasion.start_time, :format => :only_time %> - <%= l @occasion.stop_time, :format => :only_time %></td>
+    </tr>
+    <tr class="occasion-address">
+      <th>Adress:</th>
+      <td><%= linebreakize(@occasion.address) %></td>
+    </tr>
+    <tr class="occasion-address">
+      <th>Beskrivning:</th>
+      <td><%= paragraphize(@occasion.description) %></td>
+    </tr>
+
+    <tr class="booking-header">
+      <th colspan="2">Bokning</th>
+    </tr>
+    <tr class="num-normal">
+      <th>Antal platser för barn:</th>
+      <td><%= h @booking[:normal] %></td>
+    </tr>
+    <tr class="num-adult">
+      <th>Antal platser för vuxna:</th>
+      <td><%= h @booking[:adult] %></td>
+    </tr>
+    <% if @booking[:wheelchair] > 0 %>
+      <tr class="num-wheelchair">
+        <th>Antal platser för rullstolsbundna:</th>
+        <td><%= h @booking[:wheelchair] %></td>
+      </tr>
+    <% end %>
+
+    <tr class="companion-header">
+      <th colspan="2">Medföljande vuxen</th>
+    </tr>
+    <tr class="companion-name">
+      <th>Namn:</th>
+      <td><%= h @companion.name %></td>
+    </tr>
+    <tr class="companion-email">
+      <th>Epostadress:</th>
+      <td><%= h @companion.email %></td>
+    </tr>
+    <tr class="companion-cellphone">
+      <th>Mobilnummer:</th>
+      <td><%= h @companion.tel_nr %></td>
+    </tr>
+
+    <% if @booking_requirement %>
+      <tr class="requirement-header">
+        <th colspan="2">Speciella krav / Extra information ang. bokning</th>
+      </tr>
+      <tr class="companion-name">
+        <th>Extra behov:</th>
+        <td><%= paragraphize(@booking_requirement.requirement) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

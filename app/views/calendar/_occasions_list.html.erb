@@ -51,7 +51,7 @@ category_groups ||= []
           <% if occasion.event.bookable? %>
             <% if user_online? && current_user.can_book? -%>
 
-              <%= link_to "Boka", booking_path(occasion.id) %>
+              <%= link_to "Boka", new_occasion_booking_path(occasion) %>
 
               <div class="schools-with-tickets">
                 <a href="<%= schools_with_tickets_event_path(occasion.event) %>"

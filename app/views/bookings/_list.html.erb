@@ -1,0 +1,46 @@
+<% if bookings.blank? %>
+
+  <p class="message alert">
+    Gruppen har inga bokningar.
+  </p>
+
+<% else %>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Skola</th>
+        <th>Grupp</th>
+        <th>Evenemang</th>
+        <th>Datum</th>
+        <th>Antal biljetter</th>
+        <th>Bokad av</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% bookings.each do |booking|%>
+        <tr class="<%= cycle('', 'even') %>">
+          <td><%= h booking.group.school.name -%></td>
+          <td><%= h booking.group.name -%></td>
+          <td><%= link_to h(booking.occasion.event.name), booking.occasion.event -%></td>
+          <td><%= h booking.occasion.date -%></td>
+          <td><%= h booking.num_tickets -%> biljetter bokade</td>
+          <td><%= h booking.user.name %></td>
+          <td><%= link_to "Bokningsbekräftelse", occasion_booking_path(booking.occasion_id, booking.group_id) %></td>
+          <td><%= link_to "Ändra bokning", edit_occasion_booking_path(booking.occasion_id, booking.group_id) %></td>
+          <td>
+            <%= link_to "Avboka",
+              occasion_booking_path(booking.occasion_id, booking.group_id),
+              :method => :delete,
+              :confirm => "Är du säker?"
+            %>
+          </td>
+        </tr>
+      <%  end %>
+    </tbody>
+  </table>
+
+  <%= will_paginate bookings %>
+<% end %>

@@ -20,4 +20,82 @@ class Ticket < ActiveRecord::Base
   belongs_to :group
   belongs_to :companion
   belongs_to :user
+
+  # Counts the number of available wheelchair tickets booked on an occasion
+  def self.count_wheelchair_by_occasion(occasion)
+    count :all, :conditions => { :occasion_id => occasion.id , :wheelchair => true, :state => Ticket::BOOKED }
+  end
+
+  # Returns the group's booking count for a given occasion
+  def self.booking(group, occasion)
+    booking = {}
+    booking[:normal] = count_booked_by_type(group, occasion, :normal)
+    booking[:adult] = count_booked_by_type(group, occasion, :adult)
+    booking[:wheelchair] = count_booked_by_type(group, occasion, :wheelchair)
+    return booking
+  end
+
+
+  # Returns all bookings a user has made, in a paged result
+  def self.find_user_bookings(user, page)
+    paginate_by_sql(
+      [ "select t.group_id, t.occasion_id, t.user_id, count(t.id) as num_tickets
+      from tickets t left join occasions o on t.occasion_id = o.id
+      where t.user_id = ? and t.state != 0
+      group by t.group_id, t.occasion_id, t.user_id, o.date
+      order by o.date DESC",
+      user.id
+    ], :page => page)
+  end
+
+  # Returns all bookings for a specific group, in a paged result
+  def self.find_group_bookings(group, page)
+    paginate_by_sql(
+      [ "select t.group_id, t.occasion_id, t.user_id, count(t.id) as num_tickets
+      from tickets t left join occasions o on t.occasion_id = o.id
+      where t.group_id = ? and t.state != 0
+      group by t.group_id, t.occasion_id, t.user_id, o.date
+      order by o.date DESC",
+      group.id
+    ], :page => page)
+  end
+
+  # Returns a group's booked tickets for an occasion
+  def self.find_booked(group, occasion)
+    find :all, :conditions => {
+      :group_id => group.id,
+      :occasion_id => occasion.id,
+      :state => Ticket::BOOKED
+    }
+  end
+
+  # Returns a group's booked tickets for an occasion of a given type
+  def self.find_booked_by_type(group, occasion, type)
+    conditions = {
+      :group_id => group.id,
+      :occasion_id => occasion.id,
+      :adult => false,
+      :wheelchair => false,
+      :state => Ticket::BOOKED
+    }
+
+    conditions[type] = true if type != :normal
+
+    find :all, :conditions => conditions
+  end
+
+  # Counts a group's booked tickets for an occasion of a given type
+  def self.count_booked_by_type(group, occasion, type)
+    conditions = {
+      :group_id => group.id,
+      :occasion_id => occasion.id,
+      :adult => false,
+      :wheelchair => false,
+      :state => Ticket::BOOKED
+    }
+
+    conditions[type] = true if type != :normal
+
+    count :conditions => conditions
+  end
 end

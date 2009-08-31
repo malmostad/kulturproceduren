@@ -104,8 +104,7 @@ class Occasion < ActiveRecord::Base
 
   # Returns the amount of available wheelchair seats on this occasion.
   def available_wheelchair_seats
-    return self.wheelchair_seats - Ticket.count( :all , :conditions => { :occasion_id => self.id , :wheelchair => true , :state => Ticket::BOOKED})
- 
+    return self.wheelchair_seats - Ticket.count_wheelchair_by_occasion(self)
   end
  
 end

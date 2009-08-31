@@ -291,9 +291,9 @@
 #kp form.ldap-search-form .input-container { padding-left: 8em; }
 /* Booking form */
 #kp .booking-group-selection label,
-#kp form.booking-form #kp-input-area label { width: 16em; }
+#kp form.booking-form label { width: 16em; }
 #kp .booking-group-selection .input-container,
-#kp form.booking-form #kp-input-area .input-container { padding-left: 16em; }
+#kp form.booking-form .input-container { padding-left: 16em; }
 /* Evaluation form */
 #kp form.evaluation-form label { width: 15em; }
 #kp form.evaluation-form .input-container { padding-left: 15em; }
@@ -542,6 +542,8 @@
     width: 20em;
 }
 #kp .booking-group-selection .notification-request-info p { margin: 0; }
+
+#kp .booking-confirmation-list th { width: 1%; white-space: nowrap; }
 
 /*** Role application ***/
 #kp .role-application-specification dt { width: 8em; }

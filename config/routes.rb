@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
     e.resources :attachments, :except => [ :edit, :update, :new ]
   end
   
-  map.resources :occasions , :except => [ :index ],
+  map.resources :occasions, :except => [ :index ],
     :member => {
     :attendants => :get,
     :report_show => :get,
@@ -27,9 +27,10 @@ ActionController::Routing::Routes.draw do |map|
     oc.resources :notification_requests,
       :only => [ :new , :create ],
       :collection => { :get_input_area => :get }
+    oc.resources :bookings
   end
 
-  map.resources :booking_requirements
+  map.resources :bookings, :only => [ :index ], :collection => { :group => :get }
 
   map.resources :questionaires, :member => {
     :add_template_question => :post,

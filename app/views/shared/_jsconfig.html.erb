@@ -15,10 +15,8 @@
       select: { url: "<%= select_groups_path %>" }
     },
     booking: {
-      bookingInput: { url: "/booking/get_input_area" }
-    },
-    by_group: {
-      byGroupList: {url: "/booking/get_by_group_list"}
+      form: { url: "<%= url_for :controller => "bookings", :action => "form" %>" },
+      groupList: { url: "<%= url_for :controller => "bookings", :action => "group_list" %>"}
     }
   };
 </script>

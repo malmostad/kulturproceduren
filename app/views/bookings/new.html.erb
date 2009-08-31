@@ -1,20 +1,5 @@
 <%= render :partial => "menu" %>
 
-<%
-
-  state = :no_selection
-
-  case params[:commit]
-  when "Hämta skolor"
-    state = :district_selected
-  when "Hämta grupper"
-    state = :school_selected
-  when "Välj grupp"
-    state = :group_selected
-  end
-
-%>
-
 <h2 class="form-title">
   Boka biljetter för
   <%= link_to h(@occasion.event.name), @occasion.event -%>,
@@ -45,35 +30,10 @@
     </p>
   </div>
 
+  <%= hidden_field_tag "occasion_id", @occasion.id %>
 </div>
 
-<% form_tag({ :controller => "booking", :action => "book" }, { :class => "booking-form" }) do -%>
-  <fieldset>
 
-    <% if @errors.keys.length > 0 %>
-      <div class="validation-error-indicator alert"> Vänligen korrigera markerade uppgifter nedan.</div>
-    <% end %>
-
-    <%= hidden_field_tag 'occasion_id' , @occasion.id %>
-
-    <div id="kp-input-area">
-      <% if session[:group_selection][:group_id] || @edit %>
-
-        <%= render :partial => "input_area",
-          :locals => {
-          :group => @curgroup,
-          :occasion => @occasion,
-          :companion => @companion,
-          :nticks => @nticks,
-          :naticks => @naticks,
-          :nwticks => @nwticks,
-          :br => @br,
-          :edit => @edit
-        } %>
-
-      <% end %>
-    </div>
-
-  </fieldset>
-<% end %>
-
+<div id="kp-booking-form-container">
+  <%= render :partial => "form" if @group %>
+</div>

@@ -3,4 +3,9 @@
 class BookingRequirement < ActiveRecord::Base
   belongs_to :group
   belongs_to :occasion
+
+  # Fetches the booking requirement for a specific group at a specific occasion
+  def self.get(group, occasion)
+    find :first, :conditions => { :group_id => group.id, :occasion_id => occasion.id }
+  end
 end 

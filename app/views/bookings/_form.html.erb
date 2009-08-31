@@ -1,0 +1,138 @@
+<%
+  if @is_edit
+    form_url = occasion_booking_path(@occasion.id, @group.id)
+    method = :put
+  else
+    form_url = occasion_bookings_path(@occasion)
+    method = :post
+  end
+%>
+<% form_tag(form_url, { :class => "booking-form", :method => method }) do -%>
+
+  <fieldset>
+
+    <% if @is_error %>
+      <div class="validation-error-indicator alert"> Vänligen korrigera markerade uppgifter nedan.</div>
+    <% end %>
+
+    <% if @group %>
+
+      <%
+        group_tickets = @group.available_tickets_by_occasion(@occasion)
+      %>
+
+      <% if !@is_edit && group_tickets == 0 %>
+        <p class="message alert">
+          Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
+          <a href="#">Klicka här</a> om du vill få ett meddelande om biljetter blir tillgängliga senare.
+        </p>
+      <% else %>
+
+        <% if @group.age_groups.num_children_by_age_span(@occasion.event.from_age, @occasion.event.to_age) == 0 %>
+          <p class="message alert">
+            Den valda gruppen har elever vars ålder inte är rekommenderad för det här evenemanget!
+          </p>
+        <% end %>
+
+        <% if @group && @occasion.event.ticket_state != Event::FREE_FOR_ALL %>
+          <p class="message response">
+            <% if @is_edit %>
+              Uppdatera bokningen för
+              <strong><%= h @group.school.name %>, <%= h @group.name %></strong>.
+              Det finns ytterligare 
+              <strong><%= group_tickets -%></strong>
+              biljetter tillgängliga för bokning.
+            <% else %>
+              <strong><%= h @group.school.name %>, <%= h @group.name %></strong>
+              har
+              <strong><%= group_tickets -%></strong>
+              biljetter tillgängliga för bokning.
+            <% end %>
+          </p>
+        <% elsif @is_edit %>
+          <p class="message response">
+            Uppdatera bokningen tillhörande
+            <strong><%= h @group.school.name %>, <%= h @group.name %></strong>.
+          </p>
+        <% end %>
+
+        <fieldset class="seats-container">
+          <legend><span>Antal platser</span></legend>
+
+          <div class="form-row seats_normal-field-row">
+            <% if @seats_errors && @seats_errors[:normal] %>
+              <div class="validation-error-message alert-field"><%= h @seats_errors[:normal] -%></div>
+            <% end %>
+
+            <%= label_tag "seats[normal]", "Antal platser för elever:" %>
+
+            <div class="input-container">
+              <%= text_field_tag "seats[normal]",
+                @seats[:normal],
+                { :class => "num-seats", :size => 30 }
+              %>
+            </div>
+          </div>
+
+          <div class="form-row seats_adult-field-row">
+            <%= label_tag "seats[adult]", "Antal platser för vuxna:" %>
+
+            <div class="input-container">
+              <%= text_field_tag "seats[adult]",
+                @seats[:adult],
+                { :class => "num-seats", :size => 30 }
+              %>
+            </div>
+          </div>
+
+          <% if @occasion.wheelchair_seats > 0 %>
+            <div class="form-row seats_wheelchair-field-row">
+              <% if @seats_errors && @seats_errors[:wheelchair] %>
+                <div class="validation-error-message alert-field"><%= h @seats_errors[:wheelchair] -%></div>
+              <% end %>
+
+              <%= label_tag "seats[wheelchair]" , "Antal rullstolsanpassade platser:" %>
+              <div class="input-container">
+                <%= text_field_tag "seats[wheelchair]",
+                  @seats[:wheelchair],
+                  { :class => "seats", :size => 30 }
+                -%>
+                <span class="field-help">
+                  <%= @occasion.wheelchair_seats - Ticket.count_wheelchair_by_occasion(@occasion) %>
+                  rullstolsplatser tillgängligt på den här föreställningen.
+                </span>
+              </div>
+            </div>
+          <% end %>
+
+        </fieldset>
+
+        <fieldset class="booking-companion">
+          <legend><span>Medföljande vuxen</span></legend>
+
+          <% fields_for(@companion, :builder => KPFormBuilder) do |f| %>
+            <%= f.text_field :name %>
+            <%= f.text_field :email %>
+            <%= f.text_field :tel_nr %>
+          <% end %>
+        </fieldset>
+
+        <fieldset class="booking-request">
+          <legend><span>Speciella krav / Extra information ang. bokning</span></legend>
+
+          <% fields_for(@booking_requirement, :builder => KPFormBuilder) do |f| %>
+            <%= f.text_area :requirement, :rows => 8 %>
+          <% end %>
+        </fieldset>
+
+        <div class="form-buttons">
+          <%= submit_tag "Boka" %>
+        </div>
+
+      <% end %>
+
+    <% end %>
+
+  </fieldset>
+<% end %>
+

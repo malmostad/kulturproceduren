@@ -108,20 +108,20 @@
                 $("#kp-group_selection-group_id").parent().append('<div class="load-indicator"></div>');
 
                 var request = $.get(
-                kpConfig.booking.bookingInput.url,
+                kpConfig.booking.form.url,
                 { group_id: groupId, occasion_id: occasionId },
                 function(data) {
-                    $("#kp-input-area").html(data);
+                    $("#kp-booking-form-container").html(data);
                     $("#kp-group_selection-group_id").parent().find('.load-indicator').remove();
                 });
 
             } else {
                 // Disable the form
-                $("#kp-input-area").html("");
+                $("#kp-booking-form-container").html("");
             }
         }).bind("districtSelected schoolSelected", function(e, id){
             // Disable the form
-            $("#kp-input-area").html("");
+            $("#kp-booking-form-container").html("");
         });
 
         /**
@@ -149,16 +149,16 @@
         ).bind("groupSelected", function(e, groupId) {
             if (!isNaN(groupId)) {
                 // Load the group booking list
-                var request = $.get(kpConfig.by_group.byGroupList.url,
+                var request = $.get(kpConfig.booking.groupList.url,
                 { group_id: groupId },
                 function(data) {
-                    $("#kp-booking-by-group").html(data);
+                    $("#kp-group-bookings-container").html(data);
                 });
             } else {
-                $("#kp-booking-by-group").html("");
+                $("#kp-group-bookings-container").html("");
             }
         }).bind("districtSelected schoolSelected", function(e, id){
-            $("#kp-booking-by-group").html("");
+            $("#kp-group-bookings-container").html("");
         });
     });
 

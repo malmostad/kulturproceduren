@@ -213,6 +213,12 @@ sv:
                 user_id: "Användare:"
             attachment:
                 description: "Beskrivning:"
+            companion:
+                name: "Namn:"
+                email: "Epostadress:"
+                tel_nr: "Mobilnummer:"
+            booking_requirement:
+                requirement: "Extra behov:"
 
     # Used in array.to_sentence.
     support:
