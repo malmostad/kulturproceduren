@@ -191,6 +191,8 @@
                           <%= link_to "Rapportera närvaro" , :controller => "occasions" , :action => "report_show" , :id => occasion.id -%>
                         <% end %>
                       <% end -%>
+                    <% elsif @event.bookable? %>
+                      Logga in för att boka
                     <% end %>
                   </td>
                 </tr>

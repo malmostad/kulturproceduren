@@ -249,12 +249,16 @@
          * Expands/collapses the children of the selected district/school
          */
         $("#kp #kp-distribution-list .toggler").click(function() {
-            var rows = $("#kp #kp-distribution-list ." + $(this).parents("tr").attr("id"));
+            var toggler = $(this);
+            var rows = $("#kp #kp-distribution-list ." + toggler.parents("tr").attr("id"));
 
             if (rows.is(":visible")) {
+                toggler.addClass("collapsed");
                 rows.hide();
             } else {
-                rows.show();
+                toggler.removeClass("collapsed");
+                console.log(rows);
+                rows.show().find(".toggler.collapsed").removeClass("collapsed");
             }
 
             return false;

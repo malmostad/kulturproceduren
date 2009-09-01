@@ -397,11 +397,17 @@
 #kp #kp-distribution-list .tools a:hover { background: #007133; color: #fff !important; text-decoration: none !important; }
 #kp #kp-distribution-list .tools .fill { margin-right: 1em; }
 
-#kp #kp-distribution-list .toggler { color: inherit !important; }
+#kp #kp-distribution-list .toggler {
+    color: inherit !important;
+    background: url(../images/expanded.png) 5px 50% no-repeat;
+    padding-left: 20px;
+}
+#kp #kp-distribution-list .toggler.collapsed { background: url(../images/collapsed.png) 5px 50% no-repeat; }
 
-#kp #kp-distribution-list .full { background: #eaffe0; }
-#kp #kp-distribution-list .partial { background: #fffae0; }
-#kp #kp-distribution-list .error { background: #ffeae0; }
+#kp #kp-distribution-list tbody tr:nth-child(2n) { background: #fff; }
+#kp #kp-distribution-list .full { background: #caebbc !important; }
+#kp #kp-distribution-list .partial { background: #ffec80 !important; }
+#kp #kp-distribution-list .error { background: #ffeae0 !important; }
 
 #kp #kp-distribution-list .proximity { font-weight: bold; text-decoration: underline; }
 
