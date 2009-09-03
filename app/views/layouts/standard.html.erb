@@ -8,6 +8,15 @@
     <%= stylesheet_link_tag 'ui-lightness/jquery-ui-1.7.2.custom.css' %>
     <%= stylesheet_link_tag 'http://sitevision.dev.malmo.se/assets/css/malmo-core.css' %>
     <%= stylesheet_link_tag 'standard' %>
+    <!--[if IE 8]>
+    <%= stylesheet_link_tag "standard-ie8" %>
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <%= stylesheet_link_tag "standard-ie7" %>
+    <![endif]-->
+    <!--[if lte IE 6]>
+    <%= stylesheet_link_tag "standard-ie6" %>
+    <![endif]-->
 
     <%= render :partial => "shared/jsconfig" -%>
 

@@ -1,0 +1,13 @@
+#kp .load-indicator,
+#kp .pri-nav li,
+#kp .section-nav li,
+#kp .allotment-group-selection div.load-indicator,
+#kp .calendar-list-tabs li {
+    display: inline;
+    zoom: 1;
+}
+
+.input-container form { display: inline; }
+#kp .with-legend { padding-top: 3em; }
+#kp .with-legend legend { margin: -3em 0 0 -0.5em; }
+

@@ -12,31 +12,34 @@
     <%= h(@questionaire.description) %>
   </p>
 
-  <fieldset class="add-question-cnt">
-    <legend><span>Lägg till fråga</span></legend>
+  <div class="context-form">
+    <fieldset class="<%= "with-legend" unless @template_questions.empty? %>">
+      <% unless @template_questions.empty? %>
+        <legend><span>Välj en mallfråga</span></legend>
 
-    <% unless @template_questions.empty? %>
-      <span class="description">Välj en mallfråga</span>
+        <form action="<%= add_template_question_questionaire_path(@questionaire) %>"
+              method="post"
+              class="add-template-question-form"
+              name="add_template_question_form">
 
-      <form action="<%= add_template_question_questionaire_path(@questionaire) %>"
-            method="post"
-            class="add-template-question-form"
-            name="add_template_question_form">
-        <div>
-          <select name="question_id">
-            <%= options_from_collection_for_select @template_questions, :id, :question %>
-          </select>
-          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
-          <input type="submit" value="Lägg till mallfråga" name="do_submit"/>
-        </div>
-      </form>
+          <div>
+            <select name="question_id">
+              <%= options_from_collection_for_select @template_questions, :id, :question %>
+            </select>
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
+            <input type="submit" value="Lägg till mallfråga" name="do_submit"/>
+          </div>
+        </form>
+      </fieldset>
 
-      <span class="description">eller lägg till en ny fråga</span>
-    <% end -%>
+      <fieldset class="with-legend">
+        <legend><span>eller lägg till ny fråga</span></legend>
+      <% end -%>
 
-    <%= render :partial => "questions/form", :locals => { :question => @question, :questionaire => @questionaire } %>
+      <%= render :partial => "questions/form", :locals => { :question => @question, :questionaire => @questionaire } %>
+    </fieldset>
+  </div>
 
-  </fieldset>
 
   <% unless @questionaire.questions.empty? -%>
 

@@ -167,7 +167,7 @@
          * Shows the multiple choice input field when choosing the question type
          * "multiple choice".
          */
-        $("#kp .question-form .types-field-row :radio").change(function() {
+        $("#kp .question-form .types-field-row :radio").click(function() {
             if ($(this).val() == "QuestionMchoice") {
                 $("#kp .question-form .choice_csv-field-row").show("slow");
             } else {

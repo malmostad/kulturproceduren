@@ -20,11 +20,11 @@
       <% end -%>
       <%= f.text_field :description %>
 
-      <% f.buttons do -%>
-        <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
-      <% end -%>
     <% end -%>
 
+    <% f.buttons do -%>
+      <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
+    <% end -%>
   <% end %>
 
 <% else -%>

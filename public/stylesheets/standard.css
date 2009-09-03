@@ -14,8 +14,8 @@
 #kp dl { margin: 0 0 1.5em 0; }
 #kp dd { margin-left: 1.5em;}
 
-#kp fieldset { border: 1px solid #c0c0c0; margin: 0 0 1em 0; padding: 1em 1em 0 1em; }
-#kp legend { padding: 0 1em; }
+#kp fieldset { border: 1px solid #c0c0c0; margin: 0 0 1em 0; padding: 1em 0.5em; }
+#kp legend { padding: 0 1em; font-size: 1.1em; }
 
 #kp table { width: 100%; }
 #kp table .selected td { background: #cfc; }
@@ -36,6 +36,8 @@
 
 /*** jQuery UI ***/
 #kp .ui-widget { font-size: 1em; }
+
+#kp .ui-tabs { margin-bottom: 1em; }
 
 #kp ul.ui-tabs-nav {
     padding: 0 0 0 1em;
@@ -86,6 +88,7 @@
 #kp fieldset.collapsed legend { background: url(../images/collapsed.png) 5px 50% no-repeat; }
 #kp fieldset.collapsed form { display: none; }
 
+#kp .pagination { margin-top: 1em; padding-bottom: 1em; }
 #kp .pagination span, #kp .pagination a {
     border: 1px solid #c0c0c0;
     padding: 3px 0.5em;
@@ -108,6 +111,7 @@
 #kp .load-indicator {
     width: 16px;
     height: 16px;
+    display: -moz-inline-stack;
     display: inline-block;
     background: url(../images/ajax-loader.gif) no-repeat;
 }
@@ -126,6 +130,7 @@
     list-style-type: none;
 }
 #kp .pri-nav li {
+    display: -moz-inline-stack;
     display: inline-block;
     margin-right: 0.2em;
     border: 1px solid #c0c0c0;
@@ -171,26 +176,23 @@
 
 /*** Forms ***/
 
-#kp form.context-form { border: 1px solid #c0c0c0; padding: 1em 1em 0 1em; margin-bottom: 1em; }
+#kp .context-form { border: 1px solid #c0c0c0; padding: 1em; margin-bottom: 1em; }
 
-#kp form h2,
-#kp h2.form-title { padding: 0.3em 0.5em; background: #ffcf3d url(../images/list_header.png) repeat-x; }
 #kp form fieldset,
-#kp fieldset.form-fieldset { border: 0; margin: 0 0 1em 0; padding: 0; position: relative; }
-#kp form fieldset legend,
-#kp fieldset.form-fieldset legend {
-    margin: 0 0 3em 0;
-    padding: 0;
-    font-weight: bold;
-}
-#kp form fieldset legend span,
-#kp fieldset.form-fieldset legend span {
+#kp .with-legend { margin: 0; border: 0; padding: 0; }
+#kp .with-legend { position: relative; padding: 3em 0 1em 0; }
+#kp .with-legend legend { margin: 0; padding: 0; }
+#kp .with-legend legend span {
     position: absolute;
     display: block;
     width: 98%;
     padding: 0.2em 0.5em;
     background: #ffcf3d url(../images/list_header.png) repeat-x;
 }
+
+#kp form h2,
+#kp h2.form-title { padding: 0.3em 0.5em; background: #ffcf3d url(../images/list_header.png) repeat-x; }
+
 #kp .form-row { padding-bottom: 0.5em; clear: both; }
 #kp .form-row label { display: block; float: left; }
 #kp .form-row .input-container label,
@@ -281,8 +283,8 @@
 #kp form.school-form label { width: 9em; }
 #kp form.school-form .input-container { padding-left: 9em; }
 /* User form */
-#kp form.user-form label { width: 9em; }
-#kp form.user-form .input-container { padding-left: 9em; }
+#kp form.user-form label { width: 10em; }
+#kp form.user-form .input-container { padding-left: 10em; }
 /* Allotment forms */
 #kp form.allotment-init-form label { width: 12em; }
 #kp form.allotment-init-form .input-container { padding-left: 12em; }
@@ -358,9 +360,14 @@
 #kp .admin-tools { border: 1px solid #c0c0c0; padding: 0.5em; margin: 0 0 1em ; }
 #kp ul.admin-tools { list-style-type: none; border: 0; }
 #kp div.admin-tools h4 { margin: 0 0 0.5em 0; padding: 0; font-size: 1em; }
-#kp div.admin-tools ul { list-style-type: none; margin: 0; padding: 0; }
+#kp div.admin-tools ul { list-style-type: none; margin: 0; padding: 0; line-height: 1.8em; }
 #kp .admin-tools li { display: inline; padding-right: 0.5em; }
-#kp .admin-tools a, #kp a.admin-tool { border: 1px solid #c0c0c0; padding: 1px 0.5em; text-decoration: none; }
+#kp .admin-tools a, #kp a.admin-tool {
+    border: 1px solid #c0c0c0;
+    padding: 1px 0.5em;
+    text-decoration: none;
+    white-space: nowrap;
+}
 #kp .admin-tools a:hover, #kp .admin-tools a:active,
 #kp a.admin-tool:hover, #kp a.admin-tool:active { background: #D9EBD2; }
 
@@ -545,7 +552,7 @@
 /*** Booking ***/
 #kp .booking-group-selection,
 #kp .booking-form .booking-seats-container { position: relative; }
-#kp .booking-form #kp-booking-count { padding: 7px; margin-left: 16em; width: 265px; }
+#kp .booking-form #kp-booking-count { padding: 7px; margin: 0 0 0 16em; width: 265px; }
 #kp .booking-group-selection .notification-request-info {
     position: absolute;
     top: 3em;

@@ -1,7 +1,7 @@
 <%= render :partial => "menu" %>
 
 
-<fieldset>
+<fieldset class="with-legend">
   <legend><span>Personuppgifter</span></legend>
 
   <ul class="admin-tools">
@@ -33,7 +33,7 @@
   </dl>
 </fieldset>
 
-<fieldset>
+<fieldset class="with-legend">
   <legend><span>Kontodetaljer</span></legend>
 
   <dl class="form-elements">
@@ -52,7 +52,7 @@
   </dl>
 </fieldset>
 
-<fieldset class="privileges-cnt">
+<fieldset class="privileges-cnt with-legend">
   <legend><span>Behörigheter</span></legend>
 
   <% denom = current_user.has_role?(:admin) ? "Användaren" : "Du" %>

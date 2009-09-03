@@ -1,12 +1,12 @@
 <%
-questionaire ||= false
-is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions"
+  questionaire ||= false
+  is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions"
 
-form_url = nil
+  form_url = nil
 
-if questionaire
-  form_url = is_edit ? questionaire_question_path(questionaire, question) : questionaire_questions_path(questionaire)
-end
+  if questionaire
+    form_url = is_edit ? questionaire_question_path(questionaire, question) : questionaire_questions_path(questionaire)
+  end
 
 %>
 
@@ -14,23 +14,25 @@ end
 
   <%= f.validation_error_indicator -%>
 
-  <% f.row '', 'types-field-row' do -%>
-    <label>Svarstyp på frågan:</label>
+  <% f.fields do %>
+    <% f.row '', 'types-field-row' do -%>
+      <label>Svarstyp på frågan:</label>
 
-    <% f.field do -%>
-      <% Question::QTYPES.keys.each do |type|
-        val = h(Question::QTYPES[type.to_s])
-        -%>
-        <%= f.single_radio_button :qtype, val %>
-        <label for="kp-question-qtype_<%= val.downcase %>"><%= h(type) %></label>
+      <% f.field do -%>
+        <% Question::QTYPES.keys.each do |type| %>
+          <% val = h(Question::QTYPES[type.to_s]) -%>
+          <%= f.single_radio_button :qtype, val %>
+          <label for="kp-question-qtype_<%= val.downcase %>"><%= h(type) %></label>
+        <% end -%>
       <% end -%>
+
     <% end -%>
 
-  <% end -%>
+    <%= f.text_field :question %>
+    <%= f.text_field :choice_csv, :field_help => "Ange alternativen separerade med kommatecken", :row_hidden => (question.qtype != "QuestionMchoice") -%>
+    <%= f.check_box :mandatory %>
 
-  <%= f.text_field :question %>
-  <%= f.text_field :choice_csv, :field_help => "Ange alternativen separerade med kommatecken", :row_hidden => (question.qtype != "QuestionMchoice") -%>
-  <%= f.check_box :mandatory %>
+  <% end %>
 
   <% f.buttons do -%>
     <%= f.hidden_field :template -%>

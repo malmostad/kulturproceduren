@@ -8,6 +8,15 @@
     <%= stylesheet_link_tag 'ui-lightness/jquery-ui-1.7.2.custom.css' %>
     <%= stylesheet_link_tag 'http://sitevision.dev.malmo.se/assets/css/malmo-core.css' %>
     <%= stylesheet_link_tag 'standard' %>
+    <!--[if IE 8]>
+    <%= stylesheet_link_tag "standard-ie8" %>
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <%= stylesheet_link_tag "standard-ie7" %>
+    <![endif]-->
+    <!--[if lte IE 6]>
+    <%= stylesheet_link_tag "standard-ie6" %>
+    <![endif]-->
 
     <%= render :partial => "shared/jsconfig" -%>
 
@@ -28,19 +37,19 @@
       <ul class="pri-nav">
         <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
           <%= link_to "Behörighetsansökningar", role_applications_path -%>
-        </li><li class="pri-nav-questionaires <%= active_by_controller "questionaires", "questions" %>">
+          </li><li class="pri-nav-questionaires <%= active_by_controller "questionaires", "questions" %>">
           <%= link_to "Enkäter", questionaires_path -%>
-        </li><li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
+          </li><li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
           <%= link_to "Kategorier", categories_path -%>
-        </li><li class="pri-nav-districts <%= active_by_controller "districts" %>">
+          </li><li class="pri-nav-districts <%= active_by_controller "districts" %>">
           <%= link_to "Stadsdelar", districts_path -%>
-        </li><li class="pri-nav-schools <%= active_by_controller "schools" %>">
+          </li><li class="pri-nav-schools <%= active_by_controller "schools" %>">
           <%= link_to "Skolor", schools_path -%>
-        </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
+          </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
           <%= link_to "Grupper", groups_path -%>
-        </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
+          </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
           <%= link_to "Användare", users_path -%>
-        </li><li class="pri-nav-leave-logout">
+          </li><li class="pri-nav-leave-logout">
           <%= link_to "Lämna administrationen", "/" -%>
           <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
         </li>

@@ -1,7 +1,8 @@
 
-<% form_tag(ldap_search_path, { :id => "kp-ldap-search-form", :class => "ldap-search-form" }) do -%>
+<% form_tag(ldap_search_path, { :id => "kp-ldap-search-form", :class => "ldap-search-form context-form" }) do -%>
+  <h2>Sök i Malmö Stads interna katalog</h2>
+
   <fieldset>
-    <legend><span>Sök i Malmö Stads interna katalog</span></legend>
 
     <div class="form-row name-field-row">
       <label for="kp-ldapquery-name">Namn:</label>
@@ -36,8 +37,9 @@
       </div>
     </div>
 
-    <div class="form-buttons">
-      <input type="submit" value="Sök" name="submit"/>
-    </div>
   </fieldset>
+
+  <div class="form-buttons">
+    <input type="submit" value="Sök" name="submit"/>
+  </div>
 <% end %>

@@ -2,11 +2,11 @@
 
 <% is_group_distribution = session[:allotment][:ticket_state] == Event::ALLOTED_GROUP %>
 
-<h1>Fördelning</h1>
+<h2 class="form-title">Fördelning</h2>
 
 <% if is_group_distribution -%>
   <div class="allotment-group-selection">
-    <%= render :partial => "shared/group_selection" %>
+    <%= render :partial => "shared/group_selection", :locals => { :hide_title => true } %>
   </div>
 <% end -%>
 

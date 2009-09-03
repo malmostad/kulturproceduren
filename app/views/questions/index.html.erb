@@ -2,11 +2,10 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions" %>
 
-<fieldset>
-  <legend><span><%= is_edit ? "Uppdatera" : "Lägg till" %> mallfråga</span></legend>
-
+<div class="context-form">
+  <h2 class="form-title">Lägg till mallfråga</h2>
   <%= render :partial => "form", :locals => { :question => @question } %>
-</fieldset>
+</div>
 
 <table>
   <thead>
@@ -21,12 +20,11 @@
 
   <tbody>
     <% qtypes = Question::QTYPES.invert %>
-    
     <% @questions.each do |question| -%>
       <tr class="<%= cycle('', 'even') %>">
         <td><%= h question.question %></td>
         <td><%= h qtypes[question.qtype] %></td>
-        <td><%= "Ja" if question.mandatory %>
+        <td><%= "Ja" if question.mandatory %></td>
         <td><%= h question.choice_csv if question.qtype = "QuestionMchoice" %></td>
         <td><%= link_to "Redigera", edit_question_path(question) -%></td>
         <td><%= link_to "Radera", question, :confirm => "Är du säker?", :method => :delete %></td>

@@ -1,7 +1,4 @@
 <%= render :partial => "questionaires/menu" -%>
 
-<fieldset>
-  <legend><span>Uppdatera fråga</span></legend>
-
-  <%= render :partial => "form", :locals => { :question => @question, :questionaire => @questionaire } %>
-</fieldset>
+<h2 class="form-title">Uppdatera fråga</h2>
+<%= render :partial => "form", :locals => { :question => @question, :questionaire => @questionaire } %>
