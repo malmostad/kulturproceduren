@@ -34,13 +34,7 @@ class OccasionsController < ApplicationController
       return
     end
 
-    @groups = Group.find Ticket.find(
-      :all ,
-      :select => "distinct group_id" ,
-      :conditions => {
-        :occasion_id => @occasion.id ,
-        :state => Ticket::BOOKED
-      } ).map { |t| t.group_id }
+    @groups = @occasion.attending_groups
 
     render :report
 
@@ -48,7 +42,7 @@ class OccasionsController < ApplicationController
 
   # Creates an attendace report from the form parameters
   def report_create
-    if params[:id].blank? or params[:id].to_i == 0
+    if params[:id].blank? || params[:id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
       redirect_to "/"
       return
@@ -68,58 +62,34 @@ class OccasionsController < ApplicationController
       return
     end
 
-    @groups = Group.find Ticket.find(
-      :all ,
-      :select => "distinct group_id" ,
-      :conditions => {
-        :occasion_id => @occasion.id ,
-        :state => Ticket::BOOKED
-      } ).map { |t| t.group_id }
+    @groups = @occasion.attending_groups
 
-    if !params[:groups].blank?
-      @report_complete = false
-      @reported_groups = {}
-
-      #allow only numerical gids and number of attendees
-      #
-      params[:groups].select { |gid,nattend|
-        nattend.to_i > 0 and gid.to_i > 0
-      }.map { |gids,nattends|
-        @reported_groups["#{gids}"] = nattends
-      }
-      @report_complete = @reported_groups.keys.map {|k| k.to_i }.sort == @groups.map {|g| g.id}.sort
-    end
-
-    if @report_complete
-      @groups.each do |group|
-        tickets = Ticket.find(
-          :all ,
-          :conditions => {
-            :occasion_id => @occasion.id ,
-            :group_id => group.id ,
-            :state => Ticket::BOOKED
-          }
-        )
-
-        n = 0
-
-        tickets.each do |ticket|
-          if n < params[:groups]["#{group.id}"].to_i
-            ticket.state = Ticket::USED
-          else
-            ticket.state = Ticket::NOT_USED
-          end
-
-          ticket.save or flash[:error] = "Kunde inte uppdatera närvarostatistiken ..."
-          n += 1
-        end
+    @groups.each do |group|
+      attendance = {}
+      params[:attendance][group.id.to_s].each do |k,v|
+        attendance[k.to_sym] = v.to_i
       end
-      flash[:notice] = "Tack för närvarorapporten"
-      redirect_to "/"
-    else
-      flash[:error] = "Rapporten inkomplett"
-      render :report
+
+      tickets = Ticket.find_not_unbooked(group, @occasion)
+
+      tickets.each do |ticket|
+        if ticket.adult
+          ticket.state = attendance[:adult] > 0 ? Ticket::USED : Ticket::NOT_USED
+          attendance[:adult] -= 1
+        elsif ticket.wheelchair
+          ticket.state = attendance[:wheelchair] > 0 ? Ticket::USED : Ticket::NOT_USED
+          attendance[:wheelchair] -= 1
+        else
+          ticket.state = attendance[:normal] > 0 ? Ticket::USED : Ticket::NOT_USED
+          attendance[:normal] -= 1
+        end
+
+        ticket.save!
+      end
     end
+
+    flash[:notice] = "Närvaron uppdaterades."
+    redirect_to report_show_occasion_url(@occasion)
   end
 
 
@@ -128,18 +98,10 @@ class OccasionsController < ApplicationController
   def attendants
     @occasion = Occasion.find(params[:id])
 
-    group_ids = Ticket.find(
-      :all ,
-      :select => "distinct group_id" ,
-      :conditions => {
-        :occasion_id => @occasion.id ,
-        :state => Ticket::BOOKED
-      } ).map { |t| t.group_id }
-
     if params[:format] == "pdf"
-      @groups = Group.find group_ids
+      @groups = @occasion.attending_groups
     else
-      @groups = Group.paginate group_ids, :page => params[:page], :order => 'updated_at DESC'
+      @groups = @occasion.attending_groups.paginate :all, :page => params[:page]
     end
 
     @booking_reqs = BookingRequirement.find_all_by_group_id(
@@ -220,7 +182,7 @@ class OccasionsController < ApplicationController
 
     PDF::SimpleTable.new do |tab|
       tab.title = "Deltagarlista för #{@occasion.event.name} #{@occasion.date.to_s}".to_iso
-      tab.column_order.push(*%w(group comp comptel att wheel req pres))
+      tab.column_order.push(*%w(group comp comptel att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
 
       tab.columns["group"] = PDF::SimpleTable::Column.new("group") { |col|
         col.heading = "Skola / Grupp".to_iso
@@ -231,17 +193,26 @@ class OccasionsController < ApplicationController
       tab.columns["comptel"] = PDF::SimpleTable::Column.new("comptel") { |col|
         col.heading = "Telefonnummer"
       }
-      tab.columns["att"] = PDF::SimpleTable::Column.new("att") { |col|
-        col.heading = "Deltagare"
+      tab.columns["att_normal"] = PDF::SimpleTable::Column.new("att_normal") { |col|
+        col.heading = "Barn"
       }
-      tab.columns["wheel"] = PDF::SimpleTable::Column.new("wheel") { |col|
-        col.heading = "Rullstolsplatser"
+      tab.columns["att_adult"] = PDF::SimpleTable::Column.new("att_adult") { |col|
+        col.heading = "Vuxna"
+      }
+      tab.columns["att_wheel"] = PDF::SimpleTable::Column.new("att_wheel") { |col|
+        col.heading = "Rullstol"
       }
       tab.columns["req"]  = PDF::SimpleTable::Column.new("req") { |col|
         col.heading = "Övriga önskemål".to_iso
       }
-      tab.columns["pres"]  = PDF::SimpleTable::Column.new("pres") { |col|
-        col.heading = "Antal närvarande".to_iso
+      tab.columns["pres_normal"]  = PDF::SimpleTable::Column.new("pres_normal") { |col|
+        col.heading = "Barn".to_iso
+      }
+      tab.columns["pres_adult"]  = PDF::SimpleTable::Column.new("pres_adult") { |col|
+        col.heading = "Vuxna".to_iso
+      }
+      tab.columns["pres_wheel"]  = PDF::SimpleTable::Column.new("pres_wheel") { |col|
+        col.heading = "Rullstol".to_iso
       }
 
       tab.show_lines    = :all
@@ -256,14 +227,18 @@ class OccasionsController < ApplicationController
       data = []
 
       @groups.each do |g|
+        booking = Ticket.booking(g, @occasion)
         row = {}
-        row["group"]   = (g.school.name.to_s + " - " + g.name.to_s).to_iso
-        row["comp"]    = g.companion_by_occasion(@occasion).name.to_iso
-        row["comptel"] = g.companion_by_occasion(@occasion).tel_nr.to_s.to_iso
-        row["att"]     = g.available_tickets_by_occasion(@occasion,Ticket::BOOKED).to_s.to_iso
-        row["wheel"]   = g.available_tickets_by_occasion(@occasion,Ticket::BOOKED,true).to_s.to_iso
-        row["req"]     = @booking_reqs.select { |b| b.group_id == g.id }.map { |b| (b.requirement.to_s + "\n").to_iso  }
-        row["pres"]    = " ".to_iso
+        row["group"]       = (g.school.name.to_s + " - " + g.name.to_s).to_iso
+        row["comp"]        = g.companion_by_occasion(@occasion).name.to_iso
+        row["comptel"]     = g.companion_by_occasion(@occasion).tel_nr.to_s.to_iso
+        row["att_normal"]  = booking[:normal] || 0
+        row["att_adult"]   = booking[:adult] || 0
+        row["att_wheel"]   = booking[:wheel] || 0
+        row["req"]         = @booking_reqs.select { |b| b.group_id == g.id }.map { |b| (b.requirement.to_s + "\n").to_iso  }
+        row["pres_normal"] = " ".to_iso
+        row["pres_adult"]  = " ".to_iso
+        row["pres_wheel"]  = " ".to_iso
         data << row
       end
       tab.data.replace data

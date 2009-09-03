@@ -15,28 +15,32 @@
 <table class="attendant-list" >
   <thead>
     <tr>
-      <th> Skola </th>
-      <th> Grupp </th>
-      <th> Medföljande vuxen </th>
-      <th> Telefonnummer </th>
-      <th> Antal Deltagare </th>
-      <th> Antal Rullstolsplatser </th>
+      <th>Skola</th>
+      <th>Grupp</th>
+      <th>Medföljande vuxen</th>
+      <th>Telefonnummer</th>
+      <th>Antal barn</th>
+      <th>Antal vuxna</th>
+      <th>Antal rullstolsplatser</th>
       <% if current_user.has_role?(:host, :admin) -%>
-        <th> Övriga önskemål </th>
+        <th>Övriga önskemål</th>
       <% end -%>
     </tr>
   </thead>
   <tbody>
     <% @groups.each do |group| %>
+      <% booking = Ticket.booking(group, @occasion) %>
+
       <tr class="<%= cycle('', 'even') %>">
-        <td> <%= h group.school.name -%> </td>
-        <td> <%= h group.name -%> </td>
-        <td> <%= h group.companion_by_occasion(@occasion).name -%> </td>
-        <td> <%= h group.companion_by_occasion(@occasion).tel_nr -%> </td>
-        <td> <%= h group.available_tickets_by_occasion(@occasion,Ticket::BOOKED) -%> </td>
-        <td> <%= h group.available_tickets_by_occasion(@occasion,Ticket::BOOKED, true) -%> </td>
+        <td><%= h group.school.name -%></td>
+        <td><%= h group.name -%></td>
+        <td><%= h group.companion_by_occasion(@occasion).name -%></td>
+        <td><%= h group.companion_by_occasion(@occasion).tel_nr -%></td>
+        <td><%= h booking[:normal] -%></td>
+        <td><%= h booking[:adult] -%></td>
+        <td><%= h booking[:adult] -%></td>
         <% if current_user.has_role?(:host, :admin) -%>
-          <td> <%= @booking_reqs.select { |b| b.group_id == group.id }.map { |b| b.requirement.to_s + "<br/>" } -%></td>
+          <td><%= @booking_reqs.select { |b| b.group_id == group.id }.map { |b| b.requirement.to_s + "<br/>" } -%></td>
         <% end %>
       </tr>
     <% end %>

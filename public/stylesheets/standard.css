@@ -567,3 +567,5 @@
 #kp .role-application-specification dt { width: 8em; }
 #kp .role-application-specification dd { padding-left: 8em; }
 
+/*** Attendance reporting ***/
+#kp .attendant-list input { width: 3em; }

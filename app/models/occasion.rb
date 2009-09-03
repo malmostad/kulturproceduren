@@ -8,6 +8,9 @@ class Occasion < ActiveRecord::Base
   has_many :notifications_requests
 
   has_many :groups, :through => :tickets , :uniq => true
+  has_many :attending_groups, :class_name => "Group",
+    :source => :group, :through => :tickets, :uniq => true,
+    :conditions => "tickets.state != 0"
   belongs_to :answer
 
   validates_presence_of :date,

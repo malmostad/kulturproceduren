@@ -26,16 +26,6 @@ class Ticket < ActiveRecord::Base
     count :all, :conditions => { :occasion_id => occasion.id , :wheelchair => true, :state => Ticket::BOOKED }
   end
 
-  # Returns the group's booking count for a given occasion
-  def self.booking(group, occasion)
-    booking = {}
-    booking[:normal] = count_booked_by_type(group, occasion, :normal)
-    booking[:adult] = count_booked_by_type(group, occasion, :adult)
-    booking[:wheelchair] = count_booked_by_type(group, occasion, :wheelchair)
-    return booking
-  end
-
-
   # Returns all bookings a user has made, in a paged result
   def self.find_user_bookings(user, page)
     paginate_by_sql(
@@ -69,6 +59,16 @@ class Ticket < ActiveRecord::Base
     }
   end
 
+  # Returns a group's tickets for an occasion that are not unbooked
+  def self.find_not_unbooked(group, occasion)
+    find :all, :conditions => [
+      "group_id = ? and occasion_id = ? and state != ?",
+      group.id,
+      occasion.id,
+      Ticket::UNBOOKED
+    ]
+  end
+
   # Returns a group's booked tickets for an occasion of a given type
   def self.find_booked_by_type(group, occasion, type)
     conditions = {
@@ -84,18 +84,37 @@ class Ticket < ActiveRecord::Base
     find :all, :conditions => conditions
   end
 
-  # Counts a group's booked tickets for an occasion of a given type
-  def self.count_booked_by_type(group, occasion, type)
+  # Counts a group's tickets for an occasion of a given type with the given
+  # state
+  def self.count_by_type_state(group, occasion, type, states = [ Ticket::BOOKED, Ticket::USED, Ticket::NOT_USED ])
     conditions = {
       :group_id => group.id,
       :occasion_id => occasion.id,
       :adult => false,
       :wheelchair => false,
-      :state => Ticket::BOOKED
+      :state => states
     }
 
     conditions[type] = true if type != :normal
 
     count :conditions => conditions
+  end
+
+  # Returns the group's booking count for a given occasion
+  def self.booking(group, occasion)
+    booking = {}
+    booking[:normal] = count_by_type_state(group, occasion, :normal)
+    booking[:adult] = count_by_type_state(group, occasion, :adult)
+    booking[:wheelchair] = count_by_type_state(group, occasion, :wheelchair)
+    return booking
+  end
+
+  # Returns the group's usage count for a given occasion
+  def self.usage(group, occasion)
+    booking = {}
+    booking[:normal] = count_by_type_state(group, occasion, :normal, Ticket::USED)
+    booking[:adult] = count_by_type_state(group, occasion, :adult, Ticket::USED)
+    booking[:wheelchair] = count_by_type_state(group, occasion, :wheelchair, Ticket::USED)
+    return booking
   end
 end
