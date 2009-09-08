@@ -7,6 +7,14 @@
 #kp .admin-tools,
 #kp .occasion-form-container,
 #kp #kp-group-selection-form,
+#kp .cp-sec-content,
 #kp .ui-tabs-nav li {
     display: none;
+}
+
+#kp #kp-content #kp-pri-content,
+#kp #kp-content #kp-sec-content {
+    float: none;
+    width: auto;
+    margin: auto;
 }

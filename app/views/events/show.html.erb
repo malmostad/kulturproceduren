@@ -1,6 +1,6 @@
 <%= render :partial => "events/menu" -%>
 
-<div id="kp-pri-content">
+<div id="kp-pri-content" class="event-pri-content">
   <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
     <div class="admin-tools">
       <h4>Administrera <%= h @event.name %></h4>
@@ -215,6 +215,6 @@
 
 </div>
 
-<div id="kp-sec-content">
+<div id="kp-sec-content" class="event-sec-content">
   <%= render :partial => "culture_providers/info_box", :locals => { :culture_provider => @event.culture_provider } -%>
 </div>
