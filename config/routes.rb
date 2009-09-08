@@ -84,8 +84,10 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'ldap', :action => 'search'
   map.ldap_handle 'ldap/handle/:username',
     :controller => 'ldap', :action => 'handle'
-  
-  
+
+  # Login
+  map.login 'login/:action/:return_to', :controller => "login"
+
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end

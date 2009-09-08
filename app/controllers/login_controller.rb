@@ -5,6 +5,7 @@ class LoginController < ApplicationController
 
   # Display a form for logging in
   def index
+    session[:return_to] = params[:return_to] if params[:return_to]
   end
 
   # Authenticates the user

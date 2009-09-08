@@ -69,7 +69,11 @@
           </li>
         <% else -%>
           <li class="pri-nav-login <%= active_by_controller "login" %>">
-            <%= link_to "Logga in på Kulturproceduren", :controller => "login", :action => "index" -%>
+            <%= link_to "Logga in på Kulturproceduren",
+              login_path(
+                :action => "index",
+                :return_to => url_for(request.query_parameters.update(request.path_parameters))
+            ) -%>
           </li>
         <% end -%>
       </ul>
