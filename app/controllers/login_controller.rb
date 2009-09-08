@@ -19,10 +19,13 @@ class LoginController < ApplicationController
       flash[:warning] = "Felaktigt användarnamn/lösenord"
       render :action => "index"
     else
-      flash[:notice] = "Du är nu inloggad som #{CGI.escapeHTML(u.username)}"
       session[:current_user_id] = u.id
+      flash[:notice] = "Du är nu inloggad som #{CGI.escapeHTML(u.username)}"
 
-      if session[:return_to]
+      if u.roles.empty?
+        flash[:warning] = "Du har för tillfället inga behörigheter i systemet. Var god ansök om behörigheter nedan."
+        redirect_to role_applications_url()
+      elsif session[:return_to]
         redirect_to session[:return_to]
         session[:return_to] = nil
       else
