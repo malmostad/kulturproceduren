@@ -6,7 +6,10 @@
 
         <li class="<%= active_by_action "users", "index" %>"><%= link_to 'Lista', users_path %></li>
         <li class="<%= active_by_action "users", "new" %>"><%= link_to 'Skapa användare', new_user_path %></li>
-        <li class="<%= active_by_action "ldap", "index" %>"><%= link_to 'Katalogsökning', ldap_path %></li>
+
+        <% if APP_CONFIG[:ldap] %>
+          <li class="<%= active_by_action "ldap", "index" %>"><%= link_to 'Katalogsökning', ldap_path %></li>
+        <% end %>
 
       <% else -%>
 
@@ -16,10 +19,10 @@
         <li class="<%= active_by_action "role_applications", "index" %>"><%= link_to 'Behörighetsansökan', role_applications_path %></li>
 
       <% end -%>
-      
+
     <% else -%>
       <li class="<%= active_by_action "users", "new" %>"><%= link_to 'Registrera konto', new_user_path %></li>
     <% end -%>
-    
+
   </ul>
 <% end -%>

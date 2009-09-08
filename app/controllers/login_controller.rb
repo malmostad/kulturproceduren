@@ -72,33 +72,37 @@ class LoginController < ApplicationController
 
   # Authenticates the user by first checking the LDAP, then the local user database.
   def authenticate_user
-    ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
-      APP_CONFIG[:ldap][:port],
-      APP_CONFIG[:ldap][:base_dn],
-      APP_CONFIG[:ldap][:bind][:dn],
-      APP_CONFIG[:ldap][:bind][:password]
+    if APP_CONFIG[:ldap]
+      ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
+        APP_CONFIG[:ldap][:port],
+        APP_CONFIG[:ldap][:base_dn],
+        APP_CONFIG[:ldap][:bind][:dn],
+        APP_CONFIG[:ldap][:bind][:password]
 
-    ldap_user = ldap.authenticate params[:user][:username], params[:user][:password]
+      ldap_user = ldap.authenticate params[:user][:username], params[:user][:password]
 
-    if ldap_user
-      user = User.find :first, :conditions => { :username => params[:user][:username] }
+      if ldap_user
+        user = User.find :first, :conditions => { :username => params[:user][:username] }
 
-      if user
-        return user
-      else
-        ldap_user = ldap.get_user(params[:user][:username])
+        if user
+          return user
+        else
+          ldap_user = ldap.get_user(params[:user][:username])
 
-        user = User.new do |u|
-          u.name = ldap_user[:name]
-          u.email = ldap_user[:email]
-          u.cellphone = ldap_user[:cellphone]
-          u.username = ldap_user[:username]
-          u.password = "ldap"
+          user = User.new do |u|
+            u.name = ldap_user[:name]
+            u.email = ldap_user[:email]
+            u.cellphone = ldap_user[:cellphone]
+            u.username = ldap_user[:username]
+            u.password = "ldap"
+          end
+
+          user.save!
+
+          return user
         end
-
-        user.save!
-
-        return user
+      else
+        return User.authenticate(params[:user][:username], params[:user][:password])
       end
     else
       return User.authenticate(params[:user][:username], params[:user][:password])

@@ -1,4 +1,5 @@
 development:
+    :use_asset_host: true
     :salt_length: 10
     :ticket_state_change_days: 14
     :upload_attachment:
@@ -24,6 +25,7 @@ development:
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :base_url: "localhost:3000"
 test:
+    :use_asset_host: true
     :salt_length: 10
     :ticket_state_change_days: 14
     :upload_attachment:
@@ -49,6 +51,7 @@ test:
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :base_url: "localhost:3000"
 production:
+    :use_asset_host: true
     :salt_length: 10
     :ticket_state_change_days: 14
     :upload_attachment:

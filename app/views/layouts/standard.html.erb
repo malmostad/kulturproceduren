@@ -5,17 +5,24 @@
 
     <title>Kulturproceduren</title>
 
-    <%= stylesheet_link_tag 'ui-lightness/jquery-ui-1.7.2.custom.css' %>
-    <%= stylesheet_link_tag 'http://sitevision.dev.malmo.se/assets/css/malmo-core.css' %>
-    <%= stylesheet_link_tag 'standard' %>
+    <%= stylesheet_link_tag "ui-lightness/jquery-ui-1.7.2.custom.css", :media => "all" %>
+
+    <% if APP_CONFIG[:use_asset_host] %>
+      <%= stylesheet_link_tag "http://sitevision.dev.malmo.se/assets/css/malmo-core.css", :media => "all" %>
+    <% else %>
+      <%= stylesheet_link_tag "malmo-core.css", :media => "all" %>
+    <% end %>
+
+    <%= stylesheet_link_tag "standard", :media => "all" %>
+
     <!--[if IE 8]>
-    <%= stylesheet_link_tag "standard-ie8" %>
+    <%= stylesheet_link_tag "standard-ie8", :media => "all" %>
     <![endif]-->
     <!--[if lte IE 7]>
-    <%= stylesheet_link_tag "standard-ie7" %>
+    <%= stylesheet_link_tag "standard-ie7", :media => "all" %>
     <![endif]-->
     <!--[if lte IE 6]>
-    <%= stylesheet_link_tag "standard-ie6" %>
+    <%= stylesheet_link_tag "standard-ie6", :media => "all" %>
     <![endif]-->
 
     <%= render :partial => "shared/jsconfig" -%>
