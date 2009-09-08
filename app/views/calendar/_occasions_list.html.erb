@@ -6,18 +6,18 @@ category_groups ||= []
 <table class="calendar-list">
   <thead>
     <tr>
-      <th>Tid</th>
-      <th>Evenemang</th>
+      <th class="time">Tid</th>
+      <th class="event">Evenemang</th>
 
       <% unless hide_culture_provider -%>
-        <th>Arrangör</th>
+        <th class="culture-provider">Arrangör</th>
       <% end %>
 
       <% category_groups.each do |category_group| -%>
-        <th><%= h category_group.name %></th>
+        <th class="categories"><%= h category_group.name %></th>
       <% end -%>
 
-      <th>Boka</th>
+      <th class="booking">Boka</th>
       <th class="icon-indicator">Hjälpmedel</th>
     </tr>
   </thead>

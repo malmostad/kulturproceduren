@@ -3,7 +3,7 @@ collapsed ||= false
 is_edit = ["edit", "update"].include? params[:action]
 -%>
 
-<fieldset class="collapsible <%= "collapsed" if !@occasion && !collapsed %>">
+<fieldset class="occasion-form-container collapsible <%= "collapsed" if !@occasion && !collapsed %>">
 
   <legend><%= is_edit ? "Redigera" : "Lägg till" %> föreställning</legend>
 

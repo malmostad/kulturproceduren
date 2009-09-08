@@ -1,0 +1,12 @@
+#kp .pri-nav,
+#kp .section-nav,
+#kp .section-info,
+#kp .calendar-list-tabs,
+#kp .calendar-list .booking,
+#kp .booking-list .tools,
+#kp .admin-tools,
+#kp .occasion-form-container,
+#kp #kp-group-selection-form,
+#kp .ui-tabs-nav li {
+    display: none;
+}
