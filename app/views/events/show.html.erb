@@ -169,7 +169,7 @@
                   <td>
                     <%= h(occasion.seats + occasion.wheelchair_seats) %>
                     <% if occasion.wheelchair_seats.to_i > 0 -%>
-                      <%= image_tag "user_go.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats > 0 %>
+                      <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats > 0 %>
                     <% end -%>
                   </td>
                   <td><%= linebreakize(occasion.address) %></td>
