@@ -137,7 +137,7 @@ class BookingsController < ApplicationController
 
     valid = validate_seats(
       @seats,
-      current_booking[:wheelchair] + current_booking[:wheelchair] + current_booking[:wheelchair],
+      current_booking[:normal] + current_booking[:adult] + current_booking[:wheelchair],
       current_booking[:wheelchair]
     )
     valid = @companion.valid? && valid

@@ -51,7 +51,13 @@ category_groups ||= []
           <% if occasion.event.bookable? %>
             <% if user_online? && current_user.can_book? -%>
 
-              <%= link_to "Boka", new_occasion_booking_path(occasion) %>
+              <% available_seats = occasion.available_seats %>
+
+              <% if available_seats > 0 %>
+                <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
+              <% else %>
+                <span class="sold-out">Fullbokat</span>
+              <% end %>
 
               <div class="schools-with-tickets">
                 <a href="<%= schools_with_tickets_event_path(occasion.event) %>"

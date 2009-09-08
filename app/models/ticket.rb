@@ -23,7 +23,11 @@ class Ticket < ActiveRecord::Base
 
   # Counts the number of available wheelchair tickets booked on an occasion
   def self.count_wheelchair_by_occasion(occasion)
-    count :all, :conditions => { :occasion_id => occasion.id , :wheelchair => true, :state => Ticket::BOOKED }
+    count :all, :conditions => {
+      :occasion_id => occasion.id ,
+      :wheelchair => true,
+      :state => [ Ticket::BOOKED, Ticket::USED, Ticket::NOT_USED ]
+    }
   end
 
   # Returns all bookings a user has made, in a paged result

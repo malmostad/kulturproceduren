@@ -79,7 +79,7 @@ class Group < ActiveRecord::Base
     end
 
     if state == Ticket::UNBOOKED
-      m = occasion.seats - Ticket.count(:conditions => { :occasion_id => occasion.id , :state => Ticket::BOOKED } )
+      m = occasion.available_seats
       return ( m > n ? n : m )
     else
       return n

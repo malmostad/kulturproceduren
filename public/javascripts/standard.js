@@ -199,7 +199,7 @@
         $("#kp-booking-form-container").keyup(changeHandler);
 
         $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
-        "#kp-booking-form-container .seats-container")
+        "#kp-booking-form-container .seats-container");
         changeHandler();
     });
 
