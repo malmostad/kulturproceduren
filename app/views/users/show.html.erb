@@ -70,7 +70,7 @@
     <% if @user.roles.empty? -%>
 
       <li>
-        <%= denom %> kan inte boka biljetter.
+        <%= denom %> kan inte boka platser.
 
         <% if current_user.has_role?(:admin) -%>
           <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>
@@ -99,7 +99,7 @@
 
       <% if @user.has_role?(:booker) -%>
         <li>
-          <%= denom %> kan boka biljetter.
+          <%= denom %> kan boka platser.
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :booker) %></span>
@@ -107,7 +107,7 @@
         </li>
       <% elsif current_user.has_role?(:admin) -%>
         <li>
-          <%= denom %> kan inte boka biljetter.
+          <%= denom %> kan inte boka platser.
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>

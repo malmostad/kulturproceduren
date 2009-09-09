@@ -92,11 +92,11 @@ class BookingsController < ApplicationController
           book_tickets(tickets, :wheelchair)
         end
 
-        flash[:notice] = "Biljetterna bokades."
+        flash[:notice] = "Platserna bokades."
         redirect_to occasion_booking_url(@occasion.id, @group.id)
 
       rescue Exception
-        flash[:error] = "Ett fel uppstod när biljetterna skulle bokas. Var god försök igen senare."
+        flash[:error] = "Ett fel uppstod när platserna skulle bokas. Var god försök igen senare."
         redirect_to new_occasion_booking_url(@occasion)
       end
     else
@@ -183,11 +183,11 @@ class BookingsController < ApplicationController
           })
         end
 
-        flash[:notice] = "Biljetterna bokades."
+        flash[:notice] = "Platserna bokades."
         redirect_to occasion_booking_url(@occasion.id, @group.id)
 
       rescue Exception
-        flash[:error] = "Ett fel uppstod när biljetterna skulle bokas. Var god försök igen senare."
+        flash[:error] = "Ett fel uppstod när platserna skulle bokas. Var god försök igen senare."
         redirect_to new_occasion_booking_url(@occasion)
       end
     else
@@ -204,7 +204,7 @@ class BookingsController < ApplicationController
     tickets = Ticket.find_booked(@group, @occasion)
     tickets.each { |ticket| unbook_ticket(ticket) }
 
-    flash[:notice] = "Biljetterna avbokades."
+    flash[:notice] = "Platserna avbokades."
     redirect_to bookings_url()
   end
 
@@ -265,7 +265,7 @@ class BookingsController < ApplicationController
     available_wheelchair_tickets = @occasion.available_wheelchair_seats
 
     if ticket_sum <= 0
-      @seats_errors[:normal] = "Du måste boka minst 1 biljett"
+      @seats_errors[:normal] = "Du måste boka minst 1 plats"
       valid = false
     elsif available_tickets + extra_tickets < ticket_sum
       @seats_errors[:normal] = "Du har bara #{available_tickets} platser du kan boka på den här föreställningen"

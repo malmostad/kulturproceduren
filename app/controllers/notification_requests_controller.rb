@@ -18,7 +18,7 @@ class NotificationRequestsController < ApplicationController
     @notification_request.user = current_user
 
     @notification_request.save!
-    flash[:notice] = "Du är nu registrerad att få meddelanden när biljetter för detta evenemang blir tillgängliga för din grupp."
+    flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din grupp."
     redirect_to @occasion.event
   end
 
@@ -28,7 +28,7 @@ class NotificationRequestsController < ApplicationController
   def require_booker
     user = current_user
     unless user.can_book?
-      flash[:error] = "Du har inte behörighet att boka biljetter"
+      flash[:error] = "Du har inte behörighet att boka platser"
       redirect_to "/"
       return
     end

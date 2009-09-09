@@ -5,11 +5,11 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :culture_providers
-  has_many :role_applications, :order => "updated_at DESC", :include => [ :role ]
+  has_many :role_applications, :order => "updated_at DESC", :include => [ :role ], :dependent => :destroy
 
-  has_many :tickets
+  has_many :tickets, :dependent => :nullify
   has_many :occasions, :through => :tickets, :uniq => true
-  has_many :notification_requests
+  has_many :notification_requests, :dependent => :destroy
   
   validates_presence_of :username,
     :message => "Användarnamnet får inte vara tomt"

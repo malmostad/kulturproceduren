@@ -21,8 +21,8 @@
 
     <% if !@is_edit && group_tickets == 0 %>
       <p class="message alert">
-        Tyvärr finns det inga bokningsbara biljetter för det här evenamnget för den valda gruppen.
-        <a href="#">Klicka här</a> om du vill få ett meddelande om biljetter blir tillgängliga senare.
+        Tyvärr finns det inga bokningsbara platser för det här evenemanget för den valda gruppen.
+        <a href="#">Klicka här</a> om du vill få ett meddelande om platser blir tillgängliga senare.
       </p>
     <% else %>
 
@@ -39,12 +39,12 @@
             <strong><%= h @group.school.name %>, <%= h @group.name %></strong>.
             Det finns ytterligare 
             <strong><%= group_tickets -%></strong>
-            biljetter tillgängliga för bokning.
+            platser tillgängliga för bokning.
           <% else %>
             <strong><%= h @group.school.name %>, <%= h @group.name %></strong>
             har
             <strong><%= group_tickets -%></strong>
-            biljetter tillgängliga för bokning.
+            platser tillgängliga för bokning.
           <% end %>
         </p>
       <% elsif @is_edit %>

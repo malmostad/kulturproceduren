@@ -13,7 +13,7 @@
         <th class="group">Grupp</th>
         <th class="event">Evenemang</th>
         <th class="date">Datum</th>
-        <th class="num-tickets">Antal biljetter</th>
+        <th class="num-tickets">Antal platser</th>
         <th class="booked-by">Bokad av</th>
         <th class="tools" colspan="3"></th>
       </tr>
@@ -26,7 +26,7 @@
           <td class="group"><%= h booking.group.name -%></td>
           <td class="event"><%= link_to h(booking.occasion.event.name), booking.occasion.event -%></td>
           <td class="date"><%= h booking.occasion.date -%></td>
-          <td class="num-tickets"><%= h booking.num_tickets -%> biljetter bokade</td>
+          <td class="num-tickets"><%= h booking.num_tickets -%> platser bokade</td>
           <td class="booked-by"><%= h booking.user.name %></td>
           <td class="tools"><%= link_to "Bokningsbekräftelse", occasion_booking_path(booking.occasion_id, booking.group_id) %></td>
           <td class="tools"><%= link_to "Ändra bokning", edit_occasion_booking_path(booking.occasion_id, booking.group_id) %></td>

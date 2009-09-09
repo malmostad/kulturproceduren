@@ -77,7 +77,7 @@
             opts = options_for_select(
               @group_selection_collections[:groups].map { |g|
               [
-                g.name + (occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.available_tickets_by_occasion(occasion)} biljetter)" : ""),
+                g.name + (occasion.event.ticket_state == Event::ALLOTED_GROUP ? " (#{g.available_tickets_by_occasion(occasion)} platser)" : ""),
                 g.id
               ]
             },
