@@ -188,8 +188,12 @@
 
                       <% if current_user.can_administrate?(@event.culture_provider) -%>
                         <%= link_to "Redigera", edit_occasion_path(occasion) %>
-                        <%= link_to "Ta bort", occasion, :method => "destroy", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+
+                        <% unless @event.bookable? %>
+                          <%= link_to "Ta bort", occasion, :method => "delete", :confirm => "Är du säker på att du vill radera föreställningen?" %>
+                        <% end %>
                       <% end -%>
+
                       <% if occasion.date > Date.today %>
                         <%= link_to "Närvarolista", attendants_occasion_path(occasion) %>
                       <% else %>
