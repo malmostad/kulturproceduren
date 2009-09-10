@@ -98,33 +98,6 @@
 
     $(function() {
         /**
-         * Listeners for group selection fragment events for the booking form
-         */
-        $("#kp .booking-group-selection #kp-group-selection-form"
-        ).bind("groupSelected", function(e, groupId) {
-            if (!isNaN(groupId)) {
-                var occasionId = $("#kp-occasion_id").val();
-
-                $("#kp-group_selection-group_id").parent().append('<div class="load-indicator"></div>');
-
-                var request = $.get(
-                kpConfig.booking.form.url,
-                { group_id: groupId, occasion_id: occasionId },
-                function(data) {
-                    $("#kp-booking-form-container").html(data);
-                    $("#kp-group_selection-group_id").parent().find('.load-indicator').remove();
-                });
-
-            } else {
-                // Disable the form
-                $("#kp-booking-form-container").html("");
-            }
-        }).bind("districtSelected schoolSelected", function(e, id){
-            // Disable the form
-            $("#kp-booking-form-container").html("");
-        });
-
-        /**
          * Listeners for group selection fragment events for the notification request form
          */
         $("#kp .notification-request-group-selection #kp-group-selection-form"
@@ -192,7 +165,7 @@
                 }
             };
 
-            $("#kp-booking-count").html("<span>Du har angett totalt " + String(sum) + " biljetter.</span>");
+            $("#kp-booking-count").html("<span>Du har angett totalt " + String(sum) + " platser.</span>");
         };
 
         $("#kp-booking-form-container").change(changeHandler);
@@ -201,6 +174,37 @@
         $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
         "#kp-booking-form-container .seats-container");
         changeHandler();
+
+        /**
+         * Listeners for group selection fragment events for the booking form
+         */
+        $("#kp .booking-group-selection #kp-group-selection-form"
+        ).bind("groupSelected", function(e, groupId) {
+            if (!isNaN(groupId)) {
+                var occasionId = $("#kp-occasion_id").val();
+
+                $("#kp-group_selection-group_id").parent().append('<div class="load-indicator"></div>');
+
+                var request = $.get(
+                kpConfig.booking.form.url,
+                { group_id: groupId, occasion_id: occasionId },
+                function(data) {
+                    $("#kp-booking-form-container").html(data);
+                    $("#kp-group_selection-group_id").parent().find('.load-indicator').remove();
+                    $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
+                    "#kp-booking-form-container .seats-container");
+                    changeHandler();
+                });
+
+            } else {
+                // Disable the form
+                $("#kp-booking-form-container").html("");
+            }
+        }).bind("districtSelected schoolSelected", function(e, id){
+            // Disable the form
+            $("#kp-booking-form-container").html("");
+        });
+
     });
 
     $(function() {
