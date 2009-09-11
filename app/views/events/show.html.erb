@@ -34,7 +34,7 @@
       <div class="images-cnt">
         <div class="images">
           <% @event.images_excluding_main.each do |image| -%>
-            <img src="<%= h image.image_url %>" alt="<%= h image.name %>" width="<%= h image.width %>" height="<%= h image.height %>"/>
+            <%= image_tag image.image_url, :alt => image.name, :width => image.width, :height => image.height %>
           <% end -%>
         </div>
       </div>

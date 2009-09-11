@@ -5,7 +5,7 @@ development:
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:
-        :path: images/model
+        :path: model
         :width: 464
         :height: 174
         :thumb_width: 212
@@ -31,7 +31,7 @@ test:
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:
-        :path: images/model
+        :path: model
         :width: 464
         :height: 174
         :thumb_width: 212
@@ -57,7 +57,7 @@ production:
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:
-        :path: images/model
+        :path: model
         :width: 464
         :height: 174
         :thumb_width: 212

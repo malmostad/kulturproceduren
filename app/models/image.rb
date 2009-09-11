@@ -128,11 +128,11 @@ class Image < ActiveRecord::Base
 
   # Base filesystem path for the image files
   def self.path
-    "#{RAILS_ROOT}/public#{url}"
+    "#{RAILS_ROOT}/public/images/#{APP_CONFIG[:upload_image][:path]}"
   end
   # Base URLs for the image files
   def self.url
-    "/#{APP_CONFIG[:upload_image][:path]}"
+    "#{APP_CONFIG[:upload_image][:path]}"
   end
 
 end
