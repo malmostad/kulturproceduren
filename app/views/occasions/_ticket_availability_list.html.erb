@@ -1,0 +1,26 @@
+<div class="ticket-availability-container">
+
+  <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
+    <p class="description">Detta evenemang är tillgängligt för alla skolor i hela Malmö.</p>
+  <% else %>
+    <p class="description">
+      <%= @occasion.event.ticket_state == Event::ALLOTED_GROUP ? "Skolor" : "Stadsdelar" %>
+      med tilldelade eller bokade platser till evenemanget.
+    </p>
+
+    <p class="description">
+      Om inte din 
+      <%= @occasion.event.ticket_state == Event::ALLOTED_GROUP ? "skola" : "stadsdel" %>
+      finns med i listan kan du 
+      <%= link_to "klicka här", new_occasion_notification_request_path(@occasion) %>
+      för att få ett meddelande när platser blir tillgängliga för din grupp.
+    </p>
+
+    <ul class="ticket-availability-list">
+      <% @entities.each do |entity| -%>
+        <li><%= h entity.name %></li>
+      <% end %>
+    </ul>
+
+  <% end %>
+</div>
