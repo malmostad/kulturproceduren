@@ -60,10 +60,11 @@ form_for(@image, :url => form_url, :builder => KPFormBuilder, :html => { :multip
 
         <tr class="<%= cycle('', 'even') %> <%= 'logo' if is_logo %>">
           <td>
-            <img src="<%= h img.thumb_url %>"
-                 alt="<%= h img.name %>"
-                 width="<%= h img.thumb_width %>"
-                 height="<%= h img.thumb_height %>"/>
+            <%= image_tag img.thumb_url,
+              :alt => img.name,
+              :width => img.thumb_width,
+              :height =>  img.thumb_height
+            %>
           </td>
           <td><%= h img.name %></td>
 

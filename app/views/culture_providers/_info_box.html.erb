@@ -1,10 +1,11 @@
 <div class="info-box">
   <% if culture_provider.main_image -%>
     <div class="image">
-      <img src="<%= h culture_provider.main_image.thumb_url %>"
-           alt="<%= h culture_provider.main_image.name %>"
-           width="<%= h culture_provider.main_image.thumb_width %>"
-           height="<%= h culture_provider.main_image.thumb_height %>"/>
+      <%= image_tag culture_provider.main_image.thumb_url,
+        :alt => culture_provider.main_image.name,
+        :width => culture_provider.main_image.thumb_width,
+        :height => culture_provider.main_image.thumb_height
+      %>
     </div>
   <% end -%>
 
