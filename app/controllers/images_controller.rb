@@ -71,7 +71,7 @@ class ImagesController < ApplicationController
       @images = @image.event.images
     else
       flash[:error] = "Felaktigt anrop."
-      redirect_to "/"
+      redirect_to root_url()
     end
   end
 

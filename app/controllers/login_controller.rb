@@ -30,7 +30,7 @@ class LoginController < ApplicationController
         redirect_to session[:return_to]
         session[:return_to] = nil
       else
-        redirect_to "/"
+        redirect_to root_url()
       end
     end
   end
@@ -40,7 +40,7 @@ class LoginController < ApplicationController
     if user_online?
       session[:current_user_id] = nil
       flash[:notice] = "Du är nu utloggad."
-      redirect_to "/"
+      redirect_to root_url()
     else
       redirect_to :action => "index"
     end

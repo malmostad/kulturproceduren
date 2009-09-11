@@ -37,7 +37,7 @@ class BookingsController < ApplicationController
 
     if @booking.values.inject { |sum, n| sum += n } == 0
       flash[:warning] = "Gruppen har ingen bokning på den efterfrågade föreställningen."
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -282,7 +282,7 @@ class BookingsController < ApplicationController
     @occasion = Occasion.find params[:occasion_id], :include => :event
   rescue
     flash[:warning] = "Du måste välja en föreställning"
-    redirect_to "/"
+    redirect_to root_url()
   end
 
   # Loads the requested group, either from an incoming id or
@@ -305,7 +305,7 @@ class BookingsController < ApplicationController
   def require_booker
     unless current_user.can_book?
       flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to "/"
+      redirect_to root_url()
     end
   end
 

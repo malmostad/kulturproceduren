@@ -16,7 +16,7 @@ class OccasionsController < ApplicationController
 
     if params[:id].blank? || params[:id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -24,13 +24,13 @@ class OccasionsController < ApplicationController
       @occasion = Occasion.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Kunde inte hitta angiven föreställning"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
     if @occasion.date > Date.today
       flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -44,7 +44,7 @@ class OccasionsController < ApplicationController
   def report_create
     if params[:id].blank? || params[:id].to_i == 0
       flash[:error] = "Ingen föreställning angiven"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -52,13 +52,13 @@ class OccasionsController < ApplicationController
       @occasion = Occasion.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Kunde inte hitta angiven föreställning"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
     if @occasion.date > Date.today
       flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -254,7 +254,7 @@ class OccasionsController < ApplicationController
 
     unless @user.has_role?(:host) || @user.has_role?(:admin)
       flash[:error] = "Du har inte behörighet att rapportera närvaro"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
   end

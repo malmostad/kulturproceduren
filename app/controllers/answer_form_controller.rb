@@ -6,7 +6,7 @@ class AnswerFormController < ApplicationController
   def submit
     unless AnswerForm.exists?(params[:answer_form_id])
       flash[:error] = "Ogiltig utvärderingsenkät"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -14,7 +14,7 @@ class AnswerFormController < ApplicationController
 
     if @answer_form.completed
       flash[:error] = "Utvärderingsenkäten är redan besvarad"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -41,7 +41,7 @@ class AnswerFormController < ApplicationController
         @answer_form.save!
 
         flash[:notice] = "Tack för att du svarade på utvärderingsenkäten"
-        redirect_to "/"
+        redirect_to root_url()
       end
     end
   end

@@ -77,6 +77,6 @@ class AttachmentsController < ApplicationController
     end
   rescue
     flash[:error] = "Du måste ange ett giltigt evenemang."
-    redirect_to "/"
+    redirect_to root_url()
   end
 end

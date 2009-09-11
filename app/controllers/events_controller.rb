@@ -147,7 +147,7 @@ class EventsController < ApplicationController
     @event.destroy
 
     flash[:notice] = "Evenemanget raderades."
-    redirect_to "/"
+    redirect_to root_url()
   end
 
 

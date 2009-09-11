@@ -29,7 +29,7 @@ class NotificationRequestsController < ApplicationController
     user = current_user
     unless user.can_book?
       flash[:error] = "Du har inte behörighet att boka platser"
-      redirect_to "/"
+      redirect_to root_url()
       return
     end
 
@@ -44,7 +44,7 @@ class NotificationRequestsController < ApplicationController
     @occasion = Occasion.find(params[:occasion_id])
   rescue ActiveRecord::RecordNotFound
     flash[:error] = "Kunde inte hitta angiven föreställning"
-    redirect_to "/"
+    redirect_to root_url()
   end
 
 end
