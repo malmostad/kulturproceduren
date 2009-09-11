@@ -22,7 +22,8 @@ ActionController::Routing::Routes.draw do |map|
     :member => {
     :attendants => :get,
     :report_show => :get,
-    :report_create => :post
+    :report_create => :post,
+    :ticket_availability => :get
   } do |oc|
     oc.resources :notification_requests,
       :only => [ :new , :create ],

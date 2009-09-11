@@ -309,10 +309,10 @@
 
     $(function() {
         /**
-         * Hijacks the link going to the list with schools with tickets in the calendar
+         * Hijacks the link going to the list with ticket availability
          * and displays the list using Ajax.
          */
-        $("#kp .calendar-list .schools-with-tickets-link").click(function() {
+        $("#kp .calendar-list .ticket-availability-link").click(function() {
             var link = $(this);
             var url = link.attr("href");
             var container = link.parent();
@@ -323,7 +323,7 @@
             $.get(url, function(data) {
                 container.append(data);
                 container.find(".load-indicator").remove();
-                container.find(".schools-with-tickets-close-link").show();
+                container.find(".ticket-availability-close-link").show();
             });
 
             return false;
@@ -331,12 +331,12 @@
         /**
          * Closes the list with schools with tickets.
          */
-        $("#kp .calendar-list .schools-with-tickets-close-link").click(function() {
+        $("#kp .calendar-list .ticket-availability-close-link").click(function() {
             var link = $(this);
             var container = link.parent();
-            container.find(".schools-with-tickets-container").remove();
+            container.find(".ticket-availability-container").remove();
             link.hide();
-            container.find(".schools-with-tickets-link").show();
+            container.find(".ticket-availability-link").show();
             return false;
         });
     });

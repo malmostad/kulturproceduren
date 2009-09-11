@@ -59,14 +59,14 @@ category_groups ||= []
                 <span class="sold-out">Fullbokat</span>
               <% end %>
 
-              <div class="schools-with-tickets">
-                <a href="<%= schools_with_tickets_event_path(occasion.event) %>"
-                   class="schools-with-tickets-link"
-                   title="Skolor med grupper som har tilldelade eller bokade platser till evenemanget">
-                  <%= image_tag "information.png", :alt => "Skolor med platser" %>
+              <div class="ticket-availability">
+                <a href="<%= ticket_availability_occasion_path(occasion) %>"
+                   class="ticket-availability-link"
+                   title="Platstillgänglighet för evenemanget">
+                  <%= image_tag "information.png", :alt => "Platstillgänglighet" %>
                 </a>
-                <a href="<%= schools_with_tickets_event_path(occasion.event) %>"
-                   class="schools-with-tickets-close-link"
+                <a href="<%= ticket_availability_occasion_path(occasion) %>"
+                   class="ticket-availability-close-link"
                    title="Stäng listan">
                   <%= image_tag "cancel.png", :alt => "Stäng listan" %>
                 </a>

@@ -171,6 +171,33 @@ class OccasionsController < ApplicationController
   end
 
 
+  # Displays the ticket availability on the occasion's event. For use in an Ajax request.
+  def ticket_availability
+    @occasion = Occasion.find(params[:id], :include => { :event => :culture_provider })
+    wrong_state = false
+
+    case @occasion.event.ticket_state
+    when Event::ALLOTED_GROUP
+      @entities = School.find_with_tickets_to_event(@occasion.event)
+    when Event::ALLOTED_DISTRICT
+      @entities = @occasion.event.districts.find :all, :order => "districts.name ASC"
+    when Event::FREE_FOR_ALL
+      nil
+    else
+      wrong_state = true
+    end
+
+    if request.xhr? && wrong_state
+      render :text => "", :content_type => "text/plain", :status => 404
+    elsif request.xhr?
+      render :partial => "ticket_availability_list", :content_type => "text/plain", :layout => false
+    elsif wrong_state
+      flash[:error] = "Platstillgänglighet kan inte presenteras för den önskade föreställningen."
+      redirect_to root_url()
+    end
+  end
+
+
   private
 
   # Creates a pdf document of the attendants on an occasion

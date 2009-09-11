@@ -506,9 +506,9 @@
     padding: 0.5em 0;
 }
 
-#kp .calendar-list .schools-with-tickets { position: relative; display: inline; }
-#kp .calendar-list .schools-with-tickets-close-link { display: none; }
-#kp .calendar-list .schools-with-tickets-container {
+#kp .calendar-list .ticket-availability { position: relative; display: inline; }
+#kp .calendar-list .ticket-availability-close-link { display: none; }
+#kp .calendar-list .ticket-availability-container {
     position: absolute;
     top: 1.5em;
     right: 0;
@@ -518,8 +518,8 @@
     background: #D9EBD2;
     z-index: 999;
 }
-#kp .calendar-list .schools-with-tickets-container p { margin: 0 0 0.5em 0; }
-#kp .calendar-list .schools-with-tickets-container .schools-with-tickets-list {
+#kp .calendar-list .ticket-availability-container p { margin: 0 0 0.5em 0; }
+#kp .calendar-list .ticket-availability-container .ticket-availability-list {
     margin: 0;
     padding: 0 0 0 2em;
 }
