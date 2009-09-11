@@ -530,10 +530,18 @@
 
 /*** Occasions ***/
 
-#kp .occasions-event {padding: 0.5em;}
-#kp .occasions-listing {padding-left: 1em;}
+#kp .occasions-event { padding: 0.5em; }
+#kp .occasions-listing { padding-left: 1em; }
 
+#kp .occasion-form-container { clear: both; }
+
+#kp .occasion-list td { vertical-align: top; }
 #kp .occasion-list td p { margin: 0; }
+#kp .occasion-list td.date-time span,
+#kp .occasion-list td.num-seats,
+#kp .occasion-list td.address,
+#kp .occasion-list td.tools a,
+#kp .occasion-list td.tools span { white-space: nowrap; }
 
 /*** Groups ***/
 
