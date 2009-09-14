@@ -1,6 +1,6 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    Hantera lärarhandlending för
+    Hantera filer för
     <%= link_to h(@event.name), @event %>.
   </div>
 <% end -%>
@@ -51,7 +51,7 @@
             <%= link_to "Ta bort",
               event_attachment_path(@event, attachment),
               :method => :delete,
-              :confirm => "Är du säker på att du vill ta bort lärarhandledningen?"
+              :confirm => "Är du säker på att du vill ta bort filen?"
             %>
           </td>
         </tr>

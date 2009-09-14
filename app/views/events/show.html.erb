@@ -15,7 +15,7 @@
         <% end %>
 
         <li><%= link_to 'Hantera bilder', event_images_path(@event) %></li>
-        <li><%= link_to 'Hantera lärarhandledning', event_attachments_path(@event) %></li>
+        <li><%= link_to 'Hantera filer', event_attachments_path(@event) %></li>
 
         <% if current_user.has_role?(:admin) && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
           <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
@@ -136,7 +136,7 @@
 
       <% if user_online? && !@event.attachments.empty? %>
         <tr class="attachments">
-          <th>Lärarhandledning</th>
+          <th>Bifogade filer</th>
           <td>
             <ul>
               <% @event.attachments.each do |attachment| -%>

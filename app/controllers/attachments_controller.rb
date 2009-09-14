@@ -41,7 +41,7 @@ class AttachmentsController < ApplicationController
         file.write(uploaded_file.read)
       end
 
-      flash[:notice] = "Lärarhandledningen laddades upp."
+      flash[:notice] = "Filen laddades upp."
       redirect_to event_attachments_url(@event)
     else
       render :action => "index"
@@ -55,7 +55,7 @@ class AttachmentsController < ApplicationController
 
     @attachment.destroy
 
-    flash[:notice] = 'Lärarhandlednignen togs bort.'
+    flash[:notice] = 'Filen togs bort.'
     redirect_to event_attachments_url(@event)
   end
 
