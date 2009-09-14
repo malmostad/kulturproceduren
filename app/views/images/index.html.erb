@@ -1,22 +1,35 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    Hantera bilder för
     <% if @image.culture_provider -%>
-      <%= link_to h(@image.culture_provider.name), @image.culture_provider %>.
+      <%= link_to "Återvänd till presentationen för #{h(@image.culture_provider.name)}",
+        @image.culture_provider
+      %> 
     <% elsif @image.event -%>
-      <%= link_to h(@image.event.name), @image.event %>.
+      <%= link_to "Återvänd till presentationen för #{h(@image.event.name)}",
+        @image.event
+      %>
     <% end -%>
   </div>
 <% end -%>
 
-<%
-if @image.culture_provider
-  form_url = culture_provider_images_path(@image.culture_provider)
-elsif @image.event
-  form_url = event_images_path(@image.event)
-end
+<h2 class="form-title">
+  Hantera bilder för
+  <% if @image.culture_provider -%>
+    <%= link_to h(@image.culture_provider.name), @image.culture_provider %>
+  <% elsif @image.event -%>
+    <%= link_to h(@image.event.name), @image.event %>
+  <% end -%>
+</h2>
 
-form_for(@image, :url => form_url, :builder => KPFormBuilder, :html => { :multipart => true, :class => "image-form context-form" } ) do |f| %>
+<%
+  if @image.culture_provider
+    form_url = culture_provider_images_path(@image.culture_provider)
+  elsif @image.event
+    form_url = event_images_path(@image.event)
+  end
+%>
+
+<% form_for( @image, :url => form_url, :builder => KPFormBuilder, :html => { :multipart => true, :class => "image-form context-form" } ) do |f| %>
 
   <%= f.title "Ladda upp ny bild" -%>
 
@@ -51,11 +64,11 @@ form_for(@image, :url => form_url, :builder => KPFormBuilder, :html => { :multip
       <% @images.each do |img| -%>
 
         <%
-        if img.culture_provider
-          is_logo = img.id == img.culture_provider.main_image_id
-        else
-          is_logo = false
-        end
+          if img.culture_provider
+            is_logo = img.id == img.culture_provider.main_image_id
+          else
+            is_logo = false
+          end
         -%>
 
         <tr class="<%= cycle('', 'even') %> <%= 'logo' if is_logo %>">
