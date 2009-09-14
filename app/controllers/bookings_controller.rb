@@ -92,10 +92,14 @@ class BookingsController < ApplicationController
           book_tickets(tickets, :wheelchair)
         end
 
+        # Delete all notification requests for the given event and group
+        NotificationRequest.find_by_event_and_group(@occasion.event, @group).each { |n| n.destroy }
+
         flash[:notice] = "Platserna bokades."
         redirect_to occasion_booking_url(@occasion.id, @group.id)
 
-      rescue Exception
+      rescue Exception => ex
+        puts "\n\n\n\n\n\n\n\n#{ex.to_yaml}\n\n\n\n\n\n\n\n\n"
         flash[:error] = "Ett fel uppstod när platserna skulle bokas. Var god försök igen senare."
         redirect_to new_occasion_booking_url(@occasion)
       end
