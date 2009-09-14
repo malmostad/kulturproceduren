@@ -14,10 +14,12 @@
       endast tillgängliga för förskolor och grundskolor i Malmö.
     </p>
 
-    <p class="description after">
-      Är du kulturproducent i Malmö och vill presentera ditt utbud på
-      Kulturproceduren, <%= link_to "skapa ett konto här", :controller => "login", :action => "index" %>.
-    </p>
+    <% unless user_online? %>
+      <p class="description after">
+        Är du kulturproducent i Malmö och vill presentera ditt utbud på
+        Kulturproceduren, <%= link_to "skapa ett konto här", :controller => "login", :action => "index" %>.
+      </p>
+    <% end %>
 
   </div>
 <% end -%>
