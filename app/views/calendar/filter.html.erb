@@ -1,13 +1,6 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
 
-    <p class="description">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
-      justo rhoncus fringilla ullamcorper, velit ante mattis sapien, sed congue
-      sapien metus nec tellus. Cras fermentum quam risus, eget ultrices nunc.
-      Mauris iaculis est at ligula volutpat tristique.
-    </p>
-
     <div class="calendar-filter">
       <form action="<%= url_for :controller => "calendar", :action => "apply_filter", :list => @calendar_list -%>" method="post">
         <div class="free-text-cnt">

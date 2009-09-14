@@ -1,15 +1,12 @@
 <% content_for :section_sub do -%>
-  <% if user_online? && current_user.has_role?(:admin) %>
-    <ul class="section-nav">
-      <li class="<%= active_by_action "culture_providers", "index" %>"><%= link_to 'Lista arrangörer', culture_providers_path %></li>
-      <li class="<%= active_by_action "culture_providers", "new" %>"><%= link_to 'Lägg till arrangör', new_culture_provider_path %></li>
-    </ul>
-  <% elsif params[:action] == "index" -%>
-    <div class="section-info">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
-      justo rhoncus fringilla ullamcorper, velit ante mattis sapien, sed congue
-      sapien metus nec tellus. Cras fermentum quam risus, eget ultrices nunc.
-      Mauris iaculis est at ligula volutpat tristique.
-    </div>
-  <% end -%>
+  <ul class="section-nav">
+    <li class="<%= active_by_action "culture_providers", "index" %>">
+      <%= link_to 'Lista arrangörer', culture_providers_path %>
+    </li>
+    <% if user_online? && current_user.has_role?(:admin) %>
+      <li class="<%= active_by_action "culture_providers", "new" %>">
+        <%= link_to 'Lägg till arrangör', new_culture_provider_path %>
+      </li>
+    <% end -%>
+  </ul>
 <% end -%>

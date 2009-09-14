@@ -173,6 +173,7 @@
 
 #kp .section-info { padding: 1em; }
 #kp .section-info p.description { margin: 0; padding: 0; width: 70%; }
+#kp .section-info p.after { margin-top: 0.5em; }
 
 /*** Forms ***/
 
@@ -473,7 +474,6 @@
     background: url(../images/hide.png) no-repeat 100% 50%;
 }
 
-#kp .calendar-filter { margin-top: 1em; }
 #kp .calendar-filter #kp-calendar-filter-free-text-label { display: block; font-size: 1.2em; font-weight: bold; }
 #kp .calendar-filter #kp-calendar-filter-free-text { width: 40em; }
 

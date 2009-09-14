@@ -4,10 +4,19 @@
     <%= link_to "Detaljerad filtrering", { :action => "filter", :list => @calendar_list }, { :class => "show-calendar-filter-action" } %>
 
     <p class="description">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra,
-      justo rhoncus fringilla ullamcorper, velit ante mattis sapien, sed congue
-      sapien metus nec tellus. Cras fermentum quam risus, eget ultrices nunc.
-      Mauris iaculis est at ligula volutpat tristique.
+      Välkommen till Kulturproceduren. Här hittar du allt kulturutbud för barn
+      och unga (0-19 år) i Malmö. 
+    </p>
+
+    <p class="description after">
+      Bokningsbara evenemang på Kulturproceduren arrangeras och fördelas av
+      <a href="http://www.malmo.se/kbu">Kultur för Barn och Unga</a> och är
+      endast tillgängliga för förskolor och grundskolor i Malmö.
+    </p>
+
+    <p class="description after">
+      Är du kulturproducent i Malmö och vill presentera ditt utbud på
+      Kulturproceduren, <%= link_to "skapa ett konto här", :controller => "login", :action => "index" %>.
     </p>
 
   </div>
