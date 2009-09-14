@@ -1,0 +1,16 @@
+<h1>Föreställning inställd</h1>
+
+<p>
+  Vi måste tyvärr informera om att föreställningen <%= h @occasion.event.name %>,
+  <%= h @occasion.date %> har blivit inställd.
+</p>
+
+<p>
+  Ni har bokat biljetter till ovanstående tillställning för följande grupper:
+</p>
+
+<ul>
+  <% @groups.each do |group| %>
+    <li><%= h group.school.name %>, <%= h group.name %></li>
+  <% end %>
+</ul>

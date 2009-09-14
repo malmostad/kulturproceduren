@@ -15,27 +15,29 @@
         <th class="date">Datum</th>
         <th class="num-tickets">Antal platser</th>
         <th class="booked-by">Bokad av</th>
-        <th class="tools" colspan="3"></th>
+        <th class="tools"></th>
       </tr>
     </thead>
 
     <tbody>
       <% bookings.each do |booking|%>
-        <tr class="<%= cycle('', 'even') %>">
+        <tr class="<%= cycle('', 'even') %> <%= "cancelled" if booking.occasion.cancelled %>">
           <td class="school"><%= h booking.group.school.name -%></td>
           <td class="group"><%= h booking.group.name -%></td>
           <td class="event"><%= link_to h(booking.occasion.event.name), booking.occasion.event -%></td>
           <td class="date"><%= h booking.occasion.date -%></td>
           <td class="num-tickets"><%= h booking.num_tickets -%> platser bokade</td>
           <td class="booked-by"><%= h booking.user.name %></td>
-          <td class="tools"><%= link_to "Bokningsbekräftelse", occasion_booking_path(booking.occasion_id, booking.group_id) %></td>
-          <td class="tools"><%= link_to "Ändra bokning", edit_occasion_booking_path(booking.occasion_id, booking.group_id) %></td>
           <td class="tools">
-            <%= link_to "Avboka",
-              occasion_booking_path(booking.occasion_id, booking.group_id),
-              :method => :delete,
-              :confirm => "Är du säker?"
-            %>
+            <%= link_to "Bokningsbekräftelse", occasion_booking_path(booking.occasion_id, booking.group_id) %>
+            <% if !booking.occasion.cancelled && booking.occasion.date >= Date.today %>
+              <%= link_to "Ändra bokning", edit_occasion_booking_path(booking.occasion_id, booking.group_id) %>
+              <%= link_to "Avboka",
+                occasion_booking_path(booking.occasion_id, booking.group_id),
+                :method => :delete,
+                :confirm => "Är du säker?"
+              %>
+            <% end %>
           </td>
         </tr>
       <%  end %>

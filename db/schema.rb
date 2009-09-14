@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20090828070100) do
     t.text     "address"
     t.text     "description"
     t.boolean  "telecoil"
+    t.boolean  "cancelled",        :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

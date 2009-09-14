@@ -26,7 +26,8 @@ ActionController::Routing::Routes.draw do |map|
     :attendants => :get,
     :report_show => :get,
     :report_create => :post,
-    :ticket_availability => :get
+    :ticket_availability => :get,
+    :cancel => :delete
   } do |oc|
     oc.resources :bookings
   end

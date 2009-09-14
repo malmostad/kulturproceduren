@@ -19,6 +19,7 @@
 
 #kp table { width: 100%; }
 #kp table .selected td { background: #cfc; }
+#kp table .cancelled td { text-decoration: line-through; }
 #kp table th.super { border: 0; text-align: center; }
 
 #kp img { border: 0; padding: 0; margin: 0; }

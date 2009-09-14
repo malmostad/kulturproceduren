@@ -9,14 +9,16 @@
 
 <div class="admin-tools">
   <ul>
-    <li><%= link_to "Ändra bokning", edit_occasion_booking_path(@occasion.id, @group.id) %></li>
-    <li>
-      <%= link_to "Avboka",
-        occasion_booking_path(@occasion.id, @group.id),
-        :method => :delete,
-        :confirm => "Är du säker?"
-      %>
-    </li>
+    <% unless @occasion.cancelled %>
+      <li><%= link_to "Ändra bokning", edit_occasion_booking_path(@occasion.id, @group.id) %></li>
+      <li>
+        <%= link_to "Avboka",
+          occasion_booking_path(@occasion.id, @group.id),
+          :method => :delete,
+          :confirm => "Är du säker?"
+        %>
+      </li>
+    <% end %>
     <li><%= link_to_function "Skriv ut", "window.print()" %></li>
   </ul>
 </div>

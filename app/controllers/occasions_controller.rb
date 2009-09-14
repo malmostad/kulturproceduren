@@ -7,7 +7,7 @@ class OccasionsController < ApplicationController
   require "pdf/simpletable"
 
   before_filter :authenticate, :except => [ :index, :show ]
-  before_filter :require_culture_worker, :only => [ :edit, :update, :destroy ]
+  before_filter :require_culture_worker, :only => [ :edit, :update, :destroy, :cancel ]
   before_filter :require_host, :only => [ :report_show , :report_create ]
 
 
@@ -120,6 +120,7 @@ class OccasionsController < ApplicationController
   def show
     @selected_occasion = Occasion.find(params[:id])
     @event = @selected_occasion.event
+    @category_groups = CategoryGroup.all :order => "name ASC"
 
     render :template => "events/show"
   end
@@ -168,6 +169,18 @@ class OccasionsController < ApplicationController
 
     flash[:notice] = 'Föreställningen togs bort.'
     redirect_to(@occasion.event)
+  end
+
+  def cancel
+    @occasion.cancelled = true
+    @occasion.save!
+
+    #@occasion.users.each do |user|
+    #  OccasionMailer.deliver_occasion_cancelled_email(@occasion, user)
+    #end
+
+    flash[:notice] = "Föreställningen ställdes in."
+    redirect_to(@occasion)
   end
 
 

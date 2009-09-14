@@ -9,6 +9,12 @@ class User < ActiveRecord::Base
 
   has_many :tickets, :dependent => :nullify
   has_many :occasions, :through => :tickets, :uniq => true
+  has_many :groups, :through => :tickets, :uniq => true do
+    def find_by_occasion(occasion)
+      find :all, :conditions => [ " tickets.occasion_id = ? ", occasion.id ]
+    end
+  end
+
   has_many :notification_requests, :dependent => :destroy
   
   validates_presence_of :username,

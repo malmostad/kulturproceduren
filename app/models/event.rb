@@ -60,9 +60,12 @@ class Event < ActiveRecord::Base
 
 
   # Indicates whether it is possible to book occasions belonging to this event.
-  def bookable?
-    today = Date.today
-    visible_from <= today && visible_to >= today && !ticket_release_date.nil? && ticket_release_date <= today && !tickets.empty?
+  def bookable?(reload=false)
+    if @is_bookable.nil? || reload
+      today = Date.today
+      @is_bookable = visible_from <= today && visible_to >= today && !ticket_release_date.nil? && ticket_release_date <= today && !tickets.empty?
+    end
+    @is_bookable
   end
 
   # Returns an array of the ticket usage on this event. The first element is the
@@ -78,9 +81,9 @@ class Event < ActiveRecord::Base
   # Returns the ids of all groups that are not targeted by this event.
   def not_targeted_group_ids
     groups.find(:all,
-      :select => "distinct groups.id",
-      :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?)", from_age, to_age ]
-    ).collect { |g| g.id.to_i }
+                :select => "distinct groups.id",
+                :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?)", from_age, to_age ]
+               ).collect { |g| g.id.to_i }
   end
 
 
@@ -124,7 +127,7 @@ class Event < ActiveRecord::Base
 
     # The start date, defaults to today
     from_date = Date.today
-    
+
     # Date conditions
     unless filter[:from_date].blank?
       conditions[0] << " and events.visible_to >= ?"

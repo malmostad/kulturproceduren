@@ -10,6 +10,7 @@ class Occasion < ActiveRecord::Base
   has_many :attending_groups, :class_name => "Group",
     :source => :group, :through => :tickets, :uniq => true,
     :conditions => "tickets.state != 0"
+  has_many :users, :through => :tickets , :uniq => true
   belongs_to :answer
 
   validates_presence_of :date,
@@ -42,7 +43,7 @@ class Occasion < ActiveRecord::Base
   # [+:categories+] An array of the categories to limit the search to
   def self.search(filter, page)
 
-    conditions = [ " current_date between events.visible_from and events.visible_to " ]
+    conditions = [ " current_date between events.visible_from and events.visible_to and cancelled = ?", false ]
 
     unless filter[:free_text].blank?
       conditions[0] << " and ( events.name ilike ? or events.description ilike ? ) "
