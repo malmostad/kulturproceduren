@@ -10,7 +10,7 @@ class AddForeignKeys < ActiveRecord::Migration
     add_foreign_key :booking_requirements, :group
 
     add_foreign_key :notification_requests, :group
-    add_foreign_key :notification_requests, :occasion
+    add_foreign_key :notification_requests, :event
     add_foreign_key :notification_requests, :user
 
     add_foreign_key :events, :culture_provider

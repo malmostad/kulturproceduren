@@ -6,7 +6,7 @@
 
 <p>
   Om den grupp du vill boka platser för inte har fått platser tilldelade till
-  <%= link_to @occasion.event.name, @occasion.event %>
+  <%= link_to @event.name, @event %>
   tilldelade till sig så kan du här registrera dig så att du får ett
   meddelande när platser blir tillgängliga.
 </p>
@@ -17,7 +17,7 @@
 
 <% disabled = @notification_request.group_id.nil? %>
 
-<% form_for @notification_request, :url => occasion_notification_requests_path(@occasion), :builder => KPFormBuilder, :html => { :class => "notification-request-form" } do |form| %>
+<% form_for @notification_request, :url => event_notification_requests_path(@event), :builder => KPFormBuilder, :html => { :class => "notification-request-form" } do |form| %>
 
   <% form.fields("Välj meddelandetyp") do %>
     <%= form.hidden_field :group_id %>

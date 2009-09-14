@@ -16,6 +16,9 @@ ActionController::Routing::Routes.draw do |map|
     :member => { :stats => :get, :schools_with_tickets => :get } do |e|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
     e.resources :attachments, :except => [ :edit, :update, :new ]
+    e.resources :notification_requests,
+      :only => [ :new , :create ],
+      :collection => { :get_input_area => :get }
   end
   
   map.resources :occasions, :except => [ :index ],
@@ -25,9 +28,6 @@ ActionController::Routing::Routes.draw do |map|
     :report_create => :post,
     :ticket_availability => :get
   } do |oc|
-    oc.resources :notification_requests,
-      :only => [ :new , :create ],
-      :collection => { :get_input_area => :get }
     oc.resources :bookings
   end
 

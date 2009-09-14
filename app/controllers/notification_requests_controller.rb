@@ -2,24 +2,24 @@
 class NotificationRequestsController < ApplicationController
   layout "standard"
 
-  before_filter :load_occasion
+  before_filter :load_event
   before_filter :require_booker
 
   def new
     load_group_selection_collections()
     @notification_request = NotificationRequest.new
-    @notification_request.occasion = @occasion
+    @notification_request.event = @event
     @notification_request.group_id = session[:group_selection][:group_id]
   end
 
   def create
     @notification_request = NotificationRequest.new(params[:notification_request])
-    @notification_request.occasion = @occasion
+    @notification_request.event = @event
     @notification_request.user = current_user
 
     @notification_request.save!
     flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din grupp."
-    redirect_to @occasion.event
+    redirect_to @event
   end
 
   private
@@ -39,11 +39,11 @@ class NotificationRequestsController < ApplicationController
     end
   end
 
-  # Loads the selected occasion
-  def load_occasion
-    @occasion = Occasion.find(params[:occasion_id])
+  # Loads the selected event
+  def load_event
+    @event = Event.find(params[:event_id])
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = "Kunde inte hitta angiven föreställning"
+    flash[:error] = "Kunde inte hitta angivet evenemang"
     redirect_to root_url()
   end
 

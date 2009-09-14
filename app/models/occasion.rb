@@ -5,7 +5,6 @@ class Occasion < ActiveRecord::Base
   belongs_to :event
   has_many :tickets
   has_many :booking_requirements
-  has_many :notifications_requests
 
   has_many :groups, :through => :tickets , :uniq => true
   has_many :attending_groups, :class_name => "Group",

@@ -153,11 +153,11 @@ ActiveRecord::Schema.define(:version => 20090828070100) do
   end
 
   create_table "notification_requests", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "group_id"
+    t.integer  "user_id"
     t.boolean  "send_mail"
     t.boolean  "send_sms"
-    t.integer  "group_id"
-    t.integer  "occasion_id"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

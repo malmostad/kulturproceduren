@@ -1,6 +1,6 @@
 # A group is the representation of a group of children in a school.
 class Group < ActiveRecord::Base
-  has_many :tickets
+  has_many :tickets, :dependent => :destroy
   has_many :occasions, :through => :tickets , :uniq => true
   has_many :events, :through => :tickets , :uniq => true
 
@@ -11,8 +11,9 @@ class Group < ActiveRecord::Base
     end
   end
   
-  has_many :answers
-  has_many :booking_requirements
+  has_many :answers, :dependent => :destroy
+  has_many :booking_requirements, :dependent => :destroy
+  has_many :notification_requests, :dependent => :destroy
   belongs_to :school
   
   validates_presence_of :name,

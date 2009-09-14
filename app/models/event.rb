@@ -37,6 +37,8 @@ class Event < ActiveRecord::Base
   belongs_to :main_image, :class_name => "Image", :dependent => :destroy
 
   has_many :attachments, :order => "filename ASC", :dependent => :destroy
+
+  has_many :notifications_requests, :dependent => :destroy
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
