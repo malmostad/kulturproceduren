@@ -18,14 +18,19 @@ namespace :kp do
         e.save
         puts "Evenemang #{e.name} är nu bokningsbart för hela stadsdelen"
 
-        notification_requests = NotificationRequest.find_by_event_and_districts(e, e.districts)
+        notification_requests = NotificationRequest.find_by_event_and_districts(
+          e,
+          e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
+        )
       elsif e.ticket_state == Event::ALLOTED_DISTRICT && district_to_all_date <= Date.today
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
         e.save
         puts "Evenemang #{e.name} är nu bokningsbart för alla"
 
-        notification_requests = NotificationRequest.find_by_event(e)
+        if e.tickets.count(:conditions => { :state => Ticket::UNBOOKED }) > 0
+          notification_requests = NotificationRequest.find_by_event(e)
+        end
       end
 
       notification_requests.each do |n|
