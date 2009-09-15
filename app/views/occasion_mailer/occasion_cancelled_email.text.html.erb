@@ -2,7 +2,8 @@
 
 <p>
   Vi måste tyvärr informera om att föreställningen <%= h @occasion.event.name %>,
-  <%= h @occasion.date %> har blivit inställd.
+  <%= h @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
+  har blivit inställd.
 </p>
 
 <p>

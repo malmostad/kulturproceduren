@@ -10,7 +10,8 @@ class Occasion < ActiveRecord::Base
   has_many :attending_groups, :class_name => "Group",
     :source => :group, :through => :tickets, :uniq => true,
     :conditions => "tickets.state != 0"
-  has_many :users, :through => :tickets , :uniq => true
+  has_many :users, :through => :tickets, :uniq => true
+  has_many :companions, :through => :tickets, :uniq => true
   belongs_to :answer
 
   validates_presence_of :date,

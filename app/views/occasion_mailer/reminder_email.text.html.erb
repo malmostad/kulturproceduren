@@ -1,0 +1,9 @@
+<h1>Påminnelse om föreställning</h1>
+
+<p>
+  Detta är en påminnelse om att ni skall besöka
+  <%= link_to @occasion.event.name, "#" %>, föreställningen
+  <%= @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
+  med
+  <%= h @companion.group.name %>, <%= @companion.group.school.name %>.
+</p>
