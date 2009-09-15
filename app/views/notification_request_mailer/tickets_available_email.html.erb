@@ -1,0 +1,12 @@
+<h1>Platser tillgängliga</h1>
+
+<p>
+  Platser till
+  <%= link_to @notification_request.event.name, "#" %>
+  finns nu tillgängliga för
+  <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>
+</p>
+
+<p>
+  <a href="#">Gå in här för att boka platser</a>.
+</p>

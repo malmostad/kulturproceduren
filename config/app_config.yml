@@ -1,7 +1,9 @@
 development:
     :use_asset_host: true
     :salt_length: 10
-    :ticket_state_change_days: 14
+    :ticket_state:
+        :group_days: 14
+        :district_days: 14
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:
@@ -27,7 +29,9 @@ development:
 test:
     :use_asset_host: true
     :salt_length: 10
-    :ticket_state_change_days: 14
+    :ticket_state:
+        :group_days: 14
+        :district_days: 14
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:
@@ -53,7 +57,9 @@ test:
 production:
     :use_asset_host: true
     :salt_length: 10
-    :ticket_state_change_days: 14
+    :ticket_state:
+        :group_days: 14
+        :district_days: 14
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:

@@ -3,31 +3,37 @@ namespace :kp do
 
   # Initializes the ticket state transition in events based on dates
   desc "Update ticket_state for events according to date"
-  task( :update_tickets => :environment ) do
-    Event.all.each do |e|
-      state_change = nil
+  task(:update_tickets => :environment) do
+    events = Event.find(:all, :conditions => { :ticket_state => [ Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT ] })
+    
+    events.each do |e|
 
-      if e.ticket_release_date + APP_CONFIG[:ticket_state_change_days] > Date.today and e.ticket_state != Event::FREE_FOR_ALL
+      group_to_district_date = e.ticket_release_date + APP_CONFIG[:ticket_state][:group_days]
+      district_to_all_date = group_to_district_date + APP_CONFIG[:ticket_state][:district_days]
+
+      notification_requests = []
+
+      if e.ticket_state == Event::ALLOTED_GROUP && group_to_district_date <= Date.today
         e.ticket_state = Event::ALLOTED_DISTRICT
-        state_change = Event::ALLOTED_DISTRICT
         e.save
-      end
+        puts "Evenemang #{e.name} är nu bokningsbart för hela stadsdelen"
 
-      if e.ticket_release_date + APP_CONFIG[:ticket_state_change_days] * 2 > Date.today
+        notification_requests = NotificationRequest.find_by_event_and_districts(e, e.districts)
+      elsif e.ticket_state == Event::ALLOTED_DISTRICT && district_to_all_date <= Date.today
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
         e.save
+        puts "Evenemang #{e.name} är nu bokningsbart för alla"
+
+        notification_requests = NotificationRequest.find_by_event(e)
       end
-      
-      if not state_change.nil?
-        case state_change
-        when Event::ALLOTED_DISTRICT
-          puts "Evenemang #{e.name} är nu bokningsbart för hela stadsdelen"
-        when Event::FREE_FOR_ALL
-          puts "Evenemang #{e.name} är nu bokningsbart för alla"
+
+      notification_requests.each do |n|
+        if n.send_mail
+          NotificationRequestMailer.deliver_tickets_available_email(n)
         end
       end
     end
   end
-  
+
 end
