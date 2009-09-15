@@ -82,6 +82,19 @@ class BookingsController < ApplicationController
         Ticket.transaction do
           # Create booking data objects
           @companion.save!
+
+          if @occasion.event.questionaire
+            answer_form = AnswerForm.new do |a|
+              a.completed = false
+              a.companion = @companion
+              a.occasion = @occasion
+              a.group = @group
+              a.questionaire = @occasion.event.questionaire
+            end
+
+            answer_form.save!
+          end
+
           @booking_requirement.save! unless @booking_requirement.requirement.blank?
 
           # Create tickets

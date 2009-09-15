@@ -2,6 +2,9 @@ development:
     :use_asset_host: true
     :salt_length: 10
     :occasion_reminder_days: 2
+    :evaluation_form:
+        :activation_days: 2
+        :reminder_days: 2
     :ticket_state:
         :group_days: 14
         :district_days: 14
@@ -31,6 +34,9 @@ test:
     :use_asset_host: true
     :salt_length: 10
     :occasion_reminder_days: 2
+    :evaluation_form:
+        :activation_days: 2
+        :reminder_days: 7
     :ticket_state:
         :group_days: 14
         :district_days: 14
@@ -60,6 +66,9 @@ production:
     :use_asset_host: true
     :salt_length: 10
     :occasion_reminder_days: 2
+    :evaluation_form:
+        :activation_days: 2
+        :reminder_days: 7
     :ticket_state:
         :group_days: 14
         :district_days: 14

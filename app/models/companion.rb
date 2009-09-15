@@ -1,7 +1,7 @@
 # A companion is personal details of a person accompanying children
 # to booked occasions.
 class Companion < ActiveRecord::Base
-  has_one :answer_form
+  has_one :answer_form, :dependent => :destroy
   has_many :tickets
   has_one :group, :through => :tickets
   has_one :occasion, :through => :tickets

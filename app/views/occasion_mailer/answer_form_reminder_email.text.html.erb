@@ -1,0 +1,16 @@
+<h1>Påminnelse om utvärdering av evenemang</h1>
+
+<p>
+  Ni besökte
+  <%= link_to @answer_form.occasion.event.name, "#" %>, föreställningen
+  <%= @answer_form.occasion.date %> kl <%= l @answer_form.occasion.start_time, :format => :only_time %>
+  tillsammans med
+  <%= h @answer_form.companion.group.name %>, <%= @answer_form.companion.group.school.name %>.
+</p>
+
+<p>
+  Ni har tidigare fått ett mail gällande utvärdering av evenemanget, och vi ser
+  att utvärderingen inte är inskickad ännu.
+  Vi skulle vilja påminna om att ni kan <%= link_to "gå in här", "#" %>,
+  och fylla i utvärderingen.
+</p>

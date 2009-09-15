@@ -1,0 +1,14 @@
+<h1>Utvärdering av evenemang</h1>
+
+<p>
+  Ni besökte
+  <%= link_to @occasion.event.name, "#" %>, föreställningen
+  <%= @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
+  tillsammans med
+  <%= h @companion.group.name %>, <%= @companion.group.school.name %>.
+</p>
+
+<p>
+  Vi skulle vilja att ni <%= link_to "går in här", "#" %>, och fyller i en utvärderingsenkät
+  för hur barnen uppfattade evenemanget.
+</p>
