@@ -38,7 +38,7 @@ class Event < ActiveRecord::Base
 
   has_many :attachments, :order => "filename ASC", :dependent => :destroy
 
-  has_many :notifications_requests, :dependent => :destroy
+  has_many :notification_requests, :dependent => :destroy
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
