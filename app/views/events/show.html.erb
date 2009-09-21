@@ -123,13 +123,17 @@
       <% unless @event.url.blank? -%>
         <tr class="url">
           <th>Extern länk</th>
-          <td><%= link_to h(@event.url), @event.url %></td>
+          <td>
+            <a href="<%= qualified_url(@event.url) %>"><%= h(@event.url) %></a>
+          </td>
         </tr>
       <% end -%>
       <% unless @event.movie_url.blank? -%>
         <tr class="movie-url">
           <th>Youtube-länk</th>
-          <td><%= link_to h(@event.movie_url), @event.movie_url %></td>
+          <td>
+            <a href="<%= qualified_url(@event.movie_url) %>"><%= h(@event.movie_url) %></a>
+          </td>
         </tr>
       <% end -%>
 
