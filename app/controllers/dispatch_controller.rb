@@ -3,10 +3,14 @@
 # the problem of linking directly into a specific page in the application.
 class DispatchController < ApplicationController
   def index
-    if ActionController::Base.relative_url_root
-      redirect_to ActionController::Base.relative_url_root + params[:goto]
+    if params[:goto]
+      if ActionController::Base.relative_url_root
+        redirect_to ActionController::Base.relative_url_root + params[:goto]
+      else
+        redirect_to params[:goto]
+      end
     else
-      redirect_to params[:goto]
+      redirect_to root_url()
     end
   end
 end
