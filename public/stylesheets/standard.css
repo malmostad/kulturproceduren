@@ -38,7 +38,7 @@
 /*** jQuery UI ***/
 #kp .ui-widget { font-size: 1em; }
 
-#kp .ui-tabs { margin-bottom: 1em; }
+#kp .ui-tabs { margin-bottom: 1em; padding: 0; }
 
 #kp ul.ui-tabs-nav {
     padding: 0 0 0 1em;
@@ -47,6 +47,8 @@
     border: 0;
     border-bottom: 1px solid #c0c0c0;
     margin: 0;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important; 
 }
 #kp ul.ui-tabs-nav li { float: left; background: #fff; margin-right: .3em; border: 0; position: relative; top: 1px; }
 #kp ul.ui-tabs-nav li a {
@@ -117,9 +119,9 @@
     background: url(http://www.dev.malmo.se/assets/img/ajax-loader-16x16.gif) no-repeat;
 }
 
-#kp #kp-content { margin-top: 1em; position: relative; }
+#kp #kp-content { margin-top: 1em; }
+#kp #kp-content #kp-sec-content { width: 30%; margin-left: 3%; float: right; }
 #kp #kp-content #kp-pri-content { width: 66%; }
-#kp #kp-content #kp-sec-content { width: 30%; margin-left: 3%; position: absolute; top: 0; right: 0; }
 
 /*** Navigation ***/
 #kp .pri-nav {

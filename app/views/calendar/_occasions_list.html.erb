@@ -29,7 +29,7 @@ category_groups ||= []
 
       <% if prev_date < occasion.date %>
         <tr class="date-row <%= cycle('', 'even')  %>">
-          <th colspan="<%= 5 + category_groups.size %>"><%= occasion.date %></th>
+          <th colspan="<%= (hide_culture_provider ? 4 : 5) + category_groups.size %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 

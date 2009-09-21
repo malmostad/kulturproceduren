@@ -11,6 +11,10 @@
   </div>
 <% end -%>
 
+<div id="kp-sec-content" class="cp-sec-content">
+  <%= render :partial => "info_box", :locals => { :culture_provider => @culture_provider } -%>
+</div>
+
 <div id="kp-pri-content" class="cp-pri-content">
 
   <div class="model-cnt">
@@ -29,13 +33,8 @@
 
     <%= paragraphize(@culture_provider.description, 'class="description"') %>
 
-
   </div>
 
-</div>
-
-<div id="kp-sec-content" class="cp-sec-content">
-  <%= render :partial => "info_box", :locals => { :culture_provider => @culture_provider } -%>
 </div>
 
 <div class="tabs">
