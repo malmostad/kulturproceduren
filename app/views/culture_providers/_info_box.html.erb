@@ -34,9 +34,9 @@
         <a href="<%= qualified_url(culture_provider.url) %>"><%= h(culture_provider.url) %></a>
       </dd>
     <% end -%>
-    <% unless @culture_provider.opening_hours.blank? %>
+    <% unless culture_provider.opening_hours.blank? %>
       <dt class="opening-hours">Öppettider</dt>
-      <dd class="opening-hours"><%= linebreakize(@culture_provider.opening_hours) %></dd>
+      <dd class="opening-hours"><%= linebreakize(culture_provider.opening_hours) %></dd>
     <% end -%>
   </dl>
 </div>
