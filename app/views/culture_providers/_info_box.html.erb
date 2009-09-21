@@ -9,39 +9,34 @@
     </div>
   <% end -%>
 
-
-  <table class="meta">
-    <tbody>
-      <% unless culture_provider.address.blank? %>
-        <tr class="address">
-          <th>Adress</th>
-          <td><%= linebreakize(culture_provider.address) %></td>
-        </tr>
-      <% end -%>
-      <% unless culture_provider.contact_person.blank? %>
-        <tr class="contact-person">
-          <th>Kontaktperson</th>
-          <td><%= h(culture_provider.contact_person) %></td>
-        </tr>
-      <% end -%>
-      <% unless culture_provider.phone.blank? %>
-        <tr class="phone">
-          <th>Telefon</th>
-          <td><%= h(culture_provider.phone) %></td>
-        </tr>
-      <% end -%>
-      <% unless culture_provider.email.blank? %>
-        <tr class="email">
-          <th>Epost</th>
-          <td><a href="mailto:<%= u(culture_provider.email) %>"><%= h(culture_provider.email) %></a></td>
-        </tr>
-      <% end -%>
-      <% unless culture_provider.url.blank? %>
-        <tr class="url">
-          <th>Hemsida</th>
-          <td><a href="<%= qualified_url(culture_provider.url) %>"><%= h(culture_provider.url) %></a></td>
-        </tr>
-      <% end -%>
-    </tbody>
-  </table>
+  <dl class="meta">
+    <% unless culture_provider.address.blank? %>
+      <dt class="address">Adress</dt>
+      <dd class="address"><%= linebreakize(culture_provider.address) %></dd>
+    <% end -%>
+    <% unless culture_provider.contact_person.blank? %>
+      <dt class="contact-person">Kontaktperson</dt>
+      <dd class="contact-person"><%= h(culture_provider.contact_person) %></dd>
+    <% end -%>
+    <% unless culture_provider.phone.blank? %>
+      <dt class="phone">Telefon</dt>
+      <dd class="phone"><%= h(culture_provider.phone) %></dd>
+    <% end -%>
+    <% unless culture_provider.email.blank? %>
+      <dt class="email">Epost</dt>
+      <dd class="email">
+        <a href="mailto:<%= u(culture_provider.email) %>"><%= h(culture_provider.email) %></a>
+      </dd>
+    <% end -%>
+    <% unless culture_provider.url.blank? %>
+      <dt class="url">Hemsida</dt>
+      <dd class="url">
+        <a href="<%= qualified_url(culture_provider.url) %>"><%= h(culture_provider.url) %></a>
+      </dd>
+    <% end -%>
+    <% unless @culture_provider.opening_hours.blank? %>
+      <dt class="opening-hours">Öppettider</dt>
+      <dd class="opening-hours"><%= linebreakize(@culture_provider.opening_hours) %></dd>
+    <% end -%>
+  </dl>
 </div>

@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(:version => 20090828070100) do
     t.integer "questionaire_id"
   end
 
-  add_index "questionaires_questions", ["question_id", "questionaire_id"], :name => "index_questionaires_questions_on_questionaire_id_and_question_i", :unique => true
+  add_index "questionaires_questions", ["question_id", "questionaire_id"], :name => "qq_idx", :unique => true
 
   create_table "questions", :force => true do |t|
     t.string   "qtype"
