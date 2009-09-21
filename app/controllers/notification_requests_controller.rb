@@ -18,7 +18,7 @@ class NotificationRequestsController < ApplicationController
     @notification_request.user = current_user
 
     @notification_request.save!
-    flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din grupp."
+    flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din klass/avdelning."
     redirect_to @event
   end
 

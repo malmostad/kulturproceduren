@@ -41,10 +41,10 @@
 <div class="tabs">
   <ul>
     <% unless @culture_provider.upcoming_occasions.empty? -%>
-      <li><a href="#kp-cp-meta-occasions">Kommande föreställningar</a></li>
+      <li><a href="#kp-cp-meta-occasions">Kommande evenemang</a></li>
     <% end -%>
     <% unless @culture_provider.standing_events.empty? -%>
-      <li><a href="#kp-cp-meta-events">Stående evenemang</a></li>
+      <li><a href="#kp-cp-meta-events">Bokningsfria evenemang</a></li>
     <% end -%>
     <% if user_online? && current_user.can_administrate?(@culture_provider) && !@culture_provider.events.empty? -%>
       <li><a href="#kp-cp-meta-all-events">Alla evenemang</a></li>

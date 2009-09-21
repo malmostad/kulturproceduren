@@ -36,7 +36,7 @@ class BookingsController < ApplicationController
     @booking = Ticket.booking(@group, @occasion)
 
     if @booking.values.inject { |sum, n| sum += n } == 0
-      flash[:warning] = "Gruppen har ingen bokning på den efterfrågade föreställningen."
+      flash[:warning] = "Klassen/avdelningen har ingen bokning på den efterfrågade föreställningen."
       redirect_to root_url()
       return
     end

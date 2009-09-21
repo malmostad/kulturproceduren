@@ -126,10 +126,10 @@
         <% end -%>
 
         <div class="form-buttons">
-          <input type="submit" name="do_filter" value="Filtrera"/>
+          <input type="submit" name="do_filter" value="Sök"/>
           <input type="submit" name="clear_filter" value="Återställ"/>
           <%#= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter", :list => @calendar_list %>
-          <%= link_to "Ingen filtrering", { :action => "index", :list => @calendar_list }, { :class => "hide-calendar-filter-action" } %>
+          <%= link_to "Ingen sökning", { :action => "index", :list => @calendar_list }, { :class => "hide-calendar-filter-action" } %>
         </div>
 
       </form>

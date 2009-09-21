@@ -13,7 +13,7 @@
       <%= @occasion.event.ticket_state == Event::ALLOTED_GROUP ? "skola" : "stadsdel" %>
       finns med i listan kan du 
       <%= link_to "klicka här", new_event_notification_request_path(@occasion.event) %>
-      för att få ett meddelande när platser blir tillgängliga för din grupp.
+      för att få ett meddelande när platser blir tillgängliga för din klass/avdelning.
     </p>
 
     <ul class="ticket-availability-list">
