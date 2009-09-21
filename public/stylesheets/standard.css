@@ -186,7 +186,7 @@
 
 #kp .section-nav { list-style-type:none; }
 #kp .section-nav li { display: inline-block; padding: 0.5em 1em; }
-#kp .section-nav li.active { font-weight: bold; }
+#kp .section-nav li.active { font-weight: bold !important; }
 
 #kp .section-info { padding: 1em; }
 #kp .section-info p.description { margin: 0; padding: 0; width: 70%; }
