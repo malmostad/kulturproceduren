@@ -10,7 +10,6 @@
         <% unless @event.bookable? %>
           <li>
             <%= link_to 'Radera', event_path(@event), :method => :delete, :confirm => "Är du säker på att du vill radera evenemanget?" %>
-
           </li>
         <% end %>
 
