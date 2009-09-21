@@ -117,10 +117,9 @@
     background: url(http://www.dev.malmo.se/assets/img/ajax-loader-16x16.gif) no-repeat;
 }
 
-#kp #kp-content { margin-top: 1em; }
-
-#kp #kp-content #kp-pri-content { width: 66%; float: left; }
-#kp #kp-content #kp-sec-content { width: 30%; margin-left: 3%; float: left; }
+#kp #kp-content { margin-top: 1em; position: relative; }
+#kp #kp-content #kp-pri-content { width: 66%; }
+#kp #kp-content #kp-sec-content { width: 30%; margin-left: 3%; position: absolute; top: 0; right: 0; }
 
 /*** Navigation ***/
 #kp .pri-nav {
