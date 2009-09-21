@@ -2,7 +2,7 @@
 
   <ul class="calendar-list-tabs">
     <li class="<%= 'active' if @calendar_list == :occasions %>">
-      <%= link_to "Föreställningar", calendar_path(params[:action], :occasions) %>
+      <%= link_to "Evenemang", calendar_path(params[:action], :occasions) %>
     </li>
     <li class="<%= 'active' if @calendar_list == :events %>">
       <%= link_to "Bokningsfria evenemang", calendar_path(params[:action], :events) %>

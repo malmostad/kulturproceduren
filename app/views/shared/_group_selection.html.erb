@@ -4,7 +4,7 @@
 %>
 
 <fieldset id="kp-group-selection-form" class="with-legend">
-  <legend><span>Välj grupp</span></legend>
+  <legend><span>Välj klass/avdelning</span></legend>
 
   <div class="form-row district_id-field-row">
     <%= label_tag "group_selection-district_id", "Välj stadsdel:" %>
@@ -62,7 +62,7 @@
   </div>
 
   <div class="form-row group_id-field-row">
-    <%= label_tag "group_selection-group_id", "Välj grupp:" %>
+    <%= label_tag "group_selection-group_id", "Välj klass/avdelning:" %>
 
     <div class="input-container">
       <% form_tag({ :controller => "groups", :action => "select" }) do %>
@@ -94,12 +94,12 @@
 
           <%= select_tag(
             "group_id",
-            "<option>Välj grupp</option>" + opts,
+            "<option>Välj klass/avdelning</option>" + opts,
             { :id => "kp-group_selection-group_id" })
           %>
 
           <noscript>
-            <%= submit_tag "Välj grupp" %>
+            <%= submit_tag "Välj klass/avdelning" %>
           </noscript>
 
         <% else %>
