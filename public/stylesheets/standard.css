@@ -15,7 +15,7 @@
 #kp dd { margin-left: 1.5em;}
 
 #kp fieldset { border: 1px solid #c0c0c0; margin: 0 0 1em 0; padding: 1em 0.5em; }
-#kp legend { padding: 0 1em; font-size: 1.1em; }
+#kp legend { padding: 0 1em; font-size: 1em; }
 
 #kp table { width: 100%; }
 #kp table .selected td { background: #cfc; }
@@ -49,8 +49,24 @@
     margin: 0;
     -moz-border-radius: 0 !important;
     -webkit-border-radius: 0 !important; 
+    zoom: 1;
+    font-size: 0.929em;
 }
-#kp ul.ui-tabs-nav li { float: left; background: #fff; margin-right: .3em; border: 0; position: relative; top: 1px; }
+#kp ul.ui-tabs-nav:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+#kp ul.ui-tabs-nav li {
+    float: left;
+    background: #fff;
+    margin-right: .3em;
+    border: 0;
+    position: relative;
+    top: 1px;
+}
 #kp ul.ui-tabs-nav li a {
     display: block;
     background: #d9ebd2;
@@ -137,9 +153,8 @@
     margin-right: 0.2em;
     border: 1px solid #c0c0c0;
     border-bottom: 0;
-    font-size: 1.1em;
-    font-weight: bold;
     background: #d9ebd2;
+    font-size: 0.929em;
 }
 #kp .pri-nav a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
 #kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
@@ -147,7 +162,6 @@
 #kp .pri-nav li.pri-nav-logout, #kp .pri-nav li.pri-nav-leave-logout {
     background: transparent;
     border: 0;
-    font-size: 1em;
     font-weight: normal;
 }
 #kp .pri-nav li.pri-nav-leave-logout {
@@ -167,6 +181,7 @@
     border: 1px solid #c0c0c0;
     border-top: 0;
     clear: both;
+    font-size: 0.929em;
 }
 
 #kp .section-nav { list-style-type:none; }
@@ -197,10 +212,10 @@
 #kp h2.form-title { padding: 0.3em 0.5em; background: #ffcf3d url(../images/list_header.png) repeat-x; }
 
 #kp .form-row { padding-bottom: 0.5em; clear: both; }
-#kp .form-row label { display: block; float: left; }
+#kp .form-row label { display: block; float: left; font-size: 0.929em; }
 #kp .form-row .input-container label,
 #kp .post-label-form-row label { float: none; display: inline; }
-#kp .input-container .field-help { display: block; font-size: 0.9em; }
+#kp .input-container .field-help { display: block; font-size: 0.786em; }
 #kp .form-buttons { clear: both; padding-top: 1em; }
 #kp .form-row .input-container input,
 #kp .form-row .input-container select,
@@ -352,7 +367,7 @@
 
 #kp .model-title .meta { font-size: 0.6em; color: #babdb6; font-weight: normal; }
 
-#kp .info-box { border: 1px solid #c0c0c0; padding: 0 0.3em 0.5em 0.3em; }
+#kp .info-box { border: 1px solid #c0c0c0; padding: 0 0.3em 0.5em 0.3em; font-size: 0.929em; }
 #kp .info-box .meta { border: 0; margin: 0; }
 #kp .info-box .meta dt { font-style: italic; padding-top: 0.5em; }
 #kp .info-box .meta dd { padding: 0; margin: 0; overflow: hidden; }
@@ -371,6 +386,7 @@
     padding: 1px 0.5em;
     text-decoration: none;
     white-space: nowrap;
+    font-size: 0.929em;
 }
 #kp .admin-tools a:hover, #kp .admin-tools a:active,
 #kp a.admin-tool:hover, #kp a.admin-tool:active { background: #D9EBD2; }
@@ -382,7 +398,7 @@
 #kp #kp-allotment-init-form .submit-cnt { padding-top: 1em; clear: both; }
 
 #kp #kp-distribution-meta { background: #fff; border: 1px solid #c0c0c0; padding: 0.5em; margin-bottom: 1em; }
-#kp #kp-distribution-meta h4 { font-size: 1.1em; margin: 0; padding: 0; }
+#kp #kp-distribution-meta h4 { font-size: 1em; margin: 0; padding: 0; }
 #kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
 
 #kp #kp-distribution-list { width: auto; }
@@ -445,8 +461,6 @@
     margin-right: 0.2em;
     border: 1px solid #c0c0c0;
     border-bottom: 0;
-    font-size: 1em;
-    font-weight: bold;
     background: #d9ebd2;
 }
 #kp .calendar-list-tabs a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
@@ -460,7 +474,7 @@
 #kp .calendar-table td, #kp .calendar-table th { text-align: center; }
 #kp .calendar-table .inactive {color: #a2a2a2; background-color: #f0f0f0; }
 #kp .calendar-table-eventname, #kp .calendar-table-occasion { text-align: left; }
-#kp .calendar-month-nav th { padding-bottom: 1em; font-size: 1.1em; }
+#kp .calendar-month-nav th { padding-bottom: 1em; font-size: 1em; }
 #kp .calendar-month-nav th.current { font-size: 1.3em; }
 #kp .calendar-month-nav th.prev { text-align: left; }
 #kp .calendar-month-nav th.next { text-align: right; }
