@@ -51,6 +51,8 @@ class Event < ActiveRecord::Base
   validates_presence_of :visible_to,
     :message => "Du måste ange datum"
 
+  before_save :set_further_education_age
+
   # Ticket states
   CREATED          = 0
   ALLOTED_GROUP    = 1
@@ -166,5 +168,15 @@ class Event < ActiveRecord::Base
       :order => 'events.visible_from ASC, events.name ASC',
       :include => :culture_provider
     )
+  end
+
+
+  protected
+
+  def set_further_education_age
+    if self.further_education
+      self.from_age = -1
+      self.to_age = -1
+    end
   end
 end

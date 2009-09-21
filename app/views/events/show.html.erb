@@ -90,14 +90,15 @@
         <th>Arrangör</th>
         <td><%= link_to h(@event.culture_provider.name), culture_provider_path(@event.culture_provider) %></td>
       </tr>
-      <tr class="ages">
-        <th>För åldrar</th>
-        <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
-      </tr>
       <% if @event.further_education -%>
         <tr class="further-education">
           <th>Fortbildning pedagoger/vuxna</th>
           <td>Ja</td>
+        </tr>
+      <% else %>
+        <tr class="ages">
+          <th>För åldrar</th>
+          <td><%= @event.from_age %>-<%= @event.to_age %> år</td>
         </tr>
       <% end -%>
 

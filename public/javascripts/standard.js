@@ -341,4 +341,18 @@
         });
     });
 
+    $(function() {
+        /**
+         * Hides the age inputs when selecting further education in the event
+         * form.
+         */
+        $("#kp #kp-event-further_education").click(function() {
+            if ($(this).is(":checked")) {
+                $("#kp .from_age-field-row, #kp .to_age-field-row").hide();
+            } else {
+                $("#kp .from_age-field-row, #kp .to_age-field-row").show();
+            }
+        });
+    });
+
 })(jQuery);

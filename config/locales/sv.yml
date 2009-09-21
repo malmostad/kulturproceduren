@@ -142,7 +142,7 @@ sv:
                 movie_url: "Youtube-länk:"
                 opening_hours: "Öppettider:"
                 cost: "Kostnad:"
-                further_education: "Fortbildning pedagoger/vuxna:"
+                further_education: "Fortbildning pedagoger/vuxna"
             occasion:
                 date: "Datum:"
                 seats: "Antal platser:"
