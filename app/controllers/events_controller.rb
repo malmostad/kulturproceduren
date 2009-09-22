@@ -4,7 +4,7 @@ require 'gruff'
 
 # Controller for managing events
 class EventsController < ApplicationController
-  layout "standard"
+  layout "standard", :except => [ :options_list ]
 
   before_filter :authenticate, :except => [ :index, :show ]
   before_filter :check_roles, :except => [ :index, :show ]
@@ -148,6 +148,52 @@ class EventsController < ApplicationController
 
     flash[:notice] = "Evenemanget raderades."
     redirect_to root_url()
+  end
+
+  def handle_links
+    session[:event_link] ||= {}
+    @culture_providers = CultureProvider.find :all, :order => "name ASC"
+    @event = Event.find(params[:id])
+
+    if session[:event_link][:selected_culture_provider] && session[:event_link][:selected_culture_provider] > 0
+      @events = Event.find :all,
+        :conditions => { :culture_provider_id => session[:event_link][:selected_culture_provider] },
+        :order => "name ASC"
+    end
+  end
+
+  def add_link
+    session[:event_link][:selected_culture_provider] = params[:event_link][:culture_provider_id].to_i
+    from = Event.find(params[:id])
+    to = Event.find(params[:event_link][:event_id])
+    from.linked_events << to
+    to.linked_events << from
+
+    flash[:notice] = "Evenemangslänken lades till."
+    redirect_to handle_links_event_url(from)
+  end
+
+  def remove_link
+    from = Event.find(params[:id])
+    to = Event.find(params[:other_id])
+
+    from.linked_events.delete(to)
+    to.linked_events.delete(from)
+
+    flash[:notice] = "Evenemangslänken togs bort."
+    redirect_to handle_links_event_url(from)
+  end
+
+  
+  def options_list
+    conditions = {}
+    conditions[:culture_provider_id] = params[:culture_provider_id] if params[:culture_provider_id]
+
+    @events = Event.find :all, :conditions => conditions, :order => "name ASC"
+
+    render :action => "options_list", :content_type => 'text/plain'
+  rescue
+    render :text => "", :content_type => 'text/plain', :status => 404
   end
 
 

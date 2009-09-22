@@ -17,6 +17,9 @@
     booking: {
       form: { url: "<%= url_for :controller => "bookings", :action => "form" %>" },
       groupList: { url: "<%= url_for :controller => "bookings", :action => "group_list" %>"}
+    },
+    events: {
+      list: { url: "<%= options_list_events_path %>"}
     }
   };
 </script>

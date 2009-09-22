@@ -14,6 +14,7 @@
 
       <li><%= link_to 'Hantera bilder', event_images_path(@event) %></li>
       <li><%= link_to 'Hantera filer', event_attachments_path(@event) %></li>
+      <li><%= link_to 'Hantera länkade evenemang', handle_links_event_path(@event) %></li>
 
       <% if current_user.has_role?(:admin) && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
         <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
@@ -149,6 +150,19 @@
                 <li>
                   <%= link_to h(attachment.description), event_attachment_path(@event, attachment) %>
                 </li>
+              <% end %>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if !@event.linked_events.empty? %>
+        <tr class="linked-events">
+          <th>Se även</th>
+          <td>
+            <ul>
+              <% @event.linked_events.each do |event| -%>
+                <li><%= link_to event.name, event %></li>
               <% end %>
             </ul>
           </td>

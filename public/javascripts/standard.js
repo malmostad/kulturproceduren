@@ -355,4 +355,26 @@
         });
     });
 
+    $(function() {
+        /**
+         * Ajax functionality for selecting an event when adding links
+         * between events.
+         */
+        $("#kp #kp-event_link-culture_provider_id").change(function() {
+            var cpId = parseInt($(this).val());
+
+            if (!isNaN(cpId) && cpId > 0) {
+                $.get(
+                kpConfig.events.list.url,
+                { "culture_provider_id": cpId },
+                function(data) {
+                    $("#kp-event_link-event_id").html(data).removeAttr("disabled", "disabled");
+                    $("#kp-event_link-submit").removeAttr("disabled", "disabled");
+                });
+            } else {
+                $("#kp-event_link-event_id, #kp-event_link-submit").attr("disabled", "disabled");
+            }
+        });
+    });
+
 })(jQuery);

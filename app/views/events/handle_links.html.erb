@@ -1,0 +1,68 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+  </div>
+<% end -%>
+
+<% form_tag add_link_event_path(@event), :class => "event-links-form context-form" do %>
+  <h2>Lägg till länkat evenemang</h2>
+
+  <fieldset>
+    <div class="form-row culture_provider-field-row">
+      <label for="kp-event_link-culture_provider_id">Välj arrangör:</label>
+      <div class="input-container">
+        <select id="kp-event_link-culture_provider_id" name="event_link[culture_provider_id]">
+          <option value="-1" <%= 'selected="selected"' if session[:event_link][:selected_culture_provider].nil? %>>
+            Välj arrangör
+          </option>
+          <%= options_from_collection_for_select @culture_providers,
+            "id", "name",
+            session[:event_link][:selected_culture_provider]
+          %>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row event-field-row">
+      <label for="kp-event_link-event_id">Välj evenemang:</label>
+      <div class="input-container">
+        <select id="kp-event_link-event_id" name="event_link[event_id]"<%= ' disabled="disabled"' unless @events %>>
+          <% if @events %>
+            <%= options_from_collection_for_select @events, "id", "name" %>
+          <% else %>
+            <option value="-1">Välj arrangör först</option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-buttons">
+      <input type="submit"
+             value="Lägg till länk"
+             name="submit"
+             id="kp-event_link-submit"
+             <%= ' disabled="disabled"' unless @events %>/>
+    </div>
+  </fieldset>
+<% end %>
+
+<% unless @event.linked_events.empty? %>
+  <table class="event-links-list">
+    <thead>
+      <tr>
+        <th class="event">Evenemang</th>
+        <th class="tools"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @event.linked_events.each do |link| -%>
+        <tr class="<%= cycle('', 'even') %>">
+          <td class="event"><%= link_to link.name, link %></td>
+          <td class="tools">
+            <%= link_to "Ta bort", remove_link_event_path(@event, :other_id => link.id), :method => :delete %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -340,8 +340,8 @@
 #kp .model-cnt dl.meta dd { padding-right: 1em; }
 #kp .model-cnt ul.meta li { padding-bottom: 0.3em; }
 
-#kp .model-cnt table.meta { width: auto; border: 0; margin: 0; }
-#kp .model-cnt table.meta th { vertical-align: top; }
+#kp table.meta { width: auto; border: 0; margin: 0; }
+#kp table.meta th { vertical-align: top; }
 
 #kp .model-cnt .images-cnt {
     border: 1px solid #c0c0c0;
@@ -544,8 +544,8 @@
 }
 
 /*** Events ***/
-#kp #kp-ev-meta-info .attachments ul { margin: 0; padding: 0; list-style-type: none; }
-#kp #kp-ev-meta-info .attachments ul li { margin: 0; padding: 0; }
+#kp #kp-ev-meta-info ul { margin: 0; padding: 0; list-style-type: none; }
+#kp #kp-ev-meta-info ul li { margin: 0; padding: 0; }
 
 /*** Occasions ***/
 

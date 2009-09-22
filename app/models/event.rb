@@ -39,6 +39,13 @@ class Event < ActiveRecord::Base
   has_many :attachments, :order => "filename ASC", :dependent => :destroy
 
   has_many :notification_requests, :dependent => :destroy
+
+  has_and_belongs_to_many :linked_events,
+    :class_name => "Event",
+    :foreign_key => "from_id",
+    :association_foreign_key => "to_id",
+    :order => "name ASC",
+    :join_table => "event_links"
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
