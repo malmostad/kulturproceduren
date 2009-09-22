@@ -5,7 +5,7 @@ module ApplicationHelper
   #
   # Used in navigation menus to get an indicator of the currently active page.
   def active_by_controller(*names)
-    " active " if names.include?(params[:controller])
+    " active-choice " if names.include?(params[:controller])
   end
 
   # Returns the css class +active+ if the current action is an action in the given
@@ -13,7 +13,7 @@ module ApplicationHelper
   #
   # Used in navigation menus to get an indicator of the currently active page.
   def active_by_action(controller, *names)
-    " active " if params[:controller] == controller && names.include?(params[:action])
+    " active-choice " if params[:controller] == controller && names.include?(params[:action])
   end
 
   # Returns a disable HTML attribute if the argument is +false+.

@@ -157,7 +157,7 @@
     font-size: 0.929em;
 }
 #kp .pri-nav a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
-#kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
+#kp .pri-nav li.active-choice, #kp .pri-nav li.active-choice a { background: #fff; }
 
 #kp .pri-nav li.pri-nav-logout, #kp .pri-nav li.pri-nav-leave-logout {
     background: transparent;
@@ -186,7 +186,7 @@
 
 #kp .section-nav { list-style-type:none; }
 #kp .section-nav li { display: inline-block; padding: 0.5em 1em; }
-#kp .section-nav li.active { font-weight: bold !important; }
+#kp .section-nav li.active-choice { font-weight: bold !important; }
 
 #kp .section-info { padding: 1em; }
 #kp .section-info p.description { margin: 0; padding: 0; width: 70%; }
@@ -465,7 +465,7 @@
     font-size: 0.929em;
 }
 #kp .calendar-list-tabs a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
-#kp .calendar-list-tabs li.active, #kp .calendar-list-tabs li.active a { background: #fff; }
+#kp .calendar-list-tabs li.active-choice, #kp .calendar-list-tabs li.active-choice a { background: #fff; }
 
 #kp .calendar-list .date-row th { border-top: 1px solid #dcd7cf; }
 #kp .calendar-list .icon-indicator { width: 1%; white-space: nowrap; }
