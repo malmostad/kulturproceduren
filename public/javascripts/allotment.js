@@ -257,7 +257,6 @@
                 rows.hide();
             } else {
                 toggler.removeClass("collapsed");
-                console.log(rows);
                 rows.show().find(".toggler.collapsed").removeClass("collapsed");
             }
 
