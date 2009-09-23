@@ -1,5 +1,8 @@
 (function($) {
     $(function() {
+        if ($("#kp #kp-distribution-form").length <= 0) {
+            return;
+        }
 
         // Data structure for the allotment state
         var tickets = {
@@ -222,9 +225,7 @@
             $("." + $(this).parents("tr").attr("id") + " .clear").trigger("click");
             return false;
         });
-    });
 
-    $(function() {
         /**
          * Listeners for group selection fragment events for the allotment form
          */
@@ -242,9 +243,7 @@
             // Disable the form
             $("#kp #kp-add-group-submit").attr("disabled", "disabled");
         });
-    });
 
-    $(function() {
         /**
          * Expands/collapses the children of the selected district/school
          */
@@ -262,9 +261,7 @@
 
             return false;
         });
-    });
 
-    $(function() {
         /**
          * Position the meta display to the right of the distribution list,
          * and keep it visible when scrolling.
