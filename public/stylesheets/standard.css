@@ -329,6 +329,9 @@
 /* Attachment form */
 #kp form.attachment-form label { width: 7em; }
 #kp form.attachment-form .input-container { padding-left: 7em; }
+/* Event link form */
+#kp form.event-links-form label { width: 8em; }
+#kp form.event-links-form .input-container { padding-left: 8em; }
 
 /*** Models ***/
 
