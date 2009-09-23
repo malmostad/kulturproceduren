@@ -63,4 +63,29 @@ module ApplicationHelper
       :overwrite_params => { :c => column, :d => sort_dir }
   end
 
+  # Generates an image tag for uploaded images
+  #
+  # [+image+] The image model
+  # [+thumb+] Indicates if the image tag should show the thumbnail or not
+  def uploaded_image_tag(image, thumb = false)
+    options = { :alt => image.name }
+
+    image_path = "/images/"
+
+    if ActionController::Base.relative_url_root
+      image_path = ActionController::Base.relative_url_root + image_path
+    end
+
+    if thumb
+      options[:width] = image.thumb_width
+      options[:height] = image.thumb_height
+      options[:src] = image_path + image.thumb_url
+    else
+      options[:width] = image.width
+      options[:height] = image.height
+      options[:src] = image_path + image.image_url
+    end
+
+    return tag("img", options)
+  end
 end

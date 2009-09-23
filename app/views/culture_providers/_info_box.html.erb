@@ -1,11 +1,7 @@
 <div class="info-box">
   <% if culture_provider.main_image -%>
     <div class="image">
-      <%= image_tag culture_provider.main_image.thumb_url,
-        :alt => culture_provider.main_image.name,
-        :width => culture_provider.main_image.thumb_width,
-        :height => culture_provider.main_image.thumb_height
-      %>
+      <%= uploaded_image_tag culture_provider.main_image, true %>
     </div>
   <% end -%>
 

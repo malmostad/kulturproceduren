@@ -73,11 +73,7 @@
 
         <tr class="<%= cycle('', 'even') %> <%= 'logo' if is_logo %>">
           <td>
-            <%= image_tag img.thumb_url,
-              :alt => img.name,
-              :width => img.thumb_width,
-              :height =>  img.thumb_height
-            %>
+            <%= uploaded_image_tag img, true %>
           </td>
           <td><%= h img.name %></td>
 

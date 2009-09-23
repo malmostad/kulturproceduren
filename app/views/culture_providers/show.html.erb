@@ -23,7 +23,7 @@
       <div class="images-cnt">
         <div class="images">
           <% @culture_provider.images_excluding_main.each do |image| -%>
-            <%= image_tag image.image_url, :alt => image.name, :width => image.width, :height => image.height %>
+            <%= uploaded_image_tag image %>
           <% end -%>
         </div>
       </div>
