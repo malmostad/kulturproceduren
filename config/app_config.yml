@@ -6,8 +6,8 @@ development:
         :activation_days: 2
         :reminder_days: 2
     :ticket_state:
-        :group_days: 14
-        :district_days: 14
+        :group_days: 1
+        :district_days: 1
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:

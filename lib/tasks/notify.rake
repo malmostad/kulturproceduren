@@ -37,4 +37,19 @@ namespace :kp do
       OccasionMailer.deliver_answer_form_reminder_email(answer_form)
     end
   end
+
+  desc "Sends a notification for ticket release"
+  task(:notify_ticket_release => :environment) do
+    events = Event.find :all, :conditions => "ticket_release_date = current_date"
+
+    events.each do |event|
+      event.groups.each do |group|
+        addresses = (group.contacts || "").split(",")
+        addresses += (group.school.contacts || "").split(",")
+        addresses += (group.school.district.contacts || "").split(",")
+
+        EventMailer.deliver_ticket_release_notification_email(event, group, addresses.collect { |a| a.strip })
+      end
+    end
+  end
 end
