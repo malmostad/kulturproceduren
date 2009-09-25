@@ -64,7 +64,7 @@ class AddForeignKeys < ActiveRecord::Migration
     remove_foreign_key :booking_requirements, :group
 
     remove_foreign_key :notification_requests, :group
-    remove_foreign_key :notification_requests, :occasion
+    remove_foreign_key :notification_requests, :event
     remove_foreign_key :notification_requests, :user
 
     remove_foreign_key :events, :culture_provider
