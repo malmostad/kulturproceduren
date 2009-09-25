@@ -44,30 +44,6 @@ module ActionView
     end
 
     class InstanceTag
-      # Fixes the id generation to include stripping of dashes
-      def to_radio_button_tag(tag_value, options = {})
-        options = DEFAULT_RADIO_OPTIONS.merge(options.stringify_keys)
-        options["type"]     = "radio"
-        options["value"]    = tag_value
-
-        if options.has_key?("checked")
-          cv = options.delete "checked"
-          checked = cv == true || cv == "checked"
-        else
-          checked = self.class.radio_button_checked?(value(object), tag_value)
-        end
-
-        options["checked"]  = "checked" if checked
-        pretty_tag_value    = tag_value.to_s.gsub(/\s/, "_").gsub(/[^A-Za-z0-9-]/, "").downcase
-        options["id"]     ||= defined?(@auto_index) ?
-          "#{tag_id_with_index(@auto_index)}_#{pretty_tag_value}" :
-          "#{tag_id}_#{pretty_tag_value}"
-
-        add_default_name_and_id(options)
-
-        tag("input", options)
-      end
-
       private
       # Overrides the method generating the DOM ID for a field
       def tag_id
@@ -95,17 +71,6 @@ module ActionView
     end
 
     module FormTagHelper
-      # Adds ID sanitation when creating the DOM Id.
-      def text_area_tag(name, content = nil, options = {})
-        options.stringify_keys!
-
-        if size = options.delete("size")
-          options["cols"], options["rows"] = size.split("x") if size.respond_to?(:split)
-        end
-
-        content_tag :textarea, content, { "name" => name, "id" => sanitize_to_id(name) }.update(options.stringify_keys)
-      end
-
       # Overrides the DOM ID generation, prefixing the ID
       def radio_button_tag(name, value, checked = false, options = {})
         pretty_tag_value = value.to_s.gsub(/\s/, "_").gsub(/(?!-)\W/, "").downcase
