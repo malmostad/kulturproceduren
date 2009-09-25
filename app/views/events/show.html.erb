@@ -65,6 +65,14 @@
 
   <div id="kp-ev-meta-info">
     <table class="meta">
+      <% unless @event.map_address.blank? %>
+        <tr class="map-address">
+          <th>Hitta till oss</th>
+          <td>
+            <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => h(@event.map_address) %>
+          </td>
+        </tr>
+      <%end %>
       <% if user_online? && current_user.can_administrate?(@event.culture_provider) %>
         <tr class="show-date">
           <th>Visas mellan</th>
@@ -200,7 +208,20 @@
                 <%= h(available_seats) %>
                 <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
               </td>
-              <td class="address"><%= linebreakize(occasion.address) %></td>
+              <td class="address">
+                <%= linebreakize(occasion.address) unless occasion.address.blank? %>
+
+                <% unless occasion.map_address.blank? %>
+                  <% unless occasion.address.blank? %>
+                    <br/>
+                  <% end %>
+
+                  <%= link_to "Visa på karta", "#",
+                    :class => "map-address-link",
+                    :title => h(occasion.map_address)
+                  %>
+                <% end %>
+              </td>
               <td class="description"><%= linebreakize(occasion.description) %></td>
               <td class="tools">
                 <% if occasion.cancelled %>

@@ -244,6 +244,8 @@
 #kp form .date-field { width: 7em; }
 #kp form .checkbox-list { list-style-type: none; margin: 0; padding: 0; }
 
+#kp form .map-address-test-trigger { display: block; font-size: 0.929em; }
+
 
 /* Age group form */
 #kp form.age-group-form { padding-bottom: 1em; }
@@ -599,3 +601,4 @@
 
 /*** Attendance reporting ***/
 #kp .attendant-list input { width: 3em; }
+

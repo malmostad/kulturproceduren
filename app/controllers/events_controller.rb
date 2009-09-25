@@ -58,6 +58,11 @@ class EventsController < ApplicationController
     @event = Event.new do |e|
       e.to_age = 19
       e.culture_provider_id = params[:culture_provider_id] if params[:culture_provider_id]
+
+      if params[:culture_provider_id]
+        culture_provider = CultureProvider.find params[:culture_provider_id]
+        e.map_address = culture_provider.map_address
+      end
     end  
     @category_groups = CategoryGroup.all :order => "name ASC"
     

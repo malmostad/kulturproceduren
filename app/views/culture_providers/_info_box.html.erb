@@ -6,9 +6,16 @@
   <% end -%>
 
   <dl class="meta">
-    <% unless culture_provider.address.blank? %>
+    <% if !culture_provider.address.blank? || !culture_provider.map_address.blank? %>
       <dt class="address">Adress</dt>
-      <dd class="address"><%= linebreakize(culture_provider.address) %></dd>
+      <% unless culture_provider.address.blank? %>
+        <dd class="address"><%= linebreakize(culture_provider.address) %></dd>
+      <% end %>
+      <% unless culture_provider.map_address.blank? %>
+        <dd class="address">
+          <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => h(culture_provider.map_address) %>
+        </dd>
+      <% end %>
     <% end -%>
     <% unless culture_provider.contact_person.blank? %>
       <dt class="contact-person">Kontaktperson</dt>

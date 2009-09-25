@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090922075719) do
+ActiveRecord::Schema.define(:version => 20090925083850) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -19,7 +19,8 @@ ActiveRecord::Schema.define(:version => 20090922075719) do
     t.datetime "updated_at"
   end
 
-  create_table "answer_forms", :force => true do |t|
+  create_table "answer_forms", :id => false, :force => true do |t|
+    t.string   "id",              :limit => 46, :null => false
     t.boolean  "completed"
     t.integer  "companion_id"
     t.integer  "occasion_id"
@@ -94,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20090922075719) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "main_image_id"
+    t.string   "map_address"
   end
 
   create_table "culture_providers_users", :id => false, :force => true do |t|
@@ -135,6 +137,7 @@ ActiveRecord::Schema.define(:version => 20090922075719) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "main_image_id"
+    t.string   "map_address"
   end
 
   create_table "groups", :force => true do |t|
@@ -182,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20090922075719) do
     t.boolean  "cancelled",        :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "map_address"
   end
 
   create_table "questionaires", :force => true do |t|
@@ -196,7 +200,7 @@ ActiveRecord::Schema.define(:version => 20090922075719) do
     t.integer "questionaire_id"
   end
 
-  add_index "questionaires_questions", ["question_id", "questionaire_id"], :name => "qq_idx", :unique => true
+  add_index "questionaires_questions", ["questionaire_id", "question_id"], :name => "qq_idx", :unique => true
 
   create_table "questions", :force => true do |t|
     t.string   "qtype"

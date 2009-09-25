@@ -143,6 +143,7 @@ sv:
                 opening_hours: "Öppettider:"
                 cost: "Kostnad:"
                 further_education: "Fortbildning pedagoger/vuxna"
+                map_address: "Kartadress:"
             occasion:
                 date: "Datum:"
                 seats: "Antal platser:"
@@ -152,6 +153,7 @@ sv:
                 stop_time: "Sluttid:"
                 wheelchair_seats: "Antal rullstolsplatser:"
                 telecoil: "Hörselslinga"
+                map_address: "Kartadress:"
             district:
                 name: "Namn:"
                 contacts: "Kontaktadresser:"
@@ -190,6 +192,7 @@ sv:
                 address: "Adress:"
                 opening_hours: "Öppettider:"
                 url: "Hemsida:"
+                map_address: "Kartadress:"
             image:
                 name: "Namn:"
             category:

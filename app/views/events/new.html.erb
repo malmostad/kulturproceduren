@@ -53,6 +53,7 @@
     <%= f.text_field :movie_url %>
     <%= f.text_area :opening_hours, :rows => 5 %>
     <%= f.text_area :cost, :rows => 5 %>
+    <%= f.text_field :map_address %>
 
     <% f.buttons do -%>
       <%= f.submit(is_edit ? "Uppdatera" : "Spara") %>
