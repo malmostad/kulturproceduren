@@ -33,3 +33,5 @@ ActionMailer::Base.smtp_settings = {
   :port => 1025,
   :domain => "localhost"
 }
+
+ActionController::Base.asset_host = "http://www.dev.malmo.se/assets/kp"

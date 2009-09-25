@@ -1,5 +1,5 @@
 development:
-    :use_asset_host: true
+    :asset_host: "http://www.dev.malmo.se/assets"
     :salt_length: 10
     :occasion_reminder_days: 2
     :evaluation_form:
@@ -31,7 +31,6 @@ development:
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :base_url: "localhost:3000"
 test:
-    :use_asset_host: true
     :salt_length: 10
     :occasion_reminder_days: 2
     :evaluation_form:
@@ -63,7 +62,7 @@ test:
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :base_url: "localhost:3000"
 production:
-    :use_asset_host: true
+    :asset_host: "http://www.dev.malmo.se/assets"
     :salt_length: 10
     :occasion_reminder_days: 2
     :evaluation_form:
