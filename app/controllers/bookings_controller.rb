@@ -305,8 +305,8 @@ class BookingsController < ApplicationController
   # Loads the requested group, either from an incoming id or
   # the group selection widget.
   def load_group
-    if params[:id]
-      @group = Group.find params[:id], :include => { :school => :district }
+    if params[:group_id] || params[:id]
+      @group = Group.find((params[:group_id] || params[:id]), :include => { :school => :district })
       session[:group_selection] = {
         :district_id => @group.school.district_id,
         :school_id => @group.school.id,

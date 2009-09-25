@@ -195,7 +195,7 @@
                 </span>
               </td>
               <td class="num-seats">
-                <% available_seats = occasion.available_seats %>
+                <% available_seats = occasion.available_seats.to_i %>
 
                 <%= h(available_seats) %>
                 <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
