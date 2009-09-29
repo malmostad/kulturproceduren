@@ -85,10 +85,17 @@
           </tr>
         <% end -%>
       <% end -%>
-      <% unless @event.booking_info.blank? -%>
+      <% if !@event.booking_info.blank? && !@event.bookable? -%>
         <tr class="booking-info">
           <th>Bokningsinformation</th>
           <td><%= auto_link h(@event.booking_info) %></td>
+        </tr>
+      <% elsif @event.bookable? && !user_online? %>
+        <tr class="booking-info">
+          <th>Bokningsinformation</th>
+          <td>
+            Platserna är fördelade. <%= login_link "Logga in" %> och välj önskad dag och plats.
+          </td>
         </tr>
       <% end -%>
       <% unless @event.cost.blank? -%>
@@ -261,7 +268,7 @@
                     <%= link_to "Rapportera närvaro", report_show_occasion_path(occasion) -%>
                   <% end %>
                 <% elsif @event.bookable? %>
-                  <span>Logga in för att boka</span>
+                  <span><%= login_link "Logga in", new_occasion_booking_path(occasion) %> för att boka</span>
                 <% end %>
               </td>
             </tr>

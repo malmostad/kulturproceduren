@@ -49,7 +49,9 @@
     <% end -%>
 
     <%= f.text_field :url %>
-    <%= f.text_field :booking_info %>
+    <%= f.text_field :booking_info,
+      :field_help => "Detta fält visas inte om evenemanget är bokningsbart i Kulturproceduren"
+    %>
     <%= f.text_field :movie_url %>
     <%= f.text_area :opening_hours, :rows => 5 %>
     <%= f.text_area :cost, :rows => 5 %>

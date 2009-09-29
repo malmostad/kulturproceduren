@@ -81,11 +81,7 @@ num_category_groups = 0
             <% end %>
           <% else %>
             <% if occasion.event.bookable? %>
-              <%= link_to "Kulturproceduren",
-                :controller => "login",
-                :action => "index",
-                :return_to => new_occasion_booking_path(occasion)
-              %>
+              <%= login_link "Kulturproceduren", new_occasion_booking_path(occasion) %>
             <% else %>
               <%= link_to "Arrangören", occasion.event %>
             <% end %>

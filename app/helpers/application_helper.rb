@@ -88,4 +88,13 @@ module ApplicationHelper
 
     return tag("img", options)
   end
+
+  # Generates a login link that returns the user to the
+  # current page, or to the specified URL.
+  def login_link(text, url = nil)
+    link_to text,
+      :controller => "login",
+      :action => "index",
+      :return_to => url || url_for(request.query_parameters.update(request.path_parameters))
+  end
 end
