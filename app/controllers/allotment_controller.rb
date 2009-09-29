@@ -198,6 +198,21 @@ class AllotmentController < ApplicationController
   end
 
 
+  # Completely removes an allotment from an event
+  def destroy
+    @event.tickets.clear
+
+    session[:allotment] = nil
+
+    @event.ticket_release_date = nil
+    @event.ticket_state = 0
+    @event.save!
+
+    flash[:notice] = "Fördelningen togs bort."
+    redirect_to @event
+  end
+
+
   private
 
   # Loads the working districts from the session

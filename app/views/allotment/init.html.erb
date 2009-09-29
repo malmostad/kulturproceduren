@@ -14,13 +14,19 @@
 </p>
 
 <% if is_edit -%>
-  <p class="allotment_details">
+  <p class="allotment-details">
     Detta evenemang har redan <%= @event.tickets.count %> st biljetter fördelade.
+
+    <%= link_to "Ta bort fördelningen helt",
+    { :action => "destroy", :id => params[:id] },
+    { :confirm => "Är du säker?" } %>.
   </p>
 <% end -%>
 
-<% form_tag({ :action => "assign_params", :id => params[:id] },
-            { :id => "kp-allotment-init-form", :class => "allotment-init-form" }) do -%>
+<% form_tag(
+  { :action => "assign_params", :id => params[:id] },
+  { :id => "kp-allotment-init-form", :class => "allotment-init-form" }
+) do -%>
 
   <fieldset>
     <div class="form-row release_date-field-row">
@@ -74,10 +80,8 @@
                      name="allotment[district_ids][]"
                      value="<%= district.id %>"
                      id="kp-allotment-district_ids-<%= district.id %>"
-                     <%
-                       if is_edit
-                         current_district = @event.districts.include?(district)
-                       -%>
+                     <% if is_edit %>
+                       <% current_district = @event.districts.include?(district) -%>
                        <%= 'disabled="disabled"' if current_district %>
                        <%= 'checked="checked"' if current_district %>
                      <% else -%>
