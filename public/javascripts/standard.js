@@ -315,8 +315,16 @@
         $("#kp .calendar-list .ticket-availability-link").click(function() {
             var link = $(this);
             var url = link.attr("href");
+            var container = link.parent();
+
+            link.hide();
+            container.append('<div class="load-indicator"></div>');
 
             $.get(url, function(data) {
+
+                container.find(".load-indicator").remove();
+                link.show();
+
                 var d = $(data);
                 $("body").append(d);
                 d.dialog({
