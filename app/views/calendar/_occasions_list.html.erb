@@ -14,6 +14,8 @@ num_category_groups = 0
         <th class="culture-provider">Arrangör</th>
       <% end %>
 
+      <th class="age">Ålder</th>
+
       <% category_groups.each do |category_group| -%>
         <% if category_group.visible_in_calendar %>
           <th class="categories"><%= h category_group.name %></th>
@@ -33,7 +35,7 @@ num_category_groups = 0
 
       <% if prev_date < occasion.date %>
         <tr class="date-row <%= cycle('', 'even')  %>">
-          <th colspan="<%= (hide_culture_provider ? 4 : 5) + num_category_groups %>"><%= occasion.date %></th>
+          <th colspan="<%= (hide_culture_provider ? 5 : 6) + num_category_groups %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 
@@ -44,6 +46,12 @@ num_category_groups = 0
         <% unless hide_culture_provider -%>
           <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name), occasion.event.culture_provider %></td>
         <% end -%>
+
+        <td class="age">
+          <% if !occasion.event.further_education %>
+            <%= occasion.event.from_age %>-<%= occasion.event.to_age %>
+          <% end %>
+        </td>
 
         <% category_groups.each do |category_group| -%>
           <% if category_group.visible_in_calendar %>
