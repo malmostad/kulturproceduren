@@ -23,7 +23,7 @@ num_category_groups = 0
         <% end %>
       <% end -%>
 
-      <th class="booking">Boka</th>
+      <th class="booking"><%= user_online? ? "Boka" : "Bokas via" %></th>
       <th class="icon-indicator">Hjälpmedel</th>
     </tr>
   </thead>
@@ -62,9 +62,9 @@ num_category_groups = 0
         <% end -%>
 
         <td class="booking">
-          <% if occasion.event.bookable? %>
-            <% if user_online? && current_user.can_book? -%>
 
+          <% if user_online? && current_user.can_book?  %>
+            <% if occasion.event.bookable? %>
               <% available_seats = occasion.available_seats %>
 
               <% if available_seats > 0 %>
@@ -73,23 +73,23 @@ num_category_groups = 0
                 <span class="sold-out">Fullbokat</span>
               <% end %>
 
-              <div class="ticket-availability">
-                <a href="<%= ticket_availability_occasion_path(occasion) %>"
-                   class="ticket-availability-link"
-                   title="Platstillgänglighet för evenemanget">
-                  <%= image_tag "information.png", :alt => "Platstillgänglighet" %>
-                </a>
-                <a href="<%= ticket_availability_occasion_path(occasion) %>"
-                   class="ticket-availability-close-link"
-                   title="Stäng listan">
-                  <%= image_tag "cancel.png", :alt => "Stäng listan" %>
-                </a>
-              </div>
-
-            <% else -%>
-              Logga in för att boka
-            <% end -%>
-          <% end -%>
+              <a href="<%= ticket_availability_occasion_path(occasion) %>"
+                 class="ticket-availability-link"
+                 title="Platstillgänglighet för <%= h(occasion.event.name) %> <%= occasion.date %> <%= l occasion.start_time, :format => :only_time %>">
+                <%= image_tag "information.png", :alt => "Platstillgänglighet" %>
+              </a>
+            <% end %>
+          <% else %>
+            <% if occasion.event.bookable? %>
+              <%= link_to "Kulturproceduren",
+                :controller => "login",
+                :action => "index",
+                :return_to => new_occasion_booking_path(occasion)
+              %>
+            <% else %>
+              <%= link_to "Arrangören", occasion.event %>
+            <% end %>
+          <% end %>
         </td>
 
         <td class="icon-indicator">

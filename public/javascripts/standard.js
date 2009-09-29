@@ -310,33 +310,26 @@
     $(function() {
         /**
          * Hijacks the link going to the list with ticket availability
-         * and displays the list using Ajax.
+         * and displays the list using Ajax in a UI dialog.
          */
         $("#kp .calendar-list .ticket-availability-link").click(function() {
             var link = $(this);
             var url = link.attr("href");
-            var container = link.parent();
-
-            link.hide();
-            container.append('<div class="load-indicator"></div>');
 
             $.get(url, function(data) {
-                container.append(data);
-                container.find(".load-indicator").remove();
-                container.find(".ticket-availability-close-link").show();
+                var d = $(data);
+                $("body").append(d);
+                d.dialog({
+                    width: 640,
+                    height: 480,
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    title: link.attr("title"),
+                    close: function() { d.dialog("destroy").remove(); }
+                });
             });
 
-            return false;
-        });
-        /**
-         * Closes the list with schools with tickets.
-         */
-        $("#kp .calendar-list .ticket-availability-close-link").click(function() {
-            var link = $(this);
-            var container = link.parent();
-            container.find(".ticket-availability-container").remove();
-            link.hide();
-            container.find(".ticket-availability-link").show();
             return false;
         });
     });
