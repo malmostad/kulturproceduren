@@ -1,4 +1,8 @@
-<%= render :partial => "events/menu" -%>
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+  </div>
+<% end -%>
 
 <h2 class="form-title">Fördelning</h2>
 

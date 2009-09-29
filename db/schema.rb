@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090925083850) do
+ActiveRecord::Schema.define(:version => 20090928113630) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20090925083850) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "visible_in_calendar", :default => true
   end
 
   create_table "companions", :force => true do |t|

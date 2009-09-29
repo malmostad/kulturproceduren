@@ -1,6 +1,7 @@
 <%
 hide_culture_provider ||= false
 category_groups ||= []
+num_category_groups = 0
 -%>
 
 <table class="calendar-list">
@@ -14,7 +15,10 @@ category_groups ||= []
       <% end %>
 
       <% category_groups.each do |category_group| -%>
-        <th class="categories"><%= h category_group.name %></th>
+        <% if category_group.visible_in_calendar %>
+          <th class="categories"><%= h category_group.name %></th>
+          <% num_category_groups += 1 %>
+        <% end %>
       <% end -%>
 
       <th class="booking">Boka</th>
@@ -29,7 +33,7 @@ category_groups ||= []
 
       <% if prev_date < occasion.date %>
         <tr class="date-row <%= cycle('', 'even')  %>">
-          <th colspan="<%= (hide_culture_provider ? 4 : 5) + category_groups.size %>"><%= occasion.date %></th>
+          <th colspan="<%= (hide_culture_provider ? 4 : 5) + num_category_groups %>"><%= occasion.date %></th>
         </tr>
       <% end -%>
 
@@ -42,9 +46,11 @@ category_groups ||= []
         <% end -%>
 
         <% category_groups.each do |category_group| -%>
-          <td class="categories">
-            <%= h(occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")) %>
-          </td>
+          <% if category_group.visible_in_calendar %>
+            <td class="categories">
+              <%= h(occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")) %>
+            </td>
+          <% end %>
         <% end -%>
 
         <td class="booking">

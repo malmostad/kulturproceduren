@@ -1,8 +1,23 @@
-<%= render :partial => "events/menu" -%>
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+  </div>
+<% end -%>
 
 <% is_group_distribution = session[:allotment][:ticket_state] == Event::ALLOTED_GROUP %>
 
-<h2 class="form-title">Fördelning</h2>
+<h2 class="form-title">Fördelning för <%= link_to h(@event.name), @event %></h2>
+
+<dl id="kp-distribution-meta">
+  <dt>Biljettsläpp:</dt>
+  <dd><%= h session[:allotment][:release_date] %></dd>
+  <dt>Totalt antal biljetter:</dt>
+  <dd class="total-tickets">
+    <%= session[:allotment][:num_tickets] %>
+  </dd>
+  <dt>Tillgängliga biljetter: </dt>
+  <dd class="available-tickets"><%= @tickets_left %></dd>
+</dl>
 
 <% if is_group_distribution -%>
   <div class="allotment-group-selection">
@@ -23,20 +38,6 @@
     </div>
   <% end %>
 
-  <div id="kp-distribution-meta">
-    <h4><%= @event.name -%></h4>
-
-    <ul>
-      <li>
-        Totalt antal biljetter:
-        <span class="total-tickets">
-          <%= session[:allotment][:num_tickets] %>
-        </span>
-      </li>
-      <li>Tillgängliga biljetter: <span class="available-tickets"><%= @tickets_left %></span></li>
-      <li>Biljettsläpp: <%= h session[:allotment][:release_date] %></li>
-    </ul>
-  </div>
 
   <table id="kp-distribution-list">
 

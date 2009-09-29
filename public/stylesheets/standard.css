@@ -402,9 +402,9 @@
 #kp #kp-allotment-init-form .allotment-district-list li { width: 15em; float: left;  }
 #kp #kp-allotment-init-form .submit-cnt { padding-top: 1em; clear: both; }
 
-#kp #kp-distribution-meta { background: #fff; border: 1px solid #c0c0c0; padding: 0.5em; margin-bottom: 1em; }
-#kp #kp-distribution-meta h4 { font-size: 1em; margin: 0; padding: 0; }
-#kp #kp-distribution-meta ul { list-style-type: none; margin: 0; padding: 0;}
+#kp #kp-distribution-meta { margin-bottom: 1em; }
+#kp #kp-distribution-meta dt { display: block; width: 10em; float: left; }
+#kp #kp-distribution-meta dd { display: block; padding-left: 10em; }
 
 #kp #kp-distribution-list { width: auto; }
 #kp #kp-distribution-list td { padding: 3px 0.5em; vertical-align: middle; }

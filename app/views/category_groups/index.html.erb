@@ -8,6 +8,7 @@
 
   <% f.fields do -%>
     <%= f.text_field :name %>
+    <%= f.check_box :visible_in_calendar %>
 
     <% f.buttons do %>
       <%= f.submit "Ok" %>
@@ -19,6 +20,7 @@
   <thead>
     <tr>
       <th>Namn</th>
+      <th>Visas i kalendariet</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -26,6 +28,7 @@
   <% @category_groups.each do |category_group| %>
     <tr class="<%= cycle('', 'even') %>">
       <td><%= h category_group.name %></td>
+      <td><%= category_group.visible_in_calendar ? "Ja" : "Nej" %></td>
       <td><%= link_to 'Redigera', edit_category_group_path(category_group) %></td>
       <td><%= link_to 'Radera', category_group, :confirm => 'Är du säker?', :method => :delete %></td>
     </tr>

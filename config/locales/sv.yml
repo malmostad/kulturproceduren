@@ -201,6 +201,7 @@ sv:
                 category_group_id: "Kategorigrupp:"
             category_group:
                 name: "Namn:"
+                visible_in_calendar: "Visas i kalendariet"
             questionaire:
                 description: "Beskrivning:"
                 event_id: "Evenemang:"

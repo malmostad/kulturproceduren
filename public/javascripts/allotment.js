@@ -261,27 +261,5 @@
 
             return false;
         });
-
-        /**
-         * Position the meta display to the right of the distribution list,
-         * and keep it visible when scrolling.
-         */
-        var meta = $("#kp #kp-distribution-meta");
-        meta.css("position", "absolute");
-
-        var distList = $("#kp #kp-distribution-list");
-        var distPos  = distList.offset();
-
-        var top = Math.round(distPos.top)
-        var left = distPos.left + distList.width() + 10;
-
-        meta.css({
-            "top":  top + "px",
-            "left": left + "px"
-        });
-
-        $(window).scroll(function() {
-            meta.css("top", Math.max($(window).scrollTop() + 10, top) + "px");
-        });
     });
 })(jQuery);
