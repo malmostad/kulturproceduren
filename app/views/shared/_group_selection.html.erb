@@ -1,6 +1,7 @@
 <%
   occasion ||= nil
   hide_title ||= nil
+  return_to ||= url_for(request.query_parameters.update(request.path_parameters))
 %>
 
 <fieldset id="kp-group-selection-form" class="with-legend">
@@ -11,7 +12,7 @@
 
     <div class="input-container">
       <% form_tag({ :controller => "districts", :action => "select" }) do %>
-        <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+        <%= hidden_field_tag "return_to", return_to %>
         <%= hidden_field_tag("occasion_id", occasion.id) if occasion  %>
 
         <%= select_tag(
@@ -33,7 +34,7 @@
 
     <div class="input-container">
       <% form_tag({ :controller => "schools", :action => "select" }) do %>
-        <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+        <%= hidden_field_tag "return_to", return_to %>
         <%= hidden_field_tag("occasion_id", occasion.id) if occasion %>
 
         <% if @group_selection_collections[:schools] %>
@@ -66,7 +67,7 @@
 
     <div class="input-container">
       <% form_tag({ :controller => "groups", :action => "select" }) do %>
-        <%= hidden_field_tag "return_to", url_for(request.query_parameters.update(request.path_parameters)) %>
+        <%= hidden_field_tag "return_to", return_to %>
 
         <% if @group_selection_collections[:groups] %>
           <%

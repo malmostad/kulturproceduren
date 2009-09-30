@@ -18,7 +18,9 @@
 <% end %>
 
 <div class="booking-group-selection">
-  <%= render :partial => "shared/group_selection", :locals => { :occasion => @occasion } %>
+  <%= render :partial => "shared/group_selection",
+    :locals => { :occasion => @occasion, :return_to => new_occasion_booking_path(@occasion) }
+  %>
 
   <div class="notification-request-info">
     <p>
