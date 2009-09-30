@@ -585,12 +585,8 @@
 #kp .booking-group-selection,
 #kp .booking-form .booking-seats-container { position: relative; }
 #kp .booking-form #kp-booking-count { padding: 7px; margin: 0 0 0 16em; width: 265px; }
-#kp .booking-group-selection .notification-request-info {
-    position: absolute;
-    top: 3em;
-    left: 40em;
-    width: 20em;
-}
+#kp .booking-group-selection .with-legend { padding-bottom: 0; }
+#kp .booking-group-selection .notification-request-info { margin: 0 0 1em 16em; width: 275px; }
 #kp .booking-group-selection .notification-request-info p { margin: 0; }
 
 #kp .booking-confirmation-list th { width: 1%; white-space: nowrap; }
