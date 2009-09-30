@@ -191,6 +191,14 @@
                 function(data) {
                     $("#kp-booking-form-container").html(data);
                     $("#kp-group_selection-group_id").parent().find('.load-indicator').remove();
+
+                    // Hack the incoming URL for use in Sitevision
+                    var base = $("#kp-sitevision-base-url").attr("href");
+                    var form = $("#kp-booking-form-container form.booking-form");
+                    var path = form.attr("action");
+                    // Strip the trailing slash from the base
+                    form.attr("action", base.substr(0, base.length - 1) + path);
+
                     $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
                     "#kp-booking-form-container .seats-container");
                     changeHandler();

@@ -602,3 +602,6 @@
 /*** Attendance reporting ***/
 #kp .attendant-list input { width: 3em; }
 
+/*** Sitevision hack ***/
+#kp #kp-sitevision-base-url { display: none; }
+

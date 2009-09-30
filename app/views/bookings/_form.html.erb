@@ -1,13 +1,4 @@
-<%
-  if @is_edit
-    form_url = occasion_booking_path(@occasion.id, @group.id)
-    method = :put
-  else
-    form_url = occasion_bookings_path(@occasion)
-    method = :post
-  end
-%>
-<% form_tag(form_url, { :class => "booking-form", :method => method }) do -%>
+<% form_tag(occasion_bookings_path(@occasion), { :class => "booking-form", :method => (@is_edit ? :put : :post) }) do -%>
 
   <% if @is_error %>
     <div class="validation-error-indicator alert"> Vänligen korrigera markerade uppgifter nedan.</div>
