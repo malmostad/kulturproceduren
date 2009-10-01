@@ -31,8 +31,8 @@ category_groups ||= []
         </td>
 
         <td class="age">
-          <% if !occasion.event.further_education %>
-            <%= occasion.event.from_age %>-<%= occasion.event.to_age %>
+          <% if !event.further_education %>
+            <%= event.from_age %>-<%= event.to_age %>
           <% end %>
         </td>
 
