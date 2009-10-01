@@ -323,26 +323,36 @@
         $("#kp .calendar-list .ticket-availability-link").click(function() {
             var link = $(this);
             var url = link.attr("href");
-            var container = link.parent();
+            var linkContainer = link.parent();
 
             link.hide();
-            container.append('<div class="load-indicator"></div>');
+            linkContainer.append('<div class="load-indicator"></div>');
 
             $.get(url, function(data) {
 
-                container.find(".load-indicator").remove();
+                linkContainer.find(".load-indicator").remove();
                 link.show();
 
+                dialogContainer = $("#kp-ticket-availability-dialog");
+
+                if (dialogContainer.length > 0) {
+                    dialogContainer.children().remove();
+                    dialogContainer.dialog("destroy");
+                } else {
+                    dialogContainer = $("<div id=\"kp-ticket-availability-dialog\"></div>").appendTo("body");
+                }
+
                 var d = $(data);
-                $("body").append(d);
-                d.dialog({
+                dialogContainer.append(d);
+
+                dialogContainer.dialog({
                     width: 640,
                     height: 480,
                     modal: true,
                     resizable: false,
                     draggable: true,
                     title: link.attr("title"),
-                    close: function() { d.dialog("destroy").remove(); }
+                    close: function() { dialogContainer.dialog("destroy").remove(); }
                 });
             });
 
