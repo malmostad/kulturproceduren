@@ -41,7 +41,7 @@ module ApplicationHelper
   def paragraphize(text, tag_attrs = '', escape = true)
     text = h(text) if escape
     lines = text.split(/^\s*$/)
-    lines.each { |l| l.strip!.gsub!(/[\r\n]+/, '<br/>') }
+    lines.each { |l| l.strip!.gsub!(/[\r\n]+/, '<br/>') unless l.blank? }
     "<p #{tag_attrs}>" + lines.join("</p><p #{tag_attrs}>") + "</p>"
   end
   # Inserts HTML breaks at line breaks.
