@@ -107,7 +107,8 @@
 #kp fieldset.collapsed legend { background: url(../images/collapsed.png) 5px 50% no-repeat; }
 #kp fieldset.collapsed form { display: none; }
 
-#kp .pagination { margin-top: 1em; padding-bottom: 1em; }
+#kp .pagination { margin: 1em 0 0 0; padding: 0 0 1em 0; }
+#kp .pagination li { display: inline; }
 #kp .pagination span, #kp .pagination a {
     border: 1px solid #c0c0c0;
     padding: 3px 0.5em;
