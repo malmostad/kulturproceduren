@@ -10,6 +10,7 @@ class EventsController < ApplicationController
   before_filter :check_roles, :except => [ :index, :show ]
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
 
 
   # Displays statistics about an event

@@ -1,0 +1,33 @@
+class CultureProviderSweeper < ActionController::Caching::Sweeper
+  observe Event, Occasion, CultureProvider, Category, CategoryGroup
+
+  def after_save(record)
+    invalidate_cache(record)
+  end
+
+  def after_destroy(record)
+    invalidate_cache(record)
+  end
+
+  private
+
+  def invalidate_cache(record)
+    case record
+    when CultureProvider then invalidate_single(record)
+    when Event then invalidate_single(record.culture_provider)
+    when Occasion then invalidate_single(record.event.culture_provider)
+    when Category, CategoryGroup then invalidate_all()
+    end
+  end
+
+  def invalidate_single(culture_provider)
+    expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/bookable"
+    expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/not_bookable"
+    expire_fragment "culture_providers/show/#{culture_provider.id}/standing_events"
+  end
+
+  def invalidate_all
+    expire_fragment %r{culture_providers/show/\d+/upcoming_occasions}
+    expire_fragment %r{culture_providers/show/\d+/standing_events}
+  end
+end

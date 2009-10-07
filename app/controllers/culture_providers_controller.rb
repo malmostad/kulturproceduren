@@ -6,6 +6,7 @@ class CultureProvidersController < ApplicationController
   before_filter :require_admin, :only => [ :new, :create, :destroy ]
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
   
 
   # Displays a paginated list of all culture providers
@@ -77,4 +78,14 @@ class CultureProvidersController < ApplicationController
   def sort_column_from_param(p)
     "name"
   end
+
+  def upcoming_occasions_cache_key(culture_provider)
+    "culture_providers/show/#{culture_provider.id}/upcoming_occasions/#{user_online? && current_user.can_book? ? "" : "not_" }bookable"
+  end
+  helper_method :upcoming_occasions_cache_key
+
+  def standing_events_cache_key(culture_provider)
+    "culture_providers/show/#{culture_provider.id}/standing_events"
+  end
+  helper_method :standing_events_cache_key
 end

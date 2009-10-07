@@ -9,6 +9,7 @@ class BookingsController < ApplicationController
   before_filter :load_group, :except => [ :index, :form, :group_list ]
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+  after_filter :sweep_culture_provider_cache, :only => [ :create, :update, :destroy ]
 
 
   # Displays a list of a user's bookings
@@ -341,5 +342,9 @@ class BookingsController < ApplicationController
       @booking_requirement.occasion = @occasion
       @booking_requirement.group = @group
     end
+  end
+
+  def sweep_culture_provider_cache
+    expire_fragment "culture_providers/show/#{@occasion.event.culture_provider.id}/upcoming_occasions/bookable"
   end
 end
