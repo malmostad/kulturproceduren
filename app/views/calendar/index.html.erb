@@ -24,4 +24,6 @@
   </div>
 <% end -%>
 
-<%= render :partial => 'list' %>
+<% cache(list_cache_key()) do %>
+  <%= render :partial => 'list' %>
+<% end %>

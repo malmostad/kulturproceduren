@@ -10,6 +10,8 @@ class OccasionsController < ApplicationController
   before_filter :require_culture_worker, :only => [ :edit, :update, :destroy, :cancel ]
   before_filter :require_host, :only => [ :report_show , :report_create ]
 
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy, :cancel ]
+
 
   # Displays a form for reporting the attendance on an occasion
   def report_show

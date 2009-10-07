@@ -70,8 +70,13 @@ class User < ActiveRecord::Base
 
   # Returns true if this user has one of the given roles
   def has_role?(*rs)
+    @has_role_cache ||= {}
+
     rs.each do |r|
-      return true if roles.exists? [ "lower(name) = ?", r.to_s.downcase ]
+      if @has_role_cache[r].nil?
+        @has_role_cache[r] = roles.exists? [ "lower(name) = ?", r.to_s.downcase ]
+      end
+      return true if @has_role_cache[r]
     end
     return false
   end

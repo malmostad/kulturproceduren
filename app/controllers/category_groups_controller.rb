@@ -2,6 +2,9 @@
 class CategoryGroupsController < ApplicationController
   layout "admin"
 
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+
+
   # Displays a list of all categories in the system as well as a
   # form for adding new category groups
   def index

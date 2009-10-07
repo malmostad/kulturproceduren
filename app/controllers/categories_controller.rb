@@ -6,6 +6,9 @@ class CategoriesController < ApplicationController
   before_filter :authenticate
   before_filter :require_admin
 
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+
+
   # Displays a list of all categories currently in the system, as well
   # as a form for adding new categories
   def index

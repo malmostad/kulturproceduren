@@ -8,6 +8,9 @@ class BookingsController < ApplicationController
   before_filter :load_occasion, :except => [ :index, :group, :group_list ]
   before_filter :load_group, :except => [ :index, :form, :group_list ]
 
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+
+
   # Displays a list of a user's bookings
   def index
     @bookings = Ticket.find_user_bookings(current_user, params[:page])

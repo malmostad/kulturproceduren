@@ -9,6 +9,9 @@ class EventsController < ApplicationController
   before_filter :authenticate, :except => [ :index, :show ]
   before_filter :check_roles, :except => [ :index, :show ]
 
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
+
+
   # Displays statistics about an event
   def stats
     @event = Event.find_by_id(params[:id])

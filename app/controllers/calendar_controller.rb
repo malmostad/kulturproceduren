@@ -7,11 +7,13 @@ class CalendarController < ApplicationController
   
   # Displays a regular calendar for occasions/events without any search filter
   def index
-    @category_groups = CategoryGroup.all :order => "name ASC"
-    if @calendar_list == :events
-      @events = Event.search_standing({ :from_date => Date.today }, params[:page])
-    else
-      @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
+    unless fragment_exist?(list_cache_key())
+      @category_groups = CategoryGroup.all :order => "name ASC"
+      if @calendar_list == :events
+        @events = Event.search_standing({ :from_date => Date.today }, params[:page])
+      else
+        @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
+      end
     end
   end
 
@@ -70,6 +72,13 @@ class CalendarController < ApplicationController
     session[:calendar_filter]
   end
   helper_method :calendar_filter
+
+
+  # Convenience accessor for the list cache key
+  def list_cache_key
+    "calendar/list/#{@calendar_list}/#{user_online? && current_user.can_book? ? "" : "not_" }bookable/#{params[:page] || 1}"
+  end
+  helper_method :list_cache_key
 
 
   private

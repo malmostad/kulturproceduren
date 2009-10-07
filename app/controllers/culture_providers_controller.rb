@@ -4,7 +4,10 @@ class CultureProvidersController < ApplicationController
 
   before_filter :authenticate, :except => [ :index, :show ]
   before_filter :require_admin, :only => [ :new, :create, :destroy ]
+
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
   
+
   # Displays a paginated list of all culture providers
   def index
     @culture_providers = CultureProvider.paginate :page => params[:page],
