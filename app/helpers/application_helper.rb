@@ -98,4 +98,13 @@ module ApplicationHelper
       :action => "index",
       :return_to => url || url_for(request.query_parameters.update(request.path_parameters))
   end
+
+  # Wrapper around cache() do for conditional caching.
+  def conditional_cache(condition, name = {}, options = nil, &block)
+    if condition
+      cache(name, options, &block)
+    else
+      capture(&block)
+    end
+  end
 end
