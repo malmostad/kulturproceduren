@@ -1,9 +1,31 @@
-<h1>Påminnelse om föreställning</h1>
+<h1>Kulturproceduren - Snart dags för <%= h @occasion.event.name %></h1>
+
+<p>Hej!</p>
 
 <p>
-  Detta är en påminnelse om att ni skall besöka
-  <%= link_to @occasion.event.name, "#" %>, föreställningen
   <%= @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
-  med
-  <%= h @companion.group.name %>, <%= @companion.group.school.name %>.
+  är det dags för
+  <%= h @companion.group.name %> på <%= @companion.group.school.name %>
+  att ta del av
+  <%= h @occasion.event.name %>.
+</p>
+
+<p>Tänk på</p>
+
+<ul>
+  <li>
+    att du kan läsa mer om <%= h @occasion.event.name %> på
+    <%= link_to "Kulturproceduren", mail_url(event_path(@event)) %>.
+    Här finns också eventuell lärarhandledning.
+  </li>
+  <li>
+    att om medföljande vuxen är någon annan än du, uppdatera detta i
+    <%= link_to "bokningen", mail_url(bookings_path()) %>.
+  </li>
+</ul>
+
+<p>
+  Varmt välkomna!
+  <br/>
+  <strong>Kultur för Barn och Unga</strong>
 </p>

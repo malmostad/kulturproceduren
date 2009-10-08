@@ -22,7 +22,7 @@ class OccasionMailer < ActionMailer::Base
       recipients(companion.email)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Påminnelse om föreställning")
+    subject("Kulturproceduren: Snart dags för #{occasion.event.name}")
     sent_on(Time.now)
     body({ :occasion => occasion, :companion => companion })
   end

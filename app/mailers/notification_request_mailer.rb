@@ -9,7 +9,7 @@ class NotificationRequestMailer < ActionMailer::Base
       recipients(notification_request.user.email)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Platser tillgängliga")
+    subject("Kulturproceduren: Restplatser till #{notification_request.event.name}")
     sent_on(Time.now)
     body({
       :notification_request => notification_request,
