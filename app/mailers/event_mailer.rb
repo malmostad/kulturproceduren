@@ -33,11 +33,12 @@ class EventMailer < ActionMailer::Base
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      recipients((district.contacts || "").split(",").collect { |c| c.strip })
+      return if district.contacts.blank?
+      recipients(district.contacts.split(",")..collect { |c| c.strip }.uniq)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Platser för #{event.name} tillgängliga för stadsdelen")
+    subject("Kulturproceduren: Bokningsbara platser till #{event.name}")
     sent_on(Time.now)
-    body({ :event => event, :district => district })
+    body({ :event => event, :district => district, :category_groups => CategoryGroup.all })
   end
 end
