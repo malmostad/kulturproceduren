@@ -10,6 +10,7 @@ class BookingsController < ApplicationController
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
   after_filter :sweep_culture_provider_cache, :only => [ :create, :update, :destroy ]
+  after_filter :sweep_event_cache, :only => [ :create, :update, :destroy ]
 
 
   # Displays a list of a user's bookings
@@ -346,5 +347,19 @@ class BookingsController < ApplicationController
 
   def sweep_culture_provider_cache
     expire_fragment "culture_providers/show/#{@occasion.event.culture_provider.id}/upcoming_occasions/bookable"
+  end
+  def sweep_event_cache
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/not_administratable/not_reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/not_administratable/reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/administratable/not_reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/administratable/reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/not_administratable/not_reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/not_administratable/reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/administratable/not_reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/administratable/reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/not_administratable/not_reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/not_administratable/reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/administratable/not_reportable"
+    expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/administratable/reportable"
   end
 end

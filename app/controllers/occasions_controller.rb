@@ -12,6 +12,7 @@ class OccasionsController < ApplicationController
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy, :cancel ]
   cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy, :cancel ]
+  cache_sweeper :event_sweeper, :only => [ :create, :update, :destroy, :cancel ]
 
 
   # Displays a form for reporting the attendance on an occasion

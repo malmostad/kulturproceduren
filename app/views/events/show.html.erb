@@ -186,98 +186,100 @@
     </table>
   </div>
 
-  <% unless @event.occasions.empty? -%>
-    <div id="kp-ev-meta-occasions">
-      <table class="occasion-list">
-        <thead>
-          <tr>
-            <th class="date-time">Datum/tid</th>
-            <th class="num-seats">Lediga platser</th>
-            <th class="address">Adress</th>
-            <th class="description">Beskrivning</th>
-            <th class="tools"></th>
-          </tr>
-        </thead>
+  <% cache occasion_list_cache_key(@event) do %>
+    <% unless @event.occasions.empty? -%>
+      <div id="kp-ev-meta-occasions">
+        <table class="occasion-list">
+          <thead>
+            <tr>
+              <th class="date-time">Datum/tid</th>
+              <th class="num-seats">Lediga platser</th>
+              <th class="address">Adress</th>
+              <th class="description">Beskrivning</th>
+              <th class="tools"></th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <% @event.occasions.each do |occasion|
-            alt = cycle('', "even") %>
-            <tr class="<%= alt %> <%= "selected" if @selected_occasion && @selected_occasion.id == occasion.id %> <%= "cancelled" if occasion.cancelled %>">
-              <td class="date-time">
-                <span class="date"><%= h occasion.date %></span>
-                <span class="time">
-                  <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
-                </span>
-              </td>
-              <td class="num-seats">
-                <% available_seats = occasion.available_seats.to_i %>
+          <tbody>
+            <% @event.occasions.each do |occasion|
+              alt = cycle('', "even") %>
+              <tr class="<%= alt %> <%= "cancelled" if occasion.cancelled %>">
+                <td class="date-time">
+                  <span class="date"><%= h occasion.date %></span>
+                  <span class="time">
+                    <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
+                  </span>
+                </td>
+                <td class="num-seats">
+                  <% available_seats = occasion.available_seats.to_i %>
 
-                <%= h(available_seats) %>
-                <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
-              </td>
-              <td class="address">
-                <%= linebreakize(occasion.address) unless occasion.address.blank? %>
+                  <%= h(available_seats) %>
+                  <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
+                </td>
+                <td class="address">
+                  <%= linebreakize(occasion.address) unless occasion.address.blank? %>
 
-                <% unless occasion.map_address.blank? %>
-                  <% unless occasion.address.blank? %>
-                    <br/>
-                  <% end %>
-
-                  <%= link_to "Visa på karta", "#",
-                    :class => "map-address-link",
-                    :title => h(occasion.map_address)
-                  %>
-                <% end %>
-              </td>
-              <td class="description"><%= linebreakize(occasion.description) %></td>
-              <td class="tools">
-                <% if occasion.cancelled %>
-                  <span class="cancelled">Inställd</span>
-                <% elsif user_online? -%>
-                  <% if @event.bookable? && current_user.can_book? -%>
-
-                    <% if available_seats > 0 %>
-                      <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
-                    <% else %>
-                      <span class="sold-out">Fullbokat</span>
+                  <% unless occasion.map_address.blank? %>
+                    <% unless occasion.address.blank? %>
+                      <br/>
                     <% end %>
-                  <% end -%>
 
-                  <% if current_user.can_administrate?(@event.culture_provider) -%>
-                    <%= link_to "Redigera", edit_occasion_path(occasion) %>
+                    <%= link_to "Visa på karta", "#",
+                      :class => "map-address-link",
+                      :title => h(occasion.map_address)
+                    %>
+                  <% end %>
+                </td>
+                <td class="description"><%= linebreakize(occasion.description) %></td>
+                <td class="tools">
+                  <% if occasion.cancelled %>
+                    <span class="cancelled">Inställd</span>
+                  <% elsif user_online? -%>
+                    <% if @event.bookable? && current_user.can_book? -%>
 
-                    <% if @event.bookable? %>
-                      <% if occasion.date >= Date.today && !occasion.cancelled %>
-                        <%= link_to "Ställ in",
-                          cancel_occasion_path(occasion),
+                      <% if available_seats > 0 %>
+                        <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
+                      <% else %>
+                        <span class="sold-out">Fullbokat</span>
+                      <% end %>
+                    <% end -%>
+
+                    <% if current_user.can_administrate?(@event.culture_provider) -%>
+                      <%= link_to "Redigera", edit_occasion_path(occasion) %>
+
+                      <% if @event.bookable? %>
+                        <% if occasion.date >= Date.today && !occasion.cancelled %>
+                          <%= link_to "Ställ in",
+                            cancel_occasion_path(occasion),
+                            :method => "delete",
+                            :confirm => "Är du säker på att du vill ställa in föreställningen?"
+                          %>
+                        <% end %>
+                      <% else %>
+                        <%= link_to "Ta bort", occasion,
                           :method => "delete",
-                          :confirm => "Är du säker på att du vill ställa in föreställningen?"
+                          :confirm => "Är du säker på att du vill radera föreställningen?"
                         %>
                       <% end %>
-                    <% else %>
-                      <%= link_to "Ta bort", occasion,
-                        :method => "delete",
-                        :confirm => "Är du säker på att du vill radera föreställningen?"
-                      %>
+                    <% end -%>
+
+                    <% if occasion.date > Date.today %>
+                      <%= link_to "Närvarolista", attendants_occasion_path(occasion) %>
+                    <% elsif !occasion.cancelled && (current_user.has_role?(:admin) || current_user.has_role?(:host)) %>
+                      <%= link_to "Rapportera närvaro", report_show_occasion_path(occasion) -%>
                     <% end %>
-                  <% end -%>
-
-                  <% if occasion.date > Date.today %>
-                    <%= link_to "Närvarolista", attendants_occasion_path(occasion) %>
-                  <% elsif !occasion.cancelled && (current_user.has_role?(:admin) || current_user.has_role?(:host)) %>
-                    <%= link_to "Rapportera närvaro", report_show_occasion_path(occasion) -%>
+                  <% elsif @event.bookable? %>
+                    <span><%= login_link "Logga in", new_occasion_booking_path(occasion) %> för att boka</span>
                   <% end %>
-                <% elsif @event.bookable? %>
-                  <span><%= login_link "Logga in", new_occasion_booking_path(occasion) %> för att boka</span>
-                <% end %>
-              </td>
-            </tr>
-          <% end -%>
-        </tbody>
+                </td>
+              </tr>
+            <% end -%>
+          </tbody>
 
-      </table>
-    </div>
-  <% end -%>
+        </table>
+      </div>
+    <% end -%>
+  <% end %>
 
 </div>
 
