@@ -16,16 +16,21 @@ class EventMailer < ActionMailer::Base
   end
 
   # Sends an email to contacts when tickets transition to free for all allotment
-  def free_for_all_allotment_notification_email(event, district)
+  def free_for_all_allotment_notification_email(event)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      recipients((district.contacts || "").split(",").collect { |c| c.strip })
+      addresses = []
+      Districts.all.each do |d|
+        next if d.contacts.blank?
+        addresses += d.contacts.split(",").collect { |c| c.strip }
+      end
+      recipients(addresses.uniq)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Platser för #{event.name} tillgängliga för alla")
+    subject("Kulturproceduren: Möjligt att boka platser till #{event.name}")
     sent_on(Time.now)
-    body({ :event => event, :district => district })
+    body({ :event => event, :category_groups => CategoryGroup.all })
   end
 
   # Sends an email to contacts when tickets transition to district allotment

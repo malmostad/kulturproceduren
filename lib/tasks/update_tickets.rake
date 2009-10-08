@@ -32,10 +32,7 @@ namespace :kp do
 
         if e.tickets.count(:conditions => { :state => Ticket::UNBOOKED }) > 0
           notification_requests = NotificationRequest.find_by_event(e)
-
-          District.find(:all).each do |district|
-            EventMailer.deliver_free_for_all_allotment_notification_email(e, district)
-          end
+          EventMailer.deliver_free_for_all_allotment_notification_email(e)
         end
       end
 

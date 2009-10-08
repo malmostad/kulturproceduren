@@ -1,10 +1,41 @@
-<h1>Tillgängliga platser</h1>
+<h1>Kulturproceduren - Möjligt att boka platser till <%= h @event.name %></h1>
+
+<p>Hej!</p>
+
+<p>Nu har du möjlighet att boka platser till <%= h @event.name %></p>
+
+<ul>
+  <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
+  <% @category_groups.each do |category_group| -%>
+    <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
+
+    <% unless category_names.empty? -%>
+      <li>
+        <strong><%= h category_group.name %>:</strong>
+        <%= h(category_names.join(", ")) %>
+      </li>
+    <% end -%>
+  <% end -%>
+</ul>
+
+<p>För dessa platser gäller "först till kvarn".</p>
 
 <p>
-  Platser till <%= h @event.name %> i Kulturproceduren finns nu tillgängliga
-  för alla skolor i hela Malmö.
+  <a href="<%= mail_url(event_path(@event)) %>">
+    Läs mer om <%= h @event.name %> och boka eventuella platser här.
+  </a>
 </p>
 
 <p>
-  <%= link_to "Klicka här för att se tider och boka platser.", "#" %>
+  <%= h @event.name %> är inköpt och fördelat av
+  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
+  På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du information
+  om all barn- och ungdomskultur i Malmö.
 </p>
+
+<p>
+  Vänliga hälsningar!
+  <br/>
+  Kultur för Barn och Unga
+</p>
+
