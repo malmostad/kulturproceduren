@@ -3,7 +3,11 @@ class OccasionMailer < ActionMailer::Base
 
   # Sends an email when an occasion is cancelled
   def occasion_cancelled_email(occasion, user)
-    recipients(user.email)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(user.email)
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Föreställning inställd")
     sent_on(Time.now)
@@ -12,7 +16,11 @@ class OccasionMailer < ActionMailer::Base
 
   # Sends a reminder email about the given occasion to the given companion
   def reminder_email(occasion, companion)
-    recipients(companion.email)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(companion.email)
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Påminnelse om föreställning")
     sent_on(Time.now)
@@ -21,7 +29,11 @@ class OccasionMailer < ActionMailer::Base
 
   # Sends a link to the answer form for the given occasion to the given companion
   def answer_form_email(occasion, companion)
-    recipients(companion.email)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(companion.email)
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Utvärdering av evenemang")
     sent_on(Time.now)
@@ -30,7 +42,11 @@ class OccasionMailer < ActionMailer::Base
 
   # Sends a reminder to fill in the answer form
   def answer_form_reminder_email(answer_form)
-    recipients(answer_form.companion.email)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(answer_form.companion.email)
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Påminnelse om utvärdering av evenemang")
     sent_on(Time.now)

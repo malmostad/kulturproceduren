@@ -3,7 +3,11 @@ class NotificationRequestMailer < ActionMailer::Base
   # a group that has a registered notification request on the given
   # event
   def tickets_available_email(notification_request)
-    recipients(notification_request.user.email)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(notification_request.user.email)
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Platser tillgängliga")
     sent_on(Time.now)

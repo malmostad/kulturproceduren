@@ -43,13 +43,22 @@ namespace :kp do
     events = Event.find :all, :conditions => "ticket_release_date = current_date"
 
     events.each do |event|
+      puts "Notiferar kontakter att #{event.name} är fördelat"
+      group_structure = {}
+      addresses = []
+
       event.groups.each do |group|
-        addresses = (group.contacts || "").split(",")
+        addresses += (group.contacts || "").split(",")
         addresses += (group.school.contacts || "").split(",")
         addresses += (group.school.district.contacts || "").split(",")
 
-        EventMailer.deliver_ticket_release_notification_email(event, group, addresses.collect { |a| a.strip })
+        group_structure[group.school] ||= []
+        group_structure[group.school] << group
       end
+
+      addresses.uniq!
+
+      EventMailer.deliver_ticket_release_notification_email(event, group_structure, addresses.collect { |a| a.strip })
     end
   end
 end

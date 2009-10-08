@@ -1,95 +1,41 @@
+common: &common
+    :asset_host: "http://www.dev.malmo.se/assets"
+    :salt_length: 10
+    :occasion_reminder_days: 2
+    :evaluation_form:
+        :activation_days: 2
+        :reminder_days: 7
+    :ticket_state:
+        :group_days: 14
+        :district_days: 14
+    :upload_attachment:
+        :path: uploads/attachments
+    :upload_image:
+        :path: model
+        :width: 464
+        :height: 174
+        :thumb_width: 212
+        :thumb_height: 80
+    :kp_external_link: "http://www.dev.malmo.se/kulturproceduren"
+    :kbu_link: "http://www.malmo.se/KBU"
+    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
+    #:ldap:
+    #    :address:
+    #    :port: 389
+    #    :base_dn:
+    #    :bind:
+    #        :dn:
+    #        :password:
+    #    :max_search_results: 25
+    :allotment:
+        :proximity_boundary: 3
+    :mailers:
+        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
+        :base_url: "localhost:3000"
+        #:debug_recipient: "andreas.johansson@kentor.se"
 development:
-    :asset_host: "http://www.dev.malmo.se/assets"
-    :salt_length: 10
-    :occasion_reminder_days: 2
-    :evaluation_form:
-        :activation_days: 2
-        :reminder_days: 2
-    :ticket_state:
-        :group_days: 1
-        :district_days: 1
-    :upload_attachment:
-        :path: uploads/attachments
-    :upload_image:
-        :path: model
-        :width: 464
-        :height: 174
-        :thumb_width: 212
-        :thumb_height: 80
-    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
-    :ldap:
-        :address:
-        :port: 389
-        :base_dn:
-        :bind:
-            :dn:
-            :password:
-        :max_search_results: 25
-    :allotment:
-        :proximity_boundary: 3
-    :mailers:
-        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
-        :base_url: "localhost:3000"
+    <<: *common
 test:
-    :salt_length: 10
-    :occasion_reminder_days: 2
-    :evaluation_form:
-        :activation_days: 2
-        :reminder_days: 7
-    :ticket_state:
-        :group_days: 14
-        :district_days: 14
-    :upload_attachment:
-        :path: uploads/attachments
-    :upload_image:
-        :path: model
-        :width: 464
-        :height: 174
-        :thumb_width: 212
-        :thumb_height: 80
-    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
-    :ldap:
-        :address:
-        :port: 389
-        :base_dn:
-        :bind:
-            :dn:
-            :password:
-        :max_search_results: 25
-    :allotment:
-        :proximity_boundary: 3
-    :mailers:
-        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
-        :base_url: "localhost:3000"
+    <<: *common
 production:
-    :asset_host: "http://www.dev.malmo.se/assets"
-    :salt_length: 10
-    :occasion_reminder_days: 2
-    :evaluation_form:
-        :activation_days: 2
-        :reminder_days: 7
-    :ticket_state:
-        :group_days: 14
-        :district_days: 14
-    :upload_attachment:
-        :path: uploads/attachments
-    :upload_image:
-        :path: model
-        :width: 464
-        :height: 174
-        :thumb_width: 212
-        :thumb_height: 80
-    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
-    :ldap:
-        :address:
-        :port: 389
-        :base_dn:
-        :bind:
-            :dn:
-            :password:
-        :max_search_results: 25
-    :allotment:
-        :proximity_boundary: 3
-    :mailers:
-        :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
-        :base_url: "localhost:3000"
+    <<: *common

@@ -4,7 +4,11 @@ class RoleApplicationMailer < ActionMailer::Base
 
   # Sends an email to administrators when a user has submitted a role application
   def application_submitted_email(role_application, administrators)
-    recipients(administrators.map { |admin| admin.email })
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(administrators.map { |admin| admin.email })
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Behörighetsansökan inkommen")
     sent_on(Time.now)
@@ -13,7 +17,11 @@ class RoleApplicationMailer < ActionMailer::Base
 
   # Sends an email to the user when an administrator has handled a role application
   def application_handled_email(role_application)
-    recipients(role_application.user.email)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(role_application.user.email)
+    end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Behörighetsansökan behandlad")
     sent_on(Time.now)
