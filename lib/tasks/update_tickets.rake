@@ -24,6 +24,12 @@ namespace :kp do
         districts.each do |district|
           EventMailer.deliver_district_allotment_notification_email(e, district)
         end
+
+        notification_requests.each do |n|
+          if n.send_mail
+            NotificationRequestMailer.deliver_tickets_available_email(n, true)
+          end
+        end
       elsif e.ticket_state == Event::ALLOTED_DISTRICT && district_to_all_date <= Date.today
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
@@ -34,13 +40,14 @@ namespace :kp do
           notification_requests = NotificationRequest.find_by_event(e)
           EventMailer.deliver_free_for_all_allotment_notification_email(e)
         end
-      end
 
-      notification_requests.each do |n|
-        if n.send_mail
-          NotificationRequestMailer.deliver_tickets_available_email(n)
+        notification_requests.each do |n|
+          if n.send_mail
+            NotificationRequestMailer.deliver_tickets_available_email(n, false)
+          end
         end
       end
+
     end
   end
 

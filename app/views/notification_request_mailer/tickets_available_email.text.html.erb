@@ -1,12 +1,63 @@
-<h1>Platser tillgängliga</h1>
+<h1>Kulturproceduren - Restplatser till <%= h @notification_request.event.name %></h1>
+
+<p>Hej!</p>
 
 <p>
-  Platser till
-  <%= link_to @notification_request.event.name, "#" %>
-  finns nu tillgängliga för
-  <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>
+  Nu har restplatser till <%= h @notification_request.event.name %>
+  släppts
+  <% if @district_release %>
+    i din stadsdel
+  <% else %>
+    i hela Malmö
+  <% end %>
+  så att du kan boka för
+  <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>.
+</p>
+
+<ul>
+  <li><strong>Målgrupp:</strong> <%= @notification_request.event.from_age %>-<%= @notification_request.event.to_age %> år</li>
+  <% @category_groups.each do |category_group| -%>
+    <% category_names = @notification_request.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
+
+    <% unless category_names.empty? -%>
+      <li>
+        <strong><%= h category_group.name %>:</strong>
+        <%= h(category_names.join(", ")) %>
+      </li>
+    <% end -%>
+  <% end -%>
+</ul>
+
+<p>För dessa platser gäller "först till kvarn".</p>
+
+<p>
+  <a href="<%= mail_url(event_path(@event)) %>">
+    Läs mer om <%= h @notification_request.event.name %> och boka eventuella platser här.
+  </a>
+</p>
+
+<% if @district_release %>
+  <p>
+    Om platserna inte räcker till er, tänk på att ni kan få en ny chans
+    <%= @notification_request.event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>,
+    då eventuella restplatser från hela Malmö släpps.
+    Om du inte gör någon bokning för
+    <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>
+    innan restplatserna från hela Malmö släpps så kommer du automatiskt få en
+    påminnelse.
+  </p>
+<% end %>
+
+<p>
+  <%= h @notification_request.event.name %> är inköpt och fördelat av
+  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
+  På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du information
+  om all barn- och ungdomskultur i Malmö.
 </p>
 
 <p>
-  <a href="#">Gå in här för att boka platser</a>.
+  Vänliga hälsningar!
+  <br/>
+  Kultur för Barn och Unga
 </p>
+
