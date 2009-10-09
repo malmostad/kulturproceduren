@@ -48,7 +48,7 @@ class OccasionMailer < ActionMailer::Base
       recipients(answer_form.companion.email)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Påminnelse om utvärdering av evenemang")
+    subject("Kulturproceduren: Påminnelse utvärdering - #{answer_form.occasion.event.name}")
     sent_on(Time.now)
     body({ :answer_form => answer_form })
   end
