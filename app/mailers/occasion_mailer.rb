@@ -9,9 +9,9 @@ class OccasionMailer < ActionMailer::Base
       recipients(user.email)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Föreställning inställd")
+    subject("Kulturproceduren: Inställt evenemang - #{occasion.event.name}")
     sent_on(Time.now)
-    body({ :occasion => occasion, :user => user, :groups => user.groups.find_by_occasion(occasion) })
+    body({ :occasion => occasion })
   end
 
   # Sends a reminder email about the given occasion to the given companion

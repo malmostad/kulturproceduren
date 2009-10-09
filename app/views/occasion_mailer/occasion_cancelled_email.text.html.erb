@@ -1,17 +1,29 @@
-<h1>Föreställning inställd</h1>
+<h1>Kulturproceduren - Inställt evenemang - <%= h @occasion.event.name %></h1>
+
+<p>Hej!</p>
 
 <p>
-  Vi måste tyvärr informera om att föreställningen <%= h @occasion.event.name %>,
-  <%= h @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
-  har blivit inställd.
+  Dessvärre har vi blivit tvungna att ställa in <%= h @occasion.event.name %>.
+  Era bokade platser gäller därför inte.
+</p>
+
+<p>Tänk på att avboka eventuellt bokad Kulturbuss.</p>
+
+<p>
+  <a href="<%= mail_url(event_path(@occasion.event)) %>">
+    Här finns mer information om varför evenemanget ställts in.
+  </a>
 </p>
 
 <p>
-  Ni har bokat biljetter till ovanstående tillställning för följande klasser/avdelningar:
+  På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du
+  alla kulturevenemang för barn och unga i Malmö.
 </p>
 
-<ul>
-  <% @groups.each do |group| %>
-    <li><%= h group.school.name %>, <%= h group.name %></li>
-  <% end %>
-</ul>
+<p>Väl mött vid något av våra andra evenemang.</p>
+
+<p>
+  Vänliga hälsningar
+  <br/>
+  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
+</p>
