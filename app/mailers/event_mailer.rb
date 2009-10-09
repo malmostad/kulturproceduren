@@ -20,13 +20,11 @@ class EventMailer < ActionMailer::Base
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      addresses = []
-      Districts.all.each do |d|
-        next if d.contacts.blank?
-        addresses += d.contacts.split(",").collect { |c| c.strip }
-      end
-      recipients(addresses.uniq)
+      addresses = get_relevant_addresses(event, Districts.all)
+      return if addresses.empty?
+      recipients(addresses)
     end
+
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Möjligt att boka platser till #{event.name}")
     sent_on(Time.now)
@@ -38,12 +36,40 @@ class EventMailer < ActionMailer::Base
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      return if district.contacts.blank?
-      recipients(district.contacts.split(",")..collect { |c| c.strip }.uniq)
+      #return if district.contacts.blank?
+      #recipients(district.contacts.split(",")..collect { |c| c.strip }.uniq)
+      addresses = get_relevant_addresses(event, [district])
+      return if addresses.empty?
+      recipients(addresses)
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Bokningsbara platser till #{event.name}")
     sent_on(Time.now)
     body({ :event => event, :district => district, :category_groups => CategoryGroup.all })
+  end
+
+  private
+
+  def get_relevant_addresses(event, districts)
+      addresses = []
+      districts.each do |d|
+        unless d.contacts.blank?
+          addresses += d.contacts.split(",").collect { |c| c.strip }
+        end
+
+        d.schools.find_by_age_span(event.from_age, event.to_age).each do |s|
+          unless s.contacts.blank?
+            addresses += s.contacts.split(",").collect { |c| c.strip }
+          end
+
+          s.groups.find_by_age_span(event.from_age, event.to_age).each do |g|
+            unless g.contacts.blank?
+              addresses += g.contacts.split(",").collect { |c| c.strip }
+            end
+          end
+        end
+      end
+
+      return addresses.uniq
   end
 end
