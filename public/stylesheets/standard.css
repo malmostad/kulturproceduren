@@ -317,6 +317,8 @@
 /* Evaluation form */
 #kp form.evaluation-form label { width: 15em; }
 #kp form.evaluation-form .input-container { padding-left: 15em; }
+#kp form.evaluation-form .input-container .radio,
+#kp form.evaluation-form .input-container .checkbox { width: auto; }
 /* Notification request forms */
 #kp .notification-request-group-selection label,
 #kp form.notification-request-group-form label { width: 8em; }

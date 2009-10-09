@@ -1,5 +1,5 @@
 <% (1..4).each do |i| -%>
-  <%= radio_button_tag "answer[#{question.id}]", i, i == value %>
+  <%= radio_button_tag "answer[#{question.id}]", i, i == value, { :class => "radio" } %>
   <%= label_tag "answer_#{question.id}_#{i}", i %>
 <% end %>
 <span class="field-help">1 är sämst och 4 är bäst</span>
