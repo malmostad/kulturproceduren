@@ -10,7 +10,7 @@ class RoleApplicationMailer < ActionMailer::Base
       recipients(administrators.map { |admin| admin.email })
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Behörighetsansökan inkommen")
+    subject("Kulturproceduren: Behörighetsansökan")
     sent_on(Time.now)
     body({ :role_application => role_application })
   end
@@ -23,7 +23,7 @@ class RoleApplicationMailer < ActionMailer::Base
       recipients(role_application.user.email)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Behörighetsansökan behandlad")
+    subject("Kulturproceduren: Behörighet")
     sent_on(Time.now)
     body({ :role_application => role_application })
   end

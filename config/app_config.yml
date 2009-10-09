@@ -17,6 +17,7 @@ common: &common
         :thumb_width: 212
         :thumb_height: 80
     :kp_external_link: "http://www.dev.malmo.se/kulturproceduren"
+    :kp_manual_link: "http://www.dev.malmo.se/kulturproceduren"
     :kbu_link: "http://www.malmo.se/KBU"
     :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
     #:ldap:

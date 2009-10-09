@@ -1,7 +1,43 @@
-<h1>Behörighetsansökan hanterad</h1>
+<% accepted = @role_application.state == RoleApplication::ACCEPTED %>
+<% type = @role_application.role.symbol_name %>
+
+<h1>
+  Kulturproceduren -
+  <% if accepted %>
+    Behörighet
+  <% else %>
+    Nekad behörighet
+  <% end %>
+</h1>
 
 <p>
-  Din behörighetsansökan har behandlats av administratörer.
-  <%= link_to "Logga in på Kulturproceduren", user_url(@role_application.user, :host => APP_CONFIG[:mailers][:base_url]) %>
-  för att se resultatet.
+  <% if accepted %>
+    Du har nu behörighet att
+  <% else %>
+    Du har nekats behörighet att
+  <% end %>
+  <% if type == :culture_worker %>
+    redigera arrangörsinformation
+  <% elsif type == :booker %>
+    boka platser
+  <% elsif type == :host %>
+    hantera närvaro
+  <% end %>
+  i <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %>.
+</p>
+
+<p>
+  <a href="<% APP_CONFIG[:kp_manual_link] %>">
+    <% if accepted %>
+      Här kan du få hjälp med att komma igång.
+    <% else %>
+      Här kan du läsa mer om vad som gäller för att få behörighet i Kulturproceduren.
+    <% end %>
+  </a>
+</p>
+
+<p>
+  Vänliga hälsningar
+  <br/>
+  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
 </p>
