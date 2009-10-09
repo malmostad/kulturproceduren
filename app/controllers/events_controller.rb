@@ -243,7 +243,7 @@ class EventsController < ApplicationController
 
   def occasion_list_cache_key(event)
     online = user_online?
-    user = current_user
+    user = online ? current_user : nil
     online_prefix = online ? "" : "not_"
     bookable_prefix = online && user.can_book? ? "" : "not_"
     administratable_prefix = online && user.can_administrate?(@event.culture_provider) ? "" : "not_"
