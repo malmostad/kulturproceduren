@@ -75,6 +75,9 @@ class LoginController < ApplicationController
 
 
   # Authenticates the user by first checking the LDAP, then the local user database.
+  #
+  # If the user is authenticated by the LDAP but does not have a local user profile,
+  # a profile is automatically created.
   def authenticate_user
     if APP_CONFIG[:ldap]
       ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],

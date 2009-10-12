@@ -40,6 +40,7 @@ class AllotmentController < ApplicationController
       # Collect the selected districts ids and store them in the session
       ids = params[:allotment][:district_ids].collect { |id| id.to_i }
 
+      # -1 as an id means all ids
       if ids.include?(-1)
         session[:allotment][:district_ids] = nil
       else

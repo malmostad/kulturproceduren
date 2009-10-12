@@ -179,7 +179,7 @@ class OccasionsController < ApplicationController
     @occasion.cancelled = true
     @occasion.save!
 
-    #OccasionMailer.deliver_occasion_cancelled_email(@occasion)
+    OccasionMailer.deliver_occasion_cancelled_email(@occasion)
 
     flash[:notice] = "Föreställningen ställdes in."
     redirect_to(@occasion)
@@ -290,7 +290,7 @@ class OccasionsController < ApplicationController
     return pdf
   end
 
-  # Checks if the user is a host. For use in +before_filter+.
+  # Checks if the user is a host. For use in <tt>before_filter</tt>.
   def require_host
     @user = current_user
 
@@ -302,7 +302,7 @@ class OccasionsController < ApplicationController
   end
 
   # Checks if the user has administration privileges on the occasion.
-  # For use in +before_filter+.
+  # For use in <tt>before_filter</tt>.
   def require_culture_worker
     @occasion = Occasion.find(params[:id])
 

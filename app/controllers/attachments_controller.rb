@@ -61,13 +61,15 @@ class AttachmentsController < ApplicationController
 
   private
 
+  # Returns the complete file path to the attachment as it will be stored
+  # on disk.
   def get_filepath(attachment)
     filename = @attachment.id.to_s + File.extname(@attachment.filename)
     return Rails.root.join('public', APP_CONFIG[:upload_attachment][:path], filename)
   end
 
   # Checks if the user has administration privileges on the occasion.
-  # For use in +before_filter+.
+  # For use in <tt>before_filter</tt>.
   def require_culture_worker
     @event = Event.find(params[:event_id], :include => :culture_provider)
 

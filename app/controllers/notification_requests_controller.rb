@@ -24,7 +24,7 @@ class NotificationRequestsController < ApplicationController
 
   private
 
-  # Makes sure the user has privileges to book tickets. For use in +before_filter+
+  # Makes sure the user has privileges to book tickets. For use in <tt>before_filter</tt>
   def require_booker
     user = current_user
     unless user.can_book?

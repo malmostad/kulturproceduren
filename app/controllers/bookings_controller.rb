@@ -116,8 +116,7 @@ class BookingsController < ApplicationController
         flash[:notice] = "Platserna bokades."
         redirect_to occasion_booking_url(@occasion.id, @group.id)
 
-      rescue Exception => ex
-        puts "\n\n\n\n\n\n\n\n#{ex.to_yaml}\n\n\n\n\n\n\n\n\n"
+      rescue
         flash[:error] = "Ett fel uppstod när platserna skulle bokas. Var god försök igen senare."
         redirect_to new_occasion_booking_url(@occasion)
       end
@@ -252,7 +251,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  # Unbooks +num+ tickets of a given type.
+  # Unbooks <tt>num</tt> tickets of a given type.
   def unbook_tickets(num, type)
     tickets = Ticket.find_booked_by_type(@group, @occasion, type)
     1.upto(num) do |i|
@@ -323,7 +322,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  # Makes sure you can only book if you have booking privileges. For use in +before_filter+
+  # Makes sure you can only book if you have booking privileges. For use in <tt>before_filter</tt>
   def require_booker
     unless current_user.can_book?
       flash[:error] = "Du har inte behörighet att komma åt sidan."
@@ -345,9 +344,14 @@ class BookingsController < ApplicationController
     end
   end
 
+
+  # Clears the cache for a culture provider when a booking changes the amount
+  # of free seats on an occasion.
   def sweep_culture_provider_cache
     expire_fragment "culture_providers/show/#{@occasion.event.culture_provider.id}/upcoming_occasions/bookable"
   end
+  # Clears the cache for an event when a booking changes the amount
+  # of free seats on an occasion.
   def sweep_event_cache
     expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/not_administratable/not_reportable"
     expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/not_administratable/reportable"

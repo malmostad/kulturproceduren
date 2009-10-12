@@ -79,11 +79,13 @@ class CultureProvidersController < ApplicationController
     "name"
   end
 
+  # Cache key for the list of upcoming occasions
   def upcoming_occasions_cache_key(culture_provider)
     "culture_providers/show/#{culture_provider.id}/upcoming_occasions/#{user_online? && current_user.can_book? ? "" : "not_" }bookable"
   end
   helper_method :upcoming_occasions_cache_key
 
+  # Cache key for the list of standing events
   def standing_events_cache_key(culture_provider)
     "culture_providers/show/#{culture_provider.id}/standing_events"
   end

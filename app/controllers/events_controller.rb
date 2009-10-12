@@ -160,6 +160,7 @@ class EventsController < ApplicationController
     redirect_to root_url()
   end
 
+  # Displays an interface for managing links between events.
   def handle_links
     session[:event_link] ||= {}
     @culture_providers = CultureProvider.find :all, :order => "name ASC"
@@ -172,6 +173,9 @@ class EventsController < ApplicationController
     end
   end
 
+  # Adds a link between two events.
+  #
+  # The link is bidirectional.
   def add_link
     session[:event_link][:selected_culture_provider] = params[:event_link][:culture_provider_id].to_i
     from = Event.find(params[:id])
@@ -183,6 +187,7 @@ class EventsController < ApplicationController
     redirect_to handle_links_event_url(from)
   end
 
+  # Removes the bidirectional link between two events.
   def remove_link
     from = Event.find(params[:id])
     to = Event.find(params[:other_id])
@@ -195,6 +200,7 @@ class EventsController < ApplicationController
   end
 
   
+  # Renders a list of <tt>option</tt>-tags of events. For use in Ajax calls.
   def options_list
     conditions = {}
     conditions[:culture_provider_id] = params[:culture_provider_id] if params[:culture_provider_id]
@@ -222,7 +228,7 @@ class EventsController < ApplicationController
   end
 
   # Makes sure the user has privileges for administrating culture providers.
-  # For use in +before_filter+
+  # For use in <tt>before_filter</tt>
   def check_roles
     unless current_user.has_role?(:admin) || current_user.has_role?(:culture_worker)
       flash[:error] = "Du har inte behörighet att komma åt sidan."

@@ -131,7 +131,7 @@ class RoleApplicationsController < ApplicationController
 
   private
 
-  # Denies access to admins. For use in +before_filter+.
+  # Denies access to admins. For use in <tt>before_filter</tt>.
   def deny_admin
     if current_user.has_role? :admin
       flash[:notice] = "Du har redan administratörsbehörigheter och kan därför inte ansöka om behörigheter."

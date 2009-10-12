@@ -19,6 +19,7 @@ config.cache_store = :file_store, "#{RAILS_ROOT}/tmp/cache"
 #config.action_mailer.raise_delivery_errors = false
 
 ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.perform_deliveries = false
 ActionMailer::Base.smtp_settings = {
   :address => "localhost",
   :port => 1025,

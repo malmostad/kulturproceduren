@@ -54,12 +54,17 @@ class ApplicationController < ActionController::Base
   end
   helper_method :sort_order
 
-  # Override in subclass to secure column sorting
+  # Called from <tt>sort_order()</tt> to get the sort column in the database
+  # based on the incoming parameter.
+  #
+  # This method should be overriden in subclasses using paging. The method
+  # should implement functionality filtering the incoming parameter making it
+  # impossible to sort by a column that is not allowed.
   def sort_column_from_param(p)
     p
   end
 
-  # Ensures that the user is authenticated, used as a +before_filter+
+  # Ensures that the user is authenticated, used as a <tt>before_filter</tt>
   def authenticate
     unless session[:current_user_id]
 
@@ -70,7 +75,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Ensures that the user is an administrator, used as a +before_filter+
+  # Ensures that the user is an administrator, used as a <tt>before_filter</tt>
   def require_admin
     unless current_user.has_role? :admin
       flash[:notice] = "Du har inte behörighet att komma åt sidan."
@@ -92,6 +97,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
 
+  # Cache key builder for the occasion list in the <tt>event/show</tt> view.
   def occasion_list_cache_key(event)
     online = user_online?
     user = online ? current_user : nil
