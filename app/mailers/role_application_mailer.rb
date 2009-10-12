@@ -1,4 +1,4 @@
-# Mailer for events surrounding role applications.
+# Mailer for actions concerning role applications.
 class RoleApplicationMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer

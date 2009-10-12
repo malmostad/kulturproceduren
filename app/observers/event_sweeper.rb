@@ -1,3 +1,4 @@
+# Sweeper for Event caches
 class EventSweeper < ActionController::Caching::Sweeper
   observe Event, Occasion
 
@@ -11,6 +12,7 @@ class EventSweeper < ActionController::Caching::Sweeper
 
   private
 
+  # Invalidates the cache for a single Event
   def invalidate_cache(record)
     event = record.is_a?(Event) ? record : record.event
 

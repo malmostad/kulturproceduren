@@ -1,3 +1,4 @@
+# Sends mail for actions concerning Events
 class EventMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
@@ -45,6 +46,10 @@ class EventMailer < ActionMailer::Base
 
   private
 
+  # Gets the relavant recipient addresses when sending mails for the ticket transitions.
+  #
+  # This method selects the contacts for the given district, and the schools and groups in
+  # the districts that have children in the correct age groups.
   def get_relevant_addresses(event, districts)
       addresses = []
       districts.each do |d|

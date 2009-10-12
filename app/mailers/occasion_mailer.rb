@@ -1,3 +1,4 @@
+# Mailer for actions concerning occasions.
 class OccasionMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer

@@ -1,3 +1,4 @@
+# Sweeper for fragment caches concerning culture providers
 class CultureProviderSweeper < ActionController::Caching::Sweeper
   observe Event, Occasion, CultureProvider, Category, CategoryGroup
 
@@ -11,6 +12,9 @@ class CultureProviderSweeper < ActionController::Caching::Sweeper
 
   private
 
+  # Invalidates a single culture provider's cache or all
+  # culture providers' caches depending on the event that
+  # caused the sweeping
   def invalidate_cache(record)
     case record
     when CultureProvider then invalidate_single(record)
@@ -20,12 +24,14 @@ class CultureProviderSweeper < ActionController::Caching::Sweeper
     end
   end
 
+  # Removes the cache of a single culture provider
   def invalidate_single(culture_provider)
     expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/bookable"
     expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/not_bookable"
     expire_fragment "culture_providers/show/#{culture_provider.id}/standing_events"
   end
 
+  # Removes the cache for all culture providers
   def invalidate_all
     expire_fragment %r{culture_providers/show/\d+/upcoming_occasions}
     expire_fragment %r{culture_providers/show/\d+/standing_events}

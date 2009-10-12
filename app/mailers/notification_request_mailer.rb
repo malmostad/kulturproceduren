@@ -1,3 +1,4 @@
+# Mailer for actions concerning notification requests.
 class NotificationRequestMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
