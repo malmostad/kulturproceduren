@@ -2,10 +2,10 @@
 #
 # The roles in the system are the following:
 #
-# [+:admin+] Administrators, full privileges
-# [+:booker+] Booking privileges, the user can book tickets for groups
-# [+:culture_worker+] Culture worker privileges, the user can administrate the profiles for specific culture providers
-# [+:host+] Host privileges, the user can handle the attendance lists on occasions
+# [<tt>:admin</tt>] Administrators, full privileges
+# [<tt>:booker</tt>] Booking privileges, the user can book tickets for groups
+# [<tt>:culture_worker</tt>] Culture worker privileges, the user can administrate the profiles for specific culture providers
+# [<tt>:host</tt>] Host privileges, the user can handle the attendance lists on occasions
 class Role < ActiveRecord::Base
   has_and_belongs_to_many :users
   validates_presence_of   :name

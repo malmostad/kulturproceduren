@@ -2,9 +2,9 @@
 #
 # An event can be in in several states significant for the booking of tickets:
 #
-#  * Alloted on a specific group so that only the group can book the tickets
-#  * Alloted on a specific district so that only groups in the district can book the tickets
-#  * Free for all so that all groups in the system can book the tickets
+# * Alloted on a specific group so that only the group can book the tickets
+# * Alloted on a specific district so that only groups in the district can book the tickets
+# * Free for all so that all groups in the system can book the tickets
 #
 # The transition between the different states are done on a timed basis using a
 # Rake task.
@@ -99,14 +99,14 @@ class Event < ActiveRecord::Base
   # Search method for standing events. Returns a paginated result.
   #
   # Filters:
-  # [+:free_text+] Free text search in the event's name and description
-  # [+:further_education+] If true, the search should be restricted to events that are marked as further education
-  # [+:from_age+] Sets a lower limit on the age of the returned events, not applicable if +:further_education+ is set.
-  # [+:to_age+] Sets an upper limit on the age of the returned events, not applicable if +:further_education+ is set.
-  # [+:from_date+] Sets a lower limit on the visibility of the returned events, defaults to the current date.
-  # [+:date_span+] Sets a date span limit from +from_date+, can be +:day+, +:week+, +:month+ and +:date+
-  # [+:to_age+] If +:date_span+ is +:date+, this value sets an upper limit on the visibility of the returned events.
-  # [+:categories+] An array of the categories to limit the search to
+  # [<tt>:free_text</tt>] Free text search in the event's name and description
+  # [<tt>:further_education</tt>] If <tt>true</tt>, the search should be restricted to events that are marked as further education
+  # [<tt>:from_age</tt>] Sets a lower limit on the age of the returned events, not applicable if <tt>:further_education</tt> is set.
+  # [<tt>:to_age</tt>] Sets an upper limit on the age of the returned events, not applicable if <tt>:further_education</tt> is set.
+  # [<tt>:from_date</tt>] Sets a lower limit on the visibility of the returned events, defaults to the current date.
+  # [<tt>:date_span</tt>] Sets a date span limit from <tt>from_date</tt>, can be <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt> and <tt>:date</tt>
+  # [<tt>:to_age</tt>] If <tt>:date_span</tt> is <tt>:date</tt>, this value sets an upper limit on the visibility of the returned events.
+  # [<tt>:categories</tt>] An array of the categories to limit the search to
   def self.search_standing(filter, page)
     # Standing events do not have occasions
     conditions = [ "events.id not in (select x.event_id from occasions x) " ]
@@ -180,6 +180,7 @@ class Event < ActiveRecord::Base
 
   protected
 
+  # Removes the ages when the event has <tt>further_education</tt> set.
   def set_further_education_age
     if self.further_education
       self.from_age = -1

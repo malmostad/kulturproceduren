@@ -34,14 +34,14 @@ class Occasion < ActiveRecord::Base
   # Search method for occasions. Returns a paginated result.
   #
   # Filters:
-  # [+:free_text+] Free text search in the occasion's event's name and description
-  # [+:further_education+] If true, the search should be restricted to events that are marked as further education
-  # [+:from_age+] Sets a lower limit on the age of the returned events, not applicable if +:further_education+ is set.
-  # [+:to_age+] Sets an upper limit on the age of the returned events, not applicable if +:further_education+ is set.
-  # [+:from_date+] Sets a lower limit on the date of the returned occasions, defaults to the current date.
-  # [+:date_span+] Sets a date span limit from +from_date+, can be +:day+, +:week+, +:month+ and +:date+
-  # [+:to_age+] If +:date_span+ is +:date+, this value sets an upper limit on the date of the returned events.
-  # [+:categories+] An array of the categories to limit the search to
+  # [<tt>:free_text</tt>] Free text search in the occasion's event's name and description
+  # [<tt>:further_education</tt>] If true, the search should be restricted to events that are marked as further education
+  # [<tt>:from_age</tt>] Sets a lower limit on the age of the returned events, not applicable if <tt>:further_education</tt> is set.
+  # [<tt>:to_age</tt>] Sets an upper limit on the age of the returned events, not applicable if <tt>:further_education</tt> is set.
+  # [<tt>:from_date</tt>] Sets a lower limit on the date of the returned occasions, defaults to the current date.
+  # [<tt>:date_span</tt>] Sets a date span limit from <tt>from_date</tt>, can be <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt> and <tt>:date</tt>
+  # [<tt>:to_age</tt>] If <tt>:date_span</tt> is <tt>:date</tt>, this value sets an upper limit on the date of the returned events.
+  # [<tt>:categories</tt>] An array of the categories to limit the search to
   def self.search(filter, page)
 
     conditions = [ " current_date between events.visible_from and events.visible_to and cancelled = ?", false ]

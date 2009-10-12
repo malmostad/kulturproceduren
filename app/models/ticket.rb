@@ -2,13 +2,12 @@
 #
 # A ticket can be in several states:
 #
-#  * Unbooked, created and assigned to a group/district/free for all, but not booked.
-#  * Booked, when the ticket is booked to an occasion.
-#  * Used, when the ticket has been used for a person attending the occasion.
-#  * Not used, when the ticket was not used on the occasion.
+# * Unbooked, created and assigned to a group/district/free for all, but not booked.
+# * Booked, when the ticket is booked to an occasion.
+# * Used, when the ticket has been used for a person attending the occasion.
+# * Not used, when the ticket was not used on the occasion.
 class Ticket < ActiveRecord::Base
-  #State Declarations, "constants"
-
+  # Ticket states
   UNBOOKED = 0
   BOOKED = 1
   USED = 2
