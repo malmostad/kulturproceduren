@@ -1,6 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  # Returns the css class +active+ if the current controller is among
+  # Returns the css class <tt>active</tt> if the current controller is among
   # the names in the arguments.
   #
   # Used in navigation menus to get an indicator of the currently active page.
@@ -8,7 +8,7 @@ module ApplicationHelper
     " active " if names.include?(params[:controller])
   end
 
-  # Returns the css class +active+ if the current action is an action in the given
+  # Returns the css class <tt>active</tt> if the current action is an action in the given
   # controller and is among the names in the arguments.
   #
   # Used in navigation menus to get an indicator of the currently active page.
@@ -16,7 +16,7 @@ module ApplicationHelper
     " active " if params[:controller] == controller && names.include?(params[:action])
   end
 
-  # Returns a disable HTML attribute if the argument is +false+.
+  # Returns a disable HTML attribute if the argument is <tt>false</tt>.
   def disabled_if(c)
     ' disabled="disabled" ' if c
   end
@@ -27,7 +27,7 @@ module ApplicationHelper
     a.nil? || a.strip.empty?
   end
 
-  # Creates a fully qualified URL if the given +url+ is not qualified.
+  # Creates a fully qualified URL if the given <tt>url</tt> is not qualified.
   def qualified_url(url)
     unless url =~ /^http:\/\//i
       url = "http://" + url
@@ -51,12 +51,12 @@ module ApplicationHelper
 
   # Creates a link for sorting a table based on a column.
   #
-  # [+title+] The link's text
-  # [+column+] The sort column
+  # [<tt>title</tt>] The link's text
+  # [<tt>column</tt>] The sort column
   #
   # Options:
   #
-  # [+:unless+] A condition for link_to_unless
+  # [<tt>:unless</tt>] A condition for link_to_unless
   def sort_link(title, column, options = {})
     condition = options[:unless] if options.has_key?(:unless)
     sort_dir = params[:d] == 'up' && params[:c] == column ? 'down' : 'up'
@@ -66,8 +66,8 @@ module ApplicationHelper
 
   # Generates an image tag for uploaded images
   #
-  # [+image+] The image model
-  # [+thumb+] Indicates if the image tag should show the thumbnail or not
+  # [<tt>image</tt>] The image model
+  # [<tt>thumb</tt>] Indicates if the image tag should show the thumbnail or not
   def uploaded_image_tag(image, thumb = false)
     options = { :alt => image.name }
 
@@ -99,7 +99,7 @@ module ApplicationHelper
       :return_to => url || url_for(request.query_parameters.update(request.path_parameters))
   end
 
-  # Wrapper around cache() do for conditional caching.
+  # Wrapper around <tt>cache()</tt> do for conditional caching.
   def conditional_cache(condition, name = {}, options = nil, &block)
     if condition
       cache(name, options, &block)
