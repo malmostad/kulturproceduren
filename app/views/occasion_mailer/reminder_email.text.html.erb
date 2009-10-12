@@ -15,7 +15,7 @@
 <ul>
   <li>
     att du kan läsa mer om <%= h @occasion.event.name %> på
-    <%= link_to "Kulturproceduren", mail_url(event_path(@event)) %>.
+    <%= link_to "Kulturproceduren", mail_url(event_path(@occasion.event)) %>.
     Här finns också eventuell lärarhandledning.
   </li>
   <li>

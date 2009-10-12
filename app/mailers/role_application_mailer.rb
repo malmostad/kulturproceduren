@@ -1,6 +1,7 @@
 # Mailer for events surrounding role applications.
 class RoleApplicationMailer < ActionMailer::Base
   layout 'mail'
+  helper :mailer
 
   # Sends an email to administrators when a user has submitted a role application
   def application_submitted_email(role_application, administrators)

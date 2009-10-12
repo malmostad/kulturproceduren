@@ -20,9 +20,7 @@ class EventMailer < ActionMailer::Base
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      addresses = get_relevant_addresses(event, Districts.all)
-      return if addresses.empty?
-      recipients(addresses)
+      recipients(get_relevant_addresses(event, District.all))
     end
 
     from(APP_CONFIG[:mailers][:from_address])
@@ -36,11 +34,8 @@ class EventMailer < ActionMailer::Base
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      #return if district.contacts.blank?
       #recipients(district.contacts.split(",")..collect { |c| c.strip }.uniq)
-      addresses = get_relevant_addresses(event, [district])
-      return if addresses.empty?
-      recipients(addresses)
+      recipients(get_relevant_addresses(event, [district]))
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Bokningsbara platser till #{event.name}")

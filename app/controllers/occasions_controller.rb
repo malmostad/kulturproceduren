@@ -179,9 +179,7 @@ class OccasionsController < ApplicationController
     @occasion.cancelled = true
     @occasion.save!
 
-    #@occasion.users.each do |user|
-    #  OccasionMailer.deliver_occasion_cancelled_email(@occasion, user)
-    #end
+    #OccasionMailer.deliver_occasion_cancelled_email(@occasion)
 
     flash[:notice] = "Föreställningen ställdes in."
     redirect_to(@occasion)

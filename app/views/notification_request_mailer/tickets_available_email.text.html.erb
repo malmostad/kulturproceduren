@@ -31,7 +31,7 @@
 <p>För dessa platser gäller "först till kvarn".</p>
 
 <p>
-  <a href="<%= mail_url(event_path(@event)) %>">
+  <a href="<%= mail_url(event_path(@notification_request.event)) %>">
     Läs mer om <%= h @notification_request.event.name %> och boka eventuella platser här.
   </a>
 </p>

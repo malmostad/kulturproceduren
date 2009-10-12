@@ -1,4 +1,7 @@
 class NotificationRequestMailer < ActionMailer::Base
+  layout 'mail'
+  helper :mailer
+
   # Sends an email when tickets have become available for
   # a group that has a registered notification request on the given
   # event

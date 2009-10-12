@@ -1,12 +1,13 @@
 class OccasionMailer < ActionMailer::Base
   layout 'mail'
+  helper :mailer
 
   # Sends an email when an occasion is cancelled
-  def occasion_cancelled_email(occasion, user)
+  def occasion_cancelled_email(occasion)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      recipients(user.email)
+      recipients(occasion.users.collect { |u| u.email })
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Inställt evenemang - #{occasion.event.name}")

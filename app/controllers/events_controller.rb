@@ -240,17 +240,4 @@ class EventsController < ApplicationController
     end
     return fname
   end
-
-  def occasion_list_cache_key(event)
-    online = user_online?
-    user = online ? current_user : nil
-    online_prefix = online ? "" : "not_"
-    bookable_prefix = online && user.can_book? ? "" : "not_"
-    administratable_prefix = online && user.can_administrate?(@event.culture_provider) ? "" : "not_"
-    reportable_prefix = online && (user.has_role?(:admin) || user.has_role?(:host)) ? "" : "not_"
-
-    "events/show/#{event.id}/occasion_list/#{online_prefix}online/#{bookable_prefix}bookable/#{administratable_prefix}administratable/#{reportable_prefix}reportable"
-  end
-  helper_method :occasion_list_cache_key
-
 end
