@@ -21,7 +21,7 @@ class LoginController < ApplicationController
       render :action => "index"
     else
       session[:current_user_id] = u.id
-      flash[:notice] = "Du är nu inloggad som #{CGI.escapeHTML(u.username)}"
+      flash[:notice] = "Du är nu inloggad"
 
       if u.roles.empty?
         flash[:warning] = "Du har för tillfället inga behörigheter i systemet. Var god ansök om behörigheter nedan."
@@ -89,7 +89,7 @@ class LoginController < ApplicationController
       ldap_user = ldap.authenticate params[:user][:username], params[:user][:password]
 
       if ldap_user
-        user = User.find :first, :conditions => { :username => params[:user][:username] }
+        user = User.find :first, :conditions => { :username => "#{APP_CONFIG[:ldap][:username_prefix]}#{params[:user][:username]}" }
 
         if user
           return user
@@ -100,7 +100,7 @@ class LoginController < ApplicationController
             u.name = ldap_user[:name]
             u.email = ldap_user[:email]
             u.cellphone = ldap_user[:cellphone]
-            u.username = ldap_user[:username]
+            u.username = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
             u.password = "ldap"
           end
 

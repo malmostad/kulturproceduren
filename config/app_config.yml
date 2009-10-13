@@ -28,6 +28,7 @@ common: &common
     #        :dn:
     #        :password:
     #    :max_search_results: 25
+    #    :username_prefix: "malmoaut-"
     :allotment:
         :proximity_boundary: 3
     :mailers:

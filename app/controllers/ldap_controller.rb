@@ -37,7 +37,7 @@ class LdapController < ApplicationController
         u.name = ldap_user[:name]
         u.email = ldap_user[:email]
         u.cellphone = ldap_user[:cellphone]
-        u.username = ldap_user[:username]
+        u.username = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
         u.password = "ldap"
       end
 
