@@ -1,6 +1,8 @@
 common: &common
     :asset_host: "http://www.dev.malmo.se/assets"
     :salt_length: 10
+    :request_key_length: 20
+    :generated_password_length: 8
     :occasion_reminder_days: 2
     :evaluation_form:
         :activation_days: 2

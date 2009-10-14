@@ -23,6 +23,9 @@ class LoginController < ApplicationController
       session[:current_user_id] = u.id
       flash[:notice] = "Du är nu inloggad"
 
+      u.last_active = Time.now
+      u.save
+
       if u.roles.empty?
         flash[:warning] = "Du har för tillfället inga behörigheter i systemet. Var god ansök om behörigheter nedan."
         redirect_to role_applications_url()

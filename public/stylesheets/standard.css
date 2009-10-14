@@ -223,6 +223,7 @@
 #kp .post-label-form-row .input-container input,
 #kp .post-label-form-row .input-container select,
 #kp .post-label-form-row .input-container textarea { width: auto; }
+#kp .description-form-row { font-size: 0.929em; }
 
 #kp ul.form-elements {
     list-style-type: none;
@@ -334,6 +335,9 @@
 /* Event link form */
 #kp form.event-links-form label { width: 8em; }
 #kp form.event-links-form .input-container { padding-left: 8em; }
+/* Request password reset form */
+#kp form.request-password-reset-form label { width: 8em; }
+#kp form.request-password-reset-form .input-container { padding-left: 8em; }
 
 /*** Models ***/
 

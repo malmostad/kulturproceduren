@@ -4,7 +4,11 @@ ActionController::Routing::Routes.draw do |map|
     :member => {
     :edit_password => :get,
     :update_password => :put,
-    :add_culture_provider => :post
+    :add_culture_provider => :post,
+    :reset_password => :get
+  }, :collection => {
+    :request_password_reset => :get,
+    :send_password_reset_confirmation => :post
   }
 
   map.resources :culture_providers do |cp|

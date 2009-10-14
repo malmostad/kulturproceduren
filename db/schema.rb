@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090928113630) do
+ActiveRecord::Schema.define(:version => 20091014080538) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -288,6 +288,8 @@ ActiveRecord::Schema.define(:version => 20090928113630) do
     t.string   "cellphone"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_active"
+    t.string   "request_key"
   end
 
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true

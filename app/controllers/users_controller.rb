@@ -2,9 +2,12 @@
 class UsersController < ApplicationController
   layout :set_layout
 
-  before_filter :authenticate, :except => [ :new, :create ]
-  before_filter :require_admin, :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
-  before_filter :load_user, :only => [ :show, :edit, :edit_password, :update, :update_password ]
+  before_filter :authenticate,
+    :except => [ :new, :create, :request_password_reset, :send_password_reset_confirmation, :reset_password ]
+  before_filter :require_admin,
+    :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
+  before_filter :load_user,
+    :only => [ :show, :edit, :edit_password, :update, :update_password ]
 
   # Displays a list of users in the system.
   def index
@@ -156,6 +159,61 @@ class UsersController < ApplicationController
     end
 
     redirect_to user
+  end
+
+
+  # Displays a form for requesting a password reset for an account
+  def request_password_reset
+    @user = User.new
+  end
+
+  # Sends a confirmation email to the user requesting the password reset
+  def send_password_reset_confirmation
+    if !params[:user][:username].blank?
+      users = User.find :all, :conditions => { :username => params[:user][:username] }
+    elsif !params[:user][:email].blank?
+      users = User.find :all, :conditions => { :email => params[:user][:email] }
+    else
+      flash[:warning] = "Du måste ange ett användarnamn eller en epostadress."
+      redirect_to request_password_reset_users_url()
+      return
+    end
+    
+    if users.blank?
+      flash[:warning] = "Användaren finns inte i systemet."
+      redirect_to request_password_reset_users_url()
+      return
+    end
+
+    begin
+      users.each do |user|
+        user.generate_request_key()
+        user.save!
+
+        UserMailer.deliver_password_reset_confirmation_email(user)
+      end
+
+      flash[:notice] = "Ett bekräftelsemeddelande har nu skickats till den epostadress som är angiven i användarkontot. Lösenordet återställs först efter att du har följt instruktionerna i meddelandet."
+      redirect_to root_url()
+    rescue
+      flash[:error] = "Ett fel uppstod när förfrågan behandlades. Var god försök igen senare."
+      redirect_to request_password_reset_users_url()
+    end
+  end
+
+  # Resets a user's password
+  def reset_password
+    user = User.find params[:id]
+
+    if params[:key] == user.request_key
+      password = user.generate_new_password()
+      UserMailer.deliver_password_reset_email(user, password)
+      flash[:notice] = "Ditt nya lösenord har skickats till din epost."
+      redirect_to :controller => "login", :action => "index"
+    else
+      flash[:warning] = "Felaktig förfrågan."
+      redirect_to root_url()
+    end
   end
 
 

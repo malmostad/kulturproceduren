@@ -122,6 +122,23 @@ class User < ActiveRecord::Base
     write_attribute :password_confirmation, nil
   end
 
+
+  # Generates a random request key
+  def generate_request_key
+    self.request_key = User.random_string(APP_CONFIG[:request_key_length])
+  end
+
+  # Resets the user's password to a randomly generated password
+  def generate_new_password
+    pw = User.random_string(APP_CONFIG[:generated_password_length])
+    self.reset_password()
+    self.password = pw
+    self.password_confirmation = pw
+    self.save!
+
+    return pw
+  end
+
   
   private
 
