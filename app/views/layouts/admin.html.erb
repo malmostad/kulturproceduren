@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-    <title>Kulturproceduren</title>
+    <title>Kulturproceduren<%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %></title>
 
     <%= render :partial => "shared/head" %>
   </head>
@@ -11,7 +11,11 @@
 
     <div id="kp">
 
-      <h1 id="kp-logo">Kulturproceduren - Administration</h1>
+      <h1 id="kp-logo">
+        Kulturproceduren
+        <%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %>
+        - Administration
+      </h1>
 
       <ul class="pri-nav">
         <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">

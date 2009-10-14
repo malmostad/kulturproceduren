@@ -35,9 +35,28 @@ common: &common
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :base_url: "localhost:3000"
         #:debug_recipient: "andreas.johansson@kentor.se"
+        
 development:
     <<: *common
+    :instance_title: "DEV"
+
 test:
     <<: *common
+release_test:
+    <<: *common
+
 production:
     <<: *common
+    :asset_host: "http://www.test.malmo.se/assets"
+    :occasion_reminder_days: 1
+    :evaluation_form:
+        :activation_days: 1
+        :reminder_days: 2
+    :ticket_state:
+        :group_days: 1
+        :district_days: 1
+education:
+    <<: *common
+    :instance_title: "UTB"
+    :asset_host: "http://www.test.malmo.se/assets"
+
