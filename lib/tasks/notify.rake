@@ -66,6 +66,7 @@ namespace :kp do
       addresses = []
 
       event.groups.each do |group|
+        # Notify the contacts on both groups, schools and districts
         addresses += (group.contacts || "").split(",")
         addresses += (group.school.contacts || "").split(",")
         addresses += (group.school.district.contacts || "").split(",")

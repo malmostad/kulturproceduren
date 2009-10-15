@@ -14,6 +14,7 @@ namespace :kp do
       notification_requests = []
 
       if e.ticket_state == Event::ALLOTED_GROUP && group_to_district_date <= Date.today
+        # Transition to districts
         e.ticket_state = Event::ALLOTED_DISTRICT
         e.save
         puts "Evenemang #{e.name} är nu bokningsbart för hela stadsdelen"
@@ -21,16 +22,19 @@ namespace :kp do
         districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
         notification_requests = NotificationRequest.find_by_event_and_districts(e, districts)
 
+        # Notify contacts on districts
         districts.each do |district|
           EventMailer.deliver_district_allotment_notification_email(e, district)
         end
 
+        # Send responses to notification requests
         notification_requests.each do |n|
           if n.send_mail
             NotificationRequestMailer.deliver_tickets_available_email(n, true)
           end
         end
       elsif e.ticket_state == Event::ALLOTED_DISTRICT && district_to_all_date <= Date.today
+        # Transistion to all
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
         e.save
@@ -38,9 +42,11 @@ namespace :kp do
 
         if e.tickets.count(:conditions => { :state => Ticket::UNBOOKED }) > 0
           notification_requests = NotificationRequest.find_by_event(e)
+          # Notify contacts on districts
           EventMailer.deliver_free_for_all_allotment_notification_email(e)
         end
 
+        # Send responses to notification requests
         notification_requests.each do |n|
           if n.send_mail
             NotificationRequestMailer.deliver_tickets_available_email(n, false)

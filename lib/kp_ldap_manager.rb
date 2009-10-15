@@ -5,10 +5,10 @@ require 'ldap'
 # The search methods in this class all return the same result structure,
 # a hash with the following keys:
 #
-# [+:name+] The name in the LDAP entry
-# [+:email+] The email address in the LDAP entry
-# [+:cellphone+] The cellphone number in the LDAP entry
-# [+:username+] The username in the LDAP entry
+# [<tt>:name</tt>] The name in the LDAP entry
+# [<tt>:email</tt>] The email address in the LDAP entry
+# [<tt>:cellphone</tt>] The cellphone number in the LDAP entry
+# [<tt>:username</tt>] The username in the LDAP entry
 class KPLdapManager
   attr_accessor :max_results
 
@@ -53,9 +53,9 @@ class KPLdapManager
   #
   # Parameters:
   #
-  # [+:username+] adds a filter for the username
-  # [+:name+] adds a filter for the name
-  # [+:mail+] adds a filter for the email address
+  # [<tt>:username</tt>] adds a filter for the username
+  # [<tt>:name</tt>] adds a filter for the name
+  # [<tt>:mail</tt>] adds a filter for the email address
   def search(params)
     conditions = []
 

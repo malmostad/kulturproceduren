@@ -1,4 +1,3 @@
-require 'pp'
 # Methods for generating demo data
 namespace :kp do
   namespace :demo do
@@ -129,7 +128,9 @@ namespace :kp do
 
     desc "Generates a random culture provider"
     task(:generate_culture_provider => :environment) do
+      # Culture provider name seeds
       cp_seed = YAML.load_file("#{RAILS_ROOT}/demo/culture_provider_seed.yml")
+      # Contact person name seeds
       name_seed = YAML.load_file("#{RAILS_ROOT}/demo/name_seed.yml")
 
       count = 1
@@ -137,9 +138,11 @@ namespace :kp do
 
       1.upto(count) do
         culture_provider = CultureProvider.new do |c|
+          # Generate name from seed
           c.name = cp_seed[:prefix][rand(cp_seed[:prefix].length)] +
             cp_seed[:suffix][rand(cp_seed[:suffix].length)] 
           c.description = IO.read("#{RAILS_ROOT}/demo/lorem_ipsum.txt")
+          # Generate name from seed
           c.contact_person = name_seed[:first_name][rand(name_seed[:first_name].length)] +
             " " +
             name_seed[:surname][rand(name_seed[:surname].length)]
@@ -158,8 +161,9 @@ namespace :kp do
 
     desc "Generates a standing event for a culture provider"
     task(:generate_standing_event => :environment) do
+      # Seed for event names
       event_seed = YAML.load_file("#{RAILS_ROOT}/demo/event_seed.yml")
-      name_seed = YAML.load_file("#{RAILS_ROOT}/demo/name_seed.yml")
+
       cp = CultureProvider.find ENV['culture_provider_id']
       categories = Category.all
 
@@ -169,6 +173,7 @@ namespace :kp do
       1.upto(count) do
         event = Event.new do |e|
           e.culture_provider = cp
+          # Generate name from seed
           e.name = event_seed[:prefix][rand(event_seed[:prefix].length)] +
             " " + event_seed[:suffix][rand(event_seed[:suffix].length)]
           e.description = IO.read("#{RAILS_ROOT}/demo/lorem_ipsum.txt")
@@ -192,17 +197,20 @@ namespace :kp do
 
     desc "Generates an event with occasions for a culture provider"
     task(:generate_event => :environment) do
+      # Seed for event names
       event_seed = YAML.load_file("#{RAILS_ROOT}/demo/event_seed.yml")
+
       cp = CultureProvider.find ENV['culture_provider_id']
       categories = Category.all
       questions = 
 
-        count = 1
+      count = 1
       count = ENV["count"].to_i if ENV["count"].to_i > 1
 
       1.upto(count) do
         event = Event.new do |e|
           e.culture_provider = cp
+          # Generate name from seed
           e.name = event_seed[:prefix][rand(event_seed[:prefix].length)] +
             " " + event_seed[:suffix][rand(event_seed[:suffix].length)]
           e.description = IO.read("#{RAILS_ROOT}/demo/lorem_ipsum.txt")
@@ -256,6 +264,7 @@ namespace :kp do
 
     desc "Creates tickets (not booked/booked/used/not used) for an event"
     task(:create_tickets => :environment) do
+      # Seed for companion names
       name_seed = YAML.load_file("#{RAILS_ROOT}/demo/name_seed.yml")
 
       event = Event.find ENV["event_id"]
@@ -279,6 +288,7 @@ namespace :kp do
 
           companion = Companion.new do |c|
             c.tel_nr = "012345678"
+            # Generate companion name from seed
             c.name = name_seed[:first_name][rand(name_seed[:first_name].length)] +
               " " +
               name_seed[:surname][rand(name_seed[:surname].length)]
