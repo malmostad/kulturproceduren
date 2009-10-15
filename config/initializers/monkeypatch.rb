@@ -8,7 +8,10 @@ module ActionView
     module AssetTagHelper
       private
 
-      # actionpack-2.3.4/lib/action_view/helpers/asset_tag_helper.rb:528
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/asset_tag_helper.rb:528</tt>
+      #
       # Patch to ignore relative_url_root when using an asset host
       def compute_public_path(source, dir, ext = nil, include_host = true)
         has_request = @controller.respond_to?(:request)
@@ -47,13 +50,19 @@ module ActionView
 
     class InstanceTag
       private
-      # actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:896
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:896</tt>
+      #
       # Overrides the method generating the DOM ID for a field
       def tag_id
         # MONKEYPATCH: Added kp- prefix
         "kp-#{sanitized_object_name}-#{sanitized_method_name}"
       end
-      # actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:900
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:900</tt>
+      #
       # Overrides the method generating the DOM ID for a field with an index
       def tag_id_with_index(index)
         # MONKEYPATCH: Added kp- prefix
@@ -63,7 +72,10 @@ module ActionView
 
     class DateTimeSelector
       private
-      # actionpack-2.3.4/lib/action_view/helpers/date_helper.rb:875
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/date_helper.rb:875</tt>
+      #
       # Overrides the DOM ID generator for date/time selectors
       def input_id_from_type(type)
         # MONKEYPATCH: Added kp- prefix
@@ -72,7 +84,10 @@ module ActionView
     end
 
     class FormBuilder
-      # actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:900
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:900</tt>
+      #
       # Overrides the method generating the submit button, prefixing the submit button's DOM ID.
       def submit(value = "Save changes", options = {})
         # MONKEYPATCH: Added kp- prefix to id
@@ -81,7 +96,10 @@ module ActionView
     end
 
     module FormTagHelper
-      # actionpack-2.3.4/lib/action_view/helpers/form_tag_helper.rb:314
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_tag_helper.rb:314</tt>
+      #
       # Overrides the DOM ID generation, prefixing the ID
       def radio_button_tag(name, value, checked = false, options = {})
         pretty_tag_value = value.to_s.gsub(/\s/, "_").gsub(/(?!-)\W/, "").downcase
@@ -92,7 +110,10 @@ module ActionView
         tag :input, html_options
       end
 
-      # actionpack-2.3.4/lib/action_view/helpers/form_tag_helper.rb:481
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_tag_helper.rb:481</tt>
+      #
       # Overrides the DOM ID generation to prefix the ID
       def sanitize_to_id(name)
         # MONKEYPATCH: Added kp- prefix
@@ -101,7 +122,10 @@ module ActionView
     end
 
     module ActiveRecordHelper
-      # actionpack-2.3.4/lib/action_view/helpers/active_record_helper.rb:109
+      # *MONKEYPATCH*
+      #
+      # <tt>actionpack-2.3.4/lib/action_view/helpers/active_record_helper.rb:109</tt>
+      #
       # Overrides the error message for a specific field to adhere to
       # the markup guidelines for malmo.se
       def error_message_on(object, method, *args)
@@ -135,7 +159,10 @@ end
 
 module ActionController
   module RecordIdentifier
-    # actionpack-2.3.4/lib/action_controller/record_identifier.rb:61
+    # *MONKEYPATCH*
+    #
+    # <tt>actionpack-2.3.4/lib/action_controller/record_identifier.rb:61</tt>
+    #
     # Overrides the DOM class generator to prefix the class
     def dom_class(record_or_class, prefix = nil)
       singular = singular_class_name(record_or_class)
