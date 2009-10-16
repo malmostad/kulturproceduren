@@ -191,6 +191,7 @@ namespace :kp do
           end
 
           elit_contacts = elit_contacts.collect { |c| c.email.strip }
+          elit_contacts.delete_if { |c| c !~ /[^@]+@[^@]+/ }
           puts "\t\tContacts from Elit: #{elit_contacts.join(",")}"
 
           merged_contacts = local_contacts + elit_contacts
@@ -233,6 +234,7 @@ namespace :kp do
           end
 
           elit_contacts = elit_contacts.collect { |c| c.email.strip }
+          elit_contacts.delete_if { |c| c !~ /[^@]+@[^@]+/ }
           puts "\t\tContacts from Elit: #{elit_contacts.join(",")}"
 
           merged_contacts = local_contacts + elit_contacts

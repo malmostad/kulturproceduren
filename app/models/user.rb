@@ -25,6 +25,9 @@ class User < ActiveRecord::Base
     :message => "Namnet får inte vara tomt"
   validates_presence_of :email,
     :message => "Epostadressen får inte vara tom"
+  validates_format_of :email,
+    :with => /[^@]+@[^@]+/,
+    :message => "Epostadressen måste vara en giltig epostadress"
   validates_presence_of :cellphone,
     :message => "Mobilnumret får inte vara tomt"
   validates_uniqueness_of :username,
