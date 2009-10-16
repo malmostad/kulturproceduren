@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091014080538) do
+ActiveRecord::Schema.define(:version => 20091016084433) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20091014080538) do
   create_table "districts", :force => true do |t|
     t.string   "name"
     t.string   "contacts"
-    t.integer  "elit_id"
+    t.string   "elit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(:version => 20091014080538) do
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.string   "contacts"
-    t.integer  "elit_id"
+    t.string   "elit_id"
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(:version => 20091014080538) do
   create_table "schools", :force => true do |t|
     t.string   "name"
     t.string   "contacts"
-    t.integer  "elit_id"
+    t.string   "elit_id"
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"

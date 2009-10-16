@@ -37,6 +37,7 @@ common: &common
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :base_url: "localhost:3000"
         #:debug_recipient: "andreas.johansson@kentor.se"
+    :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
         
 development:
     <<: *common
