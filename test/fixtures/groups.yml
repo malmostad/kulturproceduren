@@ -1,51 +1,35 @@
-foo_apa_klass_xa:
-    id: 1
-    name: FA Klass Xa
-    elit_id: 1
-    school_id: 1
+centrumskolan1_klass35:
+  name: Klass 3-5
+  school: centrumskolan1
+centrumskolan1_klass3spec:
+  name: Klass 3 special
+  school: centrumskolan1
+centrumskolan1_klass5spec:
+  name: Klass 5 special
+  school: centrumskolan1
 
-foo_apa_klass_xb:
-    id: 2
-    name: FA Klass Xb
-    elit_id: 2
-    school_id: 1
-
-
-foo_bepa_klass_xa:
-    id: 3
-    name: FB Klass Xa
-    elit_id: 3
-    school_id: 2
-
-foo_bepa_klass_xb:
-    id: 4
-    name: FB Klass Xb
-    elit_id: 4
-    school_id: 2
+centrumskolan2_klass5:
+  name: Klass 5
+  school: centrumskolan2
+centrumskolan2_klass6:
+  name: Klass 6
+  school: centrumskolan2
 
 
+ostskolan1_klass1:
+  name: Klass 1
+  school: ostskolan1
+ostskolan2_klass1:
+  name: Klass 1
+  school: ostskolan2
 
-bar_apa_klass_xa:
-    id: 5
-    name: BA Klass Xa
-    elit_id: 7
-    school_id: 3
-
-bar_apa_klass_xb:
-    id: 6
-    name: BA Klass Xb
-    elit_id: 8
-    school_id: 3
+sydskolan1_klass1:
+  name: Klass 1
+  school: sydskolan1
 
 
-bar_bepa_klass_xa:
-    id: 7
-    name: BB Klass Xa
-    elit_id: 9
-    school_id: 4
-
-bar_bepa_klass_xb:
-    id: 8
-    name: BB Klass Xb
-    elit_id: 10
-    school_id: 4
+<% for i in 1..3 %>
+nordskolan1_klass<%= i %>:
+  name: Klass <%= i %>
+  school: nordskolan1
+<% end %>

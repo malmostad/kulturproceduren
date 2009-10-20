@@ -53,10 +53,10 @@ class LdapController < ApplicationController
 
   # Creates a new LDAP manager
   def get_ldap
-    return KPLdapManager.new APP_CONFIG[:ldap][:address],
+    return KPLdapManager.new(APP_CONFIG[:ldap][:address],
       APP_CONFIG[:ldap][:port],
       APP_CONFIG[:ldap][:base_dn],
       APP_CONFIG[:ldap][:bind][:dn],
-      APP_CONFIG[:ldap][:bind][:password]
+      APP_CONFIG[:ldap][:bind][:password])
   end
 end

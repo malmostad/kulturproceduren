@@ -1,52 +1,29 @@
-foo_apa_school:
-    id: 1
-    name: foo apa school
-    district_id: 1
-    elit_id: 1
+<% for i in 1..2 %>
+centrumskolan<%= i %>:
+  name: Centrumskolan <%= i %>
+  district: centrum
+<% end %>
 
-foo_bepa_school:
-    id: 2
-    name: foo bepa school
-    district_id: 1
-    elit_id: 2
+<% for i in 1..2 %>
+vastskolan<%= i %>:
+  name: Västskolan <%= i %>
+  district: vast
+<% end %>
 
+<% for i in 1..2 %>
+nordskolan<%= i %>:
+  name: Nordskolan <%= i %>
+  district: nord
+<% end %>
 
-bar_apa_school:
-    id: 3
-    name: bar apa school
-    district_id: 2
-    elit_id: 3
+<% for i in 1..2 %>
+ostskolan<%= i %>:
+  name: Östskolan <%= i %>
+  district: ost
+<% end %>
 
-bar_bepa_school:
-    id: 4
-    name: bar bepa school
-    district_id: 2
-    elit_id: 4
-
-bar_cepa_school:
-    id: 5
-    name: bar cepa school
-    district_id: 2
-    elit_id: 5
-
-
-fp1:
-     id: 10
-     name: For prio 1
-     district_id: 10
-fp2:
-     id: 11
-     name: For prio 2
-     district_id: 10
-fp3:
-     id: 12
-     name: For prio 3
-     district_id: 10
-fp4:
-     id: 13
-     name: For prio 4
-     district_id: 10
-fp5:
-     id: 14
-     name: For prio 5
-     district_id: 10
+<% for i in 1..4 %>
+sydskolan<%= i %>:
+  name: Sydskolan <%= i %>
+  district: syd
+<% end %>

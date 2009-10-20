@@ -1,59 +1,29 @@
-fa_xa:
-    age: 10
-    quantity: 17
-    group_id: 1
-fa_xb:
-    age: 11
-    quantity: 19
-    group_id: 2
+centrumskolan1_klass_35_9:
+  age: 9
+  quantity: 17
+  group: centrumskolan1_klass35
+centrumskolan1_klass_35_10:
+  age: 10
+  quantity: 19
+  group: centrumskolan1_klass35
+centrumskolan1_klass_35_11:
+  age: 11
+  quantity: 21
+  group: centrumskolan1_klass35
+centrumskolan1_klass_3spec_9:
+  age: 9
+  quantity: 11
+  group: centrumskolan1_klass3spec
+centrumskolan1_klass_5spec_9:
+  age: 11
+  quantity: 7
+  group: centrumskolan1_klass5spec
 
-
-fb_xa1:
-    age: 10
-    quantity: 9
-    group_id: 3
-fb_xa2:
-    age: 11
-    quantity: 7
-    group_id: 3
-fb_xa3:
-    age: 12
-    quantity: 17
-    group_id: 3
-
-fb_xb1:
-    age: 10
-    quantity: 11
-    group_id: 4
-fb_xb2:
-    age: 11
-    quantity: 10
-    group_id: 4
-
-ba_xa:
-    age: 11
-    quantity: 17
-    group_id: 5
-ba_xb:
-    age: 12
-    quantity: 19
-    group_id: 6
-
-
-bb_xa1:
-    age: 11
-    quantity: 9
-    group_id: 7
-bb_xa2:
-    age: 12
-    quantity: 7
-    group_id: 7
-
-bb_xb1:
-    age: 12
-    quantity: 11
-    group_id: 8
-bb_xb2:
-    age: 13
-    quantity: 10
-    group_id: 8
+centrumskolan2_klass5_11:
+  age: 11
+  quantity: 20
+  group: centrumskolan2_klass5
+centrumskolan2_klass6_12:
+  age: 12
+  quantity: 20
+  group: centrumskolan2_klass6

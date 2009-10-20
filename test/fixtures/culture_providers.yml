@@ -1,7 +1,9 @@
-foo:
-    id: 1
-    name: FooCP
-
-bar:
-    id: 2
-    name: BarCP
+grona_teatern:
+  name: Gröna teatern
+  main_image: grona_teatern_logo
+gula_museet:
+  name: Gula muséet
+roda_cirkusen:
+  name: Röda cirkusen
+blaa_biografen:
+  name: Blåa biografen

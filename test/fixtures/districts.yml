@@ -1,14 +1,15 @@
-foo:
-    id: 1
-    name: Foo
-    elit_id: 1
+centrum:
+  name: Centrum
 
-bar:
-    id: 2
-    name: Bar
-    elit_id: 2
+vast:
+  name: Väst
 
+nord:
+  name: Nord
 
-for_prio_testing:
-    id: 10
-    name: For prio testing
+ost:
+  name: Öst
+
+syd:
+  name: Syd
+

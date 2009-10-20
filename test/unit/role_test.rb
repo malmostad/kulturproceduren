@@ -6,7 +6,7 @@ class RoleTest < ActiveSupport::TestCase
   end
 
   test "find by symbol case insensitive" do
-    assert_equal roles(:admin).id, Role.find_by_symbol(:admin).id
+    assert_equal roles(:admin).id, Role.find_by_symbol(:aDmIn).id
   end
 
   test "symbol name" do

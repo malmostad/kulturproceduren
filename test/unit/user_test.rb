@@ -3,32 +3,22 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
 
   test "successful authentication" do
-    u = User.authenticate("foo", "foopass")
+    u = User.authenticate("pelle", "lösenord")
 
     assert_not_nil u
-    assert_equal u.username, "foo"
+    assert_equal u.username, "pelle"
+
+    assert User.find(users(:pelle).id).authenticate("lösenord")
   end
 
   test "invalid password" do
-    u = User.authenticate("foo", "fail")
-    assert_nil u
+    assert_nil User.authenticate("pelle", "fail")
+    assert !User.find(users(:pelle).id).authenticate("fail")
   end
 
   test "invalid username" do
-    u = User.authenticate("notexist", "notexist")
-    assert_nil u
+    assert_nil User.authenticate("notexist", "notexist")
   end
-
-  test "successful instance authentication" do
-    u = User.find users(:foo).id
-    assert u.authenticate("foopass")
-  end
-
-  test "unsuccessful instance authentication" do
-    u = User.find users(:foo).id
-    assert !u.authenticate("error")
-  end
-
 
   test "password creation" do
     pass = "passcreatepass"
@@ -47,37 +37,43 @@ class UserTest < ActiveSupport::TestCase
     assert_equal u2.username, u.username
   end
 
+  test "password generation" do
+    u = User.find(users(:pelle).id)
+    password = u.generate_new_password
+
+    assert User.authenticate("pelle", password)
+  end
+
   test "unique username" do
     u = User.new
-    u.username = "foo"
-    u.password = "foo"
+    u.username = "pelle"
+    u.password = "pelle"
 
     assert !u.save
   end
 
 
   test "has role successful" do
-    u = User.find users(:foo).id
+    u = User.find(users(:pelle).id)
     assert u.has_role?(:admin)
   end
 
   test "has any role" do
-    assert User.find(users(:foo).id).has_role?(:admin, :culture_worker)
+    assert User.find(users(:pelle).id).has_role?(:admin, :culture_worker)
     assert User.find(users(:booker1).id).has_role?(:admin, :culture_worker, :booker)
     assert !User.find(users(:booker1).id).has_role?(:admin, :culture_worker)
   end
 
   test "has role unsuccessful" do
-    u = User.find users(:foo).id
-    assert !u.has_role?(:culture_worker)
+    assert !User.find(users(:pelle).id).has_role?(:culture_worker)
   end
 
 
   test "can administrate culture provider" do
-    cp = CultureProvider.find culture_providers(:foo)
+    cp = CultureProvider.find(culture_providers(:grona_teatern).id)
 
     # admin
-    assert User.find(users(:foo).id).can_administrate?(cp)
+    assert User.find(users(:pelle).id).can_administrate?(cp)
     # culture worker
     assert User.find(users(:provider1).id).can_administrate?(cp)
     assert !User.find(users(:provider2).id).can_administrate?(cp)
@@ -88,5 +84,5 @@ class UserTest < ActiveSupport::TestCase
     assert User.find(users(:admin1).id).can_book?
     assert !User.find(users(:provider1).id).can_book?
   end
-  
+
 end

@@ -1,71 +1,43 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% require 'digest/sha1' %>
 
-<%
-require 'digest/sha1'
-
-salt = "aBcDeFgH"
-password = Digest::SHA1.hexdigest("foopass" + salt)
-%>
-
-foo:
-    id: 1
-    username: foo
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Foo
+pelle: &base
+    username: pelle
+    password: <%= Digest::SHA1.hexdigest("lösenord" + "aBcDeFgH") %>
+    salt: "aBcDeFgH"
+    name: Pelle Bengtsson
     cellphone: 0701234567
-    email: foo@example.com
+    email: pelle@example.com
+    roles: admin
 
 admin1:
-    id: 2
+    <<: *base
     username: admin1
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Admin 1
-    cellphone: 0701234567
-    email: admin1@example.com
+    roles: admin
 
 admin2:
-    id: 3
+    <<: *base
     username: admin2
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Admin 2
-    cellphone: 0701234567
-    email: admin2@example.com
+    roles: admin
 
 provider1:
-    id: 10
+    <<: *base
     username: provider1
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Provider 1
-    cellphone: 0701234567
-    email: provider1@provider.com
+    roles: culture_worker
+    culture_providers: grona_teatern
 
 provider2:
-    id: 11
+    <<: *base
     username: provider2
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Provider 2
-    cellphone: 0701234567
-    email: provider2@provider.com
+    roles: culture_worker
+    culture_providers: gula_museet
 
 booker1:
-    id: 20
+    <<: *base
     username: booker1
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Booker 1
-    cellphone: 0701234567
-    email: booker1@example.com
+    roles: booker
 
 booker2:
-    id: 21
+    <<: *base
     username: booker2
-    password: <%= password %>
-    salt: <%= salt %>
-    name: Booker 2
-    cellphone: 0701234567
-    email: booker2@example.com
+    roles: booker

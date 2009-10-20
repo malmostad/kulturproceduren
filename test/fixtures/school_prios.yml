@@ -1,20 +1,6 @@
-fp1p:
-    prio: 1
-    school_id: 10
-    district_id: 10
-fp2p:
-    prio: 2
-    school_id: 11
-    district_id: 10
-fp3p:
-    prio: 3
-    school_id: 12
-    district_id: 10
-fp4p:
-    prio: 4
-    school_id: 13
-    district_id: 10
-fp5p:
-    prio: 5
-    school_id: 14
-    district_id: 10
+<% for i in 1..4 %>
+syd_prio<%= i %>:
+  prio: <%= i %>
+  district: syd
+  school: sydskolan<%= 5 - i %>
+<% end %>

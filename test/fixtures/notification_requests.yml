@@ -1,0 +1,12 @@
+ostskolan1_klass1_for_rc_group:
+  user: pelle
+  group: ostskolan1_klass1
+  event: roda_cirkusen_group
+ostskolan2_klass1_for_rc_group:
+  user: pelle
+  group: ostskolan2_klass1
+  event: roda_cirkusen_group
+sydskolan1_klass1_for_rc_group:
+  user: pelle
+  group: sydskolan1_klass1
+  event: roda_cirkusen_group

@@ -1,0 +1,8 @@
+ostskolan1_for_rc_group:
+  requirement: 'x'
+  occasion: roda_cirkusen_group_past
+  group: ostskolan1_klass1
+ostskolan1_for_rc_district:
+  requirement: 'x'
+  occasion: roda_cirkusen_district_past
+  group: ostskolan1_klass1

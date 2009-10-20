@@ -1,67 +1,35 @@
-event_wo_tickets:
-    id: 1
-    from_age: 1
-    to_age: 10
-    description: Without tickets
-    name: Without tickets
+grona_teatern_standing: &base
+  culture_provider: grona_teatern
+  name: Generiskt evenemang
+  visible_from: <%= Date.today - 2 %>
+  visible_to: <%= Date.today + 2 %>
+pyjamassanger:
+  <<: *base
+  culture_provider: grona_teatern
+  name: Pyjamassånger
+  main_image: pyjamassanger_logo
+  from_age: 9
+  to_age: 11
 
-event_w_tickets:
-    id: 2
-    from_age: 1
-    to_age: 10
-    description: With tickets
-    name: With tickets
+gula_museet_bookable: &base2
+  culture_provider: gula_museet
+  name: X
+  visible_from: <%= Date.today - 2 %>
+  visible_to: <%= Date.today + 2 %>
+  ticket_release_date: <%= Date.today - 2 %>
 
-bookable:
-    id: 10
-    from_age: 1
-    to_age: 10
-    description: Bookable event
-    name: Bookable event
-    visible_from: 2009-01-01
-    visible_to: <%= Date.today + 10 %>
-    ticket_release_date: <%= Date.today - 1 %>
+roda_cirkusen_group: &rcbase
+  <<: *base2
+  culture_provider: roda_cirkusen
+  ticket_state: <%= Event::ALLOTED_GROUP %>
+roda_cirkusen_district:
+  <<: *rcbase
+  ticket_state: <%= Event::ALLOTED_DISTRICT %>
+roda_cirkusen_ffa:
+  <<: *rcbase
+  ticket_state: <%= Event::FREE_FOR_ALL %>
 
-not_bookable_by_date:
-    id: 11
-    from_age: 1
-    to_age: 10
-    description: Not bookable event
-    name: Not bookable event
-    visible_from: <%= Date.today + 10 %>
-    visible_to: <%= Date.today + 20 %>
-    ticket_release_date: <%= Date.today - 1 %>
 
-not_bookable_by_tickets:
-    id: 12
-    from_age: 1
-    to_age: 10
-    description: Not bookable event
-    name: Not bookable event
-    visible_from: 2009-01-01
-    visible_to: <%= Date.today + 10 %>
-    ticket_release_date: <%= Date.today - 1 %>
-
-not_bookable_by_release_date:
-    id: 13
-    from_age: 1
-    to_age: 10
-    description: Not bookable event
-    name: Not bookable event
-    visible_from: 2009-01-01
-    visible_to: <%= Date.today + 10 %>
-    ticket_release_date: <%= Date.today + 1 %>
-
-with_groups_outside_age_span:
-    id: 20
-    from_age: 11
-    to_age: 11
-    description: With groups outside age span
-    name: With groups outside age span
-
-wo_groups_outside_age_span:
-    id: 21
-    from_age: 11
-    to_age: 11
-    description: Without groups outside age span
-    name: Without groups outside age span
+bla_film:
+  culture_provider: blaa_biografen
+  ticket_state: <%= Event::ALLOTED_GROUP %>

@@ -1,27 +1,85 @@
-dummy_ticket:
-    state: 0
-    event_id: 2
-    district_id: 1
+pyjamassanger_booked1: &base
+  state: <%= Ticket::BOOKED %>
+  event: pyjamassanger
+  occasion: pyjamassanger_new
+  group: centrumskolan1_klass35
+  district: centrum
+  user: pelle
+  adult: false
+  wheelchair: true
+pyjamassanger_not_booked1:
+  event: pyjamassanger
+  occasion: pyjamassanger_new
+  group: centrumskolan2_klass6
 
-bookable1:
-    state: 0
-    event_id: 10
+gula_museet_bookable1:
+  event: gula_museet_bookable
 
-not_bookable1:
-    state: 0
-    event_id: 11
 
-in_age_span:
-    state: 0
-    event_id: 20
-    group_id: 7
 
-outside_age_span:
-    state: 0
-    event_id: 20
-    group_id: 8
+<% %w(group district ffa).each do |name| %>
+roda_cirkusen_<%= name %>_past1:
+  state: <%= Ticket::BOOKED %>
+  event: roda_cirkusen_<%= name %>
+  occasion: roda_cirkusen_<%= name %>_past
+  district: ost
+  group: ostskolan1_klass1
+  companion: bengt
+roda_cirkusen_<%= name %>_past2:
+  state: <%= Ticket::UNBOOKED %>
+  event: roda_cirkusen_<%= name %>
+  district: ost
+  group: ostskolan1_klass1
+roda_cirkusen_<%= name %>_past3:
+  state: <%= Ticket::UNBOOKED %>
+  event: roda_cirkusen_<%= name %>
+  district: ost
+  group: ostskolan2_klass1
+<% end %>
 
-in_age_span:
-    state: 0
-    event_id: 21
-    group_id: 7
+
+bla_film_klass1_unbooked:
+  state: <%= Ticket::UNBOOKED %>
+  event: bla_film
+  district: nord
+  group: nordskolan1_klass1
+bla_film_klass1_booked:
+  state: <%= Ticket::BOOKED %>
+  event: bla_film
+  occasion: bla_film1
+  district: nord
+  group: nordskolan1_klass1
+  adult: false
+  wheelchair: false
+bla_film_klass1_booked_wheelchair:
+  state: <%= Ticket::BOOKED %>
+  event: bla_film
+  occasion: bla_film1
+  district: nord
+  group: nordskolan1_klass1
+  adult: false
+  wheelchair: true
+bla_film_klass1_booked_adult:
+  state: <%= Ticket::BOOKED %>
+  event: bla_film
+  occasion: bla_film1
+  district: nord
+  group: nordskolan1_klass1
+  adult: true
+  wheelchair: false
+bla_film_klass1_used:
+  state: <%= Ticket::USED %>
+  event: bla_film
+  occasion: bla_film1
+  district: nord
+  group: nordskolan1_klass1
+  adult: false
+  wheelchair: false
+bla_film_klass1_not_used:
+  state: <%= Ticket::NOT_USED %>
+  event: bla_film
+  occasion: bla_film1
+  district: nord
+  group: nordskolan1_klass1
+  adult: false
+  wheelchair: false
