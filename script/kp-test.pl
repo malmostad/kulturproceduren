@@ -6,10 +6,10 @@ $result = 1;
 
 my $mech = WWW::Mechanize->new;
 
-#$starturl = "http://webapps.dev.malmo.se/kp/";
-$starturl = "http://webapps.malmo.se/kp-utb/";
-$loginurl = "http://webapps.dev.malmo.se/kp/login?return_to=%2Fkp%2F";
-$adminurl = "http://webapps.dev.malmo.se/kp/categories";
+$starturl = "http://webapps.dev.malmo.se/kp/";
+#$starturl = "http://webapps.malmo.se/kp-release_test/";
+$loginurl = "http://webapps.dev.malmo.se/kp-release_test/login?return_to=%2Fkp%2F";
+$adminurl = "http://webapps.dev.malmo.se/kp-release_test/categories";
 
 $mech->get($starturl);
 
