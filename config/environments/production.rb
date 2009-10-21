@@ -27,12 +27,10 @@ config.cache_store = :file_store, "#{RAILS_ROOT}/tmp/cache"
 # Enable threaded mode
 # config.threadsafe!
 #
-ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.perform_deliveries = false
-ActionMailer::Base.smtp_settings = {
-  :address => "localhost",
-  :port => 1025,
-  :domain => "localhost"
+ActionMailer::Base.delivery_method = :sendmail
+ActionMailer::Base.perform_deliveries = true
+ActionMailer::Base.sendmail_settings = {
+  :location => "/usr/sbin/sendmail"
 }
 
 ActionController::Base.asset_host = "http://webapps.malmo.se/assets/kp"

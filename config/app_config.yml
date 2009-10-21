@@ -35,13 +35,18 @@ common: &common
         :proximity_boundary: 3
     :mailers:
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
-        :base_url: "localhost:3000"
-        #:debug_recipient: "andreas.johansson@kentor.se"
+        :debug_recipient: "andreas.johansson@kentor.se"
     :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
         
 development:
     <<: *common
     :instance_title: "DEV"
+    :evaluation_form:
+        :activation_days: 1
+        :reminder_days: 1
+    :ticket_state:
+        :group_days: 1
+        :district_days: 1
 
 test:
     <<: *common
@@ -60,6 +65,7 @@ production:
     :ticket_state:
         :group_days: 1
         :district_days: 1
+
 education:
     <<: *common
     :instance_title: "UTB"
