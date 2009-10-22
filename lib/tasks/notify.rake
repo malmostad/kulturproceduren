@@ -27,6 +27,7 @@ namespace :kp do
       occasions.each do |occasion|
         occasion.companions.each do |companion|
           OccasionMailer.deliver_reminder_email(occasion, companion)
+          puts "Sending mail about upcomming event #{occasion.event.name} , #{occasion.date} to #{companion.email}"
         end
       end
     end
@@ -42,6 +43,7 @@ namespace :kp do
       occasion.companions.each do |companion|
         if companion.answer_form && !companion.answer_form.completed
           OccasionMailer.deliver_answer_form_email(occasion, companion)
+          puts "Sending mail about evaluation form for #{occasion.event.name} , #{occasion.date} to #{companion.email}"
         end
       end
     end
@@ -53,6 +55,7 @@ namespace :kp do
 
     answer_forms.each do |answer_form|
       OccasionMailer.deliver_answer_form_reminder_email(answer_form)
+      puts "Sending reminder mail about evaluation form for #{answer_form.occasion.event.name} , #{answer_form.occasion.date} to #{answer_form.companion.email}"
     end
   end
 
@@ -78,6 +81,8 @@ namespace :kp do
       addresses.uniq!
 
       EventMailer.deliver_ticket_release_notification_email(event, group_structure, addresses.collect { |a| a.strip })
+      addresses.each { |a| puts "Sending notification mail for ticket release about #{event.name} to #{a}" }
+     
     end
   end
 
