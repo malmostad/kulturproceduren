@@ -107,4 +107,9 @@ module ApplicationHelper
       capture(&block)
     end
   end
+
+  # Converts a date to the format "(ht|vt)$year"
+  def to_term(date)
+    "#{date.month > 6 ? "ht" : "vt"}#{date.year}"
+  end
 end

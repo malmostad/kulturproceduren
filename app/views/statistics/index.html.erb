@@ -1,0 +1,20 @@
+<%= render :partial => "menu" %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Termin</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @terms.reverse.each do |term| %>
+      <tr class="<%= cycle("", "even") %>">
+        <td><%= h term %></td>
+        <td>
+          <%= link_to "Besökstatistik", visitors_statistic_path(term) -%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -11,13 +11,15 @@ ActionController::Routing::Routes.draw do |map|
     :send_password_reset_confirmation => :post
   }
 
+  map.resources :statistics, :only => [ :index ],
+    :member => { :visitors => :get }
+  
   map.resources :culture_providers do |cp|
     cp.resources :images, :except => [ :show, :edit, :update, :new ],
       :member => { :set_main => :get }
   end
 
   map.resources :events, :except => [ :index ], :member => {
-    :stats => :get,
     :handle_links => :get,
     :add_link => :post,
     :remove_link => :delete
@@ -29,6 +31,8 @@ ActionController::Routing::Routes.draw do |map|
     e.resources :notification_requests,
       :only => [ :new , :create ],
       :collection => { :get_input_area => :get }
+    e.resources :statistics, :only => [ :index ],
+      :member => { :visitors => :get }
   end
   
   map.resources :occasions, :except => [ :index ],

@@ -178,6 +178,83 @@ class Event < ActiveRecord::Base
   end
 
 
+  # Returns an array containg hashes with the stats in the following format:
+  # [{:event =>, :distict =>, :school =>, :group =>, :booked_tickets =>,
+  #   :used_tickets_children =>, :used_tickets_adults =>}]
+  def get_visitor_stats_for_event
+    return Event.get_visitor_stats_for_events([self])
+  end
+
+
+  # Returns an array containg hashes with the stats in the following format:
+  # [{:event =>, :distict =>, :school =>, :group =>, :booked_tickets =>, :used_tickets_children =>, :used_tickets_adults =>}]
+  def self.get_visitor_stats_for_events(events = [])
+
+    stats = []
+    
+    District.all.each do |district|
+
+      district.schools.each do |school|
+
+        school.groups.each do |group|
+
+          stats_per_event = []
+
+          events.each do |event|
+
+            num_booked = Ticket.count(:all,:conditions => {
+              :event_id => event.id,
+              :group_id => group.id,
+              :state => [Ticket::USED, Ticket::NOT_USED]
+            })
+
+
+            if num_booked > 0
+
+              num_used_by_children = Ticket.count(:all,:conditions => {
+                :event_id => event.id,
+                :group_id => group.id,
+                :state => [Ticket::USED],
+                :adult => false
+              })
+
+              num_used_by_adults = Ticket.count(:all,:conditions => {
+                :event_id => event.id,
+                :group_id => group.id,
+                :state => [Ticket::USED],
+                :adult => true
+              })
+            else
+              num_used_by_children = 0
+              num_used_by_adults = 0
+            end
+
+
+            stats_per_event << {
+              :event => event,
+              :booked_tickets => num_booked,
+              :used_tickets_children => num_used_by_children,
+              :used_tickets_adults => num_used_by_adults
+            }
+
+          end
+
+          stats << {
+            :district => district,
+            :school => school,
+            :group => group,
+            :stats_per_event => stats_per_event
+          }
+
+          
+        end
+      end
+    end
+
+    return stats
+  end
+
+
   protected
 
   # Removes the ages when the event has <tt>further_education</tt> set.
@@ -187,4 +264,5 @@ class Event < ActiveRecord::Base
       self.to_age = -1
     end
   end
+
 end

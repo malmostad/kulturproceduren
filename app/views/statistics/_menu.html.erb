@@ -1,0 +1,7 @@
+<% content_for :section_sub do -%>
+  <ul class="section-nav">
+    <li class="<%= active_by_action "statistics", "index" %>">
+      <%= link_to 'Terminsstatistik', statistics_path %>
+    </li>
+  </ul>
+<% end -%>

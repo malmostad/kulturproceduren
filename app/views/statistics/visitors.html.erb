@@ -1,0 +1,74 @@
+<%= render :partial => "menu" %>
+
+<% if @visitor_stats %>
+
+  <h2>Besökstatistik för <%= h @events.first.name -%></h2>
+
+  <p>
+    <%=  link_to "Ladda ner statistik för eventet #{@events.first.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@events.first.id}" %>
+  </p>
+
+  <table class="visitor-list" >
+    <thead>
+      <tr>
+        <th>Stadsdel</th>
+        <th>Skola</th>
+        <th>Grupp</th>
+        <th>Antal bokade </th>
+        <th>Antal barn</th>
+        <th>Antal vuxna</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <% @visitor_stats.each do |visitor_group_stats| %>
+        <% stats_for_event = visitor_group_stats[:stats_per_event].first %>
+
+        <tr class="<%= cycle('', 'even') %>">
+          <td><%= h visitor_group_stats[:district].name -%></td>
+          <td><%= h visitor_group_stats[:school].name -%></td>
+          <td><%= h visitor_group_stats[:group].name -%></td>
+
+
+          <td><%= h stats_for_event[:booked_tickets] -%></td>
+          <td><%= h stats_for_event[:used_tickets_children] -%></td>
+          <td><%= h stats_for_event[:used_tickets_adults] -%></td>
+        </tr>
+
+      <% end %>
+
+    </tbody>
+  </table>
+
+<% else %>
+
+  <h2>
+    Besöksstatistik <%= h @term %>
+  </h2>
+
+  <p>
+    <%=link_to "Ladda ner alla besöksstatistik för #{@term} som Excel-fil", :format => "xls" %>
+  </p>
+
+  <h3>Evenemangsspecifik statistik</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Evenemang</th>
+        <th>Arrangör</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @events.each do |event| %>
+        <tr class="<%= cycle("", "even") %>">
+          <td>
+            <%= link_to h(event.name), visitors_event_statistic_path(event, @term) -%>
+          </td>
+          <td>
+            <%= h(event.culture_provider.name) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </ul>
+<% end %>

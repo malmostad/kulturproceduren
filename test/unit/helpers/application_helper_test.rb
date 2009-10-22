@@ -88,4 +88,14 @@ class ApplicationHelperTest < ActionView::TestCase
       uploaded_image_tag(img, true)
   end
 
+  test "to term" do
+    assert_equal "vt2009", to_term(Date.new(2009, 1, 1))
+    assert_equal "vt2009", to_term(Date.new(2009, 3, 1))
+    assert_equal "vt2009", to_term(Date.new(2009, 6, 30))
+    assert_equal "ht2009", to_term(Date.new(2009, 7, 1))
+    assert_equal "ht2009", to_term(Date.new(2009, 9, 1))
+    assert_equal "ht2009", to_term(Date.new(2009, 12, 31))
+    assert_equal "vt2010", to_term(Date.new(2010, 1, 1))
+  end
+
 end

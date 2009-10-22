@@ -19,10 +19,6 @@
       <% if current_user.has_role?(:admin) && !@event.further_education && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
         <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
       <% end -%>
-
-      <% if current_user.has_role?(:admin) -%>
-        <li><%= link_to "Statistik", stats_event_path(@event) %></li>
-      <% end -%>
     </ul>
   </div>
 <% end -%>
@@ -178,6 +174,24 @@
             <ul>
               <% @event.linked_events.each do |event| -%>
                 <li><%= link_to event.name, event %></li>
+              <% end %>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if !@event.occasions.empty? %>
+        <tr class="visitor-statistics">
+          <%
+            min = @event.occasions.minimum("date")
+            max = @event.occasions.maximum("date")
+          %>
+          <th>Besöksstatistik</th>
+          <td>
+            <ul>
+              <% while min < max %>
+                <li><%= link_to to_term(min), visitors_event_statistic_path(@event, to_term(min)) %></li>
+                <% min += 6.months %>
               <% end %>
             </ul>
           </td>
