@@ -68,7 +68,6 @@ class Question < ActiveRecord::Base
     when "QuestionText"
       #do noting
     when "QuestionBool"
-      puts "#{no_yes} , #{no_no} , #{no_answers}"
       if no_answers == 0
 	result = [ 0.0 , 0.0 ]
       else
