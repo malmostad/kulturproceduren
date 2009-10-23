@@ -5,7 +5,7 @@
   <h2>Besökstatistik för <%= h @events.first.name -%></h2>
 
   <p>
-    <%=  link_to "Ladda ner statistik för eventet #{@events.first.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@events.first.id}" %>
+    <%=  link_to "Ladda ner statistik för eventet #{@events.first.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@events.first.id}" %>    
   </p>
 
   <table class="visitor-list" >
@@ -47,7 +47,8 @@
   </h2>
 
   <p>
-    <%=link_to "Ladda ner alla besöksstatistik för #{@term} som Excel-fil", :format => "xls" %>
+    <%=link_to "Ladda ner all besöksstatistik för #{@term} som Excel-fil", :format => "xls" %>
+    <i>OBS Det kan ta tid att ladda ner all besöksstatistik</i>
   </p>
 
   <h3>Evenemangsspecifik statistik</h3>
