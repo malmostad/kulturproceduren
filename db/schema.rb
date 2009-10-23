@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091016084433) do
+ActiveRecord::Schema.define(:version => 20091023081301) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -278,6 +278,9 @@ ActiveRecord::Schema.define(:version => 20091016084433) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "tickets", ["event_id"], :name => "index_tickets_on_event_id"
+  add_index "tickets", ["group_id"], :name => "index_tickets_on_group_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"

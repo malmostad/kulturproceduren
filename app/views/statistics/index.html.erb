@@ -5,6 +5,7 @@
     <tr>
       <th>Termin</th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,9 @@
         <td>
           <%= link_to "Besökstatistik", visitors_statistic_path(term) -%>
         </td>
+	<td>
+	  <%= link_to "Enkätstatistik", questionaires_statistic_path(term) -%>
+	</td>
       </tr>
     <% end %>
   </tbody>

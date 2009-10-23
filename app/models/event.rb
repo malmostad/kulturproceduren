@@ -1,3 +1,5 @@
+require "pp"
+
 # A culture event, possibly with bookable occasions.
 #
 # An event can be in in several states significant for the booking of tickets:
@@ -191,33 +193,23 @@ class Event < ActiveRecord::Base
   def self.get_visitor_stats_for_events(events = [])
 
     stats = []
-    
     District.all.each do |district|
-
       district.schools.each do |school|
-
         school.groups.each do |group|
-
           stats_per_event = []
-
           events.each do |event|
-
             num_booked = Ticket.count(:all,:conditions => {
               :event_id => event.id,
               :group_id => group.id,
               :state => [Ticket::USED, Ticket::NOT_USED]
             })
-
-
             if num_booked > 0
-
               num_used_by_children = Ticket.count(:all,:conditions => {
                 :event_id => event.id,
                 :group_id => group.id,
                 :state => [Ticket::USED],
                 :adult => false
               })
-
               num_used_by_adults = Ticket.count(:all,:conditions => {
                 :event_id => event.id,
                 :group_id => group.id,
@@ -228,29 +220,23 @@ class Event < ActiveRecord::Base
               num_used_by_children = 0
               num_used_by_adults = 0
             end
-
-
             stats_per_event << {
               :event => event,
               :booked_tickets => num_booked,
               :used_tickets_children => num_used_by_children,
               :used_tickets_adults => num_used_by_adults
             }
-
           end
-
           stats << {
             :district => district,
             :school => school,
             :group => group,
             :stats_per_event => stats_per_event
           }
-
-          
         end
       end
     end
-
+    pp stats
     return stats
   end
 

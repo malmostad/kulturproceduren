@@ -15,7 +15,7 @@ class StatisticsController < ApplicationController
   # Shows all events for a given term. It can also be used to download
   # or view visitors stats for a given event.
   def visitors
-
+    
     @term = params[:id]
     @events = get_available_events(@term)
 
@@ -28,7 +28,7 @@ class StatisticsController < ApplicationController
         @visitor_stats = Event.get_visitor_stats_for_events(@events)
       end
 
-        puts "hello"
+      puts "hello"
       # Output an xls file
       if params[:format] == "xls"
         xls_string =  get_visitor_stats_as_csv(@visitor_stats)
@@ -39,10 +39,58 @@ class StatisticsController < ApplicationController
 
   end
 
+  def questionaires
+    @term = params[:id]
+    @events = get_available_events(@term)      
+    if !params[:event_id].nil? || params[:format] == "xls"
+      @event = Event.find(params[:event_id])
+      if params[:format] == "xls"
+	send_data get_questionaire_stats_as_csv(@event) , :filename => "questionaire_stats.xls",:type => "application/xls" , :disposition => 'inline'
+      end       
+    end
+  end
+
+  
 
   
   private
 
+  def get_questionaire_stats_as_csv(event)
+    res = ""
+    CSV.generate_row(["Enkätsvar för #{event.name}"] ,1 , res)
+    CSV.generate_row(["Antal besvarade enkäter" , "Antal obesvarade enkäter"],2,res)
+    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => true })] , 2 , res )
+    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => false })] , 2 , res )
+    CSV.generate_row([],0,res)
+    CSV.generate_row([],0,res)
+    CSV.generate_row([ "Fråga" , "Svar" ] ,2 , res)
+    event.questionaire.questions.each do |q|
+      row = []
+      stat = q.statistic_for_event(event.id)
+      case q.qtype
+      when "QuestionMark"
+	row = [ "#{q.question} (Genomsnittssvar)" ]
+	row += [ stat[0] ]
+	CSV.generate_row( row , row.length , res ) 
+      when "QuestionText"
+	row = [ "#{q.question} (Alla svar)" ]
+	row += stat
+	CSV.generate_row( row , row.length , res ) 
+      when "QuestionBool"
+	row = [ "#{q.question} (Procent ja-svar , Procent nej-svar)" ]
+	row += stat
+	CSV.generate_row( row , row.length , res ) 
+      when "QuestionMchoice"
+	row = [ "#{q.question} (Antal för varje ord)" ]
+	row += q.choice_csv.split(",")
+	CSV.generate_row( row , row.length , res ) 
+	row = [""]
+	row += stat
+	CSV.generate_row( row , row.length , res ) 
+     end
+   end
+   return res
+  end
   # Returns all avaiable terms in an array
   # The format of a term is "ht|vtYYYY", e.g. ht2007 (autumn term 2007)
   # vt = vårtermin. ht = hösttermin

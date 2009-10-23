@@ -12,7 +12,9 @@ ActionController::Routing::Routes.draw do |map|
   }
 
   map.resources :statistics, :only => [ :index ],
-    :member => { :visitors => :get }
+    :member => { :visitors => :get,
+                 :questionaires => :get
+               }
   
   map.resources :culture_providers do |cp|
     cp.resources :images, :except => [ :show, :edit, :update, :new ],
@@ -32,7 +34,7 @@ ActionController::Routing::Routes.draw do |map|
       :only => [ :new , :create ],
       :collection => { :get_input_area => :get }
     e.resources :statistics, :only => [ :index ],
-      :member => { :visitors => :get }
+      :member => { :visitors => :get , :questionaires => :get }
   end
   
   map.resources :occasions, :except => [ :index ],
