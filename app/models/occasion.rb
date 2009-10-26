@@ -44,7 +44,7 @@ class Occasion < ActiveRecord::Base
   # [<tt>:categories</tt>] An array of the categories to limit the search to
   def self.search(filter, page)
 
-    conditions = [ " current_date between events.visible_from and events.visible_to and cancelled = ?", false ]
+    conditions = [ " current_date between events.visible_from and events.visible_to and occasions.cancelled = ? and culture_providers.active = ? ", false, true ]
 
     unless filter[:free_text].blank?
       conditions[0] << " and ( events.name ilike ? or events.description ilike ? ) "

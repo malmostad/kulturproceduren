@@ -223,7 +223,9 @@ class EventsController < ApplicationController
     if current_user.has_role?(:admin)
       @culture_providers = CultureProvider.all :order => "name ASC"
     else
-      @culture_providers = current_user.culture_providers.find :all, :order => "name ASC"
+      @culture_providers = current_user.culture_providers.find :all,
+        :conditions => { :active => true },
+        :order => "name ASC"
     end
   end
 

@@ -109,7 +109,7 @@ class Event < ActiveRecord::Base
   # [<tt>:categories</tt>] An array of the categories to limit the search to
   def self.search_standing(filter, page)
     # Standing events do not have occasions
-    conditions = [ "events.id not in (select x.event_id from occasions x) " ]
+    conditions = [ "events.id not in (select x.event_id from occasions x) and culture_providers.active = ? ", true ]
 
     # Free text condition
     unless filter[:free_text].blank?

@@ -3,16 +3,22 @@ class CultureProvidersController < ApplicationController
   layout "standard"
 
   before_filter :authenticate, :except => [ :index, :show ]
-  before_filter :require_admin, :only => [ :new, :create, :destroy ]
+  before_filter :require_admin, :only => [ :new, :create, :destroy, :activate, :deactivate ]
 
-  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
-  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy, :activate, :deactivate ]
+  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy, :activate, :deactivate ]
   
 
   # Displays a paginated list of all culture providers
   def index
-    @culture_providers = CultureProvider.paginate :page => params[:page],
-      :order => sort_order("name")
+    if user_online? && current_user.has_role?(:admin)
+      @culture_providers = CultureProvider.paginate :page => params[:page],
+        :order => sort_order("name")
+    else
+      @culture_providers = CultureProvider.paginate :page => params[:page],
+        :conditions => { :active => true },
+        :order => sort_order("name")
+    end
   end
 
   # Displays a culture provider's presentation page
@@ -72,11 +78,24 @@ class CultureProvidersController < ApplicationController
     redirect_to(culture_providers_url)
   end
 
+  def activate
+    set_active(true)
+  end
+
+  def deactivate
+    set_active(false)
+  end
+
+
   protected
-  
+
   # Always sort by the culture provider's name
   def sort_column_from_param(p)
-    "name"
+    case p.to_sym
+    when :active then "active"
+    else
+      "name"
+    end
   end
 
   # Cache key for the list of upcoming occasions
@@ -90,4 +109,20 @@ class CultureProvidersController < ApplicationController
     "culture_providers/show/#{culture_provider.id}/standing_events"
   end
   helper_method :standing_events_cache_key
+
+
+  private
+
+  def set_active(active)
+    culture_provider = CultureProvider.find(params[:id])
+    culture_provider.active = active
+
+    if culture_provider.save
+      flash[:notice] = "Arrangören #{active ? "" : "de"}aktiverades."
+    else
+      flash[:error] = "Ett fel uppstod när arrangören skulle #{active ? "" : "de"}aktiveras. Var god försök igen senare."
+    end
+
+    redirect_to culture_provider
+  end
 end

@@ -4,9 +4,24 @@
   <div class="admin-tools">
     <h4>Administrera <%= h @culture_provider.name %></h4>
     <ul>
-      <li><%= link_to 'Redigera', edit_culture_provider_path(@culture_provider) %></li>
-      <li><%= link_to 'Hantera bilder', culture_provider_images_path(@culture_provider) %></li>
-      <li><%= link_to 'Lägg till evenemang', new_event_path(:culture_provider_id => @culture_provider.id) %></li>
+      <li><%= link_to "Redigera", edit_culture_provider_path(@culture_provider) %></li>
+      <li>
+        <% if @culture_provider.active %>
+          <%= link_to "Deaktivera",
+            deactivate_culture_provider_path(@culture_provider),
+            :method => :post,
+            :confirm => "Är du säker på att du vill deaktivera arrangören?"
+          %>
+        <% else %>
+          <%= link_to "Aktivera",
+            activate_culture_provider_path(@culture_provider),
+            :method => :post,
+            :confirm => "Är du säker på att du vill aktivera arrangören?"
+          %>
+        <% end %>
+      </li>
+      <li><%= link_to "Hantera bilder", culture_provider_images_path(@culture_provider) %></li>
+      <li><%= link_to "Lägg till evenemang", new_event_path(:culture_provider_id => @culture_provider.id) %></li>
     </ul>
   </div>
 <% end -%>

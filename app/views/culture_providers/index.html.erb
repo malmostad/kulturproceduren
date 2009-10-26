@@ -4,6 +4,9 @@
   <thead>
     <tr>
       <th><%= sort_link "Namn", "name" -%></th>
+      <% if user_online? && current_user.has_role?(:admin) %>
+        <th><%= sort_link "Aktiv", "active" %></th>
+      <% end %>
       <th>Detaljer</th>
     </tr>
   </thead>
@@ -13,6 +16,9 @@
     <% @culture_providers.each do |provider| -%>
       <tr class="<%= cycle('', 'even') %>">
         <td><%= link_to h(provider.name), provider %></td>
+        <% if user_online? && current_user.has_role?(:admin) %>
+          <td><%= provider.active ? "Ja" : "Nej" %></td>
+        <% end %>
         <td><%= link_to "Visa", provider %></td>
       </tr>
     <% end -%>
