@@ -5,7 +5,7 @@
       <%= link_to "Evenemang", calendar_path(params[:action], :occasions) %>
     </li>
     <li class="<%= 'active' if @calendar_list == :events %>">
-      <%= link_to "Bokningsfria evenemang", calendar_path(params[:action], :events) %>
+      <%= link_to "Löpande evenemang", calendar_path(params[:action], :events) %>
     </li>
   </ul>
 
