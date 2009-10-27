@@ -1,5 +1,3 @@
-require "pp"
-
 # Controller for managing questions in a questionnaire.
 class QuestionsController < ApplicationController
 
@@ -148,8 +146,6 @@ class QuestionsController < ApplicationController
          WHERE a.answer_form_id = b.id AND b.occasion_id = ? AND a.question_id = ?",
          occasion.id , question.id
     ])
-
-    pp answers
 
     graph = nil
 

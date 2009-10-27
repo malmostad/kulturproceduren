@@ -1,4 +1,3 @@
-require "pp"
 # Controller for displaying the welcoming occasion/event calendar for the user
 class CalendarController < ApplicationController
 
@@ -14,7 +13,6 @@ class CalendarController < ApplicationController
         @events = Event.search_standing({ :from_date => Date.today }, params[:page])
       else
         @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
-	pp @occasions
       end
     end
   end
