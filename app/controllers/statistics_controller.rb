@@ -25,10 +25,9 @@ class StatisticsController < ApplicationController
       
       if !params[:event_id].nil?
         @event = Event.find(params[:event_id])
-	@visitor_stats = Event.get_visitor_stats_for_events([ @event ])
+	@visitor_stats = Event.get_visitor_stats_for_events( @term , [ @event ])
       else
-       
-        @visitor_stats = Event.get_visitor_stats_for_events(@events)
+        @visitor_stats = Event.get_visitor_stats_for_events( @term , @events)
       end
 
       # Output an xls file

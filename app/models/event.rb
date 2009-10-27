@@ -188,9 +188,19 @@ class Event < ActiveRecord::Base
 
   # Returns an array containg hashes with the stats in the following format:
   # [{"event_id", "group_name", "school_name", "num_adult", "num_booked", "event_name", "num_children", "district_name"}]
-  def self.get_visitor_stats_for_events(events = [])
+  def self.get_visitor_stats_for_events(term , events = [])
+    term, year = term.scan(/^(vt|ht)(20[01][0-9])$/).first
+
+    if term == 'vt'
+      from = "#{year}-01-01"
+      to = "#{year}-06-30"
+    else
+      from = "#{year}-07-01"
+      to = "#{year}-12-31"
+    end
+
     event_ids = events.map { |e| e.id}.join(",")
-    sql = "SELECT * FROM statistics WHERE event_id in ( #{event_ids} )"
+    sql = "SELECT * FROM statistics( date '#{from}' , date '#{to}' )  WHERE event_id in ( #{event_ids} ) "
     puts "DEBUG_SQL: #{sql}"
     res = ActiveRecord::Base.connection.execute(sql)
     stats = res.collect
