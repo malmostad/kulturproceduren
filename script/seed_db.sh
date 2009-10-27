@@ -1,10 +1,12 @@
 #!/bin/bash
 
 function usage {
-    echo "$0 -e RAILS_ENV -d /path/to/rails/app -r /path/to/rake/command/rake"
-    echo "defaults, -d . -e development -r $(which rake)"
+    echo "Usage:"
+    echo "$0 -e RAILS_ENV -d /path/to/rails/app -r /path/to/rake/command/rake -n number_of_events_per_culture_provider -c number_of_culture_providers"
+    echo "defaults values: -d . -e development -r $(which rake) -n 3 -c 10"
 }
 
+echo "start"
 
 argparse="option"
 
@@ -20,6 +22,14 @@ do
 	fi
     else
 	case $argparse in
+	    "-c")
+		numcps=$arg
+		argparse="option"
+		;;
+	    "-n")
+		numevents=$arg
+		argparse="option"
+		;;
 	    "-d")
 		railsdir=$arg
 		if [ ! -d $railsdir ]; then
@@ -52,6 +62,8 @@ do
     fi
 done
 
+echo "done parsing"
+
 if [ -z $railsdir ]; then
     railsdir=$(pwd)
 fi
@@ -70,6 +82,14 @@ if [ -z $rake ]; then
 	usage
 	exit -1
     fi
+fi
+
+if [ -z $numevents ]; then
+    numevents=3
+fi
+
+if [ -z $numcps ]; then
+    numcps=10
 fi
 
 cd $railsdir
@@ -106,27 +126,28 @@ if [ $? -ne "0" ]; then
     exit -1
 fi
 
-for i in 1 2 3 4 5 6 7 8 9 10 11 12
+for i in $(seq $numcps)
 do
     $rake RAILS_ENV=${railsenv} kp:demo:generate_culture_provider
 done
 
-for i in 1 2 3 4 5 6 7 8 9 10 11 12
+for i in $(seq $numcps )
 do
-    $rake RAILS_ENV=${railsenv} kp:demo:generate_event culture_provider_id=$i
-    $rake RAILS_ENV=${railsenv} kp:demo:generate_event culture_provider_id=$i
-    $rake RAILS_ENV=${railsenv} kp:demo:generate_event culture_provider_id=$i
+    for j in $(seq $numevents)
+    do
+	$rake RAILS_ENV=${railsenv} kp:demo:generate_event culture_provider_id=$i
+    done
     $rake RAILS_ENV=${railsenv} kp:demo:generate_standing_event culture_provider_id=$i
 done
 
-for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+for i in $(seq $(( $numcps * $numevents)) )
 do
     $rake RAILS_ENV=${railsenv} kp:demo:create_tickets event_id=$i
 done
 
 $rake RAILS_ENV=${railsenv} kp:demo:create_questions
 
-for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+for i in $(seq $(( $numcps * $numevents)) )
 do
     $rake RAILS_ENV=${railsenv} kp:demo:create_questionnaires event_id=$i
 done
