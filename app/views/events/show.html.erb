@@ -23,20 +23,18 @@
   </div>
 <% end -%>
 
-<div id="kp-sec-content" class="event-sec-content">
-  <%= render :partial => "culture_providers/info_box", :locals => { :culture_provider => @event.culture_provider } -%>
-</div>
-
 <div id="kp-pri-content" class="event-pri-content">
 
   <div class="model-cnt">
 
     <% if !@event.images_excluding_main.empty? %>
       <div class="images-cnt">
-        <div class="images">
-          <% @event.images_excluding_main.each do |image| -%>
-            <%= uploaded_image_tag image %>
-          <% end -%>
+        <div class="images-inner-cnt">
+          <div class="images">
+            <% @event.images_excluding_main.each do |image| -%>
+              <%= uploaded_image_tag image %>
+            <% end -%>
+          </div>
         </div>
       </div>
     <% end -%>
@@ -48,6 +46,10 @@
       <%= render :partial => "occasions/form", :locals => { :event => @event } %>
     <% end -%>
   </div>
+</div>
+
+<div id="kp-sec-content" class="event-sec-content">
+  <%= render :partial => "culture_providers/info_box", :locals => { :culture_provider => @event.culture_provider } -%>
 </div>
 
 

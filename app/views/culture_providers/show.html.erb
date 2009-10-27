@@ -26,20 +26,18 @@
   </div>
 <% end -%>
 
-<div id="kp-sec-content" class="cp-sec-content">
-  <%= render :partial => "info_box", :locals => { :culture_provider => @culture_provider } -%>
-</div>
-
 <div id="kp-pri-content" class="cp-pri-content">
 
   <div class="model-cnt">
 
     <% if !@culture_provider.images_excluding_main.empty? %>
       <div class="images-cnt">
-        <div class="images">
-          <% @culture_provider.images_excluding_main.each do |image| -%>
-            <%= uploaded_image_tag image %>
-          <% end -%>
+        <div class="images-inner-cnt">
+          <div class="images">
+            <% @culture_provider.images_excluding_main.each do |image| -%>
+              <%= uploaded_image_tag image %>
+            <% end -%>
+          </div>
         </div>
       </div>
     <% end -%>
@@ -50,6 +48,10 @@
 
   </div>
 
+</div>
+
+<div id="kp-sec-content" class="cp-sec-content">
+  <%= render :partial => "info_box", :locals => { :culture_provider => @culture_provider } -%>
 </div>
 
 <div class="tabs">
