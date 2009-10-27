@@ -5,7 +5,7 @@
   <h2>Besökstatistik för <%= h @events.first.name -%></h2>
 
   <p>
-    <%=  link_to "Ladda ner statistik för eventet #{@events.first.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@events.first.id}" %>    
+    <%=  link_to "Ladda ner statistik för eventet #{@event.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@event.id}" %>    
   </p>
 
   <table class="visitor-list" >
@@ -21,18 +21,16 @@
     </thead>
     <tbody>
 
-      <% @visitor_stats.each do |visitor_group_stats| %>
-        <% stats_for_event = visitor_group_stats[:stats_per_event].first %>
-
+      <% @visitor_stats.each do |v| %>
         <tr class="<%= cycle('', 'even') %>">
-          <td><%= h visitor_group_stats[:district].name -%></td>
-          <td><%= h visitor_group_stats[:school].name -%></td>
-          <td><%= h visitor_group_stats[:group].name -%></td>
+          <td><%= h v["district_name"] -%></td>
+          <td><%= h v["school_name"] -%></td>
+          <td><%= h v["group_name"] -%></td>
 
 
-          <td><%= h stats_for_event[:booked_tickets] -%></td>
-          <td><%= h stats_for_event[:used_tickets_children] -%></td>
-          <td><%= h stats_for_event[:used_tickets_adults] -%></td>
+          <td><%= h v["num_booked"] -%></td>
+          <td><%= h v["num_children"] -%></td>
+          <td><%= h v["num_adult"] -%></td>
         </tr>
 
       <% end %>

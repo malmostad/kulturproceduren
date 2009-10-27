@@ -187,53 +187,13 @@ class Event < ActiveRecord::Base
 
 
   # Returns an array containg hashes with the stats in the following format:
-  # [{:event =>, :distict =>, :school =>, :group =>, :booked_tickets =>, :used_tickets_children =>, :used_tickets_adults =>}]
+  # [{"event_id", "group_name", "school_name", "num_adult", "num_booked", "event_name", "num_children", "district_name"}]
   def self.get_visitor_stats_for_events(events = [])
-
-    stats = []
-    District.all.each do |district|
-      district.schools.each do |school|
-        school.groups.each do |group|
-          stats_per_event = []
-          events.each do |event|
-            num_booked = Ticket.count(:all,:conditions => {
-              :event_id => event.id,
-              :group_id => group.id,
-              :state => [Ticket::USED, Ticket::NOT_USED]
-            })
-            if num_booked > 0
-              num_used_by_children = Ticket.count(:all,:conditions => {
-                :event_id => event.id,
-                :group_id => group.id,
-                :state => [Ticket::USED],
-                :adult => false
-              })
-              num_used_by_adults = Ticket.count(:all,:conditions => {
-                :event_id => event.id,
-                :group_id => group.id,
-                :state => [Ticket::USED],
-                :adult => true
-              })
-            else
-              num_used_by_children = 0
-              num_used_by_adults = 0
-            end
-            stats_per_event << {
-              :event => event,
-              :booked_tickets => num_booked,
-              :used_tickets_children => num_used_by_children,
-              :used_tickets_adults => num_used_by_adults
-            }
-          end
-          stats << {
-            :district => district,
-            :school => school,
-            :group => group,
-            :stats_per_event => stats_per_event
-          }
-        end
-      end
-    end
+    event_ids = events.map { |e| e.id}.join(",")
+    sql = "SELECT * FROM statistics WHERE event_id in ( #{event_ids} )"
+    puts "DEBUG_SQL: #{sql}"
+    res = ActiveRecord::Base.connection.execute(sql)
+    stats = res.collect
     return stats
   end
 
