@@ -14,9 +14,9 @@ common: &common
         :path: uploads/attachments
     :upload_image:
         :path: model
-        :width: 464
+        :width: 445
         :height: 174
-        :thumb_width: 212
+        :thumb_width: 195
         :thumb_height: 80
     :kp_external_link: "http://www.dev.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.dev.malmo.se/kulturproceduren"

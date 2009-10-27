@@ -87,6 +87,9 @@ module ApplicationHelper
       options[:src] = image_path + image.image_url
     end
 
+    options[:alt] = h(image.name)
+    options[:title] = h(image.name)
+
     return tag("img", options)
   end
 
