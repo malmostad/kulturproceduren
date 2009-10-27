@@ -34,10 +34,10 @@ class CreateStatisticsViews < ActiveRecord::Migration
 	sql =  "CREATE OR REPLACE VIEW statistics AS
 		SELECT ag.district_name , ag.school_name , ag.group_name ,nb.event_name, nb.event_id , nb.num_booked , nc.num_children , na.num_adult
 		from all_groups ag 
-		  full join num_booked nb on ag.group_id = nb.group_id
-		  full join num_children nc on ag.group_Id = nc.group_id
-		  full join num_adult na on ag.group_id = na.group_id
-		order by ag.district_name , ag.school_name , ag.group_name , nb.event_name"
+		   full join num_booked nb on ag.group_id = nb.group_id 
+                   full join num_children nc on nc.group_id = ag.group_id and nc.group_id = nb.group_id and nb.event_id = nc.event_id 
+                   full join num_adult na on ag.group_id = na.group_id and na.event_id = nb.event_id 
+                order by ag.district_name , ag.school_name, ag.group_name , nb.event_name"
 	execute sql
   end
 
