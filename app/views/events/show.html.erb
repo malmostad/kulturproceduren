@@ -209,7 +209,11 @@
           <thead>
             <tr>
               <th class="date-time">Datum/tid</th>
-              <th class="num-seats">Lediga platser</th>
+              <% unless @event.tickets.empty? %>
+                <th class="num-seats">Lediga platser</th>
+              <% else %>
+                <th class="num-seats">Antal platser</th>
+              <% end %>
               <th class="address">Adress</th>
               <th class="description">Beskrivning</th>
               <th class="tools"></th>
@@ -217,21 +221,26 @@
           </thead>
 
           <tbody>
-            <% @event.occasions.each do |occasion|
-              alt = cycle('', "even") %>
-              <tr class="<%= alt %> <%= "cancelled" if occasion.cancelled %>">
+            <% @event.occasions.each do |occasion| %>
+              <% available_seats = occasion.available_seats.to_i %>
+              <tr class="<%= cycle('', 'even') %> <%= "cancelled" if occasion.cancelled %>">
+
                 <td class="date-time">
                   <span class="date"><%= h occasion.date %></span>
                   <span class="time">
                     <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
                   </span>
                 </td>
-                <td class="num-seats">
-                  <% available_seats = occasion.available_seats.to_i %>
 
-                  <%= h(available_seats) %>
+                <td class="num-seats">
+                  <% unless @event.tickets.empty? %>
+                    <%= h(available_seats) %>
+                  <% else %>
+                    <%= h(occasion.seats.to_i + occasion.wheelchair_seats.to_i) %>
+                  <% end %>
                   <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
                 </td>
+
                 <td class="address">
                   <%= linebreakize(occasion.address) unless occasion.address.blank? %>
 
@@ -246,7 +255,9 @@
                     %>
                   <% end %>
                 </td>
+
                 <td class="description"><%= linebreakize(occasion.description) %></td>
+
                 <td class="tools">
                   <% if occasion.cancelled %>
                     <span class="cancelled">Inställd</span>
@@ -288,6 +299,7 @@
                     <span><%= login_link "Logga in", new_occasion_booking_path(occasion) %> för att boka</span>
                   <% end %>
                 </td>
+
               </tr>
             <% end -%>
           </tbody>
