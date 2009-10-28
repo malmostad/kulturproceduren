@@ -2,7 +2,7 @@
 
 <% if @visitor_stats %>
 
-  <h2>Besökstatistik för <%= h @events.first.name -%></h2>
+  <h2>Besökstatistik för <%= h @event.name -%></h2>
 
   <p>
     <%=  link_to "Ladda ner statistik för eventet #{@event.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@event.id}" %>    
