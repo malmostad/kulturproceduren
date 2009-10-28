@@ -91,11 +91,23 @@
         <% end -%>
       </li>
 
+      <% if current_user.has_role?(:admin) -%>
+        <li>
+          <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(:id => @user.id, :role => :admin) %>
+        </li>
+      <% end %>
+
     <% elsif @user.has_role?(:admin) -%>
 
-      <li><%= denom %> är administratör och har fulla rättigheter i systemet.</li>
+      <li>
+        <%= denom %> är administratör och har fulla rättigheter i systemet.
+          <% if current_user.has_role?(:admin) -%>
+            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :admin) %></span>
+          <% end -%>
+      </li>
 
     <% else -%>
+
 
       <% if @user.has_role?(:booker) -%>
         <li>
@@ -178,6 +190,12 @@
           <% end -%>
         </li>
       <% end -%>
+
+      <% if current_user.has_role?(:admin) -%>
+        <li>
+          <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(:id => @user.id, :role => :admin) %>
+        </li>
+      <% end %>
 
     <% end -%>
 
