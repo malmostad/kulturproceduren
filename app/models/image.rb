@@ -40,7 +40,7 @@ class Image < ActiveRecord::Base
     #  Magick::Geometry.new(
     #    APP_CONFIG[:upload_image][:width],
     #    APP_CONFIG[:upload_image][:height])) { |c,r,i| img.resize!(c,r) }
-    img.resize_to_fit!(APP_CONFIG[:upload_image][:width])
+    img.resize_to_fit!(APP_CONFIG[:upload_image][:width], APP_CONFIG[:upload_image][:height])
 
     self.width = img.columns
     self.height = img.rows
@@ -51,7 +51,7 @@ class Image < ActiveRecord::Base
     #  Magick::Geometry.new(
     #    APP_CONFIG[:upload_image][:thumb_width],
     #    APP_CONFIG[:upload_image][:thumb_height])) { |c,r,i| img.resize!(c,r) }
-    img.resize_to_fit!(APP_CONFIG[:upload_image][:thumb_width])
+    img.resize_to_fit!(APP_CONFIG[:upload_image][:thumb_width], APP_CONFIG[:upload_image][:thumb_height])
 
     self.thumb_width = img.columns
     self.thumb_height = img.rows
