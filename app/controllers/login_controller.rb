@@ -77,24 +77,18 @@ class LoginController < ApplicationController
   private
 
   def http_authenticate_user( username , password )
-    puts "BSDF"
     clnt = HTTPClient.new
     sslconf = HTTPClient::SSLConfig.new clnt
     postparams = { "name" => username , "pwd" => password }
-    
-    pp postparams
-    
     resp = clnt.post APP_CONFIG[:httpauth][:auth_url] , postparams
     if resp.status_code == 200
       userinfo = {}
       resp.body.content.split("\n").each do |line|
 	name,val = line.split("=")
-	puts "DEBUG: name = #{name} , val = #{val}"
 	userinfo[name] = val
       end
       return userinfo
     else
-      puts "DEBUG: http-auth failed, status_code = #{resp.status_code}"
       return nil
     end
   end
@@ -140,9 +134,7 @@ class LoginController < ApplicationController
         return User.authenticate(params[:user][:username], params[:user][:password])
       end
     elsif APP_CONFIG[:httpauth]
-      puts "ASDF"
       userinfo = http_authenticate_user params[:user][:username], params[:user][:password]
-      pp userinfo
       if userinfo
 	user = User.find :first, :conditions => { :username => "#{APP_CONFIG[:httpauth][:username_prefix]}#{params[:user][:username]}" }
 	if user
@@ -157,7 +149,6 @@ class LoginController < ApplicationController
             u.username = "#{APP_CONFIG[:httpauth][:username_prefix]}#{params[:user][:username]}"
             u.password = "http"
           end
-	  pp user
 	  if not user.save! 
 	    puts "Failed to save user!!!!"
 	  end

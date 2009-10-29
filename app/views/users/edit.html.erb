@@ -5,7 +5,7 @@
   <%= f.title "Redigera personuppgifter" -%>
 
   <% f.conditional_hint user_online? && current_user.has_role?(:admin) do -%>
-    Uppdaterar persondetaljer för <%= link_to h(@user.username), @user %>.
+    Uppdaterar persondetaljer för <%= link_to h(@user.get_username), @user %>.
   <% end -%>
 
   <%= f.validation_error_indicator -%>
