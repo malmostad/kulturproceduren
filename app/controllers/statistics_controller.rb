@@ -34,6 +34,7 @@ class StatisticsController < ApplicationController
       if params[:format] == "xls"
         xls_string =  get_visitor_stats_as_csv(@visitor_stats)
 	my_iconv = Iconv.new("windows-1252" , "utf-8")
+        xls_string.gsub!(/\n/,"\r\n")
 	xls_string = my_iconv.iconv(xls_string);
         send_data xls_string, :filename => "visitors_stats_#{@term}.csv", :type => "text/csv; charset=windows-1252; header=present" , :disposition => 'inline'
       end
