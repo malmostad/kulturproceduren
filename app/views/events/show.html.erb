@@ -182,7 +182,7 @@
         </tr>
       <% end %>
 
-      <% if !@event.occasions.empty? %>
+      <% if user_online? && current_user.has_role?(:admin) && !@event.occasions.empty? %>
         <tr class="visitor-statistics">
           <%
             min = @event.occasions.minimum("date")
