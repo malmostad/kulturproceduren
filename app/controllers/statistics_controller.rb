@@ -67,13 +67,13 @@ class StatisticsController < ApplicationController
 
   def get_questionaire_stats_as_csv(event)
     res = ""
-    CSV.generate_row(["Enkätsvar för #{event.name}"] ,1 , res , ';')
-    CSV.generate_row(["Antal besvarade enkäter" , "Antal obesvarade enkäter"],2,res, ';')
-    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => true })] , 2 , res, ';' )
-    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => false })] , 2 , res , ';')
+    CSV.generate_row(["Enkätsvar för #{event.name}"] ,1 , res , "\t")
+    CSV.generate_row(["Antal besvarade enkäter" , "Antal obesvarade enkäter"],2,res, "\t")
+    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => true })] , 2 , res, "\t" )
+    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => false })] , 2 , res , "\t")
     CSV.generate_row([],0,res)
     CSV.generate_row([],0,res)
-    CSV.generate_row([ "Fråga" , "Svar" ] ,2 , res, ';')
+    CSV.generate_row([ "Fråga" , "Svar" ] ,2 , res, "\t")
 
     event.questionaire.questions.each do |q|
       row = []
@@ -82,22 +82,22 @@ class StatisticsController < ApplicationController
       when "QuestionMark"
         row = [ "#{q.question} (Genomsnittssvar)" ]
         row += [ stat[0] ]
-        CSV.generate_row( row , row.length , res , ';')
+        CSV.generate_row( row , row.length , res , "\t")
       when "QuestionText"
         row = [ "#{q.question} (Alla svar)" ]
         row += stat
-        CSV.generate_row( row , row.length , res , ';') 
+        CSV.generate_row( row , row.length , res , "\t") 
       when "QuestionBool"
         row = [ "#{q.question} (Procent ja-svar , Procent nej-svar)" ]
         row += stat
-        CSV.generate_row( row , row.length , res , ';')
+        CSV.generate_row( row , row.length , res , "\t")
       when "QuestionMchoice"
         row = [ "#{q.question} (Antal för varje ord)" ]
         row += q.choice_csv.split(",")
-        CSV.generate_row( row , row.length , res , ';') 
+        CSV.generate_row( row , row.length , res , "\t") 
         row = [""]
         row += stat
-        CSV.generate_row( row , row.length , res , ';') 
+        CSV.generate_row( row , row.length , res , "\t") 
       end
     end
     return res
@@ -145,11 +145,11 @@ class StatisticsController < ApplicationController
     output_buffer = ""
     row = ["Stadsdel" , "Skola" , "Grupp" , "Föreställning" , "Antal bokade" , "Antal barn" , "Antal vuxna" ]
 
-    CSV.generate_row(row, row.length, output_buffer, ';')
+    CSV.generate_row(row, row.length, output_buffer, "\t")
 
     visitor_stats.each do |v|
       row = [ v["district_name"] , v["school_name"] ,v["group_name"] ,v["event_name"] ,v["num_booked"] ,v["num_children"] ,v["num_adult"] ]
-      CSV.generate_row(row, row.length, output_buffer, ';')
+      CSV.generate_row(row, row.length, output_buffer, "\t")
     end
 
     return output_buffer
