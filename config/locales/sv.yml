@@ -112,6 +112,7 @@ sv:
                 less_than_or_equal_to: "måste vara mindre än eller lika med {{count}}"
                 odd: "måste vara udda"
                 even: "måste vara jämn"
+                record_invalid: "innehåller fel"
                 # Append your own errors here or at the model/attributes scope.
 
         models:

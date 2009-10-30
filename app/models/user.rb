@@ -17,7 +17,8 @@ class User < ActiveRecord::Base
 
   has_many :notification_requests, :dependent => :destroy
   
-  validate :username_unique
+  validate_on_create :username_unique,
+    :message => "Användarnamnet är redan taget"
 
   validates_presence_of :username,
     :message => "Användarnamnet får inte vara tomt"
@@ -40,18 +41,6 @@ class User < ActiveRecord::Base
   # The id and salt is automatically generated and should not be changed.
   attr_protected :id, :salt
 
-  def username_unique
-    if APP_CONFIG[:ldap]
-      prefix = APP_CONFIG[:ldap][:username_prefix] 
-    elsif APP_CONFIG[:httpauth]
-      prefix = APP_CONFIG[:httpauth][:username_prefix] 
-    else
-      prefix = ""
-    end
-    if User.find_by_username( "#{prefix}#{username}" ) or User.find_by_username(username.sub( prefix , "") )
-      self.errors.add(:username, :taken , :message => "Användarnamnet är redan taget" )
-    end
-  end
 
   # Returns true if this user is authenticated when using the given password
   def authenticate(password)
@@ -181,6 +170,19 @@ class User < ActiveRecord::Base
     newpass = ""
     1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
     return newpass
+  end
+
+  def username_unique
+    if APP_CONFIG[:ldap]
+      prefix = APP_CONFIG[:ldap][:username_prefix] 
+    elsif APP_CONFIG[:httpauth]
+      prefix = APP_CONFIG[:httpauth][:username_prefix] 
+    else
+      prefix = ""
+    end
+    if User.find_by_username( "#{prefix}#{username}" ) or User.find_by_username(username.sub( prefix , "") )
+      self.errors.add(:username, :taken , :message => "Användarnamnet är redan taget" )
+    end
   end
 
 end

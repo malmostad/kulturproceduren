@@ -82,9 +82,9 @@ class ApplicationHelperTest < ActionView::TestCase
       i.thumb_height = 40
     end
 
-    assert_equal '<img alt="testimage" height="400" src="/images/model/testimage.jpg" width="300" />',
+    assert_equal '<img alt="testimage" height="400" src="/images/model/testimage.jpg" title="testimage" width="300" />',
       uploaded_image_tag(img)
-    assert_equal '<img alt="testimage" height="40" src="/images/model/testimage.thumb.jpg" width="30" />',
+    assert_equal '<img alt="testimage" height="40" src="/images/model/testimage.thumb.jpg" title="testimage" width="30" />',
       uploaded_image_tag(img, true)
   end
 
