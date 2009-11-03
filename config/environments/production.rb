@@ -30,4 +30,4 @@ ActionMailer::Base.sendmail_settings = {
   :arguments => "-i -t"
 }
 
-ActionController::Base.asset_host = "http://webapps.malmo.se/assets/kp"
+ActionController::Base.asset_host = "http://www.malmo.se/assets/kp"

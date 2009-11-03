@@ -58,7 +58,7 @@ release_test:
 
 production:
     <<: *common
-    :asset_host: "http://webapps.malmo.se/assets"
+    :asset_host: "http://www.malmo.se/assets"
     :kp_external_link: "http://www.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.malmo.se/kulturproceduren"
     :occasion_reminder_days: 1
@@ -72,5 +72,5 @@ production:
 education:
     <<: *common
     :instance_title: "UTB"
-    :asset_host: "http://webapps.malmo.se/assets"
+    :asset_host: "http://www.malmo.se/assets"
 
