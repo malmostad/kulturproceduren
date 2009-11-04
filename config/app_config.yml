@@ -36,6 +36,7 @@ common: &common
         :username_prefix: "malmoaut-"
     :allotment:
         :proximity_boundary: 3
+    # OBS - se även config/enviroments/*rb actionmailer-config ... From-address måste anges även där
     :mailers:
         :from_adress: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :debug_recipient: "camilla.bengtsson@malmo.se"

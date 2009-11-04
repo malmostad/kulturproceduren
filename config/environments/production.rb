@@ -27,7 +27,7 @@ ActionMailer::Base.delivery_method = :sendmail
 ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.sendmail_settings = {
   :location => "/usr/sbin/sendmail",
-  :arguments => "-i -t"
+  :arguments => "-i -t -F Kulturproceduren -f noreply@malmo.se"
 }
 
 ActionController::Base.asset_host = "http://www.malmo.se/assets/kp"
