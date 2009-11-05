@@ -19,6 +19,11 @@ if [ ! -x $RAKE ]; then
    exit -1
 fi   
 
+if [ ! -d $RAILS_DIR/lib/tasks ]; then
+   echo "No rails-dir $RAILS_DIR"
+   exit -1
+fi   
+
 echo -n "Begin rake tasks KP, RAILS_ENV=$RAILS_ENV at "
 date
 $RAKE RAILS_ENV=$RAILS_ENV kp:notify_occasion_reminder 
