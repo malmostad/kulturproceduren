@@ -2,9 +2,22 @@
 
 . /etc/profile
 
-RAILS_ENV=development
+RAILS_DIR=$1
+RAILS_ENV=$2
+
+if [ -z $RAILS_DIR ]; then
+   RAILS_DIR=/srv/rails/kp-dev
+fi
+
+if [ -z $RAILS_ENV ]; then
+   RAILS_ENV=development
+fi   
 
 RAKE=/usr/local/bin/rake
+if [ ! -x $RAKE ]; then
+   echo "Can not find rake"
+   exit -1
+fi   
 
 echo -n "Begin rake tasks KP, RAILS_ENV=$RAILS_ENV at "
 date
