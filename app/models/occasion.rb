@@ -101,7 +101,7 @@ class Occasion < ActiveRecord::Base
     return paginate(
       :page => page,
       :conditions => conditions,
-      :order => "occasions.date ASC, events.name ASC",
+      :order => "occasions.date ASC, events.name ASC, occasions.start_time ASC",
       :include => { :event => :culture_provider }
     )
   end
