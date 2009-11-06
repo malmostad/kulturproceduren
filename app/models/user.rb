@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     elsif APP_CONFIG[:httpauth]
       return self.username.sub( APP_CONFIG[:httpauth][:username_prefix] , "" ) 
     else
-      return @user.username
+      return self.username
     end
   end
 
