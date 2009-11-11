@@ -18,10 +18,10 @@ common: &common
         :height: 340
         :thumb_width: 204
         :thumb_height: 153
-    :kp_external_link: "http://www.dev.malmo.se/kulturproceduren"
-    :kp_manual_link: "http://www.dev.malmo.se/kulturproceduren"
-    :kbu_link: "http://www.malmo.se/KBU"
-    :culture_bus_link: "http://www.malmo.se/kulturbibliotek/malmokulturstod/kulturforbarnochunga/kulturbussarna.4.3101c0911206abdf073800025491.html"
+    :kp_external_link: "http://www.malmo.se/kulturproceduren"
+    :kp_manual_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kulturproceduren---Anvandarhjalp.html"
+    :kbu_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-for-Barn-och-Unga.html"
+    :culture_bus_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-for-Barn-och-Unga/Kulturbussarna.html"
     #:ldap:
     #    :address:
     #    :port: 389
@@ -46,10 +46,11 @@ development:
     :instance_title: "DEV"
     :evaluation_form:
         :activation_days: 1
-        :reminder_days: 1
+        :reminder_days: 2
     :ticket_state:
         :group_days: 1
         :district_days: 1
+    :occasion_reminder_days: 1
     :mailers:
         :debug_recipient: "camilla.bengtsson@malmo.se"
 
@@ -61,15 +62,6 @@ release_test:
 production:
     <<: *common
     :asset_host: "http://www.malmo.se/assets"
-    :kp_external_link: "http://www.malmo.se/kulturproceduren"
-    :kp_manual_link: "http://www.malmo.se/kulturproceduren"
-    :occasion_reminder_days: 1
-    :evaluation_form:
-        :activation_days: 1
-        :reminder_days: 2
-    :ticket_state:
-        :group_days: 1
-        :district_days: 1
 
 education:
     <<: *common
