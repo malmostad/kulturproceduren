@@ -7,7 +7,7 @@ class DispatchController < ApplicationController
   # or the root url if no path is given.
   def index
     if params[:goto]
-      if ActionController::Base.relative_url_root && !params[:goto].start_with?(ActionControler::Base.relative_url_root)
+      if ActionController::Base.relative_url_root && !params[:goto].start_with?(ActionController::Base.relative_url_root)
         redirect_to ActionController::Base.relative_url_root + params[:goto]
       else
         redirect_to params[:goto]
