@@ -367,7 +367,6 @@
 #kp .model-cnt .images-cnt .images .image-description {
     display: block;
     padding-top: 0.3em;
-    text-align: center;
     font-style: italic;
 }
 #kp .model-cnt .images-cnt .play-pause-action {
