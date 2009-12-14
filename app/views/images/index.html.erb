@@ -37,7 +37,7 @@
 
   <% f.fields do -%>
 
-    <%= f.text_field :name %>
+    <%= f.text_field :description %>
 
     <% f.row do -%>
       <label for="kp-upload-datafile">Bild:</label>
@@ -55,7 +55,7 @@
     <thead>
       <tr>
         <th>Bild</th>
-        <th>Namn</th>
+        <th>Bildtext</th>
         <th<%= ' colspan="2"' if @image.culture_provider %>></th>
       </tr>
     </thead>
@@ -75,7 +75,7 @@
           <td>
             <%= uploaded_image_tag img, true %>
           </td>
-          <td><%= h img.name %></td>
+          <td><%= h img.description %></td>
 
           <% if img.culture_provider -%>
             <td><%= link_to 'Använd som logotyp', set_main_culture_provider_image_path(img.culture_provider, img) unless is_logo -%></td>

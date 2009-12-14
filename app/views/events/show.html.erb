@@ -33,6 +33,10 @@
           <div class="images">
             <% @event.images_excluding_main.each do |image| -%>
               <%= uploaded_image_tag image %>
+
+              <% unless image.description.blank? %>
+                <span class="image-description"><%= h image.description %></span>
+              <% end %>
             <% end -%>
           </div>
         </div>

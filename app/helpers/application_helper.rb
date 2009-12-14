@@ -70,8 +70,8 @@ module ApplicationHelper
   # [<tt>thumb</tt>] Indicates if the image tag should show the thumbnail or not
   def uploaded_image_tag(image, thumb = false)
     options = {
-      :alt => h(image.name),
-      :title => h(image.name)
+      :alt => h(image.description),
+      :title => h(image.description)
     }
 
     image_path = "/images/"

@@ -270,8 +270,8 @@
 #kp form.group-form label { width: 9em; }
 #kp form.group-form .input-container { padding-left: 9em; }
 /* Image form */
-#kp form.image-form label { width: 4em; }
-#kp form.image-form .input-container { padding-left: 4em; }
+#kp form.image-form label { width: 5em; }
+#kp form.image-form .input-container { padding-left: 5em; }
 /* Login form */
 #kp form.login-form label { width: 8em; }
 #kp form.login-form .input-container { padding-left: 8em; }
@@ -364,10 +364,16 @@
 #kp .model-cnt .images-cnt .images-inner-cnt { overflow: hidden; }
 #kp .model-cnt .images-cnt .tools { margin: 0; padding: 3px 0 0 0; }
 #kp .model-cnt .images-cnt .images img { display: block; }
+#kp .model-cnt .images-cnt .images .image-description {
+    display: block;
+    padding-top: 0.3em;
+    text-align: center;
+    font-style: italic;
+}
 #kp .model-cnt .images-cnt .play-pause-action {
     position: absolute;
     display: block;
-    bottom: 1em;
+    top: 1em;
     right: 1em;
     text-indent: -10000px;
     width: 20px;

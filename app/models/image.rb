@@ -9,13 +9,18 @@ class Image < ActiveRecord::Base
   belongs_to :event
   belongs_to :culture_provider
 
-  validates_presence_of :name,
-    :message => "Namnet får inte vara tomt"
+  validates_presence_of :description,
+    :message => "Bildtexten får inte vara tom"
 
   after_destroy :cleanup
 
   attr_accessor :type
 
+
+  # Alias after rename name => description in case name is used anywhere
+  def name
+    self.description
+  end
 
   # Keep a reference to the original ActiveRecord save method
   alias :save_orig  :save

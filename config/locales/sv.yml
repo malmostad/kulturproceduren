@@ -195,7 +195,7 @@ sv:
                 url: "Hemsida:"
                 map_address: "Kartadress:"
             image:
-                name: "Namn:"
+                description: "Bildtext:"
             category:
                 name: "Namn:"
                 category_group: "Kategorigrupp:"
