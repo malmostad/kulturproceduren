@@ -391,6 +391,10 @@
 #kp .info-box .image { overflow: hidden; padding-top: 0.3em; }
 #kp .info-box .image .tools { padding: 3px; margin: 0; }
 
+#kp .model-cnt .linked-entities h3 { margin-bottom: 0.5em; }
+#kp .model-cnt .linked-entities ul { margin: 0 0 1em 0; padding: 0; }
+#kp .model-cnt .linked-entities ul li { margin: 0 0 0.3em 1.5em; }
+
 /*** Admin tools ***/
 
 #kp .admin-tools { border: 1px solid #c0c0c0; padding: 0.5em; margin: 0 0 1em ; }

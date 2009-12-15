@@ -1,0 +1,49 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+  </div>
+<% end -%>
+
+<h2 class="form-title">
+  Hantera länkade arrangörer för
+  <%= h(@culture_provider.name) %>
+</h2>
+
+<div class="admin-tools">
+  <ul>
+    <li>
+      <%= link_to "Lägg till arrangör",
+        new_culture_provider_culture_provider_link_path(
+          :culture_provider_id => @culture_provider.id
+      )
+      %>
+    </li>
+  </ul>
+</div>
+
+<% unless @culture_provider.linked_culture_providers.empty? %>
+  <table class="culture-provider-links-list">
+    <thead>
+      <tr>
+        <th class="culture-provider">Arrangör</th>
+        <th class="tools"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @culture_provider.linked_culture_providers.each do |link| -%>
+        <tr class="<%= cycle('', 'even') %>">
+          <td class="culture_provider"><%= link_to link.name, link %></td>
+          <td class="tools">
+            <%= link_to "Ta bort",
+              culture_provider_culture_provider_link_path(
+                :culture_provider_id => @culture_provider.id,
+                :id => link.id
+            ),
+              :method => :delete
+            %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

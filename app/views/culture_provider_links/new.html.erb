@@ -1,0 +1,36 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+  </div>
+<% end -%>
+
+<h2 class="form-title">
+  Välj en arrangör att länka till
+  <%= h(@culture_provider.name) %>
+</h2>
+
+<table class="select-culture-provider-link-list">
+  <thead>
+    <tr>
+      <th class="culture-provider"><%= sort_link "Arrangör", "name" %></th>
+      <th class="tools"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @culture_providers.each do |culture_provider| -%>
+      <tr class="<%= cycle('', 'even') %>">
+        <td class="culture_provider"><%= h culture_provider.name %></td>
+        <td class="tools">
+          <%= link_to "Välj",
+            select_culture_provider_culture_provider_link_path(
+              :culture_provider_id => @culture_provider.id,
+              :id => culture_provider.id
+          )
+          %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @culture_providers %>

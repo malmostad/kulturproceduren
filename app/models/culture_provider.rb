@@ -23,8 +23,19 @@ class CultureProvider < ActiveRecord::Base
     :conditions => "current_date between events.visible_from and events.visible_to and occasions.date >= current_date",
     :order => "occasions.date ASC"
 
+  has_and_belongs_to_many :linked_culture_providers,
+    :class_name => "CultureProvider",
+    :foreign_key => "from_id",
+    :association_foreign_key => "to_id",
+    :order => "name ASC",
+    :join_table => "culture_provider_links"
+
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt."
 
   default_scope :order => 'name ASC'
+
+  named_scope :not_linked_to, lambda { |culture_provider|
+    { :conditions => [ "id not in (select to_id from culture_provider_links where from_id = ?) and id != ?", culture_provider.id, culture_provider.id ] }
+  }
 end

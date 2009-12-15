@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091214093244) do
+ActiveRecord::Schema.define(:version => 20091215083517) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -83,6 +83,13 @@ ActiveRecord::Schema.define(:version => 20091214093244) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "culture_provider_links", :id => false, :force => true do |t|
+    t.integer "from_id"
+    t.integer "to_id"
+  end
+
+  add_index "culture_provider_links", ["from_id", "to_id"], :name => "index_culture_provider_links_on_from_id_and_to_id"
 
   create_table "culture_providers", :force => true do |t|
     t.string   "name"

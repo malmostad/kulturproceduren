@@ -74,7 +74,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "uploaded image tag" do
     img = Image.new do |i|
-      i.name = "testimage"
+      i.description = "testimage"
       i.filename = "testimage.jpg"
       i.width = 300
       i.height = 400

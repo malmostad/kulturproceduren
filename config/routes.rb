@@ -18,6 +18,8 @@ ActionController::Routing::Routes.draw do |map|
     :member => { :activate => :post, :deactivate => :post } do |cp|
     cp.resources :images, :except => [ :show, :edit, :update, :new ],
       :member => { :set_main => :get }
+    cp.resources :culture_provider_links, :except => [ :create, :edit, :update ],
+      :member => { :select => :get }
   end
 
   map.resources :events, :except => [ :index ], :member => {

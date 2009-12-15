@@ -22,6 +22,11 @@
       </li>
       <li><%= link_to "Hantera bilder", culture_provider_images_path(@culture_provider) %></li>
       <li><%= link_to "Lägg till evenemang", new_event_path(:culture_provider_id => @culture_provider.id) %></li>
+      <li>
+        <%= link_to "Hantera länkade arrangörer",
+          culture_provider_culture_provider_links_path(:culture_provider_id => @culture_provider.id)
+        %>
+      </li>
     </ul>
   </div>
 <% end -%>
@@ -51,6 +56,18 @@
     <h2><%= h @culture_provider.name %></h2>
 
     <%= paragraphize(@culture_provider.description, 'class="description"') %>
+
+    <% unless @culture_provider.linked_culture_providers.empty? %>
+      <div class="linked-entities">
+        <h3>Se även</h3>
+
+        <ul>
+          <% @culture_provider.linked_culture_providers.each do |link| %>
+            <li><%= link_to h(link.name), link %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
   </div>
 

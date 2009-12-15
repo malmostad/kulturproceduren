@@ -1,12 +1,12 @@
 grona_teatern_logo:
-  name: Gröna teaterns logotyp
+  description: Gröna teaterns logotyp
   culture_provider: grona_teatern
 grona_teatern_img1:
-  name: Gröna teaterns bild 1
+  description: Gröna teaterns bild 1
   culture_provider: grona_teatern
 pyjamassanger_logo:
-  name: Pyjamassånger logotyp
+  description: Pyjamassånger logotyp
   event: pyjamassanger
 pyjamassanger_img1:
-  name: Pyjamassånger bild 1
+  description: Pyjamassånger bild 1
   event: pyjamassanger
