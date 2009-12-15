@@ -62,30 +62,32 @@
 
 <div class="tabs">
   <ul>
-    <li><a href="#kp-cp-meta-occasions">Kommande evenemang</a></li>
-    <li><a href="#kp-cp-meta-events">Löpande evenemang</a></li>
+    <% unless @culture_provider.upcoming_occasions.empty? -%>
+      <li><a href="#kp-cp-meta-occasions">Kommande evenemang</a></li>
+    <% end %>
+    <% unless @culture_provider.standing_events.empty? -%>
+      <li><a href="#kp-cp-meta-events">Löpande evenemang</a></li>
+    <% end %>
     <% if user_online? && current_user.can_administrate?(@culture_provider) && !@culture_provider.events.empty? -%>
       <li><a href="#kp-cp-meta-all-events">Alla evenemang</a></li>
     <% end -%>
   </ul>
 
-  <div id="kp-cp-meta-occasions">
-    <% cache upcoming_occasions_cache_key(@culture_provider) do %>
-      <% unless @culture_provider.upcoming_occasions.empty? -%>
+  <% cache upcoming_occasions_cache_key(@culture_provider) do %>
+    <% unless @culture_provider.upcoming_occasions.empty? -%>
+      <div id="kp-cp-meta-occasions">
         <%= render :partial => "calendar/occasions_list", :locals => {
           :occasions => @culture_provider.upcoming_occasions,
           :hide_culture_provider => true,
           :category_groups => @category_groups
         } -%>
-      <% else %>
-        <p>Inga evenemang.</p>
-      <% end -%>
-    <% end %>
-  </div>
+      </div>
+    <% end -%>
+  <% end %>
 
-  <div id="kp-cp-meta-events">
-    <% cache standing_events_cache_key(@culture_provider) do %>
-      <% unless @culture_provider.standing_events.empty? -%>
+  <% cache standing_events_cache_key(@culture_provider) do %>
+    <% unless @culture_provider.standing_events.empty? -%>
+      <div id="kp-cp-meta-events">
         <table>
           <thead>
             <tr>
@@ -102,11 +104,9 @@
             <% end -%>
           </tbody>
         </table>
-      <% else %>
-        <p>Inga evenemang.</p>
-      <% end -%>
-    <% end %>
-  </div>
+      </div>
+    <% end -%>
+  <% end %>
 
   <% if user_online? && current_user.can_administrate?(@culture_provider) && !@culture_provider.events.empty? -%>
     <div id="kp-cp-meta-all-events">
