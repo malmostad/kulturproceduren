@@ -349,7 +349,14 @@
                 var urlBase = $("#kp-sitevision-base-url").attr("href");
                 dialogContainer.find("a").each(function(i, elem) {
                     var link = $(elem);
-                    link.attr("href", urlBase.substr(0, urlBase.length - 1) + link.attr("href"));
+                    var href = link.attr("href");
+
+                    // Remove the domain name (IE fix)
+                    if (href.indexOf("http://") == 0) {
+                        href = href.slice(href.indexOf("/", 7));
+                    }
+
+                    link.attr("href", urlBase.substr(0, urlBase.length - 1) + href);
                 });
 
                 dialogContainer.dialog({
