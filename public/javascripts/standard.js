@@ -345,6 +345,13 @@
                 var d = $(data);
                 dialogContainer.append(d);
 
+                // Fix for incoming URL:s in Sitevision
+                var urlBase = $("#kp-sitevision-base-url").attr("href");
+                dialogContainer.find("a").each(function(i, elem) {
+                    var link = $(elem);
+                    link.attr("href", urlBase.substr(0, urlBase.length - 1) + link.attr("href"));
+                });
+
                 dialogContainer.dialog({
                     width: 640,
                     height: 480,
