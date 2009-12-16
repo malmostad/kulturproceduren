@@ -20,7 +20,7 @@ common: &common
         :thumb_height: 153
     :kp_external_link: "http://www.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kulturproceduren---Anvandarhjalp.html"
-    :kbu_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-for-Barn-och-Unga.html"
+    :kbu_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor.html"
     :culture_bus_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-for-Barn-och-Unga/Kulturbussarna.html"
     #:ldap:
     #    :address:
