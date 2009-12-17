@@ -1,12 +1,16 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+    <% if @culture_provider %>
+      <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+    <% elsif @event %>
+      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <% end %>
   </div>
 <% end -%>
 
 <h2 class="form-title">
   Välj en arrangör att länka till
-  <%= h(@culture_provider.name) %>
+  <%= h(@culture_provider ? @culture_provider.name : @event.name) %>
 </h2>
 
 <table class="select-culture-provider-link-list">
@@ -21,12 +25,19 @@
       <tr class="<%= cycle('', 'even') %>">
         <td class="culture_provider"><%= h culture_provider.name %></td>
         <td class="tools">
-          <%= link_to "Välj",
-            select_culture_provider_culture_provider_link_path(
-              :culture_provider_id => @culture_provider.id,
-              :id => culture_provider.id
-          )
-          %>
+          <% if @culture_provider %>
+            <%= link_to "Välj",
+              select_culture_provider_culture_provider_link_path(
+                :culture_provider_id => @culture_provider.id,
+                :id => culture_provider.id
+            ) %>
+          <% elsif @event %>
+            <%= link_to "Välj",
+              select_event_culture_provider_link_path(
+                :event_id => @event.id,
+                :id => culture_provider.id
+            ) %>
+          <% end %>
         </td>
       </tr>
     <% end %>

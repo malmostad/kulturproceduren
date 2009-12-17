@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091215083517) do
+ActiveRecord::Schema.define(:version => 20091216123452) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -106,6 +106,13 @@ ActiveRecord::Schema.define(:version => 20091215083517) do
     t.string   "map_address"
     t.boolean  "active",         :default => true
   end
+
+  create_table "culture_providers_events", :id => false, :force => true do |t|
+    t.integer "culture_provider_id"
+    t.integer "event_id"
+  end
+
+  add_index "culture_providers_events", ["culture_provider_id", "event_id"], :name => "cp_ev_id"
 
   create_table "culture_providers_users", :id => false, :force => true do |t|
     t.integer "culture_provider_id"

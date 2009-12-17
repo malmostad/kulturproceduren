@@ -4,47 +4,77 @@ class CultureProviderLinksController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
-  before_filter :load_culture_provider
+  before_filter :load_entity
 
   def index
   end
 
   def new
-    @culture_providers = CultureProvider.not_linked_to(@culture_provider).paginate :page => params[:page],
-      :order => sort_order("name")
+    if @culture_provider
+      @culture_providers = CultureProvider.not_linked_to_culture_provider(@culture_provider).paginate(
+        :page => params[:page],
+        :order => sort_order("name")
+      )
+    elsif @event
+      @culture_providers = CultureProvider.not_linked_to_event(@event).paginate(
+        :page => params[:page],
+        :order => sort_order("name")
+      )
+    end
   end
 
   def select
-    to = CultureProvider.find params[:id]
+    new_link = CultureProvider.find params[:id]
 
-    @culture_provider.linked_culture_providers << to
-    to.linked_culture_providers << @culture_provider
+    if @culture_provider
+      @culture_provider.linked_culture_providers << new_link
+      new_link.linked_culture_providers << @culture_provider
 
-    flash[:notice] = "Länken mellan arrangörerna skapades."
-
-    redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
+      flash[:notice] = "Länken mellan arrangörerna skapades."
+      redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
+    elsif @event
+      @event.linked_culture_providers << new_link
+      flash[:notice] = "Länken mellan mellan arrangören och evenemanget skapades."
+      redirect_to event_culture_provider_links_url(:event_id => @event.id)
+    end
   end
 
   def destroy
-    to = CultureProvider.find params[:id]
+    linked = CultureProvider.find params[:id]
 
-    @culture_provider.linked_culture_providers.delete(to)
-    to.linked_culture_providers.delete(@culture_provider)
+    if @culture_provider
+      @culture_provider.linked_culture_providers.delete(linked)
+      linked.linked_culture_providers.delete(@culture_provider)
 
-    flash[:notice] = "Länken mellan arrangörerna togs bort."
+      flash[:notice] = "Länken mellan arrangörerna togs bort."
 
-    redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
+      redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
+    elsif @event
+      @event.linked_culture_providers.delete(linked)
+      flash[:notice] = "Länken mellan arrangören och evenemanget togs bort."
+      redirect_to event_culture_provider_links_url(:event_id => @event.id)
+    end
   end
 
   protected
 
-  def load_culture_provider
-    @culture_provider = CultureProvider.find params[:culture_provider_id]
+  def load_entity
+    if !params[:culture_provider_id].blank?
+      @culture_provider = CultureProvider.find params[:culture_provider_id]
 
-    unless current_user.can_administrate?(@culture_provider)
-      flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to @culture_provider
+      unless current_user.can_administrate?(@culture_provider)
+        flash[:error] = "Du har inte behörighet att komma åt sidan."
+        redirect_to @culture_provider
+      end
+    elsif !params[:event_id].blank?
+      @event = Event.find params[:event_id], :include => :culture_provider
+
+      unless current_user.can_administrate?(@event.culture_provider)
+        flash[:error] = "Du har inte behörighet att komma åt sidan."
+        redirect_to @event
+      end
     end
+
   end
 
   def sort_column_from_param(p)

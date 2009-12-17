@@ -46,6 +46,9 @@ class Event < ActiveRecord::Base
     :association_foreign_key => "to_id",
     :order => "name ASC",
     :join_table => "event_links"
+  has_and_belongs_to_many :linked_culture_providers,
+    :class_name => "CultureProvider",
+    :order => "name ASC"
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"

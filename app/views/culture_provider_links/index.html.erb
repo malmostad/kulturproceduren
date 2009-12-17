@@ -1,27 +1,39 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+    <% if @culture_provider %>
+      <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+    <% elsif @event %>
+      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <% end %>
   </div>
 <% end -%>
 
 <h2 class="form-title">
   Hantera länkade arrangörer för
-  <%= h(@culture_provider.name) %>
+  <%= h(@culture_provider ? @culture_provider.name : @event.name) %>
 </h2>
 
 <div class="admin-tools">
   <ul>
     <li>
-      <%= link_to "Lägg till arrangör",
-        new_culture_provider_culture_provider_link_path(
-          :culture_provider_id => @culture_provider.id
-      )
-      %>
+      <% if @culture_provider %>
+        <%= link_to "Lägg till arrangör",
+          new_culture_provider_culture_provider_link_path(
+            :culture_provider_id => @culture_provider.id
+        ) %>
+      <% elsif @event %>
+        <%= link_to "Lägg till arrangör",
+          new_event_culture_provider_link_path(
+            :event_id => @event.id
+        ) %>
+      <% end %>
     </li>
   </ul>
 </div>
 
-<% unless @culture_provider.linked_culture_providers.empty? %>
+<% entity = @culture_provider ? @culture_provider : @event %>
+
+<% unless entity.linked_culture_providers.empty? %>
   <table class="culture-provider-links-list">
     <thead>
       <tr>
@@ -30,17 +42,27 @@
       </tr>
     </thead>
     <tbody>
-      <% @culture_provider.linked_culture_providers.each do |link| -%>
+      <% entity.linked_culture_providers.each do |link| -%>
         <tr class="<%= cycle('', 'even') %>">
           <td class="culture_provider"><%= link_to link.name, link %></td>
           <td class="tools">
-            <%= link_to "Ta bort",
-              culture_provider_culture_provider_link_path(
-                :culture_provider_id => @culture_provider.id,
-                :id => link.id
-            ),
-              :method => :delete
-            %>
+            <% if @culture_provider %>
+              <%= link_to "Ta bort",
+                culture_provider_culture_provider_link_path(
+                  :culture_provider_id => @culture_provider.id,
+                  :id => link.id
+              ),
+                :method => :delete
+              %>
+            <% elsif @event %>
+              <%= link_to "Ta bort",
+                event_culture_provider_link_path(
+                  :event_id => @event.id,
+                  :id => link.id
+              ),
+                :method => :delete
+              %>
+            <% end %>
           </td>
         </tr>
       <% end %>

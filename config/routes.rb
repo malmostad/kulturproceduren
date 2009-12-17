@@ -36,6 +36,8 @@ ActionController::Routing::Routes.draw do |map|
       :collection => { :get_input_area => :get }
     e.resources :statistics, :only => [ :index ],
       :member => { :visitors => :get , :questionaires => :get }
+    e.resources :culture_provider_links, :except => [ :create, :edit, :update ],
+      :member => { :select => :get }
   end
 
   map.resources :occasions, :except => [ :index ],
