@@ -38,7 +38,7 @@
         <td><%= h group.companion_by_occasion(@occasion).tel_nr -%></td>
         <td><%= h booking[:normal] -%></td>
         <td><%= h booking[:adult] -%></td>
-        <td><%= h booking[:adult] -%></td>
+        <td><%= h booking[:wheelchair] -%></td>
         <% if current_user.has_role?(:host, :admin) -%>
           <td><%= @booking_reqs.select { |b| b.group_id == group.id }.map { |b| b.requirement.to_s + "<br/>" } -%></td>
         <% end %>
