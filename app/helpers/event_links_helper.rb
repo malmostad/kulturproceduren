@@ -1,0 +1,2 @@
+module EventLinksHelper
+end

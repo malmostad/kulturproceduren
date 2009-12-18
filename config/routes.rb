@@ -20,13 +20,12 @@ ActionController::Routing::Routes.draw do |map|
       :member => { :set_main => :get }
     cp.resources :culture_provider_links, :except => [ :create, :edit, :update ],
       :member => { :select => :get }
+    cp.resources :event_links, :except => [ :create, :edit, :update ],
+      :collection => { :select_culture_provider => :post },
+      :member => { :select_event => :get }
   end
 
-  map.resources :events, :except => [ :index ], :member => {
-    :handle_links => :get,
-    :add_link => :post,
-    :remove_link => :delete
-  }, :collection => {
+  map.resources :events, :except => [ :index ], :collection => {
     :options_list => :get
   } do |e|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
@@ -38,6 +37,9 @@ ActionController::Routing::Routes.draw do |map|
       :member => { :visitors => :get , :questionaires => :get }
     e.resources :culture_provider_links, :except => [ :create, :edit, :update ],
       :member => { :select => :get }
+    e.resources :event_links, :except => [ :create, :edit, :update ],
+      :collection => { :select_culture_provider => :post },
+      :member => { :select_event => :get }
   end
 
   map.resources :occasions, :except => [ :index ],

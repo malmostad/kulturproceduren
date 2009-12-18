@@ -27,6 +27,11 @@
           culture_provider_culture_provider_links_path(:culture_provider_id => @culture_provider.id)
         %>
       </li>
+      <li>
+        <%= link_to "Hantera länkade evenemang",
+          culture_provider_event_links_path(:culture_provider_id => @culture_provider.id)
+        %>
+      </li>
     </ul>
   </div>
 <% end -%>
@@ -57,15 +62,25 @@
 
     <%= paragraphize(@culture_provider.description, 'class="description"') %>
 
-    <% unless @culture_provider.linked_culture_providers.empty? %>
-      <div class="linked-entities">
+    <% unless @culture_provider.linked_culture_providers.empty? && @culture_provider.linked_events.empty? %>
+      <div class="linked-entities clearfix">
         <h3>Se även</h3>
 
-        <ul>
-          <% @culture_provider.linked_culture_providers.each do |link| %>
-            <li><%= link_to h(link.name), link %></li>
-          <% end %>
-        </ul>
+        <% unless @culture_provider.linked_culture_providers.empty? %>
+          <ul class="culture-provider-list">
+            <% @culture_provider.linked_culture_providers.each do |link| %>
+              <li><%= link_to h(link.name), link %></li>
+            <% end %>
+          </ul>
+        <% end %>
+
+        <% unless @culture_provider.linked_events.empty? %>
+          <ul class="event-list">
+            <% @culture_provider.linked_events.each do |link| %>
+              <li><%= link_to h(link.name), link %></li>
+            <% end %>
+          </ul>
+        <% end %>
       </div>
     <% end %>
 

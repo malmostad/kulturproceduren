@@ -160,46 +160,6 @@ class EventsController < ApplicationController
     redirect_to root_url()
   end
 
-  # Displays an interface for managing links between events.
-  def handle_links
-    session[:event_link] ||= {}
-    @culture_providers = CultureProvider.find :all, :order => "name ASC"
-    @event = Event.find(params[:id])
-
-    if session[:event_link][:selected_culture_provider] && session[:event_link][:selected_culture_provider] > 0
-      @events = Event.find :all,
-        :conditions => { :culture_provider_id => session[:event_link][:selected_culture_provider] },
-        :order => "name ASC"
-    end
-  end
-
-  # Adds a link between two events.
-  #
-  # The link is bidirectional.
-  def add_link
-    session[:event_link][:selected_culture_provider] = params[:event_link][:culture_provider_id].to_i
-    from = Event.find(params[:id])
-    to = Event.find(params[:event_link][:event_id])
-    from.linked_events << to
-    to.linked_events << from
-
-    flash[:notice] = "Evenemangslänken lades till."
-    redirect_to handle_links_event_url(from)
-  end
-
-  # Removes the bidirectional link between two events.
-  def remove_link
-    from = Event.find(params[:id])
-    to = Event.find(params[:other_id])
-
-    from.linked_events.delete(to)
-    to.linked_events.delete(from)
-
-    flash[:notice] = "Evenemangslänken togs bort."
-    redirect_to handle_links_event_url(from)
-  end
-
-  
   # Renders a list of <tt>option</tt>-tags of events. For use in Ajax calls.
   def options_list
     conditions = {}

@@ -17,6 +17,13 @@ class Event < ActiveRecord::Base
   # Scope for operating on events without questionnaires
   named_scope :without_questionaires, :conditions => 'id not in (select event_id from questionaires)'
 
+  named_scope :not_linked_to_event, lambda { |event|
+    { :conditions => [ "id not in (select to_id from event_links where from_id = ?) and id != ?", event.id, event.id ] }
+  }
+  named_scope :not_linked_to_culture_provider, lambda { |culture_provider|
+    { :conditions => [ "id not in (select event_id from culture_providers_events where culture_provider_id = ?)", culture_provider.id ] }
+  }
+
   has_many :tickets, :dependent => :delete_all
   
   has_many :districts, :through => :tickets, :uniq => true

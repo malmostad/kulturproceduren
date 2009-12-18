@@ -332,9 +332,6 @@
 /* Attachment form */
 #kp form.attachment-form label { width: 7em; }
 #kp form.attachment-form .input-container { padding-left: 7em; }
-/* Event link form */
-#kp form.event-links-form label { width: 8em; }
-#kp form.event-links-form .input-container { padding-left: 8em; }
 /* Request password reset form */
 #kp form.request-password-reset-form label { width: 8em; }
 #kp form.request-password-reset-form .input-container { padding-left: 8em; }
@@ -392,7 +389,7 @@
 #kp .info-box .image .tools { padding: 3px; margin: 0; }
 
 #kp .model-cnt .linked-entities h3 { margin-bottom: 0.5em; }
-#kp .model-cnt .linked-entities ul { margin: 0 0 1em 0; padding: 0; }
+#kp .model-cnt .linked-entities ul { margin: 0 0 1.5em 0; padding: 0; width: 15em; float: left; }
 #kp .model-cnt .linked-entities ul li { margin: 0 0 0.3em 1.5em; }
 
 /*** Admin tools ***/
@@ -567,6 +564,8 @@
 /*** Events ***/
 #kp #kp-ev-meta-info ul { margin: 0; padding: 0; list-style-type: none; }
 #kp #kp-ev-meta-info ul li { margin: 0; padding: 0; }
+
+#kp #kp-event-link-culture-provider-selection { padding-bottom: 1em; }
 
 /*** Occasions ***/
 

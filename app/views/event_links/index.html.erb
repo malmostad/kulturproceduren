@@ -9,7 +9,7 @@
 <% end -%>
 
 <h2 class="form-title">
-  Hantera länkade arrangörer för
+  Hantera länkade evenemang för
   <%= h(@culture_provider ? @culture_provider.name : @event.name) %>
 </h2>
 
@@ -17,13 +17,13 @@
   <ul>
     <li>
       <% if @culture_provider %>
-        <%= link_to "Lägg till arrangör",
-          new_culture_provider_culture_provider_link_path(
+        <%= link_to "Lägg till evenemang",
+          new_culture_provider_event_link_path(
             :culture_provider_id => @culture_provider.id
         ) %>
       <% elsif @event %>
         <%= link_to "Lägg till arrangör",
-          new_event_culture_provider_link_path(
+          new_event_event_link_path(
             :event_id => @event.id
         ) %>
       <% end %>
@@ -33,22 +33,22 @@
 
 <% entity = @culture_provider ? @culture_provider : @event %>
 
-<% unless entity.linked_culture_providers.empty? %>
-  <table class="culture-provider-links-list">
+<% unless entity.linked_events.empty? %>
+  <table class="event-links-list">
     <thead>
       <tr>
-        <th class="culture-provider">Arrangör</th>
+        <th class="event">Evenemang</th>
         <th class="tools"></th>
       </tr>
     </thead>
     <tbody>
-      <% entity.linked_culture_providers.each do |link| -%>
+      <% entity.linked_events.each do |link| -%>
         <tr class="<%= cycle('', 'even') %>">
-          <td class="culture-provider"><%= link_to link.name, link %></td>
+          <td class="event"><%= link_to link.name, link %></td>
           <td class="tools">
             <% if @culture_provider %>
               <%= link_to "Ta bort",
-                culture_provider_culture_provider_link_path(
+                culture_provider_event_link_path(
                   :culture_provider_id => @culture_provider.id,
                   :id => link.id
               ),
@@ -56,7 +56,7 @@
               %>
             <% elsif @event %>
               <%= link_to "Ta bort",
-                event_culture_provider_link_path(
+                event_event_link_path(
                   :event_id => @event.id,
                   :id => link.id
               ),

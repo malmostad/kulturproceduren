@@ -23,7 +23,7 @@
   <tbody>
     <% @culture_providers.each do |culture_provider| -%>
       <tr class="<%= cycle('', 'even') %>">
-        <td class="culture_provider"><%= h culture_provider.name %></td>
+        <td class="culture-provider"><%= h culture_provider.name %></td>
         <td class="tools">
           <% if @culture_provider %>
             <%= link_to "Välj",

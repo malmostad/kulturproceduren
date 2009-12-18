@@ -34,7 +34,7 @@ class CultureProviderLinksController < ApplicationController
       redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
     elsif @event
       @event.linked_culture_providers << new_link
-      flash[:notice] = "Länken mellan mellan arrangören och evenemanget skapades."
+      flash[:notice] = "Länken mellan arrangören och evenemanget skapades."
       redirect_to event_culture_provider_links_url(:event_id => @event.id)
     end
   end
