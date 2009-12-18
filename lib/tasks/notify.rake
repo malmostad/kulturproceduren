@@ -64,25 +64,58 @@ namespace :kp do
     events = Event.find :all, :conditions => "ticket_release_date = current_date"
 
     events.each do |event|
-      puts "Notiferar kontakter att #{event.name} är fördelat"
+      puts "Notifying ticket release for #{event.name}"
       group_structure = {}
       addresses = []
 
-      event.groups.each do |group|
-        # Notify the contacts on both groups, schools and districts
-        addresses += (group.contacts || "").split(",")
-        addresses += (group.school.contacts || "").split(",")
-        addresses += (group.school.district.contacts || "").split(",")
+      Role.find_by_symbol(:admin).users.each { |u| addresses << u.email }
 
-        group_structure[group.school] ||= []
-        group_structure[group.school] << group
+      case event.ticket_state
+      when Event::ALLOTED_GROUP
+        event.groups.each do |group|
+          # Notify the contacts on both groups, schools and districts
+          addresses += (group.contacts || "").split(",")
+          addresses += (group.school.contacts || "").split(",")
+          addresses += (group.school.district.contacts || "").split(",")
+
+          group_structure[group.school] ||= []
+          group_structure[group.school] << group
+        end
+      when Event::ALLOTED_DISTRICT
+        event.districts.each do |district|
+          addresses += (district.contacts || "").split(",")
+
+          district.schools.find_by_age_span(event.from_age, event.to_age).each do |school|
+            addresses += (school.contacts || "").split(",")
+
+            school.groups.find_by_age_span(event.from_age, event.to_age).each do |group|
+              addresses += (group.contacts || "").split(",")
+            end
+          end
+        end
+      when Event::FREE_FOR_ALL
+        District.find(:all).each do |district|
+          addresses += (district.contacts || "").split(",")
+
+          district.schools.find_by_age_span(event.from_age, event.to_age).each do |school|
+            addresses += (school.contacts || "").split(",")
+
+            school.groups.find_by_age_span(event.from_age, event.to_age).each do |group|
+              addresses += (group.contacts || "").split(",")
+            end
+          end
+        end
       end
 
       addresses.uniq!
 
-      EventMailer.deliver_ticket_release_notification_email(event, group_structure, addresses.collect { |a| a.strip })
+      EventMailer.deliver_ticket_release_notification_email(
+        event,
+        addresses.collect { |a| a.strip },
+        group_structure
+      )
       addresses.each { |a| puts "Sending notification mail for ticket release about #{event.name} to #{a}" }
-     
+
     end
   end
 

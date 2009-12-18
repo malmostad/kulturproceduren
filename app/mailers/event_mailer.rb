@@ -4,7 +4,7 @@ class EventMailer < ActionMailer::Base
   helper :mailer
 
   # Sends an email to contacts when tickets have been released
-  def ticket_release_notification_email(event, group_structure, addresses)
+  def ticket_release_notification_email(event, addresses, group_structure = nil)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else

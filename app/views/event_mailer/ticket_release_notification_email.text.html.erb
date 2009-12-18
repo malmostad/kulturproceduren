@@ -18,34 +18,69 @@
   <% end -%>
 </ul>
 
-<p>Följande har fått platser reserverade för evenemanget:</p>
+<% if @event.ticket_state == Event::ALLOTED_GROUP %>
 
-<table>
-  <tbody>
-    <% @group_structure.keys.sort_by { |s| s.name }.each do |school| %>
-      <tr>
-        <% groups = @group_structure[school] %>
-        <td rowspan="<%= h groups.length %>"><%= h school.name %></td>
-        <% groups.sort_by { |g| g.name }.each do |group| %>
-          <td><%= h group.name %></td>
-          </tr><tr>
-        <% end %>
-      </tr>
+  <p>Följande grupper har fått platser reserverade för evenemanget:</p>
+
+  <table>
+    <tbody>
+      <% @group_structure.keys.sort_by { |s| s.name }.each do |school| %>
+        <tr>
+          <% groups = @group_structure[school] %>
+          <td rowspan="<%= h groups.length %>"><%= h school.name %></td>
+          <% groups.sort_by { |g| g.name }.each do |group| %>
+            <td><%= h group.name %></td>
+            </tr><tr>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p>
+    Platserna är reserverade till er fram till
+    <%= @event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] %>.
+    Därefter släpps obekräftade platser till hela stadsdelen.
+  </p>
+
+  <p>
+    <a href="<%= mail_url(event_path(@event)) %>">
+      Läs mer om <%= h @event.name %> och bekräfta era platser genom att välja önskad dag och tid här.
+    </a>
+  </p>
+
+<% elsif @event.ticket_state == Event::ALLOTED_DISTRICT %>
+  <p>Följande stadsdelar har fått platser reserverade för evenemanget:</p>
+
+  <ul>
+    <% @event.districts.each do |district| %>
+      <li><%= h district.name %></li>
     <% end %>
-  </tbody>
-</table>
+  </ul>
 
-<p>
-  Platserna är reserverade till er fram till
-  <%= @event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] %>.
-  Därefter släpps obekräftade platser till hela stadsdelen.
-</p>
+  <p>
+    Platserna är reserverade för skolor i stadsdelarna fram till
+    <%= @event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>.
+    Därefter släpps obekräftade platser till hela staden.
+  </p>
 
-<p>
-  <a href="<%= mail_url(event_path(@event)) %>">
-    Läs mer om <%= h @event.name %> och bekräfta era platser genom att välja önskad dag och tid här.
-  </a>
-</p>
+  <p>
+    <a href="<%= mail_url(event_path(@event)) %>">
+      Läs mer om <%= h @event.name %> och bekräfta era platser genom att välja önskad dag och tid här.
+    </a>
+  </p>
+
+<% elsif @event.ticket_state == Event::FREE_FOR_ALL %>
+  <p>
+    Evenemanget är tillgängligt för alla skolor i hela Malmö.
+  </p>
+
+  <p>
+    <a href="<%= mail_url(event_path(@event)) %>">
+      Läs mer om <%= h @event.name %> och boka platser genom att välja önskad dag och tid här.
+    </a>
+  </p>
+<% end %>
 
 <p>
   <%= link_to "Boka kulturbuss", APP_CONFIG[:culture_bus_link] %>
