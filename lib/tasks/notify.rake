@@ -107,13 +107,16 @@ namespace :kp do
         end
       end
 
+      addresses.collect! { |a| a.strip }
+      addresses.reject! { |a| a !~ /\S+@\S+/ }
       addresses.uniq!
 
       EventMailer.deliver_ticket_release_notification_email(
         event,
-        addresses.collect { |a| a.strip },
+        addresses,
         group_structure
       )
+
       addresses.each { |a| puts "Sending notification mail for ticket release about #{event.name} to #{a}" }
 
     end

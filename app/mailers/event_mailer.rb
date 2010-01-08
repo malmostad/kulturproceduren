@@ -70,6 +70,8 @@ class EventMailer < ActionMailer::Base
         end
       end
 
+      addresses.reject! { |a| a !~ /\S+@\S+/ }
+
       return addresses.uniq
   end
 end
