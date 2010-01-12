@@ -24,7 +24,9 @@ namespace :kp do
 
         # Notify contacts on districts
         districts.each do |district|
-          EventMailer.deliver_district_allotment_notification_email(e, district)
+          get_relevant_addresses(e, [district]).each do |address|
+            EventMailer.deliver_district_allotment_notification_email(e, district, address)
+          end
         end
 
         # Send responses to notification requests
@@ -42,8 +44,11 @@ namespace :kp do
 
         if e.tickets.count(:conditions => { :state => Ticket::UNBOOKED }) > 0
           notification_requests = NotificationRequest.find_by_event(e)
+
           # Notify contacts on districts
-          EventMailer.deliver_free_for_all_allotment_notification_email(e)
+          get_relevant_addresses(e, District.all).each do |address|
+            EventMailer.deliver_free_for_all_allotment_notification_email(e, address)
+          end
         end
 
         # Send responses to notification requests
@@ -57,4 +62,32 @@ namespace :kp do
     end
   end
 
+  # Gets the relavant recipient addresses when sending mails for the ticket transitions.
+  #
+  # This method selects the contacts for the given district, and the schools and groups in
+  # the districts that have children in the correct age groups.
+  def get_relevant_addresses(event, districts)
+    addresses = []
+    districts.each do |d|
+      unless d.contacts.blank?
+        addresses += d.contacts.split(",").collect { |c| c.strip }
+      end
+
+      d.schools.find_by_age_span(event.from_age, event.to_age).each do |s|
+        unless s.contacts.blank?
+          addresses += s.contacts.split(",").collect { |c| c.strip }
+        end
+
+        s.groups.find_by_age_span(event.from_age, event.to_age).each do |g|
+          unless g.contacts.blank?
+            addresses += g.contacts.split(",").collect { |c| c.strip }
+          end
+        end
+      end
+    end
+
+    addresses.reject! { |a| a !~ /\S+@\S+/ }
+
+    return addresses.uniq
+  end
 end
