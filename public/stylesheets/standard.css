@@ -543,6 +543,7 @@
     padding: 0.5em 0;
 }
 
+#kp-ticket-availability-dialog { overflow: auto !important; }
 #kp .calendar-list .ticket-availability { position: relative; display: inline; }
 #kp .calendar-list .ticket-availability-close-link { display: none; }
 #kp .calendar-list .ticket-availability-container {
