@@ -11,7 +11,7 @@ class Group < ActiveRecord::Base
     end
   end
   
-  has_many :answers, :dependent => :destroy
+  has_many :answer_forms, :dependent => :destroy
   has_many :booking_requirements, :dependent => :destroy
   has_many :notification_requests, :dependent => :destroy
   belongs_to :school
