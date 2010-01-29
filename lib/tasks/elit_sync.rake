@@ -75,20 +75,42 @@ namespace :kp do
 
           if local_school
             puts "\t\tFound local school: #{local_school.attributes.to_json}"
+
+            local_school.name = elit_school.name
+
+            if local_school.save
+              puts "\t\tSchool saved: #{local_school.attributes.to_json}"
+            else
+              puts "\t\tAn error occurred while saving the school: #{elit_school.name}"
+              puts "\t\t#{local_school.errors.to_json}"
+            end
           else
             puts "\t\tNo local school found, creating a new"
+
             local_school = School.new
             local_school.elit_id = elit_school.id.strip
             local_school.district = district
+            local_school.name = elit_school.name
+
+            if local_school.save
+              prio = SchoolPrio.new do |p|
+                p.school = local_school
+                p.district = district
+                p.prio = SchoolPrio.lowest_prio(district) + 1
+              end
+
+              if prio.save
+                puts "\t\tSchool saved: #{local_school.attributes.to_json}"
+              else
+                puts "\t\tAn error occurred while saving the school: #{elit_school.name}"
+                puts "\t\t#{prio.errors.to_json}"
+              end
+            else
+              puts "\t\tAn error occurred while saving the school: #{elit_school.name}"
+              puts "\t\t#{local_school.errors.to_json}"
+            end
           end
 
-          local_school.name = elit_school.name
-          if local_school.save
-            puts "\t\tSchool saved: #{local_school.attributes.to_json}"
-          else
-            puts "\t\tAn error occurred while saving the school: #{elit_school.name}"
-            puts "\t\t#{local_school.errors.to_json}"
-          end
 
           puts " "
         end
@@ -155,7 +177,7 @@ namespace :kp do
             ag.age = elit_age_group.age
             ag.quantity = elit_age_group.amount
           end
-          
+
           if local_age_group.save
             puts "\t\tAge group saved: #{local_age_group.attributes.to_json}"
           else
