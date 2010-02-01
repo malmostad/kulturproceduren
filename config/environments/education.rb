@@ -35,4 +35,4 @@ ActionMailer::Base.smtp_settings = {
   :domain => "localhost"
 }
 
-ActionController::Base.asset_host = "http://www.malmo.se/assets/kp"
+ActionController::Base.asset_host = "http://webapps.malmo.se/assets/kp"
