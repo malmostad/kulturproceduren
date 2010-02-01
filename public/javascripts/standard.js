@@ -125,7 +125,22 @@
                 var request = $.get(kpConfig.booking.groupList.url,
                 { group_id: groupId },
                 function(data) {
-                    $("#kp-group-bookings-container").html(data);
+                    var cnt = $("#kp-group-bookings-container");
+                    cnt.html(data);
+
+                    // Fix for incoming URL:s in Sitevision
+                    var urlBase = $("#kp-sitevision-base-url").attr("href");
+                    cnt.find("a").each(function(i, elem) {
+                        var link = $(elem);
+                        var href = link.attr("href");
+
+                        // Remove the domain name (IE fix)
+                        if (href.indexOf("http://") == 0) {
+                            href = href.slice(href.indexOf("/", 7));
+                        }
+
+                        link.attr("href", urlBase.substr(0, urlBase.length - 1) + href);
+                    });
                 });
             } else {
                 $("#kp-group-bookings-container").html("");
