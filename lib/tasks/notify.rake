@@ -111,14 +111,10 @@ namespace :kp do
       addresses.reject! { |a| a !~ /\S+@\S+/ }
       addresses.uniq!
 
-      EventMailer.deliver_ticket_release_notification_email(
-        event,
-        addresses,
-        group_structure
-      )
-
-      addresses.each { |a| puts "Sending notification mail for ticket release about #{event.name} to #{a}" }
-
+      addresses.each do |a|
+        puts "Sending notification mail for ticket release about #{event.name} to #{a}"
+        EventMailer.deliver_ticket_release_notification_email(event,[a],group_structure)
+      end
     end
   end
 
