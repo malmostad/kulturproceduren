@@ -223,17 +223,20 @@ class OccasionsController < ApplicationController
     pdf.margins_cm(2,2,2,2)
 
     PDF::SimpleTable.new do |tab|
-      tab.title = "Deltagarlista för #{@occasion.event.name} #{@occasion.date.to_s}".to_iso
+      tab.title = "Deltagarlista för #{@occasion.event.name} #{@occasion.date.to_s} #{l(@occasion.start_time, :format => :only_time)}".to_iso
       tab.column_order.push(*%w(group comp comptel att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
 
       tab.columns["group"] = PDF::SimpleTable::Column.new("group") { |col|
         col.heading = "Skola / Grupp".to_iso
+        col.width = 130
       }
       tab.columns["comp"] = PDF::SimpleTable::Column.new("com") { |col|
         col.heading = "Medföljande vuxen".to_iso
+        col.width = 130
       }
       tab.columns["comptel"] = PDF::SimpleTable::Column.new("comptel") { |col|
         col.heading = "Telefonnummer"
+        col.width = 100
       }
       tab.columns["att_normal"] = PDF::SimpleTable::Column.new("att_normal") { |col|
         col.heading = "Barn"
@@ -246,6 +249,7 @@ class OccasionsController < ApplicationController
       }
       tab.columns["req"]  = PDF::SimpleTable::Column.new("req") { |col|
         col.heading = "Övriga önskemål".to_iso
+        col.width = 130
       }
       tab.columns["pres_normal"]  = PDF::SimpleTable::Column.new("pres_normal") { |col|
         col.heading = "Barn".to_iso
@@ -258,14 +262,17 @@ class OccasionsController < ApplicationController
       }
 
       tab.show_lines    = :all
-      tab.show_headings = true
-      #tab.orientation   = :right
       tab.orientation   = 1
       tab.position      = :left
       tab.font_size     = 9
+      tab.heading_font_size = 9
       tab.maximum_width = 1
+      tab.title_gap = 10
+      tab.show_headings = true
+      tab.heading_color = Color::RGB::White
+      tab.shade_headings = true
+      tab.shade_heading_color = Color::RGB::Grey30
 
-      puts "DEBUGG: #{tab.maximum_width}"
       data = []
 
       @groups.each do |g|
