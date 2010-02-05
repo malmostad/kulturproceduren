@@ -18,3 +18,5 @@
     width: auto;
     margin: auto;
 }
+
+#ui-datepicker-div { display: none; }
