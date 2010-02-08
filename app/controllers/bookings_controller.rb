@@ -177,7 +177,7 @@ class BookingsController < ApplicationController
 
           # Get the difference in requested seats between the old booking and
           # the incoming request
-          booking_diff = {}
+          booking_diff = { :normal => 0, :adult => 0, :wheelchair => 0 }
           @seats.keys.each { |k| booking_diff[k.to_sym] = @seats[k.to_sym].to_i - current_booking[k.to_sym].to_i }
 
           # Unbook tickets if the difference between the existing booking and the

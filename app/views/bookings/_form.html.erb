@@ -125,7 +125,7 @@
 
       <div class="form-buttons">
         <%= hidden_field_tag "group_id", @group.id %>
-        <%= submit_tag "Boka" %>
+        <%= submit_tag(@is_edit ? "Uppdatera bokning" : "Boka") %>
       </div>
 
     <% end %>
