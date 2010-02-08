@@ -24,6 +24,8 @@ if [ ! -d $RAILS_DIR/lib/tasks ]; then
    exit -1
 fi   
 
+cd $RAILS_DIR
+
 echo -n "Begin rake tasks KP, RAILS_ENV=$RAILS_ENV at "
 date
 $RAKE -f $RAILS_DIR/Rakefile RAILS_ENV=$RAILS_ENV kp:notify_occasion_reminder 
