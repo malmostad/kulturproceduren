@@ -1,8 +1,17 @@
 (function($) {
     $(function() {
-        if ($("#kp #kp-distribution-form").length <= 0) {
+        var form = $("#kp #kp-distribution-form");
+
+        if (form.length <= 0) {
             return;
         }
+
+        form.bind("submit", function() {
+            form.find(":submit").attr("disabled", "disabled");
+            var cnt = form.find(".submit-cnt");
+            cnt.append('<input type="hidden" name="create_tickets" value="1"/>')
+            cnt.append('<div class="load-indicator"></div>');
+        });
 
         // Data structure for the allotment state
         var tickets = {
