@@ -288,7 +288,7 @@
                   <% elsif user_online? -%>
                     <% if @event.bookable? && current_user.can_book? -%>
 
-                      <% if available_seats > 0 %>
+                      <% if available_seats > 0 && @event.has_unbooked_tickets? %>
                         <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
                       <% else %>
                         <span class="sold-out">Fullbokat</span>
