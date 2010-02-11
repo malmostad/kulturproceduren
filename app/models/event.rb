@@ -87,6 +87,11 @@ class Event < ActiveRecord::Base
     @is_bookable
   end
 
+  # Indicates whether the event has tickets available for booking
+  def has_unbooked_tickets?
+    tickets.exists?(:state => Ticket::UNBOOKED)
+  end
+
   # Returns an array of the ticket usage on this event. The first element is the
   # total number of tickets on the event, and the second is the number of tickets
   # that are booked.
