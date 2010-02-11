@@ -90,6 +90,11 @@ class OccasionsController < ApplicationController
 
         ticket.save!
       end
+
+      # Create extra tickets for extra attendants
+      [ :adult, :wheelchair, :normal ].each do |type|
+        create_extra_tickets(attendance[type], tickets[0], type) if attendance[type] > 0
+      end
     end
 
     flash[:notice] = "Närvaron uppdaterades."
@@ -214,6 +219,26 @@ class OccasionsController < ApplicationController
 
 
   private
+
+  # Creates extra tickets for unannounced attendants when reporting attendance
+  def create_extra_tickets(attendance, base, type)
+    1.upto(attendance) do |i|
+      ticket = Ticket.new do |t|
+        t.state = Ticket::USED
+        t.group = base.group
+        t.event = base.event
+        t.occasion = base.occasion
+        t.district = base.district
+        t.companion = base.companion
+        t.user = current_user
+        t.adult = (type == :adult)
+        t.wheelchair = (type == :wheelchair)
+        t.booked_when = DateTime.now
+      end
+
+      ticket.save!
+    end
+  end
 
   # Creates a pdf document of the attendants on an occasion
   def get_pdf
