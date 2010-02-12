@@ -17,7 +17,7 @@ namespace :kp do
         # Transition to districts
         e.ticket_state = Event::ALLOTED_DISTRICT
         e.save
-        puts "Evenemang #{e.name} är nu bokningsbart för hela stadsdelen"
+        puts "Notifying district allotment for #{e.name}"
 
         districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
         notification_requests = NotificationRequest.find_by_event_and_districts(e, districts)
@@ -25,6 +25,7 @@ namespace :kp do
         # Notify contacts on districts
         districts.each do |district|
           get_relevant_addresses(e, [district]).each do |address|
+            puts "Sending notification mail for district allotment on #{e.name} to #{address}"
             EventMailer.deliver_district_allotment_notification_email(e, district, address)
           end
         end
@@ -32,6 +33,7 @@ namespace :kp do
         # Send responses to notification requests
         notification_requests.each do |n|
           if n.send_mail
+            puts "Notification request answered on #{e.name} to #{address}"
             NotificationRequestMailer.deliver_tickets_available_email(n, true)
           end
         end
@@ -40,13 +42,14 @@ namespace :kp do
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
         e.save
-        puts "Evenemang #{e.name} är nu bokningsbart för alla"
+        puts "Notifying free for all for #{e.name}"
 
         if e.tickets.count(:conditions => { :state => Ticket::UNBOOKED }) > 0
           notification_requests = NotificationRequest.find_by_event(e)
 
           # Notify contacts on districts
           get_relevant_addresses(e, District.all).each do |address|
+            puts "Sending notification mail for free for all on #{e.name} to #{address}"
             EventMailer.deliver_free_for_all_allotment_notification_email(e, address)
           end
         end
@@ -54,6 +57,7 @@ namespace :kp do
         # Send responses to notification requests
         notification_requests.each do |n|
           if n.send_mail
+            puts "Notification request answered on #{e.name} to #{address}"
             NotificationRequestMailer.deliver_tickets_available_email(n, false)
           end
         end
@@ -68,6 +72,9 @@ namespace :kp do
   # the districts that have children in the correct age groups.
   def get_relevant_addresses(event, districts)
     addresses = []
+
+    Role.find_by_symbol(:admin).users.each { |u| addresses << u.email }
+
     districts.each do |d|
       unless d.contacts.blank?
         addresses += d.contacts.split(",").collect { |c| c.strip }
