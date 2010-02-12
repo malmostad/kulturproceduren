@@ -65,9 +65,9 @@ num_category_groups = 0
 
           <% if user_online? && current_user.can_book?  %>
             <% if occasion.event.bookable? %>
-              <% available_seats = occasion.available_seats %>
+              <% available_seats = [ occasion.available_seats.to_i, occasion.event.unbooked_tickets.to_i ].min %>
 
-              <% if available_seats > 0 && occasion.event.has_unbooked_tickets? %>
+              <% if available_seats > 0 %>
                 <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
               <% else %>
                 <span class="sold-out">Fullbokat</span>

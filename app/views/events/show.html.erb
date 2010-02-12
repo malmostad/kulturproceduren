@@ -246,7 +246,7 @@
 
           <tbody>
             <% @event.occasions.each do |occasion| %>
-              <% available_seats = occasion.available_seats.to_i %>
+              <% available_seats = [ occasion.available_seats.to_i, @event.unbooked_tickets.to_i ].min %>
               <tr class="<%= cycle('', 'even') %> <%= "cancelled" if occasion.cancelled %>">
 
                 <td class="date-time">
@@ -288,7 +288,7 @@
                   <% elsif user_online? -%>
                     <% if @event.bookable? && current_user.can_book? -%>
 
-                      <% if available_seats > 0 && @event.has_unbooked_tickets? %>
+                      <% if available_seats > 0 %>
                         <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
                       <% else %>
                         <span class="sold-out">Fullbokat</span>
