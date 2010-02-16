@@ -20,18 +20,18 @@ config.action_mailer.raise_delivery_errors = false
 
 #ActionMailer::Base.perform_deliveries = false
 
-#ActionMailer::Base.delivery_method = :smtp
-#ActionMailer::Base.smtp_settings = {
-#  :address => "localhost",
-#  :port => 1025,
-#  :domain => "localhost"
-#}
-
-ActionMailer::Base.delivery_method = :sendmail
-ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.sendmail_settings = {
-  :location => "/usr/sbin/sendmail",
-  :arguments => "-i -t -f noreply@malmo.se -F Kulturproceduren "
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :address => "localhost",
+  :port => 1025,
+  :domain => "localhost"
 }
+
+#ActionMailer::Base.delivery_method = :sendmail
+#ActionMailer::Base.perform_deliveries = true
+#ActionMailer::Base.sendmail_settings = {
+#  :location => "/usr/sbin/sendmail",
+#  :arguments => "-i -t -f noreply@malmo.se -F Kulturproceduren "
+#}
 
 #ActionController::Base.asset_host = "http://www.dev.malmo.se/assets/kp"

@@ -33,7 +33,7 @@ namespace :kp do
         # Send responses to notification requests
         notification_requests.each do |n|
           if n.send_mail
-            puts "Notification request answered on #{e.name} to #{address}"
+            puts "Notification request answered on #{e.name} to #{n.user.email}"
             NotificationRequestMailer.deliver_tickets_available_email(n, true)
           end
         end
@@ -57,7 +57,7 @@ namespace :kp do
         # Send responses to notification requests
         notification_requests.each do |n|
           if n.send_mail
-            puts "Notification request answered on #{e.name} to #{address}"
+            puts "Notification request answered on #{e.name} to #{n.user.email}"
             NotificationRequestMailer.deliver_tickets_available_email(n, false)
           end
         end
