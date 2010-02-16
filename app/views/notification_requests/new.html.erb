@@ -23,7 +23,7 @@
     <%= form.hidden_field :group_id %>
 
     <%= form.check_box :send_mail, :disabled => disabled %>
-    <%= form.check_box :send_sms, :disabled => disabled %>
+    <%# = form.check_box :send_sms, :disabled => disabled %>
 
     <% form.buttons do %>
       <%= form.submit "Registrera", :disabled => disabled %>
