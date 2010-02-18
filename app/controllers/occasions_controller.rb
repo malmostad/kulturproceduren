@@ -32,7 +32,7 @@ class OccasionsController < ApplicationController
       return
     end
 
-    if @occasion.date > Date.today
+    if @occasion.date >= Date.today
       flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
       redirect_to root_url()
       return
@@ -60,7 +60,7 @@ class OccasionsController < ApplicationController
       return
     end
 
-    if @occasion.date > Date.today
+    if @occasion.date >= Date.today
       flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
       redirect_to root_url()
       return

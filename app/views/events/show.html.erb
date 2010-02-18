@@ -314,7 +314,7 @@
                       <% end %>
                     <% end -%>
 
-                    <% if occasion.date > Date.today %>
+                    <% if occasion.date >= Date.today %>
                       <%= link_to "Närvarolista", attendants_occasion_path(occasion) %>
                     <% elsif !occasion.cancelled && (current_user.has_role?(:admin) || current_user.has_role?(:host)) %>
                       <%= link_to "Rapportera närvaro", report_show_occasion_path(occasion) -%>
