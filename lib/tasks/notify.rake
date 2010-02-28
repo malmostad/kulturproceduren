@@ -123,16 +123,16 @@ namespace :kp do
   # For use when calculating a date <tt>num_weekdays</tt> into the future.
   def num_weekdays_to_real_days(start_weekday, num_weekdays)
     case start_weekday
-    when 1..5
+    when 0..4
       # Start counting on the given start date when it is a regular week day
       real_days = 0
       current_weekday = start_weekday
-    when 6
+    when 5
       # Start counting on the Monday when the real start date is a Saturday,
       # and include the number of skipped days in the number of real days.
       real_days = 2
       current_weekday = 1
-    when 7
+    when 6
       # Start counting on the Monday when the real start date is a Sunday,
       # and include the number of skipped days in the number of real days.
       real_days = 1
