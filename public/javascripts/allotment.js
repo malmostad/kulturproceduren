@@ -271,4 +271,12 @@
             return false;
         });
     });
+	      $(document).ready(function() {
+			  setInterval(function(){
+                 $.get("/ping/ping/");
+			  },300000);
+            
+	      });
+
+	   
 })(jQuery);
