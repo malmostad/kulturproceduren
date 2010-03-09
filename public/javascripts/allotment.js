@@ -271,12 +271,15 @@
             return false;
         });
     });
-	      $(document).ready(function() {
-			  setInterval(function(){
-                 $.get("/ping/ping/");
-			  },300000);
-            
-	      });
 
-	   
+    $(function() {
+        /**
+         * Ping function to prevent session timeout.
+         */
+        setInterval(function(){
+            $.get(kpConfig.ping.url);
+        }, 300000);
+    });
+
+
 })(jQuery);

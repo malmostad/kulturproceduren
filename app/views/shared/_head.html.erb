@@ -41,6 +41,9 @@
 
 <script type="text/javascript">
 kpConfig = {
+  ping: {
+    url: "<%= url_for :controller => "ping", :action => "ping" %>"
+  },
   sessionfix: {
     url: "<%= url_for :controller => "login", :action => "session_fix" %>"
   },
