@@ -12,9 +12,9 @@ class AnswerForm < ActiveRecord::Base
 
   before_create :generate_id
 
-  # Finds all unanswered forms that are older than the given date
+  # Finds all unanswered forms for occasions the given date
   def self.find_overdue(date)
-    find :all, :conditions => [ "occasions.date < ? and answer_forms.completed = ?", date, false ],
+    find :all, :conditions => [ "occasions.date = ? and answer_forms.completed = ?", date, false ],
       :include => [ :occasion, :companion, :group ]
   end
 
