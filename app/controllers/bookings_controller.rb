@@ -76,7 +76,7 @@ class BookingsController < ApplicationController
   def create
     @seats = params[:seats]
     @companion = Companion.new(params[:companion])
-    load_booking_requirement(params[:booking_requirements])
+    load_booking_requirement(params[:booking_requirement])
 
     # Validate the incoming data
     valid = validate_seats(@seats)
