@@ -308,7 +308,7 @@ class OccasionsController < ApplicationController
         row["comptel"]     = g.companion_by_occasion(@occasion).tel_nr.to_s.to_iso
         row["att_normal"]  = booking[:normal] || 0
         row["att_adult"]   = booking[:adult] || 0
-        row["att_wheel"]   = booking[:wheel] || 0
+        row["att_wheel"]   = booking[:wheelchair] || 0
         row["req"]         = @booking_reqs.select { |b| b.group_id == g.id }.map { |b| (b.requirement.to_s + "\n").to_iso  }
         row["pres_normal"] = " ".to_iso
         row["pres_adult"]  = " ".to_iso
