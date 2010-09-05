@@ -9,13 +9,14 @@ class AnswerFormTest < ActiveSupport::TestCase
   end
 
   test "find overdue" do
-    as = AnswerForm.find_overdue(Date.today)
+    target_date = Date.today - 2
+    as = AnswerForm.find_overdue(target_date)
 
     assert !as.empty?
 
     as.each do |a|
       assert !a.completed
-      assert Date.today > a.occasion.date
+      assert target_date == a.occasion.date
     end
   end
 end
