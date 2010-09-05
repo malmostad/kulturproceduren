@@ -6,11 +6,11 @@
             return;
         }
 
-        form.bind("submit", function() {
-            form.find(":submit").attr("disabled", "disabled");
-            var cnt = form.find(".submit-cnt");
-            cnt.append('<input type="hidden" name="create_tickets" value="1"/>')
-            cnt.append('<div class="load-indicator"></div>');
+        form.find(".submit-cnt :submit").click(function () {
+            form.find(".submit-cnt").append('<input type="hidden" name="create_tickets" value="1"/>')
+        });
+        form.bind("submit", function(e) {
+            form.find(":submit").attr("disabled", "disabled").after('<div class="load-indicator"></div>');
         });
 
         // Data structure for the allotment state

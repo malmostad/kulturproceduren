@@ -115,7 +115,6 @@ class AllotmentController < ApplicationController
   # or adds an extra group to the working data depending on the incoming
   # submission
   def create_tickets
-
     assignment = {}
     params[:allotment][:ticket_assignment].each { |k,v| assignment[k.to_i] = v.to_i if v.to_i > 0 }
 
@@ -187,7 +186,7 @@ class AllotmentController < ApplicationController
       session[:allotment] = nil
       flash[:notice] = "Biljetter till evenemanget har fördelats."
       redirect_to @event
-    elsif params[:add_group_submit]
+    else
       session[:allotment][:extra_groups] ||= []
       session[:allotment][:extra_groups] << params[:add_group][:group_id].to_i
       session[:allotment][:extra_groups].uniq!

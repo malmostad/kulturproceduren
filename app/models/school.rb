@@ -5,7 +5,7 @@ class School < ActiveRecord::Base
     def find_by_age_span(from, to)
       find :all,
         :order => "name ASC",
-        :conditions => [ "id in (select g.id from age_groups ag left join groups g on ag.group_id = g.id where age between ? and ?)", from, to ]
+        :conditions => [ "id in (select g.id from age_groups ag left join groups g on ag.group_id = g.id where age between ? and ? and g.active = ?)", from, to, true ]
     end
   end
 

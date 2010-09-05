@@ -18,6 +18,7 @@
     <%= f.text_field :name %>
     <%= f.collection_select :school_id, @schools, :id, :name %>
     <%= f.text_field :contacts, :field_help => "Ange epostadresser, separerade med kommatecken." %>
+    <%= f.check_box :active %>
 
     <% f.buttons do -%>
       <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>

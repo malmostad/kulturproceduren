@@ -269,6 +269,7 @@
 /* Group form */
 #kp form.group-form label { width: 9em; }
 #kp form.group-form .input-container { padding-left: 9em; }
+#kp form.group-form .post-label-form-row { padding-left: 9em; }
 /* Image form */
 #kp form.image-form label { width: 5em; }
 #kp form.image-form .input-container { padding-left: 5em; }

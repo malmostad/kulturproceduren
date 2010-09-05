@@ -9,6 +9,7 @@
         <th><%= sort_link "Stadsdel", "district" %></th>
       <% end -%>
       <th><%= sort_link "ELIT-ID", "elit_id" %></th>
+      <th><%= sort_link "Aktiv", "active" %></th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -22,6 +23,7 @@
           <td><%= link_to h(group.school.district.name), group.school.district %></td>
         <% end -%>
         <td><%= h group.elit_id %></td>
+        <td><%= group.active ? "Ja" : "Nej" %></td>
         <td><%= link_to 'Redigera', edit_group_path(group) %></td>
         <td><%= link_to 'Radera', group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></td>
       </tr>

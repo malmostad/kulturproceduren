@@ -127,6 +127,7 @@ class GroupsController < ApplicationController
     when :district then "districts.name"
     when :school then "schools.name"
     when :elit_id then "elit_id"
+    when :active then "active"
     else
       "name"
     end

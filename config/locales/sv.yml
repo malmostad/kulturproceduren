@@ -169,6 +169,7 @@ sv:
                 contacts: "Kontaktadresser:"
                 elit_id: "ELIT-ID:"
                 school_id: "Skola:"
+                active: "Aktiv"
             age_group:
                 age: "Ålder:"
                 quantity: "Antal:"
