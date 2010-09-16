@@ -140,6 +140,7 @@ class SchoolsController < ApplicationController
     case p.to_sym
     when :district then "districts.name"
     when :elit_id then "elit_id"
+    when :active then "active"
     else
       "name"
     end
