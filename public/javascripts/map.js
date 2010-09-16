@@ -14,7 +14,7 @@
             var address = $(this).siblings(":text").val();
 
             if (address.length > 0) {
-                Malmo.Map.showSingleLocation(address);
+                $.malmo.map.showSingleLocation(address);
             }
 
             return false;
@@ -24,7 +24,7 @@
          * Listener for the map test preview.
          */
         $("#kp .map-address-link").live("click", function () {
-            Malmo.Map.showSingleLocation($(this).attr("title"));
+            $.malmo.map.showSingleLocation($(this).attr("title"));
             return false;
         });
     });

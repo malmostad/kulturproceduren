@@ -16,7 +16,29 @@
 #kp #kp-content #kp-sec-content {
     float: none;
     width: auto;
-    margin: auto;
+    margin: 0;
 }
 
 #ui-datepicker-div { display: none; }
+
+#kp .model-cnt .images-cnt .images { 
+    height: auto !important; 
+    border-width: 0 !important;
+    margin: 0 0 .5em 0 !important;
+}
+#kp .model-cnt .images-cnt .image {
+    clear: both;
+    margin: 0 0 .5em 0 !important;
+    padding: 0  !important;
+    position: relative !important; 
+    display: block !important; 
+    height: auto !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    filter: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    background-color: #fff !important; 
+    background-image: none !important;
+    color: #000 !important;
+}

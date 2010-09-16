@@ -30,4 +30,4 @@ ActionMailer::Base.sendmail_settings = {
   :arguments => "-i -t -F Kulturproceduren -f noreply@malmo.se"
 }
 
-ActionController::Base.asset_host = "http://webapps.malmo.se/assets/kp"
+ActionController::Base.asset_host = "http://webapps.malmo.se/assets-2.0/kp"

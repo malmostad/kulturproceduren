@@ -1,9 +1,23 @@
 <% if APP_CONFIG[:asset_host] %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-core.css", :media => "all") %>
   <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/jquery/malmo-theme.css", :media => "all") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/external.css", :media => "all") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-print.css", :media => "print") %>
+  <!--[if lt IE 7]>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie-css-fix.css", :media => "all") %>
+  <![endif]-->
+  <!--[if IE 7]>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie7-css-fix.css", :media => "all") %>
+  <![endif]-->
 <% else %>
-  <%= stylesheet_link_tag "ui-lightness/jquery-ui-1.7.2.custom.css", :media => "all" %>
-  <%= stylesheet_link_tag "malmo-core.css", :media => "all" %>
+  <%= stylesheet_link_tag "malmo-theme/malmo-theme.css", :media => "all" %>
+  <%= stylesheet_link_tag "malmo-external.css", :media => "all" %>
+  <%= stylesheet_link_tag "malmo-print.css", :media => "print" %>
+  <!--[if lt IE 7]>
+  <%= stylesheet_link_tag "malmo-ie-css-fix.css", :media => "all" %>
+  <![endif]-->
+  <!--[if IE 7]>
+  <%= stylesheet_link_tag "malmo-ie7-css-fix.css", :media => "all" %>
+  <![endif]-->
 <% end %>
 
 <% unless ActionController::Base.asset_host.blank? %>
@@ -27,9 +41,10 @@
   <%= javascript_include_tag(APP_CONFIG[:asset_host] + "/jquery/jquery.js") %>
 <% else %>
   <%= javascript_include_tag "jquery-1.4.2.min.js" %>
-  <%= javascript_include_tag "jquery.cycle.all.min.js" %>
   <%= javascript_include_tag "jquery-ui-1.8.2.custom.min.js" %>
-  <%= javascript_include_tag "malmo.maps.js" %>
+  <%= javascript_include_tag "jquery.cycle.all.min.js" %>
+  <%= javascript_include_tag "jquery.cookie.js" %>
+  <%= javascript_include_tag "jquery.malmo.map.js" %>
 <% end %>
 
 <% unless ActionController::Base.asset_host.blank? %>
