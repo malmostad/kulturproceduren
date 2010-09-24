@@ -28,5 +28,7 @@
   </ul>
 
   <%= render :partial => "groups/list", :locals => { :groups => @groups } %>
+
+  <%= will_paginate @groups %>
   
 </fieldset>
