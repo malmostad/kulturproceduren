@@ -85,18 +85,19 @@ class StatisticsController < ApplicationController
         CSV.generate_row( row , row.length , res , "\t")
       when "QuestionText"
         row = [ "#{q.question} (Alla svar)" ]
-        row += stat
+        row += stat.reject { |s| s.blank? }
         CSV.generate_row( row , row.length , res , "\t") 
       when "QuestionBool"
         row = [ "#{q.question} (Procent ja-svar , Procent nej-svar)" ]
         row += stat
         CSV.generate_row( row , row.length , res , "\t")
       when "QuestionMchoice"
+        choices = stat.keys.sort
         row = [ "#{q.question} (Antal för varje ord)" ]
-        row += q.choice_csv.split(",")
+        row += choices
         CSV.generate_row( row , row.length , res , "\t") 
         row = [""]
-        row += stat
+        row += choices.collect { |c| stat[c] }
         CSV.generate_row( row , row.length , res , "\t") 
       end
     end

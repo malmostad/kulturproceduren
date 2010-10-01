@@ -29,7 +29,7 @@ class Question < ActiveRecord::Base
   # Mark => [ avg_val ]
   # Text => [ answer1 , answer2 .... ]
   # Bool => [ %yes , %no ]
-  # Mchoice => [ %answer1 , %answer2 ... ]
+  # Mchoice => { question1 => %answer1 , question2 => %answer2 ... }
   def statistic_for_event(event_id) 
     result = [] 
     no_answers = 0
@@ -42,23 +42,24 @@ class Question < ActiveRecord::Base
     end
     Event.find(event_id).questionaire.answer_forms.each do |answer_forms| 
       answer_forms.answers.each do |answer| 
-	#puts "#{a.id} , #{a.answer_text}" if a.question_id == 1 
-	if answer.question.id == self.id
-	  no_answers = no_answers + 1
-	  case self.qtype
-	  when "QuestionMark"
-	    sum = sum + answer.answer_text.to_i
-	  when "QuestionText"
-	    result.push(answer.answer_text)
-	  when "QuestionBool"
-	    if answer.answer_text == "y"
-	      no_yes = no_yes +1
-	    else
-	      no_no = no_no +1
-	    end
-	  when "QuestionMchoice"
-	    YAML.load(answer.answer_text).keys.each { |key| mchoice_stat[key] = mchoice_stat[key] +1 }
-	  end
+        #puts "#{a.id} , #{a.answer_text}" if a.question_id == 1 
+        if answer.question.id == self.id
+          no_answers = no_answers + 1
+          case self.qtype
+          when "QuestionMark"
+            sum = sum + answer.answer_text.to_i
+          when "QuestionText"
+            result.push(answer.answer_text)
+          when "QuestionBool"
+            if answer.answer_text == "y"
+              no_yes = no_yes +1
+            else
+              no_no = no_no +1
+            end
+          when "QuestionMchoice"
+            data = YAML.load(answer.answer_text)
+            data.keys.each { |key| mchoice_stat[key] = mchoice_stat[key] + 1 }
+          end
         end
       end
     end
@@ -69,14 +70,12 @@ class Question < ActiveRecord::Base
       #do noting
     when "QuestionBool"
       if no_answers == 0
-	result = [ 0.0 , 0.0 ]
+        result = [ 0.0 , 0.0 ]
       else
         result = ["%.0d" % (( no_yes.to_f / no_answers.to_f).to_f * 100.to_f ) , "%.0d" % ((no_no.to_f / no_answers.to_f).to_f * 100.to_f) ]
       end
     when "QuestionMchoice"
-      mchoice_stat.keys.each do |key|
-        result = result + [ no_answers == 0 ? 0.to_i : "%d" % ( mchoice_stat[key].to_i  )]
-      end
+      return mchoice_stat
     end
     return result
   end

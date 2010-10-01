@@ -12,20 +12,21 @@ module QuestionsHelper
       fragment = "Genomsnitt = #{stat[0].to_s}"
     when "QuestionText"
       fragment =  "<ul>"
-      stat.each {|e| fragment = fragment + "<li>#{e.to_s}</li>" }
+      stat.each {|e| fragment = fragment + "<li>#{e.to_s}</li>" unless e.blank? }
       fragment += "</ul>"
     when "QuestionBool"
       fragment = "Ja #{stat[0]}% , Nej #{stat[1]}%"
     when "QuestionMchoice"
+      choices = stat.keys.sort
       fragment =  "<table id=\"kp-mchoice-stat\">"
       fragment += "<thead>"
       fragment += "<tr>"
-      question.choice_csv.split(",").each { |choice| fragment += "<th>#{choice.to_s}</th>" }
+      choices.each { |choice| fragment += "<th>#{choice.to_s}</th>" }
       fragment += "</tr>"
       fragment += "</thead>"
       fragment += "<tbody>"
       fragment += "<tr>"
-      stat.each { |result| fragment += "<td>#{result.to_s}</td>"  }
+      choices.each { |choice| fragment += "<td>#{stat[choice].to_s}</td>" }
       fragment += "</tr>"
       fragment += "</tbody>"
       fragment += "</table>"
