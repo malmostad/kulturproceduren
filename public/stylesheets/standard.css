@@ -599,6 +599,12 @@ body.kp-standalone { background: #fff; }
 #kp .add-template-question-form { margin-bottom: 1em; }
 #kp .question-form div { padding: 3px 0.5em; }
 
+#kp .evaluation-form .multiple-choice {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 /*** User profile ***/
 
 #kp .privileges-cnt ul li { margin: 0.5em 0; }
