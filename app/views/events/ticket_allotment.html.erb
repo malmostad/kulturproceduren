@@ -1,0 +1,79 @@
+<%= render :partial => "menu" -%>
+
+<h2 class="form-title">
+  Fördelning för <%= link_to h(@event.name), @event %>
+</h2>
+
+<div class="admin-tools">
+  <h4>Administrera <%= h @event.name %></h4>
+  <ul>
+
+    <% if current_user.has_role?(:admin) && !@event.further_education && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
+      <li><%= link_to 'Ändra fördelning', :controller => "allotment", :action => "init", :id => @event.id %></li>
+    <% end -%>
+  </ul>
+</div>
+
+<% if @event.ticket_state == Event::ALLOTED_GROUP %>
+  <table id="kp-ticket-allotment-list">
+    <thead>
+      <tr>
+        <th>Namn</th>
+        <th>Antal biljetter</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @event.districts.each do |district| -%>
+
+        <tr class="district-row">
+          <td class="name"><%= h district.name %></td>
+          <td class="count"></td>
+        </tr>
+
+        <% current_school_id = nil %>
+
+        <% @event.groups.find_by_district(district).each do |group| -%>
+
+          <% if group.school_id != current_school_id %>
+            <tr class="school-row">
+              <td class="name"><%= h group.school.name %></td>
+              <td class="count"></td>
+            </tr>
+
+            <% current_school_id = group.school_id %>
+          <% end %>
+
+          <tr class="group-row">
+            <td class="name"><%= h group.name %></td>
+            <td class="count"><%= h(@ticket_count[group.id] || 0) %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+
+  </table>
+<% elsif @event.ticket_state == Event::ALLOTED_DISTRICT %>
+  <table id="kp-ticket-allotment-list">
+    <thead>
+      <tr>
+        <th>Namn</th>
+        <th>Antal biljetter</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @event.districts.each do |district| -%>
+        <tr class="district-row">
+          <td class="name"><%= h district.name %></td>
+          <td class="count"><%= h(@ticket_count[district.id] || 0) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+<% elsif @event.ticket_state == Event::FREE_FOR_ALL %>
+  <p class="response">
+    Evenemanget är tillgängligt för hela staden.
+  </p>
+<% end %>

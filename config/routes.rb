@@ -27,6 +27,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :events, :except => [ :index ], :collection => {
     :options_list => :get
+  }, :member => {
+    :ticket_allotment => :get
   } do |e|
     e.resources :images, :except => [ :show, :edit, :update, :new ]
     e.resources :attachments, :except => [ :edit, :update, :new ]

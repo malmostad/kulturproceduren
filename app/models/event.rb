@@ -26,8 +26,16 @@ class Event < ActiveRecord::Base
 
   has_many :tickets, :dependent => :delete_all
   
-  has_many :districts, :through => :tickets, :uniq => true
-  has_many :groups, :through => :tickets, :uniq => true
+  has_many :districts, :through => :tickets, :uniq => true, :order => "name ASC"
+  has_many :groups, :through => :tickets, :uniq => true, :order => "groups.name ASC" do
+    # Scope by district
+    def find_by_district(district)
+      find :all,
+        :conditions => [ 'tickets.district_id = ?', district.id ],
+        :include => :school,
+        :order => "schools.name ASC, groups.name ASC"
+    end
+  end
   
   has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC", :dependent => :destroy
   belongs_to :culture_provider
@@ -85,6 +93,15 @@ class Event < ActiveRecord::Base
       @is_bookable = visible_from <= today && visible_to >= today && !ticket_release_date.nil? && ticket_release_date <= today && !tickets.empty? && !occasions.empty?
     end
     @is_bookable
+  end
+
+  # Gets the ticket count grouped by groups
+  def ticket_count_by_group
+    tickets.count :group => :group_id
+  end
+  # Gets the ticket count grouped by districts
+  def ticket_count_by_district
+    tickets.count :group => :district_id
   end
 
   # Indicates whether the event has tickets available for booking

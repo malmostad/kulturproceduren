@@ -92,7 +92,7 @@ class AllotmentController < ApplicationController
 
     session[:allotment] = nil
     flash[:notice] = "Biljetter till evenemanget har fördelats."
-    redirect_to @event
+    redirect_to ticket_allotment_event_url(@event)
   end
 
   # Renders a view for distributing the tickets
@@ -185,7 +185,7 @@ class AllotmentController < ApplicationController
 
       session[:allotment] = nil
       flash[:notice] = "Biljetter till evenemanget har fördelats."
-      redirect_to @event
+      redirect_to ticket_allotment_event_url(@event)
     else
       session[:allotment][:extra_groups] ||= []
       session[:allotment][:extra_groups] << params[:add_group][:group_id].to_i

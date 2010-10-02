@@ -574,6 +574,10 @@ body.kp-standalone { background: #fff; }
 
 #kp #kp-event-link-culture-provider-selection { padding-bottom: 1em; }
 
+#kp #kp-ticket-allotment-list { width: auto !important; }
+#kp #kp-ticket-allotment-list .school-row td.name { padding-left: 2em; }
+#kp #kp-ticket-allotment-list .group-row td.name { padding-left: 4em; }
+
 /*** Occasions ***/
 
 #kp .occasions-event { padding: 0.5em; }

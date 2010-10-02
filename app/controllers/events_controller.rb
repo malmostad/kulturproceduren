@@ -59,6 +59,23 @@ class EventsController < ApplicationController
     @category_groups = CategoryGroup.all :order => "name ASC"
   end
 
+  # Displays the ticket allotment for an event
+  def ticket_allotment
+    @event = Event.find(params[:id])
+
+    case @event.ticket_state
+    when Event::ALLOTED_GROUP
+      @ticket_count = @event.ticket_count_by_group
+    when Event::ALLOTED_DISTRICT
+      @ticket_count = @event.ticket_count_by_district
+    when Event::FREE_FOR_ALL
+      @ticket_count = nil
+    else
+      flash[:error] = "Evenemanget har ingen aktiv fördelning."
+      redirect_to @event
+    end
+  end
+
   def new
     @event = Event.new do |e|
       e.to_age = 19
