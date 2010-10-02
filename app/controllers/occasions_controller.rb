@@ -71,21 +71,33 @@ class OccasionsController < ApplicationController
     @groups.each do |group|
       attendance = {}
       params[:attendance][group.id.to_s].each do |k,v|
-        attendance[k.to_sym] = v.to_i
+        attendance[k.to_sym] = v.to_i unless v.blank?
       end
 
       tickets = Ticket.find_not_unbooked(group, @occasion)
 
       tickets.each do |ticket|
         if ticket.adult
-          ticket.state = attendance[:adult] > 0 ? Ticket::USED : Ticket::NOT_USED
-          attendance[:adult] -= 1
+          if attendance.has_key?(:adult)
+            ticket.state = attendance[:adult] > 0 ? Ticket::USED : Ticket::NOT_USED
+            attendance[:adult] -= 1
+          else
+            ticket.state = Ticket::BOOKED
+          end
         elsif ticket.wheelchair
-          ticket.state = attendance[:wheelchair] > 0 ? Ticket::USED : Ticket::NOT_USED
-          attendance[:wheelchair] -= 1
+          if attendance.has_key?(:wheelchair)
+            ticket.state = attendance[:wheelchair] > 0 ? Ticket::USED : Ticket::NOT_USED
+            attendance[:wheelchair] -= 1
+          else
+            ticket.state = Ticket::BOOKED
+          end
         else
-          ticket.state = attendance[:normal] > 0 ? Ticket::USED : Ticket::NOT_USED
-          attendance[:normal] -= 1
+          if attendance.has_key?(:normal)
+            ticket.state = attendance[:normal] > 0 ? Ticket::USED : Ticket::NOT_USED
+            attendance[:normal] -= 1
+          else
+            ticket.state = Ticket::BOOKED
+          end
         end
 
         ticket.save!
@@ -93,7 +105,9 @@ class OccasionsController < ApplicationController
 
       # Create extra tickets for extra attendants
       [ :adult, :wheelchair, :normal ].each do |type|
-        create_extra_tickets(attendance[type], tickets[0], type) if attendance[type] > 0
+        if attendance.has_key?(type) && attendance[type] > 0
+          create_extra_tickets(attendance[type], tickets[0], type) 
+        end
       end
     end
 

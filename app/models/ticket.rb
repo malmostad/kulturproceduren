@@ -114,10 +114,15 @@ class Ticket < ActiveRecord::Base
 
   # Returns the group's usage count for a given occasion
   def self.usage(group, occasion)
-    booking = {}
-    booking[:normal] = count_by_type_state(group, occasion, :normal, Ticket::USED)
-    booking[:adult] = count_by_type_state(group, occasion, :adult, Ticket::USED)
-    booking[:wheelchair] = count_by_type_state(group, occasion, :wheelchair, Ticket::USED)
-    return booking
+    usage = {}
+    [ :normal, :adult, :wheelchair ].each do |type|
+      num_reported = count_by_type_state(group, occasion, type, [ Ticket::USED, Ticket::NOT_USED ])
+      if num_reported > 0
+        usage[type] = count_by_type_state(group, occasion, type, Ticket::USED)
+      else
+        usage[type] = nil
+      end
+    end
+    return usage
   end
 end
