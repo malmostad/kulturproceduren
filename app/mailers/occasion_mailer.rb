@@ -2,6 +2,7 @@
 class OccasionMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
+  helper :application
 
   # Sends an email when an occasion is cancelled
   def occasion_cancelled_email(occasion)

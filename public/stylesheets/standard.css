@@ -618,6 +618,7 @@ body.kp-standalone { background: #fff; }
 #kp .booking-group-selection .notification-request-info p { margin: 0; }
 
 #kp .booking-confirmation-list th { width: 1%; white-space: nowrap; }
+#kp .cancellation-info { margin: 2em 0 0 1em; }
 
 /*** Role application ***/
 #kp .role-application-specification dt { width: 8em; }

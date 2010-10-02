@@ -10,6 +10,13 @@
   <%= h @occasion.event.name %>.
 </p>
 
+<% unless @occasion.address.blank? %>
+<p>
+  Adress:<br/>
+  <%= linebreakize(@occasion.address) %>
+</p>
+<% end %>
+
 <p>Tänk på</p>
 
 <ul>
