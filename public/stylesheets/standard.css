@@ -415,6 +415,19 @@ body.kp-standalone { background: #fff; }
 #kp .admin-tools a:hover, #kp .admin-tools a:active,
 #kp a.admin-tool:hover, #kp a.admin-tool:active { background: #D9EBD2; }
 
+/*** Form filtering tools ***/
+#kp .filter-tools {
+    border: 1px solid #c0c0c0;
+    padding: 0.5em;
+    margin: 0 0 1em;
+}
+#kp .filter-tools ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#kp .filter-tools ul li { display: inline; }
+
 /*** Allotment ***/
 
 #kp #kp-allotment-init-form .allotment-district-list { list-style-type: none; margin: 0; padding: 0; }

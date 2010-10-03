@@ -46,6 +46,24 @@ class User < ActiveRecord::Base
   attr_protected :id, :salt
 
 
+  # Filters a find call.
+  #
+  # Supported keys are: <tt>:district_id</tt>
+  def self.filter(filter, page, order)
+    if filter.blank?
+      return paginate(:page => page, :order => order)
+    else
+      conditions = [ " 1=1 " ]
+
+      if filter.has_key?(:district_id)
+        conditions[0] << " and users.id in (select user_id from districts_users where district_id = ?) "
+        conditions << filter[:district_id]
+      end
+
+      return paginate(:conditions => conditions, :page => page, :order => order)
+    end
+  end
+
   # Returns true if this user is authenticated when using the given password
   def authenticate(password)
     User.encrypt(password, self.salt) == self.password

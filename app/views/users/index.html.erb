@@ -1,5 +1,22 @@
 <%= render :partial => "menu" -%>
 
+<div class="filter-tools">
+  <% form_tag apply_filter_users_path() do %>
+    <ul>
+      <li class="district-filter">
+        <label for="kp-user-filter-district_id">Stadsdel:</label>
+        <%= select_tag "district_id",
+          '<option value="all">Alla</option>' + options_from_collection_for_select(@districts, :id, :name, (session[:user_list_filter] || {})[:district_id]),
+          :id => "kp-user-filter-district_id"
+        %>
+      </li>
+    </ul>
+    <div class="button-container">
+      <input type="submit" value="Visa"/>
+    </div>
+  <% end %>
+</div>
+
 <table>
 
   <thead>

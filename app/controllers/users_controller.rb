@@ -12,11 +12,19 @@ class UsersController < ApplicationController
   # Displays a list of users in the system.
   def index
     if current_user.has_role?(:admin)
-      @users = User.paginate :page => params[:page],
-        :order => sort_order("username")
+      @users = User.filter session[:user_list_filter], params[:page], sort_order("username")
+      @districts = District.all :order => "name ASC"
     else
       redirect_to current_user
     end
+  end
+  # Applies a filter for the user listing
+  def apply_filter
+    filter = {}
+    filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
+
+    session[:user_list_filter] = filter
+    redirect_to users_url()
   end
 
   # Displays a user's details. If the user is not an administrator,

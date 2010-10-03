@@ -8,7 +8,8 @@ ActionController::Routing::Routes.draw do |map|
     :reset_password => :get
   }, :collection => {
     :request_password_reset => :get,
-    :send_password_reset_confirmation => :post
+    :send_password_reset_confirmation => :post,
+    :apply_filter => :post
   }
 
   map.resources :statistics, :only => [ :index ],
