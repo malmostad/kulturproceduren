@@ -12,7 +12,11 @@ class Group < ActiveRecord::Base
   end
   
   has_many :answer_forms, :dependent => :destroy
-  has_many :booking_requirements, :dependent => :destroy
+  has_many :booking_requirements, :dependent => :destroy do
+    def for_occasion(occasion)
+      find :first, :conditions => { :occasion_id => occasion.id }
+    end
+  end
   has_many :notification_requests, :dependent => :destroy
   belongs_to :school
   

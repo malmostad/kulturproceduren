@@ -43,6 +43,9 @@ ActionController::Routing::Routes.draw do |map|
     e.resources :event_links, :except => [ :create, :edit, :update ],
       :collection => { :select_culture_provider => :post },
       :member => { :select_event => :get }
+    e.resources :attendance,
+      :only => [ :index ],
+      :collection => { :report => :get, :update_report => :post }
   end
 
   map.resources :occasions, :except => [ :index ],
@@ -54,6 +57,9 @@ ActionController::Routing::Routes.draw do |map|
     :cancel => :delete
   } do |oc|
     oc.resources :bookings
+    oc.resources :attendance,
+      :only => [ :index ],
+      :collection => { :report => :get, :update_report => :post }
   end
 
   map.resources :bookings, :only => [ :index ], :collection => { :group => :get }

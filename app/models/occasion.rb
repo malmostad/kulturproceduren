@@ -6,7 +6,18 @@ class Occasion < ActiveRecord::Base
   has_many :tickets
   has_many :booking_requirements
 
-  has_many :groups, :through => :tickets , :uniq => true
+  has_many :groups, :through => :tickets , :uniq => true do
+    def hierarchically_ordered
+      find :all,
+        :include => { :school => :district },
+        :order => "districts.name ASC, schools.name ASC, groups.name ASC"
+    end
+    def school_ordered
+      find :all,
+        :include => { :school => :district },
+        :order => "schools.name ASC, groups.name ASC"
+    end
+  end
   has_many :attending_groups, :class_name => "Group",
     :source => :group, :through => :tickets, :uniq => true,
     :conditions => "tickets.state != 0"

@@ -116,29 +116,6 @@ class OccasionsController < ApplicationController
   end
 
 
-  # Displays a list of the groups attending the occasion,
-  # as a HTML page or a PDF.
-  def attendants
-    @occasion = Occasion.find(params[:id])
-
-    if params[:format] == "pdf"
-      @groups = @occasion.attending_groups
-    else
-      @groups = @occasion.attending_groups.paginate :all, :page => params[:page]
-    end
-
-    @booking_reqs = BookingRequirement.find_all_by_group_id(
-      @groups.map { |g| g.id } ,
-      :conditions => { :occasion_id => @occasion.id }
-    )
-
-    if params[:format] == "pdf"
-      pdf = get_pdf()
-      send_data pdf.render, :filename => "attendants.pdf",:type => "application/pdf" , :disposition => 'inline'
-    end
-
-  end
-
   # Displays a specific occasion as the part of an event presentation
   def show
     @selected_occasion = Occasion.find(params[:id])
@@ -252,88 +229,6 @@ class OccasionsController < ApplicationController
 
       ticket.save!
     end
-  end
-
-  # Creates a pdf document of the attendants on an occasion
-  def get_pdf
-
-    pdf = PDF::Writer.new  :paper => "A4" , :orientation => :landscape
-    pdf.select_font("Helvetica")
-    pdf.margins_cm(2,2,2,2)
-
-    PDF::SimpleTable.new do |tab|
-      tab.title = "Deltagarlista för #{@occasion.event.name} #{@occasion.date.to_s} #{l(@occasion.start_time, :format => :only_time)}".to_iso
-      tab.column_order.push(*%w(group comp comptel att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
-
-      tab.columns["group"] = PDF::SimpleTable::Column.new("group") { |col|
-        col.heading = "Skola / Grupp".to_iso
-        col.width = 130
-      }
-      tab.columns["comp"] = PDF::SimpleTable::Column.new("com") { |col|
-        col.heading = "Medföljande vuxen".to_iso
-        col.width = 130
-      }
-      tab.columns["comptel"] = PDF::SimpleTable::Column.new("comptel") { |col|
-        col.heading = "Telefonnummer"
-        col.width = 100
-      }
-      tab.columns["att_normal"] = PDF::SimpleTable::Column.new("att_normal") { |col|
-        col.heading = "Barn"
-      }
-      tab.columns["att_adult"] = PDF::SimpleTable::Column.new("att_adult") { |col|
-        col.heading = "Vuxna"
-      }
-      tab.columns["att_wheel"] = PDF::SimpleTable::Column.new("att_wheel") { |col|
-        col.heading = "Rullstol"
-      }
-      tab.columns["req"]  = PDF::SimpleTable::Column.new("req") { |col|
-        col.heading = "Övriga önskemål".to_iso
-        col.width = 130
-      }
-      tab.columns["pres_normal"]  = PDF::SimpleTable::Column.new("pres_normal") { |col|
-        col.heading = "Barn".to_iso
-      }
-      tab.columns["pres_adult"]  = PDF::SimpleTable::Column.new("pres_adult") { |col|
-        col.heading = "Vuxna".to_iso
-      }
-      tab.columns["pres_wheel"]  = PDF::SimpleTable::Column.new("pres_wheel") { |col|
-        col.heading = "Rullstol".to_iso
-      }
-
-      tab.show_lines    = :all
-      tab.orientation   = 1
-      tab.position      = :left
-      tab.font_size     = 9
-      tab.heading_font_size = 9
-      tab.maximum_width = 1
-      tab.title_gap = 10
-      tab.show_headings = true
-      tab.heading_color = Color::RGB::White
-      tab.shade_headings = true
-      tab.shade_heading_color = Color::RGB::Grey30
-
-      data = []
-
-      @groups.each do |g|
-        booking = Ticket.booking(g, @occasion)
-        row = {}
-        row["group"]       = (g.school.name.to_s + " - " + g.name.to_s).to_iso
-        row["comp"]        = g.companion_by_occasion(@occasion).name.to_iso
-        row["comptel"]     = g.companion_by_occasion(@occasion).tel_nr.to_s.to_iso
-        row["att_normal"]  = booking[:normal] || 0
-        row["att_adult"]   = booking[:adult] || 0
-        row["att_wheel"]   = booking[:wheelchair] || 0
-        row["req"]         = @booking_reqs.select { |b| b.group_id == g.id }.map { |b| (b.requirement.to_s + "\n").to_iso  }
-        row["pres_normal"] = " ".to_iso
-        row["pres_adult"]  = " ".to_iso
-        row["pres_wheel"]  = " ".to_iso
-        data << row
-      end
-      tab.data.replace data
-      tab.render_on(pdf)
-    end
-
-    return pdf
   end
 
   # Checks if the user is a host. For use in <tt>before_filter</tt>.

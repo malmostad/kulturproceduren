@@ -642,6 +642,7 @@ body.kp-standalone { background: #fff; }
 #kp .role-application-specification dd { padding-left: 8em; }
 
 /*** Attendance reporting ***/
+#kp .attendant-list .occasion-row th { border-top: 1px solid #dcd7cf; }
 #kp .attendant-list input { width: 3em; }
 
 /*** Sitevision hack ***/

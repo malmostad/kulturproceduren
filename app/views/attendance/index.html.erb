@@ -1,0 +1,111 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <% if @event %>
+      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <% end %>
+  </div>
+<% end -%>
+
+<h2 class="form-title">
+  Närvarolista för
+  <%= link_to h(@event.name), @event %>,
+
+  <% if @occasion %>
+    föreställningen
+    <%= @occasion.date %>
+    kl
+    <%= l @occasion.start_time, :format => :only_time %> - <%= l @occasion.stop_time, :format => :only_time %>
+  <% else %>
+    alla föreställningar
+  <% end %>
+</h2>
+
+<% is_admin = current_user.has_role?(:host, :admin) %>
+
+<% if is_admin -%>
+  <p>
+    <% if @occasion %>
+      <%= link_to "Ladda ner som PDF", occasion_attendance_index_path(@occasion, :format => "pdf") %>
+    <% else %>
+      <%= link_to "Ladda ner som PDF", event_attendance_index_path(@event, :format => "pdf") %>
+    <% end %>
+  </p>
+<% end -%>
+
+<table class="attendant-list" >
+  <thead>
+    <tr>
+      <th>Stadsdel</th>
+      <th>Skola</th>
+      <th>Grupp</th>
+      <th>Medföljande vuxen</th>
+      <th>Telefonnummer</th>
+      <th>Antal barn</th>
+      <th>Antal vuxna</th>
+      <th>Antal rullstolsplatser</th>
+      <% if is_admin -%>
+        <th>Övriga önskemål</th>
+      <% end -%>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @occasion %>
+
+      <% @occasion.groups.hierarchically_ordered.each do |group| %>
+        <% booking = Ticket.booking(group, @occasion) %>
+
+        <tr class="<%= cycle('', 'even') %>">
+          <td><%= h group.school.district.name -%></td>
+          <td><%= h group.school.name -%></td>
+          <td><%= h group.name -%></td>
+          <td><%= h group.companion_by_occasion(@occasion).name -%></td>
+          <td><%= h group.companion_by_occasion(@occasion).tel_nr -%></td>
+          <td><%= h booking[:normal] -%></td>
+          <td><%= h booking[:adult] -%></td>
+          <td><%= h booking[:wheelchair] -%></td>
+          <% if is_admin -%>
+            <% requirements = group.booking_requirements.for_occasion(@occasion) %>
+            <td><%= linebreakize(requirements.requirement) unless requirements.blank? -%></td>
+          <% end %>
+        </tr>
+      <% end %>
+
+    <% else %>
+
+      <% @event.occasions.each do |occasion| -%>
+
+        <tr class="occasion-row">
+          <th colspan="<%= is_admin ? 9 : 8 %>" class="<%= cycle('', 'even') %>">
+            <% link_to occasion_attendance_index_path(occasion) do %>
+              Föreställningen
+              <%= h occasion.date %>
+              kl
+              <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
+            <% end %>
+          </th>
+        </tr>
+
+        <% occasion.groups.hierarchically_ordered.each do |group| %>
+          <% booking = Ticket.booking(group, occasion) %>
+
+          <tr class="<%= cycle('', 'even') %>">
+            <td><%= h group.school.district.name -%></td>
+            <td><%= h group.school.name -%></td>
+            <td><%= h group.name -%></td>
+            <td><%= h group.companion_by_occasion(occasion).name -%></td>
+            <td><%= h group.companion_by_occasion(occasion).tel_nr -%></td>
+            <td><%= h booking[:normal] -%></td>
+            <td><%= h booking[:adult] -%></td>
+            <td><%= h booking[:wheelchair] -%></td>
+            <% if is_admin -%>
+              <% requirements = group.booking_requirements.for_occasion(occasion) %>
+              <td><%= linebreakize(requirements.requirement) unless requirements.blank? -%></td>
+            <% end %>
+          </tr>
+        <% end %>
+
+      <% end %>
+
+    <% end %>
+  </tbody>
+</table>
