@@ -35,7 +35,7 @@ namespace :kp do
         u.cellphone = "0"
 
         puts "User: #{u.username}"
-        u.save!
+        u.save(false)
 
         u.roles << Role.find_by_symbol(:admin)
       end
