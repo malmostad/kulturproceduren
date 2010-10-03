@@ -16,19 +16,31 @@
       Namn
     </dt>
     <dd>
-      <%= @user.name %>
+      <%= h @user.name %>
     </dd>
     <dt>
       Epost
     </dt>
     <dd>
-      <%= @user.email %>
+      <%= h @user.email %>
     </dd>
     <dt>
       Mobilnummer
     </dt>
     <dd>
-      <%= @user.cellphone %>
+      <%= h @user.cellphone %>
+    </dd>
+    <dt>
+      Stadsdelar
+    </dt>
+    <dd>
+      <% unless @user.districts.empty? %>
+        <ul>
+          <% @user.districts.each do |district| -%>
+            <li><%= h district.name %></li>
+          <% end %>
+        </ul>
+      <% end %>
     </dd>
   </dl>
 </fieldset>

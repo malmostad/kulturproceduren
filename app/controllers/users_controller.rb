@@ -52,9 +52,11 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @districts = District.all :order => "name ASC"
   end
 
   def edit
+    @districts = District.all :order => "name ASC"
   end
 
   # Displays a form for changing a user's password.
@@ -83,6 +85,7 @@ class UsersController < ApplicationController
       return
     end
 
+    @districts = District.all :order => "name ASC"
     @user.reset_password
     render :action => "new"
   end
@@ -91,11 +94,13 @@ class UsersController < ApplicationController
     @user.name = params[:user][:name]
     @user.email = params[:user][:email]
     @user.cellphone = params[:user][:cellphone]
+    @user.district_ids = params[:user][:district_ids]
 
     if @user.save
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
+      @districts = District.all :order => "name ASC"
       render :action => "edit"
     end
   end

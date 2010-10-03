@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   end
 
   has_many :notification_requests, :dependent => :destroy
+
+  has_and_belongs_to_many :districts
   
   validate_on_create :username_unique,
     :message => "Användarnamnet är redan taget"
@@ -37,6 +39,8 @@ class User < ActiveRecord::Base
     :message => "Användarnamnet är redan taget"
   validates_confirmation_of :password,
     :message => "Lösenordsbekräftelsen matchar inte lösenordet"
+  validates_presence_of :district_ids,
+    :message => "Minst en stadsdel måste väljas"
 
   # The id and salt is automatically generated and should not be changed.
   attr_protected :id, :salt

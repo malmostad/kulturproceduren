@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100905083031) do
+ActiveRecord::Schema.define(:version => 20101003053421) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -126,6 +126,13 @@ ActiveRecord::Schema.define(:version => 20100905083031) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "districts_users", :id => false, :force => true do |t|
+    t.integer "district_id"
+    t.integer "user_id"
+  end
+
+  add_index "districts_users", ["district_id", "user_id"], :name => "district_user_id"
 
   create_table "event_links", :id => false, :force => true do |t|
     t.integer "from_id"
