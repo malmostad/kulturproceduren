@@ -4,9 +4,12 @@ class AttendanceController < ApplicationController
   before_filter :authenticate
   before_filter :load_entity
 
+  before_filter :require_host, :only => [ :report, :update_report ]
+
   require "pdf/writer"
   require "pdf/simpletable"
 
+  # Lists the attendance of an event or a single occasion
   def index
     if params[:format] == "pdf"
       pdf = get_pdf()
@@ -14,14 +17,99 @@ class AttendanceController < ApplicationController
     end
   end
 
+  # Displays a form for reporting attendance
+  def report
+    if @occasion && @occasion.date >= Date.today
+      flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
+      redirect_to occasion_attendance_index_url(@occasion)
+      return
+    end
+  end
+
+  # Updates the attendance report
+  def update_report
+    if @occasion && @occasion.date >= Date.today
+      flash[:error] = "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit"
+      redirect_to root_url()
+      return
+    end
+
+    (@occasion ? [@occasion] : @event.reportable_occasions).each do |occasion|
+      groups = occasion.attending_groups
+
+      groups.each do |group|
+        attendance = {}
+        params[:attendance][occasion.id.to_s][group.id.to_s].each do |k,v|
+          attendance[k.to_sym] = v.to_i unless v.blank?
+        end
+
+        tickets = Ticket.find_not_unbooked(group, occasion)
+
+        tickets.each do |ticket|
+          if ticket.adult
+            if attendance.has_key?(:adult)
+              ticket.state = attendance[:adult] > 0 ? Ticket::USED : Ticket::NOT_USED
+              attendance[:adult] -= 1
+            else
+              ticket.state = Ticket::BOOKED
+            end
+          elsif ticket.wheelchair
+            if attendance.has_key?(:wheelchair)
+              ticket.state = attendance[:wheelchair] > 0 ? Ticket::USED : Ticket::NOT_USED
+              attendance[:wheelchair] -= 1
+            else
+              ticket.state = Ticket::BOOKED
+            end
+          else
+            if attendance.has_key?(:normal)
+              ticket.state = attendance[:normal] > 0 ? Ticket::USED : Ticket::NOT_USED
+              attendance[:normal] -= 1
+            else
+              ticket.state = Ticket::BOOKED
+            end
+          end
+
+          ticket.save!
+        end
+
+        # Create extra tickets for extra attendants
+        [ :adult, :wheelchair, :normal ].each do |type|
+          if attendance.has_key?(type) && attendance[type] > 0
+            create_extra_tickets(attendance[type], tickets[0], type) 
+          end
+        end
+      end
+    end
+
+    flash[:notice] = "Närvaron uppdaterades."
+    if @occasion
+      redirect_to report_occasion_attendance_url(@occasion)
+    else
+      redirect_to report_event_attendance_url(@event)
+    end
+  end
+
   protected
 
+  # Loads either the requested event or the requested occasion
   def load_entity
     if !params[:event_id].blank?
       @event = Event.find params[:event_id]
     elsif !params[:occasion_id].blank?
       @occasion = Occasion.find params[:occasion_id], :include => :event
       @event = @occasion.event
+    else
+      flash[:error] = "Felaktig adress angiven"
+      redirect_to root_url()
+    end
+  end
+
+  # Checks if the user is a host. For use in <tt>before_filter</tt>.
+  def require_host
+    unless current_user.has_role?(:host) || current_user.has_role?(:admin)
+      flash[:error] = "Du har inte behörighet att rapportera närvaro"
+      redirect_to root_url()
+      return
     end
   end
 
@@ -119,4 +207,25 @@ class AttendanceController < ApplicationController
 
     return row
   end
+
+  # Creates extra tickets for unannounced attendants when reporting attendance
+  def create_extra_tickets(attendance, base, type)
+    1.upto(attendance) do |i|
+      ticket = Ticket.new do |t|
+        t.state = Ticket::USED
+        t.group = base.group
+        t.event = base.event
+        t.occasion = base.occasion
+        t.district = base.district
+        t.companion = base.companion
+        t.user = current_user
+        t.adult = (type == :adult)
+        t.wheelchair = (type == :wheelchair)
+        t.booked_when = DateTime.now
+      end
+
+      ticket.save!
+    end
+  end
+
 end

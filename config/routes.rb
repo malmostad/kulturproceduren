@@ -50,9 +50,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :occasions, :except => [ :index ],
     :member => {
-    :attendants => :get,
-    :report_show => :get,
-    :report_create => :post,
     :ticket_availability => :get,
     :cancel => :delete
   } do |oc|

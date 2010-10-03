@@ -1,0 +1,131 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <% if @event %>
+      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <% end %>
+  </div>
+<% end -%>
+
+<h2 class="form-title">
+  Rapportera närvaro för
+  <%= link_to h(@event.name), @event %>,
+
+  <% if @occasion %>
+    föreställningen
+    <%= @occasion.date %>
+    kl
+    <%= l @occasion.start_time, :format => :only_time %> - <%= l @occasion.stop_time, :format => :only_time %>
+  <% else %>
+    alla föreställningar
+  <% end %>
+</h2>
+
+<%
+if @occasion
+  url = update_report_occasion_attendance_path(@occasion)
+else
+  url = update_report_event_attendance_path(@event)
+end
+%>
+
+<% form_tag(url)  do %>
+  <table class="attendant-list">
+
+    <thead>
+      <tr>
+        <th rowspan="2">Stadsdel</th>
+        <th rowspan="2">Skola</th>
+        <th rowspan="2">Grupp</th>
+        <th colspan="3" class="super">Antal anmälda</th>
+        <th colspan="3" class="super">Antal närvarande</th>
+      </tr>
+      <tr>
+        <th>Barn</th>
+        <th>Vuxna</th>
+        <th>Rullstolsplatser</th>
+        <th>Barn</th>
+        <th>Vuxna</th>
+        <th>Rullstolsplatser</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @occasion %>
+
+        <% @occasion.attending_groups.each do |group| %>
+          <% booking = Ticket.booking(group, @occasion) %>
+          <% usage = Ticket.usage(group, @occasion) %>
+
+          <tr class="<%= cycle('', 'even') %>">
+
+            <td><%= h group.school.district.name -%></td>
+            <td><%= h group.school.name -%></td>
+            <td><%= h group.name -%></td>
+
+            <td><%= h booking[:normal] -%></td>
+            <td><%= h booking[:adult] -%></td>
+            <td><%= h booking[:wheelchair] -%></td>
+
+            <td>
+              <%= text_field_tag "attendance[#{@occasion.id}][#{group.id}][normal]", usage[:normal] %>
+            </td>
+            <td>
+              <%= text_field_tag "attendance[#{@occasion.id}][#{group.id}][adult]", usage[:adult] %>
+            </td>
+            <td>
+              <%= text_field_tag "attendance[#{@occasion.id}][#{group.id}][wheelchair]", usage[:wheelchair] %>
+            </td>
+          </tr>
+        <% end %>
+
+      <% else %>
+
+        <% @event.reportable_occasions.each do |occasion| -%>
+
+          <tr class="occasion-row">
+            <th colspan="9" class="<%= cycle('', 'even') %>">
+              Föreställningen
+              <%= h occasion.date %>
+              kl
+              <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
+            </th>
+          </tr>
+
+          <% occasion.attending_groups.each do |group| %>
+
+            <% booking = Ticket.booking(group, occasion) %>
+            <% usage = Ticket.usage(group, occasion) %>
+
+            <tr class="<%= cycle('', 'even') %>">
+
+              <td><%= h group.school.district.name -%></td>
+              <td><%= h group.school.name -%></td>
+              <td><%= h group.name -%></td>
+
+              <td><%= h booking[:normal] -%></td>
+              <td><%= h booking[:adult] -%></td>
+              <td><%= h booking[:wheelchair] -%></td>
+
+              <td>
+                <%= text_field_tag "attendance[#{occasion.id}][#{group.id}][normal]", usage[:normal] %>
+              </td>
+              <td>
+                <%= text_field_tag "attendance[#{occasion.id}][#{group.id}][adult]", usage[:adult] %>
+              </td>
+              <td>
+                <%= text_field_tag "attendance[#{occasion.id}][#{group.id}][wheelchair]", usage[:wheelchair] %>
+              </td>
+
+            </tr>
+
+          <% end %>
+        <% end %>
+
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="form-buttons">
+    <%= submit_tag "Rapportera närvaro" %>
+  </div>
+<% end %>

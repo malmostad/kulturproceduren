@@ -20,7 +20,9 @@ class Occasion < ActiveRecord::Base
   end
   has_many :attending_groups, :class_name => "Group",
     :source => :group, :through => :tickets, :uniq => true,
-    :conditions => "tickets.state != 0"
+    :conditions => "tickets.state != 0",
+    :include => { :school => :district },
+    :order => "districts.name ASC, schools.name ASC, groups.name ASC"
   has_many :users, :through => :tickets, :uniq => true
   has_many :companions, :through => :tickets, :uniq => true
   belongs_to :answer

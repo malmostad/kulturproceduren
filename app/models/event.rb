@@ -38,6 +38,9 @@ class Event < ActiveRecord::Base
   end
   
   has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC", :dependent => :destroy
+  has_many :reportable_occasions, :class_name => "Occasion",
+    :order => "date ASC, start_time ASC, stop_time ASC",
+    :conditions => [ 'occasions.date < ?', Date.today ]
   belongs_to :culture_provider
 
   has_and_belongs_to_many :categories, :include => :category_group
