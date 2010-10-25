@@ -133,6 +133,7 @@ sv:
                 name: "Namn:"
                 from_age: "Från ålder:"
                 to_age: "Till ålder:"
+                single_group_per_occasion: "Endast en grupp per föreställning"
                 description: "Beskrivning:"
                 culture_provider: "Arrangör:"
                 culture_provider_id: "Arrangör:"
@@ -155,6 +156,7 @@ sv:
                 wheelchair_seats: "Antal rullstolsplatser:"
                 telecoil: "Hörselslinga"
                 map_address: "Kartadress:"
+                single_group: "Endast en grupp kan boka denna föreställning"
             district:
                 name: "Namn:"
                 contacts: "Kontaktadresser:"

@@ -7,7 +7,11 @@ if @occasion
 else
   occasion = Occasion.new(session[:last_occasion_added]) do |o|
     o.event_id = event.id
-    o.map_address = event.map_address unless session[:last_occasion_added]
+
+    unless session[:last_occasion_added]
+      o.map_address = event.map_address 
+      o.single_group = event.single_group_per_occasion
+    end
   end
 end
 -%>
@@ -27,6 +31,7 @@ end
       <%= f.time_select :stop_time, :minute_step => 5 %>
       <%= f.text_field :seats %>
       <%= f.text_field :wheelchair_seats %>
+      <%= f.check_box :single_group %>
       <%= f.text_area :address, :rows => 5 %>
       <%= f.text_area :description, :rows => 5 %>
       <%= f.check_box :telecoil %>

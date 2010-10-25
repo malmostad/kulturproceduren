@@ -21,6 +21,8 @@
     <%= f.select :from_age, (0..19).to_a, :row_hidden => is_edit && @event.further_education %>
     <%= f.select :to_age, (0..19).to_a, :row_hidden => is_edit && @event.further_education %>
 
+    <%= f.check_box :single_group_per_occasion %>
+
     <% if !is_edit || @event.ticket_release_date.nil? || @event.ticket_release_date > Date.today %>
       <%= f.text_field :visible_from, :class => "date-field auto" %>
     <% end -%>

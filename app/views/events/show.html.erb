@@ -332,7 +332,7 @@
                     <% if occasion.date >= Date.today %>
                       <%= link_to "Närvarolista", occasion_attendance_index_path(occasion) %>
                     <% elsif !occasion.cancelled && (current_user.has_role?(:admin) || current_user.has_role?(:host)) %>
-                      <%= link_to "Rapportera närvaro", report_show_occasion_path(occasion) -%>
+                      <%= link_to "Rapportera närvaro", report_occasion_attendance_path(occasion) %>
                     <% end %>
                   <% elsif @event.bookable? %>
                     <span><%= login_link "Logga in", new_occasion_booking_path(occasion) %> för att boka</span>
