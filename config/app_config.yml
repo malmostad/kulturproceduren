@@ -1,5 +1,5 @@
 common: &common
-    #:asset_host: "http://www.dev.malmo.se/assets-2.0"
+    :asset_host: "http://www.dev.malmo.se/assets-2.0"
     :salt_length: 10
     :request_key_length: 20
     :generated_password_length: 8
