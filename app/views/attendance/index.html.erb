@@ -45,11 +45,12 @@
 <table class="attendant-list" >
   <thead>
     <tr>
-      <th>Stadsdel</th>
-      <th>Skola</th>
-      <th>Grupp</th>
+      <th>
+        Stadsdel<br/>
+        Skola<br/>
+        Grupp
+      </th>
       <th>Medföljande vuxen</th>
-      <th>Telefonnummer</th>
       <th>Antal barn</th>
       <th>Antal vuxna</th>
       <th>Antal rullstolsplatser</th>
@@ -65,11 +66,17 @@
         <% booking = Ticket.booking(group, @occasion) %>
 
         <tr class="<%= cycle('', 'even') %>">
-          <td><%= h group.school.district.name -%></td>
-          <td><%= h group.school.name -%></td>
-          <td><%= h group.name -%></td>
-          <td><%= h group.companion_by_occasion(@occasion).name -%></td>
-          <td><%= h group.companion_by_occasion(@occasion).tel_nr -%></td>
+          <td>
+            <%= h group.school.district.name -%><br/>
+            <%= h group.school.name -%><br/>
+            <%= h group.name -%>
+          </td>
+          <td>
+            <% companion = group.companion_by_occasion(@occasion) %>
+            <%= h companion.name -%><br/>
+            <%= h companion.tel_nr -%><br/>
+            <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
+          </td>
           <td><%= h booking[:normal] -%></td>
           <td><%= h booking[:adult] -%></td>
           <td><%= h booking[:wheelchair] -%></td>
@@ -99,11 +106,17 @@
           <% booking = Ticket.booking(group, occasion) %>
 
           <tr class="<%= cycle('', 'even') %>">
-            <td><%= h group.school.district.name -%></td>
-            <td><%= h group.school.name -%></td>
-            <td><%= h group.name -%></td>
-            <td><%= h group.companion_by_occasion(occasion).name -%></td>
-            <td><%= h group.companion_by_occasion(occasion).tel_nr -%></td>
+            <td>
+              <%= h group.school.district.name -%><br/>
+              <%= h group.school.name -%><br/>
+              <%= h group.name -%>
+            </td>
+            <td>
+              <% companion = group.companion_by_occasion(occasion) %>
+              <%= h companion.name -%><br/>
+              <%= h companion.tel_nr -%><br/>
+              <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
+            </td>
             <td><%= h booking[:normal] -%></td>
             <td><%= h booking[:adult] -%></td>
             <td><%= h booking[:wheelchair] -%></td>

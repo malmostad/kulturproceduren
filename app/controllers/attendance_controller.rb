@@ -126,7 +126,7 @@ class AttendanceController < ApplicationController
       PDF::SimpleTable.new do |tab|
         tab.title = "Deltagarlista för #{occasion.event.name}, föreställningen #{occasion.date.to_s} kl #{l(occasion.start_time, :format => :only_time)}".to_iso
 
-        tab.column_order.push(*%w(group comp comptel att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
+        tab.column_order.push(*%w(group comp att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
 
         tab.columns["group"] = PDF::SimpleTable::Column.new("group") { |col|
           col.heading = "Skola / Grupp".to_iso
@@ -134,11 +134,7 @@ class AttendanceController < ApplicationController
         }
         tab.columns["comp"] = PDF::SimpleTable::Column.new("com") { |col|
           col.heading = "Medföljande vuxen".to_iso
-          col.width = 130
-        }
-        tab.columns["comptel"] = PDF::SimpleTable::Column.new("comptel") { |col|
-          col.heading = "Telefonnummer"
-          col.width = 100
+          col.width = 180
         }
         tab.columns["att_normal"] = PDF::SimpleTable::Column.new("att_normal") { |col|
           col.heading = "Barn"
@@ -192,11 +188,11 @@ class AttendanceController < ApplicationController
   def create_pdf_row(occasion, group)
     booking = Ticket.booking(group, occasion)
     requirements = group.booking_requirements.for_occasion(occasion)
+    companion = group.companion_by_occasion(occasion)
 
     row = {}
     row["group"]       = (group.school.name.to_s + " - " + group.name.to_s).to_iso
-    row["comp"]        = group.companion_by_occasion(occasion).name.to_iso
-    row["comptel"]     = group.companion_by_occasion(occasion).tel_nr.to_s.to_iso
+    row["comp"]        = "#{companion.name}\n#{companion.tel_nr}\n#{companion.email}".to_iso
     row["att_normal"]  = booking[:normal] || 0
     row["att_adult"]   = booking[:adult] || 0
     row["att_wheel"]   = booking[:wheelchair] || 0

@@ -648,3 +648,23 @@ body.kp-standalone { background: #fff; }
 /*** Sitevision hack ***/
 #kp #kp-sitevision-base-url { display: none; }
 
+/*** Multirow tables ***/
+#kp table.multirow tbody tr:nth-child(even) { background: transparent; }
+#kp table.multirow tbody tr:nth-child(4n),
+#kp table.multirow tbody tr:nth-child(4n-1) { background: #f8f8f8; }
+
+/*** Table action row ***/
+#kp tr.action-row ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+#kp tr.action-row ul li {
+    margin: 0 0 0 1em;
+    padding: 0;
+    display: inline;
+}
+
+
+

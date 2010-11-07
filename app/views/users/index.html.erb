@@ -17,7 +17,7 @@
   <% end %>
 </div>
 
-<table>
+<table class="multirow">
 
   <thead>
     <tr>
@@ -25,22 +25,28 @@
       <th><%= sort_link "Namn", "name" %></th>
       <th><%= sort_link "Mobilnummer", "cellphone" %></th>
       <th><%= sort_link "Epost", "email" %></th>
-      <th colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @users.each do |user| %>
+      <% css_class = cycle('', 'even') %>
       
-      <tr class="<%= cycle('', 'even') %>">
+      <tr class="<%= css_class %>">
         <td><%= h user.get_username %></td>
         <td><%= h user.name %></td>
         <td><%= h user.cellphone %></td>
-        <td><%= h user.email %></td>
-        <td><%= link_to 'Visa', user %></td>
-        <td><%= link_to 'Redigera', edit_user_path(user) %></td>
-        <td><%= link_to 'Byt lösenord', edit_password_user_path(user) %></td>
-        <td><%= link_to 'Ta bort', user, :confirm => 'Are you säker?', :method => :delete %></td>
+        <td><a href="mailto:<%= u user.email %>"><%= h user.email %></a></td>
+      </tr>
+      <tr class="<%= css_class %> action-row">
+        <td colspan="4">
+          <ul>
+            <li><%= link_to 'Visa', user %></li>
+            <li><%= link_to 'Redigera', edit_user_path(user) %></li>
+            <li><%= link_to 'Byt lösenord', edit_password_user_path(user) %></li>
+            <li><%= link_to 'Ta bort', user, :confirm => 'Are you säker?', :method => :delete %></li>
+          </ul>
+        </td>
       </tr>
 
     <% end %>
