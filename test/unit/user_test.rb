@@ -28,6 +28,7 @@ class UserTest < ActiveSupport::TestCase
     u.name = "Test"
     u.email = "test@test.com"
     u.cellphone = "0702345678"
+    u.districts << districts(:centrum)
 
     assert u.save
 

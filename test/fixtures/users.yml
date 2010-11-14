@@ -9,6 +9,7 @@ pelle: &base
     cellphone: 0701234567
     email: pelle@example.com
     roles: admin
+    districts: centrum
 
 admin1:
     <<: *base

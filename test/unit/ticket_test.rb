@@ -98,7 +98,7 @@ class TicketTest < ActiveSupport::TestCase
     o = occasions(:bla_film1)
     u = Ticket.usage(g, o)
     assert_equal 1, u[:normal]
-    assert_equal 0, u[:wheelchair]
-    assert_equal 0, u[:adult]
+    assert_nil u[:wheelchair]
+    assert_nil u[:adult]
   end
 end
