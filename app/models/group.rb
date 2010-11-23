@@ -25,6 +25,8 @@ class Group < ActiveRecord::Base
   validates_associated :school,
     :message => "Gruppen måste tillhöra en skola"
 
+  before_create :set_default_priority
+
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets
   
@@ -120,6 +122,29 @@ class Group < ActiveRecord::Base
     end
 
     return tickets
+  end
+
+  def move_first_in_prio
+    Group.update_all(
+      "priority = priority + 1",
+      [ "priority < ?", self.priority ]
+    )
+    self.priority = 1
+    save!
+  end
+  def move_last_in_prio
+    Group.update_all(
+      "priority = priority - 1",
+      [ "priority > ?", self.priority ]
+    )
+    self.priority = Group.count(:all)
+    save!
+  end
+
+  private
+
+  def set_default_priority
+    self.priority = Group.count(:all) + 1
   end
 
 end

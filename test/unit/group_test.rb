@@ -60,4 +60,26 @@ class GroupTest < ActiveSupport::TestCase
       assert_equal occasions(:roda_cirkusen_ffa_past).event.id, t.event_id
     end
   end
+
+  test "move first in prio" do
+    g = Group.find groups(:centrumskolan2_klass6).id
+    g.move_first_in_prio
+    assert_equal 1, g.priority
+    assert_equal 2, Group.find(groups(:centrumskolan1_klass35).id).priority
+    assert_equal 8, Group.find(groups(:sydskolan1_klass1).id).priority
+  end
+  test "move last in prio" do
+    g = Group.find groups(:centrumskolan2_klass6).id
+    g.move_last_in_prio
+    assert_equal Group.count(:all), g.priority
+    assert_equal 5, Group.find(groups(:ostskolan1_klass1).id).priority
+    assert_equal 1, Group.find(groups(:centrumskolan1_klass35).id).priority
+  end
+  test "default priority" do
+    g = Group.new
+    g.name = "Test"
+    g.school = schools(:centrumskolan1)
+    assert g.save
+    assert_equal 12, g.priority
+  end
 end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101012070557) do
+ActiveRecord::Schema.define(:version => 20101123174034) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20101012070557) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active",     :default => true
+    t.integer  "priority"
   end
 
   create_table "images", :force => true do |t|

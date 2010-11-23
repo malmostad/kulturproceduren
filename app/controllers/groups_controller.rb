@@ -53,6 +53,17 @@ class GroupsController < ApplicationController
     end
   end
 
+  def move_first_in_priority
+    group = Group.find(params[:id])
+    group.move_first_in_prio
+    redirect_to params[:return_to] || group_url()
+  end
+  def move_last_in_priority
+    group = Group.find(params[:id])
+    group.move_last_in_prio
+    redirect_to params[:return_to] || group_url()
+  end
+
   def destroy
     @group = Group.find(params[:id])
     school = @group.school

@@ -10,6 +10,7 @@
       <% end -%>
       <th><%= sort_link "ELIT-ID", "elit_id" %></th>
       <th><%= sort_link "Aktiv", "active" %></th>
+      <th colspan="2">Prioritering</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -24,6 +25,15 @@
         <% end -%>
         <td><%= h group.elit_id %></td>
         <td><%= group.active ? "Ja" : "Nej" %></td>
+        <% return_to = url_for(request.query_parameters.update(request.path_parameters)) %>
+        <td>
+          <%= link_to 'Flytta först',
+            move_first_in_priority_group_path(group, :return_to => return_to) %>
+        </td>
+        <td>
+          <%= link_to 'Flytta sist',
+            move_last_in_priority_group_path(group, :return_to => return_to) %>
+        </td>
         <td><%= link_to 'Redigera', edit_group_path(group) %></td>
         <td><%= link_to 'Radera', group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></td>
       </tr>
