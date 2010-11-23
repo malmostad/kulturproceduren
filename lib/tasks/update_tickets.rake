@@ -14,37 +14,42 @@ namespace :kp do
       notification_requests = []
 
       if e.ticket_state == Event::ALLOTED_GROUP && group_to_district_date <= Date.today
+        puts "Changing to district allotment for #{e.name}"
         # Transition to districts
         e.ticket_state = Event::ALLOTED_DISTRICT
         e.save
-        puts "Notifying district allotment for #{e.name}"
 
-        districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
-        notification_requests = NotificationRequest.find_by_event_and_districts(e, districts)
+        if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }
+          puts "Notifying district allotment for #{e.name}"
 
-        # Notify contacts on districts
-        districts.each do |district|
-          get_relevant_addresses(e, [district]).each do |address|
-            puts "Sending notification mail for district allotment on #{e.name} to #{address}"
-            EventMailer.deliver_district_allotment_notification_email(e, district, address)
+          districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
+          notification_requests = NotificationRequest.find_by_event_and_districts(e, districts)
+
+          # Notify contacts on districts
+          districts.each do |district|
+            get_relevant_addresses(e, [district]).each do |address|
+              puts "Sending notification mail for district allotment on #{e.name} to #{address}"
+              EventMailer.deliver_district_allotment_notification_email(e, district, address)
+            end
           end
-        end
 
-        # Send responses to notification requests
-        notification_requests.each do |n|
-          if n.send_mail
-            puts "Notification request answered on #{e.name} to #{n.user.email}"
-            NotificationRequestMailer.deliver_tickets_available_email(n, true)
+          # Send responses to notification requests
+          notification_requests.each do |n|
+            if n.send_mail
+              puts "Notification request answered on #{e.name} to #{n.user.email}"
+              NotificationRequestMailer.deliver_tickets_available_email(n, true)
+            end
           end
         end
       elsif e.ticket_state == Event::ALLOTED_DISTRICT && district_to_all_date <= Date.today
+        puts "Changing to free for all for #{e.name}"
         # Transistion to all
         e.ticket_state = Event::FREE_FOR_ALL
         state_change = Event::FREE_FOR_ALL
         e.save
-        puts "Notifying free for all for #{e.name}"
 
-        if e.tickets.count(:conditions => { :state => Ticket::UNBOOKED }) > 0
+        if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }
+          puts "Notifying free for all for #{e.name}"
           notification_requests = NotificationRequest.find_by_event(e)
 
           # Notify contacts on districts
@@ -52,13 +57,13 @@ namespace :kp do
             puts "Sending notification mail for free for all on #{e.name} to #{address}"
             EventMailer.deliver_free_for_all_allotment_notification_email(e, address)
           end
-        end
 
-        # Send responses to notification requests
-        notification_requests.each do |n|
-          if n.send_mail
-            puts "Notification request answered on #{e.name} to #{n.user.email}"
-            NotificationRequestMailer.deliver_tickets_available_email(n, false)
+          # Send responses to notification requests
+          notification_requests.each do |n|
+            if n.send_mail
+              puts "Notification request answered on #{e.name} to #{n.user.email}"
+              NotificationRequestMailer.deliver_tickets_available_email(n, false)
+            end
           end
         end
       end

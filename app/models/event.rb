@@ -109,7 +109,7 @@ class Event < ActiveRecord::Base
 
   # Indicates whether the event has tickets available for booking
   def has_unbooked_tickets?(reload=false)
-    if @has_unbooked_tickets.nil || reload
+    if @has_unbooked_tickets.nil? || reload
       @has_unbooked_tickets = unbooked_tickets(reload) > 0
     end
     @has_unbooked_tickets
@@ -137,7 +137,8 @@ class Event < ActiveRecord::Base
   def not_targeted_group_ids
     groups.find(:all,
                 :select => "distinct groups.id",
-                :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false ]
+                :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false ],
+                :order => "groups.id ASC"
                ).collect { |g| g.id.to_i }
   end
 
