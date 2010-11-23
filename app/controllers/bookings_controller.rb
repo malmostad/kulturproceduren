@@ -225,6 +225,12 @@ class BookingsController < ApplicationController
     tickets = Ticket.find_booked(@group, @occasion)
     tickets.each { |ticket| unbook_ticket(ticket) }
 
+    BookingMailer.deliver_booking_cancelled_email(
+      current_user(),
+      @group,
+      @occasion
+    )
+
     flash[:notice] = "Platserna avbokades."
     redirect_to bookings_url()
   end

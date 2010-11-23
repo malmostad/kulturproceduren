@@ -1,0 +1,13 @@
+<h1>Kulturproceduren - Avbokning</h1>
+
+<p>
+  Biljetterna för
+  <%= h @group.name %>, <%= @group.school.name %>
+  till
+  <%= h @occasion.event.name %>,
+  föreställningen
+  <%= h @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
+  har avbokats av
+  <%= h @user.name %> (<%= h @user.email %>, <%= h @user.cellphone %>).
+</p>
+
