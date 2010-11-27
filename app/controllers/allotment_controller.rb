@@ -56,18 +56,18 @@ class AllotmentController < ApplicationController
       return
     elsif @event.tickets.empty?
       # Store the preliminary distribution in the session as the working distribution
-      session[:allotment][:working_distribution] =
-        get_preliminary_distribution(@event,
-                                    load_working_districts(),
-                                    session[:allotment][:num_tickets],
-                                    session[:allotment][:ticket_state])
+      session[:allotment][:working_distribution] = get_preliminary_distribution(
+        @event,
+        session[:allotment][:district_ids],
+        session[:allotment][:num_tickets],
+        session[:allotment][:ticket_state])
     else
       # Store the existing distribution in the session as the working distribution
-      session[:allotment][:working_distribution] =
-        get_ticket_distribution(@event,
-                                load_working_districts(),
-                                session[:allotment][:extra_groups],
-                                session[:allotment][:ticket_state])
+      session[:allotment][:working_distribution] = get_ticket_distribution(
+        @event,
+        load_working_districts(),
+        session[:allotment][:extra_groups],
+        session[:allotment][:ticket_state])
     end
 
     redirect_to :action => "distribute", :id => params[:id]
@@ -148,6 +148,7 @@ class AllotmentController < ApplicationController
             tickets_created += 1
           end
 
+          group.move_last_in_prio
           schools << group.school unless schools.include?(group.school)
         end
 
@@ -347,29 +348,51 @@ class AllotmentController < ApplicationController
 
   # Creates a working distribution from a preliminary distribution based on
   # the number of tickets and the number of children in each district
-  def get_preliminary_distribution(event, districts, tickets, ticket_state)
+  def get_preliminary_distribution(event, district_ids, tickets, ticket_state)
     distribution = {}
 
-    total_children = assign_children(event, districts)
+    total_query = AgeGroup.active.with_age(event.from_age, event.to_age)
+    total_query = total_query.with_district(district_ids) unless district_ids.blank?
+    children_per_district = total_query.num_children_per_district
+    logger.info "\nChildren per district:#{children_per_district.to_yaml}"
 
-    districts.each do |district|
-      assigned_tickets = ((district.num_children.to_f / total_children.to_f) * tickets).floor
+    total_children = children_per_district.values.reduce(:+)
+    total_tickets = tickets
+    extra_pool = 0
+
+    children_per_district.each_pair do |district_id, num_children|
+      assigned_tickets = ((num_children.to_f / total_children.to_f) * total_tickets).floor + extra_pool
+
+      logger.info "\n\n\nAssigning #{assigned_tickets} (#{extra_pool} from extra_pool) tickets for #{district_id} (#{num_children} children)"
 
       tickets -= assigned_tickets
 
       if ticket_state == Event::ALLOTED_GROUP
-        district.distribution_schools.each do |school|
-          school.distribution_groups.each do |group|
-            if assigned_tickets > group.num_children + 1
-              assigned_tickets -= group.num_children + 1
-              distribution[group.id] = group.num_children + 1
-            end
+        children_per_group = AgeGroup.
+          active.
+          with_age(event.from_age, event.to_age).
+          with_district(district_id).
+          num_children_per_group
+
+        logger.info "\n\nChildren per group in district #{district_id}:#{children_per_group.to_yaml}"
+
+        sorted_ids = Group.sort_ids_by_priority(children_per_group.keys)
+        sorted_ids.each do |group_id|
+          amount = children_per_group[group_id.to_i] + 1
+          logger.info "\nAmount for #{group_id}: #{amount}, tickets left: #{assigned_tickets}"
+          if assigned_tickets >= amount
+            assigned_tickets -= amount
+            distribution[group_id.to_i] = amount
+            logger.info "Giving #{amount} tickets to #{group_id}"
           end
+
         end
 
-        tickets += assigned_tickets
+        logger.info "Pooling #{assigned_tickets} tickets"
+        extra_pool += assigned_tickets
+
       elsif ticket_state == Event::ALLOTED_DISTRICT
-        distribution[district.id] = assigned_tickets
+        distribution[district_id.to_i] = assigned_tickets
       end
     end
 

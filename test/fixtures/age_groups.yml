@@ -27,3 +27,12 @@ centrumskolan2_klass6_12:
   age: 12
   quantity: 20
   group: centrumskolan2_klass6
+
+ostskolan1_klass1_9:
+  age: 9
+  quantity: 10
+  group: ostskolan1_klass1
+ostskolan2_klass1_9:
+  age: 9
+  quantity: 11
+  group: ostskolan2_klass1

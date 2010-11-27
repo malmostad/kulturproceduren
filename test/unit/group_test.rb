@@ -66,7 +66,7 @@ class GroupTest < ActiveSupport::TestCase
     g.move_first_in_prio
     assert_equal 1, g.priority
     assert_equal 2, Group.find(groups(:centrumskolan1_klass35).id).priority
-    assert_equal 8, Group.find(groups(:sydskolan1_klass1).id).priority
+    assert_equal 9, Group.find(groups(:sydskolan1_klass1).id).priority
   end
   test "move last in prio" do
     g = Group.find groups(:centrumskolan2_klass6).id
@@ -80,6 +80,27 @@ class GroupTest < ActiveSupport::TestCase
     g.name = "Test"
     g.school = schools(:centrumskolan1)
     assert g.save
-    assert_equal 12, g.priority
+    assert_equal Group.count(:all), g.priority
+  end
+
+  test "sort ids by priority" do
+    sorted_ids = Group.sort_ids_by_priority([
+      groups(:centrumskolan2_klass6).id,
+      groups(:centrumskolan1_klass5spec).id,
+      groups(:centrumskolan1_klass35).id,
+      groups(:centrumskolan2_klass5).id,
+      groups(:ostskolan1_klass1).id,
+      groups(:centrumskolan1_klass3spec).id,
+      groups(:ostskolan2_klass2).id,
+      groups(:ostskolan2_klass1).id,
+      groups(:sydskolan1_klass1).id
+    ])
+
+    last_prio = 0
+    sorted_ids.each do |id|
+      prio = Group.find(id).priority
+      assert last_prio <= prio
+      last_prio = prio
+    end
   end
 end

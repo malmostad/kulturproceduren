@@ -141,6 +141,10 @@ class Group < ActiveRecord::Base
     save!
   end
 
+  def self.sort_ids_by_priority(ids)
+    connection.select_values(sanitize_sql_array(["select id from groups where id in (?) order by priority asc", ids]))
+  end
+
   private
 
   def set_default_priority

@@ -139,6 +139,7 @@ class GroupsController < ApplicationController
     when :school then "schools.name"
     when :elit_id then "elit_id"
     when :active then "active"
+    when :priority then "priority"
     else
       "name"
     end
