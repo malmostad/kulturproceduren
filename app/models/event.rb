@@ -36,6 +36,8 @@ class Event < ActiveRecord::Base
         :order => "schools.name ASC, groups.name ASC"
     end
   end
+  has_many :unordered_groups, :through => :tickets, :uniq => true,
+    :class_name => "Group", :source => :group
   
   has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC", :dependent => :destroy
   has_many :reportable_occasions, :class_name => "Occasion",
@@ -135,7 +137,7 @@ class Event < ActiveRecord::Base
 
   # Returns the ids of all groups that are not targeted by this event.
   def not_targeted_group_ids
-    groups.find(:all,
+    unordered_groups.find(:all,
                 :select => "distinct groups.id",
                 :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false ],
                 :order => "groups.id ASC"
