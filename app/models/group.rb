@@ -127,7 +127,7 @@ class Group < ActiveRecord::Base
   def move_first_in_prio
     Group.update_all(
       "priority = priority + 1",
-      [ "priority < ?", self.priority ]
+      [ "priority < (select priority from groups where id = ?)", self.id ]
     )
     self.priority = 1
     save!
@@ -135,7 +135,7 @@ class Group < ActiveRecord::Base
   def move_last_in_prio
     Group.update_all(
       "priority = priority - 1",
-      [ "priority > ?", self.priority ]
+      [ "priority > (select priority from groups where id = ?)", self.id ]
     )
     self.priority = Group.count(:all)
     save!
