@@ -58,7 +58,13 @@ class Question < ActiveRecord::Base
             end
           when "QuestionMchoice"
             data = YAML.load(answer.answer_text)
-            data.keys.each { |key| mchoice_stat[key] = mchoice_stat[key] + 1 }
+            data.keys.each do |key|
+              if mchoice_stat[key].has_key?(key)
+                mchoice_stat[key] = mchoice_stat[key] + 1
+              else
+                mchoice_stat[key] = 1
+              end
+            end
           end
         end
       end

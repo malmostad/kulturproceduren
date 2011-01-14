@@ -39,7 +39,7 @@
 
   <p>
     Platserna är reserverade till er fram till och med
-    <%= @event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] %>.
+    <%= @event.ticket_release_date - 1 + APP_CONFIG[:ticket_state][:group_days] %>.
     Därefter släpps obekräftade platser till hela stadsdelen.
   </p>
 
@@ -59,8 +59,8 @@
   </ul>
 
   <p>
-    Platserna är reserverade för skolor i stadsdelarna fram till
-    <%= @event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>.
+    Platserna är reserverade för skolor i stadsdelarna fram till och med
+    <%= @event.ticket_release_date - 1 + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>.
     Därefter släpps obekräftade platser till hela staden.
   </p>
 
