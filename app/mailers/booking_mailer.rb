@@ -5,7 +5,7 @@ class BookingMailer < ActionMailer::Base
   helper :application
 
   # Sends an email to administrators when a booking has been cancelled
-  def booking_cancelled_email(user, group, occasion)
+  def booking_cancelled_email(administrators, user, group, occasion)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else

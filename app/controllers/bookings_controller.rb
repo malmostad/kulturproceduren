@@ -226,6 +226,7 @@ class BookingsController < ApplicationController
     tickets.each { |ticket| unbook_ticket(ticket) }
 
     BookingMailer.deliver_booking_cancelled_email(
+      Role.find_by_symbol(:admin).users,
       current_user(),
       @group,
       @occasion
