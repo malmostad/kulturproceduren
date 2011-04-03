@@ -11,16 +11,16 @@ namespace :kp do
       occasion_date = today + real_days
 
       occasions = Occasion.find :all,
-        :conditions => { :date => occasion_date },
+        :conditions => { :date => occasion_date, :cancelled => false },
         :include => :event
 
       # Notify for Saturday and Sunday when the targeted notification date is a Monday.
       if occasion_date.wday == 1
         occasions += Occasion.find :all,
-          :conditions => { :date => occasion_date - 1 },
+          :conditions => { :date => occasion_date - 1, :cancelled => false },
           :include => :event
         occasions += Occasion.find :all,
-          :conditions => { :date => occasion_date - 2 },
+          :conditions => { :date => occasion_date - 2, :cancelled => false },
           :include => :event
       end
 
@@ -36,7 +36,7 @@ namespace :kp do
   desc "Sends a link to occasions' evaluation forms to the companion"
   task(:send_answer_forms => :environment) do
     occasions = Occasion.find :all,
-      :conditions => { :date => Date.today - APP_CONFIG[:evaluation_form][:activation_days] },
+      :conditions => { :date => Date.today - APP_CONFIG[:evaluation_form][:activation_days], :cancelled => false },
       :include => :event
     
     occasions.each do |occasion|
