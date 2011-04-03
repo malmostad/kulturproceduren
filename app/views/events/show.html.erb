@@ -38,7 +38,7 @@
       <% end %>
     </ul>
   </div>
-<% elsif user_online? && current_user.has_role?(:host) && @event.bookable? %>
+<% elsif user_online? && current_user.has_role?(:host, :coordinator) && @event.bookable? %>
   <div class="admin-tools">
     <h4>Administrera <%= h @event.name %></h4>
     <ul>
@@ -331,7 +331,7 @@
 
                     <% if occasion.date >= Date.today %>
                       <%= link_to "Närvarolista", occasion_attendance_index_path(occasion) %>
-                    <% elsif !occasion.cancelled && (current_user.has_role?(:admin) || current_user.has_role?(:host)) %>
+                    <% elsif !occasion.cancelled && current_user.has_role?(:admin, :host) %>
                       <%= link_to "Rapportera närvaro", report_occasion_attendance_path(occasion) %>
                     <% end %>
                   <% elsif @event.bookable? %>

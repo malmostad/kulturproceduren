@@ -1,7 +1,19 @@
 <% content_for :section_sub do -%>
   <ul class="section-nav">
-    <li class="<%= active_by_action "bookings", "index" %>"><%= link_to "Mina bokningar", bookings_path() %></li>
-    <li class="<%= active_by_action "bookings", "group" %>"><%= link_to "Klassers/avdelningars bokningar", group_bookings_path() %></li>
-    <li><%= link_to "Boka kulturbuss", APP_CONFIG[:culture_bus_link] %></li>
+    <% if current_user.can_book? %>
+      <li class="<%= active_by_action "bookings", "index" %>">
+        <%= link_to "Mina bokningar", bookings_path() %>
+      </li>
+      <li class="<%= active_by_action "bookings", "group" %>">
+        <%= link_to "Klassers/avdelningars bokningar", group_bookings_path() %>
+      </li>
+      <li>
+        <%= link_to "Boka kulturbuss", APP_CONFIG[:culture_bus_link] %>
+      </li>
+    <% else %>
+      <li class="<%= active_by_action "bookings", "group" %>">
+        <%= link_to "Klassers/avdelningars bokningar", group_bookings_path() %>
+      </li>
+    <% end %>
   </ul>
 <% end -%>

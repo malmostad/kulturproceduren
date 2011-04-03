@@ -12,7 +12,7 @@ namespace :kp do
     # Creates all system roles required in the application
     desc "Create system roles if they do not exist"
     task(:create_system_roles => :environment) do
-      [:admin, :booker, :culture_worker, :host].each do |role|
+      [:admin, :booker, :culture_worker, :host, :coordinator].each do |role|
         unless Role.find_by_symbol role
           r = Role.new
           r.name = role.to_s

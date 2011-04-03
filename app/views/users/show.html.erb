@@ -7,7 +7,7 @@
   <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_user_path(@user) %></li>
     <% if current_user.has_role?(:admin) %>
-      <li><%= link_to "Radera", @user, :confirm => 'Are you säker?', :method => :delete %></li>
+      <li><%= link_to "Radera", @user, :confirm => 'Är du säker?', :method => :delete %></li>
     <% end -%>
   </ul>
 
@@ -79,43 +79,46 @@
 
   <ul>
 
-    <% if @user.roles.empty? -%>
+    <% if @user.roles.empty? && current_user.has_role?(:admin) -%>
 
       <li>
         <%= denom %> kan inte boka platser.
-
-        <% if current_user.has_role?(:admin) -%>
-          <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>
-        <% end -%>
+        <span class="inline-tool">
+          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %>
+        </span>
       </li>
       <li>
         <%= denom %> är inte evenemangsvärd.
-
-        <% if current_user.has_role?(:admin) -%>
-          <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %></span>
-        <% end -%>
+        <span class="inline-tool">
+          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %>
+        </span>
+      </li>
+      <li>
+        <%= denom %> är inte samordnare.
+        <span class="inline-tool">
+          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :coordinator) %>
+        </span>
       </li>
       <li>
         <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
-
-        <% if current_user.has_role?(:admin) -%>
-          <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %></span>
-        <% end -%>
+        <span class="inline-tool">
+          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %>
+        </span>
       </li>
 
-      <% if current_user.has_role?(:admin) -%>
-        <li>
-          <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(:id => @user.id, :role => :admin) %>
-        </li>
-      <% end %>
+      <li>
+        <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(:id => @user.id, :role => :admin) %>
+      </li>
 
     <% elsif @user.has_role?(:admin) -%>
 
       <li>
         <%= denom %> är administratör och har fulla rättigheter i systemet.
-          <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :admin) %></span>
-          <% end -%>
+        <% if current_user.has_role?(:admin) -%>
+          <span class="inline-tool">
+            <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :admin) %>
+          </span>
+        <% end -%>
       </li>
 
     <% else -%>
@@ -126,16 +129,17 @@
           <%= denom %> kan boka platser.
 
           <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :booker) %></span>
+            <span class="inline-tool">
+              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :booker) %>
+            </span>
           <% end -%>
         </li>
       <% elsif current_user.has_role?(:admin) -%>
         <li>
           <%= denom %> kan inte boka platser.
-
-          <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %></span>
-          <% end -%>
+          <span class="inline-tool">
+            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %>
+          </span>
         </li>
       <% end -%>
 
@@ -144,16 +148,36 @@
           <%= denom %> är evenemangsvärd.
 
           <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :host) %></span>
+            <span class="inline-tool">
+              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :host) %>
+            </span>
           <% end -%>
         </li>
       <% elsif current_user.has_role?(:admin) -%>
         <li>
           <%= denom %> är inte evenemangsvärd.
+          <span class="inline-tool">
+            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %>
+          </span>
+        </li>
+      <% end -%>
+
+      <% if @user.has_role?(:coordinator) -%>
+        <li>
+          <%= denom %> är samordnare.
 
           <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %></span>
+            <span class="inline-tool">
+              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :coordinator) %>
+            </span>
           <% end -%>
+        </li>
+      <% elsif current_user.has_role?(:admin) -%>
+        <li>
+          <%= denom %> är inte samordnare.
+          <span class="inline-tool">
+            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :coordinator) %>
+          </span>
         </li>
       <% end -%>
 
@@ -196,10 +220,9 @@
       <% elsif current_user.has_role?(:admin) -%>
         <li>
           <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
-
-          <% if current_user.has_role?(:admin) -%>
-            <span class="inline-tool"><%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %></span>
-          <% end -%>
+          <span class="inline-tool">
+            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %>
+          </span>
         </li>
       <% end -%>
 

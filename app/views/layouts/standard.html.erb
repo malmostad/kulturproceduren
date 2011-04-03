@@ -26,17 +26,23 @@
 
         <% if user_online? -%>
 
-          <% if current_user.has_role?(:admin, :booker) -%>
+          <% if current_user.has_role?(:admin, :booker, :coordinator) -%>
             <li class="pri-nav-booking  <%= active_by_controller "bookings", "notification_requests" %>">
               <%= link_to "Bokning", bookings_path() -%>
             </li>
           <% end -%>
 
+          <% if current_user.has_role?(:coordinator) %>
+            <li class="pri-nav-users <%= active_by_action "users", "index" %>">
+              <%= link_to "Användare", users_path %>
+            </li>
+          <% end %>
+
           <% if current_user.has_role?(:admin) -%>
             <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
           <% end -%>
 
-          <li class="pri-nav-user <%= active_by_controller "users", "role_applications" %>">
+          <li class="pri-nav-user <%= active_by_controller "role_applications" %> <%= active_by_action "users", "new", "create", "show", "edit", "update", "edit_password" %>">
             <%= link_to "Konto", current_user %>
           </li>
           <li class="pri-nav-logout">

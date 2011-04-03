@@ -7,11 +7,11 @@ class UsersController < ApplicationController
   before_filter :require_admin,
     :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
   before_filter :load_user,
-    :only => [ :show, :edit, :edit_password, :update, :update_password ]
+    :only => [ :edit, :edit_password, :update, :update_password ]
 
   # Displays a list of users in the system.
   def index
-    if current_user.has_role?(:admin)
+    if current_user.has_role?(:admin, :coordinator)
       @users = User.filter session[:user_list_filter], params[:page], sort_order("username")
       @districts = District.all :order => "name ASC"
     else
@@ -30,6 +30,15 @@ class UsersController < ApplicationController
   # Displays a user's details. If the user is not an administrator,
   # the user's own details is always displayed.
   def show
+    if current_user.has_role?(:admin, :coordinator)
+      @user = User.find(params[:id])
+
+      if current_user.has_role?(:coordinator)
+        render :action => "show_readonly"
+      end
+    else
+      @user = current_user
+    end
   end
 
   # Grant roles to a user.

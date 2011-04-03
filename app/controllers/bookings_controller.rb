@@ -4,7 +4,8 @@ class BookingsController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
-  before_filter :require_booker
+  before_filter :require_booker, :except => [ "group", "group_list", "show" ]
+  before_filter :require_booking_viewer, :only => [ "group", "group_list", "show" ]
   before_filter :load_occasion, :except => [ :index, :group, :group_list ]
   before_filter :load_group, :except => [ :index, :form, :group_list ]
 
@@ -331,7 +332,18 @@ class BookingsController < ApplicationController
 
   # Makes sure you can only book if you have booking privileges. For use in <tt>before_filter</tt>
   def require_booker
-    unless current_user.can_book?
+    if !current_user.can_book?
+      if current_user.can_view_bookings?
+        redirect_to :action => "group"
+      else
+        flash[:error] = "Du har inte behörighet att komma åt sidan."
+        redirect_to root_url()
+      end
+    end
+  end
+  # Makes sure you can only view bookings if you have viewing privileges. For use in <tt>before_filter</tt>
+  def require_booking_viewer
+    unless current_user.can_view_bookings?
       flash[:error] = "Du har inte behörighet att komma åt sidan."
       redirect_to root_url()
     end

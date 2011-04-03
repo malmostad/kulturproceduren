@@ -134,6 +134,10 @@ class User < ActiveRecord::Base
   def can_book?
     return has_role?(:admin, :booker)
   end
+  # Returns true if this user can view bookings
+  def can_view_bookings?
+    return has_role?(:admin, :booker, :coordinator)
+  end
 
   
   # Sets the password of a user.

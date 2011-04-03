@@ -11,9 +11,13 @@
           <li class="<%= active_by_action "ldap", "index" %>"><%= link_to 'Katalogsökning', ldap_path %></li>
         <% end %>
 
+      <% elsif current_user.has_role?(:coordinator) && params[:action] == "index" %>
+
+        <li class="<%= active_by_action "users", "index" %>"><%= link_to 'Lista', users_path %></li>
+
       <% else -%>
 
-        <li class="<%= active_by_action "users", "show" %>"><%= link_to 'Ditt konto', users_path %></li>
+        <li class="<%= active_by_action "users", "show" %>"><%= link_to 'Ditt konto', current_user %></li>
         <li class="<%= active_by_action "users", "edit" %>"><%= link_to 'Uppdatera personuppgifter', edit_user_path(current_user) %></li>
         <li class="<%= active_by_action "users", "edit_password" %>"><%= link_to 'Byt lösenord', edit_password_user_path(current_user) %></li>
         <li class="<%= active_by_action "role_applications", "index" %>"><%= link_to 'Behörighetsansökan', role_applications_path %></li>
