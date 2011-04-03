@@ -27,7 +27,7 @@ $mech->submit_form(
     form_number => 1,
     fields => {
 	'user[username]' => 'admin',
-	'user[password]' => 'admin',
+	'user[password]' => '',
     },    );
 
 if ( $mech->success ) {
