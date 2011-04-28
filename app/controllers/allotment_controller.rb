@@ -148,6 +148,7 @@ class AllotmentController < ApplicationController
             tickets_created += 1
           end
 
+          logger.info "Moving #{group.id} last in priority"
           group.move_last_in_prio
           schools << group.school unless schools.include?(group.school)
         end
@@ -389,7 +390,7 @@ class AllotmentController < ApplicationController
         end
 
         logger.info "Pooling #{assigned_tickets} tickets"
-        extra_pool += assigned_tickets
+        extra_pool = assigned_tickets
 
       elsif ticket_state == Event::ALLOTED_DISTRICT
         distribution[district_id.to_i] = assigned_tickets

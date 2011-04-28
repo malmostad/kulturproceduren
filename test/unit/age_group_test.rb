@@ -21,8 +21,8 @@ class AgeGroupTest < ActiveSupport::TestCase
 
   test "number of children by district" do
     counts = AgeGroup.with_age(9,9).num_children_per_district
-    assert_equal 28, counts[districts(:centrum).id]
-    assert_equal 21, counts[districts(:ost).id]
+    assert_equal 28, counts[districts(:centrum).id.to_s]
+    assert_equal 21, counts[districts(:ost).id.to_s]
   end
   test "number of children by group" do
     counts = AgeGroup.with_age(11,11).num_children_per_group

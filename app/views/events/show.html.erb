@@ -244,7 +244,7 @@
   <% cache occasion_list_cache_key(@event) do %>
     <% unless @event.occasions.empty? -%>
       <div id="kp-ev-meta-occasions">
-        <table class="occasion-list">
+        <table class="occasion-list multirow">
           <thead>
             <tr>
               <th class="date-time">Datum/tid</th>
@@ -261,8 +261,11 @@
 
           <tbody>
             <% @event.occasions.each do |occasion| %>
-              <% available_seats = [ occasion.available_seats.to_i, @event.unbooked_tickets.to_i ].min %>
-              <tr class="<%= cycle('', 'even') %> <%= "cancelled" if occasion.cancelled %>">
+              <%
+              available_seats = [ occasion.available_seats.to_i, @event.unbooked_tickets.to_i ].min
+              row_class = cycle('', 'even')
+              %>
+              <tr class="<%= row_class %> <%= "cancelled" if occasion.cancelled %>">
 
                 <td class="date-time">
                   <span class="date"><%= h occasion.date %></span>
@@ -296,47 +299,75 @@
                 </td>
 
                 <td class="description"><%= linebreakize(occasion.description) %></td>
+              </tr>
 
-                <td class="tools">
-                  <% if occasion.cancelled %>
-                    <span class="cancelled">Inställd</span>
-                  <% elsif user_online? -%>
-                    <% if @event.bookable? && current_user.can_book? -%>
+              <tr class="<%= row_class %> action-row <%= "cancelled" if occasion.cancelled %>">
+                <td class="tools" colspan="4">
+                  <ul>
+                    <% if occasion.cancelled %>
+                      <li><span class="cancelled">Inställd</span></li>
+                    <% elsif user_online? -%>
+                      <% if @event.bookable? && current_user.can_book? -%>
 
-                      <% if available_seats > 0 %>
-                        <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
-                      <% else %>
-                        <span class="sold-out">Fullbokat</span>
-                      <% end %>
-                    <% end -%>
+                        <li>
+                          <% if available_seats > 0 %>
+                            <%= link_to "Boka",
+                              new_occasion_booking_path(occasion),
+                              :title => "#{available_seats} lediga platser"
+                            %>
+                          <% else %>
+                            <span class="sold-out">Fullbokat</span>
+                          <% end %>
+                        </li>
+                      <% end -%>
 
-                    <% if current_user.can_administrate?(@event.culture_provider) -%>
-                      <%= link_to "Redigera", edit_occasion_path(occasion) %>
+                      <% if current_user.can_administrate?(@event.culture_provider) -%>
+                        <%= link_to "Redigera", edit_occasion_path(occasion) %>
 
-                      <% if @event.bookable? %>
-                        <% if occasion.date >= Date.today && !occasion.cancelled %>
-                          <%= link_to "Ställ in",
-                            cancel_occasion_path(occasion),
-                            :method => "delete",
-                            :confirm => "Är du säker på att du vill ställa in föreställningen?"
-                          %>
+                        <% if @event.bookable? %>
+                          <% if occasion.date >= Date.today && !occasion.cancelled %>
+                            <li>
+                              <%= link_to "Ställ in",
+                                cancel_occasion_path(occasion),
+                                :method => "delete",
+                                :confirm => "Är du säker på att du vill ställa in föreställningen?"
+                              %>
+                            </li>
+                          <% end %>
+                        <% else %>
+                          <li>
+                            <%= link_to "Ta bort", occasion,
+                              :method => "delete",
+                              :confirm => "Är du säker på att du vill radera föreställningen?"
+                            %>
+                          </li>
                         <% end %>
-                      <% else %>
-                        <%= link_to "Ta bort", occasion,
-                          :method => "delete",
-                          :confirm => "Är du säker på att du vill radera föreställningen?"
-                        %>
-                      <% end %>
-                    <% end -%>
+                      <% end -%>
 
-                    <% if occasion.date >= Date.today %>
-                      <%= link_to "Närvarolista", occasion_attendance_index_path(occasion) %>
-                    <% elsif !occasion.cancelled && current_user.has_role?(:admin, :host) %>
-                      <%= link_to "Rapportera närvaro", report_occasion_attendance_path(occasion) %>
+                      <% if current_user.can_view_bookings? %>
+                        <li>
+                          <%= link_to "Bokningar", occasion_bookings_path(occasion) %>
+                        </li>
+                      <% end %>
+
+                      <% if occasion.date >= Date.today %>
+                        <li>
+                          <%= link_to "Närvarolista", occasion_attendance_index_path(occasion) %>
+                        </li>
+                      <% elsif !occasion.cancelled && current_user.has_role?(:admin, :host) %>
+                        <li>
+                          <%= link_to "Rapportera närvaro", report_occasion_attendance_path(occasion) %>
+                        </li>
+                      <% end %>
+                    <% elsif @event.bookable? %>
+                      <li>
+                        <span>
+                          <%= login_link "Logga in", new_occasion_booking_path(occasion) %>
+                          för att boka
+                        </span>
+                      </li>
                     <% end %>
-                  <% elsif @event.bookable? %>
-                    <span><%= login_link "Logga in", new_occasion_booking_path(occasion) %> för att boka</span>
-                  <% end %>
+                  </ul>
                 </td>
 
               </tr>

@@ -4,8 +4,10 @@ class BookingsController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
-  before_filter :require_booker, :except => [ "group", "group_list", "show" ]
-  before_filter :require_booking_viewer, :only => [ "group", "group_list", "show" ]
+  before_filter :require_booker,
+    :except => [ "index", "apply_filter", "group", "group_list", "show" ]
+  before_filter :require_booking_viewer,
+    :only => [ "index", "apply_filter", "group", "group_list", "show" ]
   before_filter :load_occasion, :except => [ :index, :group, :group_list ]
   before_filter :load_group, :except => [ :index, :form, :group_list ]
 
@@ -16,7 +18,25 @@ class BookingsController < ApplicationController
 
   # Displays a list of a user's bookings
   def index
-    @bookings = Ticket.find_user_bookings(current_user, params[:page])
+    if params[:occasion_id]
+      @districts = District.all :order => "name asc"
+      @bookings = Ticket.find_occasion_bookings(
+        params[:occasion_id],
+        session[:booking_list_filter],
+        params[:page]
+      )
+    else
+      @bookings = Ticket.find_user_bookings(current_user, params[:page])
+    end
+  end
+
+  # Applies a filter for the occasion booking list
+  def apply_filter
+    filter = {}
+    filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
+
+    session[:booking_list_filter] = filter
+    redirect_to occasion_bookings_url(params[:occasion_id])
   end
 
   # Displays bookings by group

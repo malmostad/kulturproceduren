@@ -53,7 +53,9 @@ ActionController::Routing::Routes.draw do |map|
     :ticket_availability => :get,
     :cancel => :delete
   } do |oc|
-    oc.resources :bookings
+    oc.resources :bookings, :collection => {
+      :apply_filter => :post
+    }
     oc.resources :attendance,
       :only => [ :index ],
       :collection => { :report => :get, :update_report => :post }
