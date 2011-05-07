@@ -46,6 +46,9 @@ ActionController::Routing::Routes.draw do |map|
     e.resources :attendance,
       :only => [ :index ],
       :collection => { :report => :get, :update_report => :post }
+    e.resources :bookings, :collection => {
+      :apply_filter => :post
+    }
   end
 
   map.resources :occasions, :except => [ :index ],

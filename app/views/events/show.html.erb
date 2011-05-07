@@ -33,6 +33,12 @@
         <li><%= link_to 'Visa biljettfördelning', ticket_allotment_event_path(@event) %></li>
       <% end %>
 
+      <% if current_user.can_view_bookings? %>
+        <li>
+          <%= link_to "Bokningar", event_bookings_path(@event) %>
+        </li>
+      <% end %>
+
       <% if @event.bookable? %>
         <li><%= link_to 'Hantera närvaro', event_attendance_index_path(@event) %></li>
       <% end %>

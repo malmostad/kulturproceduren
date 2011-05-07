@@ -8,8 +8,8 @@ class BookingsController < ApplicationController
     :except => [ "index", "apply_filter", "group", "group_list", "show" ]
   before_filter :require_booking_viewer,
     :only => [ "index", "apply_filter", "group", "group_list", "show" ]
-  before_filter :load_occasion, :except => [ :index, :group, :group_list ]
-  before_filter :load_group, :except => [ :index, :form, :group_list ]
+  before_filter :load_occasion, :except => [ :index, :apply_filter, :group, :group_list ]
+  before_filter :load_group, :except => [ :index, :apply_filter, :form, :group_list ]
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
   after_filter :sweep_culture_provider_cache, :only => [ :create, :update, :destroy ]
@@ -18,10 +18,21 @@ class BookingsController < ApplicationController
 
   # Displays a list of a user's bookings
   def index
+    session[:booking_list_filter] ||= {
+      :district_id => current_user.districts.first.try(:id)
+    }
+
     if params[:occasion_id]
       @districts = District.all :order => "name asc"
       @bookings = Ticket.find_occasion_bookings(
         params[:occasion_id],
+        session[:booking_list_filter],
+        params[:page]
+      )
+    elsif params[:event_id]
+      @districts = District.all :order => "name asc"
+      @bookings = Ticket.find_event_bookings(
+        params[:event_id],
         session[:booking_list_filter],
         params[:page]
       )
@@ -36,7 +47,12 @@ class BookingsController < ApplicationController
     filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
 
     session[:booking_list_filter] = filter
-    redirect_to occasion_bookings_url(params[:occasion_id])
+
+    if params[:occasion_id]
+      redirect_to occasion_bookings_url(params[:occasion_id])
+    elsif params[:event_id]
+      redirect_to event_bookings_url(params[:event_id])
+    end
   end
 
   # Displays bookings by group

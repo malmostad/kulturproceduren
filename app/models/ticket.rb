@@ -41,6 +41,27 @@ class Ticket < ActiveRecord::Base
     ], :page => page)
   end
 
+  # Returns all bookings for an event
+  def self.find_event_bookings(event_id, filter, page)
+    sql_params = [ event_id ]
+
+    sql = " select t.group_id, t.occasion_id, t.user_id, count(t.id) as num_tickets
+      from tickets t left join groups g on t.group_id = g.id left join schools s on g.school_id = s.id "
+    sql << " where t.event_id = ? and t.state != 0 "
+
+    unless filter.blank?
+      unless filter[:district_id].blank?
+        sql << " and s.district_id = ? "
+        sql_params << filter[:district_id]
+      end
+    end
+
+    sql << " group by t.group_id, t.occasion_id, t.user_id, s.name, g.name
+      order by s.name, g.name DESC " 
+
+    paginate_by_sql( [ sql, *sql_params ], :page => page)
+  end
+
   # Returns all bookings for an occasion
   def self.find_occasion_bookings(occasion_id, filter, page)
     sql_params = [ occasion_id ]

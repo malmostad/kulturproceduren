@@ -1,8 +1,17 @@
 <%= render :partial => "menu" -%>
 
-<% if params[:occasion_id] %>
+<% if params[:occasion_id] || params[:event_id] %>
   <div class="filter-tools">
-    <% form_tag apply_filter_occasion_bookings_path() do %>
+
+    <%
+    if params[:occasion_id]
+      url = apply_filter_occasion_bookings_path()
+    elsif params[:event_id]
+      url = apply_filter_event_bookings_path()
+    end
+    %>
+
+    <% form_tag url do %>
       <ul>
         <li class="district-filter">
           <label for="kp-booking-filter-district_id">Stadsdel:</label>
