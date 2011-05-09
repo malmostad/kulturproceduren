@@ -44,11 +44,20 @@
       <% end %>
     </ul>
   </div>
-<% elsif user_online? && current_user.has_role?(:host, :coordinator) && @event.bookable? %>
+<% elsif user_online? && current_user.has_role?(:host) && @event.bookable? %>
   <div class="admin-tools">
     <h4>Administrera <%= h @event.name %></h4>
     <ul>
       <li><%= link_to 'Hantera närvaro', event_attendance_index_path(@event) %></li>
+    </ul>
+  </div>
+<% elsif user_online? && current_user.has_role?(:coordinator) %>
+  <div class="admin-tools">
+    <h4>Administrera <%= h @event.name %></h4>
+    <ul>
+      <li>
+        <%= link_to "Bokningar", event_bookings_path(@event) %>
+      </li>
     </ul>
   </div>
 <% end -%>
