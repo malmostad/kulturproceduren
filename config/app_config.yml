@@ -71,5 +71,12 @@ education:
 staging:
     <<: *common
     :instance_title: "STAGING"
+    :instance_message: "Detta är en förberedelseinstans inför nästa termin. Förändringar här kommer inte att visas på malmo.se utan manuell handpåläggning av tekniker."
+    :asset_host: "http://www.malmo.se/assets-2.0"
+
+archive:
+    <<: *common
+    :instance_title: "ARKIV"
+    :instance_message: "Detta är en arkivinstans för föregående läsår. Inga ändringar här kommer att kunna flyttas till malmo.se."
     :asset_host: "http://www.malmo.se/assets-2.0"
 

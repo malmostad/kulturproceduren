@@ -17,6 +17,12 @@
         - Administration
       </h1>
 
+      <% if APP_CONFIG[:instance_message] %>
+        <div class="flash alert">
+          <%= APP_CONFIG[:instance_message] %>
+        </div>
+      <% end %>
+
       <ul class="pri-nav">
         <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
           <%= link_to "Ansökningar", role_applications_path -%>

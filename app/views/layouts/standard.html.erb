@@ -16,6 +16,12 @@
         <%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %>
       </h1>
 
+      <% if APP_CONFIG[:instance_message] %>
+        <div class="flash alert">
+          <%= APP_CONFIG[:instance_message] %>
+        </div>
+      <% end %>
+
       <ul class="pri-nav">
         <li class="pri-nav-calendar <%= active_by_controller "calendar" %>">
           <%= link_to "Kalendarium", :controller => "calendar" -%>
