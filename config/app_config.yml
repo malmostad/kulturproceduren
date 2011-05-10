@@ -68,3 +68,8 @@ education:
     :instance_title: "UTB"
     :asset_host: "http://www.malmo.se/assets-2.0"
 
+staging:
+    <<: *common
+    :instance_title: "STAGING"
+    :asset_host: "http://www.malmo.se/assets-2.0"
+
