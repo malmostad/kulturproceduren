@@ -10,6 +10,11 @@
 # Rake task.
 class Event < ActiveRecord::Base
 
+  # Scope for operating on standing events
+  named_scope :standing, :conditions => "events.id not in (select x.event_id from occasions x)"
+  # Scope for operating on non-standing events
+  named_scope :non_standing, :conditions => "events.id in (select x.event_id from occasions x)"
+
   # Scope for operating on events without tickets
   named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
   # Scope for operating on events that are visible
