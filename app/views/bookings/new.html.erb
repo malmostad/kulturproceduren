@@ -6,17 +6,6 @@
   föreställningen <%= h @occasion.date -%>
 </h2>
 
-<% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
-  <p class="message response">
-    Det finns totalt
-    <%= [
-      Ticket.count(:conditions => { :event_id => @occasion.event.id , :state => Ticket::UNBOOKED } ),
-      @occasion.available_seats
-    ].min -%>
-    platser tillgängliga för bokning.
-  </p>
-<% end %>
-
 <div class="booking-group-selection">
   <%= render :partial => "shared/group_selection",
     :locals => { :occasion => @occasion, :return_to => new_occasion_booking_path(@occasion) }

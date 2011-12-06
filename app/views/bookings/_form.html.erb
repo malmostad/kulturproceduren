@@ -32,7 +32,7 @@
         </p>
       <% end %>
 
-      <% if @group && @occasion.event.ticket_state != Event::FREE_FOR_ALL %>
+      <% if @group %>
         <p class="message response">
           <% if @is_edit %>
             Uppdatera bokningen för
@@ -41,10 +41,24 @@
             <strong><%= group_tickets -%></strong>
             platser tillgängliga för bokning.
           <% else %>
-            <strong><%= h @group.school.name %>, <%= h @group.name %></strong>
-            har
-            <strong><%= group_tickets -%></strong>
-            platser tillgängliga för bokning.
+            <%
+            case @occasion.event.ticket_state
+            when Event::ALLOTED_GROUP
+              %>
+              <strong><%= h @group.school.name %>, <%= h @group.name %></strong>
+              har
+              <strong><%= group_tickets -%></strong>
+              platser tillgängliga för bokning.
+            <% when Event::ALLOTED_DISTRICT %>
+              Det finns
+              <strong><%= group_tickets -%></strong>
+              tillgängliga platser att boka för alla förskolor och skolor i
+              <strong><%= h @group.school.district.name %></strong>.
+            <% when Event::FREE_FOR_ALL %>
+              Det finns
+              <strong><%= group_tickets -%></strong>
+              tillgängliga platser att boka. Först till kvarn gäller.
+            <% end %>
           <% end %>
         </p>
       <% elsif @is_edit %>
