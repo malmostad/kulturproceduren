@@ -145,6 +145,8 @@ class BookingsController < ApplicationController
           book_tickets(tickets, :normal)
           book_tickets(tickets, :adult)
           book_tickets(tickets, :wheelchair)
+
+          deactivate_leftovers(tickets, @occasion)
         end
 
         # Delete all notification requests for the given event and group
@@ -229,6 +231,8 @@ class BookingsController < ApplicationController
           book_tickets(tickets, :normal) if booking_diff[:normal] > 0
           book_tickets(tickets, :adult) if booking_diff[:adult] > 0
           book_tickets(tickets, :wheelchair) if booking_diff[:wheelchair] > 0
+
+          deactivate_leftovers(tickets, @occasion)
 
           # Update all booked tickets for the group to the occasion
           # to change the booker to the current user
@@ -316,6 +320,21 @@ class BookingsController < ApplicationController
 
     ticket.save!
   end
+
+  # Deactivate left over tickets when booking a single group occasion
+  def deactivate_leftovers(tickets, occasion)
+    if occasion.single_group && occasion.event.ticket_state == Event::ALLOTED_GROUP
+      tickets.each do |ticket|
+        if ticket.state == Ticket::UNBOOKED
+          ticket.state = Ticket::DEACTIVATED
+          ticket.user = current_user
+          ticket.occasion = occasion
+          ticket.save
+        end
+      end
+    end
+  end
+
 
   # Validates the number of seats the user is trying to book.
   #

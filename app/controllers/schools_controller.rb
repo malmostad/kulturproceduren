@@ -127,7 +127,8 @@ class SchoolsController < ApplicationController
     end
 
     render :action => "options_list", :content_type => 'text/plain'
-  rescue
+  rescue => e
+    logger.debug(e)
     render :text => "", :content_type => 'text/plain', :status => 404
   end
 

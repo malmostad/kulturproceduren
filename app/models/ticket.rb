@@ -12,6 +12,7 @@ class Ticket < ActiveRecord::Base
   BOOKED = 1
   USED = 2
   NOT_USED = 3
+  DEACTIVATED = -1
 
   belongs_to :occasion
   belongs_to :event
@@ -100,7 +101,7 @@ class Ticket < ActiveRecord::Base
     find :all, :conditions => {
       :group_id => group.id,
       :occasion_id => occasion.id,
-      :state => Ticket::BOOKED
+      :state => [Ticket::BOOKED, Ticket::DEACTIVATED]
     }
   end
 
