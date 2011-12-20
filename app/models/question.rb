@@ -20,7 +20,7 @@ class Question < ActiveRecord::Base
   }
     
   has_and_belongs_to_many :questionaire 
-  has_one :answer
+  has_many :answers, :dependent => :destroy
 
   validates_presence_of :question,
     :message => "Frågan får inte vara tom"
