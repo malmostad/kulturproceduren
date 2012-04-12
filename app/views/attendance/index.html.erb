@@ -73,9 +73,11 @@
           </td>
           <td>
             <% companion = group.companion_by_occasion(@occasion) %>
-            <%= h companion.name -%><br/>
-            <%= h companion.tel_nr -%><br/>
-            <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
+            <% if companion %>
+              <%= h companion.name -%><br/>
+              <%= h companion.tel_nr -%><br/>
+              <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
+            <% end %>
           </td>
           <td><%= h booking[:normal] -%></td>
           <td><%= h booking[:adult] -%></td>
@@ -113,9 +115,11 @@
             </td>
             <td>
               <% companion = group.companion_by_occasion(occasion) %>
-              <%= h companion.name -%><br/>
-              <%= h companion.tel_nr -%><br/>
-              <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
+              <% if companion %>
+                <%= h companion.name -%><br/>
+                <%= h companion.tel_nr -%><br/>
+                <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
+              <% end %>
             </td>
             <td><%= h booking[:normal] -%></td>
             <td><%= h booking[:adult] -%></td>
