@@ -177,6 +177,21 @@ class AttendanceController < ApplicationController
           data << create_pdf_row(occasion, group)
         end
 
+        if data.blank?
+          # Add empty row
+          data << {
+            "group" => " ".to_iso,
+            "comp" => " ".to_iso,
+            "att_normal" => " ".to_iso,
+            "att_adult" => " ".to_iso,
+            "att_wheel" => " ".to_iso,
+            "req" => " ".to_iso,
+            "pres_normal" => " ".to_iso,
+            "pres_adult" => " ".to_iso,
+            "pres_wheel" => " ".to_iso
+          }
+        end
+
         tab.data.replace data
         tab.render_on(pdf)
       end
@@ -192,7 +207,11 @@ class AttendanceController < ApplicationController
 
     row = {}
     row["group"]       = (group.school.name.to_s + " - " + group.name.to_s).to_iso
-    row["comp"]        = "#{companion.name}\n#{companion.tel_nr}\n#{companion.email}".to_iso
+    if companion
+      row["comp"]      = "#{companion.name}\n#{companion.tel_nr}\n#{companion.email}".to_iso
+    else
+      row["comp"]      = " ".to_iso
+    end
     row["att_normal"]  = booking[:normal] || 0
     row["att_adult"]   = booking[:adult] || 0
     row["att_wheel"]   = booking[:wheelchair] || 0
