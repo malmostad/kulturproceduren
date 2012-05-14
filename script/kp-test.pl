@@ -6,10 +6,12 @@ $result = 1;
 
 my $mech = WWW::Mechanize->new;
 
-#$starturl = "http://webapps.dev.malmo.se/kp/";
-$starturl = "http://webapps.dev.malmo.se/kp-release_test/";
-$loginurl = "http://webapps.dev.malmo.se/kp-release_test/login?return_to=%2Fkp-release_test%2F";
-$adminurl = "http://webapps.dev.malmo.se/kp-release_test/categories";
+$admin_username = ''
+$admin_password = ''
+
+$starturl = "http://localhost/";
+$loginurl = "http://localhost/login?return_to=%2F";
+$adminurl = "http://localhost/categories";
 
 $mech->get($starturl);
 
@@ -26,8 +28,8 @@ $mech->get($loginurl);
 $mech->submit_form(
     form_number => 1,
     fields => {
-	'user[username]' => 'admin',
-	'user[password]' => '',
+    'user[username]' => $admin_username,
+    'user[password]' => $admin_password,
     },    );
 
 if ( $mech->success ) {
