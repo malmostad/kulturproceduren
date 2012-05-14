@@ -6,12 +6,12 @@ $result = 1;
 
 my $mech = WWW::Mechanize->new;
 
-$admin_username = ''
-$admin_password = ''
+$admin_username = '';
+$admin_password = '';
 
-$starturl = "http://localhost/";
-$loginurl = "http://localhost/login?return_to=%2F";
-$adminurl = "http://localhost/categories";
+$starturl = "http://localhost:3000/";
+$loginurl = "http://localhost:3000/login?return_to=%2F";
+$adminurl = "http://localhost:3000/categories";
 
 $mech->get($starturl);
 
