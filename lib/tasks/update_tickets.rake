@@ -8,12 +8,9 @@ namespace :kp do
     
     events.each do |e|
 
-      group_to_district_date = e.ticket_release_date + APP_CONFIG[:ticket_state][:group_days]
-      district_to_all_date = group_to_district_date + APP_CONFIG[:ticket_state][:district_days]
-
       notification_requests = []
 
-      if e.ticket_state == Event::ALLOTED_GROUP && group_to_district_date <= Date.today
+      if e.ticket_state == Event::ALLOTED_GROUP && e.district_transition_date <= Date.today
         puts "Changing to district allotment for #{e.name}"
         # Transition to districts
         e.ticket_state = Event::ALLOTED_DISTRICT
@@ -41,7 +38,7 @@ namespace :kp do
             end
           end
         end
-      elsif e.ticket_state == Event::ALLOTED_DISTRICT && district_to_all_date <= Date.today
+      elsif e.ticket_state == Event::ALLOTED_DISTRICT && e.free_for_all_transition_date <= Date.today
         puts "Changing to free for all for #{e.name}"
         # Transistion to all
         e.ticket_state = Event::FREE_FOR_ALL

@@ -257,7 +257,25 @@
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         $("#kp #kp-allotment-release_date").datepicker({
-            minDate: tomorrow
+            minDate: tomorrow,
+            onSelect: function(dateText, inst) {
+                var date = new Date(dateText);
+                $("#kp #kp-allotment-district_transition_date:not(.changed),\
+                    #kp #kp-allotment-free_for_all_transition_date:not(.changed)").each(function() {
+                    var $field = $(this),
+                        defaultInterval = parseInt($field.attr("data-default-interval")),
+                        newDate = new Date();
+                    newDate.setDate(date.getDate() + defaultInterval);
+                    $field.val($.datepicker.formatDate("yy-mm-dd", newDate));
+                });
+            }
+        });
+        $("#kp #kp-allotment-district_transition_date,\
+            #kp #kp-allotment-free_for_all_transition_date").datepicker({
+            minDate: tomorrow,
+            onSelect: function() {
+                $(this).addClass("changed");
+            }
         });
 
         // Default settings on the date fields in the filter form

@@ -47,9 +47,6 @@ development:
     :evaluation_form:
         :activation_days: 1
         :reminder_days: 2
-    :ticket_state:
-        :group_days: 1
-        :district_days: 1
     :occasion_reminder_days: 1
     :mailers:
         :debug_recipient: "camilla.bengtsson@malmo.se"

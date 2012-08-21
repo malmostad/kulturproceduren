@@ -28,7 +28,7 @@
 
 <p>
   Om platserna inte räcker till er, tänk på att ni kan få en ny chans
-  <%= @event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>,
+  <%= @event.free_for_all_transition_date %>,
   då eventuella restplatser från hela Malmö släpps.
   <a href="<%= mail_url(new_event_notification_request_path(@event)) %>">
     Anmäl dig för att få en påminnelse vid restplatssläpp.

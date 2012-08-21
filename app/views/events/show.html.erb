@@ -149,6 +149,18 @@
             <td><%= h @event.ticket_release_date %></td>
           </tr>
         <% end -%>
+        <% unless @event.district_transition_date.blank? -%>
+          <tr class="district-transition-date">
+            <th>Släpp till stadsdel</th>
+            <td><%= h @event.district_transition_date %></td>
+          </tr>
+        <% end -%>
+        <% unless @event.free_for_all_transition_date.blank? -%>
+          <tr class="free-for-all-transition-date">
+            <th>Släpp till hela staden</th>
+            <td><%= h @event.free_for_all_transition_date %></td>
+          </tr>
+        <% end -%>
       <% end -%>
       <% if !@event.booking_info.blank? && !@event.bookable? -%>
         <tr class="booking-info">

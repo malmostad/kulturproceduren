@@ -20,6 +20,8 @@ class AllotmentController < ApplicationController
 
     session[:allotment] = {}
     session[:allotment][:release_date] = Date.parse(params[:allotment][:release_date])
+    session[:allotment][:district_transition_date] = Date.parse(params[:allotment][:district_transition_date])
+    session[:allotment][:free_for_all_transition_date] = Date.parse(params[:allotment][:free_for_all_transition_date])
     session[:allotment][:num_tickets] = params[:allotment][:num_tickets].to_i
     session[:allotment][:ticket_state] = params[:allotment][:ticket_state].to_i
 
@@ -123,6 +125,8 @@ class AllotmentController < ApplicationController
       @event.tickets.clear
 
       @event.ticket_release_date = session[:allotment][:release_date]
+      @event.district_transition_date = session[:allotment][:district_transition_date]
+      @event.free_for_all_transition_date = session[:allotment][:free_for_all_transition_date]
       @event.ticket_state = session[:allotment][:ticket_state]
       @event.save!
 
@@ -207,6 +211,8 @@ class AllotmentController < ApplicationController
     session[:allotment] = nil
 
     @event.ticket_release_date = nil
+    @event.district_transition_date = nil
+    @event.free_for_all_transition_date = nil
     @event.ticket_state = 0
     @event.save!
 

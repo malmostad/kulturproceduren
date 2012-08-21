@@ -39,7 +39,7 @@
 <% if @district_release %>
   <p>
     Om platserna inte räcker till er, tänk på att ni kan få en ny chans
-    <%= @notification_request.event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>,
+    <%= @notification_request.event.free_for_all_transition_date %>,
     då eventuella restplatser från hela Malmö släpps.
     Om du inte gör någon bokning för
     <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>

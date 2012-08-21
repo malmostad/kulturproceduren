@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101123174034) do
+ActiveRecord::Schema.define(:version => 20120821090629) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -149,7 +149,7 @@ ActiveRecord::Schema.define(:version => 20101123174034) do
     t.date     "visible_to"
     t.integer  "from_age"
     t.integer  "to_age"
-    t.boolean  "further_education",         :default => false
+    t.boolean  "further_education",            :default => false
     t.date     "ticket_release_date"
     t.integer  "ticket_state"
     t.string   "url"
@@ -161,7 +161,9 @@ ActiveRecord::Schema.define(:version => 20101123174034) do
     t.datetime "updated_at"
     t.integer  "main_image_id"
     t.string   "map_address"
-    t.boolean  "single_group_per_occasion", :default => false
+    t.boolean  "single_group_per_occasion",    :default => false
+    t.date     "district_transition_date"
+    t.date     "free_for_all_transition_date"
   end
 
   create_table "groups", :force => true do |t|

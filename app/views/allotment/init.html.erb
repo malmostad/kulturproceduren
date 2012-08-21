@@ -40,6 +40,30 @@
                value="<%= h @event.ticket_release_date %>"/>
       </div>
     </div>
+    <div class="form-row district_transition_date-field-row">
+      <label for="kp-allotment-district_transition_date">Övergång till stadsdel:</label>
+      <div class="input-container">
+        <input type="text"
+               id="kp-allotment-district_transition_date"
+               name="allotment[district_transition_date]"
+               class="date-field <%= "changed" unless @event.district_transition_date.blank? %>"
+               size="30"
+               data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] %>"
+               value="<%= h @event.district_transition_date %>"/>
+      </div>
+    </div>
+    <div class="form-row free_for_all_transition_date-field-row">
+      <label for="kp-allotment-free_for_all_transition_date">Övergång till hela staden:</label>
+      <div class="input-container">
+        <input type="text"
+               id="kp-allotment-free_for_all_transition_date"
+               name="allotment[free_for_all_transition_date]"
+               class="date-field <%= "changed" unless @event.free_for_all_transition_date.blank? %>"
+               size="30"
+               data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>"
+               value="<%= h @event.free_for_all_transition_date %>"/>
+      </div>
+    </div>
 
     <div class="form-row num_tickets-field-row">
       <label for="kp-allotment-num_tickets">Antal <%= is_edit ? "ytterligare" : "inköpta" %> biljetter:</label>
