@@ -21,7 +21,7 @@ common: &common
     :kp_external_link: "http://www.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
     :kbu_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor.html"
-    :culture_bus_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Kulturbussarna.html"
+    :culture_bus_link: "http://malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
     #:ldap:
     #    :address:
     #    :port: 389
