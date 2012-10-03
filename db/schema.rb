@@ -125,7 +125,10 @@ ActiveRecord::Schema.define(:version => 20120821090629) do
     t.string   "elit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "extens_id",  :limit => 64
   end
+
+  add_index "districts", ["extens_id"], :name => "index_districts_on_extens_id"
 
   create_table "districts_users", :id => false, :force => true do |t|
     t.integer "district_id"
@@ -173,9 +176,12 @@ ActiveRecord::Schema.define(:version => 20120821090629) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active",     :default => true
+    t.boolean  "active",                   :default => true
     t.integer  "priority"
+    t.string   "extens_id",  :limit => 64
   end
+
+  add_index "groups", ["extens_id"], :name => "index_groups_on_extens_id"
 
   create_table "images", :force => true do |t|
     t.integer  "event_id"
@@ -280,7 +286,10 @@ ActiveRecord::Schema.define(:version => 20120821090629) do
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "extens_id",   :limit => 64
   end
+
+  add_index "schools", ["extens_id"], :name => "index_schools_on_extens_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :limit => 512, :null => false
