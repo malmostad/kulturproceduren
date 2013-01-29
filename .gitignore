@@ -1,0 +1,45 @@
+
+# /
+/*.war
+/.allotment-basis.dump.swp
+/.fuzroot
+/.rvmrc
+/.rbenv-*
+
+# /config/
+/config/database.yml
+
+# /db/
+/db/*.sqlite3
+
+# /doc/
+/doc/*
+
+# /log/
+/log/*.log
+
+# /nbproject/
+/nbproject/private
+
+# /public/images/graphs/
+/public/images/graphs/*
+
+# /public/images/model/
+/public/images/model/*
+
+# /public/javascripts/
+/public/javascripts/malmo.maps.js
+/public/javascripts/jquery.malmo.map.js
+
+# /public/stylesheets/
+/public/stylesheets/malmo-*.css
+/public/stylesheets/malmo-theme
+
+# /public/uploads/attachments/
+/public/uploads/attachments/*
+
+# /test/fixtures/
+/test/fixtures/''
+
+# /tmp/
+/tmp/*
