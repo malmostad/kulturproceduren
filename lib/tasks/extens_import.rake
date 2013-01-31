@@ -292,7 +292,7 @@ namespace :kp do
           school = School.first(:conditions => { :extens_id => school_guid })
           next unless school
 
-          school.contacts = merge_contacts(school.contacts || "", emails || "")
+          school.contacts = merge_extens_contacts(school.contacts || "", emails || "")
           school.save!
         end
 
@@ -322,7 +322,7 @@ namespace :kp do
 
           next unless group
 
-          group.contacts = merge_contacts(group.contacts || "", emails || "")
+          group.contacts = merge_extens_contacts(group.contacts || "", emails || "")
           group.save!
         end
 
@@ -331,7 +331,7 @@ namespace :kp do
 
       private
 
-      def merge_contacts(local, remote)
+      def merge_extens_contacts(local, remote)
         local = local.split(",").collect { |c| c.try(:strip) }.compact
         local.delete_if { |c| c !~ /[^@]+@[^@]+/ }
 
