@@ -2,8 +2,7 @@
 class District < ActiveRecord::Base
   
   has_many :schools,
-    :order => "school_prios.prio ASC",
-    :include => :school_prio,
+    :order => "name ASC",
     :dependent => :destroy do
 
     # Finds all schools in the district that has children in the given age span.
@@ -15,7 +14,6 @@ class District < ActiveRecord::Base
   end
 
   has_many :tickets
-  has_many :school_prios
 
   has_and_belongs_to_many :users
 

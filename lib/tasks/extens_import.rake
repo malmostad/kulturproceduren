@@ -99,14 +99,6 @@ namespace :kp do
               school.extens_id = guid
               school.district = district
               school.save!
-
-              prio = SchoolPrio.new do |p|
-                p.school = school
-                p.district = district
-                p.prio = SchoolPrio.lowest_prio(district) + 1
-              end
-
-              prio.save!
             end
           else
             puts "\tSchool with ID already exists: #{school.name}, updating name"

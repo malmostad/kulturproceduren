@@ -25,7 +25,6 @@ tables = [
   "ANSWERS",
   "CULTURE_PROVIDERS",
   "USERS",
-  "SCHOOL_PRIOS",
   "AGE_GROUPS",
   "GROUPS",
   "SCHOOLS",
@@ -148,26 +147,6 @@ sth.fetch do |g|
   quantity = 10 + rand(15)
   puts "INSERT INTO AGE_GROUPS (age,quantity,group_id) VALUES ( #{age}, #{quantity}, #{g[0]} );"
   dbh.do("INSERT INTO AGE_GROUPS (age,quantity,group_id) VALUES ( #{age}, #{quantity}, #{g[0]} )")
-end
-dbh.do "DISCARD ALL"
-
-# 5 - SchoolPrios
-
-sth_districts = dbh.prepare("select id from districts")
-sth_districts.execute
-
-sth_districts.fetch do |d_id|
-  sth_schools = dbh.prepare("select id from schools where district_id=#{d_id}")
-  sth_schools.execute
-  prio = 0
-  sth_schools.fetch do |s_id|
-    puts "INSERT INTO SCHOOL_PRIOS (prio    , school_id , district_id , created_at , updated_at)"
-    puts "VALUES                   (#{prio} , #{s_id}   , #{d_id}     , NOW()      , NOW())"
-    puts ""
-    dbh.do("INSERT INTO SCHOOL_PRIOS (prio    , school_id , district_id , created_at , updated_at)
-                              VALUES                   (#{prio} , #{s_id}   , #{d_id}     , NOW()      , NOW())")
-    prio = prio + 1
-  end
 end
 dbh.do "DISCARD ALL"
 

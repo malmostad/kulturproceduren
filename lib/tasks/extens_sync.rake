@@ -290,18 +290,7 @@ namespace :kp do
           local_school.name = extens_name
 
           if local_school.save
-            prio = SchoolPrio.new do |p|
-              p.school = local_school
-              p.district = district
-              p.prio = SchoolPrio.lowest_prio(district) + 1
-            end
-
-            if prio.save
-              puts "\t\tSchool saved:\t\t#{local_school.id}\t#{local_school.extens_id}\t#{local_school.name}"
-            else
-              puts "\t\tAn error occurred while saving the school:\t\t#{local_school.id}\t#{local_school.name}"
-              puts "\t\t#{prio.errors.to_yaml}"
-            end
+            puts "\t\tSchool saved:\t\t#{local_school.id}\t#{local_school.extens_id}\t#{local_school.name}"
           else
             puts "\t\tAn error occurred while saving the school:\t\t#{local_school.id}\t#{local_school.name}"
             puts "\t\t#{local_school.errors.to_yaml}"

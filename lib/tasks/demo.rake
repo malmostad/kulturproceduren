@@ -16,17 +16,7 @@ namespace :kp do
             :district => district
           )
 
-          if school.new_record?
-            school.save!
-
-            prio = SchoolPrio.new do |p|
-              p.school = school
-              p.district = district
-              p.prio = SchoolPrio.lowest_prio(district) + 1
-            end
-
-            prio.save!
-          end
+          school.save! if school.new_record?
 
           school.groups.clear
 

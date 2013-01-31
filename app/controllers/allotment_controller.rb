@@ -135,7 +135,6 @@ class AllotmentController < ApplicationController
       if session[:allotment][:ticket_state] == Event::ALLOTED_GROUP
         # Assign the tickets to groups
         groups = Group.find assignment.keys, :include => { :school => :district }
-        schools = []
 
         groups.each do |group|
           num = assignment[group.id]
@@ -154,10 +153,8 @@ class AllotmentController < ApplicationController
 
           logger.info "Moving #{group.id} last in priority"
           group.move_last_in_prio
-          schools << group.school unless schools.include?(group.school)
         end
 
-        schools.each { |s| s.move_last_in_prio }
       elsif session[:allotment][:ticket_state] == Event::ALLOTED_DISTRICT
         # Assign the tickets to districts
         districts = District.find assignment.keys

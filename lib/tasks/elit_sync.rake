@@ -93,18 +93,7 @@ namespace :kp do
             local_school.name = elit_school.name
 
             if local_school.save
-              prio = SchoolPrio.new do |p|
-                p.school = local_school
-                p.district = district
-                p.prio = SchoolPrio.lowest_prio(district) + 1
-              end
-
-              if prio.save
-                puts "\t\tSchool saved: #{local_school.attributes.to_json}"
-              else
-                puts "\t\tAn error occurred while saving the school: #{elit_school.name}"
-                puts "\t\t#{prio.errors.to_json}"
-              end
+              puts "\t\tSchool saved: #{local_school.attributes.to_json}"
             else
               puts "\t\tAn error occurred while saving the school: #{elit_school.name}"
               puts "\t\t#{local_school.errors.to_json}"

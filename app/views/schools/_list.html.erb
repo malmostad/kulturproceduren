@@ -1,22 +1,17 @@
 <%
 show_district ||= false
-show_prio_tools ||= false
 -%>
 
 <table>
   <thead>
     <tr>
-      <th><%= sort_link "Namn", "name", :unless => show_prio_tools %></th>
+      <th><%= sort_link "Namn", "name" %></th>
 
       <% if show_district -%>
-        <th><%= sort_link "Stadsdel", "district", :unless => show_prio_tools %></th>
+        <th><%= sort_link "Stadsdel", "district" %></th>
       <% end -%>
 
-      <% if show_prio_tools -%>
-        <th colspan="2">Prioritering</th>
-      <% else -%>
-        <th><%= sort_link "ELIT-ID", "elit_id", :unles => show_prio_tools %></th>
-      <% end -%>
+      <th><%= sort_link "ELIT-ID", "elit_id" %></th>
 
       <th colspan="2"></th>
     </tr>
@@ -31,12 +26,7 @@ show_prio_tools ||= false
           <td><%= link_to h(school.district.name), school.district %></td>
         <% end -%>
 
-        <% if show_prio_tools -%>
-          <td><%= link_to "Upp", :controller => "school_prios", :action => "move_up", :id => school.id %></td>
-          <td><%= link_to "Ner", :controller => "school_prios", :action => "move_down", :id => school.id %></td>
-        <% else -%>
-          <td><%= h school.elit_id %></td>
-        <% end -%>
+        <td><%= h school.elit_id %></td>
 
         <td><%= link_to 'Redigera', edit_school_path(school) %></td>
         <td><%= link_to 'Radera', school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></td>

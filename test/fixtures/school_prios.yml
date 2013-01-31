@@ -1,6 +1,0 @@
-<% for i in 1..4 %>
-syd_prio<%= i %>:
-  prio: <%= i %>
-  district: syd
-  school: sydskolan<%= 5 - i %>
-<% end %>

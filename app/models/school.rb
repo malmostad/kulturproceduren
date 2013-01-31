@@ -10,7 +10,6 @@ class School < ActiveRecord::Base
   end
 
   belongs_to :district
-  has_one :school_prio, :dependent => :destroy
 
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
@@ -21,68 +20,6 @@ class School < ActiveRecord::Base
   attr_accessor :num_children, :num_tickets, :distribution_groups
 
   
-  # Finds the school that is directly above this school in priority. Returns +nil+ if
-  # this school is the top prioritized school.
-  def above_in_prio
-    prio = SchoolPrio.first :conditions => [ "district_id = ? and prio < ?", district_id, school_prio.prio ],
-      :order => "prio DESC",
-      :include => :school
-
-    if prio
-      return prio.school
-    else
-      return nil
-    end
-  end
-
-  # Finds the school that is directly below this school in priority. Returns +nil+ if
-  # this school is the bottom prioritized school.
-  def below_in_prio
-    prio = SchoolPrio.first :conditions => [ "district_id = ? and prio > ?", district_id, school_prio.prio ],
-      :order => "prio ASC",
-      :include => :school
-    
-    if prio
-      return prio.school
-    else
-      return nil
-    end
-  end
-
-  # Returns true if this school has the highest priority in its district.
-  def has_highest_prio?
-    school_prio.prio == SchoolPrio.highest_prio(district)
-  end
-
-  # Returns true if this school has the lowest priority in its district.
-  def has_lowest_prio?
-    school_prio.prio == SchoolPrio.lowest_prio(district)
-  end
-
-  # Moves this school to the top of the priority list in its district.
-  def move_first_in_prio
-    return if has_highest_prio?
-
-    highest = SchoolPrio.highest_prio district
-    SchoolPrio.update_all "prio = prio + 1",
-      [ "district_id = ? and prio < ?", district.id, school_prio.prio ]
-
-    school_prio.prio = highest
-    school_prio.save!
-  end
-
-  # Moves this school to the bottom of the priority list in its district.
-  def move_last_in_prio
-    return if has_lowest_prio?
-
-    lowest = SchoolPrio.lowest_prio district
-    SchoolPrio.update_all "prio = prio - 1",
-      [ "district_id = ? and prio > ?", district.id, school_prio.prio ]
-
-    school_prio.prio = lowest
-    school_prio.save!
-  end
-
   # Returns the number of available tickets on the given occasion for this school.
   def available_tickets_by_occasion(occasion)
     occasion = Occasion.find(occasion) if occasion.is_a?(Integer)
