@@ -10,7 +10,7 @@ module ActionView
 
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/asset_tag_helper.rb:528</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/asset_tag_helper.rb:529</tt>
       #
       # Patch to ignore relative_url_root when using an asset host
       def compute_public_path(source, dir, ext = nil, include_host = true)
@@ -52,7 +52,7 @@ module ActionView
       private
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:896</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/form_helper.rb:949</tt>
       #
       # Overrides the method generating the DOM ID for a field
       def tag_id
@@ -61,7 +61,7 @@ module ActionView
       end
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:900</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/form_helper.rb:953</tt>
       #
       # Overrides the method generating the DOM ID for a field with an index
       def tag_id_with_index(index)
@@ -74,7 +74,7 @@ module ActionView
       private
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/date_helper.rb:875</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/date_helper.rb:888</tt>
       #
       # Overrides the DOM ID generator for date/time selectors
       def input_id_from_type(type)
@@ -86,7 +86,7 @@ module ActionView
     class FormBuilder
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_helper.rb:900</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/form_helper.rb:1059</tt>
       #
       # Overrides the method generating the submit button, prefixing the submit button's DOM ID.
       def submit(value = "Save changes", options = {})
@@ -98,7 +98,7 @@ module ActionView
     module FormTagHelper
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_tag_helper.rb:314</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/form_tag_helper.rb:317</tt>
       #
       # Overrides the DOM ID generation, prefixing the ID
       def radio_button_tag(name, value, checked = false, options = {})
@@ -112,7 +112,7 @@ module ActionView
 
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/form_tag_helper.rb:481</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/form_tag_helper.rb:484</tt>
       #
       # Overrides the DOM ID generation to prefix the ID
       def sanitize_to_id(name)
@@ -124,7 +124,7 @@ module ActionView
     module ActiveRecordHelper
       # *MONKEYPATCH*
       #
-      # <tt>actionpack-2.3.4/lib/action_view/helpers/active_record_helper.rb:109</tt>
+      # <tt>actionpack-2.3.16/lib/action_view/helpers/active_record_helper.rb:109</tt>
       #
       # Overrides the error message for a specific field to adhere to
       # the markup guidelines for malmo.se
@@ -146,7 +146,7 @@ module ActionView
           (errors = obj.errors.on(method))
           content_tag(
             "div",
-            "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}",
+            "#{options[:prepend_text]}#{ERB::Util.html_escape(errors.is_a?(Array) ? errors.first : errors)}#{options[:append_text]}".html_safe,
             :class => options[:css_class]
           )
         else
