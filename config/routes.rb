@@ -102,8 +102,6 @@ ActionController::Routing::Routes.draw do |map|
   # Questionnaires
   map.answer_questionaire 'questionaires/:answer_form_id/answer',
     :controller => 'answer_form' , :action => 'submit'
-  map.question_graph 'questions/:question_id/graph/:occasion_id',
-    :controller => 'questions' , :action => 'stat_graph'
 
   # Role granting
   map.grant_role 'users/:id/grant/:role',

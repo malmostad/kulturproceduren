@@ -38,10 +38,6 @@ class Image < ActiveRecord::Base
       raise "Could not read the uploaded image."
     end
     
-    #img.change_geometry(
-    #  Magick::Geometry.new(
-    #    APP_CONFIG[:upload_image][:width],
-    #    APP_CONFIG[:upload_image][:height])) { |c,r,i| img.resize!(c,r) }
     img.resize_to_fit!(APP_CONFIG[:upload_image][:width], APP_CONFIG[:upload_image][:height])
 
     self.width = img.columns
@@ -49,10 +45,6 @@ class Image < ActiveRecord::Base
     
     img.write(self.image_path)
 
-    #img.change_geometry(
-    #  Magick::Geometry.new(
-    #    APP_CONFIG[:upload_image][:thumb_width],
-    #    APP_CONFIG[:upload_image][:thumb_height])) { |c,r,i| img.resize!(c,r) }
     img.resize_to_fit!(APP_CONFIG[:upload_image][:thumb_width], APP_CONFIG[:upload_image][:thumb_height])
 
     self.thumb_width = img.columns
