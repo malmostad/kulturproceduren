@@ -1,0 +1,28 @@
+<% form_for(
+  :information_mail,
+  @mail,
+  :url => { :action => :create },
+  :builder => KPFormBuilder,
+  :html => { :class => "information-mail-form context-form" }
+) do |f| -%>
+    <%= f.title("Skicka e-post med information") %>
+
+    <%= f.validation_error_indicator %>
+
+    <% f.fields do -%>
+      <%= f.select(
+        :recipients,
+        [
+          [ "Alla kontakter", :all_contacts ],
+          [ "Alla användare", :all_users ]
+        ],
+        :include_blank => true
+      ) %>
+      <%= f.text_field :subject %>
+      <%= f.text_area :body, :size => "40x5" %>
+
+      <% f.buttons do -%>
+        <%= f.submit "Skicka" %>
+      <% end -%>
+    <% end %>
+<% end -%>

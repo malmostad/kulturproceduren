@@ -40,6 +40,8 @@
           <%= link_to "Grupper", groups_path -%>
           </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
           <%= link_to "Användare", users_path -%>
+          </li><li class="pri-nav-info <%= active_by_controller "information" %>">
+          <%= link_to "Sändlistor", new_information_path -%>
           </li><li class="pri-nav-leave-logout">
           <%= link_to "Lämna administrationen", root_url() -%>
           <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>

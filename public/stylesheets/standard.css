@@ -341,6 +341,13 @@ body.kp-standalone { background: #fff; }
 /* Request password reset form */
 #kp form.request-password-reset-form label { width: 8em; }
 #kp form.request-password-reset-form .input-container { padding-left: 8em; }
+/* Information mail form */
+#kp form.information-mail-form label { width: 8em; }
+#kp form.information-mail-form .input-container { padding-left: 8em; }
+#kp form.information-mail-form .input-container textarea {
+    width: 500px;
+    height: 400px;
+}
 
 /*** Models ***/
 

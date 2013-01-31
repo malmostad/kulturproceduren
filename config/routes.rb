@@ -90,6 +90,8 @@ ActionController::Routing::Routes.draw do |map|
     :new => { :booker => :get, :culture_worker => :get },
     :collection => { :archive => :get }
 
+  map.resource :information, :only => [ :new, :create ]
+
 
   map.root :controller => "calendar"
 

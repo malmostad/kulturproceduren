@@ -12,3 +12,5 @@ gem "soap4r", "1.5.8"
 gem "httpclient", "2.3.2"
 gem "pdf-writer", "1.1.8"
 gem "ruby-ldap", "0.9.12", :require => "ldap"
+
+gem "jnunemaker-validatable", "~> 1.8.4", :require => "validatable"
