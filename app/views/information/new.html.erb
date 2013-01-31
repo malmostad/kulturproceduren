@@ -1,3 +1,13 @@
+<% if @event %>
+  <% content_for :section_sub do -%>
+    <ul class="section-nav">
+      <li>
+        <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+      </li>
+    </ul>
+  <% end -%>
+<% end -%>
+
 <% form_for(
   :information_mail,
   @mail,
@@ -10,14 +20,24 @@
     <%= f.validation_error_indicator %>
 
     <% f.fields do -%>
-      <%= f.select(
-        :recipients,
-        [
+
+      <%
+      if @event
+        recipients = [ [ "Alla bokade till #{@event.name}", @event.id ] ]
+      else
+      recipients = [
           [ "Alla kontakter", :all_contacts ],
           [ "Alla användare", :all_users ]
-        ],
-        :include_blank => true
+        ]
+      end
+      %>
+
+      <%= f.select(
+        :recipients,
+        recipients,
+        :include_blank => @event.blank?
       ) %>
+
       <%= f.text_field :subject %>
       <%= f.text_area :body, :size => "40x5" %>
 

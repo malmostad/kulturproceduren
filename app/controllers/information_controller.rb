@@ -6,6 +6,10 @@ class InformationController < ApplicationController
 
   def new
     @mail = UtilityModels::InformationMail.new
+    if params[:event_id]
+      @event = Event.find(params[:event_id])
+      @mail.recipients = @event.id
+    end
   end
 
   def create
@@ -23,6 +27,8 @@ class InformationController < ApplicationController
         "alla kontakter"
       when :all_users
         "alla användare"
+      else
+        "alla bokade till #{@mail.event.name}"
       end
 
       flash[:notice] = "E-post skickat till #{notice} (#{recipients.length} mottagare)"

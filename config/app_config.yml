@@ -48,8 +48,8 @@ development:
         :activation_days: 1
         :reminder_days: 2
     :occasion_reminder_days: 1
-    :mailers:
-        :debug_recipient: "camilla.bengtsson@malmo.se"
+    #:mailers:
+    #    :debug_recipient: "camilla.bengtsson@malmo.se"
 
 test:
     <<: *common

@@ -6,10 +6,12 @@ module UtilityModels
       :subject,
       :body
 
+    attr_reader :event
+
     validates_presence_of :recipients,
       :message => "En mottagare måste anges"
     validates_true_for :recipients,
-      :logic => lambda { [ :all_contacts, :all_users ].include? recipients },
+      :logic => lambda { [ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients) },
       :message => "Ogiltig mottagare"
     validates_presence_of :subject,
       :message => "Ämnesraden får inte vara tom"
@@ -17,7 +19,15 @@ module UtilityModels
       :message => "Meddelandet får inte vara tomt"
 
     def initialize(params = {})
-      @recipients = params[:recipients].try(:to_sym)
+      @recipients = params[:recipients]
+
+      if @recipients =~ /^\d+$/
+        @recipients = @recipients.to_i
+        @event = Event.find(@recipients)
+      else
+        @recipients = @recipients.try(:to_sym)
+      end
+
       @subject = params[:subject]
       @body = params[:body]
     end
@@ -35,7 +45,8 @@ module UtilityModels
       when :all_users
         addresses = User.all(:select => "email").collect(&:email)
       else
-        addresses = []
+        addresses = @event.booked_users.collect(&:email)
+        addresses += @event.companions.collect(&:email)
       end
 
       return addresses

@@ -30,6 +30,11 @@ class Event < ActiveRecord::Base
   }
 
   has_many :tickets, :dependent => :delete_all
+  has_many :companions, :through => :tickets, :uniq => true
+  has_many :users, :through => :tickets, :uniq => true
+  has_many :booked_users, :through => :tickets, :uniq => true,
+    :source => :user,
+    :conditions => "tickets.state = #{Ticket::BOOKED}"
   
   has_many :districts, :through => :tickets, :uniq => true, :order => "name ASC"
   has_many :groups, :through => :tickets, :uniq => true, :order => "groups.name ASC" do
@@ -120,6 +125,10 @@ class Event < ActiveRecord::Base
   # Gets the ticket count grouped by districts
   def ticket_count_by_district
     tickets.count :group => :district_id
+  end
+
+  def has_booking?
+    tickets.exists?(:state => Ticket::BOOKED)
   end
 
   # Indicates whether the event has tickets available for booking
