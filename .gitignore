@@ -5,6 +5,7 @@
 /.fuzroot
 /.rvmrc
 /.rbenv-*
+/tags
 
 # /config/
 /config/database.yml
