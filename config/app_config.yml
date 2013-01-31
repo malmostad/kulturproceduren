@@ -1,5 +1,5 @@
 common: &common
-    :asset_host: "http://www.dev.malmo.se/assets-2.0"
+    :asset_host: "http://www.malmo.se/assets-2.0"
     :salt_length: 10
     :request_key_length: 20
     :generated_password_length: 8
@@ -58,22 +58,18 @@ release_test:
 
 production:
     <<: *common
-    :asset_host: "http://www.malmo.se/assets-2.0"
 
 education:
     <<: *common
     :instance_title: "UTB"
-    :asset_host: "http://www.malmo.se/assets-2.0"
 
 staging:
     <<: *common
     :instance_title: "STAGING"
     :instance_message: "Detta är en förberedelseinstans inför nästa termin. Förändringar här kommer inte att visas på malmo.se utan manuell handpåläggning av tekniker."
-    :asset_host: "http://www.malmo.se/assets-2.0"
 
 archive:
     <<: *common
     :instance_title: "ARKIV"
     :instance_message: "Detta är en arkivinstans för föregående läsår. Inga ändringar här kommer att kunna flyttas till malmo.se."
-    :asset_host: "http://www.malmo.se/assets-2.0"
 
