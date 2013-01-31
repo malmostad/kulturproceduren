@@ -1,6 +1,3 @@
-require "rubygems"
-require "RMagick"
-
 # Container class for images associated with different models in the system.
 #
 # An image consists of two different images, one full size and one thumbnail.

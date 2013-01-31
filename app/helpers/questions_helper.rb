@@ -3,7 +3,6 @@ module QuestionsHelper
   # Helper returning a html-fragment containing statistics for a question and event
   # Used in the following way:
   #   <%= render :partial => get_question_statistic_fragment(question,event) ...
-  require "pp"
   def get_question_statistic_fragment(question,event)
     stat = question.statistic_for_event(event.id)
     fragment = ""

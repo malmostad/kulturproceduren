@@ -1,7 +1,3 @@
-require "pp"
-require 'rubygems'
-require 'gruff'
-
 # Controller for managing events
 class EventsController < ApplicationController
   layout "standard", :except => [ :options_list ]

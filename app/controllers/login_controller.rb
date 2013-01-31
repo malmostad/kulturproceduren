@@ -1,4 +1,3 @@
-require "httpclient"
 # Controller for managin login and logout
 class LoginController < ApplicationController
 

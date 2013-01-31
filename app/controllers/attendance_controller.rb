@@ -6,9 +6,6 @@ class AttendanceController < ApplicationController
 
   before_filter :require_host, :only => [ :report, :update_report ]
 
-  require "pdf/writer"
-  require "pdf/simpletable"
-
   # Lists the attendance of an event or a single occasion
   def index
     if params[:format] == "pdf"

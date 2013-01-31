@@ -3,9 +3,6 @@ class OccasionsController < ApplicationController
 
   layout "standard"
   
-  require "pdf/writer"
-  require "pdf/simpletable"
-
   before_filter :authenticate, :except => [ :index, :show ]
   before_filter :require_culture_worker, :only => [ :edit, :update, :destroy, :cancel ]
 
