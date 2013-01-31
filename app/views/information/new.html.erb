@@ -1,3 +1,5 @@
+<%= wysiwyg_init %>
+
 <% if @event %>
   <% content_for :section_sub do -%>
     <ul class="section-nav">
@@ -25,7 +27,7 @@
       if @event
         recipients = [ [ "Alla bokade till #{@event.name}", @event.id ] ]
       else
-      recipients = [
+        recipients = [
           [ "Alla kontakter", :all_contacts ],
           [ "Alla användare", :all_users ]
         ]
@@ -39,7 +41,7 @@
       ) %>
 
       <%= f.text_field :subject %>
-      <%= f.text_area :body, :size => "40x5" %>
+      <%= f.text_area :body, :size => "40x5", :class => "wysiwyg" %>
 
       <% f.buttons do -%>
         <%= f.submit "Skicka" %>

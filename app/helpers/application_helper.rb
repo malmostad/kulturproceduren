@@ -115,4 +115,9 @@ module ApplicationHelper
   def to_term(date)
     "#{date.month > 6 ? "ht" : "vt"}#{date.year}"
   end
+
+  # Includes wysiwyg libraries and initialization files
+  def wysiwyg_init
+    render :partial => "shared/wysiwyg_init" if ActionController::Base.asset_host.blank?
+  end
 end
