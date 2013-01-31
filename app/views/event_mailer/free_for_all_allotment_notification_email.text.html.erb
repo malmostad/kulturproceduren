@@ -1,8 +1,9 @@
-<h1>Kulturproceduren - Möjligt att boka platser till <%= h @event.name %></h1>
+<h1>Kulturproceduren - Restplatser till <%= h @event.name %></h1>
 
 <p>Hej!</p>
 
 <p>Nu har du möjlighet att boka platser till <%= h @event.name %></p>
+<p>För dessa platser gäller "först till kvarn".</p>
 
 <ul>
   <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
@@ -17,8 +18,6 @@
     <% end -%>
   <% end -%>
 </ul>
-
-<p>För dessa platser gäller "först till kvarn".</p>
 
 <p>
   <a href="<%= mail_url(event_path(@event)) %>">

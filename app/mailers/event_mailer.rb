@@ -25,7 +25,7 @@ class EventMailer < ActionMailer::Base
     end
 
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Möjligt att boka platser till #{event.name}")
+    subject("Kulturproceduren: Restplatser till #{event.name}")
     sent_on(Time.now)
     body({ :event => event, :category_groups => CategoryGroup.all })
   end
@@ -38,7 +38,7 @@ class EventMailer < ActionMailer::Base
       recipients(recipient)
     end
     from(APP_CONFIG[:mailers][:from_address])
-    subject("Kulturproceduren: Bokningsbara platser till #{event.name}")
+    subject("Kulturproceduren: Restplatser till #{event.name}")
     sent_on(Time.now)
     body({ :event => event, :district => district, :category_groups => CategoryGroup.all })
   end
