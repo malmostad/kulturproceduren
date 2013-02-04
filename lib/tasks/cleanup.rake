@@ -61,6 +61,8 @@ namespace :kp do
       Ticket.delete_all # No dependencies, so we can delete rather than destroy
       puts "Removing Companions and associated AnswerForms and Answers"
       Companion.destroy_all
+      puts "Removing orphan AnswerForms"
+      AnswerForm.destoy_all("companion_id is null")
       puts "Removing NotificationRequests"
       NotificationRequest.destroy_all
       puts "Removing non-standing events and associated Occasions, Questionnaires, Attachments, Images"

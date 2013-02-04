@@ -12,11 +12,7 @@
     <% if current_user.can_book? && !@occasion.cancelled %>
       <li><%= link_to "Ändra bokning", edit_occasion_booking_path(@occasion.id, @group.id) %></li>
       <li>
-        <%= link_to "Avboka",
-          occasion_booking_path(@occasion.id, @group.id),
-          :method => :delete,
-          :confirm => "Är du säker?"
-        %>
+        <%= link_to "Avboka", unbook_occasion_booking_path(@occasion.id, @group.id) %>
       </li>
     <% end %>
     <li><%= link_to_function "Skriv ut", "window.print()" %></li>

@@ -59,6 +59,8 @@ ActionController::Routing::Routes.draw do |map|
   } do |oc|
     oc.resources :bookings, :collection => {
       :apply_filter => :post
+    }, :member => {
+      :unbook => :get
     }
     oc.resources :attendance,
       :only => [ :index ],

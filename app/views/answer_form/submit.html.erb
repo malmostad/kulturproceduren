@@ -15,16 +15,17 @@
     <%= l @answer_form.occasion.stop_time, :format => :only_time %>.
   </p>
 
-  <% unless @non_answered_mandatory_questions.blank? %>
+  <% if @answer_form.missing_answers %>
     <div class="validation-error-indicator alert">
       Vänligen korrigera uppgifter nedan.
     </div>
   <% end %>
 
   <fieldset>
+    <% missing_answers = @answer_form.missing_answers || [] %>
     <% @answer_form.questionnaire.questions.each do |question| %>
       <div class="form-row clearfix">
-        <% if @non_answered_mandatory_questions.include?(question.id) %>
+        <% if missing_answers.include?(question.id) %>
           <div class="validation-error-message alert-field">Frågan är obligatorisk</div>
         <% end %>
 
@@ -32,7 +33,7 @@
 
         <div class="input-container">
           <%= render :partial => get_question_fragment(question),
-            :locals => { :question => question, :value => @answer["#{question.id}"] }
+            :locals => { :question => question, :value => @answer[question.id.to_s] }
           %>
         </div>
       </div>

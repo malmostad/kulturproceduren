@@ -32,11 +32,7 @@
             <%= link_to "Bokningsbekräftelse", occasion_booking_path(booking.occasion_id, booking.group_id) %>
             <% if !booking.occasion.cancelled && booking.occasion.date >= Date.today %>
               <%= link_to "Ändra bokning", edit_occasion_booking_path(booking.occasion_id, booking.group_id) %>
-              <%= link_to "Avboka",
-                occasion_booking_path(booking.occasion_id, booking.group_id),
-                :method => :delete,
-                :confirm => "Är du säker?"
-              %>
+              <%= link_to "Avboka", unbook_occasion_booking_path(booking.occasion_id, booking.group_id) %>
             <% end %>
           </td>
         </tr>

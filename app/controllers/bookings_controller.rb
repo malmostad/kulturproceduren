@@ -261,8 +261,37 @@ class BookingsController < ApplicationController
     end
   end
 
+  # Displays the unbooking confirmation and questionnaire
+  def unbook
+    @booking = Ticket.booking(@group, @occasion)
+    @questionnaire = Questionnaire.find_unbooking
+    @answer = {}
+  end
+
   # Unbooks a booking
   def destroy
+    if params[:commit] == "Avbryt"
+      redirect_to occasion_booking_url(@occasion, @group)
+      return
+    end
+
+    @booking = Ticket.booking(@group, @occasion)
+    @questionnaire = Questionnaire.find_unbooking
+
+    unless @questionnaire.questions.empty?
+      @answer = params[:answer] || {}
+      @answer_form = AnswerForm.new do |a|
+        a.occasion = @occasion
+        a.group = @group
+        a.questionnaire = @questionnaire
+      end
+
+      unless @answer_form.answer(@answer)
+        render :action => "unbook"
+        return
+      end
+    end
+    
     tickets = Ticket.find_booked(@group, @occasion)
     tickets.each { |ticket| unbook_ticket(ticket) }
 

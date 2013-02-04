@@ -18,32 +18,13 @@ class AnswerFormController < ApplicationController
       return
     end
 
-    @answer = params[:answer].blank? ? {} : params[:answer]
-    @qids = []
-    @non_answered_mandatory_questions = []
+    @answer = params[:answer] || {}
 
-    @answer.keys.each { |k| @qids << k unless @answer["#{k}"].blank? } unless @answer.blank? 
-
-    unless @qids.blank?
-      @non_answered_mandatory_questions = @answer_form.questionnaire.questions.select { |q| q.mandatory }.map {|q| q.id } - @qids.map { |k| k.to_i }.sort
-
-      if @non_answered_mandatory_questions.blank?
-
-        @answer.each do |qid , ans|
-          answer = Answer.new
-          answer.question_id = qid
-          answer.answer_text = ans
-          answer.answer_form = @answer_form
-          answer.save!
-        end
-
-        @answer_form.completed = true
-        @answer_form.save!
-
-        flash[:notice] = "Tack för att du svarade på utvärderingsenkäten"
-        redirect_to root_url()
-      end
+    if !@answer.blank? && @answer_form.answer(params[:answer])
+      flash[:notice] = "Tack för att du svarade på utvärderingsenkäten"
+      redirect_to root_url()
     end
+
   end
 
 end

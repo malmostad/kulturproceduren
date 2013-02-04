@@ -8,13 +8,13 @@ module AnswerFormHelper
   def get_question_fragment(question)
     case question.qtype 
     when "QuestionMark" then
-      return "mark"
+      "answer_form/mark"
     when "QuestionText"
-      return "text"
+      "answer_form/text"
     when "QuestionBool"
-      return "bool"
+      "answer_form/bool"
     when "QuestionMchoice"
-      return "mchoice"
+      "answer_form/mchoice"
     end
   end
 

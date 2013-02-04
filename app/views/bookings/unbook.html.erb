@@ -1,0 +1,45 @@
+<%= render :partial => "menu" %>
+
+<h2 class="form-title">
+  Avboka 
+  <%= h @group.school.name %>, <%= h @group.name %> från
+  <%= link_to h(@occasion.event.name), @occasion.event -%>,
+  föreställningen <%= h @occasion.date -%>
+</h2>
+
+<div class="flash alert">
+  Detta avbokar alla <%= @booking.values.sum %> platser.
+</div>
+
+<% form_tag({ :action => :destroy }, { :class => "evaluation-form", :method => :delete }) do %>
+
+  <% if @answer_form && @answer_form.missing_answers %>
+    <div class="validation-error-indicator alert">
+      Vänligen korrigera uppgifter nedan.
+    </div>
+  <% end %>
+
+  <fieldset>
+    <% missing_answers = @answer_form.try(:missing_answers) || [] %>
+    <% @questionnaire.questions.each do |question| %>
+      <div class="form-row clearfix">
+        <% if missing_answers.include?(question.id) %>
+          <div class="validation-error-message alert-field">Frågan är obligatorisk</div>
+        <% end %>
+
+        <label><%= h question.question %>:</label>
+
+        <div class="input-container">
+          <%= render :partial => get_question_fragment(question),
+            :locals => { :question => question, :value => @answer[question.id.to_s] }
+          %>
+        </div>
+      </div>
+    <% end %>
+
+  <div class="form-buttons">
+    <%= submit_tag "Avboka" %>
+    <%= submit_tag "Avbryt" %>
+  </div>
+<% end %>
+

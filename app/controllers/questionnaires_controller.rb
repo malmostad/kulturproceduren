@@ -8,7 +8,7 @@ class QuestionnairesController < ApplicationController
   
   # Displays a list of all questionnaires in the system.
   def index
-    @questionnaires = Questionnaire.paginate :page => params[:page],
+    @questionnaires = Questionnaire.for_event.paginate :page => params[:page],
       :include => :event,
       :order => sort_order("events.name")
   end

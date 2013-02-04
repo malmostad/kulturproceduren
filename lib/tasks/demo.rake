@@ -271,6 +271,8 @@ namespace :kp do
           event.free_for_all_transition_date = event.ticket_release_date + 1.week
         end
 
+        puts event.to_json
+
         event.save!
 
         occasions = event.occasions.find(:all)
