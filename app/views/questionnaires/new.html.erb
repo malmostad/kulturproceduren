@@ -9,7 +9,11 @@
     <%= f.title(is_edit ? "Redigera enkät" : "Lägg till enkät") -%>
 
     <% f.conditional_hint is_edit do -%>
-      Redigerar enkät för <%= link_to h(@questionnaire.event.name), @questionnaire %>
+      <% if @questionnaire.for_event? %>
+        Redigerar enkät för <%= link_to h(@questionnaire.event.name), @questionnaire %>
+      <% else %>
+        Redigerar avbokningsenkät
+      <% end %>
     <% end -%>
 
     <%= f.validation_error_indicator -%>

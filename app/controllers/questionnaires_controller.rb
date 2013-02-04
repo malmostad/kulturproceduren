@@ -22,9 +22,16 @@ class QuestionnairesController < ApplicationController
       q.qtype = "QuestionMark"
     end
 
-    @template_questions = Question.find :all,
+    @template_questions = Question.find(
+      :all,
       :conditions => { :template => true },
       :order => "question ASC"
+    ) if @questionnaire.for_event?
+  end
+
+  # Displays details about the unbooking questionnaire
+  def unbooking
+    redirect_to Questionnaire.find_unbooking
   end
 
   def add_template_question

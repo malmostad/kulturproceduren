@@ -4,6 +4,11 @@ class Questionnaire < ActiveRecord::Base
   has_and_belongs_to_many   :questions, :order => "questions.question ASC"
   has_many                  :answer_forms, :dependent => :destroy
 
+  as_enum :target, { :for_event => 1, :for_unbooking => 2 }, :slim => :class
+
+  named_scope :for_event, :conditions => { :target_cd => targets.for_event }
+  named_scope :for_unbooking, :conditions => { :target_cd => targets.for_unbooking }
+
   # Returns an array of the numbers of answers. The first element is the number of answers
   # that are not submitted, and the second is the number of submitted.
   def answered
@@ -13,4 +18,15 @@ class Questionnaire < ActiveRecord::Base
     ]
   end
   
+
+  # Finds the single unbooking questionnaire
+  def self.find_unbooking
+    questionnaire = for_unbooking.first
+    questionnaire ||= Questionnaire.create(
+      :description => "Avbokningsenkät",
+      :target_cd => targets.for_unbooking
+    )
+    
+    return questionnaire
+  end
 end

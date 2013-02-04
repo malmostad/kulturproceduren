@@ -1,5 +1,6 @@
 <%
   questionnaire ||= false
+  with_header ||= false
   is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions"
 
   form_url = nil
@@ -11,6 +12,10 @@
 %>
 
 <% form_for question, :url => form_url, :builder => KPFormBuilder, :html => { :class => "question-form" } do |f| -%>
+
+  <% if with_header %>
+    <h2>Lägg till fråga</h2>
+  <% end %>
 
   <%= f.validation_error_indicator -%>
 

@@ -67,10 +67,16 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :bookings, :only => [ :index ], :collection => { :group => :get }
 
-  map.resources :questionnaires, :member => {
-    :add_template_question => :post,
-    :remove_template_question => :delete
-  } do |questionnaire|
+  map.resources(
+    :questionnaires,
+    :collection => {
+      :unbooking => :get
+    },
+    :member => {
+      :add_template_question => :post,
+      :remove_template_question => :delete,
+    }
+  ) do |questionnaire|
     questionnaire.resources :questions, :except => [ :show, :new ]
   end
   map.resources :answers
