@@ -6,6 +6,7 @@
       <th>Termin</th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -15,9 +16,12 @@
         <td>
           <%= link_to "Besökstatistik", visitors_statistic_path(term) -%>
         </td>
-	<td>
-	  <%= link_to "Enkätstatistik", questionnaires_statistic_path(term) -%>
-	</td>
+        <td>
+          <%= link_to "Enkätstatistik", questionnaires_statistic_path(term) -%>
+        </td>
+        <td>
+          <%= link_to "Avbokningsstatistik", unbooking_questionnaires_statistic_path(term) -%>
+        </td>
       </tr>
     <% end %>
   </tbody>

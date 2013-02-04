@@ -5,7 +5,7 @@ class BookingMailer < ActionMailer::Base
   helper :application
 
   # Sends an email to administrators when a booking has been cancelled
-  def booking_cancelled_email(administrators, user, group, occasion)
+  def booking_cancelled_email(administrators, user, group, occasion, answer_form)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
@@ -14,6 +14,6 @@ class BookingMailer < ActionMailer::Base
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Avbokning - #{group.name}, #{group.school.name} till #{occasion.event.name}")
     sent_on(Time.now)
-    body({ :user => user, :group => group, :occasion => occasion })
+    body({ :user => user, :group => group, :occasion => occasion, :answer_form => answer_form })
   end
 end

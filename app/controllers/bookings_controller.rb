@@ -299,7 +299,8 @@ class BookingsController < ApplicationController
       Role.find_by_symbol(:admin).users,
       current_user(),
       @group,
-      @occasion
+      @occasion,
+      @answer_form
     )
 
     flash[:notice] = "Platserna avbokades."

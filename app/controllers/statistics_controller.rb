@@ -10,95 +10,128 @@ class StatisticsController < ApplicationController
   def index
     @terms = get_available_terms()
   end
-  
+
 
   # Shows all events for a given term. It can also be used to download
   # or view visitors stats for a given event.
   def visitors
-    
+
     @term = params[:id]
-    @events = get_available_events(@term)
-    
 
     # Only fetch statistics for a specific event or when downloading statistics as an .xls file.
     if !params[:event_id].nil? || params[:format] == "xls"
-      
       if !params[:event_id].nil?
         @event = Event.find(params[:event_id])
-	@visitor_stats = Event.get_visitor_stats_for_events( @term , [ @event ])
+        @events = [@event]
       else
-        @visitor_stats = Event.get_visitor_stats_for_events( @term , @events)
+        @events = available_events(@term)
       end
 
+      @visitor_stats = Event.get_visitor_stats_for_events(@term , @events)
+
       # Output an xls file
-      if params[:format] == "xls"
-        xls_string =  get_visitor_stats_as_csv(@visitor_stats)
-	my_iconv = Iconv.new("windows-1252" , "utf-8")
-        xls_string.gsub!(/\n/,"\r\n")
-	xls_string = my_iconv.iconv(xls_string);
-        send_data xls_string, :filename => "visitors_stats_#{@term}.csv", :type => "text/csv; charset=windows-1252; header=present" , :disposition => 'inline'
-      end
-      
+      send_csv(
+        "besokstatistik_#{@term}.csv",
+        visitor_stats_csv(@visitor_stats)
+      ) if params[:format] == "xls"
+    else
+      @events = available_events(@term)
     end
 
   end
 
   def questionnaires
     @term = params[:id]
-    @events = get_available_events(@term)
-    @events = @events.select { |e| ( ! e.questionnaire.nil? ) && e.questionnaire.answer_forms.count > 0 }
+
     if !params[:event_id].nil? || params[:format] == "xls" 
       @event = Event.find(params[:event_id])
-      if ( ! @event.questionnaire.nil? ) && @event.questionnaire.answer_forms.count > 0 
-        if params[:format] == "xls"
-	  xls_string = get_questionnaire_stats_as_csv(@event)
-	  my_iconv = Iconv.new("windows-1252" , "utf-8")
-	  xls_string = my_iconv.iconv(xls_string)
-	  send_data xls_string , :filename => "questionnaire_stats.csv",:type => "text/csv; charset=windows-1252; header=present" , :disposition => 'inline'
-        end
+
+      if !@event.questionnaire.nil? && @event.questionnaire.answer_forms.count > 0 
+        send_csv(
+          "enkatstatistik_#{@term}.csv",
+          questionnaire_stats_csv(
+            "Enkätsvar för #{@event.name}",
+            @event.questionnaire
+          )
+        ) if params[:format] == "xls"
       else
-         @event = nil
+        @event = nil
       end      
+    else
+      @events = available_events(@term).select { |e|
+        !e.questionnaire.nil? && e.questionnaire.answer_forms.count > 0
+      }
     end
   end
 
-  
+  def unbooking_questionnaires
+    @term = params[:id]
+    @questionnaire = Questionnaire.find_unbooking
+    from, to = term_to_date_span(@term)
+    @answer_forms = @questionnaire.answer_forms.all(
+      :conditions => { :created_at => from..to }
+    )
+    send_csv(
+      "avbokningsstatistik_#{@term}.csv",
+      questionnaire_stats_csv(
+        "Avbokningsenkätsvar",
+        @questionnaire
+      )
+    ) if params[:format] == "xls"
+  end
+
+
   private
 
-  def get_questionnaire_stats_as_csv(event)
-    res = ""
-    CSV.generate_row(["Enkätsvar för #{event.name}"] ,1 , res , "\t")
-    CSV.generate_row(["Antal besvarade enkäter" , "Antal obesvarade enkäter"],2,res, "\t")
-    CSV.generate_row([event.questionnaire.answer_forms.count(:all,:conditions => { :completed => true })] , 2 , res, "\t" )
-    CSV.generate_row([event.questionnaire.answer_forms.count(:all,:conditions => { :completed => false })] , 2 , res , "\t")
-    CSV.generate_row([],0,res)
-    CSV.generate_row([],0,res)
-    CSV.generate_row([ "Fråga" , "Svar" ] ,2 , res, "\t")
+  def send_csv(filename, csv)
+    iconv = Iconv.new("windows-1252" , "utf-8")
+    csv = iconv.iconv(csv.gsub(/\n/,"\r\n"));
+    send_data(
+      csv,
+      :filename => filename,
+      :type => "text/csv; charset=windows-1252; header=present",
+      :disposition => "inline"
+    )
+  end
 
-    event.questionnaire.questions.each do |q|
+  def questionnaire_stats_csv(title, questionnaire)
+    res = ""
+    answer_forms = questionnaire.answer_forms
+
+    CSV.generate_row([title], 1, res, "\t")
+    CSV.generate_row(["Antal besvarade enkäter", "Antal obesvarade enkäter"], 2, res, "\t")
+    CSV.generate_row([answer_forms.count(:all, :conditions => { :completed => true })], 2, res, "\t" )
+    CSV.generate_row([answer_forms.count(:all, :conditions => { :completed => false })], 2, res, "\t")
+    CSV.generate_row([], 0, res)
+    CSV.generate_row([], 0, res)
+    CSV.generate_row(["Fråga", "Svar"], 2, res, "\t")
+
+    questionnaire.questions.each do |q|
+
       row = []
-      stat = q.statistic_for_event(event.id)
+      stat = q.statistics_for_answer_forms(answer_forms)
+
       case q.qtype
       when "QuestionMark"
         row = [ "#{q.question} (Genomsnittssvar)" ]
         row += [ stat[0] ]
-        CSV.generate_row( row , row.length , res , "\t")
+        CSV.generate_row(row, row.length, res, "\t")
       when "QuestionText"
         row = [ "#{q.question} (Alla svar)" ]
         row += stat.reject { |s| s.blank? }
-        CSV.generate_row( row , row.length , res , "\t") 
+        CSV.generate_row(row, row.length, res, "\t") 
       when "QuestionBool"
         row = [ "#{q.question} (Procent ja-svar , Procent nej-svar)" ]
         row += stat
-        CSV.generate_row( row , row.length , res , "\t")
+        CSV.generate_row(row, row.length, res, "\t")
       when "QuestionMchoice"
         choices = stat.keys.sort
         row = [ "#{q.question} (Antal för varje ord)" ]
         row += choices
-        CSV.generate_row( row , row.length , res , "\t") 
+        CSV.generate_row(row, row.length, res, "\t") 
         row = [""]
         row += choices.collect { |c| stat[c] }
-        CSV.generate_row( row , row.length , res , "\t") 
+        CSV.generate_row(row, row.length, res, "\t") 
       end
     end
     return res
@@ -124,9 +157,7 @@ class StatisticsController < ApplicationController
     return available_terms
   end
 
-  # Returns all available events for a given term
-  # The format of a term is "ht|vtYYYY", e.g. ht2007 (autumn term 2007)
-  def get_available_events(term)
+  def term_to_date_span(term)
     term, year = term.scan(/^(vt|ht)(20[01][0-9])$/).first
 
     if term == 'vt'
@@ -136,13 +167,19 @@ class StatisticsController < ApplicationController
       from = "#{year}-07-01"
       to = "#{year}-12-31"
     end
+    [from, to]
+  end
 
+  # Returns all available events for a given term
+  # The format of a term is "ht|vtYYYY", e.g. ht2007 (autumn term 2007)
+  def available_events(term)
+    from, to = term_to_date_span(term)
     Event.find :all, :include => :culture_provider,
       :conditions => [ "events.id in (select event_id from occasions where occasions.date between ? and ?)", from, to ]
   end
 
   # Returns a comma-seperated values (CSV) string
-  def get_visitor_stats_as_csv(visitor_stats)
+  def visitor_stats_csv(visitor_stats)
     output_buffer = ""
     row = ["Stadsdel" , "Skola" , "Grupp" , "Föreställning" , "Antal bokade" , "Antal barn" , "Antal vuxna" ]
 

@@ -11,3 +11,26 @@
   <%= h @user.name %> (<%= h @user.email %>, <%= h @user.cellphone %>).
 </p>
 
+<% if @answer_form %>
+  <p>
+    <b>Enkätsvar:</b>
+    <ul>
+      <% @answer_form.answers.each do |answer| -%>
+        <% question = answer.question -%>
+        <li>
+          <b><%= question.question %>:</b>
+          <%=
+          case question.qtype
+          when "QuestionMark", "QuestionText" then h(answer.answer_text)
+          when "QuestionBool" then answer.answer_text == "y" ? "Ja" : "Nej"
+          when "QuestionMchoice"
+            choices = YAML.load(answer.answer_text).collect { |c| "<li>#{h(c)}</li>" }
+            "<ul>#{choices}</ul>"
+          end
+          -%>
+        </li>
+      <% end %>
+    </ul>
+  </p>
+<% end %>
+

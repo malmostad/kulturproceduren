@@ -1,0 +1,29 @@
+<%= render :partial => "menu" %>
+
+<h2>
+  Avbokningsstatistik <%= h @term %>
+</h2>
+<p>
+  <%= link_to "Ladda ner avbokningsstatistik som Excel-fil", unbooking_questionnaires_statistic_path(@term, :format => "xls") %>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fråga</th>
+      <th>Svarsstatistik</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @questionnaire.questions.each do |question| %>
+      <tr class="<%= cycle("", "even") %>">
+        <td>
+          <%= question.question -%>
+        </td>
+        <td>
+          <%= question_statistics(question, question.statistics_for_answer_forms(@answer_forms)) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

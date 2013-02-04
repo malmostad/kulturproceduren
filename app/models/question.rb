@@ -25,23 +25,29 @@ class Question < ActiveRecord::Base
   validates_presence_of :question,
     :message => "Frågan får inte vara tom"
 
-  #Returns a list with statistic_for_event
+  def statistics_for_event(event)
+    statistics_for_answer_forms(event.questionnaire.answer_forms)
+  end
+
+  # Returns a list with statistics
   # Mark => [ avg_val ]
   # Text => [ answer1 , answer2 .... ]
   # Bool => [ %yes , %no ]
   # Mchoice => { question1 => %answer1 , question2 => %answer2 ... }
-  def statistic_for_event(event_id) 
+  def statistics_for_answer_forms(answer_forms) 
     result = [] 
     no_answers = 0
     sum = 0
     no_yes = 0
     no_no = 0
+
     if self.qtype == "QuestionMchoice"
       mchoice_stat = {}
       self.choice_csv.split(",").each { |key| mchoice_stat[key] = 0 }
     end
-    Event.find(event_id).questionnaire.answer_forms.each do |answer_forms| 
-      answer_forms.answers.each do |answer| 
+
+    answer_forms.each do |answer_form| 
+      answer_form.answers.each do |answer| 
         #puts "#{a.id} , #{a.answer_text}" if a.question_id == 1 
         if answer.question.id == self.id
           no_answers = no_answers + 1
@@ -69,6 +75,7 @@ class Question < ActiveRecord::Base
         end
       end
     end
+
     case self.qtype
     when "QuestionMark"
       result.push( no_answers == 0 ? 0.0 : [ "%2.2f" % (sum.to_f / no_answers.to_f) ] )

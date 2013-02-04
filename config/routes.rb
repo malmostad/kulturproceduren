@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   }
 
   map.resources :statistics, :only => [ :index ],
-    :member => { :visitors => :get, :questionnaires => :get }
+    :member => { :visitors => :get, :questionnaires => :get, :unbooking_questionnaires => :get }
 
   map.resources :culture_providers,
     :member => { :activate => :post, :deactivate => :post } do |cp|
