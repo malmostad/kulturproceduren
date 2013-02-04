@@ -333,15 +333,15 @@ namespace :kp do
     task(:create_questionnaires => :environment) do
       event = Event.find ENV["event_id"]
 
-      unless event.questionaire
-        questionaire = Questionaire.new do |q|
+      unless event.questionnaire
+        questionnaire = Questionnaire.new do |q|
           q.event = event
           q.description = "n/a"
           q.questions = Question.find(:all , :conditions => { :template => true })
         end
 
         puts "Questionnaire"
-        questionaire.save!
+        questionnaire.save!
 
         unless event.tickets.empty?
           query = "select distinct t.occasion_id, t.companion_id, t.group_id from tickets t left join occasions o on o.id = t.occasion_id where t.event_id = #{event.id} and o.date < now() and t.state in (2,3)"
@@ -359,14 +359,14 @@ namespace :kp do
               a.companion_id = d["companion_id"]
               a.occasion_id = d["occasion_id"]
               a.group_id = d["group_id"]
-              a.questionaire = questionaire
+              a.questionnaire = questionnaire
             end
 
             puts "\tAnswer form"
             answer_form.save!
 
             puts "\tAnswers"
-            questionaire.questions.each do |question|
+            questionnaire.questions.each do |question|
               answer = Answer.new do |a|
                 a.question = question
                 a.answer_form = answer_form

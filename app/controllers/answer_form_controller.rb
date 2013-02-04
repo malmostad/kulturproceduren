@@ -25,7 +25,7 @@ class AnswerFormController < ApplicationController
     @answer.keys.each { |k| @qids << k unless @answer["#{k}"].blank? } unless @answer.blank? 
 
     unless @qids.blank?
-      @non_answered_mandatory_questions = @answer_form.questionaire.questions.select { |q| q.mandatory }.map {|q| q.id } - @qids.map { |k| k.to_i }.sort
+      @non_answered_mandatory_questions = @answer_form.questionnaire.questions.select { |q| q.mandatory }.map {|q| q.id } - @qids.map { |k| k.to_i }.sort
 
       if @non_answered_mandatory_questions.blank?
 

@@ -1,12 +1,12 @@
 pyjamassanger_overdue:
   occasion: pyjamassanger_old
   completed: false
-  questionaire: pyjamassanger
+  questionnaire: pyjamassanger
 pyjamassanger_completed:
   occasion: pyjamassanger_old
   completed: true
-  questionaire: pyjamassanger
+  questionnaire: pyjamassanger
 pyjamassanger_upcoming:
   occasion: pyjamassanger_new
   completed: false
-  questionaire: pyjamassanger
+  questionnaire: pyjamassanger

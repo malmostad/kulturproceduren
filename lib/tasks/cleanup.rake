@@ -25,7 +25,7 @@ namespace :kp do
       puts " * NotificationRequests"
       puts " * Occasions"
       puts " * Non-template Questions belonging to non-standing Events"
-      puts " * Questionaires belonging to non-standing Events"
+      puts " * Questionnaires belonging to non-standing Events"
       puts " * Tickets"
       puts
 
@@ -63,12 +63,12 @@ namespace :kp do
       Companion.destroy_all
       puts "Removing NotificationRequests"
       NotificationRequest.destroy_all
-      puts "Removing non-standing events and associated Occasions, Questionaires, Attachments, Images"
+      puts "Removing non-standing events and associated Occasions, Questionnaires, Attachments, Images"
       Event.non_standing.all.each { |e| e.destroy }
       puts "Removing inactive Groups with associated AgeGroups"
       Group.all(:conditions => { :active => false }).each { |g| g.destroy }
       puts "Removing orphaned Questions"
-      Question.all(:conditions => "template = false and id not in (select question_id from questionaires_questions)").each { |q| q.destroy }
+      Question.all(:conditions => "template = false and id not in (select question_id from questionnaires_questions)").each { |q| q.destroy }
     end
 
   end

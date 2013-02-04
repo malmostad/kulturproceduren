@@ -127,7 +127,7 @@ class EventsController < ApplicationController
       return
     end
 
-    @event.questionaire.destroy if @event.questionaire
+    @event.questionnaire.destroy if @event.questionnaire
     @event.destroy
 
     flash[:notice] = "Evenemanget raderades."

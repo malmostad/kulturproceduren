@@ -286,9 +286,9 @@ body.kp-standalone { background: #fff; }
 #kp form.occasion-form .post-label-form-row,
 #kp form.occasion-form .input-container { padding-left: 10em; }
 #kp form.occasion-form .input-container select { width: auto; }
-/* Questionaire form */
-#kp form.questionaire-form label { width: 6em; }
-#kp form.questionaire-form .input-container { padding-left: 6em; }
+/* Questionnaire form */
+#kp form.questionnaire-form label { width: 6em; }
+#kp form.questionnaire-form .input-container { padding-left: 6em; }
 /* Question form */
 #kp form.question-form label { width: 10em; }
 #kp form.question-form .post-label-form-row,
@@ -617,7 +617,7 @@ body.kp-standalone { background: #fff; }
 
 #kp .age-group-form #kp-age_group-age, #kp .age-group-form #kp-age_group-quantity { width: 4em; }
 
-/*** Questionaires ***/
+/*** Questionnaires ***/
 
 #kp .add-question-cnt .description { display: block; padding-bottom: 0.5em; font-weight: bold; }
 #kp .add-template-question-form { margin-bottom: 1em; }

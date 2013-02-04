@@ -9,8 +9,8 @@
     <%=link_to "Ladda ner enkätstatistik för #{@event.name} som Excel-fil", :event_id => @event,  :format => "xls" %>
   </p>
   <p>
-  Antal besvarade enkäter: <%= @event.questionaire.answer_forms.count(:all,:conditions => { :completed => true }) -%>
-  Antal obesvarade enkäter: <%= @event.questionaire.answer_forms.count(:all,:conditions => { :completed => false }) -%> 
+  Antal besvarade enkäter: <%= @event.questionnaire.answer_forms.count(:all,:conditions => { :completed => true }) -%>
+  Antal obesvarade enkäter: <%= @event.questionnaire.answer_forms.count(:all,:conditions => { :completed => false }) -%> 
   </p>
   <table>
     <thead>
@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @event.questionaire.questions.each do |question| %>
+      <% @event.questionnaire.questions.each do |question| %>
         <tr class="<%= cycle("", "even") %>">
           <td>
             <%= question.question -%>
@@ -52,7 +52,7 @@
       <% @events.each do |event| %>
         <tr class="<%= cycle("", "even") %>">
           <td>
-            <%= link_to h(event.name), questionaires_event_statistic_path(event, @term) -%>
+            <%= link_to h(event.name), questionnaires_event_statistic_path(event, @term) -%>
           </td>
           <td>
             <%= h(event.culture_provider.name) %>

@@ -20,7 +20,7 @@ class Event < ActiveRecord::Base
   # Scope for operating on events that are visible
   named_scope :visible, :conditions => "current_date between visible_from and visible_to"
   # Scope for operating on events without questionnaires
-  named_scope :without_questionaires, :conditions => 'id not in (select event_id from questionaires)'
+  named_scope :without_questionnaires, :conditions => 'id not in (select event_id from questionnaires)'
 
   named_scope :not_linked_to_event, lambda { |event|
     { :conditions => [ "id not in (select to_id from event_links where from_id = ?) and id != ?", event.id, event.id ] }
@@ -57,7 +57,7 @@ class Event < ActiveRecord::Base
 
   has_and_belongs_to_many :categories, :include => :category_group
 
-  has_one :questionaire, :dependent => :destroy
+  has_one :questionnaire, :dependent => :destroy
 
   # All images
   has_many :images, :dependent => :destroy

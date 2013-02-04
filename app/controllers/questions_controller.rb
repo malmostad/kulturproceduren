@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
         :order => sort_order("question")
       render :action => "index"
     else
-      @questionaire = Questionaire.find params[:questionaire_id]
+      @questionnaire = Questionnaire.find params[:questionnaire_id]
       @template_questions = Question.find :all,
         :conditions => { :template => true },
         :order => "question ASC"
@@ -38,22 +38,22 @@ class QuestionsController < ApplicationController
     if @question.save
       flash[:notice] = 'Frågan skapades.'
 
-      if params[:questionaire_id]
-        questionaire = Questionaire.find params[:questionaire_id]
-        questionaire.questions << @question
+      if params[:questionnaire_id]
+        questionnaire = Questionnaire.find params[:questionnaire_id]
+        questionnaire.questions << @question
 
-        redirect_to questionaire
+        redirect_to questionnaire
       else
         redirect_to :action => "index"
       end
     else
-      if params[:questionaire_id]
-        @questionaire = Questionaire.find params[:questionaire_id]
+      if params[:questionnaire_id]
+        @questionnaire = Questionnaire.find params[:questionnaire_id]
         @template_questions = Question.find :all,
           :conditions => { :template => true },
           :order => "question ASC"
         
-        render :template => "questionaires/show"
+        render :template => "questionnaires/show"
       else
         @questions = Question.find :all,
           :conditions => { :template => true },
@@ -70,15 +70,15 @@ class QuestionsController < ApplicationController
     if @question.update_attributes(params[:question])
       flash[:notice] = 'Frågan uppdaterades.'
 
-      if params[:questionaire_id]
-        questionaire = Questionaire.find params[:questionaire_id]
-        redirect_to questionaire
+      if params[:questionnaire_id]
+        questionnaire = Questionnaire.find params[:questionnaire_id]
+        redirect_to questionnaire
       else
         redirect_to :action => "index"
       end
     else      
-      if params[:questionaire_id]
-        @questionaire = Questionaire.find params[:questionaire_id]
+      if params[:questionnaire_id]
+        @questionnaire = Questionnaire.find params[:questionnaire_id]
         @template_questions = Question.find :all,
           :conditions => { :template => true },
           :order => "question ASC"
@@ -100,9 +100,9 @@ class QuestionsController < ApplicationController
 
     flash[:notice] = "Frågan togs bort"
     
-    if params[:questionaire_id]
-      questionaire = Questionaire.find params[:questionaire_id]
-      redirect_to questionaire
+    if params[:questionnaire_id]
+      questionnaire = Questionnaire.find params[:questionnaire_id]
+      redirect_to questionnaire
     else      
       redirect_to :action => "index"
     end

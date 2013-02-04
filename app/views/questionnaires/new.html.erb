@@ -4,12 +4,12 @@
 
 <% if is_edit || !@events.empty? %>
 
-  <% form_for @questionaire, :builder => KPFormBuilder, :html => { :class => "questionaire-form" } do |f| %>
+  <% form_for @questionnaire, :builder => KPFormBuilder, :html => { :class => "questionnaire-form" } do |f| %>
 
     <%= f.title(is_edit ? "Redigera enkät" : "Lägg till enkät") -%>
 
     <% f.conditional_hint is_edit do -%>
-      Redigerar enkät för <%= link_to h(@questionaire.event.name), @questionaire %>
+      Redigerar enkät för <%= link_to h(@questionnaire.event.name), @questionnaire %>
     <% end -%>
 
     <%= f.validation_error_indicator -%>

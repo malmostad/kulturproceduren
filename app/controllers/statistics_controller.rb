@@ -43,18 +43,18 @@ class StatisticsController < ApplicationController
 
   end
 
-  def questionaires
+  def questionnaires
     @term = params[:id]
     @events = get_available_events(@term)
-    @events = @events.select { |e| ( ! e.questionaire.nil? ) && e.questionaire.answer_forms.count > 0 }
+    @events = @events.select { |e| ( ! e.questionnaire.nil? ) && e.questionnaire.answer_forms.count > 0 }
     if !params[:event_id].nil? || params[:format] == "xls" 
       @event = Event.find(params[:event_id])
-      if ( ! @event.questionaire.nil? ) && @event.questionaire.answer_forms.count > 0 
+      if ( ! @event.questionnaire.nil? ) && @event.questionnaire.answer_forms.count > 0 
         if params[:format] == "xls"
-	  xls_string = get_questionaire_stats_as_csv(@event)
+	  xls_string = get_questionnaire_stats_as_csv(@event)
 	  my_iconv = Iconv.new("windows-1252" , "utf-8")
 	  xls_string = my_iconv.iconv(xls_string)
-	  send_data xls_string , :filename => "questionaire_stats.csv",:type => "text/csv; charset=windows-1252; header=present" , :disposition => 'inline'
+	  send_data xls_string , :filename => "questionnaire_stats.csv",:type => "text/csv; charset=windows-1252; header=present" , :disposition => 'inline'
         end
       else
          @event = nil
@@ -65,17 +65,17 @@ class StatisticsController < ApplicationController
   
   private
 
-  def get_questionaire_stats_as_csv(event)
+  def get_questionnaire_stats_as_csv(event)
     res = ""
     CSV.generate_row(["Enkätsvar för #{event.name}"] ,1 , res , "\t")
     CSV.generate_row(["Antal besvarade enkäter" , "Antal obesvarade enkäter"],2,res, "\t")
-    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => true })] , 2 , res, "\t" )
-    CSV.generate_row([event.questionaire.answer_forms.count(:all,:conditions => { :completed => false })] , 2 , res , "\t")
+    CSV.generate_row([event.questionnaire.answer_forms.count(:all,:conditions => { :completed => true })] , 2 , res, "\t" )
+    CSV.generate_row([event.questionnaire.answer_forms.count(:all,:conditions => { :completed => false })] , 2 , res , "\t")
     CSV.generate_row([],0,res)
     CSV.generate_row([],0,res)
     CSV.generate_row([ "Fråga" , "Svar" ] ,2 , res, "\t")
 
-    event.questionaire.questions.each do |q|
+    event.questionnaire.questions.each do |q|
       row = []
       stat = q.statistic_for_event(event.id)
       case q.qtype

@@ -19,7 +19,7 @@ class Question < ActiveRecord::Base
     "Flervalsvar" => "QuestionMchoice"
   }
     
-  has_and_belongs_to_many :questionaire 
+  has_and_belongs_to_many :questionnaire 
   has_many :answers, :dependent => :destroy
 
   validates_presence_of :question,
@@ -40,7 +40,7 @@ class Question < ActiveRecord::Base
       mchoice_stat = {}
       self.choice_csv.split(",").each { |key| mchoice_stat[key] = 0 }
     end
-    Event.find(event_id).questionaire.answer_forms.each do |answer_forms| 
+    Event.find(event_id).questionnaire.answer_forms.each do |answer_forms| 
       answer_forms.answers.each do |answer| 
         #puts "#{a.id} , #{a.answer_text}" if a.question_id == 1 
         if answer.question.id == self.id

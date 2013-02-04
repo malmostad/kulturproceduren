@@ -1,0 +1,22 @@
+<%= render :partial => "menu" -%>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= sort_link "Arrangemang", "event" %></th>
+      <th>Beskrivning</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <% @questionnaires.each do |questionnaire| %>
+    <tr>
+      <td><%= h(questionnaire.event.name) %></td>
+      <td><%= h questionnaire.description %></td>
+      <td><%= link_to 'Visa enkät', questionnaire %></td>
+      <td><%= link_to 'Radera enkät', questionnaire, :confirm => 'Är du säker?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= will_paginate @questionnaires %>

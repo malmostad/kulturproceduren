@@ -125,13 +125,13 @@ class BookingsController < ApplicationController
           # Create booking data objects
           @companion.save!
 
-          if @occasion.event.questionaire
+          if @occasion.event.questionnaire
             answer_form = AnswerForm.new do |a|
               a.completed = false
               a.companion = @companion
               a.occasion = @occasion
               a.group = @group
-              a.questionaire = @occasion.event.questionaire
+              a.questionnaire = @occasion.event.questionnaire
             end
 
             answer_form.save!

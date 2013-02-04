@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130129144945) do
+ActiveRecord::Schema.define(:version => 20130131070025) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(:version => 20130129144945) do
   end
 
   create_table "answer_forms", :id => false, :force => true do |t|
-    t.string   "id",              :limit => 46, :null => false
+    t.string   "id",               :limit => 46, :null => false
     t.boolean  "completed"
     t.integer  "companion_id"
     t.integer  "occasion_id"
     t.integer  "group_id"
-    t.integer  "questionaire_id"
+    t.integer  "questionnaire_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -223,19 +223,19 @@ ActiveRecord::Schema.define(:version => 20130129144945) do
     t.boolean  "single_group",     :default => false
   end
 
-  create_table "questionaires", :force => true do |t|
+  create_table "questionnaires", :force => true do |t|
     t.integer  "event_id"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "questionaires_questions", :id => false, :force => true do |t|
+  create_table "questionnaires_questions", :id => false, :force => true do |t|
     t.integer "question_id"
-    t.integer "questionaire_id"
+    t.integer "questionnaire_id"
   end
 
-  add_index "questionaires_questions", ["questionaire_id", "question_id"], :name => "qq_idx", :unique => true
+  add_index "questionnaires_questions", ["questionnaire_id", "question_id"], :name => "qq_idx", :unique => true
 
   create_table "questions", :force => true do |t|
     t.string   "qtype"

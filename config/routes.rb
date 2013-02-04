@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   }
 
   map.resources :statistics, :only => [ :index ],
-    :member => { :visitors => :get, :questionaires => :get }
+    :member => { :visitors => :get, :questionnaires => :get }
 
   map.resources :culture_providers,
     :member => { :activate => :post, :deactivate => :post } do |cp|
@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
       :only => [ :new , :create ],
       :collection => { :get_input_area => :get }
     e.resources :statistics, :only => [ :index ],
-      :member => { :visitors => :get , :questionaires => :get }
+      :member => { :visitors => :get , :questionnaires => :get }
     e.resources :culture_provider_links, :except => [ :create, :edit, :update ],
       :member => { :select => :get }
     e.resources :event_links, :except => [ :create, :edit, :update ],
@@ -67,11 +67,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :bookings, :only => [ :index ], :collection => { :group => :get }
 
-  map.resources :questionaires, :member => {
+  map.resources :questionnaires, :member => {
     :add_template_question => :post,
     :remove_template_question => :delete
-  } do |questionaire|
-    questionaire.resources :questions, :except => [ :show, :new ]
+  } do |questionnaire|
+    questionnaire.resources :questions, :except => [ :show, :new ]
   end
   map.resources :answers
   map.resources :questions, :except => [ :show, :new ]
@@ -103,7 +103,7 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'booking', :action => 'book'
 
   # Questionnaires
-  map.answer_questionaire 'questionaires/:answer_form_id/answer',
+  map.answer_questionnaire 'questionnaires/:answer_form_id/answer',
     :controller => 'answer_form' , :action => 'submit'
 
   # Role granting

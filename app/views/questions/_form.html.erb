@@ -1,11 +1,11 @@
 <%
-  questionaire ||= false
+  questionnaire ||= false
   is_edit = ["edit", "update"].include?(params[:action]) && params[:controller] == "questions"
 
   form_url = nil
 
-  if questionaire
-    form_url = is_edit ? questionaire_question_path(questionaire, question) : questionaire_questions_path(questionaire)
+  if questionnaire
+    form_url = is_edit ? questionnaire_question_path(questionnaire, question) : questionnaire_questions_path(questionnaire)
   end
 
 %>
