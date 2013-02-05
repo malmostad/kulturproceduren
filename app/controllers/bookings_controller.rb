@@ -21,10 +21,10 @@ class BookingsController < ApplicationController
 
     if params[:occasion_id]
       @districts = District.all :order => "name asc"
-      @bookings = Booking.active.find_for_occasion(params[:occasion_id], session[:booking_list_filter], params[:page])
+      @bookings = Booking.find_for_occasion(params[:occasion_id], session[:booking_list_filter], params[:page])
     elsif params[:event_id]
       @districts = District.all :order => "name asc"
-      @bookings = Booking.active.find_for_event(params[:event_id], session[:booking_list_filter], params[:page])
+      @bookings = Booking.find_for_event(params[:event_id], session[:booking_list_filter], params[:page])
     else
       @bookings = Booking.active.find_for_user(current_user, params[:page])
     end
@@ -34,6 +34,7 @@ class BookingsController < ApplicationController
   def apply_filter
     filter = {}
     filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
+    filter[:unbooked] = !params[:unbooked].blank?
 
     session[:booking_list_filter] = filter
 
@@ -65,11 +66,12 @@ class BookingsController < ApplicationController
 
   # Displays a booking confirmation
   def show
-    @booking = Booking.active.find(
+    query = Booking
+    query = Booking.active unless current_user.has_role?(:admin)
+    @booking = query.find(
       params[:id],
       :include => [ { :group => :school }, :occasion ]
     )
-
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "Klassen/avdelningen har ingen bokning på den efterfrågade föreställningen."
     redirect_to bookings_url()
@@ -203,19 +205,18 @@ class BookingsController < ApplicationController
       @answer_form = AnswerForm.new do |a|
         a.booking = @booking
         a.occasion = @occasion
-        a.group = @group
+        a.group = @booking.group
         a.questionnaire = @questionnaire
       end
 
-      unless @answer_form.answer(@answer)
+      unless @answer_form.valid_answer?(@answer)
         render :action => "unbook"
         return
       end
     end
 
-    @booking.unbooked = true
-    @booking.unbooked_by = current_user()
-    @booking.save!
+    @booking.unbook!(current_user)
+    @answer_form.answer(@answer)
 
     BookingMailer.deliver_booking_cancelled_email(
       Role.find_by_symbol(:admin).users,

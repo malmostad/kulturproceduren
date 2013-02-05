@@ -12,14 +12,21 @@
     %>
 
     <% form_tag url do %>
+      <% filter = (session[:booking_list_filter] || {}) %>
       <ul>
         <li class="district-filter">
           <label for="kp-booking-filter-district_id">Stadsdel:</label>
           <%= select_tag "district_id",
-            '<option value="all">Alla</option>' + options_from_collection_for_select(@districts, :id, :name, (session[:booking_list_filter] || {})[:district_id]),
+            '<option value="all">Alla</option>' + options_from_collection_for_select(@districts, :id, :name, filter[:district_id]),
             :id => "kp-booking-filter-district_id"
           %>
         </li>
+        <% if current_user.has_role?(:admin) %>
+          <li class="district-filter">
+            <%= check_box_tag "unbooked", 1, filter[:unbooked], :id => "kp-booking-filter-unbooked" %>
+            <label for="kp-booking-filter-unbooked">Visa avbokade</label>
+          </li>
+        <% end %>
       </ul>
       <div class="button-container">
         <input type="submit" value="Visa"/>

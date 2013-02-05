@@ -18,6 +18,7 @@ class Booking < ActiveRecord::Base
   validates_presence_of :companion_phone, :message => "Telefonnumret får inte vara tom"
 
   after_save :synchronize_tickets
+  before_create :set_booked_at_timestamp
 
   named_scope :active, :conditions => { :unbooked => false }
 
@@ -58,6 +59,14 @@ class Booking < ActiveRecord::Base
     end
   end
 
+  def unbook!(user)
+    self.unbooked_by = user
+    self.unbooked_at = Time.zone.now
+    self.unbooked = true
+    self.save!
+    self.answer_form.try(:destroy)
+  end
+
 
   def self.find_for_user(user, page)
     paginate(
@@ -79,11 +88,7 @@ class Booking < ActiveRecord::Base
 
   def self.find_for_event(event_id, filter, page)
     conditions = [ " occasions.event_id = ? ", event_id ]
-
-    if !filter.blank? && !filter[:district_id].blank?
-      conditions[0] << " and schools.district_id = ? "
-      conditions << filter[:district_id]
-    end
+    apply_filter(conditions, filter)
 
     paginate(
       :conditions => conditions,
@@ -95,10 +100,7 @@ class Booking < ActiveRecord::Base
 
   def self.find_for_occasion(occasion_id, filter, page)
     conditions = [ "occasions.id = ?", occasion_id ]
-    if !filter.blank? && !filter[:district_id].blank?
-      conditions[0] << " and schools.district_id = ? "
-      conditions << filter[:district_id]
-    end
+    apply_filter(conditions, filter)
 
     paginate(
       :conditions => conditions,
@@ -110,6 +112,10 @@ class Booking < ActiveRecord::Base
 
 
   private
+
+  def set_booked_at_timestamp
+    self.booked_at = Time.zone.now
+  end
 
   def validate_seats
     total_new = self.total_count
@@ -139,9 +145,23 @@ class Booking < ActiveRecord::Base
       ticket.booking = self
       ticket.wheelchair = (type == :wheelchair)
       ticket.adult = (type == :adult)
-      ticket.booked_when = DateTime.now
+      ticket.booked_when = Time.zone.now
 
       ticket.save!
+    end
+  end
+
+  def self.apply_filter(conditions, filter)
+    if !filter.blank? 
+      if !filter[:district_id].blank?
+        conditions[0] << " and schools.district_id = ? "
+        conditions << filter[:district_id]
+      end
+
+      if !filter[:unbooked]
+        conditions[0] << " and unbooked = ? "
+        conditions << false
+      end
     end
   end
 end
