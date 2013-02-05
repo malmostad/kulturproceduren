@@ -9,11 +9,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130201074509) do
+ActiveRecord::Schema.define(:version => 20130204111729) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
     t.integer  "quantity"
+    t.integer  "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "allotments", :force => true do |t|
+    t.integer  "amount"
+    t.integer  "user_id"
+    t.integer  "event_id"
+    t.integer  "district_id"
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -328,6 +338,7 @@ ActiveRecord::Schema.define(:version => 20130201074509) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "booking_id"
+    t.integer  "allotment_id"
   end
 
   add_index "tickets", ["event_id"], :name => "index_tickets_on_event_id"

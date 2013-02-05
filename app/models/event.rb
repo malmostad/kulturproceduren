@@ -29,6 +29,7 @@ class Event < ActiveRecord::Base
     { :conditions => [ "id not in (select event_id from culture_providers_events where culture_provider_id = ?)", culture_provider.id ] }
   }
 
+  has_many :allotments, :dependent => :destroy
   has_many :tickets, :dependent => :delete_all
   has_many :bookings, :through => :tickets, :uniq => true
   has_many :users, :through => :tickets, :uniq => true

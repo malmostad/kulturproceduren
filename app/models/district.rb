@@ -13,6 +13,7 @@ class District < ActiveRecord::Base
     end
   end
 
+  has_many :allotments, :dependent => :nullify
   has_many :tickets
 
   has_and_belongs_to_many :users

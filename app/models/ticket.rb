@@ -20,6 +20,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :group
   belongs_to :user
   belongs_to :booking
+  belongs_to :allotment
 
 
   # Unbooks a ticket
