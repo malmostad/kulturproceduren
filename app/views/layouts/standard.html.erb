@@ -7,86 +7,118 @@
 
     <%= render :partial => "shared/head" %>
   </head>
-  <body class="kp-standalone">
+  <body>
+    <div class="wrap-all">
+      <!--Include the remote masthead here -->
+      <%= malmo_remote_masthead() %>
+      <div class="main">
+        <div class="columns-1">
+          <div class="content-wrapper">
+            <div class="content-wrapper-1">
+              <div class="content-wrapper-2">
+                <div class="content-wrapper-3">
+                  <div class="content-wrapper-4">
+                    <div class="content-wrapper-5">
+                      <div class="content-wrapper-6">
+                        <div class="pagecontent">
+                          <div class="article-toolbar"> 
+                            <div class="listen">
+                              <a href="http://app.readspeaker.com/proreader/proreader.php?cid=4817&amp;lang=sv_se&amp;url=http://www.malmo.se/full-url-to-the-page">Lyssna</a>
+                            </div>
+                            <div class="print"></div>
+                            <div class="share">
+                              <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250"><img src="http://www.malmo.se/assets-2.0/img/share-this.png" width="119" height="18" alt="Dela" /></a>
+                            </div>
+                          </div>
+                          <!-- RSPEAK_START -->
+                          <div id="kp">
+                            <h1 id="kp-logo">
+                              Kulturproceduren
+                              <%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %>
+                            </h1>
 
-    <div id="kp">
+                            <% if APP_CONFIG[:instance_message] %>
+                              <div class="flash alert">
+                                <%= APP_CONFIG[:instance_message] %>
+                              </div>
+                            <% end %>
 
-      <h1 id="kp-logo">
-        Kulturproceduren
-        <%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %>
-      </h1>
+                            <ul class="pri-nav">
+                              <li class="pri-nav-calendar <%= active_by_controller "calendar" %>">
+                                <%= link_to "Kalendarium", :controller => "calendar" -%>
+                              </li>
+                              <li class="pri-nav-culture-providers <%= active_by_controller "culture_providers" %>">
+                                <%= link_to "Arrangörer", culture_providers_path -%>
+                              </li>
 
-      <% if APP_CONFIG[:instance_message] %>
-        <div class="flash alert">
-          <%= APP_CONFIG[:instance_message] %>
+                              <% if user_online? -%>
+
+                                <% if current_user.has_role?(:admin, :booker, :coordinator) -%>
+                                  <li class="pri-nav-booking  <%= active_by_controller "bookings", "notification_requests" %>">
+                                    <%= link_to "Bokning", bookings_path() -%>
+                                  </li>
+                                <% end -%>
+
+                                <% if current_user.has_role?(:coordinator) %>
+                                  <li class="pri-nav-users <%= active_by_action "users", "index" %>">
+                                    <%= link_to "Användare", users_path %>
+                                  </li>
+                                <% end %>
+
+                                <% if current_user.has_role?(:admin) -%>
+                                  <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
+                                <% end -%>
+
+                                <li class="pri-nav-user <%= active_by_controller "role_applications" %> <%= active_by_action "users", "new", "create", "show", "edit", "update", "edit_password" %>">
+                                  <%= link_to "Konto", current_user %>
+                                </li>
+                                <li class="pri-nav-logout">
+                                  <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
+                                </li>
+                              <% else -%>
+                                <li class="pri-nav-login <%= active_by_controller "login" %>">
+                                  <%= login_link "Logga in på Kulturproceduren" %>
+                                </li>
+                              <% end -%>
+                            </ul>
+
+                            <%= yield :section_sub %>
+
+                            <% if flash[:notice] -%>
+                              <div class="flash success">
+                                <%= flash[:notice] %>
+                              </div>
+                            <% end -%>
+
+                            <% if flash[:warning] -%>
+                              <div class="flash alert">
+                                <%= flash[:warning] %>
+                              </div>
+                            <% end -%>
+
+                            <% if flash[:error] -%>
+                              <div class="flash error">
+                                <%= flash[:error] %>
+                              </div>
+                            <% end -%>
+
+                            <div id="kp-content" class="clearfix">
+                              <%= yield %>
+                            </div>
+
+                            <a href="/" id="kp-sitevision-base-url">KP</a>
+                          </div>
+                          <!-- RSPEAK_STOP -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      <% end %>
-
-      <ul class="pri-nav">
-        <li class="pri-nav-calendar <%= active_by_controller "calendar" %>">
-          <%= link_to "Kalendarium", :controller => "calendar" -%>
-        </li>
-        <li class="pri-nav-culture-providers <%= active_by_controller "culture_providers" %>">
-          <%= link_to "Arrangörer", culture_providers_path -%>
-        </li>
-
-        <% if user_online? -%>
-
-          <% if current_user.has_role?(:admin, :booker, :coordinator) -%>
-            <li class="pri-nav-booking  <%= active_by_controller "bookings", "notification_requests" %>">
-              <%= link_to "Bokning", bookings_path() -%>
-            </li>
-          <% end -%>
-
-          <% if current_user.has_role?(:coordinator) %>
-            <li class="pri-nav-users <%= active_by_action "users", "index" %>">
-              <%= link_to "Användare", users_path %>
-            </li>
-          <% end %>
-
-          <% if current_user.has_role?(:admin) -%>
-            <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
-          <% end -%>
-
-          <li class="pri-nav-user <%= active_by_controller "role_applications" %> <%= active_by_action "users", "new", "create", "show", "edit", "update", "edit_password" %>">
-            <%= link_to "Konto", current_user %>
-          </li>
-          <li class="pri-nav-logout">
-            <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
-          </li>
-        <% else -%>
-          <li class="pri-nav-login <%= active_by_controller "login" %>">
-            <%= login_link "Logga in på Kulturproceduren" %>
-          </li>
-        <% end -%>
-      </ul>
-
-      <%= yield :section_sub %>
-
-      <% if flash[:notice] -%>
-        <div class="flash response">
-          <%= flash[:notice] %>
-        </div>
-      <% end -%>
-
-      <% if flash[:warning] -%>
-        <div class="flash alert">
-          <%= flash[:warning] %>
-        </div>
-      <% end -%>
-
-      <% if flash[:error] -%>
-        <div class="flash error">
-          <%= flash[:error] %>
-        </div>
-      <% end -%>
-
-      <div id="kp-content" class="clearfix">
-        <%= yield %>
       </div>
-
-      <a href="/" id="kp-sitevision-base-url">KP</a>
     </div>
-
   </body>
 </html>

@@ -186,7 +186,7 @@
         $("#kp-booking-form-container").change(changeHandler);
         $("#kp-booking-form-container").keyup(changeHandler);
 
-        $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
+        $("<p id=\"kp-booking-count\" class=\"booking-count message success\"></p>").appendTo(
         "#kp-booking-form-container .seats-container");
         changeHandler();
 
@@ -214,7 +214,7 @@
                     // Strip the trailing slash from the base
                     form.attr("action", base.substr(0, base.length - 1) + path);
 
-                    $("<p id=\"kp-booking-count\" class=\"booking-count message response\"></p>").appendTo(
+                    $("<p id=\"kp-booking-count\" class=\"booking-count message success\"></p>").appendTo(
                     "#kp-booking-form-container .seats-container");
                     changeHandler();
                 });

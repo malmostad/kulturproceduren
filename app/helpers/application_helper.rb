@@ -137,4 +137,25 @@ module ApplicationHelper
   def wysiwyg_init
     render :partial => "shared/wysiwyg_init"
   end
+
+  # Renders and caches malmo.se's remote masthead
+  def malmo_remote_masthead
+    masthead = Rails.cache.read("malmo_remote_masthead")
+    return masthead if masthead
+
+    Rails.logger.info("Fetching masthead")
+    http = HTTPClient.new
+    message = http.get(APP_CONFIG[:masthead_url])
+
+    if message.status == 200
+      Rails.cache.write("malmo_remote_masthead", message.body)
+      return message.body
+    else
+      Rails.logger.error("Couldn't fetch masthead, HTTP status #{message.status}")
+      render :partial => "shared/masthead_fallback"
+    end
+  rescue => e
+    Rails.logger.error("Couldn't fetch masthead, error message: #{e.message}")
+    render :partial => "shared/masthead_fallback"
+  end
 end

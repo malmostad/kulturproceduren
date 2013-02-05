@@ -1,31 +1,10 @@
-<% if APP_CONFIG[:asset_host] %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/jquery/malmo-theme.css", :media => "all") %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/external.css", :media => "all") %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-print.css", :media => "print") %>
-  <!--[if lt IE 7]>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie-css-fix.css", :media => "all") %>
-  <![endif]-->
-  <!--[if IE 7]>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie7-css-fix.css", :media => "all") %>
-  <![endif]-->
-<% else %>
-  <%= stylesheet_link_tag "malmo-theme/malmo-theme.css", :media => "all" %>
-  <%= stylesheet_link_tag "malmo-external.css", :media => "all" %>
-  <%= stylesheet_link_tag "malmo-print.css", :media => "print" %>
-  <!--[if lt IE 7]>
-  <%= stylesheet_link_tag "malmo-ie-css-fix.css", :media => "all" %>
-  <![endif]-->
-  <!--[if IE 7]>
-  <%= stylesheet_link_tag "malmo-ie7-css-fix.css", :media => "all" %>
-  <![endif]-->
-<% end %>
-
-<% unless ActionController::Base.asset_host.blank? %>
-  <%= stylesheet_link_tag "kp", :media => "all" %>
-<% else %>
-  <%= stylesheet_link_tag "standard", :media => "all" %>
-<% end %>
-
+<link href="http://www.malmo.se/assets-2.0/css/external-core.css" rel="stylesheet" type="text/css" media="all" />
+<link href="http://www.malmo.se/assets-2.0/jquery/malmo-theme.css" rel="stylesheet" type="text/css" media="all" />
+<link href="http://www.malmo.se/assets-2.0/css/malmo-print.css" rel="stylesheet" type="text/css" media="print" />
+<!--[if lt IE 7]><link href="http://www.malmo.se/assets-2.0/css/malmo-ie-css-fix.css" rel="stylesheet" type="text/css" media="all" /><![endif]-->
+<!--[if IE 7]><link href="http://www.malmo.se/assets-2.0/css/malmo-ie7-css-fix.css" rel="stylesheet" type="text/css" media="all" /><![endif]-->
+<link rel="shortcut icon" href="http://www.malmo.se/assets-2.0/img/malmo-favicon.ico" type="image/x-icon" />
+<%= stylesheet_link_tag "standard", :media => "all" %>
 <!--[if IE 8]>
 <%= stylesheet_link_tag "standard-ie8", :media => "all" %>
 <![endif]-->
@@ -37,22 +16,13 @@
 <![endif]-->
 <%= stylesheet_link_tag "print", :media => "print" %>
 
-<% if APP_CONFIG[:asset_host] %>
-  <%= javascript_include_tag(APP_CONFIG[:asset_host] + "/jquery/jquery.js") %>
-<% else %>
-  <%= javascript_include_tag "jquery-1.4.2.min.js" %>
-  <%= javascript_include_tag "jquery-ui-1.8.2.custom.min.js" %>
-  <%= javascript_include_tag "jquery.cycle.all.min.js" %>
-  <%= javascript_include_tag "jquery.cookie.js" %>
-  <%= javascript_include_tag "jquery.malmo.map.js" %>
-<% end %>
+<script src="http://www.malmo.se/assets-2.0/jquery/jquery.js" type="text/javascript"></script>
+<script src="http://www.malmo.se/assets-2.0/js/malmo.js" type="text/javascript"></script>
+<script src="http://www.malmo.se/assets-2.0/js/external.js" type="text/javascript"></script>
+<script src="http://s7.addthis.com/js/250/addthis_widget.js" type="text/javascript"></script> 
 
-<% unless ActionController::Base.asset_host.blank? %>
-  <%= javascript_include_tag "kp-standalone.js" %>
-<% else %>
-  <%= javascript_include_tag "standard.js" %>
-  <%= javascript_include_tag "map.js" %>
-<% end %>
+<%= javascript_include_tag "standard.js" %>
+<%= javascript_include_tag "map.js" %>
 
 <script type="text/javascript">
 kpConfig = {

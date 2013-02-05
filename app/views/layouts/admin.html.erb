@@ -7,72 +7,106 @@
 
     <%= render :partial => "shared/head" %>
   </head>
-  <body class="kp-standalone">
+  <body>
+    <div class="wrap-all">
+      <!--Include the remote masthead here -->
+      <%= malmo_remote_masthead() %>
+      <div class="main">
+        <div class="columns-1">
+          <div class="content-wrapper">
+            <div class="content-wrapper-1">
+              <div class="content-wrapper-2">
+                <div class="content-wrapper-3">
+                  <div class="content-wrapper-4">
+                    <div class="content-wrapper-5">
+                      <div class="content-wrapper-6">
+                        <div class="pagecontent">
+                          <div class="article-toolbar"> 
+                            <div class="listen">
+                              <a href="http://app.readspeaker.com/proreader/proreader.php?cid=4817&amp;lang=sv_se&amp;url=http://www.malmo.se/full-url-to-the-page">Lyssna</a>
+                            </div>
+                            <div class="print"></div>
+                            <div class="share">
+                              <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250"><img src="http://www.malmo.se/assets-2.0/img/share-this.png" width="119" height="18" alt="Dela" /></a>
+                            </div>
+                          </div>
+                          <!-- RSPEAK_START -->
 
-    <div id="kp">
+                          <div id="kp">
 
-      <h1 id="kp-logo">
-        Kulturproceduren
-        <%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %>
-        - Administration
-      </h1>
+                            <h1 id="kp-logo">
+                              Kulturproceduren
+                              <%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %>
+                              - Administration
+                            </h1>
 
-      <% if APP_CONFIG[:instance_message] %>
-        <div class="flash alert">
-          <%= APP_CONFIG[:instance_message] %>
+                            <% if APP_CONFIG[:instance_message] %>
+                              <div class="flash alert">
+                                <%= APP_CONFIG[:instance_message] %>
+                              </div>
+                            <% end %>
+
+                            <ul class="pri-nav">
+                              <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
+                                <%= link_to "Ansökningar", role_applications_path -%>
+                                </li><li class="pri-nav-statistics <%= active_by_controller "statistics" %>">
+                                <%= link_to "Statistik", statistics_path -%>
+                                </li><li class="pri-nav-questionnaires <%= active_by_controller "questionnaires", "questions" %>">
+                                <%= link_to "Enkäter", questionnaires_path -%>
+                                </li><li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
+                                <%= link_to "Kategorier", categories_path -%>
+                                </li><li class="pri-nav-districts <%= active_by_controller "districts" %>">
+                                <%= link_to "Stadsdelar", districts_path -%>
+                                </li><li class="pri-nav-schools <%= active_by_controller "schools" %>">
+                                <%= link_to "Skolor", schools_path -%>
+                                </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
+                                <%= link_to "Grupper", groups_path -%>
+                                </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
+                                <%= link_to "Användare", users_path -%>
+                                </li><li class="pri-nav-info <%= active_by_controller "information" %>">
+                                <%= link_to "Sändlistor", new_information_path -%>
+                                </li><li class="pri-nav-leave-logout">
+                                <%= link_to "Lämna administrationen", root_url() -%>
+                                <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
+                              </li>
+                            </ul>
+
+                            <%= yield :section_sub %>
+
+                            <% if flash[:notice] -%>
+                              <div class="flash success">
+                                <%= flash[:notice] %>
+                              </div>
+                            <% end -%>
+
+                            <% if flash[:warning] -%>
+                              <div class="flash alert">
+                                <%= flash[:warning] %>
+                              </div>
+                            <% end -%>
+
+                            <% if flash[:error] -%>
+                              <div class="flash error">
+                                <%= flash[:error] %>
+                              </div>
+                            <% end -%>
+
+                            <div id="kp-content">
+                              <%= yield %>
+                            </div>
+
+                            <a href="/" id="kp-sitevision-base-url">KP</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      <% end %>
-
-      <ul class="pri-nav">
-        <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
-          <%= link_to "Ansökningar", role_applications_path -%>
-          </li><li class="pri-nav-statistics <%= active_by_controller "statistics" %>">
-          <%= link_to "Statistik", statistics_path -%>
-          </li><li class="pri-nav-questionnaires <%= active_by_controller "questionnaires", "questions" %>">
-          <%= link_to "Enkäter", questionnaires_path -%>
-          </li><li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
-          <%= link_to "Kategorier", categories_path -%>
-          </li><li class="pri-nav-districts <%= active_by_controller "districts" %>">
-          <%= link_to "Stadsdelar", districts_path -%>
-          </li><li class="pri-nav-schools <%= active_by_controller "schools" %>">
-          <%= link_to "Skolor", schools_path -%>
-          </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
-          <%= link_to "Grupper", groups_path -%>
-          </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
-          <%= link_to "Användare", users_path -%>
-          </li><li class="pri-nav-info <%= active_by_controller "information" %>">
-          <%= link_to "Sändlistor", new_information_path -%>
-          </li><li class="pri-nav-leave-logout">
-          <%= link_to "Lämna administrationen", root_url() -%>
-          <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
-        </li>
-      </ul>
-
-      <%= yield :section_sub %>
-
-      <% if flash[:notice] -%>
-        <div class="flash response">
-          <%= flash[:notice] %>
-        </div>
-      <% end -%>
-
-      <% if flash[:warning] -%>
-        <div class="flash alert">
-          <%= flash[:warning] %>
-        </div>
-      <% end -%>
-
-      <% if flash[:error] -%>
-        <div class="flash error">
-          <%= flash[:error] %>
-        </div>
-      <% end -%>
-
-      <div id="kp-content">
-        <%= yield %>
       </div>
-
-      <a href="/" id="kp-sitevision-base-url">KP</a>
     </div>
 
   </body>
