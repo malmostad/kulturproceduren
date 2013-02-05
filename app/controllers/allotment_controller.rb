@@ -64,7 +64,7 @@ class AllotmentController < ApplicationController
       # distribution
       redirect_to :action => "create_free_for_all_tickets", :id => params[:id]
       return
-    elsif @event.tickets.empty?
+    elsif @event.allotments.empty?
       # Store the preliminary distribution in the session as the working distribution
       session[:allotment][:working_distribution] = get_preliminary_distribution(
         @event,
@@ -126,7 +126,7 @@ class AllotmentController < ApplicationController
 
     if params[:create_tickets]
       # Update the event
-      @event.tickets.clear
+      @event.allotments.clear
 
       @event.ticket_release_date = session[:allotment][:release_date]
       @event.district_transition_date = session[:allotment][:district_transition_date]
@@ -164,31 +164,22 @@ class AllotmentController < ApplicationController
         districts = District.find assignment.keys
 
         districts.each do |district|
-          num = assignment[district.id]
-
-          1.upto(num) do
-            ticket = Ticket.new do |t|
-              t.event = @event
-              t.district = district
-              t.state = Ticket::UNBOOKED
-            end
-
-            ticket.save!
-            tickets_created += 1
-          end
+          amount = assignment[district.id]
+          @event.allotments.create!(
+            :user => current_user,
+            :district => district,
+            :amount => amount
+          )
+          tickets_created += amount
         end
       end
 
       # Create extra tickets for tickets that have not been assigned to a specific
       # district or group
-      tickets_created.upto(session[:allotment][:num_tickets] - 1) do
-        ticket = Ticket.new do |t|
-          t.event = @event
-          t.state = Ticket::UNBOOKED
-        end
-
-        ticket.save!
-      end
+      @event.allotments.create!(
+        :user => current_user,
+        :amount => session[:allotment][:num_tickets] - tickets_created
+      )
 
       session[:allotment] = nil
       flash[:notice] = "Biljetter till evenemanget har fördelats."
@@ -403,6 +394,8 @@ class AllotmentController < ApplicationController
         distribution[district_id.to_i] = assigned_tickets
       end
     end
+
+    Rails.logger.info("\nPreliminary distribution:\n#{distribution.to_yaml}\n")
 
     return distribution
   end
