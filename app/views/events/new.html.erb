@@ -1,4 +1,5 @@
 <%= render :partial => "menu" -%>
+<%= wysiwyg_init %>
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
@@ -28,7 +29,7 @@
     <% end -%>
 
     <%= f.text_field :visible_to, :class => "date-field auto" %>
-    <%= f.text_area :description %>
+    <%= f.text_area :description, :class => "wysiwyg" %>
 
     <% @category_groups.each do |category_group| -%>
       <% unless category_group.categories.empty? -%>
