@@ -31,5 +31,65 @@ namespace :kp do
         temp_age.save!
       end
     end
+
+    desc "Generate bookings from existing tickets without bookings"
+    task(:generate_bookings_from_tickets => :environment) do
+      # Generate bookings from tickets
+      Ticket.find_each(
+        :conditions => "state > 0" # Only booked tickets
+      ) do |ticket|
+
+        booking = Booking.first(
+          :conditions => {
+            :group_id => ticket.group_id,
+            :occasion_id => ticket.occasion_id,
+            :user_id => ticket.user_id
+          }
+        )
+
+        # Create new booking if none existed
+        booking ||= Booking.new do |b|
+          # Default values
+          b.student_count = 0
+          b.adult_count = 0
+          b.wheelchair_count = 0
+
+          # Associations
+          b.group_id = ticket.group_id
+          b.occasion_id = ticket.occasion_id
+          b.user_id = ticket.user_id
+
+          puts "Creating new booking for #{b.group_id},#{b.occasion_id},#{b.user_id}"
+
+          # Booking timestamp
+          b.booked_at = ticket.booked_when
+
+          # Companion
+          if ticket.companion
+            b.companion_name = ticket.companion.name
+            b.companion_phone = ticket.companion.tel_nr
+            b.companion_email = ticket.companion.email
+          end
+
+          # Booking requirements
+          req = BookingRequirement.first(:conditions => { :group_id => ticket.group_id, :occasion_id => ticket.occasion_id })
+          b.requirement = req.requirement if req
+        end
+
+        # Increase 
+        if ticket.wheelchair
+          booking.wheelchair_count += 1
+        elsif ticket.adult
+          booking.adult_count += 1
+        else
+          booking.student_count += 1
+        end
+
+        booking.save!
+
+        ticket.booking_id = booking.id
+        ticket.save!
+      end
+    end
   end
 end

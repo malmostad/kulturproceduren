@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131073638) do
+ActiveRecord::Schema.define(:version => 20130201074509) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20130131073638) do
     t.integer  "questionnaire_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "booking_id"
   end
 
   create_table "answers", :force => true do |t|
@@ -51,6 +52,25 @@ ActiveRecord::Schema.define(:version => 20130131073638) do
     t.text     "requirement"
     t.integer  "occasion_id"
     t.integer  "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "bookings", :force => true do |t|
+    t.datetime "booked_at"
+    t.boolean  "unbooked",         :default => false
+    t.datetime "unbooked_at"
+    t.integer  "unbooked_by_id"
+    t.integer  "student_count"
+    t.integer  "adult_count"
+    t.integer  "wheelchair_count"
+    t.text     "requirement"
+    t.string   "companion_name"
+    t.string   "companion_phone"
+    t.string   "companion_email"
+    t.integer  "group_id"
+    t.integer  "occasion_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -307,6 +327,7 @@ ActiveRecord::Schema.define(:version => 20130131073638) do
     t.datetime "booked_when"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "booking_id"
   end
 
   add_index "tickets", ["event_id"], :name => "index_tickets_on_event_id"
