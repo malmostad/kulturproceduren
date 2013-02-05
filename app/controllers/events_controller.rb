@@ -20,14 +20,7 @@ class EventsController < ApplicationController
   def ticket_allotment
     @event = Event.find(params[:id])
 
-    case @event.ticket_state
-    when Event::ALLOTED_GROUP
-      @ticket_count = @event.ticket_count_by_group
-    when Event::ALLOTED_DISTRICT
-      @ticket_count = @event.ticket_count_by_district
-    when Event::FREE_FOR_ALL
-      @ticket_count = nil
-    else
+    if @event.allotments.empty?
       flash[:error] = "Evenemanget har ingen aktiv fördelning."
       redirect_to @event
     end

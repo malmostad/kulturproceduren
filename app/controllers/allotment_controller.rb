@@ -141,19 +141,14 @@ class AllotmentController < ApplicationController
         groups = Group.find assignment.keys, :include => { :school => :district }
 
         groups.each do |group|
-          num = assignment[group.id]
-
-          1.upto(num) do
-            ticket = Ticket.new do |t|
-              t.group = group
-              t.event = @event
-              t.district = group.school.district
-              t.state = Ticket::UNBOOKED
-            end
-
-            ticket.save!
-            tickets_created += 1
-          end
+          amount = assignment[group.id]
+          @event.allotments.create!(
+            :user => current_user,
+            :group => group,
+            :district => group.school.district,
+            :amount => amount
+          )
+          tickets_created += amount
 
           logger.info "Moving #{group.id} last in priority"
           group.move_last_in_prio
@@ -176,10 +171,11 @@ class AllotmentController < ApplicationController
 
       # Create extra tickets for tickets that have not been assigned to a specific
       # district or group
+      extra_tickets = session[:allotment][:num_tickets] - tickets_created
       @event.allotments.create!(
         :user => current_user,
-        :amount => session[:allotment][:num_tickets] - tickets_created
-      )
+        :amount => extra_tickets
+      ) if extra_tickets > 0
 
       session[:allotment] = nil
       flash[:notice] = "Biljetter till evenemanget har fördelats."

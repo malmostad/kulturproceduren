@@ -32,7 +32,7 @@ class Event < ActiveRecord::Base
   has_many :allotments,
     :dependent => :destroy,
     :include => [ :district, { :group => :school } ],
-    :order => "districts.name asc nulls last"
+    :order => "districts.name asc nulls last, schools.name asc nulls last, groups.name asc nulls last"
   has_many :tickets, :dependent => :delete_all
   has_many :bookings, :through => :tickets, :uniq => true
   has_many :users, :through => :tickets, :uniq => true
