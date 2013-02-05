@@ -23,7 +23,7 @@ class LoginController < ApplicationController
       session[:current_user_id] = u.id
       flash[:notice] = "Du är nu inloggad"
 
-      u.last_active = Time.now
+      u.last_active = Time.zone.now
       u.save
 
       if !u.valid?

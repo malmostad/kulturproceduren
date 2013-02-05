@@ -13,7 +13,7 @@ class BookingMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Avbokning - #{group.name}, #{group.school.name} till #{occasion.event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :user => user, :group => group, :occasion => occasion, :answer_form => answer_form })
   end
 end

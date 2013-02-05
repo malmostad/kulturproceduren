@@ -13,7 +13,7 @@ class OccasionMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Inställt evenemang - #{occasion.event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :occasion => occasion })
   end
 
@@ -26,7 +26,7 @@ class OccasionMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Snart dags för #{occasion.event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :occasion => occasion, :booking => booking })
   end
 
@@ -39,7 +39,7 @@ class OccasionMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Utvärdering av #{occasion.event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :occasion => occasion, :booking => booking })
   end
 
@@ -52,7 +52,7 @@ class OccasionMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Påminnelse utvärdering - #{answer_form.occasion.event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :answer_form => answer_form })
   end
 end

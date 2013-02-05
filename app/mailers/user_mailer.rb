@@ -11,7 +11,7 @@ class UserMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Bekräfta återställning av lösenord")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :user => user })
   end
 
@@ -24,7 +24,7 @@ class UserMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Nytt lösenord")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :user => user, :password => password })
   end
 

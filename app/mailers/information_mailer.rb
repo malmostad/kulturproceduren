@@ -12,7 +12,7 @@ class InformationMailer < ActionMailer::Base
 
     from(APP_CONFIG[:mailers][:from_address])
     subject(subject)
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :message => body })
   end
 end

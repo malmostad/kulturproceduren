@@ -12,7 +12,7 @@ class RoleApplicationMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Behörighetsansökan")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :role_application => role_application })
   end
 
@@ -25,7 +25,7 @@ class RoleApplicationMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Behörighet")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :role_application => role_application })
   end
 end

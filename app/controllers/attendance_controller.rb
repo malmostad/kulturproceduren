@@ -223,7 +223,7 @@ class AttendanceController < ApplicationController
         t.booking = base.booking
         t.adult = (type == :adult)
         t.wheelchair = (type == :wheelchair)
-        t.booked_when = DateTime.now
+        t.booked_when = Time.zone.now
       end
 
       ticket.save!

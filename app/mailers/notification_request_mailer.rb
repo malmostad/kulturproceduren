@@ -14,7 +14,7 @@ class NotificationRequestMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Restplatser till #{notification_request.event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({
       :notification_request => notification_request,
       :district_release => district_release,

@@ -144,7 +144,7 @@ class StatisticsController < ApplicationController
 
     # Begins at fall 2001
     available_terms = []
-    2009.upto(Time.now.year.to_i) do |year|
+    2009.upto(Date.today.year) do |year|
 
       num_vt = Occasion.count :all, :conditions => "date between '#{year}-01-01' and '#{year}-06-30'"
       num_ht = Occasion.count :all, :conditions => "date between '#{year}-07-01' and '#{year}-12-31'"

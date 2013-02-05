@@ -12,7 +12,7 @@ class EventMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Fördelade platser till #{event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :event => event, :group_structure => group_structure, :category_groups => CategoryGroup.all })
   end
 
@@ -26,7 +26,7 @@ class EventMailer < ActionMailer::Base
 
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Restplatser till #{event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :event => event, :category_groups => CategoryGroup.all })
   end
 
@@ -39,7 +39,7 @@ class EventMailer < ActionMailer::Base
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Restplatser till #{event.name}")
-    sent_on(Time.now)
+    sent_on(Time.zone.now)
     body({ :event => event, :district => district, :category_groups => CategoryGroup.all })
   end
 end
