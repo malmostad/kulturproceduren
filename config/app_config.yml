@@ -45,9 +45,9 @@ development:
     <<: *common
     :instance_title: "DEV"
     :evaluation_form:
-        :activation_days: 1
-        :reminder_days: 2
-    :occasion_reminder_days: 1
+        :activation_days: 0
+        :reminder_days: 0
+    :occasion_reminder_days: 0
     #:mailers:
     #    :debug_recipient: "camilla.bengtsson@malmo.se"
 

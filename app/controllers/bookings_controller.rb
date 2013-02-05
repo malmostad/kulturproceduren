@@ -118,6 +118,7 @@ class BookingsController < ApplicationController
   def create
     @booking = Booking.new(params[:booking])
     @booking.user = current_user
+    @group = @booking.group
 
     @occasion = @booking.occasion
 
@@ -141,7 +142,6 @@ class BookingsController < ApplicationController
       flash[:notice] = "Platserna bokades."
       redirect_to booking_url(@booking)
     else
-      @group = @booking.group
       load_group_selection_collections(@occasion)
 
       render :action => "new"

@@ -4,7 +4,7 @@
 
 <p>
   Nu har du och
-  <%= h @companion.group.name %> på <%= h @companion.group.school.name %>
+  <%= h @booking.group.name %> på <%= h @booking.group.school.name %>
   varit med om <%= h @occasion.event.name %>.
   Vi på Kultur för Barn och Unga är nyfikna på hur ni upplevde
   <%= h @occasion.event.name %>.
@@ -12,7 +12,7 @@
 
 <p>
   Vi ber er därför svara på några korta frågor.
-  <a href="<%= mail_url(answer_questionnaire_path(@companion.answer_form.id)) %>">
+  <a href="<%= mail_url(answer_questionnaire_path(@booking.answer_form.id)) %>">
     Klicka här för att komma till utvärderingen.
   </a>
 </p>

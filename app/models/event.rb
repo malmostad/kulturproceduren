@@ -30,7 +30,7 @@ class Event < ActiveRecord::Base
   }
 
   has_many :tickets, :dependent => :delete_all
-  has_many :companions, :through => :tickets, :uniq => true
+  has_many :bookings, :through => :tickets, :uniq => true
   has_many :users, :through => :tickets, :uniq => true
   has_many :booked_users, :through => :tickets, :uniq => true,
     :source => :user,

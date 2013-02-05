@@ -36,14 +36,6 @@ class Group < ActiveRecord::Base
     @total_children ||= age_groups.sum "quantity"
   end
 
-  # Returns the companion that will accompany this group to the given occasion.
-  def companion_by_occasion(occasion)
-    Ticket.find(:first , :conditions => [
-      "tickets.group_id = ? and tickets.occasion_id = ? and tickets.state != ?",
-      id, occasion.id, Ticket::UNBOOKED
-    ]).companion
-  end
-
   # Returns the number of tickets this group has booked on the given occasion. 
   def booked_tickets_by_occasion(occasion)
     occasion = Occasion.find(occasion) if occasion.is_a?(Integer)

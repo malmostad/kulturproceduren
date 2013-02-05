@@ -20,11 +20,6 @@ class GroupTest < ActiveSupport::TestCase
       groups(:centrumskolan1_klass35).total_children
   end
 
-  test "companion by occasion" do
-    assert_equal companions(:bengt).id,
-      groups(:ostskolan1_klass1).companion_by_occasion(occasions(:roda_cirkusen_group_past)).id
-  end
-
   test "booked_tickets_by_occasion" do
     assert_equal 1,
       groups(:ostskolan1_klass1).booked_tickets_by_occasion(occasions(:roda_cirkusen_group_past))

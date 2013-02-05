@@ -5,8 +5,8 @@ class AnswerForm < ActiveRecord::Base
   set_primary_key "id"
   
   has_many :answers, :dependent => :destroy
+  belongs_to :booking
   belongs_to :occasion
-  belongs_to :companion
   belongs_to :booking
   belongs_to :questionnaire
   belongs_to :group
@@ -52,8 +52,8 @@ class AnswerForm < ActiveRecord::Base
 
   # Finds all unanswered forms for occasions the given date
   def self.find_overdue(date)
-    find :all, :conditions => [ "occasions.date = ? and occasions.cancelled = ? and answer_forms.completed = ? and answer_forms.companion_id is not null", date, false, false ],
-      :include => [ :occasion, :companion, :group ]
+    find :all, :conditions => [ "occasions.date = ? and occasions.cancelled = ? and answer_forms.completed = ?", date, false, false ],
+      :include => [ :occasion, :booking, :group ]
   end
 
   protected

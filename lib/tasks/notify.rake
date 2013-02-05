@@ -25,9 +25,9 @@ namespace :kp do
       end
 
       occasions.each do |occasion|
-        occasion.companions.each do |companion|
-          OccasionMailer.deliver_reminder_email(occasion, companion)
-          puts "Sending mail about upcomming event #{occasion.event.name} , #{occasion.date} to #{companion.email}"
+        occasion.bookings.active.each do |booking|
+          OccasionMailer.deliver_reminder_email(occasion, booking)
+          puts "Sending mail about upcoming event #{occasion.event.name}, #{occasion.date} to #{booking.companion_email}"
         end
       end
     end
@@ -40,10 +40,10 @@ namespace :kp do
       :include => :event
     
     occasions.each do |occasion|
-      occasion.companions.each do |companion|
-        if companion.answer_form && !companion.answer_form.completed
-          OccasionMailer.deliver_answer_form_email(occasion, companion)
-          puts "Sending mail about evaluation form for #{occasion.event.name} , #{occasion.date} to #{companion.email}"
+      occasion.bookings.active.each do |booking|
+        if booking.answer_form && !booking.answer_form.completed
+          OccasionMailer.deliver_answer_form_email(occasion, booking)
+          puts "Sending mail about evaluation form for #{occasion.event.name}, #{occasion.date} to #{booking.companion_email}"
         end
       end
     end
@@ -55,7 +55,7 @@ namespace :kp do
 
     answer_forms.each do |answer_form|
       OccasionMailer.deliver_answer_form_reminder_email(answer_form)
-      puts "Sending reminder mail about evaluation form for #{answer_form.occasion.event.name} , #{answer_form.occasion.date} to #{answer_form.companion.email}"
+      puts "Sending reminder mail about evaluation form for #{answer_form.occasion.event.name}, #{answer_form.occasion.date} to #{answer_form.booking.companion_email}"
     end
   end
 

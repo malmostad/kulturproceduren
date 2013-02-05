@@ -18,29 +18,29 @@ class OccasionMailer < ActionMailer::Base
   end
 
   # Sends a reminder email about the given occasion to the given companion
-  def reminder_email(occasion, companion)
+  def reminder_email(occasion, booking)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      recipients(companion.email)
+      recipients(booking.companion_email)
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Snart dags för #{occasion.event.name}")
     sent_on(Time.now)
-    body({ :occasion => occasion, :companion => companion })
+    body({ :occasion => occasion, :booking => booking })
   end
 
-  # Sends a link to the answer form for the given occasion to the given companion
-  def answer_form_email(occasion, companion)
+  # Sends a link to the answer form for the given occasion to the given booking's companion
+  def answer_form_email(occasion, booking)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      recipients(companion.email)
+      recipients(booking.companion_email)
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Utvärdering av #{occasion.event.name}")
     sent_on(Time.now)
-    body({ :occasion => occasion, :companion => companion })
+    body({ :occasion => occasion, :booking => booking })
   end
 
   # Sends a reminder to fill in the answer form
@@ -48,7 +48,7 @@ class OccasionMailer < ActionMailer::Base
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients(APP_CONFIG[:mailers][:debug_recipient])
     else
-      recipients(answer_form.companion.email)
+      recipients(answer_form.booking.companion_email)
     end
     from(APP_CONFIG[:mailers][:from_address])
     subject("Kulturproceduren: Påminnelse utvärdering - #{answer_form.occasion.event.name}")

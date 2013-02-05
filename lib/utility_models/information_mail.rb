@@ -46,7 +46,7 @@ module UtilityModels
         addresses = User.all(:select => "email").collect(&:email)
       else
         addresses = @event.booked_users.collect(&:email)
-        addresses += @event.companions.collect(&:email)
+        addresses += @event.bookings.collect(&:companion_email)
       end
 
       return addresses

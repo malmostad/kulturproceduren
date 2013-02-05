@@ -24,7 +24,6 @@ roda_cirkusen_<%= name %>_past1:
   occasion: roda_cirkusen_<%= name %>_past
   district: ost
   group: ostskolan1_klass1
-  companion: bengt
 roda_cirkusen_<%= name %>_past2:
   state: <%= Ticket::UNBOOKED %>
   event: roda_cirkusen_<%= name %>

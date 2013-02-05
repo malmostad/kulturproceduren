@@ -18,7 +18,6 @@ class Ticket < ActiveRecord::Base
   belongs_to :event
   belongs_to :district
   belongs_to :group
-  belongs_to :companion
   belongs_to :user
   belongs_to :booking
 
