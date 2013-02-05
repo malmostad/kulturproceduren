@@ -60,39 +60,10 @@
     </tr>
   </thead>
   <tbody>
-    <% if @occasion %>
+    <% occasions = @occasion ? [@occasion] : @event.occasions %>
 
-      <% @occasion.groups.hierarchically_ordered.each do |group| %>
-        <% booking = Ticket.booking(group, @occasion) %>
-
-        <tr class="<%= cycle('', 'even') %>">
-          <td>
-            <%= h group.school.district.name -%><br/>
-            <%= h group.school.name -%><br/>
-            <%= h group.name -%>
-          </td>
-          <td>
-            <% companion = group.companion_by_occasion(@occasion) %>
-            <% if companion %>
-              <%= h companion.name -%><br/>
-              <%= h companion.tel_nr -%><br/>
-              <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
-            <% end %>
-          </td>
-          <td><%= h booking[:normal] -%></td>
-          <td><%= h booking[:adult] -%></td>
-          <td><%= h booking[:wheelchair] -%></td>
-          <% if is_admin -%>
-            <% requirements = group.booking_requirements.for_occasion(@occasion) %>
-            <td><%= linebreakize(requirements.requirement) unless requirements.blank? -%></td>
-          <% end %>
-        </tr>
-      <% end %>
-
-    <% else %>
-
-      <% @event.occasions.each do |occasion| -%>
-
+    <% occasions.each do |occasion| %>
+      <% unless @occasion %>
         <tr class="occasion-row">
           <th colspan="<%= is_admin ? 9 : 8 %>" class="<%= cycle('', 'even') %>">
             <% link_to occasion_attendance_index_path(occasion) do %>
@@ -103,36 +74,28 @@
             <% end %>
           </th>
         </tr>
-
-        <% occasion.groups.hierarchically_ordered.each do |group| %>
-          <% booking = Ticket.booking(group, occasion) %>
-
-          <tr class="<%= cycle('', 'even') %>">
-            <td>
-              <%= h group.school.district.name -%><br/>
-              <%= h group.school.name -%><br/>
-              <%= h group.name -%>
-            </td>
-            <td>
-              <% companion = group.companion_by_occasion(occasion) %>
-              <% if companion %>
-                <%= h companion.name -%><br/>
-                <%= h companion.tel_nr -%><br/>
-                <a href="mailto:<%= u companion.email %>"><%= h companion.email -%></a>
-              <% end %>
-            </td>
-            <td><%= h booking[:normal] -%></td>
-            <td><%= h booking[:adult] -%></td>
-            <td><%= h booking[:wheelchair] -%></td>
-            <% if is_admin -%>
-              <% requirements = group.booking_requirements.for_occasion(occasion) %>
-              <td><%= linebreakize(requirements.requirement) unless requirements.blank? -%></td>
-            <% end %>
-          </tr>
-        <% end %>
-
       <% end %>
 
+      <% occasion.bookings.hierarchically_ordered.each do |booking| %>
+        <tr class="<%= cycle('', 'even') %>">
+          <td>
+            <%= h booking.group.school.district.name -%><br/>
+            <%= h booking.group.school.name -%><br/>
+            <%= h booking.group.name -%>
+          </td>
+          <td>
+            <%= h booking.companion_name -%><br/>
+            <%= h booking.companion_phone -%><br/>
+            <a href="mailto:<%= u booking.companion_email %>"><%= h booking.companion_email -%></a>
+          </td>
+          <td><%= h booking.student_count -%></td>
+          <td><%= h booking.adult_count -%></td>
+          <td><%= h booking.wheelchair_count -%></td>
+          <% if is_admin -%>
+            <td><%= linebreakize(booking.requirement) unless booking.requirement.blank? -%></td>
+          <% end %>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

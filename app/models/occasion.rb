@@ -4,7 +4,18 @@ class Occasion < ActiveRecord::Base
 
   belongs_to :event
   has_many :tickets
-  has_many :booking_requirements
+  has_many :bookings do
+    def hierarchically_ordered
+      active.find :all,
+        :include => { :group => { :school => :district } },
+        :order => "districts.name ASC, schools.name ASC, groups.name ASC"
+    end
+    def school_ordered
+      active.find :all,
+        :include => { :group => { :school => :district } },
+        :order => "schools.name ASC, groups.name ASC"
+    end
+  end
 
   has_many :groups, :through => :tickets , :uniq => true do
     def hierarchically_ordered

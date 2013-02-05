@@ -9,8 +9,7 @@ class AttendanceController < ApplicationController
   # Lists the attendance of an event or a single occasion
   def index
     if params[:format] == "pdf"
-      pdf = get_pdf()
-      send_data pdf.render, :filename => "narvaro.pdf",:type => "application/pdf" , :disposition => 'inline'
+      send_data generate_pdf().render, :filename => "narvaro.pdf", :type => "application/pdf", :disposition => "inline"
     end
   end
 
@@ -113,11 +112,10 @@ class AttendanceController < ApplicationController
   private
 
   # Creates a pdf document of the attendants on an occasion or event
-  def get_pdf
-
-    pdf = PDF::Writer.new  :paper => "A4" , :orientation => :landscape
+  def generate_pdf
+    pdf = PDF::Writer.new :paper => "A4", :orientation => :landscape
     pdf.select_font("Helvetica")
-    pdf.margins_cm(2,2,2,2)
+    pdf.margins_cm(2, 2, 2, 2)
 
     (@occasion ? [ @occasion ] : @event.occasions).each do |occasion|
       PDF::SimpleTable.new do |tab|
@@ -156,10 +154,10 @@ class AttendanceController < ApplicationController
           col.heading = "Rullstol".to_iso
         }
 
-        tab.show_lines    = :all
-        tab.orientation   = 1
-        tab.position      = :left
-        tab.font_size     = 9
+        tab.show_lines = :all
+        tab.orientation = 1
+        tab.position = :left
+        tab.font_size = 9
         tab.heading_font_size = 9
         tab.maximum_width = 1
         tab.title_gap = 10
@@ -170,8 +168,8 @@ class AttendanceController < ApplicationController
 
         data = []
 
-        occasion.groups.school_ordered.each do |group|
-          data << create_pdf_row(occasion, group)
+        occasion.bookings.school_ordered.each do |booking|
+          data << create_pdf_row(occasion, booking)
         end
 
         if data.blank?
@@ -197,25 +195,17 @@ class AttendanceController < ApplicationController
     return pdf
   end
 
-  def create_pdf_row(occasion, group)
-    booking = Ticket.booking(group, occasion)
-    requirements = group.booking_requirements.for_occasion(occasion)
-    companion = group.companion_by_occasion(occasion)
-
+  def create_pdf_row(occasion, booking)
     row = {}
-    row["group"]       = (group.school.name.to_s + " - " + group.name.to_s).to_iso
-    if companion
-      row["comp"]      = "#{companion.name}\n#{companion.tel_nr}\n#{companion.email}".to_iso
-    else
-      row["comp"]      = " ".to_iso
-    end
-    row["att_normal"]  = booking[:normal] || 0
-    row["att_adult"]   = booking[:adult] || 0
-    row["att_wheel"]   = booking[:wheelchair] || 0
-    row["req"]         = (requirements.blank? ? " " : requirements.requirement).to_iso
+    row["group"] = (booking.group.school.name.to_s + " - " + booking.group.name.to_s).to_iso
+    row["comp"] = "#{booking.companion_name}\n#{booking.companion_phone}\n#{booking.companion_email}".to_iso
+    row["att_normal"] = booking.student_count || 0
+    row["att_adult"] = booking.adult_count || 0
+    row["att_wheel"] = booking.wheelchair_count || 0
+    row["req"] = (booking.requirement.blank? ? " " : booking.requirement).to_iso
     row["pres_normal"] = " ".to_iso
-    row["pres_adult"]  = " ".to_iso
-    row["pres_wheel"]  = " ".to_iso
+    row["pres_adult"] = " ".to_iso
+    row["pres_wheel"] = " ".to_iso
 
     return row
   end
@@ -226,11 +216,11 @@ class AttendanceController < ApplicationController
       ticket = Ticket.new do |t|
         t.state = Ticket::USED
         t.group = base.group
-        t.event = base.event
-        t.occasion = base.occasion
-        t.district = base.district
-        t.companion = base.companion
         t.user = current_user
+        t.occasion = base.occasion
+        t.event = base.event
+        t.district = base.district
+        t.booking = base.booking
         t.adult = (type == :adult)
         t.wheelchair = (type == :wheelchair)
         t.booked_when = DateTime.now
