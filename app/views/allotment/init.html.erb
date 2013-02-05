@@ -40,30 +40,34 @@
                value="<%= h @event.ticket_release_date %>"/>
       </div>
     </div>
-    <div class="form-row district_transition_date-field-row">
-      <label for="kp-allotment-district_transition_date">Övergång till stadsdel:</label>
-      <div class="input-container">
-        <input type="text"
-               id="kp-allotment-district_transition_date"
-               name="allotment[district_transition_date]"
-               class="date-field <%= "changed" unless @event.district_transition_date.blank? %>"
-               size="30"
-               data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] %>"
-               value="<%= h @event.district_transition_date %>"/>
+    <% if !is_edit || @event.ticket_state == Event::ALLOTED_GROUP %>
+      <div class="form-row district_transition_date-field-row">
+        <label for="kp-allotment-district_transition_date">Övergång till stadsdel:</label>
+        <div class="input-container">
+          <input type="text"
+                 id="kp-allotment-district_transition_date"
+                 name="allotment[district_transition_date]"
+                 class="date-field <%= "changed" unless @event.district_transition_date.blank? %>"
+                 size="30"
+                 data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] %>"
+                 value="<%= h @event.district_transition_date %>"/>
+        </div>
       </div>
-    </div>
-    <div class="form-row free_for_all_transition_date-field-row">
-      <label for="kp-allotment-free_for_all_transition_date">Övergång till hela staden:</label>
-      <div class="input-container">
-        <input type="text"
-               id="kp-allotment-free_for_all_transition_date"
-               name="allotment[free_for_all_transition_date]"
-               class="date-field <%= "changed" unless @event.free_for_all_transition_date.blank? %>"
-               size="30"
-               data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>"
-               value="<%= h @event.free_for_all_transition_date %>"/>
+    <% end %>
+    <% if !is_edit || [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT].include?(@event.ticket_state) %>
+      <div class="form-row free_for_all_transition_date-field-row">
+        <label for="kp-allotment-free_for_all_transition_date">Övergång till hela staden:</label>
+        <div class="input-container">
+          <input type="text"
+                 id="kp-allotment-free_for_all_transition_date"
+                 name="allotment[free_for_all_transition_date]"
+                 class="date-field <%= "changed" unless @event.free_for_all_transition_date.blank? %>"
+                 size="30"
+                 data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>"
+                 value="<%= h @event.free_for_all_transition_date %>"/>
+        </div>
       </div>
-    </div>
+    <% end %>
 
     <div class="form-row num_tickets-field-row">
       <label for="kp-allotment-num_tickets">Antal <%= is_edit ? "ytterligare" : "inköpta" %> biljetter:</label>
@@ -85,39 +89,41 @@
       </div>
     <% end -%>
 
-    <div class="form-row district_id-field-row">
-      <label for="kp-allotment-district_id-all">Stadsdelar:</label>
-      <div class="input-container">
-        <ul class="allotment-district-list checkbox-list">
-          <li>
-            <input type="checkbox"
-                   name="allotment[district_ids][]"
-                   value="-1"
-                   id="kp-allotment-district_ids-all"
-                   <%= 'checked="checked"' if !is_edit || @event.districts.size == @districts.size %>
-                   class="all-toggler"/>
-            <label for="kp-allotment-district_ids-all">Alla</label>
-          </li>
-          <% @districts.each do |district| -%>
+    <% if !is_edit || [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT].include?(@event.ticket_state) %>
+      <div class="form-row district_id-field-row">
+        <label for="kp-allotment-district_id-all">Stadsdelar:</label>
+        <div class="input-container">
+          <ul class="allotment-district-list checkbox-list">
             <li>
               <input type="checkbox"
                      name="allotment[district_ids][]"
-                     value="<%= district.id %>"
-                     id="kp-allotment-district_ids-<%= district.id %>"
-                     <% if is_edit %>
-                       <% current_district = @event.districts.include?(district) -%>
-                       <%= 'disabled="disabled"' if current_district %>
-                       <%= 'checked="checked"' if current_district %>
-                     <% else -%>
-                       checked="checked"
-                     <% end -%>/>
-              <label for="kp-allotment-district_ids-<%= district.id %>"><%= h district.name %></label>
+                     value="-1"
+                     id="kp-allotment-district_ids-all"
+                     <%= 'checked="checked"' if !is_edit || @event.districts.size == @districts.size %>
+                     class="all-toggler"/>
+              <label for="kp-allotment-district_ids-all">Alla</label>
             </li>
-          <% end -%>
-        </ul>
+            <% @districts.each do |district| -%>
+              <li>
+                <input type="checkbox"
+                       name="allotment[district_ids][]"
+                       value="<%= district.id %>"
+                       id="kp-allotment-district_ids-<%= district.id %>"
+                       <% if is_edit %>
+                         <% current_district = @event.districts.include?(district) -%>
+                         <%= 'disabled="disabled"' if current_district %>
+                         <%= 'checked="checked"' if current_district %>
+                       <% else -%>
+                         checked="checked"
+                       <% end -%>/>
+                <label for="kp-allotment-district_ids-<%= district.id %>"><%= h district.name %></label>
+              </li>
+            <% end -%>
+          </ul>
+        </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
-    </div>
+    <% end %>
 
     <div class="form-buttons">
       <input type="submit" value="Starta fördelning" name="submit"/>

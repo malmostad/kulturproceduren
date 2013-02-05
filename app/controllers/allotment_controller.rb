@@ -18,12 +18,20 @@ class AllotmentController < ApplicationController
   # to the distribution view
   def assign_params
 
+    incoming = params[:allotment]
+
     session[:allotment] = {}
-    session[:allotment][:release_date] = Date.parse(params[:allotment][:release_date])
-    session[:allotment][:district_transition_date] = Date.parse(params[:allotment][:district_transition_date])
-    session[:allotment][:free_for_all_transition_date] = Date.parse(params[:allotment][:free_for_all_transition_date])
-    session[:allotment][:num_tickets] = params[:allotment][:num_tickets].to_i
-    session[:allotment][:ticket_state] = params[:allotment][:ticket_state].to_i
+    session[:allotment][:release_date] = Date.parse(incoming[:release_date])
+
+    if incoming.has_key?(:district_transition_date)
+      session[:allotment][:district_transition_date] = Date.parse(incoming[:district_transition_date]) 
+    end
+    if incoming.has_key?(:free_for_all_transition_date)
+      session[:allotment][:free_for_all_transition_date] = Date.parse(incoming[:free_for_all_transition_date])
+    end
+
+    session[:allotment][:num_tickets] = incoming[:num_tickets].to_i
+    session[:allotment][:ticket_state] = incoming[:ticket_state].to_i
 
     unless @event.tickets.empty?
       # Add the number of tickets already assigned to an event
@@ -38,9 +46,9 @@ class AllotmentController < ApplicationController
       session[:allotment][:extra_groups] = @event.not_targeted_group_ids
     end
 
-    unless params[:allotment][:district_ids].blank?
+    unless incoming[:district_ids].blank?
       # Collect the selected districts ids and store them in the session
-      ids = params[:allotment][:district_ids].collect { |id| id.to_i }
+      ids = incoming[:district_ids].collect { |id| id.to_i }
 
       # -1 as an id means all ids
       if ids.include?(-1)
@@ -77,20 +85,16 @@ class AllotmentController < ApplicationController
 
   # Creates tickets that are in the free for all state
   def create_free_for_all_tickets
-    @event.tickets.clear
+    @event.allotments.clear
 
     @event.ticket_release_date = session[:allotment][:release_date]
     @event.ticket_state = session[:allotment][:ticket_state]
     @event.save!
 
-    1.upto(session[:allotment][:num_tickets]) do
-      ticket = Ticket.new do |t|
-        t.event = @event
-        t.state = Ticket::UNBOOKED
-      end
-
-      ticket.save!
-    end
+    @event.allotments.create!(
+      :user => current_user,
+      :amount => session[:allotment][:num_tickets]
+    )
 
     session[:allotment] = nil
     flash[:notice] = "Biljetter till evenemanget har fördelats."
@@ -203,7 +207,7 @@ class AllotmentController < ApplicationController
 
   # Completely removes an allotment from an event
   def destroy
-    @event.tickets.clear
+    @event.allotments.clear
 
     session[:allotment] = nil
 
