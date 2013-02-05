@@ -83,17 +83,6 @@ class StatisticsController < ApplicationController
 
   private
 
-  def send_csv(filename, csv)
-    iconv = Iconv.new("windows-1252" , "utf-8")
-    csv = iconv.iconv(csv.gsub(/\n/,"\r\n"));
-    send_data(
-      csv,
-      :filename => filename,
-      :type => "text/csv; charset=windows-1252; header=present",
-      :disposition => "inline"
-    )
-  end
-
   def questionnaire_stats_csv(title, questionnaire)
     res = ""
     answer_forms = questionnaire.answer_forms

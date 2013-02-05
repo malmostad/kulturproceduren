@@ -24,6 +24,13 @@ class EventsController < ApplicationController
       flash[:error] = "Evenemanget har ingen aktiv fördelning."
       redirect_to @event
     end
+
+    if params[:format] == "xls"
+      send_csv(
+        "fordelning_evenemang#{@event.id}.csv",
+        ticket_allotment_csv(@event)
+      )
+    end
   end
 
   def new
@@ -174,5 +181,25 @@ class EventsController < ApplicationController
       fname = "public/images/graphs/" + s + numpart.to_s + ".png"
     end
     return fname
+  end
+
+  def ticket_allotment_csv(event)
+    csv = ""
+    row = [ "Stadsdel", "Skola", "Grupp", "Antal biljetter" ]
+    CSV.generate_row(row, row.length, csv, "\t")
+
+    event.allotments.each do |allotment|
+      if allotment.for_group?
+        row = [ allotment.district.name, allotment.group.school.name, allotment.group.name, allotment.amount ]
+      elsif allotment.for_district?
+        row = [ allotment.district.name, "", "", allotment.amount ]
+      else
+        row = [ "Hela staden", "", "", allotment.amount ]
+      end
+
+      CSV.generate_row(row, row.length, csv, "\t")
+    end
+
+    return csv
   end
 end

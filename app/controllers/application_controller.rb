@@ -109,4 +109,17 @@ class ApplicationController < ActionController::Base
     "events/show/#{event.id}/occasion_list/#{online_prefix}online/#{bookable_prefix}bookable/#{administratable_prefix}administratable/#{reportable_prefix}reportable"
   end
   helper_method :occasion_list_cache_key
+
+
+  def send_csv(filename, csv)
+    my_iconv = Iconv.new("windows-1252" , "utf-8")
+    csv = my_iconv.iconv(csv.gsub(/\n/,"\r\n"));
+    send_data(
+      csv,
+      :filename => filename,
+      :type => "text/csv; charset=windows-1252; header=present",
+      :disposition => "inline"
+    )
+  end
+
 end
