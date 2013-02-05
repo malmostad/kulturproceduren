@@ -46,9 +46,9 @@ ActionController::Routing::Routes.draw do |map|
     e.resources :attendance,
       :only => [ :index ],
       :collection => { :report => :get, :update_report => :post }
-    e.resources :bookings, :collection => {
-      :apply_filter => :post
-    }
+    e.resources :bookings,
+      :only => [ :index, :new ],
+      :collection => { :apply_filter => :post }
     e.resource :information, :only => [ :new, :create ]
   end
 
@@ -57,17 +57,16 @@ ActionController::Routing::Routes.draw do |map|
     :ticket_availability => :get,
     :cancel => :delete
   } do |oc|
-    oc.resources :bookings, :collection => {
-      :apply_filter => :post
-    }, :member => {
-      :unbook => :get
-    }
+    oc.resources :bookings, :collection => { :apply_filter => :post }
     oc.resources :attendance,
       :only => [ :index ],
       :collection => { :report => :get, :update_report => :post }
   end
 
-  map.resources :bookings, :only => [ :index ], :collection => { :group => :get }
+  map.resources :bookings,
+    :except => [ :new ],
+    :collection => { :group => :get, :group_list => :get, :form => :get },
+    :member => { :unbook => :get }
 
   map.resources(
     :questionnaires,
@@ -106,9 +105,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.calendar 'calendar/:action/:list',
     :controller => 'calendar'
-
-  map.booking 'booking/book/:occasion_id',
-    :controller => 'booking', :action => 'book'
 
   # Questionnaires
   map.answer_questionnaire 'questionnaires/:answer_form_id/answer',

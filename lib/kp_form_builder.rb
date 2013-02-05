@@ -107,12 +107,13 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
   # Generates a fieldset container with an optional legend encapsulating
   # multiple field of rows.
-  def fields(title = '', &block)
+  def fields(title = '', extra_classes = '', &block)
     raise ArgumentError, "Missing block" unless block_given?
 
     contents = @template.capture(&block)
     title = @template.content_tag(:legend, @template.content_tag(:span, title)) unless title.blank?
-    cls = title.blank? ? "" : "with-legend"
+    cls = title.blank? ? "" : "with-legend "
+    cls << extra_classes
 
     @template.concat @template.content_tag(:fieldset, title + contents, :class => cls)
   end

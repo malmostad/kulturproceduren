@@ -7,6 +7,7 @@ class AnswerForm < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   belongs_to :occasion
   belongs_to :companion
+  belongs_to :booking
   belongs_to :questionnaire
   belongs_to :group
 

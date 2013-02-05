@@ -20,6 +20,24 @@ class Ticket < ActiveRecord::Base
   belongs_to :group
   belongs_to :companion
   belongs_to :user
+  belongs_to :booking
+
+
+  # Unbooks a ticket
+  def unbook!
+    if self.state != Ticket::UNBOOKED
+      self.state = Ticket::UNBOOKED
+      self.booking = nil
+      self.user = nil
+      self.occasion = nil
+      self.wheelchair = false
+      self.adult = false
+      self.booked_when = nil
+
+      self.save!
+    end
+  end
+
 
   # Counts the number of available wheelchair tickets booked on an occasion
   def self.count_wheelchair_by_occasion(occasion)

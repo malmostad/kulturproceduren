@@ -2,17 +2,17 @@
 
 <h2 class="form-title">
   Bokningsbekräftelse för
-  <%= h @group.school.name %>, <%= h @group.name %> till
-  <%= link_to h(@occasion.event.name), @occasion.event -%>,
-  föreställningen <%= h @occasion.date -%>
+  <%= h @booking.group.school.name %>, <%= h @booking.group.name %> till
+  <%= link_to h(@booking.occasion.event.name), @booking.occasion.event -%>,
+  föreställningen <%= h @booking.occasion.date -%>
 </h2>
 
 <div class="admin-tools">
   <ul>
-    <% if current_user.can_book? && !@occasion.cancelled %>
-      <li><%= link_to "Ändra bokning", edit_occasion_booking_path(@occasion.id, @group.id) %></li>
+    <% if current_user.can_book? && !@booking.occasion.cancelled && @booking.occasion.date >= Date.today %>
+      <li><%= link_to "Ändra bokning", edit_booking_path(@booking) %></li>
       <li>
-        <%= link_to "Avboka", unbook_occasion_booking_path(@occasion.id, @group.id) %>
+        <%= link_to "Avboka", unbook_booking_path(@booking) %>
       </li>
     <% end %>
     <li><%= link_to_function "Skriv ut", "window.print()" %></li>
@@ -26,23 +26,23 @@
     </tr>
     <tr class="event">
       <th>Namn:</th>
-      <td><%= link_to h(@occasion.event.name), @occasion.event %></td>
+      <td><%= link_to h(@booking.occasion.event.name), @booking.occasion.event %></td>
     </tr>
     <tr class="occasion-date">
       <th>Datum:</th>
-      <td><%= h @occasion.date %></td>
+      <td><%= h @booking.occasion.date %></td>
     </tr>
     <tr class="occasion-time">
       <th>Tid:</th>
-      <td><%= l @occasion.start_time, :format => :only_time %> - <%= l @occasion.stop_time, :format => :only_time %></td>
+      <td><%= l @booking.occasion.start_time, :format => :only_time %> - <%= l @booking.occasion.stop_time, :format => :only_time %></td>
     </tr>
     <tr class="occasion-address">
       <th>Adress:</th>
-      <td><%= linebreakize(@occasion.address) %></td>
+      <td><%= linebreakize(@booking.occasion.address) %></td>
     </tr>
     <tr class="occasion-address">
       <th>Beskrivning:</th>
-      <td><%= paragraphize(@occasion.description) %></td>
+      <td><%= paragraphize(@booking.occasion.description) %></td>
     </tr>
 
     <tr class="booking-header">
@@ -50,16 +50,16 @@
     </tr>
     <tr class="num-normal">
       <th>Antal platser för barn:</th>
-      <td><%= h @booking[:normal] %></td>
+      <td><%= h @booking.student_count %></td>
     </tr>
     <tr class="num-adult">
       <th>Antal platser för vuxna:</th>
-      <td><%= h @booking[:adult] %></td>
+      <td><%= h @booking.adult_count %></td>
     </tr>
-    <% if @booking[:wheelchair] > 0 %>
+    <% if @booking.wheelchair_count > 0 %>
       <tr class="num-wheelchair">
         <th>Antal platser för rullstolsbundna:</th>
-        <td><%= h @booking[:wheelchair] %></td>
+        <td><%= h @booking.wheelchair_count %></td>
       </tr>
     <% end %>
 
@@ -68,24 +68,24 @@
     </tr>
     <tr class="companion-name">
       <th>Namn:</th>
-      <td><%= h @companion.name %></td>
+      <td><%= h @booking.companion_name %></td>
     </tr>
     <tr class="companion-email">
       <th>Epostadress:</th>
-      <td><%= h @companion.email %></td>
+      <td><%= h @booking.companion_email %></td>
     </tr>
     <tr class="companion-cellphone">
       <th>Mobilnummer:</th>
-      <td><%= h @companion.tel_nr %></td>
+      <td><%= h @booking.companion_phone %></td>
     </tr>
 
-    <% if @booking_requirement %>
+    <% unless @booking.requirement.blank? %>
       <tr class="requirement-header">
         <th colspan="2">Speciella krav / Extra information ang. bokning</th>
       </tr>
       <tr class="companion-name">
         <th>Extra behov:</th>
-        <td><%= paragraphize(@booking_requirement.requirement) %></td>
+        <td><%= paragraphize(@booking.requirement) %></td>
       </tr>
     <% end %>
   </tbody>

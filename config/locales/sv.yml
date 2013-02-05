@@ -227,6 +227,14 @@ sv:
         tel_nr: "Mobilnummer:"
       booking_requirement:
         requirement: "Extra behov:"
+      booking:
+        student_count: "Antal platser för elever:"
+        adult_count: "Antal platser för vuxna:"
+        wheelchair_count: "Antal rullstolsanpassade platser:"
+        companion_name: "Namn:"
+        companion_email: "Epostadress:"
+        companion_phone: "Mobilnummer:"
+        requirement: "Extra behov:"
 
   helpers:
     label:

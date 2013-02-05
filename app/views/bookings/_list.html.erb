@@ -26,13 +26,13 @@
           <td class="group"><%= h booking.group.name -%></td>
           <td class="event"><%= link_to h(booking.occasion.event.name), booking.occasion.event -%></td>
           <td class="date"><%= h booking.occasion.date -%></td>
-          <td class="num-tickets"><%= h booking.num_tickets -%> platser bokade</td>
+          <td class="num-tickets"><%= h booking.total_count -%> platser bokade</td>
           <td class="booked-by"><%= h booking.user.name %></td>
           <td class="tools">
-            <%= link_to "Bokningsbekräftelse", occasion_booking_path(booking.occasion_id, booking.group_id) %>
+            <%= link_to "Bokningsbekräftelse", booking_path(booking) %>
             <% if !booking.occasion.cancelled && booking.occasion.date >= Date.today %>
-              <%= link_to "Ändra bokning", edit_occasion_booking_path(booking.occasion_id, booking.group_id) %>
-              <%= link_to "Avboka", unbook_occasion_booking_path(booking.occasion_id, booking.group_id) %>
+              <%= link_to "Ändra bokning", edit_booking_path(booking) %>
+              <%= link_to "Avboka", unbook_booking_path(booking) %>
             <% end %>
           </td>
         </tr>
