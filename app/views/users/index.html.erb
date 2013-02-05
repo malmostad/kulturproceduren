@@ -3,16 +3,22 @@
 <div class="filter-tools">
   <% form_tag apply_filter_users_path() do %>
     <ul>
+      <% filter = (session[:user_list_filter] || {}) -%>
       <li class="district-filter">
         <label for="kp-user-filter-district_id">Stadsdel:</label>
         <%= select_tag "district_id",
-          '<option value="all">Alla</option>' + options_from_collection_for_select(@districts, :id, :name, (session[:user_list_filter] || {})[:district_id]),
+          '<option value="all">Alla</option>' + options_from_collection_for_select(@districts, :id, :name, filter[:district_id]),
           :id => "kp-user-filter-district_id"
         %>
       </li>
+      <li class="name-filter">
+        <label for="kp-user-filter-name">Namn/användarnamn:</label>
+        <%= text_field_tag "name", filter[:name], :id => "kp-user-filter-name" %>
+      </li>
     </ul>
     <div class="button-container">
-      <input type="submit" value="Visa"/>
+      <input type="submit" name="search" value="Sök"/>
+      <input type="submit" name="clear" value="Rensa"/>
     </div>
   <% end %>
 </div>

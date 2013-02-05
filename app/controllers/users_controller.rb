@@ -21,9 +21,16 @@ class UsersController < ApplicationController
   # Applies a filter for the user listing
   def apply_filter
     filter = {}
-    filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
+
+    if !params[:clear]
+      filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
+      filter[:name] = params[:name].strip if !params[:name].blank?
+
+      session[:user_list_filter] = filter
+    end
 
     session[:user_list_filter] = filter
+
     redirect_to users_url()
   end
 

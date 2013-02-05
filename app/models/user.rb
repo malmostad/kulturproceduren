@@ -60,6 +60,13 @@ class User < ActiveRecord::Base
         conditions << filter[:district_id]
       end
 
+      if filter.has_key?(:name)
+        name_query = "%#{filter[:name]}%"
+        conditions[0] << " and (users.name ilike ? or users.username ilike ?) "
+        conditions << name_query
+        conditions << name_query
+      end
+
       return paginate(:conditions => conditions, :page => page, :order => order)
     end
   end
