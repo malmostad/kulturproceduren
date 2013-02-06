@@ -1,5 +1,4 @@
 common: &common
-    :asset_host: "http://www.malmo.se/assets-2.0"
     :masthead_url: "http://www.malmo.se/assets-2.0/remote/external-masthead/?node=medborgare"
     :salt_length: 10
     :request_key_length: 20

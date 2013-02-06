@@ -27,11 +27,3 @@ ActionMailer::Base.smtp_settings = {
   :domain => "localhost"
 }
 
-#ActionMailer::Base.delivery_method = :sendmail
-#ActionMailer::Base.perform_deliveries = true
-#ActionMailer::Base.sendmail_settings = {
-#  :location => "/usr/sbin/sendmail",
-#  :arguments => "-i -t -f noreply@malmo.se -F Kulturproceduren "
-#}
-
-#ActionController::Base.asset_host = "http://webapps.dev.malmo.se/assets-2.0/kp"

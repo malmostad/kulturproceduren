@@ -5,49 +5,6 @@
 
 module ActionView
   module Helpers
-    module AssetTagHelper
-      private
-
-      # *MONKEYPATCH*
-      #
-      # <tt>actionpack-2.3.16/lib/action_view/helpers/asset_tag_helper.rb:529</tt>
-      #
-      # Patch to ignore relative_url_root when using an asset host
-      def compute_public_path(source, dir, ext = nil, include_host = true)
-        has_request = @controller.respond_to?(:request)
-
-        source_ext = File.extname(source)[1..-1]
-        if ext && (source_ext.blank? || (ext != source_ext && File.exist?(File.join(ASSETS_DIR, dir, "#{source}.#{ext}"))))
-          source += ".#{ext}"
-        end
-
-        unless source =~ %r{^[-a-z]+://}
-          source = "/#{dir}/#{source}" unless source[0] == ?/
-
-          source = rewrite_asset_path(source)
-
-          # MONKEYPATCH: Added check on asset_host
-          if has_request && include_host && ActionController::Base.asset_host.blank?
-            unless source =~ %r{^#{ActionController::Base.relative_url_root}/}
-              source = "#{ActionController::Base.relative_url_root}#{source}"
-            end
-          end
-        end
-
-        if include_host && source !~ %r{^[-a-z]+://}
-          host = compute_asset_host(source)
-
-          if has_request && !host.blank? && host !~ %r{^[-a-z]+://}
-            host = "#{@controller.request.protocol}#{host}"
-          end
-
-          "#{host}#{source}"
-        else
-          source
-        end
-      end
-    end
-
     class InstanceTag
       private
       # *MONKEYPATCH*
