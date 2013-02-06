@@ -40,36 +40,94 @@
                               - Administration
                             </h1>
 
+                            <ul id="logout-nav">
+                              <li>
+                                <%= link_to(
+                                  "Lämna administrationen",
+                                  root_url()
+                                ) -%>
+                              </li>
+                              <li>
+                                <%= link_to(
+                                  "Logga ut från Kulturproceduren",
+                                  :controller => "login", :action => "logout"
+                                ) -%>
+                              </li>
+                            </ul>
+
                             <% if APP_CONFIG[:instance_message] %>
                               <div class="flash alert">
                                 <%= APP_CONFIG[:instance_message] %>
                               </div>
                             <% end %>
 
-                            <ul class="pri-nav">
-                              <li class="pri-nav-role-applications <%= active_by_controller "role_applications" %>">
-                                <%= link_to "Ansökningar", role_applications_path -%>
-                                </li><li class="pri-nav-statistics <%= active_by_controller "statistics" %>">
-                                <%= link_to "Statistik", statistics_path -%>
-                                </li><li class="pri-nav-questionnaires <%= active_by_controller "questionnaires", "questions" %>">
-                                <%= link_to "Enkäter", questionnaires_path -%>
-                                </li><li class="pri-nav-role-categories <%= active_by_controller "categories", "category_groups" %>">
-                                <%= link_to "Kategorier", categories_path -%>
-                                </li><li class="pri-nav-districts <%= active_by_controller "districts" %>">
-                                <%= link_to "Stadsdelar", districts_path -%>
-                                </li><li class="pri-nav-schools <%= active_by_controller "schools" %>">
-                                <%= link_to "Skolor", schools_path -%>
-                                </li><li class="pri-nav-groups <%= active_by_controller "groups", "age_groups" %>">
-                                <%= link_to "Grupper", groups_path -%>
-                                </li><li class="pri-nav-users <%= active_by_controller "users", "ldap" %>">
-                                <%= link_to "Användare", users_path -%>
-                                </li><li class="pri-nav-info <%= active_by_controller "information" %>">
-                                <%= link_to "Sändlistor", new_information_path -%>
-                                </li><li class="pri-nav-leave-logout">
-                                <%= link_to "Lämna administrationen", root_url() -%>
-                                <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
-                              </li>
-                            </ul>
+                            <div id="primary-nav" class="tab-sub-menu">
+                              <ul>
+                                <li>
+                                  <%= link_to(
+                                    "Ansökningar",
+                                    role_applications_path(),
+                                    :class => active_by_controller("role_applications")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Statistik",
+                                    statistics_path(),
+                                    :class => active_by_controller("statistics")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Enkäter",
+                                    questionnaires_path(),
+                                    :class => active_by_controller("questionnaires", "questions")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Kategorier",
+                                    categories_path(),
+                                    :class => active_by_controller("categories", "category_groups")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Stadsdelar",
+                                    districts_path(),
+                                    :class => active_by_controller("districts")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Skolor",
+                                    schools_path(),
+                                    :class => active_by_controller("schools")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Grupper",
+                                    groups_path(),
+                                    :class => active_by_controller("groups", "age_groups")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Användare",
+                                    users_path(),
+                                    :class => active_by_controller("users", "ldap")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Sändlistor",
+                                    new_information_path(),
+                                    :class => active_by_controller("information")
+                                  ) -%>
+                                </li>
+                              </ul>
+                            </div>
 
                             <%= yield :section_sub %>
 

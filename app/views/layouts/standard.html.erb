@@ -43,44 +43,73 @@
                               </div>
                             <% end %>
 
-                            <ul class="pri-nav">
-                              <li class="pri-nav-calendar <%= active_by_controller "calendar" %>">
-                                <%= link_to "Kalendarium", :controller => "calendar" -%>
-                              </li>
-                              <li class="pri-nav-culture-providers <%= active_by_controller "culture_providers" %>">
-                                <%= link_to "Arrangörer", culture_providers_path -%>
-                              </li>
+                            <div id="primary-nav" class="tab-sub-menu">
+                              <ul>
+                                <li>
+                                  <%= link_to(
+                                    "Kalendarium",
+                                    { :controller => "calendar" },
+                                    :class => active_by_controller("calendar")
+                                  ) -%>
+                                </li>
+                                <li>
+                                  <%= link_to(
+                                    "Arrangörer",
+                                    culture_providers_path,
+                                    :class => active_by_controller("culture_providers")
+                                  ) -%>
+                                </li>
 
-                              <% if user_online? -%>
-
-                                <% if current_user.has_role?(:admin, :booker, :coordinator) -%>
-                                  <li class="pri-nav-booking  <%= active_by_controller "bookings", "notification_requests" %>">
-                                    <%= link_to "Bokning", bookings_path() -%>
+                                <% if user_online? -%>
+                                  <% if current_user.has_role?(:admin, :booker, :coordinator) -%>
+                                    <li>
+                                      <%= link_to(
+                                        "Bokning",
+                                        bookings_path(),
+                                        :class => active_by_controller("bookings", "notification_requests")
+                                      ) -%>
+                                    </li>
+                                  <% end -%>
+                                  <% if current_user.has_role?(:coordinator) %>
+                                    <li class="pri-nav-users <%= %>">
+                                      <%= link_to(
+                                        "Användare",
+                                        users_path(),
+                                        :class => active_by_action("users", "index")
+                                      ) %>
+                                    </li>
+                                  <% end %>
+                                  <% if current_user.has_role?(:admin) -%>
+                                    <li>
+                                      <%= link_to("Administration", :controller => "role_applications") -%>
+                                    </li>
+                                  <% end -%>
+                                  <li>
+                                    <%= link_to(
+                                      "Konto",
+                                      current_user,
+                                      :class => active_by_controller("role_applications") +
+                                        active_by_action("users", "new", "create", "show", "edit", "update", "edit_password")
+                                    ) %>
+                                  </li>
+                                  <li class="logout">
+                                    <%= link_to(
+                                      "Logga ut från Kulturproceduren",
+                                      :controller => "login",
+                                      :action => "logout"
+                                    ) -%>
+                                  </li>
+                                <% else -%>
+                                  <li>
+                                    <%= login_link(
+                                      "Logga in på Kulturproceduren",
+                                      :class => active_by_controller("login")
+                                    ) %>
                                   </li>
                                 <% end -%>
 
-                                <% if current_user.has_role?(:coordinator) %>
-                                  <li class="pri-nav-users <%= active_by_action "users", "index" %>">
-                                    <%= link_to "Användare", users_path %>
-                                  </li>
-                                <% end %>
-
-                                <% if current_user.has_role?(:admin) -%>
-                                  <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
-                                <% end -%>
-
-                                <li class="pri-nav-user <%= active_by_controller "role_applications" %> <%= active_by_action "users", "new", "create", "show", "edit", "update", "edit_password" %>">
-                                  <%= link_to "Konto", current_user %>
-                                </li>
-                                <li class="pri-nav-logout">
-                                  <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
-                                </li>
-                              <% else -%>
-                                <li class="pri-nav-login <%= active_by_controller "login" %>">
-                                  <%= login_link "Logga in på Kulturproceduren" %>
-                                </li>
-                              <% end -%>
-                            </ul>
+                              </ul>
+                            </div>
 
                             <%= yield :section_sub %>
 

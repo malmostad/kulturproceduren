@@ -5,7 +5,11 @@ module ApplicationHelper
   #
   # Used in navigation menus to get an indicator of the currently active page.
   def active_by_controller(*names)
-    " active " if names.include?(params[:controller])
+    if names.include?(params[:controller])
+      " active " 
+    else
+      ""
+    end
   end
 
   # Returns the css class <tt>active</tt> if the current action is an action in the given
@@ -13,7 +17,11 @@ module ApplicationHelper
   #
   # Used in navigation menus to get an indicator of the currently active page.
   def active_by_action(controller, *names)
-    " active " if params[:controller] == controller && names.include?(params[:action])
+    if params[:controller] == controller && names.include?(params[:action])
+      " active "
+    else
+      ""
+    end
   end
 
   # Returns a disable HTML attribute if the argument is <tt>false</tt>.
@@ -112,11 +120,19 @@ module ApplicationHelper
 
   # Generates a login link that returns the user to the
   # current page, or to the specified URL.
-  def login_link(text, url = nil)
-    link_to text,
-      :controller => "login",
-      :action => "index",
-      :return_to => url || url_for(request.query_parameters.update(request.path_parameters))
+  def login_link(text, *args)
+    options = args.extract_options!
+    return_to = args.first
+
+    link_to(
+      text,
+      {
+        :controller => "login",
+        :action => "index",
+        :return_to => return_to || url_for(request.query_parameters.update(request.path_parameters))
+      },
+      options
+    )
   end
 
   # Wrapper around <tt>cache()</tt> do for conditional caching.

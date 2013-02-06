@@ -1,13 +1,23 @@
 <div class="calendar-list-cnt">
 
-  <ul class="calendar-list-tabs">
-    <li class="<%= 'active' if @calendar_list == :occasions %>">
-      <%= link_to "Evenemang", calendar_path(params[:action], :occasions) %>
-    </li>
-    <li class="<%= 'active' if @calendar_list == :events %>">
-      <%= link_to "Löpande evenemang", calendar_path(params[:action], :events) %>
-    </li>
-  </ul>
+  <div class="tab-sub-menu">
+    <ul>
+      <li>
+        <%= link_to(
+          "Evenemang",
+          calendar_path(params[:action], :occasions),
+          :class => @calendar_list == :occasions ? "active" : nil
+        ) %>
+      </li>
+      <li>
+        <%= link_to(
+          "Löpande evenemang",
+          calendar_path(params[:action], :events),
+          :class => @calendar_list == :events ? "active" : nil
+        ) %>
+      </li>
+    </ul>
+  </div>
 
   <% if @calendar_list == :events && @events -%>
     <%= render :partial => "events_list", :locals => { :events => @events, :category_groups => @category_groups } %>

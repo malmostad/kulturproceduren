@@ -1,4 +1,18 @@
-body.kp-standalone { background: #fff; }
+/*** Core overrides and enhancements ***/
+.tab-sub-menu {
+    overflow: hidden;
+}
+.ui-widget { font-size: 1em; }
+.ui-datepicker-trigger {
+    border: 0;
+    background: transparent url(../images/calendar.png) 100% 50% no-repeat;
+    text-indent: -1000px;
+    width: 20px;
+}
+
+/*** KP ***/
+
+#kp { position: relative; }
 
 #kp h1 { margin-bottom: 0.5em; }
 #kp h2 { margin-bottom: 0.75em; }
@@ -6,18 +20,8 @@ body.kp-standalone { background: #fff; }
 #kp h4 { margin-bottom: 1.25em; }
 #kp h5 { margin-bottom: 1.5em; }
 
-#kp li ul,
-#kp li ol { margin:0 1.5em; }
-#kp ul, ol { margin: 0 1.5em 1.5em 1.5em; }
-
-#kp ul { list-style-type: disc; }
-#kp ol { list-style-type: decimal; }
-
 #kp dl { margin: 0 0 1.5em 0; }
 #kp dd { margin-left: 1.5em;}
-
-#kp fieldset { border: 1px solid #c0c0c0; margin: 0 0 1em 0; padding: 1em 0.5em; }
-#kp legend { padding: 0 1em; font-size: 1em; }
 
 #kp table { width: 100%; }
 #kp table .selected td { background: #cfc; }
@@ -37,70 +41,6 @@ body.kp-standalone { background: #fff; }
 }
 
 
-/*** jQuery UI ***/
-#kp .ui-widget { font-size: 1em; }
-
-#kp .ui-tabs { margin-bottom: 1em; padding: 0; }
-
-#kp ul.ui-tabs-nav {
-    padding: 0 0 0 1em;
-    list-style: none;
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid #c0c0c0;
-    margin: 0;
-    -moz-border-radius: 0 !important;
-    -webkit-border-radius: 0 !important; 
-    zoom: 1;
-    font-size: 0.929em;
-    overflow: visible;
-}
-#kp ul.ui-tabs-nav:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-#kp ul.ui-tabs-nav li {
-    float: left;
-    background: #fff;
-    margin-right: .3em;
-    margin-bottom: -1px;
-    border: 0;
-    position: relative;
-    top: 1px;
-}
-#kp ul.ui-tabs-nav li a {
-    display: block;
-    background: #d9ebd2;
-    border: 1px solid #c0c0c0;
-    padding: .2em 1em;
-    cursor: pointer;
-    font-size: 1em;
-}
-#kp ul.ui-tabs-nav li.ui-state-hover a { background: #fff; }
-#kp ul.ui-tabs-nav li.ui-state-hover a:hover { text-decoration: none !important; }
-#kp ul.ui-tabs-nav li.ui-state-active a { border-bottom: 1px solid #fff; background: #fff; }
-
-#kp .ui-tabs-hide { display: none; }
-
-#kp .ui-widget-content {
-    background: transparent;
-    border: 0;
-    border-top: none;
-    overflow: hidden;
-    clear: both;
-}
-#kp .ui-tabs-panel { border: 1px solid #c0c0c0; border-top: 0; padding: 0.5em; }
-
-#kp .ui-datepicker-trigger {
-    border: 0;
-    background: transparent url(../images/calendar.png) 100% 50% no-repeat;
-    text-indent: -1000px;
-    width: 20px;
-}
-
 /*** Widgets ***/
 #kp fieldset.collapsible legend {
     font-weight: bold;
@@ -112,10 +52,7 @@ body.kp-standalone { background: #fff; }
 #kp fieldset.collapsed legend { background: url(../images/collapsed.png) 5px 50% no-repeat; }
 #kp fieldset.collapsed form { display: none; }
 
-#kp .pagination
-{
-	margin: .5em 0;
-}
+#kp .pagination { margin: .5em 0; }
 
 /*** Page ***/
 #kp .flash { margin: 1em 0; }
@@ -135,7 +72,7 @@ body.kp-standalone { background: #fff; }
     height: 16px;
     display: -moz-inline-stack;
     display: inline-block;
-    background: url(http://www.dev.malmo.se/assets/img/ajax-loader-16x16.gif) no-repeat;
+    background: url(http://www.malmo.se/assets-2.0/img/ajax-loader-16x16.gif) no-repeat;
 }
 
 #kp #kp-content { margin-top: 1em; }
@@ -143,38 +80,27 @@ body.kp-standalone { background: #fff; }
 #kp #kp-content #kp-sec-content { width: 15.286em; margin-left: 34em; }
 
 /*** Navigation ***/
-#kp .pri-nav {
+#kp #primary-nav {
     position: relative;
+    list-style-type: none;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #c0c0c0;
-    list-style-type: none;
 }
-#kp .pri-nav li {
-    display: -moz-inline-stack;
-    display: inline-block;
-    margin-right: 0.2em;
-    border: 1px solid #c0c0c0;
-    border-bottom: 0;
-    background: #d9ebd2;
-    font-size: 0.929em;
-}
-#kp .pri-nav a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
-#kp .pri-nav li.active, #kp .pri-nav li.active a { background: #fff; }
 
-#kp .pri-nav li.pri-nav-logout, #kp .pri-nav li.pri-nav-leave-logout {
+#kp #primary-nav .logout a {
     background: transparent;
     border: 0;
     font-weight: normal;
 }
-#kp .pri-nav li.pri-nav-leave-logout {
+#kp #logout-nav {
     position: absolute;
-    top: -3em;
+    top: -0.7em;
     right: 0;
     padding: 0;
     margin: 0;
+    list-style-type: none;
+    font-size: .928571428571429em!important;
 }
-#kp .pri-nav li.pri-nav-leave-logout a { margin-left: 7px; padding: 0; text-align: right; }
 
 /*** Section subcontent ***/
 
@@ -421,7 +347,7 @@ body.kp-standalone { background: #fff; }
     font-size: 0.929em;
 }
 #kp .admin-tools a:hover, #kp .admin-tools a:active,
-#kp a.admin-tool:hover, #kp a.admin-tool:active { background: #D9EBD2; }
+#kp a.admin-tool:hover, #kp a.admin-tool:active { background: #d9ebd2; }
 
 /*** Form filtering tools ***/
 #kp .filter-tools {
@@ -495,23 +421,6 @@ body.kp-standalone { background: #fff; }
 
 /*** Calendar ***/
 
-#kp .calendar-list-tabs {
-    list-style-type: none;
-    margin: 0 0 1em 0;
-    padding: 0;
-    border-bottom: 1px solid #c0c0c0;
-}
-#kp .calendar-list-tabs li {
-    display: inline-block;
-    margin-right: 0.2em;
-    border: 1px solid #c0c0c0;
-    border-bottom: 0;
-    background: #d9ebd2;
-    font-size: 0.929em;
-}
-#kp .calendar-list-tabs a { display: block; padding: 0.3em 0.6em 0.5em 0.6em; position: relative; top: 1px; }
-#kp .calendar-list-tabs li.active, #kp .calendar-list-tabs li.active a { background: #fff; }
-
 #kp .calendar-list .date-row th { border-top: 1px solid #dcd7cf; }
 #kp .calendar-list .icon-indicator { width: 1%; white-space: nowrap; }
 #kp .calendar-list .booking { white-space: nowrap; }
@@ -571,23 +480,6 @@ body.kp-standalone { background: #fff; }
 }
 
 #kp-ticket-availability-dialog { overflow: auto !important; }
-#kp .calendar-list .ticket-availability { position: relative; display: inline; }
-#kp .calendar-list .ticket-availability-close-link { display: none; }
-#kp .calendar-list .ticket-availability-container {
-    position: absolute;
-    top: 1.5em;
-    right: 0;
-    padding: 0.3em;
-    border: 1px solid #c0c0c0;
-    width: 25em;
-    background: #D9EBD2;
-    z-index: 999;
-}
-#kp .calendar-list .ticket-availability-container p { margin: 0 0 0.5em 0; }
-#kp .calendar-list .ticket-availability-container .ticket-availability-list {
-    margin: 0;
-    padding: 0 0 0 2em;
-}
 
 /*** Events ***/
 #kp #kp-ev-meta-info ul { margin: 0; padding: 0; list-style-type: none; }
