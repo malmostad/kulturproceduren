@@ -68,6 +68,7 @@ class QuestionnairesController < ApplicationController
 
   def create
     @questionnaire = Questionnaire.new(params[:questionnaire])
+    @questionnaire.target_cd = Questionnaire.targets.for_event
     @questionnaire.questions = Question.find(:all , :conditions => { :template => true })
     if @questionnaire.save
       flash[:notice] = 'Enkäten skapades.'
