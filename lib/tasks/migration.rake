@@ -39,6 +39,9 @@ namespace :kp do
         :conditions => "state > 0" # Only booked tickets
       ) do |ticket|
 
+        Booking.before_create.clear
+        Booking.after_save.clear
+
         booking = Booking.first(
           :conditions => {
             :group_id => ticket.group_id,
@@ -65,10 +68,12 @@ namespace :kp do
           b.booked_at = ticket.booked_when
 
           # Companion
-          if ticket.companion
-            b.companion_name = ticket.companion.name
-            b.companion_phone = ticket.companion.tel_nr
-            b.companion_email = ticket.companion.email
+          begin
+            companion = Companion.find(ticket.companion_id)
+            b.companion_name = companion.name
+            b.companion_phone = companion.tel_nr
+            b.companion_email = companion.email
+          rescue ActiveRecord::RecordNotFound
           end
 
           # Booking requirements
@@ -85,7 +90,7 @@ namespace :kp do
           booking.student_count += 1
         end
 
-        booking.save!
+        booking.save(false) || raise(ActiveRecord::RecordNotSaved)
 
         ticket.booking_id = booking.id
         ticket.save!
