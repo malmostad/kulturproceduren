@@ -141,6 +141,11 @@ class BookingsController < ApplicationController
         end
       end
 
+      if unbooking_notification_request =
+          NotificationRequest.unbooking_for(current_user, @occasion.event)
+        unbooking_notification_request.destroy
+      end
+
       flash[:notice] = "Platserna bokades."
       redirect_to booking_url(@booking)
     else
@@ -168,8 +173,16 @@ class BookingsController < ApplicationController
     @occasion = @booking.occasion
 
     if @booking.valid?
+      old_available_tickets = @booking.event.unbooked_tickets
+      was_fully_booked = @booking.event.fully_booked?
+
       Ticket.transaction do
         @booking.save!
+      end
+
+      if was_fully_booked && !@booking.event.fully_booked?(true) ||
+          !was_fully_booked && old_available_tickets <= APP_CONFIG[:unbooking_notification_request_seat_limit]
+        notify_requests_of_unbooking(@booking.event)
       end
 
       flash[:notice] = "Bokningen uppdaterades."
@@ -216,15 +229,10 @@ class BookingsController < ApplicationController
     end
 
     @booking.unbook!(current_user)
-    @answer_form.answer(@answer)
+    @answer_form.answer(@answer) if @answer_form
 
-    BookingMailer.deliver_booking_cancelled_email(
-      Role.find_by_symbol(:admin).users,
-      current_user(),
-      @booking.group,
-      @booking.occasion,
-      @answer_form
-    )
+    notify_admins_of_unbooking(@booking, @answer_form)
+    notify_requests_of_unbooking(@booking.event)
 
     flash[:notice] = "Platserna avbokades."
     redirect_to bookings_url()
@@ -301,6 +309,25 @@ class BookingsController < ApplicationController
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/not_administratable/reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/administratable/not_reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/administratable/reportable"
+    end
+  end
+
+
+  def notify_admins_of_unbooking(booking, answer_form)
+    BookingMailer.deliver_booking_cancelled_email(
+      Role.find_by_symbol(:admin).users,
+      current_user(),
+      booking.group,
+      booking.occasion,
+      answer_form
+    )
+  end
+
+  def notify_requests_of_unbooking(event)
+    if !event.fully_booked?(true) && event.unbooked_tickets(true) > APP_CONFIG[:unbooking_notification_request_seat_limit]
+      event.notification_requests.for_unbooking.each do |req|
+        NotificationRequestMailer.deliver_unbooking_notification(req)
+      end
     end
   end
 end

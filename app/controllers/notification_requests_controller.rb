@@ -6,19 +6,50 @@ class NotificationRequestsController < ApplicationController
   before_filter :require_booker
 
   def new
-    load_group_selection_collections()
     @notification_request = NotificationRequest.new
     @notification_request.event = @event
-    @notification_request.group_id = session[:group_selection][:group_id]
+
+    case @event.ticket_state
+    when Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT
+      load_group_selection_collections()
+      @notification_request.group_id = session[:group_selection][:group_id]
+    when Event::FREE_FOR_ALL
+      if NotificationRequest.unbooking_for(current_user, @event)
+        flash[:warning] = "Du är redan registrerad för restplatser på detta evenemang"
+        redirect_to(@event)
+      end
+    else
+      flash[:warning] = "Evenemanget är inte bokningsbart."
+      redirect_to(@event)
+    end
   end
 
   def create
-    @notification_request = NotificationRequest.new(params[:notification_request])
-    @notification_request.event = @event
-    @notification_request.user = current_user
+    if params[:cancel]
+      redirect_to(@event)
+      return
+    end
+
+    free_for_all = @event.ticket_state == Event::FREE_FOR_ALL
+    
+    @notification_request = NotificationRequest.new(params[:notification_request]) do |req|
+      req.event = @event
+      req.user = current_user
+
+      if free_for_all
+        req.target_cd = NotificationRequest.targets.for_unbooking
+      else
+        req.target_cd = NotificationRequest.targets.for_transition
+      end
+    end
 
     @notification_request.save!
-    flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din klass/avdelning."
+
+    if free_for_all
+      flash[:notice] = "Du är nu registrerad att få meddelanden om restplatser på detta evenemang blir tillgängliga."
+    else
+      flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din klass/avdelning."
+    end
     redirect_to @event
   end
 
@@ -33,8 +64,8 @@ class NotificationRequestsController < ApplicationController
       return
     end
 
-    if user.email.blank? or user.cellphone.blank?
-      flash[:warning] = "Du måste ange mobiltelefonnummer och epostadress för att kunna få information om kommande föreställningar"
+    if user.email.blank?
+      flash[:warning] = "Du måste ange epostadress för att kunna få information om biljettsläpp"
       redirect_to user
     end
   end

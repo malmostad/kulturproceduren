@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130204111729) do
+ActiveRecord::Schema.define(:version => 20130205063943) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -234,6 +234,7 @@ ActiveRecord::Schema.define(:version => 20130204111729) do
     t.boolean  "send_sms"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "target_cd"
   end
 
   create_table "occasions", :force => true do |t|

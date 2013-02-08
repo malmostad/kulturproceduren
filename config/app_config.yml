@@ -4,6 +4,7 @@ common: &common
     :request_key_length: 20
     :generated_password_length: 8
     :occasion_reminder_days: 2
+    :unbooking_notification_request_seat_limit: 5
     :evaluation_form:
         :activation_days: 2
         :reminder_days: 7

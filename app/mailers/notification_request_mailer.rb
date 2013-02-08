@@ -21,4 +21,16 @@ class NotificationRequestMailer < ActionMailer::Base
       :category_groups => CategoryGroup.all
     })
   end
+
+  def unbooking_notification(notification_request)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(notification_request.user.email)
+    end
+    from(APP_CONFIG[:mailers][:from_address])
+    subject("Kulturproceduren: Reservplatser till #{notification_request.event.name}")
+    sent_on(Time.zone.now)
+    body(:notification_request => notification_request)
+  end
 end

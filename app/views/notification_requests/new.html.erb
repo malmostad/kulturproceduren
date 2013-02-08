@@ -1,33 +1,50 @@
 <%= render :partial => "bookings/menu" %>
 
+<% free_for_all = @event.ticket_state == Event::FREE_FOR_ALL -%>
+
 <h2 class="form-title">
-  Meddelande vid platssläpp
+  <% if free_for_all %>
+    Meddelande vid avbokningar
+  <% else %>
+    Meddelande vid platssläpp
+  <% end %>
 </h2>
 
-<p>
-  Om den klass/avdelning du vill boka platser för inte har fått platser tilldelade till
-  <%= link_to @event.name, @event %>
-  tilldelade till sig så kan du här registrera dig så att du får ett
-  meddelande när platser blir tillgängliga.
-</p>
+<% if free_for_all %>
+  <p>
+    Om <%= link_to @event.name, @event %> är fullbokat så kan du registrera dig
+    här för att få ett meddelande om reservplatser släpps till evenemanget.
+  </p>
+  <p>
+    Det är först till kvarn på restplatser som släpps till evenemang.
+  </p>
+<% else %>
+  <p>
+    Om den klass/avdelning du vill boka platser för inte har fått platser tilldelade till
+    <%= link_to @event.name, @event %>
+    tilldelade till sig så kan du här registrera dig så att du får ett
+    meddelande när platser blir tillgängliga.
+  </p>
 
-<div class="notification-request-group-selection">
-  <%= render :partial => "shared/group_selection" %>
-</div>
+  <div class="notification-request-group-selection">
+    <%= render :partial => "shared/group_selection" %>
+  </div>
+<% end %>
 
-<% disabled = @notification_request.group_id.nil? %>
+<% disabled = !free_for_all && @notification_request.group_id.nil? %>
 
-<% form_for @notification_request, :url => event_notification_requests_path(@event), :builder => KPFormBuilder, :html => { :class => "notification-request-form" } do |form| %>
+<% form_for(
+  @notification_request,
+  :url => event_notification_requests_path(@event),
+  :builder => KPFormBuilder,
+  :html => { :class => "notification-request-form" }
+) do |form| %>
 
-  <% form.fields("Välj meddelandetyp") do %>
-    <%= form.hidden_field :group_id %>
+  <%= form.hidden_field :group_id %>
 
-    <%= form.check_box :send_mail, :disabled => disabled %>
-    <%# = form.check_box :send_sms, :disabled => disabled %>
-
-    <% form.buttons do %>
-      <%= form.submit "Registrera", :disabled => disabled %>
-    <% end %>
+  <% form.buttons do %>
+    <%= form.submit "Jag vill få ett e-postmeddelande när platser blir tillgängliga", :disabled => disabled %>
+    <%= form.submit "Avbryt", :name => "cancel" %>
   <% end %>
 
 <% end  %>

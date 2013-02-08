@@ -1,18 +1,26 @@
 <div class="ticket-availability-container">
-
-  <% if @occasion.event.ticket_state == Event::FREE_FOR_ALL %>
-    <p class="description">Detta evenemang är tillgängligt för alla skolor i hela Malmö.</p>
+  <% event = @occasion.event %>
+  <% if event.ticket_state == Event::FREE_FOR_ALL %>
+    <% if user_online? && current_user.can_book? && event.bookable? && event.fully_booked? -%>
+      <p class="description">
+        Evenemanget är fullbokat, men du kan
+        <%= link_to "klicka här", new_event_notification_request_path(event) %>
+        för att få ett meddelande om reservplatser blir tillgängliga.
+      </p>
+    <% else %>
+      <p class="description">Detta evenemang är tillgängligt för alla skolor i hela Malmö.</p>
+    <% end %>
   <% else %>
     <p class="description">
-      <%= @occasion.event.ticket_state == Event::ALLOTED_GROUP ? "Skolor" : "Stadsdelar" %>
+      <%= event.ticket_state == Event::ALLOTED_GROUP ? "Skolor" : "Stadsdelar" %>
       med tilldelade eller bokade platser till evenemanget.
     </p>
 
     <p class="description">
       Om inte din 
-      <%= @occasion.event.ticket_state == Event::ALLOTED_GROUP ? "skola" : "stadsdel" %>
+      <%= event.ticket_state == Event::ALLOTED_GROUP ? "skola" : "stadsdel" %>
       finns med i listan kan du 
-      <%= link_to "klicka här", new_event_notification_request_path(@occasion.event) %>
+      <%= link_to "klicka här", new_event_notification_request_path(event) %>
       för att få ett meddelande när platser blir tillgängliga för din klass/avdelning.
     </p>
 

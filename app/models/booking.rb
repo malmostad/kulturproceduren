@@ -1,6 +1,7 @@
 class Booking < ActiveRecord::Base
   belongs_to :group
   belongs_to :occasion
+  has_one :event, :through => :occasion
   belongs_to :user
   belongs_to :unbooked_by, :class_name => "User", :foreign_key => "unbooked_by_id"
 

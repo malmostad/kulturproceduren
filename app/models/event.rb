@@ -151,6 +151,14 @@ class Event < ActiveRecord::Base
     @total_unbooked_tickets
   end
 
+  def fully_booked?(reload=false)
+    !has_unbooked_tickets?(reload) || !has_available_seats?
+  end
+
+  def has_available_seats?
+    self.occasions.any? { |o| o.available_seats > 0 }
+  end
+
   # Returns an array of the ticket usage on this event. The first element is the
   # total number of tickets on the event, and the second is the number of tickets
   # that are booked.

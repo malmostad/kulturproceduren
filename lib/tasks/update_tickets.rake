@@ -20,7 +20,7 @@ namespace :kp do
           puts "Notifying district allotment for #{e.name}"
 
           districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
-          notification_requests = NotificationRequest.find_by_event_and_districts(e, districts)
+          notification_requests = NotificationRequest.for_transition.find_by_event_and_districts(e, districts)
 
           # Notify contacts on districts
           districts.each do |district|
@@ -47,7 +47,7 @@ namespace :kp do
 
         if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }
           puts "Notifying free for all for #{e.name}"
-          notification_requests = NotificationRequest.find_by_event(e)
+          notification_requests = NotificationRequest.for_transition.find_by_event(e)
 
           # Notify contacts on districts
           get_relevant_addresses(e, District.all).each do |address|

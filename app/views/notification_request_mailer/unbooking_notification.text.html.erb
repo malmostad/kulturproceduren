@@ -1,0 +1,31 @@
+<h1>Kulturproceduren - Reservplatser till <%= h @notification_request.event.name %></h1>
+
+<p>Hej!</p>
+
+<p>
+  Nu finns det reservplatser till <%= h @notification_request.event.name %>
+</p>
+
+<p>
+  Tänk på att detta erbjudande skickas till fler än dig. Först till kvarn.
+</p>
+
+<p>
+  <a href="<%= mail_url(event_path(@notification_request.event)) %>">
+    Boka eventuella platser här.
+  </a>
+</p>
+
+<p>
+  <%= h @notification_request.event.name %> är inköpt och fördelat av
+  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
+  På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du information
+  om all barn- och ungdomskultur i Malmö.
+</p>
+
+<p>
+  Vänliga hälsningar!
+  <br/>
+  Kultur för Barn och Unga
+</p>
+

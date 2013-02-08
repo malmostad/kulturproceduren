@@ -124,8 +124,18 @@
       </div>
     <% end %>
 
-    <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
-      <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+    <% if user_online? -%>
+      <% if current_user.can_administrate?(@event.culture_provider) -%>
+        <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+      <% end %>
+
+      <% if current_user.can_book? && @event.bookable? && @event.fully_booked? -%>
+        <div class="fully-booked-notification alert">
+          Evenemanget är fullbokat, men du kan
+          <%= link_to "klicka här", new_event_notification_request_path(@event) %>
+          för att få ett meddelande om reservplatser blir tillgängliga.
+        </div>
+      <% end %>
     <% end -%>
   </div>
 </div>
