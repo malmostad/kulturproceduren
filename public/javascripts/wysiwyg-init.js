@@ -1,8 +1,8 @@
 (function($) {
     $(function() {
         $("textarea.wysiwyg").tinymce({
-            script_url: "/javascripts/tiny_mce/tiny_mce.js",
-            content_css: "http://www.malmo.se/assets-2.0/css/external-core.css,/stylesheets/tinymce-content.css",
+            script_url: kpConfig.wysiwyg.script.url,
+            content_css: "http://www.malmo.se/assets-2.0/css/external-core.css," + kpConfig.wysiwyg.tinymce_style.url,
             language: "sv",
 
             theme: "advanced",
