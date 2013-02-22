@@ -1,4 +1,10 @@
-<% content_for :head do %>
-  <%= javascript_include_tag "tiny_mce/jquery.tinymce.js" %>
-  <%= javascript_include_tag "wysiwyg-init.js" %>
+<% if APP_CONFIG[:asset_host] %>
+  <%# Sitevision hack -%>
+  <%= javascript_include_tag "http://webapps.malmo.se/kp/javascripts/tiny_mce/jquery.tinymce.js" %>
+  <%= javascript_include_tag "http://webapps.malmo.se/kp/javascripts/wysiwyg-init.js" %>
+<% else %>
+  <% content_for :head do %>
+    <%= javascript_include_tag "tiny_mce/jquery.tinymce.js" %>
+    <%= javascript_include_tag "wysiwyg-init.js" %>
+  <% end %>
 <% end %>
