@@ -83,7 +83,7 @@ kpConfig = {
   wysiwyg: {
     <% if !Rails.env.development? && APP_CONFIG[:asset_host] %>
     script: { url: "http://webapps.malmo.se/kp/javascripts/tiny_mce/tiny_mce.js" },
-    tinymce_style: { url: "http://webapps.malmo.se/kp/stylesheets/tinymce-content.css"" }
+    tinymce_style: { url: "http://webapps.malmo.se/kp/stylesheets/tinymce-content.css" }
     <% else %>
     script: { url: "<%= javascript_path("tiny_mce/tiny_mce.js") %>" },
     tinymce_style: { url: "<%= stylesheet_path("tinymce-content.css") %>" }

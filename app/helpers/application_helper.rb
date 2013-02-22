@@ -134,6 +134,6 @@ module ApplicationHelper
 
   # Includes wysiwyg libraries and initialization files
   def wysiwyg_init
-    render :partial => "shared/wysiwyg_init" if ActionController::Base.asset_host.blank?
+    render :partial => "shared/wysiwyg_init"
   end
 end
