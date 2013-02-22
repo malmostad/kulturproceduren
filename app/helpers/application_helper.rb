@@ -49,6 +49,22 @@ module ApplicationHelper
     text.split($/).join("<br/>")
   end
 
+  # Common description rendering
+  def show_description(description)
+    if description.include?("<p")
+      content_tag(:div,
+        sanitize(
+          description,
+          :tags => %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
+          :attributes => %w(href target title style)
+        ),
+        :class => "description"
+      )
+    else
+      paragraphize(description, 'class="description"')
+    end
+  end
+
   # Creates a link for sorting a table based on a column.
   #
   # [<tt>title</tt>] The link's text

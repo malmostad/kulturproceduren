@@ -1,4 +1,5 @@
 <%= render :partial => "menu" %>
+<%= wysiwyg_init %>
 
 <% is_edit = !@culture_provider.id.nil? %>
 
@@ -10,7 +11,7 @@
 
   <% f.fields do -%>
     <%= f.text_field :name %>
-    <%= f.text_area :description %>
+    <%= f.text_area :description, :class => "wysiwyg" %>
     <%= f.text_field :contact_person %>
     <%= f.text_field :email %>
     <%= f.text_field :phone %>

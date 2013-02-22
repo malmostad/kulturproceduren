@@ -60,7 +60,7 @@
 
     <h2><%= h @culture_provider.name %></h2>
 
-    <%= paragraphize(@culture_provider.description, 'class="description"') %>
+    <%= show_description(@culture_provider.description) %>
 
     <% unless @culture_provider.linked_culture_providers.empty? && @culture_provider.linked_events.empty? %>
       <div class="linked-entities clearfix">
