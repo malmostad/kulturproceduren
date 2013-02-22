@@ -47,11 +47,11 @@ class ApplicationHelperTest < ActionView::TestCase
       linebreakize("abc\ndef\nghi")
   end
 
-  def link_to_unless(condition, title, options)
+  def link_to_unless(condition, title, url)
     @link_to_result = {
       :condition => condition,
       :title => title,
-      :options => options
+      :url => url
     }
   end
 
@@ -63,13 +63,13 @@ class ApplicationHelperTest < ActionView::TestCase
     }
     sort_link("link title", "testcolumn")
     assert_equal "link title", @link_to_result[:title]
-    assert_equal "testcolumn", @link_to_result[:options][:overwrite_params][:c]
-    assert_equal "down", @link_to_result[:options][:overwrite_params][:d]
+    assert_equal "testcolumn", @link_to_result[:url][:c]
+    assert_equal "down", @link_to_result[:url][:d]
 
     sort_link("link title", "testcolumn2")
     assert_equal "link title", @link_to_result[:title]
-    assert_equal "testcolumn2", @link_to_result[:options][:overwrite_params][:c]
-    assert_equal "up", @link_to_result[:options][:overwrite_params][:d]
+    assert_equal "testcolumn2", @link_to_result[:url][:c]
+    assert_equal "up", @link_to_result[:url][:d]
   end
 
   test "uploaded image tag" do

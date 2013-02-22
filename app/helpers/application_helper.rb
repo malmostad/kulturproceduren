@@ -61,7 +61,7 @@ module ApplicationHelper
     condition = options[:unless] if options.has_key?(:unless)
     sort_dir = params[:d] == 'up' && params[:c] == column ? 'down' : 'up'
     link_to_unless condition, title,
-      :overwrite_params => { :c => column, :d => sort_dir }
+      params.merge(:c => column, :d => sort_dir)
   end
 
   # Generates an image tag for uploaded images
