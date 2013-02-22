@@ -11,7 +11,7 @@ module UtilityModels
     validates_presence_of :recipients,
       :message => "En mottagare måste anges"
     validates_true_for :recipients,
-      :logic => lambda { [ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients) },
+      :logic => lambda { !recipients.blank? && ([ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients)) },
       :message => "Ogiltig mottagare"
     validates_presence_of :subject,
       :message => "Ämnesraden får inte vara tom"
@@ -24,16 +24,12 @@ module UtilityModels
       if @recipients =~ /^\d+$/
         @recipients = @recipients.to_i
         @event = Event.find(@recipients)
-      else
+      elsif !@recipients.blank?
         @recipients = @recipients.try(:to_sym)
       end
 
       @subject = params[:subject]
       @body = params[:body]
-    end
-
-    def recipients
-      @recipients
     end
 
     def recipient_addresses
