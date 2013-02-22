@@ -8,7 +8,14 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
 
+  #prepend_before_filter :maintenance_redirect
+
   protected
+
+  #def maintenance_redirect
+  #  url_root = ActionController::Base.relative_url_root || ""
+  #  redirect_to(url_root + "/maintenance.html", :status => :found)
+  #end
 
   # Loads the appropriate data for the group selection fragment
   #
