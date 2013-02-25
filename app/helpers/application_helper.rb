@@ -51,6 +51,7 @@ module ApplicationHelper
 
   # Common description rendering
   def show_description(description)
+    return "" if description.blank?
     if description.include?("<p")
       content_tag(:div,
         sanitize(
