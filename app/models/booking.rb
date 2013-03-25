@@ -39,8 +39,7 @@ class Booking < ActiveRecord::Base
 
   def synchronize_tickets
     if !self.unbooked
-      bookable_tickets = self.tickets.all(:conditions => { :state => [ Ticket::BOOKED ]}) +
-        self.group.bookable_tickets(self.occasion, true)
+      bookable_tickets = self.tickets + self.group.bookable_tickets(self.occasion, true)
 
       unless bookable_tickets.blank?
         book_tickets(bookable_tickets, :normal, self.student_count)
@@ -48,8 +47,8 @@ class Booking < ActiveRecord::Base
         book_tickets(bookable_tickets, :wheelchair, self.wheelchair_count)
 
         if self.occasion.single_group
-          available_tickets = self.group.available_tickets_by_occasion(self.occasion).to_i 
-          book_tickets(bookable_tickets, :normal, available_tickets, Ticket::DEACTIVATED)
+          num_deactivate = self.occasion.seats.to_i + self.occasion.wheelchair_seats.to_i - self.total_count
+          book_tickets(bookable_tickets, :normal, num_deactivate, Ticket::DEACTIVATED)
         else
           bookable_tickets.each { |ticket| ticket.unbook! }
         end
@@ -127,7 +126,12 @@ class Booking < ActiveRecord::Base
       total_new_wheelchair -= self.wheelchair_count_was.to_i
     end
 
-    available_tickets = self.group.available_tickets_by_occasion(self.occasion).to_i 
+    available_tickets = self.group.available_tickets_by_occasion(self.occasion).to_i
+
+    if self.occasion.single_group
+      available_tickets += self.tickets.count(:conditions => { :state => Ticket::DEACTIVATED })
+    end
+
     available_wheelchair_tickets = self.occasion.available_wheelchair_seats
 
     errors.add(:student_count, "Du måste boka minst 1 plats") if self.total_count <= 0
@@ -137,7 +141,9 @@ class Booking < ActiveRecord::Base
 
   def book_tickets(tickets, type, amount, state = Ticket::BOOKED)
     1.upto(amount) do |i|
-      ticket = tickets.pop
+      return if tickets.blank?
+
+      ticket = tickets.shift
 
       ticket.state = state
       ticket.group = self.group
