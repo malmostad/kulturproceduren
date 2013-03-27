@@ -31,7 +31,7 @@ class StatisticsController < ApplicationController
 
       # Output an xls file
       send_csv(
-        "besokstatistik_#{@term}.csv",
+        "besokstatistik_#{@term}.tsv",
         visitor_stats_csv(@visitor_stats)
       ) if params[:format] == "xls"
     else
@@ -48,7 +48,7 @@ class StatisticsController < ApplicationController
 
       if !@event.questionnaire.nil? && @event.questionnaire.answer_forms.count > 0 
         send_csv(
-          "enkatstatistik_#{@term}.csv",
+          "enkatstatistik_#{@term}.tsv",
           questionnaire_stats_csv(
             "Enkätsvar för #{@event.name}",
             @event.questionnaire
@@ -72,7 +72,7 @@ class StatisticsController < ApplicationController
       :conditions => { :created_at => from..to }
     )
     send_csv(
-      "avbokningsstatistik_#{@term}.csv",
+      "avbokningsstatistik_#{@term}.tsv",
       questionnaire_stats_csv(
         "Avbokningsenkätsvar",
         @questionnaire
