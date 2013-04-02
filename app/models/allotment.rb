@@ -41,7 +41,9 @@ class Allotment < ActiveRecord::Base
         :event => self.event,
         :district => self.district,
         :group => self.group,
-        :state => Ticket::UNBOOKED
+        :state => Ticket::UNBOOKED,
+        :wheelchair => false,
+        :adult => false
       )
     end
   end
