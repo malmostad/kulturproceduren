@@ -12,16 +12,10 @@ namespace :kp do
 
       desc "Import districts from Extens"
       task(:districts => :environment) do
-        first = true
         puts "\n"
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 2)
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
-
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           guid, name = row
 
           puts "Processing #{name}\t#{guid}"
@@ -56,19 +50,14 @@ namespace :kp do
 
       desc "Import schools"
       task(:schools => :environment) do
-        return unless ENV["school_prefix"]
-        first = true
+        raise "Missing school_prefix" unless ENV["school_prefix"]
         puts "\n"
+
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 3)
 
         districts = District.all
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
-
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           guid, district_guid, name = row
           guid = "#{ENV["school_prefix"]}-#{guid}"
 
@@ -112,18 +101,13 @@ namespace :kp do
 
       desc "Import groups"
       task(:groups => :environment) do
-        return unless ENV["school_prefix"]
-        return unless ENV["group_prefix"]
-        first = true
+        raise "Missing school_prefix" unless ENV["school_prefix"]
+        raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 6)
 
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           guid, school_guid, school_name, name = row
           guid = "#{ENV["group_prefix"]}-#{guid}"
           school_guid = "#{ENV["school_prefix"]}-#{school_guid}"
@@ -161,22 +145,17 @@ namespace :kp do
 
       desc "Import age groups"
       task(:age_groups => :environment) do
-        return unless ENV["group_prefix"]
-        first = true
+        raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
+
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 6)
 
         # Calculate the age based on the current school year
         base_year = (Date.today - 6.months).year
 
         cleared_age_groups = []
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
-
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           school_guid, group_guid, group_name, school_name, amount, birth_year = row
           group_guid = "#{ENV["group_prefix"]}-#{group_guid}"
 
@@ -209,23 +188,18 @@ namespace :kp do
 
       desc "Import preschool data - both groups and amounts"
       task(:preschool => :environment) do
-        return unless ENV["school_prefix"]
-        return unless ENV["group_prefix"]
-        first = true
+        raise "Missing school_prefix" unless ENV["school_prefix"]
+        raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
+
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 6)
 
         # Calculate the age based on the current school year
         base_year = (Date.today - 6.months).year
 
         cleared_age_groups = []
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
-
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           school_guid, group_guid, group_name, school_name, amount, birth_year = row
           group_guid = "#{ENV["group_prefix"]}-#{group_guid}"
           school_guid = "#{ENV["school_prefix"]}-#{school_guid}"
@@ -271,17 +245,12 @@ namespace :kp do
 
       desc "Import school contacts"
       task(:school_contacts => :environment) do
-        return unless ENV["school_prefix"]
-        first = true
+        raise "Missing school_prefix" unless ENV["school_prefix"]
         puts "\n"
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 3)
 
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           school_guid, school_name, emails = row
           school_guid = "#{ENV["school_prefix"]}-#{school_guid}"
 
@@ -300,17 +269,12 @@ namespace :kp do
 
       desc "Import school class contacts"
       task(:school_class_contacts => :environment) do
-        return unless ENV["group_prefix"]
-        first = true
+        raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
 
-        CSV.open(ENV["from"], "r", ?;) do |row|
-          # Skip first row (headers)
-          if first
-            first = false
-            next
-          end
+        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 4)
 
+        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           group_guid, school_guid, group_name, emails = row
           group_guid = "#{ENV["group_prefix"]}-#{group_guid}"
 
@@ -330,6 +294,19 @@ namespace :kp do
 
 
       private
+
+      def verify_extens_csv_file(file, csv_sep, num_elements)
+        errors = {}
+        rownum = 1
+        CSV.open(file, "r", csv_sep[0]) do |row|
+          errors[rownum] = row.join(csv_sep) if row.length != num_elements
+          rownum += 1
+        end
+
+        if !errors.blank?
+          raise "Errors in CSV file:\n#{errors.to_yaml}"
+        end
+      end
 
       def merge_extens_contacts(local, remote)
         local = local.split(",").collect { |c| c.try(:strip) }.compact
