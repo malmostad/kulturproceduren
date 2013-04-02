@@ -18,13 +18,13 @@ class AnswerForm < ActiveRecord::Base
   # Validates the answer
   def valid_answer?(answer)
     question_ids = []
-    answer.keys.each { |k| question_ids << k unless answer[k.to_s].blank? }
+    answer.keys.each { |k| question_ids << k unless answer[k].blank? }
 
     unless question_ids.blank?
-      @missing_answers = self.questionnaire.questions.select { |q| q.mandatory }.collect(&:id) -
+      missing_answers = self.questionnaire.questions.select { |q| q.mandatory }.collect(&:id) -
         question_ids.map { |k| k.to_i }.sort
 
-      return @missing_answers.blank?
+      return missing_answers.blank?
     end
 
     return false

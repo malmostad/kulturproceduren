@@ -1,36 +1,75 @@
 require 'test_helper'
 
 class SchoolTest < ActiveSupport::TestCase
+  test "validations" do
+    school = build(:school, :name => "")
+    assert !school.valid?
+    assert_not_nil school.errors.on(:name)
+    school = build(:school, :district => nil)
+    assert !school.valid?
+    assert_not_nil school.errors.on(:district)
+  end
 
   test "groups by age span" do
-    s = School.find schools(:centrumskolan1)
+    school = create(:school)
+    create(:school_with_age_groups) # dummy
 
-    gs = s.groups.find_by_age_span(9, 10)
+    7.upto(12).collect { |i| create(:group_with_age_groups, :school => school, :age_group_data => [[i, 1]]) }
 
-    assert !gs.empty?
+    groups = school.groups.find_by_age_span(8, 11)
+    assert !groups.blank?
+    groups.each { |g| assert g.age_groups.exists?(:age => (8..11))}
 
-    gs.each do |g|
-      assert_equal s.id, g.school_id
-      assert(groups(:centrumskolan1_klass35).id == g.id || groups(:centrumskolan1_klass3spec).id == g.id)
-    end
+    create(:group_with_age_groups, :school => school, :age_group_data => [[1, 1]], :active => false)
+    assert school.groups.find_by_age_span(1, 2).blank?
   end
 
   test "available tickets by occasion" do
-    assert_equal 1, schools(:ostskolan1).available_tickets_by_occasion(occasions(:roda_cirkusen_group_past))
-    assert_equal 0, schools(:sydskolan1).available_tickets_by_occasion(occasions(:roda_cirkusen_group_past))
-    assert_equal 2, schools(:ostskolan1).available_tickets_by_occasion(occasions(:roda_cirkusen_district_past))
-    assert_equal 2, schools(:ostskolan2).available_tickets_by_occasion(occasions(:roda_cirkusen_district_past))
-    assert_equal 0, schools(:sydskolan1).available_tickets_by_occasion(occasions(:roda_cirkusen_district_past))
-    assert_equal 2, schools(:ostskolan1).available_tickets_by_occasion(occasions(:roda_cirkusen_ffa_past))
-    assert_equal 2, schools(:ostskolan2).available_tickets_by_occasion(occasions(:roda_cirkusen_ffa_past))
-    assert_equal 2, schools(:sydskolan1).available_tickets_by_occasion(occasions(:roda_cirkusen_ffa_past))
+    occasion = create(:occasion)
+    school   = create(:school)
+    groups   = create_list(:group, 5, :school => school)
+
+    groups.each do |g|
+      create_list(:ticket, 3, :occasion => occasion, :event => occasion.event, :group => g, :district => school.district, :state => Ticket::UNBOOKED)
+      create(:ticket,         :occasion => occasion, :event => occasion.event, :group => g, :district => school.district, :state => Ticket::BOOKED)
+    end
+
+    create_list(:ticket, 5, :occasion => occasion, :event => occasion.event, :district => school.district, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 5, :occasion => occasion, :event => occasion.event,                               :state => Ticket::UNBOOKED)
+
+    create(:ticket, :occasion => occasion, :event => occasion.event,                               :state => Ticket::BOOKED)
+    create(:ticket, :occasion => occasion, :event => occasion.event, :district => school.district, :state => Ticket::BOOKED)
+
+    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    assert_equal 15, school.available_tickets_by_occasion(occasion)
+    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    assert_equal 20, school.available_tickets_by_occasion(occasion)
+    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    assert_equal 25, school.available_tickets_by_occasion(occasion)
   end
 
   test "find with tickets to events" do
-    schools = School.find_with_tickets_to_event(events(:roda_cirkusen_group))
-    assert_equal 2, schools.length
-    assert schools[0].id == schools(:ostskolan1).id || schools[0].id == schools(:ostskolan2).id
-    assert schools[1].id == schools(:ostskolan1).id || schools[1].id == schools(:ostskolan2).id
+    events = create_list(:event, 2)
+
+    with = create_list(:school, 5)
+
+    with.each do |s|
+      create_list(:group, 5, :school => s).each do |g|
+        create_list(:ticket, 5, :group => g, :event => events.first)
+      end
+    end
+
+    create_list(:school, 4).each do |s|
+      create_list(:group, 4, :school => s).each do |g|
+        create_list(:ticket, 4, :group => g, :event => events.second)
+      end
+    end
+
+    with_ids = with.collect(&:id)
+
+    School.find_with_tickets_to_event(events.first).each do |s|
+      assert with_ids.include?(s.id)
+    end
   end
-  
+
 end

@@ -1,25 +1,62 @@
 require 'test_helper'
 
 class DistrictTest < ActiveSupport::TestCase
+  test "validations" do
+    district = build(:district, :name => "")
+    assert !district.valid?
+    assert_not_nil district.errors.on(:name)
+  end
 
   test "schools by age span" do
-    d = District.find districts(:centrum)
+    district = create(:district)
+    create(:district_with_age_groups) # dummy
 
-    ss = d.schools.find_by_age_span(10, 11)
+    forskola = create(:school, :district => district)
+    create(:group_with_age_groups, :school => forskola, :age_group_data => [[3, 1], [4, 1]])
+    create(:group_with_age_groups, :school => forskola, :age_group_data => [[5, 1], [6, 1]])
+    create(:group_with_age_groups, :school => forskola, :age_group_data => [[1, 1]], :active => false)
 
-    assert !ss.empty?
+    lagstadie = create(:school, :district => district)
+    create(:group_with_age_groups, :school => lagstadie, :age_group_data => [[7, 1]])
+    create(:group_with_age_groups, :school => lagstadie, :age_group_data => [[8, 1]])
+    create(:group_with_age_groups, :school => lagstadie, :age_group_data => [[9, 1]])
+    create(:group_with_age_groups, :school => lagstadie, :age_group_data => [[1, 1]], :active => false)
 
-    ss.each do |s|
-      assert_equal d.id, s.district_id
-      assert schools(:centrumskolan1).id, s.id
-    end
+    mellanstadie = create(:school, :district => district)
+    create(:group_with_age_groups, :school => mellanstadie, :age_group_data => [[10, 1]])
+    create(:group_with_age_groups, :school => mellanstadie, :age_group_data => [[11, 1]])
+    create(:group_with_age_groups, :school => mellanstadie, :age_group_data => [[12, 1]])
+    create(:group_with_age_groups, :school => mellanstadie, :age_group_data => [[1, 1]], :active => false)
+
+    schools = district.schools.find_by_age_span(8, 11)
+    assert !schools.blank?
+    schools.each { |s| assert s.age_groups.exists?(:age => (8..11)) }
+
+    schools = district.schools.find_by_age_span(6, 7)
+    assert !schools.blank?
+    schools.each { |s| assert s.age_groups.exists?(:age => (6..7)) }
+
+    # active
+    assert district.schools.find_by_age_span(1, 2).blank?
   end
 
   test "available tickets by occasion" do
-    assert_equal 2, districts(:ost).available_tickets_by_occasion(occasions(:roda_cirkusen_group_past))
-    assert_equal 0, districts(:syd).available_tickets_by_occasion(occasions(:roda_cirkusen_group_past))
-    assert_equal 2, districts(:ost).available_tickets_by_occasion(occasions(:roda_cirkusen_ffa_past))
-    assert_equal 2, districts(:syd).available_tickets_by_occasion(occasions(:roda_cirkusen_ffa_past))
+    occasion = create(:occasion)
+    district = create(:district)
+    create_list(:ticket, 5, :event => occasion.event, :district => district, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 5, :event => occasion.event, :district => district, :state => Ticket::BOOKED)
+    create_list(:ticket, 5, :event => occasion.event, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 5, :event => occasion.event, :state => Ticket::BOOKED)
+
+    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.save!
+    assert_equal 5, district.available_tickets_by_occasion(occasion)
+    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.save!
+    assert_equal 5, district.available_tickets_by_occasion(occasion)
+    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.save!
+    assert_equal 10, district.available_tickets_by_occasion(occasion)
   end
 
 end

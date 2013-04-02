@@ -48,7 +48,6 @@ class Question < ActiveRecord::Base
 
     answer_forms.each do |answer_form| 
       answer_form.answers.each do |answer| 
-        #puts "#{a.id} , #{a.answer_text}" if a.question_id == 1 
         if answer.question.id == self.id
           no_answers = no_answers + 1
           case self.qtype

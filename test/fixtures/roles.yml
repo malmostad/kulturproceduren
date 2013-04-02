@@ -1,13 +1,16 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 admin:
-    name: admin
+  name: admin
 
 booker:
-    name: booker
+  name: booker
 
 culture_worker:
-    name: culture_worker
+  name: culture_worker
 
 host:
-    name: host
+  name: host
+
+coordinator:
+  name: coordinator

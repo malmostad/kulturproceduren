@@ -90,9 +90,9 @@ class User < ActiveRecord::Base
 
   def get_username
     if APP_CONFIG[:ldap]
-      return self.username.sub( APP_CONFIG[:ldap][:username_prefix] , "")
+      return self.username.sub(APP_CONFIG[:ldap][:username_prefix] , "")
     elsif APP_CONFIG[:httpauth]
-      return self.username.sub( APP_CONFIG[:httpauth][:username_prefix] , "" ) 
+      return self.username.sub(APP_CONFIG[:httpauth][:username_prefix] , "")
     else
       return self.username
     end
@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
   # This method generates a new salt if there are no salt, and encrypts
   # the password.
   def password=(pass)
-    if pass.length > 0
+    if pass && pass.length > 0
       self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
       write_attribute :password, User.encrypt(pass, self.salt)
     end
@@ -161,15 +161,17 @@ class User < ActiveRecord::Base
 
   # Accessor for the password confirmation used in the UI.
   def password_confirmation=(pass)
-    self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
-    @password_confirmation = User.encrypt(pass, self.salt)
+    if pass && pass.length > 0
+      self.salt = User.random_string(APP_CONFIG[:salt_length]) unless self.salt
+      @password_confirmation = User.encrypt(pass, self.salt)
+    end
   end
 
   # Sets all password related data to nil.
   def reset_password
     self.salt = nil
     write_attribute :password, nil
-    write_attribute :password_confirmation, nil
+    @password_confirmation = nil
   end
 
 
@@ -214,7 +216,7 @@ class User < ActiveRecord::Base
     else
       prefix = ""
     end
-    if User.find_by_username( "#{prefix}#{username}" ) or User.find_by_username(username.sub( prefix , "") )
+    if User.find_by_username("#{prefix}#{username}") || User.find_by_username(username.sub(prefix , ""))
       self.errors.add(:username, :taken , :message => "Användarnamnet är redan taget" )
     end
   end

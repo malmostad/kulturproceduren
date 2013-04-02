@@ -17,6 +17,11 @@ gem "ruby-ldap", "0.9.12", :require => "ldap"
 gem "jnunemaker-validatable", "~> 1.8.4", :require => "validatable"
 gem "simple_enum", "1.3.2"
 
-group :development do
+group :development, :test do
   gem "ruby-debug", "0.10.4"
+end
+
+group :test do
+  gem "factory_girl", "~> 2.6.4"
+  gem "mocha", "~> 0.12.10", :require => false
 end

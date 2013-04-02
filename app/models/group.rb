@@ -23,7 +23,7 @@ class Group < ActiveRecord::Base
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
-  validates_associated :school,
+  validates_presence_of :school,
     :message => "Gruppen måste tillhöra en skola"
 
   before_create :set_default_priority
@@ -50,7 +50,7 @@ class Group < ActiveRecord::Base
   end
 
   # Returns the number of tickets with the given state available to this group on the given location.
-  def available_tickets_by_occasion(occasion, state = Ticket::UNBOOKED, wheelchair = false)
+  def available_tickets_by_occasion(occasion)
    
     occasion = Occasion.find(occasion) if occasion.is_a?(Integer)
 
@@ -58,40 +58,33 @@ class Group < ActiveRecord::Base
 
     case occasion.event.ticket_state
     when Event::ALLOTED_GROUP then
-      states = [state]
+      states = [Ticket::UNBOOKED]
+      states << Ticket::DEACTIVATED if existing_booking
 
-      if state == Ticket::UNBOOKED && existing_booking
-        states << Ticket::DEACTIVATED
-      end
-
-      n = Ticket.count :all , :conditions => {
+      tickets = Ticket.count :all , :conditions => {
         :event_id => occasion.event.id,
         :group_id => self.id,
         :state => states,
-        :wheelchair => wheelchair
+        :wheelchair => false
       }
 
     when Event::ALLOTED_DISTRICT then
-      n = Ticket.count :all , :conditions => {
+      tickets = Ticket.count :all, :conditions => {
         :event_id => occasion.event.id,
         :district_id => self.school.district.id,
-        :state => state ,
-        :wheelchair => wheelchair
+        :state => Ticket::UNBOOKED,
+        :wheelchair => false
       }
     when Event::FREE_FOR_ALL then
-      n = Ticket.count :all , :conditions => {
+      tickets = Ticket.count :all, :conditions => {
         :event_id => occasion.event.id,
-        :state => state ,
-        :wheelchair => wheelchair
+        :state => Ticket::UNBOOKED,
+        :wheelchair => false
       }  
     end
 
-    if state == Ticket::UNBOOKED
-      m = occasion.available_seats(existing_booking)
-      return ( m > n ? n : m )
-    else
-      return n
-    end
+    available_seats = occasion.available_seats(existing_booking)
+    return ( available_seats > tickets ? tickets : available_seats )
   end
 
   # Returns the bookable tickets this group has on the given occasion

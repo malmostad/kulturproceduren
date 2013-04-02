@@ -1,83 +1,425 @@
 require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
-
-  test "main image" do
-    ev = Event.find events(:pyjamassanger).id
-    assert_equal ev.main_image.id, images(:pyjamassanger_logo).id
+  test "validations" do
+    event = build(:event, :name => "")
+    assert !event.valid?
+    assert_not_nil event.errors.on(:name)
+    event = build(:event, :description => "")
+    assert !event.valid?
+    assert_not_nil event.errors.on(:description)
+    event = build(:event, :from_age => "a")
+    assert !event.valid?
+    assert_not_nil event.errors.on(:from_age)
+    event = build(:event, :to_age => "a")
+    assert !event.valid?
+    assert_not_nil event.errors.on(:to_age)
+    event = build(:event, :visible_from => "")
+    assert !event.valid?
+    assert_not_nil event.errors.on(:visible_from)
+    event = build(:event, :visible_to => "")
+    assert !event.valid?
+    assert_not_nil event.errors.on(:visible_to)
   end
 
-  test "images excluding main" do
-    ev = Event.find events(:pyjamassanger).id
-    imgs = ev.images_excluding_main
+  test "standing" do
+    create_list(:event, 5)
+    create_list(:event_with_occasions, 5)
 
-    assert !imgs.empty?
+    events = Event.standing.all
+    assert_equal 5, events.length
+    events.each { |e| assert e.occasions.blank? }
+  end
+  test "non standing" do
+    create_list(:event, 5)
+    create_list(:event_with_occasions, 5)
 
-    imgs.each do |img|
-      assert_equal img.event_id, ev.id
-      assert_equal img.id, images(:pyjamassanger_img1).id
+    events = Event.non_standing.all
+    assert_equal 5, events.length
+    events.each { |e| assert !e.occasions.blank? }
+  end
+
+  test "without tickets" do
+    with = create(:event)
+    without = create(:event)
+    create(:ticket, :event => with)
+
+    events = Event.without_tickets.all
+    assert_equal 1, events.length
+    assert_equal without.id, events.first.id
+  end
+  test "without questionnaires" do
+    with = create(:event)
+    without = create(:event)
+    create(:questionnaire, :event => with)
+
+    events = Event.without_questionnaires.all
+    assert_equal 1, events.length
+    assert_equal without.id, events.first.id
+  end
+
+  test "linked events" do
+    event1 = create(:event)
+    event2 = create(:event)
+    event3 = create(:event, :linked_events => [event1])
+
+    events = Event.not_linked_to_event(event3).all
+    assert_equal 1, events.length
+    assert_equal event2.id, events.first.id
+  end
+  test "linked culture providers" do
+    culture_provider = create(:culture_provider)
+    event1 = create(:event)
+    create(:event, :linked_culture_providers => [culture_provider])
+
+    events = Event.not_linked_to_culture_provider(culture_provider).all
+    assert_equal 1, events.length
+    assert_equal event1.id, events.first.id
+  end
+
+  test "booked users" do
+    event = create(:event)
+    users = create_list(:user, 2)
+    create_list(:ticket, 3, :event => event, :user => users.first,  :state => Ticket::BOOKED)
+    create_list(:ticket, 3, :event => event, :user => users.first,  :state => Ticket::UNBOOKED)
+    create_list(:ticket, 3, :event => event, :user => users.second, :state => Ticket::UNBOOKED)
+
+    booked_users = event.booked_users
+    assert_equal 1, booked_users.length
+    assert users.first.id, booked_users.first.id
+  end
+
+  test "groups by district" do
+    event = create(:event)
+    districts = create_list(:district, 2)
+
+    districts.each do |d|
+      create_list(:school, 2, :district => d).each do |s|
+        create_list(:group, 2, :school => s).each do |g|
+          create_list(:ticket, 2, :district => d, :group => g, :event => event)
+        end
+      end
+    end
+
+    event.groups.find_by_district(districts.first).each do |g|
+      assert_equal districts.first.id, g.school.district.id
     end
   end
 
+  test "reportable occasions" do
+    event = create(:event)
+    create_list(:occasion, 5, :event => event, :date => Date.today)
+    create_list(:occasion, 6, :event => event, :date => Date.today - 1)
+    assert_equal 6, event.reportable_occasions.length
+    event.reportable_occasions.each { |o| assert o.date < Date.today }
+  end
+
+  test "main image" do
+    event = create(:event)
+    images = create_list(:image, 10, :event => event)
+    event.main_image_id = images.first.id
+
+    assert_equal images.first.id, event.main_image.id
+  end
+  test "images excluding main" do
+    event = create(:event)
+    images = create_list(:image, 10, :event => event)
+    event.main_image_id = images.first.id
+
+    images_excluding_main = event.images_excluding_main
+    assert_equal 9, images_excluding_main.length
+    images_excluding_main.each { |i| assert_not_equal images.first.id, i.id }
+  end
+
+  test "further education age" do
+    event = create(:event, :further_education => true, :from_age => 10, :to_age => 11)
+    assert_equal -1, event.from_age
+    assert_equal -1, event.to_age
+  end
+
   test "bookable" do
-    ev = Event.find(events(:gula_museet_bookable).id)
-    assert ev.bookable?
+    event = create(:event_with_occasions,
+      :visible_from => Date.today - 1,
+      :visible_to => Date.today + 1,
+      :ticket_release_date => Date.today - 1
+    )
+    create_list(:ticket, 5, :event => event)
+
+    assert event.bookable?(true)
+
+    event.visible_from = Date.today + 1
+    assert !event.bookable?(true)
+    event.visible_from = Date.today - 1
+    assert event.bookable?(true)
+
+    event.visible_to = Date.today - 1
+    assert !event.bookable?(true)
+    event.visible_to = Date.today + 1
+    assert event.bookable?(true)
+
+    event.ticket_release_date = nil
+    assert !event.bookable?(true)
+    event.ticket_release_date = Date.today + 1
+    assert !event.bookable?(true)
+    event.ticket_release_date = Date.today - 1
+    assert event.bookable?(true)
+
+    event.tickets.clear
+    assert !event.bookable?(true)
+    create_list(:ticket, 5, :event => event)
+    event.tickets(true)
+    assert event.bookable?(true)
+
+    event.occasions.clear
+    assert !event.bookable?(true)
+    create_list(:occasion, 5, :event => event)
+    event.occasions(true)
+    assert event.bookable?(true)
+  end
+  test "reportable" do
+    event = create(:event_with_occasions,
+      :visible_from => Date.today - 1,
+      :ticket_release_date => Date.today - 1
+    )
+    create_list(:ticket, 5, :event => event)
+
+    assert event.reportable?(true)
+
+    event.visible_from = Date.today + 1
+    assert !event.reportable?(true)
+    event.visible_from = Date.today - 1
+    assert event.reportable?(true)
+
+    event.ticket_release_date = nil
+    assert !event.reportable?(true)
+    event.ticket_release_date = Date.today + 1
+    assert !event.reportable?(true)
+    event.ticket_release_date = Date.today - 1
+    assert event.reportable?(true)
+
+    event.tickets.clear
+    assert !event.reportable?(true)
+    create_list(:ticket, 5, :event => event)
+    event.tickets(true)
+    assert event.reportable?(true)
+
+    event.occasions.clear
+    assert !event.reportable?(true)
+    create_list(:occasion, 5, :event => event)
+    event.occasions(true)
+    assert event.reportable?(true)
+  end
+
+  test "ticket count by group" do
+    event = create(:event)
+    groups = create_list(:group, 2)
+    create_list(:ticket, 5, :event => event, :group => groups.first)
+    create_list(:ticket, 6, :event => event, :group => groups.second)
+    create_list(:ticket, 1, :group => groups.second) # dummy
+
+    count = event.ticket_count_by_group
+    assert_equal 5, count[groups.first.id]
+    assert_equal 6, count[groups.second.id]
+  end
+  test "ticket count by district" do
+    event = create(:event)
+    districts = create_list(:district, 2)
+    create_list(:ticket, 5, :event => event, :district => districts.first)
+    create_list(:ticket, 6, :event => event, :district => districts.second)
+    create_list(:ticket, 1, :district => districts.second) # dummy
+
+    count = event.ticket_count_by_district
+    assert_equal 5, count[districts.first.id]
+    assert_equal 6, count[districts.second.id]
+  end
+
+  test "has booking" do
+    event = create(:event)
+    assert !event.has_booking?
+    create_list(:ticket, 5, :event => event)
+    assert !event.has_booking?
+    create_list(:ticket, 5, :event => event, :state => Ticket::BOOKED)
+    assert event.has_booking?
+  end
+  test "unbooked tickets" do
+    event = create(:event)
+    assert !event.has_unbooked_tickets?(true)
+    assert_equal 0, event.unbooked_tickets(true)
+    create_list(:ticket, 5, :event => event, :state => Ticket::BOOKED)
+    assert !event.has_unbooked_tickets?(true)
+    assert_equal 0, event.unbooked_tickets(true)
+    create_list(:ticket, 5, :event => event, :state => Ticket::UNBOOKED)
+    assert event.has_unbooked_tickets?(true)
+    assert_equal 5, event.unbooked_tickets(true)
+  end
+
+  test "fully booked" do
+    event = create(:event)
+    # Unbooked tickets
+    tickets = create_list(:ticket, 2, :event => event, :state => Ticket::UNBOOKED)
+    # Available seats
+    occasions = create_list(:occasion, 2, :event => event, :single_group => true) # No booked tickets
+
+    assert !event.fully_booked?(true)
+
+    # Book the tickets
+    tickets.each { |t| t.state = Ticket::BOOKED; t.save }
+    assert event.fully_booked?(true)
+
+    create_list(:ticket, 2, :event => event, :state => Ticket::UNBOOKED)
+    assert !event.fully_booked?(true)
+
+    # Assign booked tickets to single group occasions
+    tickets.each { |t| t.occasion = occasions.pop; t.save }
+    event.occasions(true)
+    assert event.fully_booked?(true)
     
-    # visible_from
-    ev.visible_from = Date.today + 2
-    ev.visible_to = Date.today + 4
-    assert !ev.bookable?(true)
-    ev.reload
-
-    # visible_to
-    ev.visible_from = Date.today - 4
-    ev.visible_to = Date.today - 2
-    assert !ev.bookable?(true)
-    ev.reload
-
-    # ticket_release_date
-    ev.ticket_release_date = Date.today + 2
-    assert !ev.bookable?(true)
-    ev.reload
-
-    # No tickets
-    assert !Event.find(events(:pyjamassanger).id).bookable?
-
-    # No occasions
-    assert !Event.find(events(:grona_teatern_standing).id).bookable?
+    create_list(:occasion, 2, :event => event, :single_group => true)
+    event.occasions(true)
+    assert !event.fully_booked?(true)
   end
 
-  test "find without tickets" do
-    es = Event.without_tickets.find :all
-    es.each { |e| assert e.tickets.empty? }
-  end
+  test "has available seats" do
+    event = create(:event)
+    # This uses Occasion#available_seats
+    # No available seats for an occasion if it has at least one booked ticket and is a single group occasion
+    create_list(:occasion_with_booked_tickets, 2, :event => event, :single_group => true)
+    assert !event.has_available_seats?
 
-  test "not targeted group ids" do
-    e = Event.find(events(:pyjamassanger).id)
-    ids = e.not_targeted_group_ids
-    assert_equal 1, ids.length
-    assert_equal groups(:centrumskolan2_klass6).id, ids[0]
+    create_list(:occasion, 2, :event => event, :single_group => true) # No booked tickets
+    event.occasions(true)
+    assert event.has_available_seats?
   end
 
   test "ticket usage" do
-    e = Event.find(events(:pyjamassanger).id)
-    assert_equal [2, 1], e.ticket_usage
+    event = create(:event)
+    create_list(:ticket, 5, :event => event, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 6, :event => event, :state => Ticket::BOOKED)
+    create_list(:ticket, 1, :event => event, :state => Ticket::USED)
+    create_list(:ticket, 2, :event => event, :state => Ticket::NOT_USED)
+    create_list(:ticket, 3, :event => event, :state => Ticket::DEACTIVATED)
+
+    usage = event.ticket_usage
+    assert_equal 2, usage.length
+    total, booked = usage
+    assert_equal 1+2+3+5+6, total
+    assert_equal 6, booked
   end
 
-  test "further education set" do
-    Event.delete_observers
-    e = Event.new
-    e.name = "x"
-    e.description = "x"
-    e.from_age = 10
-    e.to_age = 11
-    e.visible_from = Date.today
-    e.visible_to = Date.today + 1
-    e.further_education = true
+  test "not targeted group ids" do
+    event = create(:event, :from_age => 10, :to_age => 11)
+    targeted1    = create(:group_with_age_groups, :age_group_data => [[10,20]])
+    targeted2    = create(:group_with_age_groups, :age_group_data => [[11,20]])
+    not_targeted = create(:group_with_age_groups, :age_group_data => [[9,20]])
 
-    e.save
-    assert_equal -1, e.from_age
-    assert_equal -1, e.to_age
+    create_list(:ticket, 2, :event => event, :group => targeted1)
+    create_list(:ticket, 2, :event => event, :group => targeted2)
+    create_list(:ticket, 2, :event => event, :group => not_targeted)
+
+    ids = event.not_targeted_group_ids
+    assert_equal 1, ids.length
+    assert_equal not_targeted.id, ids.first
   end
 
+  def search_standing(filter)
+    Event.search_standing(filter, 1).map(&:id)
+  end
+
+  test "search standing" do
+    old_per_page = Event.per_page
+    Event.per_page = 100 # Disable paging
+
+    # Default
+    create(:event, :further_education => false, :from_age => 7, :to_age => 9)
+
+    # Default exclusions
+    with_occasions = create(:event_with_occasions).id
+    inactive = create(:event, :culture_provider => create(:culture_provider, :active => false)).id
+
+    result = search_standing({})
+    assert_equal 1, result.length
+    assert !result.include?(with_occasions)
+    assert !result.include?(inactive)
+
+    # Free text
+    freetext1 = create(:event, :name => "freetext1").id
+    freetext2 = create(:event, :description => "freetext2").id
+
+    result = search_standing(:free_text => "freetext")
+    assert_equal 2, result.length
+    assert result.include?(freetext1)
+    assert result.include?(freetext2)
+
+    # Further education
+    further_education = create(:event, :further_education => true, :from_age => 10, :to_age => 11).id
+    result = search_standing(:further_education => true, :from_age => 12, :to_age => 13)
+    assert_equal 1, result.length
+    assert_equal further_education, result.first
+
+    # Age
+    with_age = create(:event, :from_age => 10, :to_age => 11).id
+    result = search_standing(:from_age => -1, :to_age => -1)
+    assert result.include?(with_age)
+    result = search_standing(:from_age => 12)
+    assert !result.include?(with_age)
+    result = search_standing(:to_age => 9)
+    assert !result.include?(with_age)
+
+    # Date
+    old_event = create(:event, :visible_to => Date.today - 1).id
+    result = search_standing({})
+    assert !result.include?(old_event)
+    result = search_standing(:from_date => Date.today - 1)
+    assert result.include?(old_event)
+
+    # Date span
+    future_events = [
+      create(:event, :visible_from => Date.today + 1,   :visible_to => Date.today + 1).id,
+      create(:event, :visible_from => Date.today + 1.week,   :visible_to => Date.today + 1.week).id,
+      create(:event, :visible_from => Date.today + 1.month,  :visible_to => Date.today + 1.month).id,
+      create(:event, :visible_from => Date.today + 1.year, :visible_to => Date.today + 1.year).id
+    ]
+
+    result = search_standing({})
+    future_events.each { |e| assert result.include?(e) }
+    result = search_standing(:date_span => :day)
+    assert result.include?(future_events.first)
+    future_events.last(3).each { |e| assert !result.include?(e) }
+    result = search_standing(:date_span => :week)
+    future_events.first(2).each { |e| assert result.include?(e) }
+    future_events.last(2).each { |e| assert !result.include?(e) }
+    result = search_standing(:date_span => :month)
+    future_events.first(3).each { |e| assert result.include?(e) }
+    assert !result.include?(future_events.last)
+
+    # From date + date span
+    result = search_standing(:from_date => Date.today - 1, :date_span => :day)
+    future_events.each { |e| assert !result.include?(e) }
+    result = search_standing(:from_date => Date.today - 1, :date_span => :week)
+    assert result.include?(future_events.first)
+    future_events.last(3).each { |e| assert !result.include?(e) }
+    result = search_standing(:from_date => Date.today - 1, :date_span => :month)
+    future_events.first(2).each { |e| assert result.include?(e) }
+    future_events.last(2).each { |e| assert !result.include?(e) }
+
+    # Categories
+    categories = create_list(:category, 2)
+    events = create_list(:event, 2)
+    events.first.categories << categories.first
+    events.second.categories << categories.second
+
+    result = search_standing({})
+    events.each { |e| assert result.include?(e.id) }
+    result = search_standing(:categories => categories.first.id)
+    assert result.include?(events.first.id)
+    assert !result.include?(events.second.id)
+    result = search_standing(:categories => categories.collect(&:id))
+    events.each { |e| assert result.include?(e.id) }
+
+    Event.per_page = old_per_page
+  end
+
+  test "get visitor stats for events" do
+    # TODO
+  end
 end

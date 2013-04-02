@@ -29,7 +29,7 @@ class Image < ActiveRecord::Base
 
     return false unless valid?
 
-    self.filename = Image.gen_fname
+    self.filename = Image.generate_filename
     File.open(self.image_path, "wb") { |f| f.write(upload['datafile'].read) }
     
     img = Magick::Image.read(self.image_path).first
@@ -55,11 +55,6 @@ class Image < ActiveRecord::Base
     save_orig
   end
 
-  # Generates the name for the thumbnail
-  def thumb_name
-    Image.thumb_name(self.filename)
-  end
-
   # Generates the filesystem path to the image file
   def image_path
     "#{Image.path}/#{self.filename}"
@@ -72,7 +67,7 @@ class Image < ActiveRecord::Base
 
   # Generates the filesystem path to the thumbnail file
   def thumb_path
-    "#{Image.path}/#{Image.thumb_name(self.filename)}"
+    "#{Image.path}/#{self.thumb_name}"
   end
 
   # Generates the URL to the thumbnail file
@@ -80,9 +75,13 @@ class Image < ActiveRecord::Base
     "#{Image.url}/#{self.thumb_name}"
   end
   
+  # Generates the name for the thumbnail
+  def thumb_name
+    self.filename.sub(/\.jpg$/, ".thumb.jpg")
+  end
 
   # Generates a random filename for the image and thumbnail.
-  def self.gen_fname()
+  def self.generate_filename()
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     tempfname = ""
 
@@ -93,24 +92,6 @@ class Image < ActiveRecord::Base
     end
     
     return tempfname.to_s + ".jpg"
-  end
-
-  # Creates a thumbnail name for an image
-  def self.thumb_name(img)
-    regexp = /(\w+?).jpg$/
-
-    if img.is_a? String
-      img = Image.new { |i| i.filename = img }
-    elsif img.is_a? Integer
-      img = Image.find(img)
-    else
-      return nil
-    end
-    
-    return nil if img.nil?
-
-    img.filename =~ regexp
-    return $1 + ".thumb.jpg"
   end
 
   protected

@@ -8,12 +8,13 @@ class School < ActiveRecord::Base
         :conditions => [ "id in (select g.id from age_groups ag left join groups g on ag.group_id = g.id where age between ? and ? and g.active = ?)", from, to, true ]
     end
   end
+  has_many :age_groups, :through => :groups
 
   belongs_to :district
 
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"
-  validates_presence_of :district_id,
+  validates_presence_of :district,
     :message => "Skolan måste tillhöra en stadsdel"
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment

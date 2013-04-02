@@ -118,6 +118,8 @@ class Booking < ActiveRecord::Base
   end
 
   def validate_seats
+    return if self.group.blank? || self.occasion.blank?
+
     total_new = self.total_count
     total_new_wheelchair = self.wheelchair_count
 
@@ -128,7 +130,7 @@ class Booking < ActiveRecord::Base
 
     available_tickets = self.group.available_tickets_by_occasion(self.occasion).to_i
 
-    if self.occasion.single_group
+    if self.occasion.single_group && self.occasion.event.ticket_state != Event::ALLOTED_GROUP
       available_tickets += self.tickets.count(:conditions => { :state => Ticket::DEACTIVATED })
     end
 
