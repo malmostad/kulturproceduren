@@ -47,6 +47,17 @@ class ApplicationHelperTest < ActionView::TestCase
       linebreakize("abc\ndef\nghi")
   end
 
+  test "show description" do
+    assert_equal "", show_description(nil)
+    assert_equal paragraphize("abc\ndef\n\nghi", 'class="description"'), show_description("abc\ndef\n\nghi")
+    self.expects(:sanitize).with(
+      "<p>foo</p>",
+      :tags => %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
+      :attributes => %w(href target title style)
+    ).returns("ok_value")
+    assert_equal '<div class="description">ok_value</div>', show_description("<p>foo</p>")
+  end
+
   def link_to_unless(condition, title, url)
     @link_to_result = {
       :condition => condition,
@@ -86,6 +97,13 @@ class ApplicationHelperTest < ActionView::TestCase
       uploaded_image_tag(img)
     assert_equal '<img alt="testimage" height="40" src="/images/model/testimage.thumb.jpg" title="testimage" width="30" />',
       uploaded_image_tag(img, true)
+  end
+
+  test "conditional_cache" do
+    self.expects(:cache).returns("cached")
+    assert_equal "cached", conditional_cache(true)
+    self.expects(:capture).returns("capture")
+    assert_equal "capture", conditional_cache(false)
   end
 
   test "to term" do

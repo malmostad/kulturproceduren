@@ -7,10 +7,10 @@ module QuestionsHelper
 
     case question.qtype
     when "QuestionMark"
-      fragment = "Genomsnitt = #{stat[0].to_s}"
+      fragment = "Genomsnitt = #{stat[0]}"
     when "QuestionText"
       fragment =  "<ul>"
-      stat.each {|e| fragment = fragment + "<li>#{e.to_s}</li>" unless e.blank? }
+      stat.each {|e| fragment = fragment + "<li>#{e}</li>" unless e.blank? }
       fragment += "</ul>"
     when "QuestionBool"
       fragment = "Ja #{stat[0]}% , Nej #{stat[1]}%"
@@ -19,12 +19,12 @@ module QuestionsHelper
       fragment =  "<table id=\"kp-mchoice-stat\">"
       fragment += "<thead>"
       fragment += "<tr>"
-      choices.each { |choice| fragment += "<th>#{choice.to_s}</th>" }
+      choices.each { |choice| fragment += "<th>#{choice}</th>" }
       fragment += "</tr>"
       fragment += "</thead>"
       fragment += "<tbody>"
       fragment += "<tr>"
-      choices.each { |choice| fragment += "<td>#{stat[choice].to_s}</td>" }
+      choices.each { |choice| fragment += "<td>#{stat[choice]}</td>" }
       fragment += "</tr>"
       fragment += "</tbody>"
       fragment += "</table>"
