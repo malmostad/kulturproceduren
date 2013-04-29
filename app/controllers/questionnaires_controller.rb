@@ -74,6 +74,7 @@ class QuestionnairesController < ApplicationController
       flash[:notice] = 'Enkäten skapades.'
       redirect_to @questionnaire 
     else
+      @events = Event.without_questionnaires.find :all, :order => "name"
       render :action => "new" 
     end
   end
@@ -85,6 +86,7 @@ class QuestionnairesController < ApplicationController
       flash[:notice] = 'Enkäten uppdaterades.'
       redirect_to(@questionnaire) 
     else
+      @events = Event.without_questionnaires.find :all, :order => "name"
       render :action => "new"
     end
   end

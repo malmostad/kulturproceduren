@@ -57,16 +57,9 @@ class NotificationRequestsController < ApplicationController
 
   # Makes sure the user has privileges to book tickets. For use in <tt>before_filter</tt>
   def require_booker
-    user = current_user
-    unless user.can_book?
+    unless current_user.can_book?
       flash[:error] = "Du har inte behörighet att boka platser"
       redirect_to root_url()
-      return
-    end
-
-    if user.email.blank?
-      flash[:warning] = "Du måste ange epostadress för att kunna få information om biljettsläpp"
-      redirect_to user
     end
   end
 

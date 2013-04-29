@@ -91,8 +91,6 @@ class User < ActiveRecord::Base
   def get_username
     if APP_CONFIG[:ldap]
       return self.username.sub(APP_CONFIG[:ldap][:username_prefix] , "")
-    elsif APP_CONFIG[:httpauth]
-      return self.username.sub(APP_CONFIG[:httpauth][:username_prefix] , "")
     else
       return self.username
     end
@@ -211,8 +209,6 @@ class User < ActiveRecord::Base
   def username_unique
     if APP_CONFIG[:ldap]
       prefix = APP_CONFIG[:ldap][:username_prefix] 
-    elsif APP_CONFIG[:httpauth]
-      prefix = APP_CONFIG[:httpauth][:username_prefix] 
     else
       prefix = ""
     end

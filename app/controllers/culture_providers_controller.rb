@@ -33,7 +33,7 @@ class CultureProvidersController < ApplicationController
     render :action => "edit"
   end
 
-  # Displays a form for edtiing an existing culture provider
+  # Displays a form for editing an existing culture provider
   def edit
     @culture_provider = CultureProvider.find(params[:id])
 
@@ -45,12 +45,6 @@ class CultureProvidersController < ApplicationController
 
   def create
     @culture_provider = CultureProvider.new(params[:culture_provider])
-
-    unless current_user.can_administrate?(@culture_provider)
-      flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to @culture_provider
-      return
-    end
 
     if @culture_provider.save
       flash[:notice] = 'Arrangören skapades.'

@@ -63,7 +63,7 @@ class EventLinksController < ApplicationController
     if @event
       @event.linked_events.delete(linked)
       linked.linked_events.delete(@event)
-      flash[:notice] = "Länken mellan arrangemangen togs bort."
+      flash[:notice] = "Länken mellan evenemangen togs bort."
       redirect_to event_event_links_url(:event_id => @event.id)
     elsif @culture_provider
       @culture_provider.linked_events.delete(linked)

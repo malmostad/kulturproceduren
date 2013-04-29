@@ -11,7 +11,8 @@ class LoginController < ApplicationController
   # Authenticates the user
   def login
     if user_online?
-      redirect_to :action => "index"
+      redirect_to root_url()
+      return
     end
 
     u = authenticate_user()
@@ -68,33 +69,25 @@ class LoginController < ApplicationController
       :name => request.session_options[:key],
       :value => cookies[request.session_options[:key]],
       :options => {
-      :path => request.session_options[:path],
-      :domain => request.session_options[:domain],
-      :secure => request.session_options[:secure]
-    }
+        :path => request.session_options[:path],
+        :domain => request.session_options[:domain],
+        :secure => request.session_options[:secure]
+      }
     }
     render :json => session_cookie.to_json
   end
 
   private
 
-  def http_authenticate_user( username , password )
-    clnt = HTTPClient.new
-    sslconf = HTTPClient::SSLConfig.new clnt
-    postparams = { "name" => username , "pwd" => password }
-    resp = clnt.post APP_CONFIG[:httpauth][:auth_url] , postparams
-    if resp.status_code == 200
-      userinfo = {}
-      resp.body.content.split("\n").each do |line|
-	name,val = line.split("=")
-	userinfo[name] = val
-      end
-      return userinfo
-    else
-      return nil
-    end
+  def get_ldap
+    ldap = KPLdapManager.new(
+      APP_CONFIG[:ldap][:address],
+      APP_CONFIG[:ldap][:port],
+      APP_CONFIG[:ldap][:base_dn],
+      APP_CONFIG[:ldap][:bind][:dn],
+      APP_CONFIG[:ldap][:bind][:password]
+    )
   end
-
 
   # Authenticates the user by first checking the LDAP, then the local user database.
   #
@@ -102,11 +95,7 @@ class LoginController < ApplicationController
   # a profile is automatically created.
   def authenticate_user
     if APP_CONFIG[:ldap]
-      ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
-        APP_CONFIG[:ldap][:port],
-        APP_CONFIG[:ldap][:base_dn],
-        APP_CONFIG[:ldap][:bind][:dn],
-        APP_CONFIG[:ldap][:bind][:password]
+      ldap = get_ldap()
 
       ldap_user = ldap.authenticate params[:user][:username], params[:user][:password]
 
@@ -118,15 +107,14 @@ class LoginController < ApplicationController
         else
           ldap_user = ldap.get_user(params[:user][:username])
 
-          user = User.new do |u|
-            u.name = ldap_user[:name]
-            if ldap_user[:email] =~ /[^@]+@[^@]+/
-              u.email = ldap_user[:email]
-            end
-            u.cellphone = ldap_user[:cellphone]
-            u.username = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
-            u.password = "ldap"
-          end
+          user = User.new
+          user.name                  = ldap_user[:name]
+          user.email                 = ldap_user[:email]
+          user.cellphone             = ldap_user[:cellphone]
+          user.username              = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
+          user.password              = "ldap"
+          user.password_confirmation = "ldap"
+          user.districts             << District.first
 
           user.save!
 
@@ -134,30 +122,6 @@ class LoginController < ApplicationController
         end
       else
         return User.authenticate(params[:user][:username], params[:user][:password])
-      end
-    elsif APP_CONFIG[:httpauth]
-      userinfo = http_authenticate_user params[:user][:username], params[:user][:password]
-      if userinfo
-	user = User.find :first, :conditions => { :username => "#{APP_CONFIG[:httpauth][:username_prefix]}#{params[:user][:username]}" }
-	if user
-	  return user
-	else
-	  user = User.new do |u|
-            u.name = userinfo["fullName"]
-            if userinfo["mail"] =~ /[^@]+@[^@]+/
-              u.email = userinfo["mail"]
-            end
-            u.cellphone = userinfo["telephoneNumber"]
-            u.username = "#{APP_CONFIG[:httpauth][:username_prefix]}#{params[:user][:username]}"
-            u.password = "http"
-          end
-	  if not user.save! 
-	    puts "Failed to save user!!!!"
-	  end
-	  return user
-	end
-      else
-	return User.authenticate(params[:user][:username], params[:user][:password])
       end
     else
       return User.authenticate(params[:user][:username], params[:user][:password])

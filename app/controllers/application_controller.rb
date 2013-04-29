@@ -87,6 +87,7 @@ class ApplicationController < ActionController::Base
     unless current_user.has_role? :admin
       flash[:notice] = "Du har inte behörighet att komma åt sidan."
       redirect_to :action => "index"
+      return false
     end
   end
 

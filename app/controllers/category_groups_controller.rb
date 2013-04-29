@@ -2,6 +2,9 @@
 class CategoryGroupsController < ApplicationController
   layout "admin"
 
+  before_filter :authenticate
+  before_filter :require_admin
+
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
   cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
 

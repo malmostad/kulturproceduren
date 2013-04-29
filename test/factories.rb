@@ -116,7 +116,7 @@ FactoryGirl.define do
     sequence(:username)   { |n| "user_#{n}" }
     salt                  "abcdefg"
     password              "password"
-    password_confirmation "password"
+    password_confirmation { password }
     name                  { username }
     email                 { "#{username}@example.com" }
     cellphone             "012 - 34 567"
@@ -307,11 +307,11 @@ FactoryGirl.define do
   end
 
   factory :question do
-    qtype      "QuestionText"
-    question   "What?"
-    choice_csv nil
-    template   false
-    mandatory  false
+    qtype               "QuestionText"
+    sequence(:question) { |n| "Question #{n}" }
+    choice_csv          nil
+    template            false
+    mandatory           false
   end
   factory :questionnaire do
     event

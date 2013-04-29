@@ -109,7 +109,7 @@ class BookingsController < ApplicationController
         redirect_to edit_booking_url(@booking)
       else
         @booking = Booking.new do |b|
-          b.group_id = @group.id if @group
+          b.group_id = @group.id
           b.occasion_id = @occasion.id
         end
 

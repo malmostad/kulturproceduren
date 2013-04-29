@@ -315,7 +315,6 @@ class AllotmentController < ApplicationController
     distribution = {}
     assign_children(event, districts)
 
-
     if ticket_state == Event::ALLOTED_GROUP
       group_counts = event.tickets.count(:group => "group_id")
 

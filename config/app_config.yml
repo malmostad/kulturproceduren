@@ -32,9 +32,6 @@ common: &common
     #        :password:
     #    :max_search_results: 25
     #    :username_prefix: "malmoaut-"
-    #:httpauth:
-    #    :auth_url: "https://www.malmo.se/4.48c74f1f1249b31458c800013298/12.48c74f1f1249b31458c800013337.txt"
-    #    :username_prefix: "malmoaut-"
     :allotment:
         :proximity_boundary: 3
     # OBS - se även config/enviroments/*rb actionmailer-config ... From-address måste anges även där

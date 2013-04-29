@@ -59,7 +59,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (= 1.2.3)
   factory_girl (~> 2.6.4)
-  httpclient (= 2.3.2)
   jnunemaker-validatable (~> 1.8.4)
   mocha (~> 0.12.10)
   pdf-writer (= 1.1.8)

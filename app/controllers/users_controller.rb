@@ -147,6 +147,7 @@ class UsersController < ApplicationController
     end
 
     @user.password = params[:user][:password]
+    @user.password_confirmation = params[:user][:password_confirmation]
 
     if @user.save
       flash[:notice] = "Lösenordet uppdaterades."

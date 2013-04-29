@@ -2,8 +2,8 @@
 class EventsController < ApplicationController
   layout "standard", :except => [ :options_list ]
 
-  before_filter :authenticate, :except => [ :index, :show ]
-  before_filter :check_roles, :except => [ :index, :show ]
+  before_filter :authenticate, :except => :show
+  before_filter :check_roles, :except => :show
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
   cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
@@ -54,7 +54,7 @@ class EventsController < ApplicationController
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to :action => "index"
+      redirect_to @event
       return
     end
 
@@ -62,29 +62,28 @@ class EventsController < ApplicationController
   end
 
   def create
+    category_ids = params[:event].try(:delete, :category_ids) || []
     @event = Event.new(params[:event])
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to :action => "index"
+      redirect_to root_url()
       return
     end
 
-    load_culture_providers()
-
     if @event.save
-      params[:category_ids] ||= []
       @event.categories.clear
 
-      params[:category_ids].each do |cid|
+      category_ids.each do |category_id|
         begin
-          @event.categories << Category.find(cid.to_i)
+          @event.categories << Category.find(category_id.to_i)
         rescue; end
       end
 
       flash[:notice] = 'Evenemanget skapades.'
       redirect_to(@event)
     else
+      load_culture_providers()
       @category_groups = CategoryGroup.all :order => "name ASC"
       render :action => "new"
     end
@@ -95,16 +94,17 @@ class EventsController < ApplicationController
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to :action => "index"
+      redirect_to @event
       return
     end
 
+    category_ids = params[:event].try(:delete, :category_ids) || []
+
     if @event.update_attributes(params[:event])
 
-      params[:category_ids] ||= []
       @event.categories.clear
 
-      params[:category_ids].each do |cid|
+      category_ids.each do |cid|
         begin
           @event.categories << Category.find(cid.to_i)
         rescue; end
@@ -168,19 +168,8 @@ class EventsController < ApplicationController
   def check_roles
     unless current_user.has_role?(:admin) || current_user.has_role?(:culture_worker)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
-      redirect_to :action => "index"
+      redirect_to root_url()
     end
-  end
-
-  # Generates random filenames for the generated graphs
-  def gen_fname(s)
-    numpart = rand(10000)
-    fname = "public/images/graphs/" + s + numpart.to_s + ".png"
-    while File.exists?(fname) do
-      numpart +=1
-      fname = "public/images/graphs/" + s + numpart.to_s + ".png"
-    end
-    return fname
   end
 
   def ticket_allotment_csv(event)

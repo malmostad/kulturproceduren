@@ -43,7 +43,7 @@ class StatisticsController < ApplicationController
   def questionnaires
     @term = params[:id]
 
-    if !params[:event_id].nil? || params[:format] == "xls" 
+    if !params[:event_id].nil?
       @event = Event.find(params[:event_id])
 
       if !@event.questionnaire.nil? && @event.questionnaire.answer_forms.count > 0 
@@ -55,8 +55,9 @@ class StatisticsController < ApplicationController
           )
         ) if params[:format] == "xls"
       else
-        @event = nil
-      end      
+        flash[:warning] = "Evenemanget saknar enkät eller enkätsvar."
+        redirect_to :action => "questionnaires"
+      end
     else
       @events = available_events(@term).select { |e|
         !e.questionnaire.nil? && e.questionnaire.answer_forms.count > 0
@@ -96,7 +97,6 @@ class StatisticsController < ApplicationController
     CSV.generate_row(["Fråga", "Svar"], 2, res, "\t")
 
     questionnaire.questions.each do |q|
-
       row = []
       stat = q.statistics_for_answer_forms(answer_forms)
 

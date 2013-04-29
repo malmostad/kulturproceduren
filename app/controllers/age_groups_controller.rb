@@ -40,9 +40,9 @@ class AgeGroupsController < ApplicationController
   end
 
   def destroy
-    @age_group = AgeGroup.find(params[:id])
-    group = @age_group.group
-    @age_group.destroy
+    age_group = AgeGroup.find(params[:id])
+    group = age_group.group
+    age_group.destroy
 
     redirect_to(group)
   end

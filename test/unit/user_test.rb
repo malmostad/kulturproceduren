@@ -100,11 +100,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal "username", user.get_username
 
-    APP_CONFIG.replace(:httpauth => { :username_prefix => "http_" })
-    user.username = "http_username"
-    assert_equal "username", user.get_username
-
-    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" }, :httpauth => { :username_prefix => "http_" })
+    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" })
     user.username = "ldap_username"
     assert_equal "username", user.get_username
   end
@@ -141,17 +137,24 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "can administrate" do
-    culture_providers = create_list(:culture_provider, 2)
-    culture_worker    = create(:user, :roles => [roles(:culture_worker)], :culture_providers => [culture_providers.first])
-    admin             = create(:user, :roles => [roles(:admin)])
-    booker            = create(:user, :roles => [roles(:booker)])
+    culture_providers    = create_list(:culture_provider, 2)
+    culture_worker       = create(:user, :roles => [roles(:culture_worker)], :culture_providers => [culture_providers.first])
+    blank_culture_worker = create(:user, :roles => [roles(:culture_worker)], :culture_providers => [])
+    admin                = create(:user, :roles => [roles(:admin)])
+    booker               = create(:user, :roles => [roles(:booker)])
 
     assert  admin.can_administrate?(culture_providers.first)
     assert  admin.can_administrate?(culture_providers.second)
+    assert !admin.can_administrate?(nil)
     assert  culture_worker.can_administrate?(culture_providers.first)
     assert !culture_worker.can_administrate?(culture_providers.second)
+    assert !culture_worker.can_administrate?(nil)
+    assert !blank_culture_worker.can_administrate?(culture_providers.first)
+    assert !blank_culture_worker.can_administrate?(culture_providers.second)
+    assert !blank_culture_worker.can_administrate?(nil)
     assert !booker.can_administrate?(culture_providers.first)
     assert !booker.can_administrate?(culture_providers.second)
+    assert !booker.can_administrate?(nil)
   end
 
   test "can book" do
@@ -218,10 +221,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert !build(:user, :username => "username").valid?
 
-    APP_CONFIG.replace(:httpauth => { :username_prefix => "http_" })
-    assert !build(:user, :username => "http_username").valid?
-
-    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" }, :httpauth => { :username_prefix => "http_" })
+    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" })
     assert !build(:user, :username => "ldap_username").valid?
   end
 end

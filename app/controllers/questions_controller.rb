@@ -3,6 +3,9 @@ class QuestionsController < ApplicationController
 
   layout "admin"
 
+  before_filter :authenticate
+  before_filter :require_admin
+
   # Lists all questions in the system as well as a form
   # for adding template questions.
   def index

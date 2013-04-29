@@ -9,10 +9,10 @@
     </li>
   </ul>
 
-  <% if @calendar_list == :events -%>
+  <% if @calendar_list == :events && @events -%>
     <%= render :partial => "events_list", :locals => { :events => @events, :category_groups => @category_groups } %>
     <%= will_paginate @events %>
-  <% else -%>
+  <% elsif @occasions -%>
     <%= render :partial => "occasions_list", :locals => { :occasions => @occasions, :category_groups => @category_groups } %>
     <%= will_paginate @occasions %>
   <% end -%>

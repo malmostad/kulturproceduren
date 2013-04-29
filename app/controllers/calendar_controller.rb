@@ -31,7 +31,7 @@ class CalendarController < ApplicationController
   def apply_filter
     if params[:clear_filter]
       session[:calendar_filter] = { :from_date => Date.today }
-    else
+    elsif params[:filter]
       calendar_filter[:free_text] = params[:filter][:free_text]
 
       calendar_filter[:from_age] = (params[:filter][:from_age] || -1).to_i

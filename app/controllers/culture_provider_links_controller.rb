@@ -74,7 +74,6 @@ class CultureProviderLinksController < ApplicationController
         redirect_to @event
       end
     end
-
   end
 
   def sort_column_from_param(p)

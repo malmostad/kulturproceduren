@@ -3,7 +3,7 @@ class OccasionsController < ApplicationController
 
   layout "standard"
   
-  before_filter :authenticate, :except => [ :index, :show ]
+  before_filter :authenticate, :except => :show
   before_filter :require_culture_worker, :only => [ :edit, :update, :destroy, :cancel ]
 
   cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy, :cancel ]

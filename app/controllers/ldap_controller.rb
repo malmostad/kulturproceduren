@@ -27,20 +27,20 @@ class LdapController < ApplicationController
   # Creates a local user object from the data in the LDAP if the local
   # user object does not exist
   def handle
-    ldap = get_ldap()
     user = User.find :first, :conditions => { :username => params[:username] }
 
     unless user
+      ldap = get_ldap()
       ldap_user = ldap.get_user(params[:username])
 
       user = User.new do |u|
         u.name = ldap_user[:name]
-        if ldap_user[:email] =~ /[^@]+@[^@]+/
-          u.email = ldap_user[:email]
-        end
+        u.email = ldap_user[:email]
         u.cellphone = ldap_user[:cellphone]
         u.username = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
         u.password = "ldap"
+        u.password_confirmation = "ldap"
+        u.districts << District.first
       end
 
       user.save!
