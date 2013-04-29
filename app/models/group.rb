@@ -41,12 +41,12 @@ class Group < ActiveRecord::Base
   def booked_tickets_by_occasion(occasion)
     occasion = Occasion.find(occasion) if occasion.is_a?(Integer)
 
-    return Ticket.count(:all,
+    return Ticket.booked.count(
       :conditions => {
-        :group_id => self.id ,
-        :occasion_id => occasion.id ,
-        :state => Ticket::BOOKED
-      })
+        :group_id => self.id,
+        :occasion_id => occasion.id
+      }
+    )
   end
 
   # Returns the number of tickets with the given state available to this group on the given location.
@@ -58,29 +58,32 @@ class Group < ActiveRecord::Base
 
     case occasion.event.ticket_state
     when Event::ALLOTED_GROUP then
-      states = [Ticket::UNBOOKED]
-      states << Ticket::DEACTIVATED if existing_booking
+      states = [:unbooked]
+      states << :deactivated if existing_booking
 
-      tickets = Ticket.count :all , :conditions => {
-        :event_id => occasion.event.id,
-        :group_id => self.id,
-        :state => states,
-        :wheelchair => false
-      }
+      tickets = Ticket.with_states(states).count(
+        :conditions => {
+          :event_id => occasion.event.id,
+          :group_id => self.id,
+          :wheelchair => false
+        }
+      )
 
     when Event::ALLOTED_DISTRICT then
-      tickets = Ticket.count :all, :conditions => {
-        :event_id => occasion.event.id,
-        :district_id => self.school.district.id,
-        :state => Ticket::UNBOOKED,
-        :wheelchair => false
-      }
+      tickets = Ticket.unbooked.count(
+        :conditions => {
+          :event_id => occasion.event.id,
+          :district_id => self.school.district.id,
+          :wheelchair => false
+        }
+      )
     when Event::FREE_FOR_ALL then
-      tickets = Ticket.count :all, :conditions => {
-        :event_id => occasion.event.id,
-        :state => Ticket::UNBOOKED,
-        :wheelchair => false
-      }  
+      tickets = Ticket.unbooked.count(
+        :conditions => {
+          :event_id => occasion.event.id,
+          :wheelchair => false
+        }  
+      )
     end
 
     available_seats = occasion.available_seats(existing_booking)
@@ -98,22 +101,28 @@ class Group < ActiveRecord::Base
 
     case occasion.event.ticket_state
     when Event::ALLOTED_GROUP
-      tickets = Ticket.find( :all , :conditions => {
+      tickets = Ticket.with_states(:unbooked, :deactivated).all(
+        :conditions => {
           :event_id => occasion.event.id,
-          :group_id => self.id,
-          :state => [Ticket::UNBOOKED, Ticket::DEACTIVATED]
-        } , :lock => lock )
+          :group_id => self.id
+        },
+        :lock => lock
+      )
     when Event::ALLOTED_DISTRICT
-      tickets = Ticket.find( :all , :conditions => {
+      tickets = Ticket.unbooked.all(
+        :conditions => {
           :event_id => occasion.event.id,
-          :district_id => self.school.district.id,
-          :state => Ticket::UNBOOKED
-        }, :lock => lock )
+          :district_id => self.school.district.id
+        },
+        :lock => lock
+      )
     when Event::FREE_FOR_ALL
-      tickets = Ticket.find( :all , :conditions => {
-          :event_id => occasion.event.id,
-          :state => Ticket::UNBOOKED
-        }, :lock => lock )
+      tickets = Ticket.unbooked.all(
+        :conditions => {
+          :event_id => occasion.event.id
+        },
+        :lock => lock
+      )
     end
 
     return tickets

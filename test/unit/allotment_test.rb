@@ -22,7 +22,7 @@ class AllotmentTest < ActiveSupport::TestCase
       assert_equal allotment.event.id,    t.event.id
       assert_equal allotment.district.id, t.district.id
       assert_equal allotment.group.id,    t.group.id
-      assert_equal Ticket::UNBOOKED,      t.state
+      assert       t.unbooked?
 
       # Check for booleans, don't accept nil or empty string
       assert t.adult == false

@@ -15,11 +15,12 @@ class Companion < ActiveRecord::Base
 
   # Fetches the companion for a specific group at a specific occasion
   def self.get(group, occasion)
-    Ticket.find(:first, :conditions => {
-      :group_id => group.id,
-      :occasion_id => occasion.id,
-      :state => Ticket::BOOKED
-    }).companion
+    Ticket.booked.first(
+      :conditions => {
+        :group_id => group.id,
+        :occasion_id => occasion.id
+      }
+    ).companion
   end
 end
 

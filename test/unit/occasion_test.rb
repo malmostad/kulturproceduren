@@ -124,11 +124,11 @@ class OccasionTest < ActiveSupport::TestCase
   end
   
   test "attending groups" do
-    occasion = create(:occasion)
-    attending = create_list(:group, 3)
-    not_attending = create_list(:group, 3)
-    attending.each { |g| create(:ticket, :occasion => occasion, :group => g, :state => Ticket::BOOKED) }
-    not_attending.each { |g| create(:ticket, :occasion => occasion, :group => g, :state => Ticket::UNBOOKED) }
+    occasion           = create(:occasion)
+    attending          = create_list(:group, 3)
+    not_attending      = create_list(:group, 3)
+    attending.each     { |g| create(:ticket, :occasion => occasion, :group => g, :state => :booked) }
+    not_attending.each { |g| create(:ticket, :occasion => occasion, :group => g, :state => :unbooked) }
 
     attending_ids = attending.collect(&:id)
     not_attending_ids = not_attending.collect(&:id)
@@ -141,8 +141,8 @@ class OccasionTest < ActiveSupport::TestCase
 
   test "ticket usage" do
     occasion = create(:occasion)
-    create_list(:ticket, 5, :occasion => occasion, :state => Ticket::BOOKED)
-    create_list(:ticket, 2, :occasion => occasion, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 5, :occasion => occasion, :state => :booked)
+    create_list(:ticket, 2, :occasion => occasion, :state => :unbooked)
     total, booked = occasion.ticket_usage
 
     assert_equal 7, total
@@ -253,31 +253,31 @@ class OccasionTest < ActiveSupport::TestCase
 
   test "available wheelchair seats" do
     occasion = create(:occasion, :wheelchair_seats => 10)
-    create(:ticket, :occasion => occasion, :wheelchair => true, :state => Ticket::BOOKED)
-    create(:ticket, :occasion => occasion, :wheelchair => true, :state => Ticket::USED)
-    create(:ticket, :occasion => occasion, :wheelchair => true, :state => Ticket::NOT_USED)
-    create(:ticket, :occasion => occasion, :wheelchair => true, :state => Ticket::UNBOOKED)
-    create(:ticket, :occasion => occasion, :wheelchair => true, :state => Ticket::DEACTIVATED)
+    create(:ticket, :occasion => occasion, :wheelchair => true, :state => :booked)
+    create(:ticket, :occasion => occasion, :wheelchair => true, :state => :used)
+    create(:ticket, :occasion => occasion, :wheelchair => true, :state => :not_used)
+    create(:ticket, :occasion => occasion, :wheelchair => true, :state => :unbooked)
+    create(:ticket, :occasion => occasion, :wheelchair => true, :state => :deactivated)
 
     assert_equal 7, occasion.available_wheelchair_seats
   end
 
   test "available seats" do
     occasion = create(:occasion, :seats => 5, :wheelchair_seats => 5)
-    create(:ticket, :occasion => occasion, :state => Ticket::BOOKED)
-    create(:ticket, :occasion => occasion, :state => Ticket::USED)
-    create(:ticket, :occasion => occasion, :state => Ticket::NOT_USED)
-    create(:ticket, :occasion => occasion, :state => Ticket::UNBOOKED)
-    create(:ticket, :occasion => occasion, :state => Ticket::DEACTIVATED)
+    create(:ticket, :occasion => occasion, :state => :booked)
+    create(:ticket, :occasion => occasion, :state => :used)
+    create(:ticket, :occasion => occasion, :state => :not_used)
+    create(:ticket, :occasion => occasion, :state => :unbooked)
+    create(:ticket, :occasion => occasion, :state => :deactivated)
 
     assert_equal 6, occasion.available_seats
 
     occasion = create(:occasion, :seats => 4, :wheelchair_seats => 4, :single_group => true)
-    create(:ticket, :occasion => occasion, :state => Ticket::BOOKED)
-    create(:ticket, :occasion => occasion, :state => Ticket::USED)
-    create(:ticket, :occasion => occasion, :state => Ticket::NOT_USED)
-    create(:ticket, :occasion => occasion, :state => Ticket::UNBOOKED)
-    create(:ticket, :occasion => occasion, :state => Ticket::DEACTIVATED)
+    create(:ticket, :occasion => occasion, :state => :booked)
+    create(:ticket, :occasion => occasion, :state => :used)
+    create(:ticket, :occasion => occasion, :state => :not_used)
+    create(:ticket, :occasion => occasion, :state => :unbooked)
+    create(:ticket, :occasion => occasion, :state => :deactivated)
 
     assert_equal 0, occasion.available_seats
     assert_equal 5, occasion.available_seats(true)

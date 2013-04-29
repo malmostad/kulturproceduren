@@ -80,9 +80,9 @@ class EventTest < ActiveSupport::TestCase
   test "booked users" do
     event = create(:event)
     users = create_list(:user, 2)
-    create_list(:ticket, 3, :event => event, :user => users.first,  :state => Ticket::BOOKED)
-    create_list(:ticket, 3, :event => event, :user => users.first,  :state => Ticket::UNBOOKED)
-    create_list(:ticket, 3, :event => event, :user => users.second, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 3, :event => event, :user => users.first,  :state => :booked)
+    create_list(:ticket, 3, :event => event, :user => users.first,  :state => :unbooked)
+    create_list(:ticket, 3, :event => event, :user => users.second, :state => :unbooked)
 
     booked_users = event.booked_users
     assert_equal 1, booked_users.length
@@ -238,17 +238,17 @@ class EventTest < ActiveSupport::TestCase
     assert !event.has_booking?
     create_list(:ticket, 5, :event => event)
     assert !event.has_booking?
-    create_list(:ticket, 5, :event => event, :state => Ticket::BOOKED)
+    create_list(:ticket, 5, :event => event, :state => :booked)
     assert event.has_booking?
   end
   test "unbooked tickets" do
     event = create(:event)
     assert !event.has_unbooked_tickets?(true)
     assert_equal 0, event.unbooked_tickets(true)
-    create_list(:ticket, 5, :event => event, :state => Ticket::BOOKED)
+    create_list(:ticket, 5, :event => event, :state => :booked)
     assert !event.has_unbooked_tickets?(true)
     assert_equal 0, event.unbooked_tickets(true)
-    create_list(:ticket, 5, :event => event, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 5, :event => event, :state => :unbooked)
     assert event.has_unbooked_tickets?(true)
     assert_equal 5, event.unbooked_tickets(true)
   end
@@ -256,17 +256,17 @@ class EventTest < ActiveSupport::TestCase
   test "fully booked" do
     event = create(:event)
     # Unbooked tickets
-    tickets = create_list(:ticket, 2, :event => event, :state => Ticket::UNBOOKED)
+    tickets = create_list(:ticket, 2, :event => event, :state => :unbooked)
     # Available seats
     occasions = create_list(:occasion, 2, :event => event, :single_group => true) # No booked tickets
 
     assert !event.fully_booked?(true)
 
     # Book the tickets
-    tickets.each { |t| t.state = Ticket::BOOKED; t.save }
+    tickets.each { |t| t.state = :booked; t.save }
     assert event.fully_booked?(true)
 
-    create_list(:ticket, 2, :event => event, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 2, :event => event, :state => :unbooked)
     assert !event.fully_booked?(true)
 
     # Assign booked tickets to single group occasions
@@ -293,11 +293,11 @@ class EventTest < ActiveSupport::TestCase
 
   test "ticket usage" do
     event = create(:event)
-    create_list(:ticket, 5, :event => event, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 6, :event => event, :state => Ticket::BOOKED)
-    create_list(:ticket, 1, :event => event, :state => Ticket::USED)
-    create_list(:ticket, 2, :event => event, :state => Ticket::NOT_USED)
-    create_list(:ticket, 3, :event => event, :state => Ticket::DEACTIVATED)
+    create_list(:ticket, 5, :event => event, :state => :unbooked)
+    create_list(:ticket, 6, :event => event, :state => :booked)
+    create_list(:ticket, 1, :event => event, :state => :used)
+    create_list(:ticket, 2, :event => event, :state => :not_used)
+    create_list(:ticket, 3, :event => event, :state => :deactivated)
 
     usage = event.ticket_usage
     assert_equal 2, usage.length

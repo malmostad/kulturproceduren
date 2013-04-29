@@ -209,7 +209,7 @@ FactoryGirl.define do
         FactoryGirl.create_list(:ticket, evaluator.ticket_count,
           :event => occasion.event,
           :occasion => occasion,
-          :state => Ticket::BOOKED
+          :state => :booked
         )
       end
     end
@@ -251,7 +251,7 @@ FactoryGirl.define do
           :district => evaluator.group.try(:school).try(:district),
           :occasion => evaluator.occasion,
           :event => evaluator.occasion.try(:event),
-          :state => Ticket::UNBOOKED
+          :state => :unbooked
         )
       end
     end

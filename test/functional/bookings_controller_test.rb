@@ -428,7 +428,7 @@ class BookingsControllerTest < ActionController::TestCase
       :district => group.school.district,
       :occasion => occasion,
       :event    => occasion.event,
-      :state    => Ticket::UNBOOKED
+      :state    => :unbooked
     )
 
     assert !Booking.exists?
@@ -473,7 +473,7 @@ class BookingsControllerTest < ActionController::TestCase
       :district => group.school.district,
       :occasion => occasion,
       :event    => occasion.event,
-      :state    => Ticket::UNBOOKED
+      :state    => :unbooked
     )
 
     post(
@@ -585,7 +585,7 @@ class BookingsControllerTest < ActionController::TestCase
       :district => booking.group.school.district,
       :occasion => booking.occasion,
       :event    => booking.occasion.event,
-      :state    => Ticket::UNBOOKED
+      :state    => :unbooked
     )
 
     assert !booking.event.fully_booked?(true)
@@ -617,7 +617,7 @@ class BookingsControllerTest < ActionController::TestCase
       :district => booking.group.school.district,
       :occasion => booking.occasion,
       :event    => booking.occasion.event,
-      :state    => Ticket::UNBOOKED
+      :state    => :unbooked
     )
 
     assert !booking.event.fully_booked?(true)

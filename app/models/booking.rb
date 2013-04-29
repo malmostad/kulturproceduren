@@ -48,7 +48,7 @@ class Booking < ActiveRecord::Base
 
         if self.occasion.single_group
           num_deactivate = self.occasion.seats.to_i + self.occasion.wheelchair_seats.to_i - self.total_count
-          book_tickets(bookable_tickets, :normal, num_deactivate, Ticket::DEACTIVATED)
+          book_tickets(bookable_tickets, :normal, num_deactivate, :deactivated)
         else
           bookable_tickets.each { |ticket| ticket.unbook! }
         end
@@ -131,7 +131,7 @@ class Booking < ActiveRecord::Base
     available_tickets = self.group.available_tickets_by_occasion(self.occasion).to_i
 
     if self.occasion.single_group && self.occasion.event.ticket_state != Event::ALLOTED_GROUP
-      available_tickets += self.tickets.count(:conditions => { :state => Ticket::DEACTIVATED })
+      available_tickets += self.tickets.deactivated.count
     end
 
     available_wheelchair_tickets = self.occasion.available_wheelchair_seats
@@ -141,7 +141,7 @@ class Booking < ActiveRecord::Base
     errors.add(:wheelchair_count, "Det finns bara #{available_wheelchair_tickets} rullstolsplatser du kan boka på den här föreställningen") if total_new_wheelchair > available_wheelchair_tickets
   end
 
-  def book_tickets(tickets, type, amount, state = Ticket::BOOKED)
+  def book_tickets(tickets, type, amount, state = :booked)
     1.upto(amount) do |i|
       return if tickets.blank?
 

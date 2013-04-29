@@ -30,15 +30,15 @@ class SchoolTest < ActiveSupport::TestCase
     groups   = create_list(:group, 5, :school => school)
 
     groups.each do |g|
-      create_list(:ticket, 3, :occasion => occasion, :event => occasion.event, :group => g, :district => school.district, :state => Ticket::UNBOOKED)
-      create(:ticket,         :occasion => occasion, :event => occasion.event, :group => g, :district => school.district, :state => Ticket::BOOKED)
+      create_list(:ticket, 3, :occasion => occasion, :event => occasion.event, :group => g, :district => school.district, :state => :unbooked)
+      create(:ticket,         :occasion => occasion, :event => occasion.event, :group => g, :district => school.district, :state => :booked)
     end
 
-    create_list(:ticket, 5, :occasion => occasion, :event => occasion.event, :district => school.district, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 5, :occasion => occasion, :event => occasion.event,                               :state => Ticket::UNBOOKED)
+    create_list(:ticket, 5, :occasion => occasion, :event => occasion.event, :district => school.district, :state => :unbooked)
+    create_list(:ticket, 5, :occasion => occasion, :event => occasion.event,                               :state => :unbooked)
 
-    create(:ticket, :occasion => occasion, :event => occasion.event,                               :state => Ticket::BOOKED)
-    create(:ticket, :occasion => occasion, :event => occasion.event, :district => school.district, :state => Ticket::BOOKED)
+    create(:ticket, :occasion => occasion, :event => occasion.event,                               :state => :booked)
+    create(:ticket, :occasion => occasion, :event => occasion.event, :district => school.district, :state => :booked)
 
     occasion.event.ticket_state = Event::ALLOTED_GROUP
     assert_equal 15, school.available_tickets_by_occasion(occasion)

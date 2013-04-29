@@ -31,18 +31,16 @@ class School < ActiveRecord::Base
     when Event::ALLOTED_GROUP
       self.groups.each { |g| num_tickets += g.available_tickets_by_occasion(occasion) }
     when Event::ALLOTED_DISTRICT
-      num_tickets =  Ticket.count(
+      num_tickets = Ticket.unbooked.count(
         :conditions => {
-          :event_id => occasion.event.id ,
-          :district_id => self.district.id ,
-          :state => Ticket::UNBOOKED
+          :event_id => occasion.event.id,
+          :district_id => self.district.id,
         }
       )
     when Event::FREE_FOR_ALL
-      num_tickets = Ticket.count(
+      num_tickets = Ticket.unbooked.count(
         :conditions => {
-          :event_id => occasion.event.id ,
-          :state => Ticket::UNBOOKED
+          :event_id => occasion.event.id,
         }
       )
     end

@@ -40,20 +40,16 @@ class District < ActiveRecord::Base
     case o.event.ticket_state
     when Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT
       # Count all tickets belonging to this district
-      tickets = Ticket.count(
+      tickets = Ticket.unbooked.count(
         :conditions => {
-          :event_id => o.event.id ,
-          :district_id => self.id ,
-          :state => Ticket::UNBOOKED
+          :event_id => o.event.id,
+          :district_id => self.id
         }
       )
     when Event::FREE_FOR_ALL
       # Count all tickets
-      tickets = Ticket.count(
-        :conditions => {
-          :event_id => o.event.id ,
-          :state => Ticket::UNBOOKED
-        }
+      tickets = Ticket.unbooked.count(
+        :conditions => { :event_id => o.event.id }
       )
     end
 

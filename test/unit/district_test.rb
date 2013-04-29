@@ -43,10 +43,10 @@ class DistrictTest < ActiveSupport::TestCase
   test "available tickets by occasion" do
     occasion = create(:occasion)
     district = create(:district)
-    create_list(:ticket, 5, :event => occasion.event, :district => district, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 5, :event => occasion.event, :district => district, :state => Ticket::BOOKED)
-    create_list(:ticket, 5, :event => occasion.event, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 5, :event => occasion.event, :state => Ticket::BOOKED)
+    create_list(:ticket, 5, :event => occasion.event, :district => district, :state => :unbooked)
+    create_list(:ticket, 5, :event => occasion.event, :district => district, :state => :booked)
+    create_list(:ticket, 5, :event => occasion.event, :state => :unbooked)
+    create_list(:ticket, 5, :event => occasion.event, :state => :booked)
 
     occasion.event.ticket_state = Event::ALLOTED_GROUP
     occasion.event.save!

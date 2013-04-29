@@ -37,9 +37,9 @@ class GroupTest < ActiveSupport::TestCase
   test "booked tickets by occasion" do
     group = create(:group)
     occasion = create(:occasion)
-    create_list(:ticket, 5, :group => group,       :occasion => occasion,    :state => Ticket::UNBOOKED)
-    create_list(:ticket, 6, :group => group,       :occasion => occasion,    :state => Ticket::BOOKED)
-    create_list(:ticket, 4, :occasion => occasion,                           :state => Ticket::BOOKED)
+    create_list(:ticket, 5, :group => group,       :occasion => occasion,    :state => :unbooked)
+    create_list(:ticket, 6, :group => group,       :occasion => occasion,    :state => :booked)
+    create_list(:ticket, 4, :occasion => occasion,                           :state => :booked)
 
     assert_equal 6, group.booked_tickets_by_occasion(occasion)
     assert_equal 6, group.booked_tickets_by_occasion(occasion.id)
@@ -50,13 +50,13 @@ class GroupTest < ActiveSupport::TestCase
     occasion = create(:occasion, :seats => 40)
     event = occasion.event
 
-    create_list(:ticket, 10, :group => group, :district => group.school.district, :event => event, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 10,                  :district => group.school.district, :event => event, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 10,                                                      :event => event, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 10, :group => group, :district => group.school.district, :event => event, :state => :unbooked)
+    create_list(:ticket, 10,                  :district => group.school.district, :event => event, :state => :unbooked)
+    create_list(:ticket, 10,                                                      :event => event, :state => :unbooked)
 
-    create(:ticket, :group => group, :district => group.school.district, :occasion => occasion, :event => event, :state => Ticket::BOOKED)
-    create(:ticket,                                                      :occasion => occasion, :event => event, :state => Ticket::BOOKED)
-    create(:ticket,                  :district => group.school.district, :occasion => occasion, :event => event, :state => Ticket::BOOKED)
+    create(:ticket, :group => group, :district => group.school.district, :occasion => occasion, :event => event, :state => :booked)
+    create(:ticket,                                                      :occasion => occasion, :event => event, :state => :booked)
+    create(:ticket,                  :district => group.school.district, :occasion => occasion, :event => event, :state => :booked)
 
     # Without deactivated
     occasion.event.ticket_state = Event::ALLOTED_GROUP
@@ -67,7 +67,7 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal 30, group.available_tickets_by_occasion(occasion)
     
     # With deactivated
-    create_list(:ticket, 5, :group => group, :district => group.school.district, :event => event, :state => Ticket::DEACTIVATED)
+    create_list(:ticket, 5, :group => group, :district => group.school.district, :event => event, :state => :deactivated)
     occasion.event.ticket_state = Event::ALLOTED_GROUP
     assert_equal 15, group.available_tickets_by_occasion(occasion)
     occasion.event.ticket_state = Event::ALLOTED_DISTRICT
@@ -90,14 +90,14 @@ class GroupTest < ActiveSupport::TestCase
     occasion = create(:occasion, :seats => 40)
     event = occasion.event
 
-    create_list(:ticket, 10, :group => group, :district => group.school.district, :event => event, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 5 , :group => group, :district => group.school.district, :event => event, :state => Ticket::DEACTIVATED)
-    create_list(:ticket, 10,                  :district => group.school.district, :event => event, :state => Ticket::UNBOOKED)
-    create_list(:ticket, 10,                                                      :event => event, :state => Ticket::UNBOOKED)
+    create_list(:ticket, 10, :group => group, :district => group.school.district, :event => event, :state => :unbooked)
+    create_list(:ticket, 5 , :group => group, :district => group.school.district, :event => event, :state => :deactivated)
+    create_list(:ticket, 10,                  :district => group.school.district, :event => event, :state => :unbooked)
+    create_list(:ticket, 10,                                                      :event => event, :state => :unbooked)
 
-    create(:ticket, :group => group, :district => group.school.district, :occasion => occasion, :event => event, :state => Ticket::BOOKED)
-    create(:ticket,                                                      :occasion => occasion, :event => event, :state => Ticket::BOOKED)
-    create(:ticket,                  :district => group.school.district, :occasion => occasion, :event => event, :state => Ticket::BOOKED)
+    create(:ticket, :group => group, :district => group.school.district, :occasion => occasion, :event => event, :state => :booked)
+    create(:ticket,                                                      :occasion => occasion, :event => event, :state => :booked)
+    create(:ticket,                  :district => group.school.district, :occasion => occasion, :event => event, :state => :booked)
 
     occasion.event.ticket_state = Event::ALLOTED_GROUP
     tickets = group.bookable_tickets(occasion)

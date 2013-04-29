@@ -316,12 +316,12 @@ namespace :kp do
                 t.wheelchair = false
                 t.booked_when = occasion.date.to_time
                 if occasion.date < Date.today
-                  t.state = rand(10) == 0 ? Ticket::NOT_USED : Ticket::USED
+                  t.state = rand(10) == 0 ? :not_used : :used
                 else
-                  t.state = Ticket::BOOKED
+                  t.state = :booked
                 end
               else
-                t.state = Ticket::UNBOOKED
+                t.state = :unbooked
               end
             end
 

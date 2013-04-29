@@ -45,7 +45,7 @@ class BookingTest < ActiveSupport::TestCase
     assert_equal "Det finns bara 3 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
 
     # Wheelchair seats already booked
-    create_list(:ticket, 2, :occasion => occasion, :wheelchair => true, :state => Ticket::BOOKED)
+    create_list(:ticket, 2, :occasion => occasion, :wheelchair => true, :state => :booked)
     booking = build(:booking, :occasion => occasion, :student_count => 1, :adult_count => 0, :wheelchair_count => 2)
     assert !booking.valid?
     assert_equal "Det finns bara 1 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
@@ -71,7 +71,7 @@ class BookingTest < ActiveSupport::TestCase
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 0)
     booking = create(:booking, :occasion => occasion, :student_count => 8, :adult_count => 2, :wheelchair_count => 0)
     assert booking.valid?
-    create(:ticket, :event => occasion.event, :group => booking.group, :state => Ticket::UNBOOKED, :wheelchair => false)
+    create(:ticket, :event => occasion.event, :group => booking.group, :state => :unbooked, :wheelchair => false)
     booking.student_count += 1
     assert !booking.valid?
     assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
@@ -80,7 +80,7 @@ class BookingTest < ActiveSupport::TestCase
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 0)
     booking = create(:booking, :occasion => occasion, :student_count => 8, :adult_count => 2, :wheelchair_count => 0)
     assert booking.valid?
-    create(:ticket, :event => occasion.event, :group => booking.group, :state => Ticket::UNBOOKED, :wheelchair => false)
+    create(:ticket, :event => occasion.event, :group => booking.group, :state => :unbooked, :wheelchair => false)
     booking.wheelchair_count += 1
     assert !booking.valid?
     assert_equal "Det finns bara 0 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
@@ -88,9 +88,9 @@ class BookingTest < ActiveSupport::TestCase
     # Wheelchair seats already booked
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 2)
     booking = create(:booking, :occasion => occasion, :student_count => 8, :adult_count => 2, :wheelchair_count => 0)
-    create_list(:ticket, 2, :occasion => occasion, :wheelchair => true, :state => Ticket::BOOKED)
+    create_list(:ticket, 2, :occasion => occasion, :wheelchair => true, :state => :booked)
     assert booking.valid?
-    create(:ticket, :event => occasion.event, :group => booking.group, :state => Ticket::UNBOOKED, :wheelchair => false)
+    create(:ticket, :event => occasion.event, :group => booking.group, :state => :unbooked, :wheelchair => false)
     booking.wheelchair_count += 1
     assert !booking.valid?
     assert_equal "Det finns bara 0 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
@@ -98,7 +98,7 @@ class BookingTest < ActiveSupport::TestCase
     # Include deactivated tickets in the validation, for group allotment
     occasion = create(:occasion, :single_group => true)
     booking = create(:booking, :occasion => occasion)
-    create(:ticket, :event => occasion.event, :group => booking.group, :state => Ticket::DEACTIVATED, :booking => booking)
+    create(:ticket, :event => occasion.event, :group => booking.group, :state => :deactivated, :booking => booking)
     booking.tickets(true) # reload association
     assert booking.valid?
     booking.student_count += 2
@@ -109,7 +109,7 @@ class BookingTest < ActiveSupport::TestCase
     occasion = create(:occasion, :single_group => true)
     occasion.event.ticket_state = Event::ALLOTED_DISTRICT
     booking = create(:booking, :occasion => occasion)
-    create(:ticket, :event => occasion.event, :group => booking.group, :state => Ticket::DEACTIVATED, :booking => booking)
+    create(:ticket, :event => occasion.event, :group => booking.group, :state => :deactivated, :booking => booking)
     booking.tickets(true) # reload association
     assert booking.valid?
     booking.student_count += 2
@@ -121,12 +121,12 @@ class BookingTest < ActiveSupport::TestCase
     assert !Ticket.exists?
     booking = build(:booking, :student_count => 15, :adult_count => 3, :wheelchair_count => 2)
     assert_equal 20, Ticket.count(:all)
-    Ticket.all.each { |t| assert t.state == Ticket::UNBOOKED }
+    Ticket.all.each { |t| assert t.unbooked? }
 
     # New booking
     booking.save!
     booking.tickets(true)
-    Ticket.all.each { |t| assert t.state == Ticket::BOOKED }
+    Ticket.all.each { |t| assert t.booked? }
     assert_equal booking.student_count,    Ticket.count(:conditions => { :adult => false, :wheelchair => false })
     assert_equal booking.adult_count,      Ticket.count(:conditions => { :adult => true,  :wheelchair => false })
     assert_equal booking.wheelchair_count, Ticket.count(:conditions => { :adult => false, :wheelchair => true  })
@@ -139,10 +139,10 @@ class BookingTest < ActiveSupport::TestCase
 
     booking.save!
     booking.tickets(true)
-    assert_equal 3,                        Ticket.count(:conditions => { :state => Ticket::UNBOOKED } )
-    assert_equal booking.student_count,    Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => false })
-    assert_equal booking.adult_count,      Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => true,  :wheelchair => false })
-    assert_equal booking.wheelchair_count, Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => true  })
+    assert_equal 3,                        Ticket.unbooked.count
+    assert_equal booking.student_count,    Ticket.booked.count(:conditions => { :adult => false, :wheelchair => false })
+    assert_equal booking.adult_count,      Ticket.booked.count(:conditions => { :adult => true,  :wheelchair => false })
+    assert_equal booking.wheelchair_count, Ticket.booked.count(:conditions => { :adult => false, :wheelchair => true  })
 
     # Existing booking, more tickets
     booking.student_count    += 1
@@ -151,7 +151,7 @@ class BookingTest < ActiveSupport::TestCase
 
     booking.save!
     booking.tickets(true)
-    Ticket.all.each { |t| assert t.state == Ticket::BOOKED }
+    Ticket.all.each { |t| assert t.booked? }
     assert_equal booking.student_count,    Ticket.count(:conditions => { :adult => false, :wheelchair => false })
     assert_equal booking.adult_count,      Ticket.count(:conditions => { :adult => true,  :wheelchair => false })
     assert_equal booking.wheelchair_count, Ticket.count(:conditions => { :adult => false, :wheelchair => true  })
@@ -159,7 +159,7 @@ class BookingTest < ActiveSupport::TestCase
     # Unbook
     booking.unbooked = true
     booking.save!
-    Ticket.all.each { |t| assert t.state == Ticket::UNBOOKED }
+    Ticket.all.each { |t| assert t.unbooked? }
   end
 
   test "synchronize tickets - single group occasion" do
@@ -174,19 +174,19 @@ class BookingTest < ActiveSupport::TestCase
       :district => booking.group.school.district,
       :occasion => booking.occasion,
       :event => booking.occasion.event,
-      :state => Ticket::UNBOOKED
+      :state => :unbooked
     )
     assert_equal 30, Ticket.count(:all)
-    Ticket.all.each { |t| assert t.state == Ticket::UNBOOKED }
+    Ticket.all.each { |t| assert t.unbooked? }
 
     # New booking
     booking.save!
     booking.tickets(true)
-    assert_equal 20,                       Ticket.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 10,                       Ticket.count(:conditions => { :state => Ticket::DEACTIVATED })
-    assert_equal booking.student_count,    Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => false })
-    assert_equal booking.adult_count,      Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => true,  :wheelchair => false })
-    assert_equal booking.wheelchair_count, Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => true  })
+    assert_equal 20,                       Ticket.booked.count
+    assert_equal 10,                       Ticket.deactivated.count
+    assert_equal booking.student_count,    Ticket.booked.count(:conditions => { :adult => false, :wheelchair => false })
+    assert_equal booking.adult_count,      Ticket.booked.count(:conditions => { :adult => true,  :wheelchair => false })
+    assert_equal booking.wheelchair_count, Ticket.booked.count(:conditions => { :adult => false, :wheelchair => true  })
 
 
     ## Existing booking, fewer tickets
@@ -196,11 +196,11 @@ class BookingTest < ActiveSupport::TestCase
 
     booking.save!
     booking.tickets(true)
-    assert_equal 17,                       Ticket.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 13,                       Ticket.count(:conditions => { :state => Ticket::DEACTIVATED })
-    assert_equal booking.student_count,    Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => false })
-    assert_equal booking.adult_count,      Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => true,  :wheelchair => false })
-    assert_equal booking.wheelchair_count, Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => true  })
+    assert_equal 17,                       Ticket.booked.count
+    assert_equal 13,                       Ticket.deactivated.count
+    assert_equal booking.student_count,    Ticket.booked.count(:conditions => { :adult => false, :wheelchair => false })
+    assert_equal booking.adult_count,      Ticket.booked.count(:conditions => { :adult => true,  :wheelchair => false })
+    assert_equal booking.wheelchair_count, Ticket.booked.count(:conditions => { :adult => false, :wheelchair => true  })
 
     ## Existing booking, more tickets
     booking.student_count    += 2
@@ -209,16 +209,16 @@ class BookingTest < ActiveSupport::TestCase
 
     booking.save!
     booking.tickets(true)
-    assert_equal 23,                       Ticket.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 7,                        Ticket.count(:conditions => { :state => Ticket::DEACTIVATED })
-    assert_equal booking.student_count,    Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => false })
-    assert_equal booking.adult_count,      Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => true,  :wheelchair => false })
-    assert_equal booking.wheelchair_count, Ticket.count(:conditions => { :state => Ticket::BOOKED, :adult => false, :wheelchair => true  })
+    assert_equal 23,                       Ticket.booked.count
+    assert_equal 7,                        Ticket.deactivated.count
+    assert_equal booking.student_count,    Ticket.booked.count(:conditions => { :adult => false, :wheelchair => false })
+    assert_equal booking.adult_count,      Ticket.booked.count(:conditions => { :adult => true,  :wheelchair => false })
+    assert_equal booking.wheelchair_count, Ticket.booked.count(:conditions => { :adult => false, :wheelchair => true  })
 
     # Unbook
     booking.unbooked = true
     booking.save!
-    Ticket.all.each { |t| assert t.state == Ticket::UNBOOKED }
+    Ticket.all.each { |t| assert t.unbooked? }
   end
 
   test "set booked at timestamp" do

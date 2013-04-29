@@ -44,24 +44,24 @@ class AttendanceController < ApplicationController
         tickets.each do |ticket|
           if ticket.adult
             if attendance.has_key?(:adult)
-              ticket.state = attendance[:adult] > 0 ? Ticket::USED : Ticket::NOT_USED
+              ticket.state = attendance[:adult] > 0 ? :used : :not_used
               attendance[:adult] -= 1
             else
-              ticket.state = Ticket::BOOKED
+              ticket.state = :booked
             end
           elsif ticket.wheelchair
             if attendance.has_key?(:wheelchair)
-              ticket.state = attendance[:wheelchair] > 0 ? Ticket::USED : Ticket::NOT_USED
+              ticket.state = attendance[:wheelchair] > 0 ? :used : :not_used
               attendance[:wheelchair] -= 1
             else
-              ticket.state = Ticket::BOOKED
+              ticket.state = :booked
             end
           else
             if attendance.has_key?(:normal)
-              ticket.state = attendance[:normal] > 0 ? Ticket::USED : Ticket::NOT_USED
+              ticket.state = attendance[:normal] > 0 ? :used : :not_used
               attendance[:normal] -= 1
             else
-              ticket.state = Ticket::BOOKED
+              ticket.state = :booked
             end
           end
 
@@ -214,7 +214,7 @@ class AttendanceController < ApplicationController
   def create_extra_tickets(attendance, base, type)
     1.upto(attendance) do |i|
       ticket = Ticket.new do |t|
-        t.state = Ticket::USED
+        t.state = :used
         t.group = base.group
         t.user = current_user
         t.occasion = base.occasion

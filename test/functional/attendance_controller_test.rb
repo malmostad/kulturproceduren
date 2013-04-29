@@ -113,9 +113,9 @@ class AttendanceControllerTest < ActionController::TestCase
     book(groups.second, @occasions.first, 4, 2, 1)
     book(groups.third,  @occasions.first, 1, 1)
 
-    assert_equal 4, groups.first.tickets.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 7, groups.second.tickets.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 2, groups.third.tickets.count(:conditions => { :state => Ticket::BOOKED })
+    assert_equal 4, groups.first.tickets.booked.count
+    assert_equal 7, groups.second.tickets.booked.count
+    assert_equal 2, groups.third.tickets.booked.count
 
     post(
       :update_report,
@@ -134,25 +134,25 @@ class AttendanceControllerTest < ActionController::TestCase
 
     # First group
     tickets = groups.first.tickets(true).to_a
-    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::NOT_USED }.length
-    assert_equal 0, tickets.find_all { |t| t.state == Ticket::BOOKED }.length
+    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t| !t.adult && !t.wheelchair && t.not_used? }.length
+    assert_equal 0, tickets.find_all { |t| t.booked? }.length
 
     # Second group
     tickets = groups.second.tickets(true).to_a
-    assert_equal 4, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::NOT_USED }.length
-    assert_equal 0, tickets.find_all { |t| t.state == Ticket::BOOKED }.length
+    assert_equal 4, tickets.find_all { |t| !t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.not_used? }.length
+    assert_equal 0, tickets.find_all { |t| t.booked? }.length
 
     # Third group, more reported than booked
     tickets = groups.third.tickets(true).to_a
-    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 2, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 0, tickets.find_all { |t| t.state == Ticket::BOOKED || t.state == Ticket::NOT_USED }.length
+    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 2, tickets.find_all { |t|  t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.used? }.length
+    assert_equal 0, tickets.find_all { |t| t.booked? || t.not_used? }.length
   end
   test "update report for event" do
     # Booking setup
@@ -170,10 +170,10 @@ class AttendanceControllerTest < ActionController::TestCase
     book(groups.third,  @occasions.third,         1, 1)
     book(groups.fourth, @not_reportable_occasion, 1, 1)
 
-    assert_equal 4, groups.first.tickets.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 7, groups.second.tickets.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 2, groups.third.tickets.count(:conditions => { :state => Ticket::BOOKED })
-    assert_equal 2, groups.fourth.tickets.count(:conditions => { :state => Ticket::BOOKED })
+    assert_equal 4, groups.first.tickets.booked.count
+    assert_equal 7, groups.second.tickets.booked.count
+    assert_equal 2, groups.third.tickets.booked.count
+    assert_equal 2, groups.fourth.tickets.booked.count
 
     post(
       :update_report,
@@ -199,29 +199,29 @@ class AttendanceControllerTest < ActionController::TestCase
 
     # First group
     tickets = groups.first.tickets(true).to_a
-    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::NOT_USED }.length
-    assert_equal 0, tickets.find_all { |t| t.state == Ticket::BOOKED }.length
+    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t| !t.adult && !t.wheelchair && t.not_used? }.length
+    assert_equal 0, tickets.find_all { |t| t.booked? }.length
 
     # Second group
     tickets = groups.second.tickets(true).to_a
-    assert_equal 4, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::NOT_USED }.length
-    assert_equal 0, tickets.find_all { |t| t.state == Ticket::BOOKED }.length
+    assert_equal 4, tickets.find_all { |t| !t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t|  t.adult && !t.wheelchair && t.not_used? }.length
+    assert_equal 0, tickets.find_all { |t| t.booked? }.length
 
     # Third group, more reported than booked
     tickets = groups.third.tickets(true).to_a
-    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 2, tickets.find_all { |t|  t.adult && !t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.state == Ticket::USED }.length
-    assert_equal 0, tickets.find_all { |t| t.state == Ticket::BOOKED || t.state == Ticket::NOT_USED }.length
+    assert_equal 2, tickets.find_all { |t| !t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 2, tickets.find_all { |t|  t.adult && !t.wheelchair && t.used? }.length
+    assert_equal 1, tickets.find_all { |t| !t.adult &&  t.wheelchair && t.used? }.length
+    assert_equal 0, tickets.find_all { |t| t.booked? || t.not_used? }.length
 
     # Fourth group, unreportable occasion
     tickets = groups.fourth.tickets(true).to_a
-    assert_equal 2, tickets.find_all { |t| t.state == Ticket::BOOKED }.length
+    assert_equal 2, tickets.find_all { |t| t.booked? }.length
   end
 
   test "update report, upcoming occasion" do

@@ -132,7 +132,7 @@ class Event < ActiveRecord::Base
   end
 
   def has_booking?
-    tickets.exists?(:state => Ticket::BOOKED)
+    tickets.booked.exists?
   end
 
   # Indicates whether the event has tickets available for booking
@@ -146,7 +146,7 @@ class Event < ActiveRecord::Base
   # Gets the total number of unbooked tickets on this event
   def unbooked_tickets(reload=false)
     if @total_unbooked_tickets.nil? || reload
-      @total_unbooked_tickets = tickets.count(:conditions =>  { :state => Ticket::UNBOOKED })
+      @total_unbooked_tickets = tickets.unbooked.count
     end
     @total_unbooked_tickets
   end
@@ -165,7 +165,7 @@ class Event < ActiveRecord::Base
   def ticket_usage
     return [
       Ticket.count( :conditions => { :event_id => self.id } ) ,
-      Ticket.count( :conditions => { :event_id => self.id  , :state => Ticket::BOOKED})
+      Ticket.booked.count( :conditions => { :event_id => self.id })
     ]
   end
 

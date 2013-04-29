@@ -69,7 +69,7 @@ class ApplicationProxyControllerTest < ActionController::TestCase
     group = school.groups.second
     occasion = create(:occasion)
     occasion.event.ticket_state = Event::ALLOTED_GROUP
-    create(:ticket, :event => occasion.event, :group => group, :district => district, :state => Ticket::UNBOOKED)
+    create(:ticket, :event => occasion.event, :group => group, :district => district, :state => :unbooked)
 
     # no selection, occasion
     session[:group_selection] = nil
