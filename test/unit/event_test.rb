@@ -305,8 +305,24 @@ class EventTest < ActiveSupport::TestCase
 
   test "fully booked" do
     event = create(:event)
+
     # Unbooked tickets
     tickets = create_list(:ticket, 2, :event => event, :state => :unbooked)
+
+    ts = Time.zone.now
+
+    # Old occasions, should not count
+    create(:occasion,
+      :event      => event,
+      :date       => Date.yesterday,
+      :start_time => (ts - 24.hours).strftime("%H:%M"),
+      :stop_time  => (ts - 23.hours).strftime("%H:%M"))
+    create(:occasion,
+      :event      => event,
+      :date       => Date.today,
+      :start_time => (ts - 1.hours).strftime("%H:%M"),
+      :stop_time  => (ts + 1.hours).strftime("%H:%M"))
+
     # Available seats
     occasions = create_list(:occasion, 2, :event => event, :single_group => true) # No booked tickets
 
@@ -331,6 +347,21 @@ class EventTest < ActiveSupport::TestCase
 
   test "has available seats" do
     event = create(:event)
+
+    ts = Time.zone.now
+
+    # Old occasions, should not count
+    create(:occasion,
+      :event      => event,
+      :date       => Date.yesterday,
+      :start_time => (ts - 24.hours).strftime("%H:%M"),
+      :stop_time  => (ts - 23.hours).strftime("%H:%M"))
+    create(:occasion,
+      :event      => event,
+      :date       => Date.today,
+      :start_time => (ts - 1.hours).strftime("%H:%M"),
+      :stop_time  => (ts + 1.hours).strftime("%H:%M"))
+
     # This uses Occasion#available_seats
     # No available seats for an occasion if it has at least one booked ticket and is a single group occasion
     create_list(:occasion_with_booked_tickets, 2, :event => event, :single_group => true)

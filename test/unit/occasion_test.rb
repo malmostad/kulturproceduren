@@ -139,6 +139,47 @@ class OccasionTest < ActiveSupport::TestCase
     end
   end
 
+  test "upcoming" do
+    ts = Time.zone.now
+    # Yesterday
+    create(:occasion,
+      :date       => Date.yesterday,
+      :start_time => (ts - 23.hours).strftime("%H:%M"),
+      :stop_time  => (ts - 22.hours).strftime("%H:%M"))
+    # Today, but the entire occasion has passed
+    create(:occasion,
+      :date       => Date.today,
+      :start_time => (ts - 2.hour).strftime("%H:%M"),
+      :stop_time  => (ts - 1.hours).strftime("%H:%M"))
+    # Today, occasion has started but not ended
+    create(:occasion,
+      :date       => Date.today,
+      :start_time => (ts - 1.hour).strftime("%H:%M"),
+      :stop_time  => (ts + 1.hours).strftime("%H:%M"))
+    # Today, occasion has not started
+    create(:occasion,
+      :date       => Date.today,
+      :start_time => (ts + 1.hour).strftime("%H:%M"),
+      :stop_time  => (ts + 2.hours).strftime("%H:%M"))
+    # Tomorrow
+    create(:occasion,
+      :date       => Date.tomorrow,
+      :start_time => (ts + 22.hours).strftime("%H:%M"),
+      :stop_time  => (ts + 23.hours).strftime("%H:%M"))
+
+    result = Occasion.upcoming.all
+    assert_equal 2, result.length # The last two defined above
+
+    result.each do |occasion|
+      assert occasion.date              >= Date.today
+
+      if occasion.date == Date.today
+        assert occasion.start_time.hour >= ts.hour
+        assert occasion.start_time.min  >= ts.min
+      end
+    end
+  end
+
   test "ticket usage" do
     occasion = create(:occasion)
     create_list(:ticket, 5, :occasion => occasion, :state => :booked)

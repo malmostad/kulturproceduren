@@ -190,8 +190,8 @@ FactoryGirl.define do
   factory :occasion do
     association      :event, :factory => :event, :ticket_state => :alloted_group, :ticket_release_date => Date.today - 1
     date             Date.today
-    start_time       Time.now
-    stop_time        Time.now + 1.hour
+    start_time       (Time.zone.now + 1.hour).strftime("%H:%M")
+    stop_time        (Time.zone.now + 2.hours).strftime("%H:%M")
     seats            30
     wheelchair_seats 3
     address          "Foogatan 13"

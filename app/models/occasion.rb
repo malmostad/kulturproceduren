@@ -44,6 +44,18 @@ class Occasion < ActiveRecord::Base
   validates_numericality_of :seats, :only_integer => true,
     :message => "Antalet platser måste vara ett giltigt heltal"
 
+  named_scope :upcoming, lambda {
+    {
+      :conditions => [
+        "date > :date or (date = :date and start_time > :time)",
+        {
+          :date => Date.today,
+          :time => Time.zone.now.strftime("%H:%M")
+        }
+      ]
+    }
+  }
+
   # Returns an array of the ticket usage on this occasion. The first element
   # in the array contains the total amount of tickets on this occasion, and the
   # second the total amount of booked tickets on this occasion.

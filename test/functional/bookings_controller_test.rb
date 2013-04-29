@@ -551,6 +551,14 @@ class BookingsControllerTest < ActionController::TestCase
 
     booking = create(:booking, :user => @user, :student_count => 30)
 
+    # Passed occasion
+    ts = Time.zone.now
+    create(:occasion,
+      :event      => booking.event,
+      :date       => Date.yesterday,
+      :start_time => (ts - 23.hours).strftime("%H:%M"),
+      :stop_time  => (ts - 22.hours).strftime("%H:%M"))
+
     notification_request = create(
       :notification_request,
       :user => @user,
@@ -600,6 +608,14 @@ class BookingsControllerTest < ActionController::TestCase
 
     booking = create(:booking, :user => @user, :student_count => 30)
 
+    # Passed occasion
+    ts = Time.zone.now
+    create(:occasion,
+      :event      => booking.event,
+      :date       => Date.yesterday,
+      :start_time => (ts - 23.hours).strftime("%H:%M"),
+      :stop_time  => (ts - 22.hours).strftime("%H:%M"))
+
     notification_request = create(
       :notification_request,
       :user => @user,
@@ -640,6 +656,15 @@ class BookingsControllerTest < ActionController::TestCase
 
   test "destroy" do
     booking = create(:booking, :user => @user)
+
+    # Passed occasion
+    ts = Time.zone.now
+    create(:occasion,
+      :event      => booking.event,
+      :date       => Date.yesterday,
+      :start_time => (ts - 23.hours).strftime("%H:%M"),
+      :stop_time  => (ts - 22.hours).strftime("%H:%M"))
+
     notification_request = create(
       :notification_request,
       :user => @user,

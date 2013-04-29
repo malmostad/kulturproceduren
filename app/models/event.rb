@@ -187,7 +187,7 @@ class Event < ActiveRecord::Base
   end
 
   def has_available_seats?
-    self.occasions.any? { |o| o.available_seats > 0 }
+    self.occasions.upcoming.any? { |o| o.available_seats > 0 }
   end
 
   # Returns an array of the ticket usage on this event. The first element is the
