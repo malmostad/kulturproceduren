@@ -96,21 +96,17 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "get_username" do
-    old_app_config = APP_CONFIG
-    
     user = create(:user, :username => "username")
 
     assert_equal "username", user.get_username
 
-    Kernel::silence_warnings { ::APP_CONFIG = { :httpauth => { :username_prefix => "http_" } } }
+    APP_CONFIG.replace(:httpauth => { :username_prefix => "http_" })
     user.username = "http_username"
     assert_equal "username", user.get_username
 
-    Kernel::silence_warnings { ::APP_CONFIG = { :ldap => { :username_prefix => "ldap_" }, :httpauth => { :username_prefix => "http_" } } }
+    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" }, :httpauth => { :username_prefix => "http_" })
     user.username = "ldap_username"
     assert_equal "username", user.get_username
-
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
   end
 
   test "bookings" do
@@ -218,20 +214,14 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "username unique" do
-    old_app_config = APP_CONFIG
-    
     user = create(:user, :username => "username")
 
     assert !build(:user, :username => "username").valid?
 
-    Kernel::silence_warnings { ::APP_CONFIG = { :httpauth => { :username_prefix => "http_" } } }
+    APP_CONFIG.replace(:httpauth => { :username_prefix => "http_" })
     assert !build(:user, :username => "http_username").valid?
 
-    Kernel::silence_warnings { ::APP_CONFIG = { :ldap => { :username_prefix => "ldap_" }, :httpauth => { :username_prefix => "http_" } } }
+    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" }, :httpauth => { :username_prefix => "http_" })
     assert !build(:user, :username => "ldap_username").valid?
-
-
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
-
   end
 end

@@ -8,8 +8,7 @@ class ImageTest < ActiveSupport::TestCase
   end
 
   test "save" do
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :width => 10, :height => 20, :thumb_width => 1, :thumb_height => 2 } } }
+    APP_CONFIG.replace(:upload_image => { :width => 10, :height => 20, :thumb_width => 1, :thumb_height => 2 })
 
     outfile = "#{RAILS_ROOT}/tmp/foo.txt"
     upload = { "datafile" => stub(:read => "foo") }
@@ -31,44 +30,31 @@ class ImageTest < ActiveSupport::TestCase
 
     # Cleanup
     File.delete(outfile)
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
   end
 
   test "image path" do
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :path => "upload" } } }
+    APP_CONFIG.replace(:upload_image => { :path => "upload" })
 
     image = create(:image, :filename => "test.jpg")
     assert_equal "#{RAILS_ROOT}/public/images/upload/test.jpg", image.image_path
-
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
   end
   test "image url" do
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :path => "upload" } } }
+    APP_CONFIG.replace(:upload_image => { :path => "upload" })
 
     image = create(:image, :filename => "test.jpg")
     assert_equal "upload/test.jpg", image.image_url
-
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
   end
   test "thumb path" do
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :path => "upload" } } }
+    APP_CONFIG.replace(:upload_image => { :path => "upload" })
 
     image = create(:image, :filename => "test.jpg")
     assert_equal "#{RAILS_ROOT}/public/images/upload/test.thumb.jpg", image.thumb_path
-
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
   end
   test "thumb url" do
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :path => "upload" } } }
+    APP_CONFIG.replace(:upload_image => { :path => "upload" })
 
     image = create(:image, :filename => "test.jpg")
     assert_equal "upload/test.thumb.jpg", image.thumb_url
-
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
   end
 
   test "thumb name" do
