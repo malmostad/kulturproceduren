@@ -40,7 +40,7 @@
                value="<%= h @event.ticket_release_date %>"/>
       </div>
     </div>
-    <% if !is_edit || @event.ticket_state == Event::ALLOTED_GROUP %>
+    <% if !is_edit || @event.ticket_state == :alloted_group %>
       <div class="form-row district_transition_date-field-row">
         <label for="kp-allotment-district_transition_date">Övergång till stadsdel:</label>
         <div class="input-container">
@@ -54,7 +54,7 @@
         </div>
       </div>
     <% end %>
-    <% if !is_edit || [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT].include?(@event.ticket_state) %>
+    <% if !is_edit || [:alloted_group, :alloted_district].include?(@event.ticket_state) %>
       <div class="form-row free_for_all_transition_date-field-row">
         <label for="kp-allotment-free_for_all_transition_date">Övergång till hela staden:</label>
         <div class="input-container">
@@ -89,7 +89,7 @@
       </div>
     <% end -%>
 
-    <% if !is_edit || [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT].include?(@event.ticket_state) %>
+    <% if !is_edit || [:alloted_group, :alloted_district].include?(@event.ticket_state) %>
       <div class="form-row district_id-field-row">
         <label for="kp-allotment-district_id-all">Stadsdelar:</label>
         <div class="input-container">

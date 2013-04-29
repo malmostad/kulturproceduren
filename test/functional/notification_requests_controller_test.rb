@@ -30,7 +30,7 @@ class NotificationRequestsControllerTest < ActionController::TestCase
   end
 
   test "new, for group alloted event" do
-    event = create(:event, :ticket_state => Event::ALLOTED_GROUP)
+    event = create(:event, :ticket_state => :alloted_group)
     group = create(:group)
     session[:group_selection] = {
       :group_id    => group.id,
@@ -46,7 +46,7 @@ class NotificationRequestsControllerTest < ActionController::TestCase
     assert_equal    group, assigns(:notification_request).group
   end
   test "new, for district alloted event" do
-    event = create(:event, :ticket_state => Event::ALLOTED_DISTRICT)
+    event = create(:event, :ticket_state => :alloted_district)
     group = create(:group)
     session[:group_selection] = {
       :group_id    => group.id,
@@ -62,7 +62,7 @@ class NotificationRequestsControllerTest < ActionController::TestCase
     assert_equal    group, assigns(:notification_request).group
   end
   test "new, for free for all event" do
-    event = create(:event, :ticket_state => Event::FREE_FOR_ALL)
+    event = create(:event, :ticket_state => :free_for_all)
 
     get :new, :event_id => event.id
     assert_response :success
@@ -93,7 +93,7 @@ class NotificationRequestsControllerTest < ActionController::TestCase
     assert !NotificationRequest.exists?
   end
   test "create, alloted" do
-    event = create(:event, :ticket_state => Event::ALLOTED_GROUP)
+    event = create(:event, :ticket_state => :alloted_group)
 
     post :create, :event_id => event.id, :notification_request => {}
     assert_redirected_to event
@@ -105,7 +105,7 @@ class NotificationRequestsControllerTest < ActionController::TestCase
     assert       notification_request.for_transition?
   end
   test "create, free for all" do
-    event = create(:event, :ticket_state => Event::FREE_FOR_ALL)
+    event = create(:event, :ticket_state => :free_for_all)
 
     post :create, :event_id => event.id, :notification_request => {}
     assert_redirected_to event

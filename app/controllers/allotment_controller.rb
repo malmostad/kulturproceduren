@@ -31,7 +31,7 @@ class AllotmentController < ApplicationController
     end
 
     session[:allotment][:num_tickets] = incoming[:num_tickets].to_i
-    session[:allotment][:ticket_state] = incoming[:ticket_state].to_i
+    session[:allotment][:ticket_state] = Event.new(:ticket_state => incoming[:ticket_state].to_i).ticket_state
 
     unless @event.tickets.empty?
       # Add the number of tickets already assigned to an event
@@ -59,7 +59,7 @@ class AllotmentController < ApplicationController
       end
     end
 
-    if session[:allotment][:ticket_state] == Event::FREE_FOR_ALL
+    if session[:allotment][:ticket_state] == :free_for_all
       # If the selected ticket state is free for all, we don't need to do any
       # distribution
       redirect_to :action => "create_free_for_all_tickets", :id => params[:id]
@@ -136,7 +136,7 @@ class AllotmentController < ApplicationController
 
       tickets_created = 0
 
-      if session[:allotment][:ticket_state] == Event::ALLOTED_GROUP
+      if session[:allotment][:ticket_state] == :alloted_group
         # Assign the tickets to groups
         groups = Group.find assignment.keys, :include => { :school => :district }
 
@@ -154,7 +154,7 @@ class AllotmentController < ApplicationController
           group.move_last_in_prio
         end
 
-      elsif session[:allotment][:ticket_state] == Event::ALLOTED_DISTRICT
+      elsif session[:allotment][:ticket_state] == :alloted_district
         # Assign the tickets to districts
         districts = District.find assignment.keys
 
@@ -275,7 +275,7 @@ class AllotmentController < ApplicationController
     assign_children(event, districts)
     assigned_tickets = 0
 
-    if ticket_state == Event::ALLOTED_GROUP
+    if ticket_state == :alloted_group
       districts.each do |district|
         district.num_tickets = 0;
         district.distribution_schools.each do |school|
@@ -296,7 +296,7 @@ class AllotmentController < ApplicationController
         end
       end
 
-    elsif ticket_state == Event::ALLOTED_DISTRICT
+    elsif ticket_state == :alloted_district
 
       districts.each do |district|
         district.num_tickets = 
@@ -315,7 +315,7 @@ class AllotmentController < ApplicationController
     distribution = {}
     assign_children(event, districts)
 
-    if ticket_state == Event::ALLOTED_GROUP
+    if ticket_state == :alloted_group
       group_counts = event.tickets.count(:group => "group_id")
 
       districts.each do |district|
@@ -332,7 +332,7 @@ class AllotmentController < ApplicationController
         end
       end
 
-    elsif ticket_state == Event::ALLOTED_DISTRICT
+    elsif ticket_state == :alloted_district
       district_counts = event.tickets.count(:group => "district_id")
       districts.each { |d| distribution[d.id] = district_counts[d.id].to_i }
     end
@@ -361,7 +361,7 @@ class AllotmentController < ApplicationController
 
       tickets -= assigned_tickets
 
-      if ticket_state == Event::ALLOTED_GROUP
+      if ticket_state == :alloted_group
         children_per_group = AgeGroup.
           active.
           with_age(event.from_age, event.to_age).
@@ -385,7 +385,7 @@ class AllotmentController < ApplicationController
         logger.info "Pooling #{assigned_tickets} tickets"
         extra_pool = assigned_tickets
 
-      elsif ticket_state == Event::ALLOTED_DISTRICT
+      elsif ticket_state == :alloted_district
         distribution[district_id.to_i] = assigned_tickets
       end
     end

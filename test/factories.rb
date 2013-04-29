@@ -152,7 +152,7 @@ FactoryGirl.define do
     to_age                       11
     further_education            false
     ticket_release_date          nil
-    ticket_state                 0
+    ticket_state                 nil
     url                          "http://www.malmo.se"
     movie_url                    "http://www.malmo.se"
     opening_hours                "08:00 - 19:00"
@@ -188,7 +188,7 @@ FactoryGirl.define do
   end
 
   factory :occasion do
-    association      :event, :factory => :event, :ticket_state => Event::ALLOTED_GROUP, :ticket_release_date => Date.today - 1
+    association      :event, :factory => :event, :ticket_state => :alloted_group, :ticket_release_date => Date.today - 1
     date             Date.today
     start_time       Time.now
     stop_time        Time.now + 1.hour

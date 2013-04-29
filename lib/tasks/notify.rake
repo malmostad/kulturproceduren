@@ -71,7 +71,7 @@ namespace :kp do
       Role.find_by_symbol(:admin).users.each { |u| addresses << u.email }
 
       case event.ticket_state
-      when Event::ALLOTED_GROUP
+      when :alloted_group
         event.groups.each do |group|
           # Notify the contacts on both groups, schools and districts
           addresses += (group.contacts || "").split(",")
@@ -81,7 +81,7 @@ namespace :kp do
           group_structure[group.school] ||= []
           group_structure[group.school] << group
         end
-      when Event::ALLOTED_DISTRICT
+      when :alloted_district
         event.districts.each do |district|
           addresses += (district.contacts || "").split(",")
 
@@ -93,7 +93,7 @@ namespace :kp do
             end
           end
         end
-      when Event::FREE_FOR_ALL
+      when :free_for_all
         District.find(:all).each do |district|
           addresses += (district.contacts || "").split(",")
 

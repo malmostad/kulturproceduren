@@ -107,7 +107,7 @@ class BookingTest < ActiveSupport::TestCase
 
     # Include deactivated tickets in the validation, the other allotment states
     occasion = create(:occasion, :single_group => true)
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     booking = create(:booking, :occasion => occasion)
     create(:ticket, :event => occasion.event, :group => booking.group, :state => :deactivated, :booking => booking)
     booking.tickets(true) # reload association

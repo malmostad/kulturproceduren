@@ -10,10 +10,10 @@ namespace :kp do
 
       notification_requests = []
 
-      if e.ticket_state == Event::ALLOTED_GROUP && e.district_transition_date <= Date.today
+      if e.alloted_group? && e.district_transition_date <= Date.today
         puts "Changing to district allotment for #{e.name}"
         # Transition to districts
-        e.ticket_state = Event::ALLOTED_DISTRICT
+        e.ticket_state = :alloted_district
         e.save
 
         if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }
@@ -38,11 +38,10 @@ namespace :kp do
             end
           end
         end
-      elsif e.ticket_state == Event::ALLOTED_DISTRICT && e.free_for_all_transition_date <= Date.today
+      elsif e.alloted_district? && e.free_for_all_transition_date <= Date.today
         puts "Changing to free for all for #{e.name}"
         # Transistion to all
-        e.ticket_state = Event::FREE_FOR_ALL
-        state_change = Event::FREE_FOR_ALL
+        e.ticket_state = :free_for_all
         e.save
 
         if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }

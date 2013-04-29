@@ -28,16 +28,16 @@ class School < ActiveRecord::Base
 
     num_tickets = 0
     case occasion.event.ticket_state
-    when Event::ALLOTED_GROUP
+    when :alloted_group
       self.groups.each { |g| num_tickets += g.available_tickets_by_occasion(occasion) }
-    when Event::ALLOTED_DISTRICT
+    when :alloted_district
       num_tickets = Ticket.unbooked.count(
         :conditions => {
           :event_id => occasion.event.id,
           :district_id => self.district.id,
         }
       )
-    when Event::FREE_FOR_ALL
+    when :free_for_all
       num_tickets = Ticket.unbooked.count(
         :conditions => {
           :event_id => occasion.event.id,

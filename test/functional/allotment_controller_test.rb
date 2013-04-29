@@ -26,7 +26,7 @@ class AllotmentControllerTest < ActionController::TestCase
       @groups += groups
     end
 
-    @event = create(:event, :from_age => 9, :to_age => 11, :ticket_state => Event::ALLOTED_GROUP)
+    @event = create(:event, :from_age => 9, :to_age => 11, :ticket_state => :alloted_group)
   end
 
   test "wrong event" do
@@ -72,9 +72,9 @@ class AllotmentControllerTest < ActionController::TestCase
 
     assert_redirected_to :action => "distribute", :id => @event.id
 
-    assert_equal Date.today + 10,      session[:allotment][:release_date]
-    assert_equal 10,                   session[:allotment][:num_tickets]
-    assert_equal Event::ALLOTED_GROUP, session[:allotment][:ticket_state]
+    assert_equal Date.today + 10, session[:allotment][:release_date]
+    assert_equal 10,              session[:allotment][:num_tickets]
+    assert_equal :alloted_group,  session[:allotment][:ticket_state]
 
     assert_nil   session[:allotment][:district_ids]
     assert_nil   session[:allotment][:district_transition_date]
@@ -94,12 +94,12 @@ class AllotmentControllerTest < ActionController::TestCase
 
     assert_redirected_to :action => "create_free_for_all_tickets", :id => @event.id
 
-    assert_equal Date.today + 10,      session[:allotment][:release_date]
-    assert_equal Date.today + 11,      session[:allotment][:district_transition_date]
-    assert_equal Date.today + 12,      session[:allotment][:free_for_all_transition_date]
-    assert_equal 10,                   session[:allotment][:num_tickets]
-    assert_equal Event::FREE_FOR_ALL,  session[:allotment][:ticket_state]
-    assert_equal [district.id],        session[:allotment][:district_ids]
+    assert_equal Date.today + 10, session[:allotment][:release_date]
+    assert_equal Date.today + 11, session[:allotment][:district_transition_date]
+    assert_equal Date.today + 12, session[:allotment][:free_for_all_transition_date]
+    assert_equal 10,              session[:allotment][:num_tickets]
+    assert_equal :free_for_all,   session[:allotment][:ticket_state]
+    assert_equal [district.id],   session[:allotment][:district_ids]
   end
 
   test "assign params with existing tickets" do
@@ -124,10 +124,10 @@ class AllotmentControllerTest < ActionController::TestCase
 
     assert_redirected_to :action => "distribute", :id => @event.id
 
-    assert_equal 19,                   session[:allotment][:num_tickets]  # params + existing tickets
-    assert_equal Event::ALLOTED_GROUP, session[:allotment][:ticket_state] # can't override the ticket state
-    assert_equal expected_districts,   session[:allotment][:district_ids] # see comment above
-    assert_equal [groups.last.id],     session[:allotment][:extra_groups] # odd group
+    assert_equal 19,                 session[:allotment][:num_tickets]  # params + existing tickets
+    assert_equal :alloted_group,     session[:allotment][:ticket_state] # can't override the ticket state
+    assert_equal expected_districts, session[:allotment][:district_ids] # see comment above
+    assert_equal [groups.last.id],   session[:allotment][:extra_groups] # odd group
   end
 
   def expected_distribution(*group_indexes)
@@ -233,7 +233,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal expected.merge(@groups[2].id => 10, @groups[8].id => 20, extra_group.id => 5), session[:allotment][:working_distribution]
   end
   test "ticket distribution for districts" do
-    @event.ticket_state = Event::ALLOTED_DISTRICT
+    @event.ticket_state = :alloted_district
     @event.save!
     create(:allotment, :amount => 10, :event => @event, :district => @districts.first)
     create(:allotment, :amount => 20, :event => @event, :district => @districts.second)
@@ -255,7 +255,7 @@ class AllotmentControllerTest < ActionController::TestCase
     session[:current_user_id] = user.id
     session[:allotment] = {
       :release_date => (Date.today + 2).to_s,
-      :ticket_state => Event::FREE_FOR_ALL.to_s,
+      :ticket_state => :free_for_all,
       :num_tickets => 11
     }
 
@@ -268,11 +268,11 @@ class AllotmentControllerTest < ActionController::TestCase
     @event.allotments(true)
 
     assert_nil   session[:allotment]
-    assert_equal Date.today + 2,      @event.ticket_release_date
-    assert_equal Event::FREE_FOR_ALL, @event.ticket_state
-    assert_equal 1,                   @event.allotments.length
-    assert_equal 11,                  @event.allotments.first.amount
-    assert_equal user,                @event.allotments.first.user
+    assert_equal Date.today + 2, @event.ticket_release_date
+    assert_equal :free_for_all,  @event.ticket_state
+    assert_equal 1,              @event.allotments.length
+    assert_equal 11,             @event.allotments.first.amount
+    assert_equal user,           @event.allotments.first.user
   end
 
   test "distribute" do
@@ -280,7 +280,7 @@ class AllotmentControllerTest < ActionController::TestCase
     session[:allotment] = {
       :district_ids => nil,
       :num_tickets => 100,
-      :ticket_state => Event::ALLOTED_GROUP,
+      :ticket_state => :alloted_group,
       :working_distribution => {}
     }
 
@@ -347,7 +347,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal 100 - (10+11+12+13+14), assigns(:tickets_left)
 
     # District allotment
-    session[:allotment][:ticket_state] = Event::ALLOTED_DISTRICT
+    session[:allotment][:ticket_state] = :alloted_district
     session[:allotment][:working_distribution] = {
       @districts.first.id  => 11,
       @districts.second.id => 12
@@ -372,7 +372,7 @@ class AllotmentControllerTest < ActionController::TestCase
       :release_date                 => Date.today + 11,
       :district_transition_date     => Date.today + 12,
       :free_for_all_transition_date => Date.today + 13,
-      :ticket_state                 => Event::ALLOTED_GROUP,
+      :ticket_state                 => :alloted_group,
       :num_tickets                  => 30
     }
 
@@ -385,10 +385,10 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal "Biljetter till evenemanget har fördelats.", flash[:notice]
 
     @event.reload
-    assert_equal Date.today + 11,      @event.ticket_release_date
-    assert_equal Date.today + 12,      @event.district_transition_date
-    assert_equal Date.today + 13,      @event.free_for_all_transition_date
-    assert_equal Event::ALLOTED_GROUP, @event.ticket_state
+    assert_equal Date.today + 11, @event.ticket_release_date
+    assert_equal Date.today + 12, @event.district_transition_date
+    assert_equal Date.today + 13, @event.free_for_all_transition_date
+    assert_equal :alloted_group,  @event.ticket_state
 
     @event.allotments(true)
     assert_equal 3, @event.allotments.length # 2 groups + extra tickets
@@ -422,7 +422,7 @@ class AllotmentControllerTest < ActionController::TestCase
       :release_date                 => Date.today + 12,
       :district_transition_date     => Date.today + 13,
       :free_for_all_transition_date => Date.today + 14,
-      :ticket_state                 => Event::ALLOTED_DISTRICT,
+      :ticket_state                 => :alloted_district,
       :num_tickets                  => 30
     }
 
@@ -435,10 +435,10 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal "Biljetter till evenemanget har fördelats.", flash[:notice]
 
     @event.reload
-    assert_equal Date.today + 12,         @event.ticket_release_date
-    assert_equal Date.today + 13,         @event.district_transition_date
-    assert_equal Date.today + 14,         @event.free_for_all_transition_date
-    assert_equal Event::ALLOTED_DISTRICT, @event.ticket_state
+    assert_equal Date.today + 12,   @event.ticket_release_date
+    assert_equal Date.today + 13,   @event.district_transition_date
+    assert_equal Date.today + 14,   @event.free_for_all_transition_date
+    assert_equal :alloted_district, @event.ticket_state
 
     @event.allotments(true)
     assert_equal 3, @event.allotments.length # 2 groups + extra tickets
@@ -487,7 +487,7 @@ class AllotmentControllerTest < ActionController::TestCase
     @event.ticket_release_date          = Date.today + 1
     @event.district_transition_date     = Date.today + 2
     @event.free_for_all_transition_date = Date.today + 2
-    @event.ticket_state                 = Event::FREE_FOR_ALL
+    @event.ticket_state                 = :free_for_all
     @event.save!
     session[:allotment] = {}
 
@@ -500,6 +500,6 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_nil   @event.ticket_release_date
     assert_nil   @event.district_transition_date
     assert_nil   @event.free_for_all_transition_date
-    assert_equal 0, @event.ticket_state
+    assert_nil   @event.ticket_state
   end
 end

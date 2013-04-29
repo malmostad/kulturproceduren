@@ -18,7 +18,7 @@
   <% end -%>
 </ul>
 
-<% if @event.ticket_state == Event::ALLOTED_GROUP %>
+<% if @event.allotted_group? %>
 
   <p>Följande grupper har fått platser reserverade för evenemanget:</p>
 
@@ -49,7 +49,7 @@
     </a>
   </p>
 
-<% elsif @event.ticket_state == Event::ALLOTED_DISTRICT %>
+<% elsif @event.alloted_district? %>
   <p>Följande stadsdelar har fått platser reserverade för evenemanget:</p>
 
   <ul>
@@ -70,7 +70,7 @@
     </a>
   </p>
 
-<% elsif @event.ticket_state == Event::FREE_FOR_ALL %>
+<% elsif @event.free_for_all? %>
   <p>
     Evenemanget är tillgängligt för alla skolor i hela Malmö.
   </p>

@@ -137,6 +137,56 @@ class EventTest < ActiveSupport::TestCase
     assert_equal -1, event.to_age
   end
 
+  test "ticket state" do
+    event = Event.new
+
+    event.ticket_state = :alloted_group
+    assert_equal :alloted_group, event.ticket_state
+    event.ticket_state = :alloted_district
+    assert_equal :alloted_district, event.ticket_state
+    event.ticket_state = :free_for_all
+    assert_equal :free_for_all, event.ticket_state
+
+    event.ticket_state = Event::ALLOTED_GROUP
+    assert_equal :alloted_group, event.ticket_state
+    event.ticket_state = Event::ALLOTED_DISTRICT
+    assert_equal :alloted_district, event.ticket_state
+    event.ticket_state = Event::FREE_FOR_ALL
+    assert_equal :free_for_all, event.ticket_state
+
+    event.ticket_state = :zomg
+    assert_nil event.ticket_state
+    event.ticket_state = -3
+    assert_nil event.ticket_state
+  end
+  test "alloted group?" do
+    assert !Event.new(:ticket_state => nil).alloted_group?
+    assert  Event.new(:ticket_state => :alloted_group).alloted_group?
+    assert  Event.new(:ticket_state => Event::ALLOTED_GROUP).alloted_group?
+    assert !Event.new(:ticket_state => :alloted_district).alloted_group?
+    assert !Event.new(:ticket_state => Event::ALLOTED_DISTRICT).alloted_group?
+    assert !Event.new(:ticket_state => :free_for_all).alloted_group?
+    assert !Event.new(:ticket_state => Event::FREE_FOR_ALL).alloted_group?
+  end
+  test "alloted district?" do
+    assert !Event.new(:ticket_state => nil).alloted_district?
+    assert !Event.new(:ticket_state => :alloted_group).alloted_district?
+    assert !Event.new(:ticket_state => Event::ALLOTED_GROUP).alloted_district?
+    assert  Event.new(:ticket_state => :alloted_district).alloted_district?
+    assert  Event.new(:ticket_state => Event::ALLOTED_DISTRICT).alloted_district?
+    assert !Event.new(:ticket_state => :free_for_all).alloted_district?
+    assert !Event.new(:ticket_state => Event::FREE_FOR_ALL).alloted_district?
+  end
+  test "free for all?" do
+    assert !Event.new(:ticket_state => nil).free_for_all?
+    assert !Event.new(:ticket_state => :alloted_group).free_for_all?
+    assert !Event.new(:ticket_state => Event::ALLOTED_GROUP).free_for_all?
+    assert !Event.new(:ticket_state => :alloted_district).free_for_all?
+    assert !Event.new(:ticket_state => Event::ALLOTED_DISTRICT).free_for_all?
+    assert  Event.new(:ticket_state => :free_for_all).free_for_all?
+    assert  Event.new(:ticket_state => Event::FREE_FOR_ALL).free_for_all?
+  end
+
   test "bookable" do
     event = create(:event_with_occasions,
       :visible_from => Date.today - 1,

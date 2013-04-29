@@ -83,11 +83,11 @@ class OccasionsController < ApplicationController
     wrong_state = false
 
     case @occasion.event.ticket_state
-    when Event::ALLOTED_GROUP
+    when :alloted_group
       @entities = School.find_with_tickets_to_event(@occasion.event)
-    when Event::ALLOTED_DISTRICT
+    when :alloted_district
       @entities = @occasion.event.districts.find :all, :order => "districts.name ASC"
-    when Event::FREE_FOR_ALL
+    when :free_for_all
       nil
     else
       wrong_state = true

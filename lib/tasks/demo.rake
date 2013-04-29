@@ -261,13 +261,13 @@ namespace :kp do
 
       if event.tickets.empty?
         event.ticket_release_date = event.visible_from
-        event.ticket_state = [Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT, Event::FREE_FOR_ALL][rand(3)]
+        event.ticket_state = [:alloted_group, :alloted_district, :free_for_all][rand(3)]
 
         case event.ticket_state
-        when Event::ALLOTED_GROUP
+        when :alloted_group
           event.district_transition_date = event.ticket_release_date + 1.week
           event.free_for_all_transition_date = event.ticket_release_date + 2.week
-        when Event::ALLOTED_DISTRICT
+        when :alloted_district
           event.free_for_all_transition_date = event.ticket_release_date + 1.week
         end
 

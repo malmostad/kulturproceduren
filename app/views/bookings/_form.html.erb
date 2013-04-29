@@ -28,18 +28,18 @@
       <% else %>
         <%
         case @occasion.event.ticket_state
-        when Event::ALLOTED_GROUP
+        when :alloted_group
           %>
           <strong><%= h @group.school.name %>, <%= h @group.name %></strong>
           har
           <strong><%= available_tickets -%></strong>
           platser tillgängliga för bokning.
-        <% when Event::ALLOTED_DISTRICT %>
+        <% when :alloted_district %>
           Det finns
           <strong><%= available_tickets -%></strong>
           tillgängliga platser att boka för alla förskolor och skolor i
           <strong><%= h @group.school.district.name %></strong>.
-        <% when Event::FREE_FOR_ALL %>
+        <% when :free_for_all %>
           Det finns
           <strong><%= available_tickets -%></strong>
           tillgängliga platser att boka. Först till kvarn gäller.

@@ -48,13 +48,13 @@ class DistrictTest < ActiveSupport::TestCase
     create_list(:ticket, 5, :event => occasion.event, :state => :unbooked)
     create_list(:ticket, 5, :event => occasion.event, :state => :booked)
 
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     occasion.event.save!
     assert_equal 5, district.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     occasion.event.save!
     assert_equal 5, district.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.ticket_state = :free_for_all
     occasion.event.save!
     assert_equal 10, district.available_tickets_by_occasion(occasion)
   end

@@ -98,11 +98,42 @@ class Event < ActiveRecord::Base
   before_save :set_further_education_age
 
   # Ticket states
-  CREATED          = 0
   ALLOTED_GROUP    = 1
   ALLOTED_DISTRICT = 2
   FREE_FOR_ALL     = 3
-  NON_BOOKABLE     = 4
+
+  def ticket_state
+    case read_attribute(:ticket_state)
+    when ALLOTED_GROUP
+      :alloted_group
+    when ALLOTED_DISTRICT
+      :alloted_district
+    when FREE_FOR_ALL
+      :free_for_all
+    else
+      nil
+    end
+  end
+  def ticket_state=(value)
+    case value
+    when Symbol
+      write_attribute(:ticket_state, self.class.ticket_state_id_from_symbol(value))
+    when ALLOTED_GROUP..FREE_FOR_ALL
+      write_attribute(:ticket_state, value)
+    else
+      write_attribute(:ticket_state, nil)
+    end
+  end
+
+  def alloted_group?
+    self.ticket_state == :alloted_group
+  end
+  def alloted_district?
+    self.ticket_state == :alloted_district
+  end
+  def free_for_all?
+    self.ticket_state == :free_for_all
+  end
 
 
   # Indicates whether it is possible to book occasions belonging to this event.
@@ -301,4 +332,18 @@ class Event < ActiveRecord::Base
     end
   end
 
+  private
+
+  def self.ticket_state_id_from_symbol(sym)
+    case sym
+    when :alloted_group
+      ALLOTED_GROUP
+    when :alloted_district
+      ALLOTED_DISTRICT
+    when :free_for_all
+      FREE_FOR_ALL
+    else
+      nil
+    end
+  end
 end

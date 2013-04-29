@@ -68,7 +68,7 @@ class ApplicationProxyControllerTest < ActionController::TestCase
     # occasion setup
     group = school.groups.second
     occasion = create(:occasion)
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     create(:ticket, :event => occasion.event, :group => group, :district => district, :state => :unbooked)
 
     # no selection, occasion

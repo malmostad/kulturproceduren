@@ -7,7 +7,7 @@ class BookingsControllerTest < ActionController::TestCase
 
     @event = create(
       :event_with_occasions,
-      :ticket_state => Event::FREE_FOR_ALL,
+      :ticket_state => :free_for_all,
       :occasion_count => 3,
       :occasion_dates => [ Date.today - 1, Date.today + 1, Date.today + 2 ]
     )

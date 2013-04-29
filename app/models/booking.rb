@@ -130,7 +130,7 @@ class Booking < ActiveRecord::Base
 
     available_tickets = self.group.available_tickets_by_occasion(self.occasion).to_i
 
-    if self.occasion.single_group && self.occasion.event.ticket_state != Event::ALLOTED_GROUP
+    if self.occasion.single_group && !self.occasion.event.alloted_group?
       available_tickets += self.tickets.deactivated.count
     end
 

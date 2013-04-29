@@ -129,7 +129,7 @@ class OccasionsControllerTest < ActionController::TestCase
 
   test "ticket availability, alloted group" do
     group    = create(:group)
-    event    = create(:event, :ticket_state => Event::ALLOTED_GROUP)
+    event    = create(:event, :ticket_state => :alloted_group)
     occasion = create(:occasion, :event => event)
     create(:allotment, :event => event, :group => group, :district => group.school.district, :amount => 1)
     create(:group) # dummy
@@ -147,7 +147,7 @@ class OccasionsControllerTest < ActionController::TestCase
   end
   test "ticket availability, alloted district" do
     group    = create(:group)
-    event    = create(:event, :ticket_state => Event::ALLOTED_DISTRICT)
+    event    = create(:event, :ticket_state => :alloted_district)
     occasion = create(:occasion, :event => event)
     create(:allotment, :event => event, :group => group, :district => group.school.district, :amount => 1)
     create(:group) # dummy
@@ -164,7 +164,7 @@ class OccasionsControllerTest < ActionController::TestCase
     assert_equal    [group.school.district], assigns(:entities)
   end
   test "ticket availability, free for all" do
-    event    = create(:event, :ticket_state => Event::FREE_FOR_ALL)
+    event    = create(:event, :ticket_state => :free_for_all)
     occasion = create(:occasion, :event => event)
     create(:allotment, :amount => 1)
 

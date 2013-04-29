@@ -10,10 +10,10 @@ class NotificationRequestsController < ApplicationController
     @notification_request.event = @event
 
     case @event.ticket_state
-    when Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT
+    when :alloted_group, :alloted_district
       load_group_selection_collections()
       @notification_request.group_id = session[:group_selection][:group_id]
-    when Event::FREE_FOR_ALL
+    when :free_for_all
       if NotificationRequest.unbooking_for(current_user, @event)
         flash[:warning] = "Du är redan registrerad för restplatser på detta evenemang"
         redirect_to(@event)
@@ -30,13 +30,11 @@ class NotificationRequestsController < ApplicationController
       return
     end
 
-    free_for_all = @event.ticket_state == Event::FREE_FOR_ALL
-    
     @notification_request = NotificationRequest.new(params[:notification_request]) do |req|
       req.event = @event
       req.user = current_user
 
-      if free_for_all
+      if @event.free_for_all?
         req.target_cd = NotificationRequest.targets.for_unbooking
       else
         req.target_cd = NotificationRequest.targets.for_transition
@@ -45,7 +43,7 @@ class NotificationRequestsController < ApplicationController
 
     @notification_request.save!
 
-    if free_for_all
+    if @event.free_for_all?
       flash[:notice] = "Du är nu registrerad att få meddelanden om restplatser på detta evenemang blir tillgängliga."
     else
       flash[:notice] = "Du är nu registrerad att få meddelanden när platser på detta evenemang blir tillgängliga för din klass/avdelning."

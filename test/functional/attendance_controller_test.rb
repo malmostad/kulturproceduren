@@ -5,7 +5,7 @@ class AttendanceControllerTest < ActionController::TestCase
     # Stub ActionController filters
     @controller.expects(:authenticate).at_least_once.returns(true)
 
-    @event     = create(:event, :ticket_state => Event::FREE_FOR_ALL)
+    @event     = create(:event, :ticket_state => :free_for_all)
     @occasions = create_list(:occasion, 3, :event => @event, :date => Date.today - 1)
     @occasion  = @occasions.first
     @user      = create(:user, :roles => [roles(:host)])

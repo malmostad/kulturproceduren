@@ -40,11 +40,11 @@ class SchoolTest < ActiveSupport::TestCase
     create(:ticket, :occasion => occasion, :event => occasion.event,                               :state => :booked)
     create(:ticket, :occasion => occasion, :event => occasion.event, :district => school.district, :state => :booked)
 
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     assert_equal 15, school.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     assert_equal 20, school.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.ticket_state = :free_for_all
     assert_equal 25, school.available_tickets_by_occasion(occasion)
   end
 

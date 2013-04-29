@@ -59,29 +59,29 @@ class GroupTest < ActiveSupport::TestCase
     create(:ticket,                  :district => group.school.district, :occasion => occasion, :event => event, :state => :booked)
 
     # Without deactivated
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     assert_equal 10, group.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     assert_equal 20, group.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.ticket_state = :free_for_all
     assert_equal 30, group.available_tickets_by_occasion(occasion)
     
     # With deactivated
     create_list(:ticket, 5, :group => group, :district => group.school.district, :event => event, :state => :deactivated)
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     assert_equal 15, group.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     assert_equal 20, group.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.ticket_state = :free_for_all
     assert_equal 30, group.available_tickets_by_occasion(occasion)
 
     # Limited by seats
     occasion.seats = 2
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     assert_equal 2, group.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     assert_equal 2, group.available_tickets_by_occasion(occasion)
-    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.ticket_state = :free_for_all
     assert_equal 2, group.available_tickets_by_occasion(occasion)
   end
 
@@ -99,13 +99,13 @@ class GroupTest < ActiveSupport::TestCase
     create(:ticket,                                                      :occasion => occasion, :event => event, :state => :booked)
     create(:ticket,                  :district => group.school.district, :occasion => occasion, :event => event, :state => :booked)
 
-    occasion.event.ticket_state = Event::ALLOTED_GROUP
+    occasion.event.ticket_state = :alloted_group
     tickets = group.bookable_tickets(occasion)
     assert_equal 15, tickets.length
-    occasion.event.ticket_state = Event::ALLOTED_DISTRICT
+    occasion.event.ticket_state = :alloted_district
     tickets = group.bookable_tickets(occasion)
     assert_equal 20, tickets.length
-    occasion.event.ticket_state = Event::FREE_FOR_ALL
+    occasion.event.ticket_state = :free_for_all
     tickets = group.bookable_tickets(occasion)
     assert_equal 30, tickets.length
   end

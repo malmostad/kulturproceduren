@@ -58,7 +58,7 @@ class InformationControllerTest < ActionController::TestCase
       :occasion_count => 2,
       :occasion_dates => [Date.today - 1],
       :name => "Event",
-      :ticket_state => Event::FREE_FOR_ALL
+      :ticket_state => :free_for_all
     )
     create(:allotment, :event => event, :amount => 10)
 

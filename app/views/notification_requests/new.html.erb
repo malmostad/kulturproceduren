@@ -1,16 +1,14 @@
 <%= render :partial => "bookings/menu" %>
 
-<% free_for_all = @event.ticket_state == Event::FREE_FOR_ALL -%>
-
 <h2 class="form-title">
-  <% if free_for_all %>
+  <% if @event.free_for_all? %>
     Meddelande vid avbokningar
   <% else %>
     Meddelande vid platssläpp
   <% end %>
 </h2>
 
-<% if free_for_all %>
+<% if @event.free_for_all? %>
   <p>
     Om <%= link_to @event.name, @event %> är fullbokat så kan du registrera dig
     här för att få ett meddelande om reservplatser släpps till evenemanget.
@@ -31,7 +29,7 @@
   </div>
 <% end %>
 
-<% disabled = !free_for_all && @notification_request.group_id.nil? %>
+<% disabled = !@event.free_for_all? && @notification_request.group_id.nil? %>
 
 <% form_for(
   @notification_request,

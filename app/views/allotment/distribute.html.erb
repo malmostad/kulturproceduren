@@ -4,7 +4,7 @@
   </div>
 <% end -%>
 
-<% is_group_distribution = session[:allotment][:ticket_state] == Event::ALLOTED_GROUP %>
+<% is_group_distribution = session[:allotment][:ticket_state] == :alloted_group %>
 
 <h2 class="form-title">Fördelning för <%= link_to h(@event.name), @event %></h2>
 
