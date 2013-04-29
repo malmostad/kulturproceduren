@@ -280,6 +280,15 @@
 
         // Default settings on the date fields in the filter form
         $("#kp #kp-calendar-filter-from-date, #kp #kp-calendar-filter-to-date").datepicker();
+
+        // Skip district transition button
+        $("#kp #kp-allotment-skip-district-transition").change(function() {
+            if ($(this).is(":checked")) {
+                $("#kp #kp-allotment-district_transition_date").attr("disabled", "disabled");
+            } else {
+                $("#kp #kp-allotment-district_transition_date").removeAttr("disabled");
+            }
+        });
     });
 
     $(function() {

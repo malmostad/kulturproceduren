@@ -187,6 +187,32 @@ class EventTest < ActiveSupport::TestCase
     assert  Event.new(:ticket_state => Event::FREE_FOR_ALL).free_for_all?
   end
 
+  test "transition to district?" do
+    assert  create(:event, :ticket_state => :alloted_group,    :district_transition_date => Date.today    ).transition_to_district?
+    assert  create(:event, :ticket_state => :alloted_group,    :district_transition_date => Date.today - 1).transition_to_district?
+    assert !create(:event, :ticket_state => :alloted_group,    :district_transition_date => Date.today + 1).transition_to_district?
+    assert !create(:event, :ticket_state => :alloted_district, :district_transition_date => Date.today    ).transition_to_district?
+    assert !create(:event, :ticket_state => :alloted_group,    :district_transition_date => nil           ).transition_to_district?
+  end
+  test "transition to district!" do
+    event = create(:event, :ticket_state => :alloted_group, :district_transition_date => Date.today)
+    event.transition_to_district!
+    assert Event.find(event.id).alloted_district?
+  end
+  test "transition to free for all?" do
+    assert  create(:event, :ticket_state => :alloted_district, :free_for_all_transition_date => Date.today    ).transition_to_free_for_all?
+    assert  create(:event, :ticket_state => :alloted_district, :free_for_all_transition_date => Date.today - 1).transition_to_free_for_all?
+    assert !create(:event, :ticket_state => :alloted_district, :free_for_all_transition_date => Date.today + 1).transition_to_free_for_all?
+    assert !create(:event, :ticket_state => :free_for_all,     :free_for_all_transition_date => Date.today    ).transition_to_free_for_all?
+
+    assert  create(:event, :ticket_state => :alloted_group,    :free_for_all_transition_date => Date.today,   :district_transition_date => nil).transition_to_free_for_all?
+  end
+  test "transition to free for all!" do
+    event = create(:event, :ticket_state => :alloted_district, :free_for_all_transition_date => Date.today)
+    event.transition_to_free_for_all!
+    assert Event.find(event.id).free_for_all?
+  end
+
   test "bookable" do
     event = create(:event_with_occasions,
       :visible_from => Date.today - 1,

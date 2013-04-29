@@ -10,14 +10,12 @@ namespace :kp do
 
       notification_requests = []
 
-      if e.alloted_group? && e.district_transition_date <= Date.today
-        puts "Changing to district allotment for #{e.name}"
-        # Transition to districts
-        e.ticket_state = :alloted_district
-        e.save
+      if e.transition_to_district?
+        puts "Changing to district allotment for #{e.id}: #{e.name}"
+        e.transition_to_district!
 
-        if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }
-          puts "Notifying district allotment for #{e.name}"
+        if !e.fully_booked?
+          puts "Notifying district allotment for #{e.id}: #{e.name}"
 
           districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
           notification_requests = NotificationRequest.for_transition.find_by_event_and_districts(e, districts)
@@ -38,14 +36,12 @@ namespace :kp do
             end
           end
         end
-      elsif e.alloted_district? && e.free_for_all_transition_date <= Date.today
-        puts "Changing to free for all for #{e.name}"
-        # Transistion to all
-        e.ticket_state = :free_for_all
-        e.save
+      elsif e.transition_to_free_for_all?
+        puts "Changing to free for all for #{e.id}: #{e.name}"
+        e.transition_to_free_for_all!
 
-        if e.has_unbooked_tickets? && e.occasions.any? { |o| o.available_seats > 0 }
-          puts "Notifying free for all for #{e.name}"
+        if e.fully_booked?
+          puts "Notifying free for all for #{e.id}: #{e.name}"
           notification_requests = NotificationRequest.for_transition.find_by_event(e)
 
           # Notify contacts on districts

@@ -136,6 +136,25 @@ class Event < ActiveRecord::Base
   end
 
 
+  # Transitioning
+  def transition_to_district?
+    !self.district_transition_date.blank? && self.alloted_group? && self.district_transition_date <= Date.today
+  end
+  def transition_to_district!
+    self.ticket_state = :alloted_district
+    self.save!
+  end
+  def transition_to_free_for_all?
+    (self.alloted_district? ||
+        (self.alloted_group? && self.district_transition_date.blank?)) &&
+      self.free_for_all_transition_date <= Date.today
+  end
+  def transition_to_free_for_all!
+    self.ticket_state = :free_for_all
+    self.save!
+  end
+
+
   # Indicates whether it is possible to book occasions belonging to this event.
   def bookable?(reload=false)
     if @is_bookable.nil? || reload

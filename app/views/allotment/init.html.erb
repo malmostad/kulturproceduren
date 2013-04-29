@@ -41,6 +41,15 @@
       </div>
     </div>
     <% if !is_edit || @event.ticket_state == :alloted_group %>
+      <div class="form-row post-label-form-row district-skip-district-transition-field-row">
+        <div class="input-container">
+          <input type="checkbox"
+                 id="kp-allotment-skip-district-transition"
+                 name="allotment[skip_district_transition]"
+                 class="checkbox"/>
+          <label for="kp-allotment-skip-district-transition">Hoppa över övergång till stadsdel</label>
+        </div>
+      </div>
       <div class="form-row district_transition_date-field-row">
         <label for="kp-allotment-district_transition_date">Övergång till stadsdel:</label>
         <div class="input-container">
