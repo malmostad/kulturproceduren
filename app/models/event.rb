@@ -229,6 +229,11 @@ class Event < ActiveRecord::Base
   end
 
 
+  def has_bus_bookings?
+    bookings.any?(&:bus_booking)
+  end
+
+
   # Search method for standing events. Returns a paginated result.
   #
   # Filters:

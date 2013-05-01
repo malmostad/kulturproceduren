@@ -156,5 +156,12 @@ class Occasion < ActiveRecord::Base
     return 0 if !ignore_single_group && used_tickets > 0 && self.single_group
     return self.seats.to_i + self.wheelchair_seats.to_i - used_tickets
   end
+
+  def bus_booking?
+    self.event.bus_booking? &&
+      self.event.alloted_group? &&
+      (self.seats.to_i + self.wheelchair_seats.to_i) <= 200 &&
+      (self.start_time.hour > 9 || self.start_time.hour == 9 && self.start_time.min >= 30)
+  end
  
 end

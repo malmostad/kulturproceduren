@@ -190,6 +190,19 @@ class BookingsControllerTest < ActionController::TestCase
     assert assigns(:bookings).blank?
   end
 
+  test "bus" do
+    @controller.expects(:require_admin).at_least_once.returns(true)
+
+    booking = book(@group, @event.occasions.first, 1, 1, 1, :bus_booking => true, :bus_stop => "foo")
+
+    book(@group, create(:occasion),      1, 1, 1, :bus_booking => true, :bus_stop => "foo")
+    book(@group, @event.occasions.first, 1, 1, 1, :bus_booking => false)
+
+    get :bus, :event_id => @event.id
+    assert_equal @event,    assigns(:event)
+    assert_equal [booking], assigns(:bookings)
+  end
+
   test "apply filter" do
     occasion = create(:occasion)
 

@@ -428,6 +428,13 @@ class EventTest < ActiveSupport::TestCase
     assert_equal not_targeted.id, ids.first
   end
 
+  test "has bus bookings?" do
+    booking = create(:booking, :bus_booking => true, :bus_stop => "bus stop")
+    assert booking.event.has_bus_bookings?
+    booking = create(:booking, :bus_booking => false)
+    assert !booking.event.has_bus_bookings?
+  end
+
   def search_standing(filter)
     Event.search_standing(filter, 1).map(&:id)
   end

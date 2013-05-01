@@ -85,6 +85,18 @@
       </div>
     </div>
 
+    <div class="form-row post-label-form-row bus_booking-field-row">
+      <div class="input-container">
+        <input type="checkbox"
+               id="kp-allotment-bus_booking"
+               name="allotment[bus_booking]"
+               <%= "checked=\"checked\"" if @event.bus_booking? %>
+               class="checkbox"
+               value="1"/>
+        <label for="kp-allotment-bus_booking">Aktivera bussbokning för evenemanget</label>
+      </div>
+    </div>
+
     <% unless is_edit -%>
       <div class="form-row ticket_state-field-row">
         <label for="kp-allotment-ticket_state">Fördelningsnivå:</label>

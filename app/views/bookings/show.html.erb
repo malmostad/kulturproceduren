@@ -89,6 +89,20 @@
       <td><%= h @booking.companion_phone %></td>
     </tr>
 
+    <% if @booking.bus_booking? %>
+      <tr class="bus-booking-header">
+        <th colspan="2">Kulturbussbokning</th>
+      </tr>
+      <tr class="bus-stop">
+        <th>Från hållplats:</th>
+        <td><%= h @booking.bus_stop %></td>
+      </tr>
+      <tr class="bus-stop">
+        <th>Bokningstyp:</th>
+        <td><%= @booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></td>
+      </tr>
+    <% end %>
+
     <% unless @booking.requirement.blank? %>
       <tr class="requirement-header">
         <th colspan="2">Speciella krav / Extra information ang. bokning</th>

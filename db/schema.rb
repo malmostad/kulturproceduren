@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130205063943) do
+ActiveRecord::Schema.define(:version => 20130501073933) do
 
   create_table "age_groups", :force => true do |t|
     t.integer  "age"
@@ -83,6 +83,9 @@ ActiveRecord::Schema.define(:version => 20130205063943) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "bus_booking",      :default => false
+    t.boolean  "bus_one_way",      :default => false
+    t.string   "bus_stop"
   end
 
   create_table "categories", :force => true do |t|
@@ -197,6 +200,7 @@ ActiveRecord::Schema.define(:version => 20130205063943) do
     t.boolean  "single_group_per_occasion",    :default => false
     t.date     "district_transition_date"
     t.date     "free_for_all_transition_date"
+    t.boolean  "bus_booking",                  :default => false
   end
 
   create_table "groups", :force => true do |t|

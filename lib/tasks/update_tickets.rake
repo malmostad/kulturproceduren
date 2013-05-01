@@ -8,6 +8,11 @@ namespace :kp do
     
     events.each do |e|
 
+      if e.alloted_group? && (e.transition_to_district? || e.transition_to_free_for_all?) && e.has_bus_bookings?
+        puts "Sending bus booking list for #{e.id}: #{e.name}"
+        EventMailer.deliver_bus_booking_email(e)
+      end
+
       notification_requests = []
 
       if e.transition_to_district?

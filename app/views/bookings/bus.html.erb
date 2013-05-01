@@ -1,0 +1,53 @@
+<% content_for :section_sub do -%>
+  <div class="section-info">
+    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+  </div>
+<% end -%>
+
+<h2 class="form-title">
+  Bussbokningar för <%= link_to h(@event.name), @event %>
+</h2>
+
+<div class="admin-tools">
+  <ul>
+    <li>
+      <%= link_to "Ladda ner listan som Excel-fil", bus_event_bookings_path(@event, :format => :xls) %>
+    </li>
+  </ul>
+</div>
+
+<% if !@bookings.blank? %>
+  <table class="bus-booking-list">
+    <thead>
+      <tr>
+        <th class="school">Skola</th>
+        <th class="group">Klass/avdelning</th>
+        <th class="occasion">Föreställning</th>
+        <th class="seats">Antal platser</th>
+        <th class="bus-stop">Hållplats</th>
+        <th class="type">Resa</th>
+        <th class="tools"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @bookings.each do |booking| %>
+        <tr class="<%= cycle('', 'even') %>">
+          <td class="school"><%= h booking.group.school.name -%></td>
+          <td class="group"><%= h booking.group.name -%></td>
+          <td class="occasion"><%= h booking.occasion.date %> <%= l booking.occasion.start_time, :format => :only_time %></td>
+          <td class="seats"><%= h booking.total_count %></td>
+          <td class="bus-stop"><%= h booking.bus_stop %></td>
+          <td class="type"><%= booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></td>
+          <td class="tools">
+            <%= link_to "Bokningsbekräftelse", booking_path(booking) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="message alert">
+    Inga bussbokningar hittades.
+  </p>
+<% end %>

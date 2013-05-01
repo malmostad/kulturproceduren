@@ -1,3 +1,5 @@
+require "csv"
+
 class Booking < ActiveRecord::Base
   belongs_to :group
   belongs_to :occasion
@@ -16,7 +18,9 @@ class Booking < ActiveRecord::Base
 
   validates_presence_of :companion_name, :message => "Namnet får inte vara tomt"
   validates_presence_of :companion_email, :message => "Epostadressen får inte vara tom"
-  validates_presence_of :companion_phone, :message => "Telefonnumret får inte vara tom"
+  validates_presence_of :companion_phone, :message => "Telefonnumret får inte vara tomt"
+
+  validates_presence_of :bus_stop, :if => :bus_booking, :message => "Du måste ange en hållplats"
 
   after_save :synchronize_tickets
   before_create :set_booked_at_timestamp
@@ -108,6 +112,49 @@ class Booking < ActiveRecord::Base
       :order => "schools.name, groups.name desc",
       :page => page
     )
+  end
+
+
+  def self.bus_booking_csv(bookings)
+    csv = ""
+
+    row = %w(
+    Evenemang
+    Datum
+    Adress
+    Stadsdel
+    Skola
+    Grupp
+    Medföljande\ vuxen
+    Telefonnummer
+    E-postadress
+    Antal\ platser
+    Resa
+    Hållplats
+    )
+
+    CSV.generate_row(row, row.length, csv, "\t")
+
+    bookings.each do |booking|
+      row = [
+        booking.occasion.event.name,
+        "#{booking.occasion.date} #{I18n.localize(booking.occasion.start_time, :format => :only_time)}",
+        booking.occasion.address,
+        booking.group.school.district.name,
+        booking.group.school.name,
+        booking.group.name,
+        booking.companion_name,
+        booking.companion_phone,
+        booking.companion_email,
+        booking.total_count,
+        booking.bus_one_way ? "Enkel resa" : "Tur och retur",
+        booking.bus_stop
+      ]
+
+      CSV.generate_row(row, row.length, csv, "\t")
+    end
+
+    return csv
   end
 
 

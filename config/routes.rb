@@ -48,7 +48,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => { :report => :get, :update_report => :post }
     e.resources :bookings,
       :only => [ :index, :new ],
-      :collection => { :apply_filter => :post }
+      :collection => { :apply_filter => :post, :bus => :get }
     e.resource :information, :only => [ :new, :create ]
   end
 

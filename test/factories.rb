@@ -163,6 +163,7 @@ FactoryGirl.define do
     single_group_per_occasion    false
     district_transition_date     nil
     free_for_all_transition_date nil
+    bus_booking                  false
 
     linked_culture_providers     { [] }
     linked_events                { [] }
@@ -235,6 +236,9 @@ FactoryGirl.define do
     companion_name   "Foo Bar"
     companion_phone  "031-12345678"
     companion_email  "foo.bar@example.com"
+    bus_booking      false
+    bus_one_way      false
+    bus_stop         nil
     group
     occasion
     user

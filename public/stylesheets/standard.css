@@ -320,6 +320,7 @@ body.kp-standalone { background: #fff; }
 #kp .booking-group-selection label,
 #kp form.booking-form label { width: 16em; }
 #kp .booking-group-selection .input-container,
+#kp form.booking-form .post-label-form-row,
 #kp form.booking-form .input-container { padding-left: 16em; }
 /* Evaluation form */
 #kp form.evaluation-form label { width: 15em; }
@@ -637,6 +638,7 @@ body.kp-standalone { background: #fff; }
 #kp .booking-group-selection,
 #kp .booking-form .booking-seats-container { position: relative; }
 #kp .booking-form #kp-booking-count { padding: 7px; margin: 0 0 0 16em; width: 265px; }
+#kp .booking-form .in-form-message { float: left; padding: 7px; margin: 0 0 0 16em; }
 #kp .booking-group-selection .with-legend { padding-bottom: 0; }
 #kp .booking-group-selection .notification-request-info { margin: 0 0 1em 16em; width: 275px; }
 #kp .booking-group-selection .notification-request-info p { margin: 0; }

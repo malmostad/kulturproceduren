@@ -4,6 +4,7 @@ class BookingsController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
+  before_filter :require_admin, :only => :bus
   before_filter :require_booker, :except => [ :index, :apply_filter, :group, :group_list, :show ]
   before_filter :require_booking_viewer, :only => [ :index, :apply_filter, :group, :group_list, :show ]
   before_filter :load_booking_for_change, :only => [ :edit, :update, :unbook, :destroy ]
@@ -27,6 +28,19 @@ class BookingsController < ApplicationController
       @bookings = Booking.find_for_event(params[:event_id], session[:booking_list_filter], params[:page])
     else
       @bookings = Booking.active.find_for_user(current_user, params[:page])
+    end
+  end
+
+  # List of bus bookings for an event
+  def bus
+    @event = Event.find(params[:event_id])
+    @bookings = @event.bookings.all(:conditions => { :bus_booking => true }, :include => :occasion, :order => "occasions.date, occasions.start_time")
+
+    if params[:format] == "xls"
+      send_csv(
+        "bussbokning_evenemang#{@event.id}.tsv",
+        Booking.bus_booking_csv(@bookings)
+      )
     end
   end
 
@@ -109,8 +123,8 @@ class BookingsController < ApplicationController
         redirect_to edit_booking_url(@booking)
       else
         @booking = Booking.new do |b|
-          b.group_id = @group.id
-          b.occasion_id = @occasion.id
+          b.group    = @group
+          b.occasion = @occasion
         end
 
       end

@@ -20,6 +20,9 @@ class BookingTest < ActiveSupport::TestCase
     booking = build(:booking, :companion_phone => nil)
     assert !booking.valid?
     assert_not_nil booking.errors.on(:companion_phone)
+    booking = build(:booking, :bus_stop => nil, :bus_booking => true)
+    assert !booking.valid?
+    assert_not_nil booking.errors.on(:bus_stop)
   end
   test "validate seats" do
     ## New booking
@@ -294,5 +297,19 @@ class BookingTest < ActiveSupport::TestCase
 
     booking = create(:booking, :occasion => booking.occasion, :unbooked => false)
     assert_equal [booking], Booking.find_for_occasion(booking.occasion.id, {:unbooked => true, :district_id => booking.group.school.district.id}, 1)
+  end
+
+  test "bus booking csv" do
+    booking = create(
+      :booking,
+      :bus_booking => true,
+      :bus_stop    => "Bus stop",
+      :bus_one_way => false
+    )
+
+    assert_equal(
+      "Evenemang\tDatum\tAdress\tStadsdel\tSkola\tGrupp\tMedföljande vuxen\tTelefonnummer\tE-postadress\tAntal platser\tResa\tHållplats\n#{booking.occasion.event.name}\t#{booking.occasion.date.strftime("%Y-%m-%d")} #{booking.occasion.start_time.strftime("%H:%M")}\t#{booking.occasion.address}\t#{booking.group.school.district.name}\t#{booking.group.school.name}\t#{booking.group.name}\t#{booking.companion_name}\t#{booking.companion_phone}\t#{booking.companion_email}\t#{booking.total_count}\tTur och retur\tBus stop\n",
+      Booking.bus_booking_csv([booking])
+    )
   end
 end

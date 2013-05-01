@@ -42,4 +42,33 @@ class EventMailer < ActionMailer::Base
     sent_on(Time.zone.now)
     body({ :event => event, :district => district, :category_groups => CategoryGroup.all })
   end
+
+  # Sends a mail to the bus booking recipient with an event's bus bookings
+  def bus_booking_email(event)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients(APP_CONFIG[:mailers][:debug_recipient])
+    else
+      recipients(APP_CONFIG[:mailers][:bus_booking_recipient])
+    end
+
+    from(APP_CONFIG[:mailers][:from_address])
+    subject("Kulturproceduren: Kulturbussbokningar för #{event.name}")
+
+    sent_on(Time.zone.now)
+    content_type("multipart/mixed")
+
+    part("multipart/alternative") do |alternative|
+      alternative.part("text/html") do |html|
+        html.body = render_message("bus_booking_email.text.html", :event => event)
+      end
+    end
+
+    bookings = event.bookings.all(:conditions => { :bus_booking => true }, :include => :occasion, :order => "occasions.date, occasions.start_time")
+
+    attachment(
+      :content_type => "text/csv",
+      :filename     => "bussbokning_evenemang#{event.id}.tsv",
+      :body         => Booking.bus_booking_csv(bookings)
+    )
+  end
 end

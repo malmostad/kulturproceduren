@@ -235,6 +235,9 @@ sv:
         companion_email: "Epostadress:"
         companion_phone: "Mobilnummer:"
         requirement: "Extra behov:"
+        bus_booking: "Jag vill boka kulturbuss"
+        bus_stop: "Från hållplats:"
+        bus_one_way: "Enkel resa"
 
   helpers:
     label:

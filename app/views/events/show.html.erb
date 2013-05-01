@@ -39,6 +39,12 @@
         </li>
       <% end %>
 
+      <% if current_user.has_role?(:admin) %>
+        <li>
+          <%= link_to "Bussbokningar", bus_event_bookings_path(@event) %>
+        </li>
+      <% end %>
+
       <% if @event.reportable? %>
         <li><%= link_to 'Hantera närvaro', event_attendance_index_path(@event) %></li>
       <% end %>
@@ -176,6 +182,10 @@
             <td><%= h @event.free_for_all_transition_date %></td>
           </tr>
         <% end -%>
+        <tr class="bus-booking">
+          <th>Bussbokning</th>
+          <td><%= @event.bus_booking? ? "Ja" : "Nej" %></td>
+        </tr>
       <% end -%>
       <% if !@event.booking_info.blank? && !@event.bookable? -%>
         <tr class="booking-info">

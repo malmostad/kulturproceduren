@@ -75,6 +75,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal Date.today + 10, session[:allotment][:release_date]
     assert_equal 10,              session[:allotment][:num_tickets]
     assert_equal :alloted_group,  session[:allotment][:ticket_state]
+    assert_equal false,           session[:allotment][:bus_booking]
 
     assert_nil   session[:allotment][:district_ids]
     assert_nil   session[:allotment][:district_transition_date]
@@ -87,7 +88,8 @@ class AllotmentControllerTest < ActionController::TestCase
       :district_transition_date     => (Date.today + 11).to_s,
       :free_for_all_transition_date => (Date.today + 12).to_s,
       :district_ids                 => [district.id.to_s],
-      :ticket_state                 => Event::FREE_FOR_ALL.to_s
+      :ticket_state                 => Event::FREE_FOR_ALL.to_s,
+      :bus_booking                  => "1"
     )
 
     post :assign_params, :id => @event.id, :allotment => allotment_params
@@ -100,6 +102,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal 10,              session[:allotment][:num_tickets]
     assert_equal :free_for_all,   session[:allotment][:ticket_state]
     assert_equal [district.id],   session[:allotment][:district_ids]
+    assert_equal true,            session[:allotment][:bus_booking]
   end
 
   test "assign params with existing tickets" do
@@ -373,7 +376,8 @@ class AllotmentControllerTest < ActionController::TestCase
       :district_transition_date     => Date.today + 12,
       :free_for_all_transition_date => Date.today + 13,
       :ticket_state                 => :alloted_group,
-      :num_tickets                  => 30
+      :num_tickets                  => 30,
+      :bus_booking                  => "1"
     }
 
     post :create_tickets,
@@ -389,6 +393,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal Date.today + 12, @event.district_transition_date
     assert_equal Date.today + 13, @event.free_for_all_transition_date
     assert_equal :alloted_group,  @event.ticket_state
+    assert_equal true,            @event.bus_booking
 
     @event.allotments(true)
     assert_equal 3, @event.allotments.length # 2 groups + extra tickets
