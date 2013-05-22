@@ -689,8 +689,7 @@ class BookingsControllerTest < ActionController::TestCase
     BookingMailer.expects(:deliver_booking_cancelled_email).with(
       [],
       @user,
-      booking.group,
-      booking.occasion,
+      booking,
       nil
     )
 

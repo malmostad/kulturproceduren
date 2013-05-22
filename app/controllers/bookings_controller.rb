@@ -331,8 +331,7 @@ class BookingsController < ApplicationController
     BookingMailer.deliver_booking_cancelled_email(
       Role.find_by_symbol(:admin).users,
       current_user(),
-      booking.group,
-      booking.occasion,
+      booking,
       answer_form
     )
   end

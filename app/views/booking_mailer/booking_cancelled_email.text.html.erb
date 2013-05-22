@@ -2,14 +2,24 @@
 
 <p>
   Biljetterna för
-  <%= h @group.name %>, <%= @group.school.name %>
+  <%= h @booking.group.name %>, <%= @booking.group.school.name %>
   till
-  <%= h @occasion.event.name %>,
+  <%= h @booking.occasion.event.name %>,
   föreställningen
-  <%= h @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
+  <%= h @booking.occasion.date %> kl <%= l @booking.occasion.start_time, :format => :only_time %>
   har avbokats av
   <%= h @user.name %> (<%= h @user.email %>, <%= h @user.cellphone %>).
 </p>
+
+<% if @booking.bus_booking? %>
+<p>
+  Denna bokning innehåller en bussbokning:
+</p>
+<ul>
+  <li><strong>Från hållplats:</strong> <%= h @booking.bus_stop %></li>
+  <li><strong>Bokningstyp:</strong> <%= h @booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></li>
+</ul>
+<% end %>
 
 <% if @answer_form %>
   <p>
