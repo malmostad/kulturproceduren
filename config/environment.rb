@@ -6,6 +6,18 @@ RAILS_GEM_VERSION = '2.3.18' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+# Creates an application config hash on a global level using settings
+# in the given YAML file. Initialize this as early as possible.
+APP_CONFIG = {}
+%W(
+#{RAILS_ROOT}/config/app_config.yml
+#{RAILS_ROOT}/config/app_config.local.yml
+#{RAILS_ROOT}/config/app_config.confidential.yml
+).each do |conf|
+  APP_CONFIG.merge!(YAML.load_file(conf)[RAILS_ENV]) if FileTest.exist?(conf)
+end
+
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers

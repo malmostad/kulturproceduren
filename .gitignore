@@ -9,6 +9,9 @@
 
 # /config/
 /config/database.yml
+/config/database.yml.release
+/config/app_config.local.yml
+/config/app_config.confidential.yml
 
 # /db/
 /db/*.sqlite3
