@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :district do
-    sequence(:name) { |n| "District #{n}" }
-    contacts        { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
-    elit_id         nil
-    extens_id       { |n| "id_#{n}" }
+    sequence(:name)      { |n| "District %09d" % n }
+    contacts             { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
+    elit_id              nil
+    sequence(:extens_id) { |n| "id_%09d" % n }
 
     factory :district_with_schools do
       ignore { school_count 5 }
@@ -42,10 +42,10 @@ FactoryGirl.define do
 
   factory :school do
     district
-    sequence(:name) { |n| "School #{n}" }
-    contacts        { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
-    elit_id         nil
-    extens_id       { |n| "id_#{n}" }
+    sequence(:name)      { |n| "School %09d" % n }
+    contacts             { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
+    elit_id              nil
+    sequence(:extens_id) { |n| "id_%09d" % n }
 
     factory :school_with_groups do
       ignore do
@@ -72,10 +72,10 @@ FactoryGirl.define do
 
   factory :group do
     school
-    sequence(:name)      { |n| "Group #{n}" }
+    sequence(:name)      { |n| "Group %09d" % n }
     contacts             { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
     elit_id              nil
-    sequence(:extens_id) { |n| "id_#{n}" }
+    sequence(:extens_id) { |n| "id_%09d" % n }
     active               true
     sequence(:priority)
 
@@ -113,7 +113,7 @@ FactoryGirl.define do
   end
 
   factory :user do
-    sequence(:username)   { |n| "user_#{n}" }
+    sequence(:username)   { |n| "user_%09d" % n }
     salt                  "abcdefg"
     password              "password"
     password_confirmation { password }
@@ -126,7 +126,7 @@ FactoryGirl.define do
 
 
   factory :culture_provider do
-    sequence(:name)          { |n| "culture_provider_#{n}" }
+    sequence(:name)          { |n| "culture_provider_%09d" % n }
     description              "lorem ipsum dolor sit amet"
     contact_person           "John Doe"
     email                    { "#{name}@example.com" }
@@ -144,7 +144,7 @@ FactoryGirl.define do
 
   factory :event do
     culture_provider
-    sequence(:name)              { |n| "event_#{n}" }
+    sequence(:name)              { |n| "event_%09d" % n }
     description                  "lorem ipsum dolor sit amet"
     visible_from                 Date.today - 1
     visible_to                   Date.today + 1
@@ -276,12 +276,12 @@ FactoryGirl.define do
   end
 
   factory :category_group do
-    sequence(:name)     { |n| "category_group_#{n}" }
+    sequence(:name)     { |n| "category_group_%09d" % n }
     visible_in_calendar true
   end
   factory :category do
     category_group
-    sequence(:name) { |n| "category_#{n}" }
+    sequence(:name) { |n| "category_%09d" % n }
   end
 
   factory :booking_requirement do
@@ -312,7 +312,7 @@ FactoryGirl.define do
 
   factory :question do
     qtype               "QuestionText"
-    sequence(:question) { |n| "Question #{n}" }
+    sequence(:question) { |n| "Question %09d" % n }
     choice_csv          nil
     template            false
     mandatory           false
