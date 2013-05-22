@@ -62,7 +62,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    category_ids = params[:event].try(:delete, :category_ids) || []
+    category_ids = params[:category_ids] || []
     @event = Event.new(params[:event])
 
     unless current_user.can_administrate?(@event.culture_provider)
@@ -98,7 +98,7 @@ class EventsController < ApplicationController
       return
     end
 
-    category_ids = params[:event].try(:delete, :category_ids) || []
+    category_ids = params[:category_ids] || []
 
     if @event.update_attributes(params[:event])
 

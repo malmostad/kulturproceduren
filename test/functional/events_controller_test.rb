@@ -181,9 +181,9 @@ class EventsControllerTest < ActionController::TestCase
         :to_age => 11,
         :visible_from => Date.today - 1,
         :visible_to => Date.today + 1,
-        :culture_provider_id => culture_provider.id,
-        :category_ids => [ categories.first.id, "-1" ]
-      }
+        :culture_provider_id => culture_provider.id
+      },
+      :category_ids => [ categories.first.id, "-1" ]
     )
 
     event = Event.last
@@ -221,9 +221,9 @@ class EventsControllerTest < ActionController::TestCase
         :to_age => 11,
         :visible_from => Date.today - 1,
         :visible_to => Date.today + 1,
-        :culture_provider_id => active.id,
-        :category_ids => [ categories.first.id, "-1" ]
-      }
+        :culture_provider_id => active.id
+      },
+      :category_ids => [ categories.first.id, "-1" ]
     )
 
     event = Event.last
@@ -263,7 +263,7 @@ class EventsControllerTest < ActionController::TestCase
     assert_equal    category_groups, assigns(:category_groups)
 
     # Valid
-    put :update, :id => event.id, :event => { :name => "bar", :category_ids => [categories.last.id, "-1"] }
+    put :update, :id => event.id, :event => { :name => "bar" }, :category_ids => [categories.last.id, "-1"]
     assert_redirected_to event
     assert_equal         "Evenemanget uppdaterades.", flash[:notice]
 
