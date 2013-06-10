@@ -18,7 +18,7 @@
   <% end -%>
 </ul>
 
-<% if @event.allotted_group? %>
+<% if @event.alloted_group? %>
 
   <p>Följande grupper har fått platser reserverade för evenemanget:</p>
 
@@ -39,7 +39,7 @@
 
   <p>
     Platserna är reserverade till er fram till och med
-    <%= @event.district_transition_date - 1 %>.
+    <%= (@event.district_transition_date || @event.free_for_all_transition_date) - 1 %>.
     Därefter släpps obekräftade platser till hela stadsdelen.
   </p>
 
