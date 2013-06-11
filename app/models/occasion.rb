@@ -158,10 +158,7 @@ class Occasion < ActiveRecord::Base
   end
 
   def bus_booking?
-    self.event.bus_booking? &&
-      self.event.alloted_group? &&
-      (self.seats.to_i + self.wheelchair_seats.to_i) <= 200 &&
-      (self.start_time.hour > 9 || self.start_time.hour == 9 && self.start_time.min >= 30)
+    self.event.bus_booking? && self.event.alloted_group?
   end
  
 end

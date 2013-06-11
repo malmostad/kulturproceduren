@@ -328,11 +328,7 @@ class OccasionTest < ActiveSupport::TestCase
     event = create(:event, :bus_booking => true, :ticket_state => :alloted_group)
     occasion = create(
       :occasion,
-      :event => event,
-      :seats => 30,
-      :wheelchair_seats => 3,
-      :start_time => "11:00",
-      :stop_time => "12:00"
+      :event => event
     )
 
     assert occasion.bus_booking?
@@ -347,18 +343,6 @@ class OccasionTest < ActiveSupport::TestCase
     event.ticket_state = :alloted_district
     assert !occasion.bus_booking?
     event.ticket_state = :alloted_group
-    assert occasion.bus_booking?
-
-    # Occasion cannot have more than 200 seats
-    occasion.seats = 198
-    assert !occasion.bus_booking?
-    occasion.seats = 197
-    assert occasion.bus_booking?
-
-    # Occasion cannot start earlier than 9:30
-    occasion.start_time = "09:29"
-    assert !occasion.bus_booking?
-    occasion.start_time = "09:30"
     assert occasion.bus_booking?
   end
 end
