@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class RoleApplicationsHelperTest < ActionView::TestCase
+  include ERB::Util
+
   test "state string" do
     role_application = build(:role_application, :state => RoleApplication::PENDING)
     assert_equal "Inskickad", state_string(role_application)

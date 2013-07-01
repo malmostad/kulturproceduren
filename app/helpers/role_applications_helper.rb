@@ -15,9 +15,9 @@ module RoleApplicationsHelper
     when :host then return "Evenemangsvärd"
     when :culture_worker
       if application.culture_provider
-        return "Publicering för #{h(application.culture_provider.name)}"
+        return "Publicering för #{html_escape(application.culture_provider.name)}"
       else
-        return "Publicering för #{h(application.new_culture_provider_name)}"
+        return "Publicering för #{html_escape(application.new_culture_provider_name)}"
       end
     end
   end

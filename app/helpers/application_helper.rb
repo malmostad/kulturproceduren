@@ -39,14 +39,15 @@ module ApplicationHelper
   # Turns a text into HTML paragraphs. Paragraphs should be separated
   # by empty lines.
   def paragraphize(text, tag_attrs = '', escape = true)
-    text = h(text) if escape
+    text = html_escape(text) if escape
     lines = text.split(/^\s*$/).collect { |l| l.strip.gsub(/[\r\n]+/, '<br/>') }
-    "<p #{tag_attrs}>" + lines.join("</p><p #{tag_attrs}>") + "</p>"
+    paragraphs = "<p #{tag_attrs}>" + lines.join("</p><p #{tag_attrs}>") + "</p>"
+    return paragraphs.html_safe
   end
   # Inserts HTML breaks at line breaks.
   def linebreakize(text, escape = true)
-    text = h(text) if escape
-    text.split($/).join("<br/>")
+    text = html_escape(text) if escape
+    text.split($/).join("<br/>").html_safe
   end
 
   # Common description rendering
@@ -87,8 +88,8 @@ module ApplicationHelper
   # [<tt>thumb</tt>] Indicates if the image tag should show the thumbnail or not
   def uploaded_image_tag(image, thumb = false)
     options = {
-      :alt => h(image.description),
-      :title => h(image.description)
+      :alt => html_escape(image.description),
+      :title => html_escape(image.description)
     }
 
     image_path = "/images/"
@@ -107,7 +108,7 @@ module ApplicationHelper
       options[:src] = image_path + image.image_url
     end
 
-    return tag("img", options)
+    return tag("img", options).html_safe
   end
 
   # Generates a login link that returns the user to the

@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ApplicationHelperTest < ActionView::TestCase
+  include ERB::Util
+
   def params
     @dummy_params
   end
@@ -38,13 +40,13 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   test "paragraphize" do
-    assert_equal '<p class="test">abc<br/>def</p><p class="test">ghi</p>',
-      paragraphize("abc\ndef\n\nghi", 'class="test"')
+    assert_equal '<p class="test">abc<br/>d&lt;ef</p><p class="test">ghi</p>',
+      paragraphize("abc\nd<ef\n\nghi", 'class="test"')
   end
 
   test "linebreakize" do
-    assert_equal 'abc<br/>def<br/>ghi',
-      linebreakize("abc\ndef\nghi")
+    assert_equal 'abc<br/>d&lt;ef<br/>ghi',
+      linebreakize("abc\nd<ef\nghi")
   end
 
   test "show description" do
@@ -85,7 +87,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "uploaded image tag" do
     img = Image.new do |i|
-      i.description = "testimage"
+      i.description = "test<image"
       i.filename = "testimage.jpg"
       i.width = 300
       i.height = 400
@@ -93,9 +95,9 @@ class ApplicationHelperTest < ActionView::TestCase
       i.thumb_height = 40
     end
 
-    assert_equal '<img alt="testimage" height="400" src="/images/model/testimage.jpg" title="testimage" width="300" />',
+    assert_equal '<img alt="test&lt;image" height="400" src="/images/model/testimage.jpg" title="test&lt;image" width="300" />',
       uploaded_image_tag(img)
-    assert_equal '<img alt="testimage" height="40" src="/images/model/testimage.thumb.jpg" title="testimage" width="30" />',
+    assert_equal '<img alt="test&lt;image" height="40" src="/images/model/testimage.thumb.jpg" title="test&lt;image" width="30" />',
       uploaded_image_tag(img, true)
   end
 
