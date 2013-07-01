@@ -58,6 +58,9 @@ module Kulturproceduren
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Don't report field errors in the summary in the beginnning of the form
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag }
   end
 end
 
