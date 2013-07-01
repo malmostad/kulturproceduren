@@ -1,62 +1,16 @@
-# Be sure to restart your server when you modify this file
-
-# Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.18' unless defined? RAILS_GEM_VERSION
-
-# Bootstrap the Rails environment, frameworks, and default configuration
-require File.join(File.dirname(__FILE__), 'boot')
+# Load the rails application
+require File.expand_path('../application', __FILE__)
 
 # Creates an application config hash on a global level using settings
 # in the given YAML file. Initialize this as early as possible.
 APP_CONFIG = {}
 %W(
-#{RAILS_ROOT}/config/app_config.yml
-#{RAILS_ROOT}/config/app_config.local.yml
-#{RAILS_ROOT}/config/app_config.confidential.yml
+#{Rails.root}/config/app_config.yml
+#{Rails.root}/config/app_config.local.yml
+#{Rails.root}/config/app_config.confidential.yml
 ).each do |conf|
-  APP_CONFIG.merge!(YAML.load_file(conf)[RAILS_ENV]) if FileTest.exist?(conf)
+  APP_CONFIG.merge!(YAML.load_file(conf)[Rails.env]) if FileTest.exist?(conf)
 end
 
-
-Rails::Initializer.run do |config|
-  # Settings in config/environments/* take precedence over those specified here.
-  # Application configuration should go into files in config/initializers
-  # -- all .rb files in that directory are automatically loaded.
-
-  # Add additional load paths for your own custom dirs
-  config.autoload_paths += %W( #{RAILS_ROOT}/app/mailers #{RAILS_ROOT}/app/observers )
-
-  # Activate observers that should always be running
-  config.active_record.observers = :role_application_observer
-
-  # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-  # Run "rake -D time" for a list of tasks for finding time zone names.
-  config.time_zone = "Stockholm"
-
-  # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-  # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
-  config.i18n.default_locale = :sv
-end
-
-Dir.glob(File.join(RAILS_ROOT,'app','models','**','*.rb')).each do |file|
-  require_dependency file
-end
-
-
-# http://kopongo.com/2008/7/25/postgres-ri_constrainttrigger-error
-module ActiveRecord
-  module ConnectionAdapters
-    class PostgreSQLAdapter < AbstractAdapter
-      def disable_referential_integrity(&block)
-        transaction {
-          begin
-            execute "SET CONSTRAINTS ALL DEFERRED"
-            yield
-          ensure
-            execute "SET CONSTRAINTS ALL IMMEDIATE"
-          end
-        }
-      end
-    end
-  end
-end
+# Initialize the rails application
+Kulturproceduren::Application.initialize!
