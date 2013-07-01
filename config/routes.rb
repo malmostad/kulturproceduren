@@ -1,131 +1,198 @@
-ActionController::Routing::Routes.draw do |map|
+Kulturproceduren::Application.routes.draw do
+  resources :users do
+    collection do
+      post :apply_filter
+      get  :request_password_reset
+      post :send_password_reset_confirmation
+    end
+    member do
+      get  :edit_password
+      put  :update_password
+      post :add_culture_provider
+      get  :reset_password
+    end
 
-  map.resources :users,
-    :member => {
-    :edit_password => :get,
-    :update_password => :put,
-    :add_culture_provider => :post,
-    :reset_password => :get
-  }, :collection => {
-    :request_password_reset => :get,
-    :send_password_reset_confirmation => :post,
-    :apply_filter => :post
-  }
-
-  map.resources :statistics, :only => [ :index ],
-    :member => { :visitors => :get, :questionnaires => :get, :unbooking_questionnaires => :get }
-
-  map.resources :culture_providers,
-    :member => { :activate => :post, :deactivate => :post } do |cp|
-    cp.resources :images, :except => [ :show, :edit, :update, :new ],
-      :member => { :set_main => :get }
-    cp.resources :culture_provider_links, :except => [ :create, :edit, :update ],
-      :member => { :select => :get }
-    cp.resources :event_links, :except => [ :create, :edit, :update ],
-      :collection => { :select_culture_provider => :post },
-      :member => { :select_event => :get }
   end
 
-  map.resources :events, :except => [ :index ], :collection => {
-    :options_list => :get
-  }, :member => {
-    :ticket_allotment => :get
-  } do |e|
-    e.resources :images, :except => [ :show, :edit, :update, :new ]
-    e.resources :attachments, :except => [ :edit, :update, :new ]
-    e.resources :notification_requests,
-      :only => [ :new , :create ],
-      :collection => { :get_input_area => :get }
-    e.resources :statistics, :only => [ :index ],
-      :member => { :visitors => :get , :questionnaires => :get }
-    e.resources :culture_provider_links, :except => [ :create, :edit, :update ],
-      :member => { :select => :get }
-    e.resources :event_links, :except => [ :create, :edit, :update ],
-      :collection => { :select_culture_provider => :post },
-      :member => { :select_event => :get }
-    e.resources :attendance,
-      :only => [ :index ],
-      :collection => { :report => :get, :update_report => :post }
-    e.resources :bookings,
-      :only => [ :index, :new ],
-      :collection => { :apply_filter => :post, :bus => :get }
-    e.resource :information, :only => [ :new, :create ]
+  resources :statistics, :only => [:index] do
+    member do
+      get :visitors
+      get :questionnaires
+      get :unbooking_questionnaires
+    end
   end
 
-  map.resources :occasions, :except => [ :index ],
-    :member => {
-    :ticket_availability => :get,
-    :cancel => :get
-  } do |oc|
-    oc.resources :bookings, :collection => { :apply_filter => :post }
-    oc.resources :attendance,
-      :only => [ :index ],
-      :collection => { :report => :get, :update_report => :post }
+  resources :culture_providers do
+    member do
+      post :deactivate
+      post :activate
+    end
+    resources :images, :except => [:show, :edit, :update, :new] do
+      member do
+        get :set_main
+      end
+    end
+    resources :culture_provider_links, :except => [:create, :edit, :update] do
+      member do
+        get :select
+      end
+    end
+
+    resources :event_links, :except => [:create, :edit, :update] do
+      collection do
+        post :select_culture_provider
+      end
+      member do
+        get :select_event
+      end
+    end
   end
 
-  map.resources :bookings,
-    :except => [ :new ],
-    :collection => { :group => :get, :group_list => :get, :form => :get },
-    :member => { :unbook => :get }
+  resources :events, :except => [:index] do
+    collection do
+      get :options_list
+    end
+    member do
+      get :ticket_allotment
+    end
 
-  map.resources(
-    :questionnaires,
-    :collection => {
-      :unbooking => :get
-    },
-    :member => {
-      :add_template_question => :post,
-      :remove_template_question => :delete,
-    }
-  ) do |questionnaire|
-    questionnaire.resources :questions, :except => [ :show, :new ]
+    resources :images,                :except => [:show, :edit, :update, :new]
+    resources :attachments,           :except => [:edit, :update, :new]
+    resources :notification_requests, :only => [:new, :create] do
+      collection do
+        get :get_input_area
+      end
+    end
+    resources :statistics, :only => [:index] do
+      member do
+        get :visitors
+        get :questionnaires
+      end
+    end
+    resources :culture_provider_links, :except => [:create, :edit, :update] do
+      member do
+        get :select
+      end
+    end
+    resources :event_links, :except => [:create, :edit, :update] do
+      collection do
+        post :select_culture_provider
+      end
+      member do
+        get :select_event
+      end
+    end
+    resources :attendance, :only => [:index] do
+      collection do
+        post :update_report
+        get  :report
+      end
+    end
+    resources :bookings, :only => [:index, :new] do
+      collection do
+        post :apply_filter
+        get  :bus
+      end
+    end
+
+    resource :information, :only => [:new, :create]
   end
-  map.resources :answers
-  map.resources :questions, :except => [ :show, :new ]
 
-  map.resources :categories, :except => [ :show, :new ]
-  map.resources :category_groups, :except => [:show, :new ]
+  resources :occasions, :except => [:index] do
+    member do
+      get :cancel
+      get :ticket_availability
+    end
 
-  map.resources :districts, :collection => { :select => [ :get, :post ] }
-  map.resources :schools, :collection => { :options_list => :get, :select => [ :get, :post ] }
-  map.resources :groups,
-    :collection => { :options_list => :get, :select => [ :get, :post ] },
-    :member => { :move_first_in_priority => :get, :move_last_in_priority => :get }
-  map.resources :age_groups, :except => [ :show, :index, :new ]
+    resources :bookings do
+      collection do
+        post :apply_filter
+      end
+    end
+    resources :attendance, :only => [:index] do
+      collection do
+        post :update_report
+        get :report
+      end
+    end
+  end
 
-  map.resources :role_applications,
-    :except => [ :new ],
-    :new => { :booker => :get, :culture_worker => :get },
-    :collection => { :archive => :get }
+  resources :bookings, :except => [:new] do
+    collection do
+      get :group_list
+      get :group
+      get :form
+    end
+    member do
+      get :unbook
+    end
+  end
 
-  map.resource :information, :only => [ :new, :create ]
+  resources :questionnaires do
+    collection do
+      get :unbooking
+    end
+    member do
+      delete :remove_template_question
+      post :add_template_question
+    end
+    resources :questions, :except => [:show, :new]
+  end
 
+  resources :answers
+  resources :questions,       :except => [:show, :new]
+  resources :categories,      :except => [:show, :new]
+  resources :category_groups, :except => [:show, :new]
+  resources :districts do
+    collection do
+      get  :select
+      post :select
+    end
+  end
 
-  map.root :controller => "calendar"
+  resources :schools do
+    collection do
+      get  :select
+      post :select
+      get  :options_list
+    end
+  end
 
-  map.calendar 'calendar/:action/:list',
-    :controller => 'calendar'
+  resources :groups do
+    collection do
+      get  :select
+      post :select
+      get  :options_list
+    end
+    member do
+      get :move_first_in_priority
+      get :move_last_in_priority
+    end
 
-  # Questionnaires
-  map.answer_questionnaire 'questionnaires/:answer_form_id/answer',
-    :controller => 'answer_form' , :action => 'submit'
+  end
 
-  # Role granting
-  map.grant_role 'users/:id/grant/:role',
-    :controller => 'users', :action => 'grant'
-  map.revoke_role 'users/:id/revoke/:role',
-    :controller => 'users', :action => 'revoke'
-  map.remove_culture_provider_user 'users/:id/remove_culture_provider/:culture_provider_id',
-    :controller => 'users', :action => 'remove_culture_provider'
+  resources :age_groups, :except => [:show, :index, :new]
+  resources :role_applications, :except => [:new] do
+    collection do
+      get :archive
+    end
+  end
 
-  # LDAP views
-  map.ldap 'ldap/',
-    :controller => 'ldap', :action => 'index'
-  map.ldap_search 'ldap/search',
-    :controller => 'ldap', :action => 'search'
-  map.ldap_handle 'ldap/handle/:username',
-    :controller => 'ldap', :action => 'handle'
+  resource :information, :only => [:new, :create]
 
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  root :to => "calendar#index"
+
+  match "calendar/:action/:list" => "calendar#index", :as => :calendar
+
+  match "questionnaires/:answer_form_id/answer" => "answer_form#submit", :as => :answer_questionnaire
+
+  match "users/:id/grant/:role" => "users#grant", :as => :grant_role
+  match "users/:id/revoke/:role" => "users#revoke", :as => :revoke_role
+  match "users/:id/remove_culture_provider/:culture_provider_id" => "users#remove_culture_provider", :as => :remove_culture_provider_user
+
+  match "ldap/" => "ldap#index", :as => :ldap
+  match "ldap/search" => "ldap#search", :as => :ldap_search
+  match "ldap/handle/:username" => "ldap#handle", :as => :ldap_handle
+
+  match "/:controller(/:action(/:id))"
 end
