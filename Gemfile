@@ -21,5 +21,6 @@ end
 
 group :test do
   gem "factory_girl", "~> 2.6.4"
+  gem "factory_girl_rails", "~> 1.7.0"
   gem "mocha", "1.0.0", :require => false
 end
