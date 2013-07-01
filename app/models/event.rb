@@ -244,11 +244,11 @@ class Event < ActiveRecord::Base
 
   # Returns the ids of all groups that are not targeted by this event.
   def not_targeted_group_ids
-    unordered_groups.find(:all,
-                :select => "distinct groups.id",
-                :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false ],
-                :order => "groups.id ASC"
-               ).collect { |g| g.id.to_i }
+    unordered_groups.all(
+      :select => "groups.id",
+      :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false ],
+      :order => "groups.id ASC"
+    ).collect { |g| g.id.to_i }
   end
 
 
