@@ -10,7 +10,7 @@ class CultureProvider < ActiveRecord::Base
   has_many :images
   # All images, excluding the main image (logotype)
   has_many :images_excluding_main, :class_name => "Image",
-    :conditions => 'id != #{main_image_id || 0}'
+    :conditions => lambda { [ "id != ?", self.main_image_id || 0 ] }
   # The main image (logotype)
   belongs_to :main_image, :class_name => "Image", :dependent => :delete
   

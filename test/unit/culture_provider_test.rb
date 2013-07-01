@@ -44,7 +44,7 @@ class CultureProviderTest < ActiveSupport::TestCase
   test "images excluding main" do
     culture_provider = create(:culture_provider)
     images = create_list(:image, 10, :culture_provider => culture_provider)
-    culture_provider.main_image_id = images.first
+    culture_provider.main_image_id = images.first.id
 
     images_excluding_main = culture_provider.images_excluding_main
     assert_equal 9, images_excluding_main.length

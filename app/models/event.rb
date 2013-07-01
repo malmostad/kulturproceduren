@@ -54,9 +54,10 @@ class Event < ActiveRecord::Base
     :class_name => "Group", :source => :group
   
   has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC", :dependent => :destroy
-  has_many :reportable_occasions, :class_name => "Occasion",
+  has_many :reportable_occasions,
+    :class_name => "Occasion",
     :order => "date ASC, start_time ASC, stop_time ASC",
-    :conditions => [ 'occasions.date < ?', Date.today ]
+    :conditions => lambda { [ 'occasions.date < ?', Date.today ] }
   belongs_to :culture_provider
 
   has_and_belongs_to_many :categories, :include => :category_group
@@ -66,7 +67,7 @@ class Event < ActiveRecord::Base
   # All images
   has_many :images, :dependent => :destroy
   # All images, excluding the main image (logotype)
-  has_many :images_excluding_main, :class_name => "Image", :conditions => 'id != #{main_image_id || 0}'
+  has_many :images_excluding_main, :class_name => "Image", :conditions => lambda { [ "id != ?", self.main_image_id || 0 ] }
   # The main image (logotype)
   belongs_to :main_image, :class_name => "Image", :dependent => :destroy
 
