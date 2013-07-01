@@ -5,11 +5,11 @@ class AgeGroupTest < ActiveSupport::TestCase
   test "validations" do
     age_group = build(:age_group, :age => "a")
     assert !age_group.valid?
-    assert_not_nil age_group.errors.on(:age)
+    assert age_group.errors.include?(:age)
 
     age_group = build(:age_group, :quantity => "a")
     assert !age_group.valid?
-    assert_not_nil age_group.errors.on(:quantity)
+    assert age_group.errors.include?(:quantity)
   end
 
   test "with district" do

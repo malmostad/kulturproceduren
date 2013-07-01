@@ -4,54 +4,54 @@ class BookingTest < ActiveSupport::TestCase
   test "validations" do
     booking = build(:booking, :group => nil)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:group)
+    assert booking.errors.include?(:group)
     booking = build(:booking, :occasion => nil)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:occasion)
+    assert booking.errors.include?(:occasion)
     booking = build(:booking, :user => nil)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:user)
+    assert booking.errors.include?(:user)
     booking = build(:booking, :companion_name => nil)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:companion_name)
+    assert booking.errors.include?(:companion_name)
     booking = build(:booking, :companion_email => nil)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:companion_email)
+    assert booking.errors.include?(:companion_email)
     booking = build(:booking, :companion_phone => nil)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:companion_phone)
+    assert booking.errors.include?(:companion_phone)
     booking = build(:booking, :bus_stop => nil, :bus_booking => true)
     assert !booking.valid?
-    assert_not_nil booking.errors.on(:bus_stop)
+    assert booking.errors.include?(:bus_stop)
   end
   test "validate seats" do
     ## New booking
     # No seats
     booking = build(:booking, :student_count => 0, :adult_count => 0, :wheelchair_count => 0)
     assert !booking.valid?
-    assert_equal "Du måste boka minst 1 plats", booking.errors.on(:student_count)
+    assert_equal "Du måste boka minst 1 plats", booking.errors[:student_count].first
 
     # Too few available tickets
     booking = build(:booking, :student_count => 1, :adult_count => 0, :wheelchair_count => 0, :skip_tickets => true)
     assert !booking.valid?
-    assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
+    assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors[:student_count].first
 
     # Too few seats
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 3)
     booking = build(:booking, :occasion => occasion, :student_count => 20, :adult_count => 0, :wheelchair_count => 0)
     assert !booking.valid?
-    assert_equal "Du har bara 13 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
+    assert_equal "Du har bara 13 platser du kan boka på den här föreställningen", booking.errors[:student_count].first
 
     # Too few wheelchair seats
     booking = build(:booking, :occasion => occasion, :student_count => 1, :adult_count => 0, :wheelchair_count => 4)
     assert !booking.valid?
-    assert_equal "Det finns bara 3 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
+    assert_equal "Det finns bara 3 rullstolsplatser du kan boka på den här föreställningen", booking.errors[:wheelchair_count].first
 
     # Wheelchair seats already booked
     create_list(:ticket, 2, :occasion => occasion, :wheelchair => true, :state => :booked)
     booking = build(:booking, :occasion => occasion, :student_count => 1, :adult_count => 0, :wheelchair_count => 2)
     assert !booking.valid?
-    assert_equal "Det finns bara 1 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
+    assert_equal "Det finns bara 1 rullstolsplatser du kan boka på den här föreställningen", booking.errors[:wheelchair_count].first
 
     ## Existing booking
     # No seats
@@ -61,14 +61,14 @@ class BookingTest < ActiveSupport::TestCase
     booking.adult_count      = 0
     booking.wheelchair_count = 0
     assert !booking.valid?
-    assert_equal "Du måste boka minst 1 plats", booking.errors.on(:student_count)
+    assert_equal "Du måste boka minst 1 plats", booking.errors[:student_count].first
 
     # Too few tickets
     booking = create(:booking)
     assert booking.valid?
     booking.student_count += 1
     assert !booking.valid?
-    assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
+    assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors[:student_count].first
 
     # Too few seats
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 0)
@@ -77,7 +77,7 @@ class BookingTest < ActiveSupport::TestCase
     create(:ticket, :event => occasion.event, :group => booking.group, :state => :unbooked, :wheelchair => false)
     booking.student_count += 1
     assert !booking.valid?
-    assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
+    assert_equal "Du har bara 0 platser du kan boka på den här föreställningen", booking.errors[:student_count].first
 
     # Too few wheelchair seats
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 0)
@@ -86,7 +86,7 @@ class BookingTest < ActiveSupport::TestCase
     create(:ticket, :event => occasion.event, :group => booking.group, :state => :unbooked, :wheelchair => false)
     booking.wheelchair_count += 1
     assert !booking.valid?
-    assert_equal "Det finns bara 0 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
+    assert_equal "Det finns bara 0 rullstolsplatser du kan boka på den här föreställningen", booking.errors[:wheelchair_count].first
 
     # Wheelchair seats already booked
     occasion = create(:occasion, :seats => 10, :wheelchair_seats => 2)
@@ -96,7 +96,7 @@ class BookingTest < ActiveSupport::TestCase
     create(:ticket, :event => occasion.event, :group => booking.group, :state => :unbooked, :wheelchair => false)
     booking.wheelchair_count += 1
     assert !booking.valid?
-    assert_equal "Det finns bara 0 rullstolsplatser du kan boka på den här föreställningen", booking.errors.on(:wheelchair_count)
+    assert_equal "Det finns bara 0 rullstolsplatser du kan boka på den här föreställningen", booking.errors[:wheelchair_count].first
 
     # Include deactivated tickets in the validation, for group allotment
     occasion = create(:occasion, :single_group => true)
@@ -106,7 +106,7 @@ class BookingTest < ActiveSupport::TestCase
     assert booking.valid?
     booking.student_count += 2
     assert !booking.valid?
-    assert_equal "Du har bara 1 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
+    assert_equal "Du har bara 1 platser du kan boka på den här föreställningen", booking.errors[:student_count].first
 
     # Include deactivated tickets in the validation, the other allotment states
     occasion = create(:occasion, :single_group => true)
@@ -117,7 +117,7 @@ class BookingTest < ActiveSupport::TestCase
     assert booking.valid?
     booking.student_count += 2
     assert !booking.valid?
-    assert_equal "Du har bara 1 platser du kan boka på den här föreställningen", booking.errors.on(:student_count)
+    assert_equal "Du har bara 1 platser du kan boka på den här föreställningen", booking.errors[:student_count].first
   end
 
   test "synchronize tickets - normal occasion" do

@@ -4,10 +4,10 @@ class GroupTest < ActiveSupport::TestCase
   test "validations" do
     group = build(:group, :name => "")
     assert !group.valid?
-    assert_not_nil group.errors.on(:name)
+    assert group.errors.include?(:name)
     group = build(:group, :school => nil)
     assert !group.valid?
-    assert_not_nil group.errors.on(:school)
+    assert group.errors.include?(:school)
   end
 
   test "age group, number of children by age span" do

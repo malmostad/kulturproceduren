@@ -4,28 +4,28 @@ class UserTest < ActiveSupport::TestCase
   test "validations" do
     user = build(:user, :username => "")
     assert !user.valid?
-    assert_not_nil user.errors.on(:username)
+    assert user.errors.include?(:username)
     user = build(:user, :password => "")
     assert !user.valid?
-    assert_not_nil user.errors.on(:password)
+    assert user.errors.include?(:password)
     user = build(:user, :name => "")
     assert !user.valid?
-    assert_not_nil user.errors.on(:name)
+    assert user.errors.include?(:name)
     user = build(:user, :email => "")
     assert !user.valid?
-    assert_not_nil user.errors.on(:email)
+    assert user.errors.include?(:email)
     user = build(:user, :email => "foobarbaz")
     assert !user.valid?
-    assert_not_nil user.errors.on(:email)
+    assert user.errors.include?(:email)
     user = build(:user, :cellphone => "")
     assert !user.valid?
-    assert_not_nil user.errors.on(:cellphone)
+    assert user.errors.include?(:cellphone)
     user = build(:user, :password => "foo", :password_confirmation => "bar")
     assert !user.valid?
-    assert_not_nil user.errors.on(:password)
+    assert user.errors.include?(:password)
     user = build(:user, :district_ids => nil)
     assert !user.valid?
-    assert_not_nil user.errors.on(:district_ids)
+    assert user.errors.include?(:district_ids)
   end
 
   test "groups by occasion" do

@@ -4,10 +4,10 @@ class AllotmentTest < ActiveSupport::TestCase
   test "validations" do
     allotment = build(:allotment, :user => nil)
     assert !allotment.valid?
-    assert_not_nil allotment.errors.on(:user)
+    assert allotment.errors.include?(:user)
     allotment = build(:allotment, :event => nil)
     assert !allotment.valid?
-    assert_not_nil allotment.errors.on(:event)
+    assert allotment.errors.include?(:event)
   end
   test "synchronize tickets" do
     assert !Ticket.exists?

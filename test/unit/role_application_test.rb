@@ -8,13 +8,13 @@ class RoleApplicationTest < ActiveSupport::TestCase
     assert build(:role_application, :message => "").valid?
     role_application = build(:role_application, :role => booker, :message => "")
     assert !role_application.valid?
-    assert_not_nil role_application.errors.on(:message)
+    assert role_application.errors.include?(:message)
 
     assert build(:role_application, :culture_provider => nil, :new_culture_provider_name => "").valid?
     assert build(:role_application, :role => culture_worker, :culture_provider => create(:culture_provider), :new_culture_provider_name => "").valid?
     assert build(:role_application, :role => culture_worker, :culture_provider => nil, :new_culture_provider_name => "test").valid?
     role_application = build(:role_application, :role => culture_worker, :culture_provider => nil, :new_culture_provider_name => "")
     assert !role_application.valid?
-    assert_not_nil role_application.errors.on(:culture_provider_id)
+    assert role_application.errors.include?(:culture_provider_id)
   end
 end

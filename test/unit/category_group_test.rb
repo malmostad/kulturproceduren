@@ -4,6 +4,6 @@ class CategoryGroupTest < ActiveSupport::TestCase
   test "validations" do
     category_group = build(:category_group, :name => "")
     assert !category_group.valid?
-    assert_not_nil category_group.errors.on(:name)
+    assert category_group.errors.include?(:name)
   end
 end

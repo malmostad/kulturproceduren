@@ -4,10 +4,10 @@ class SchoolTest < ActiveSupport::TestCase
   test "validations" do
     school = build(:school, :name => "")
     assert !school.valid?
-    assert_not_nil school.errors.on(:name)
+    assert school.errors.include?(:name)
     school = build(:school, :district => nil)
     assert !school.valid?
-    assert_not_nil school.errors.on(:district)
+    assert school.errors.include?(:district)
   end
 
   test "groups by age span" do

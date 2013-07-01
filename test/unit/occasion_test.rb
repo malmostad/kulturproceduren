@@ -4,13 +4,13 @@ class OccasionTest < ActiveSupport::TestCase
   test "validations" do
     occasion = build(:occasion, :date => "")
     assert !occasion.valid?
-    assert_not_nil occasion.errors.on(:date)
+    assert occasion.errors.include?(:date)
     occasion = build(:occasion, :address => "")
     assert !occasion.valid?
-    assert_not_nil occasion.errors.on(:address)
+    assert occasion.errors.include?(:address)
     occasion = build(:occasion, :seats => "a")
     assert !occasion.valid?
-    assert_not_nil occasion.errors.on(:seats)
+    assert occasion.errors.include?(:seats)
   end
   
   test "bookings hierarchically ordered" do

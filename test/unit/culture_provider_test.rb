@@ -4,7 +4,7 @@ class CultureProviderTest < ActiveSupport::TestCase
   test "validations" do
     culture_provider = build(:culture_provider, :name => "")
     assert !culture_provider.valid?
-    assert_not_nil culture_provider.errors.on(:name)
+    assert culture_provider.errors.include?(:name)
   end
   test "standing events" do
     culture_provider = create(:culture_provider)

@@ -4,7 +4,7 @@ class ImageTest < ActiveSupport::TestCase
   test "validations" do
     image = build(:image, :description => "")
     assert !image.valid?
-    assert_not_nil image.errors.on(:description)
+    assert image.errors.include?(:description)
   end
 
   test "save" do

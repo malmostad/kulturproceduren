@@ -4,22 +4,22 @@ class EventTest < ActiveSupport::TestCase
   test "validations" do
     event = build(:event, :name => "")
     assert !event.valid?
-    assert_not_nil event.errors.on(:name)
+    assert event.errors.include?(:name)
     event = build(:event, :description => "")
     assert !event.valid?
-    assert_not_nil event.errors.on(:description)
+    assert event.errors.include?(:description)
     event = build(:event, :from_age => "a")
     assert !event.valid?
-    assert_not_nil event.errors.on(:from_age)
+    assert event.errors.include?(:from_age)
     event = build(:event, :to_age => "a")
     assert !event.valid?
-    assert_not_nil event.errors.on(:to_age)
+    assert event.errors.include?(:to_age)
     event = build(:event, :visible_from => "")
     assert !event.valid?
-    assert_not_nil event.errors.on(:visible_from)
+    assert event.errors.include?(:visible_from)
     event = build(:event, :visible_to => "")
     assert !event.valid?
-    assert_not_nil event.errors.on(:visible_to)
+    assert event.errors.include?(:visible_to)
   end
 
   test "standing" do

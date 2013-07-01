@@ -4,7 +4,7 @@ class DistrictTest < ActiveSupport::TestCase
   test "validations" do
     district = build(:district, :name => "")
     assert !district.valid?
-    assert_not_nil district.errors.on(:name)
+    assert district.errors.include?(:name)
   end
 
   test "schools by age span" do

@@ -4,7 +4,7 @@ class QuestionTest < ActiveSupport::TestCase
   test "validations" do
     question = build(:question, :question => "")
     assert !question.valid?
-    assert_not_nil question.errors.on(:question)
+    assert question.errors.include?(:question)
   end
 
   test "statistics for answer forms" do
