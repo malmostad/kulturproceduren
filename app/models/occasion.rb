@@ -44,7 +44,7 @@ class Occasion < ActiveRecord::Base
   validates_numericality_of :seats, :only_integer => true,
     :message => "Antalet platser måste vara ett giltigt heltal"
 
-  named_scope :upcoming, lambda {
+  scope :upcoming, lambda {
     {
       :conditions => [
         "date > :date or (date = :date and start_time > :time)",

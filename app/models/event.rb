@@ -11,21 +11,21 @@
 class Event < ActiveRecord::Base
 
   # Scope for operating on standing events
-  named_scope :standing, :conditions => "events.id not in (select x.event_id from occasions x)"
+  scope :standing, :conditions => "events.id not in (select x.event_id from occasions x)"
   # Scope for operating on non-standing events
-  named_scope :non_standing, :conditions => "events.id in (select x.event_id from occasions x)"
+  scope :non_standing, :conditions => "events.id in (select x.event_id from occasions x)"
 
   # Scope for operating on events without tickets
-  named_scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
+  scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
   # Scope for operating on events that are visible
-  named_scope :visible, :conditions => "current_date between visible_from and visible_to"
+  scope :visible, :conditions => "current_date between visible_from and visible_to"
   # Scope for operating on events without questionnaires
-  named_scope :without_questionnaires, :conditions => 'id not in (select event_id from questionnaires where event_id is not null)'
+  scope :without_questionnaires, :conditions => 'id not in (select event_id from questionnaires where event_id is not null)'
 
-  named_scope :not_linked_to_event, lambda { |event|
+  scope :not_linked_to_event, lambda { |event|
     { :conditions => [ "id not in (select to_id from event_links where from_id = ?) and id != ?", event.id, event.id ] }
   }
-  named_scope :not_linked_to_culture_provider, lambda { |culture_provider|
+  scope :not_linked_to_culture_provider, lambda { |culture_provider|
     { :conditions => [ "id not in (select event_id from culture_providers_events where culture_provider_id = ?)", culture_provider.id ] }
   }
 

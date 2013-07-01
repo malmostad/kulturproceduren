@@ -25,7 +25,7 @@ class Booking < ActiveRecord::Base
   after_save :synchronize_tickets
   before_create :set_booked_at_timestamp
 
-  named_scope :active, :conditions => { :unbooked => false }
+  scope :active, :conditions => { :unbooked => false }
 
   def student_count
     read_attribute(:student_count).to_i

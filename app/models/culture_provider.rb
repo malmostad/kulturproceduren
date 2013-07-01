@@ -38,10 +38,10 @@ class CultureProvider < ActiveRecord::Base
 
   default_scope :order => 'name ASC'
 
-  named_scope :not_linked_to_culture_provider, lambda { |culture_provider|
+  scope :not_linked_to_culture_provider, lambda { |culture_provider|
     { :conditions => [ "id not in (select to_id from culture_provider_links where from_id = ?) and id != ?", culture_provider.id, culture_provider.id ] }
   }
-  named_scope :not_linked_to_event, lambda { |event|
+  scope :not_linked_to_event, lambda { |event|
     { :conditions => [ "id not in (select culture_provider_id from culture_providers_events where event_id = ?) and id != ?", event.id, event.culture_provider_id ] }
   }
 end

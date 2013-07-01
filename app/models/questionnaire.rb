@@ -6,8 +6,8 @@ class Questionnaire < ActiveRecord::Base
 
   as_enum :target, { :for_event => 1, :for_unbooking => 2 }, :slim => :class
 
-  named_scope :for_event, :conditions => { :target_cd => targets.for_event }
-  named_scope :for_unbooking, :conditions => { :target_cd => targets.for_unbooking }
+  scope :for_event, :conditions => { :target_cd => targets.for_event }
+  scope :for_unbooking, :conditions => { :target_cd => targets.for_unbooking }
 
   # Returns an array of the numbers of answers. The first element is the number of answers
   # that are not submitted, and the second is the number of submitted.

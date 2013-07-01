@@ -9,8 +9,8 @@ class NotificationRequest < ActiveRecord::Base
 
   as_enum :target, { :for_transition => 1, :for_unbooking => 2 }, :slim => :class
 
-  named_scope :for_transition, :conditions => { :target_cd => targets.for_transition }
-  named_scope :for_unbooking, :conditions => { :target_cd => targets.for_unbooking }
+  scope :for_transition, :conditions => { :target_cd => targets.for_transition }
+  scope :for_unbooking, :conditions => { :target_cd => targets.for_unbooking }
 
   # Finds all notification requests belonging to a specific group for a specific event.
   def self.find_by_event_and_group(event, group)
