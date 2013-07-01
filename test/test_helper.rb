@@ -1,6 +1,6 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
-require 'test_help'
+require "rails/test_help"
 
 FactoryGirl.define do
   sequence :email do |n|
@@ -54,4 +54,4 @@ class ActiveSupport::TestCase
 
 end
 
-require "mocha"
+require "mocha/setup"
