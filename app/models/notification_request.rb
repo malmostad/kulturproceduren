@@ -7,6 +7,13 @@ class NotificationRequest < ActiveRecord::Base
   belongs_to  :user
   belongs_to  :group
 
+  attr_accessible :send_mail,
+    :send_sms,
+    :event_id, :event,
+    :group_id, :group,
+    :user_id,  :user,
+    :target_cd
+
   as_enum :target, { :for_transition => 1, :for_unbooking => 2 }, :slim => :class
 
   scope :for_transition, :conditions => { :target_cd => targets.for_transition }

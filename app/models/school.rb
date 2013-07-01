@@ -10,6 +10,12 @@ class School < ActiveRecord::Base
   end
   has_many :age_groups, :through => :groups
 
+  attr_accessible :name,
+    :contacts,
+    :elit_id,
+    :district_id, :district,
+    :extens_id
+
   belongs_to :district
 
   validates_presence_of :name,

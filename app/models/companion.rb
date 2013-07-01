@@ -6,6 +6,10 @@ class Companion < ActiveRecord::Base
   has_one :group, :through => :tickets
   has_one :occasion, :through => :tickets
 
+  attr_accessible :tel_nr,
+    :email,
+    :name
+
   validates_presence_of :email,
     :message => "Epostadressen får inte vara tom."
   validates_presence_of :name,

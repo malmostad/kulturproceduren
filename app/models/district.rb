@@ -18,6 +18,11 @@ class District < ActiveRecord::Base
 
   has_and_belongs_to_many :users
 
+  attr_accessible :name,
+    :contacts,
+    :elit_id,
+    :extens_id
+
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt."
 

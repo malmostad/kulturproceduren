@@ -37,6 +37,19 @@ class Occasion < ActiveRecord::Base
   has_many :users, :through => :tickets, :uniq => true
   belongs_to :answer
 
+  attr_accessible :date,
+    :start_time,
+    :stop_time,
+    :seats,
+    :wheelchair_seats,
+    :address,
+    :description,
+    :telecoil,
+    :cancelled,
+    :event_id,         :event,
+    :map_address,
+    :single_group
+
   validates_presence_of :date,
     :message => "Datumet får inte vara tom"
   validates_presence_of :address,

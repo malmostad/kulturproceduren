@@ -11,6 +11,13 @@ class AnswerForm < ActiveRecord::Base
   belongs_to :questionnaire
   belongs_to :group
 
+  attr_accessible :completed,
+    :companion_id,     :companion,
+    :occasion_id,      :occasion,
+    :group_id,         :group,
+    :questionnaire_id, :questionnaire,
+    :booking_id,       :booking
+
   before_create :generate_id
 
   attr_accessor :missing_answers

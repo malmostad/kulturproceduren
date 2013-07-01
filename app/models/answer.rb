@@ -2,4 +2,8 @@
 class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :answer_form
+
+  attr_accessible :answer_text,
+    :question_id,    :question,
+    :answer_form_id, :answer_form
 end

@@ -10,6 +10,22 @@ class Booking < ActiveRecord::Base
   has_many :tickets
   has_one :answer_form
 
+  attr_accessible :unbooked,
+    :unbooked_by_id,   :unbooked_by,
+    :student_count,
+    :adult_count,
+    :wheelchair_count,
+    :requirement,
+    :companion_name,
+    :companion_phone,
+    :companion_email,
+    :group_id,         :group,
+    :occasion_id,      :occasion,
+    :user_id,          :user,
+    :bus_booking,
+    :bus_one_way,
+    :bus_stop
+
   validates_presence_of :group, :message => "Bokningen måste tillhöra en grupp"
   validates_presence_of :occasion, :message => "Bokningen måste tillhöra en föreställning"
   validates_presence_of :user, :message => "Bokningen måste tillhöra en användare"

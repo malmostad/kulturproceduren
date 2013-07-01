@@ -4,6 +4,10 @@ class Questionnaire < ActiveRecord::Base
   has_and_belongs_to_many   :questions, :order => "questions.question ASC"
   has_many                  :answer_forms, :dependent => :destroy
 
+  attr_accessible :description,
+    :event_id, :event,
+    :target_cd
+
   as_enum :target, { :for_event => 1, :for_unbooking => 2 }, :slim => :class
 
   scope :for_event, :conditions => { :target_cd => targets.for_event }

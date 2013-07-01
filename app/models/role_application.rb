@@ -15,6 +15,15 @@ class RoleApplication < ActiveRecord::Base
   belongs_to :user
   belongs_to :culture_provider
 
+  attr_accessible :message,
+    :new_culture_provider_name,
+    :state,
+    :response,
+    :user_id,                   :user,
+    :role_id,                   :role,
+    :group_id,                  :group,
+    :culture_provider_id,       :culture_provider
+
   validates_presence_of :message,
     :message => "Meddelandet får inte vara tomt",
     :if => Proc.new { |application| application.role.is? :booker }

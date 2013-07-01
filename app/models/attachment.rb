@@ -3,6 +3,11 @@
 class Attachment < ActiveRecord::Base
   belongs_to :event
 
+  attr_accessible :description,
+    :filename,
+    :content_type,
+    :event_id, :event
+
   validates_presence_of :description,
     :message => "Beskrivningen får inte vara tom"
   validates_presence_of :filename,

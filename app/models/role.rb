@@ -8,6 +8,9 @@
 # [<tt>:host</tt>] Host privileges, the user can handle the attendance lists on occasions
 class Role < ActiveRecord::Base
   has_and_belongs_to_many :users
+
+  attr_accessible :name
+
   validates_presence_of   :name
 
   # Finds a specific role using a symbol, for constantized referencing of

@@ -5,6 +5,12 @@ class Allotment < ActiveRecord::Base
   belongs_to :group
   has_many :tickets, :dependent => :delete_all
 
+  attr_accessible :amount,
+    :user_id,     :user,
+    :event_id,    :event,
+    :district_id, :district,
+    :group_id,    :group
+
   after_save :synchronize_tickets
 
   validates_presence_of :user, :message => "Tilldelningen måste tillhöra en grupp"

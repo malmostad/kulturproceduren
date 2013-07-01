@@ -33,6 +33,18 @@ class CultureProvider < ActiveRecord::Base
     :class_name => "Event",
     :order => "name ASC"
 
+  attr_accessible :name,
+    :description,
+    :contact_person,
+    :email,
+    :phone,
+    :address,
+    :opening_hours,
+    :url,
+    :main_image_id, :main_image,
+    :map_address,
+    :active
+
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt."
 

@@ -6,6 +6,15 @@ class Image < ActiveRecord::Base
   belongs_to :event
   belongs_to :culture_provider
 
+  attr_accessible :description,
+    :filename,
+    :width,
+    :height,
+    :thumb_width,
+    :thumb_height,
+    :event_id,            :event,
+    :culture_provider_id, :culture_provider
+
   validates_presence_of :description,
     :message => "Bildtexten får inte vara tom"
 

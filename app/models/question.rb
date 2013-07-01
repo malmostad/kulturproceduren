@@ -22,6 +22,12 @@ class Question < ActiveRecord::Base
   has_and_belongs_to_many :questionnaire 
   has_many :answers, :dependent => :destroy
 
+  attr_accessible :qtype,
+    :question,
+    :choice_csv,
+    :template,
+    :mandatory
+
   validates_presence_of :question,
     :message => "Frågan får inte vara tom"
 

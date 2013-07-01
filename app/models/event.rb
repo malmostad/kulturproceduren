@@ -83,6 +83,28 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :linked_culture_providers,
     :class_name => "CultureProvider",
     :order => "name ASC"
+
+  attr_accessible :name,
+    :description,
+    :visible_from,
+    :visible_to,
+    :from_age,
+    :to_age,
+    :further_education,
+    :ticket_release_date,
+    :ticket_state,
+    :url,
+    :movie_url,
+    :opening_hours,
+    :cost,
+    :booking_info,
+    :culture_provider_id,          :culture_provider,
+    :main_image_id,                :main_image,
+    :map_address,
+    :single_group_per_occasion,
+    :district_transition_date,
+    :free_for_all_transition_date,
+    :bus_booking
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"

@@ -3,6 +3,10 @@
 class AgeGroup < ActiveRecord::Base
   belongs_to :group
 
+  attr_accessible :age,
+    :quantity,
+    :group_id, :group
+
   scope :with_district, lambda { |district_ids|
     {
       :include => { :group => :school },

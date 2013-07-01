@@ -20,6 +20,14 @@ class Group < ActiveRecord::Base
   end
   has_many :notification_requests, :dependent => :destroy
   belongs_to :school
+
+  attr_accessible :name,
+    :contacts,
+    :elit_id,
+    :school_id, :school,
+    :active,
+    :priority,
+    :extens_id
   
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt"

@@ -19,6 +19,15 @@ class User < ActiveRecord::Base
   has_many :notification_requests, :dependent => :destroy
 
   has_and_belongs_to_many :districts
+
+  attr_accessible :username,
+    :password,
+    :password_confirmation,
+    :name,
+    :email,
+    :cellphone,
+    :last_active,
+    :request_key
   
   validate :username_unique,
     :on => :create,
