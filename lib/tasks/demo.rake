@@ -4,7 +4,7 @@ namespace :kp do
 
     desc "Creates a group structure (district/school/group/age group) from demo/group_structure.yml"
     task(:create_group_structure => :environment) do
-      YAML.load_file("#{RAILS_ROOT}/demo/group_structure.yml").each do |district_name, schools|
+      YAML.load_file("#{Rails.root}/demo/group_structure.yml").each do |district_name, schools|
 
         puts "District \"#{district_name}\""
         district = District.find_or_create_by_name(district_name)
@@ -82,7 +82,7 @@ namespace :kp do
 
     desc "Creates categories and category groups"
     task(:create_categories => :environment) do
-      YAML.load_file("#{RAILS_ROOT}/demo/categories.yml").each do |group_name, category_names|
+      YAML.load_file("#{Rails.root}/demo/categories.yml").each do |group_name, category_names|
         puts "Group: #{group_name}"
         group = CategoryGroup.find_or_create_by_name(group_name)
 
@@ -102,7 +102,7 @@ namespace :kp do
 
     desc "Creates template questions"
     task(:create_questions => :environment) do
-      YAML.load_file("#{RAILS_ROOT}/demo/questions.yml").each do |id, question_data|
+      YAML.load_file("#{Rails.root}/demo/questions.yml").each do |id, question_data|
         question = Question.new do |q|
           q.qtype = question_data[:type]
           q.question = question_data[:question]
@@ -119,9 +119,9 @@ namespace :kp do
     desc "Generates a random culture provider"
     task(:generate_culture_provider => :environment) do
       # Culture provider name seeds
-      cp_seed = YAML.load_file("#{RAILS_ROOT}/demo/culture_provider_seed.yml")
+      cp_seed = YAML.load_file("#{Rails.root}/demo/culture_provider_seed.yml")
       # Contact person name seeds
-      name_seed = YAML.load_file("#{RAILS_ROOT}/demo/name_seed.yml")
+      name_seed = YAML.load_file("#{Rails.root}/demo/name_seed.yml")
 
       count = 1
       count = ENV["count"].to_i if ENV["count"].to_i > 1
@@ -131,7 +131,7 @@ namespace :kp do
           # Generate name from seed
           c.name = cp_seed[:prefix][rand(cp_seed[:prefix].length)] +
             cp_seed[:suffix][rand(cp_seed[:suffix].length)] 
-          c.description = IO.read("#{RAILS_ROOT}/demo/lorem_ipsum.txt")
+          c.description = IO.read("#{Rails.root}/demo/lorem_ipsum.txt")
           # Generate name from seed
           c.contact_person = name_seed[:first_name][rand(name_seed[:first_name].length)] +
             " " +
@@ -152,7 +152,7 @@ namespace :kp do
     desc "Generates a standing event for a culture provider"
     task(:generate_standing_event => :environment) do
       # Seed for event names
-      event_seed = YAML.load_file("#{RAILS_ROOT}/demo/event_seed.yml")
+      event_seed = YAML.load_file("#{Rails.root}/demo/event_seed.yml")
 
       cp = CultureProvider.find ENV['culture_provider_id']
       categories = Category.all
@@ -166,7 +166,7 @@ namespace :kp do
           # Generate name from seed
           e.name = event_seed[:prefix][rand(event_seed[:prefix].length)] +
             " " + event_seed[:suffix][rand(event_seed[:suffix].length)]
-          e.description = IO.read("#{RAILS_ROOT}/demo/lorem_ipsum.txt")
+          e.description = IO.read("#{Rails.root}/demo/lorem_ipsum.txt")
 
           e.visible_from = Date.today - rand(120).days
           e.visible_to = Date.today + rand(120).days
@@ -188,7 +188,7 @@ namespace :kp do
     desc "Generates an event with occasions for a culture provider"
     task(:generate_event => :environment) do
       # Seed for event names
-      event_seed = YAML.load_file("#{RAILS_ROOT}/demo/event_seed.yml")
+      event_seed = YAML.load_file("#{Rails.root}/demo/event_seed.yml")
 
       cp = CultureProvider.find ENV['culture_provider_id']
       categories = Category.all
@@ -203,7 +203,7 @@ namespace :kp do
           # Generate name from seed
           e.name = event_seed[:prefix][rand(event_seed[:prefix].length)] +
             " " + event_seed[:suffix][rand(event_seed[:suffix].length)]
-          e.description = IO.read("#{RAILS_ROOT}/demo/lorem_ipsum.txt")
+          e.description = IO.read("#{Rails.root}/demo/lorem_ipsum.txt")
 
           e.visible_from = Date.today - rand(120).days
           e.visible_to = Date.today + rand(120).days
@@ -255,7 +255,7 @@ namespace :kp do
     desc "Creates tickets (not booked/booked/used/not used) for an event"
     task(:create_tickets => :environment) do
       # Seed for companion names
-      name_seed = YAML.load_file("#{RAILS_ROOT}/demo/name_seed.yml")
+      name_seed = YAML.load_file("#{Rails.root}/demo/name_seed.yml")
 
       event = Event.find ENV["event_id"]
 

@@ -10,7 +10,7 @@ class ImageTest < ActiveSupport::TestCase
   test "save" do
     APP_CONFIG.replace(:upload_image => { :width => 10, :height => 20, :thumb_width => 1, :thumb_height => 2 })
 
-    outfile = "#{RAILS_ROOT}/tmp/foo.txt"
+    outfile = "#{Rails.root}/tmp/foo.txt"
     upload = { "datafile" => stub(:read => "foo") }
     magick = stub(:columns => 20, :rows => 21)
     magick.expects(:resize_to_fit!).with(10, 20).returns(true)
@@ -36,7 +36,7 @@ class ImageTest < ActiveSupport::TestCase
     APP_CONFIG.replace(:upload_image => { :path => "upload" })
 
     image = create(:image, :filename => "test.jpg")
-    assert_equal "#{RAILS_ROOT}/public/images/upload/test.jpg", image.image_path
+    assert_equal "#{Rails.root}/public/images/upload/test.jpg", image.image_path
   end
   test "image url" do
     APP_CONFIG.replace(:upload_image => { :path => "upload" })
@@ -48,7 +48,7 @@ class ImageTest < ActiveSupport::TestCase
     APP_CONFIG.replace(:upload_image => { :path => "upload" })
 
     image = create(:image, :filename => "test.jpg")
-    assert_equal "#{RAILS_ROOT}/public/images/upload/test.thumb.jpg", image.thumb_path
+    assert_equal "#{Rails.root}/public/images/upload/test.thumb.jpg", image.thumb_path
   end
   test "thumb url" do
     APP_CONFIG.replace(:upload_image => { :path => "upload" })
