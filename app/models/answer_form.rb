@@ -2,7 +2,7 @@
 # group's answers to a specific questionnaire.
 class AnswerForm < ActiveRecord::Base
   # Answer forms have ASCII-ID:s for URL obfuscation
-  set_primary_key "id"
+  self.primary_key = "id"
   
   has_many :answers, :dependent => :destroy
   belongs_to :booking
