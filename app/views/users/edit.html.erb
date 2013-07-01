@@ -15,7 +15,7 @@
     <%= f.text_field :email %>
     <%= f.text_field :cellphone %>
     <% f.row do -%>
-      <%= f.error_message_on :district_ids %>
+      <%= f.validation_error_message :district_ids %>
       <label>Stadsdelar:</label>
       <div class="input-container">
         <ul class="checkbox-list">

@@ -34,8 +34,8 @@
     
     <%= f.submit(["edit", "update"].include?(params[:action]) ? "Uppdatera åldersgrupp" : "Lägg till åldersgrupp") %>
 
-    <%= f.error_message_on :age %>
-    <%= f.error_message_on :quantity %>
+    <%#= f.validation_error_message :age %>
+    <%#= f.validation_error_message :quantity %>
   <% end %>
 
   <table>

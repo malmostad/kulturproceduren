@@ -26,7 +26,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
       options = args.last.is_a?(Hash) ? args.pop : {}
 
       label = label(field, options.delete(:label), :class => options.delete(:label_class))
-      error = error_message_on(field)
+      error = validation_error_message(field)
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
 
@@ -50,11 +50,24 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
       options = args.last.is_a?(Hash) ? args.pop : {}
 
       label = label(field, options.delete(:label), :class => options.delete(:label_class))
-      error = error_message_on(field)
+      error = validation_error_message(field)
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
 
       row error + super + label + field_help(help), row_class(field, !error.blank?, "post-label-form-row"), row_hidden
+    end
+  end
+
+  def validation_error_message(field)
+    if @object.errors.include?(field)
+      error = @object.errors[field]
+      @template.content_tag(
+        :div,
+        error.is_a?(Array) ? error.first : error,
+        :class => "validation-error-message alert-field"
+      )
+    else
+      "".html_safe
     end
   end
 
