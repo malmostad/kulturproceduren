@@ -20,7 +20,8 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :districts
   
-  validate_on_create :username_unique,
+  validate :username_unique,
+    :on => :create,
     :message => "Användarnamnet är redan taget"
 
   validates_presence_of :username,
