@@ -40,7 +40,7 @@
 
   <%= form.hidden_field :group_id %>
 
-  <% form.buttons do %>
+  <%= form.buttons do %>
     <%= form.submit "Jag vill få ett e-postmeddelande när platser blir tillgängliga", :disabled => disabled %>
     <%= form.submit "Avbryt", :name => "cancel" %>
   <% end %>

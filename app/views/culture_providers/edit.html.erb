@@ -9,7 +9,7 @@
 
   <%= f.validation_error_indicator %>
 
-  <% f.fields do -%>
+  <%= f.fields do -%>
     <%= f.text_field :name %>
     <%= f.text_area :description, :class => "wysiwyg" %>
     <%= f.text_field :contact_person %>
@@ -20,7 +20,7 @@
     <%= f.text_field :url %>
     <%= f.text_field :map_address %>
 
-    <% f.buttons do -%>
+    <%= f.buttons do -%>
       <%= f.submit(is_edit ? "Uppdatera arrangör" : "Skapa arrangör") %>
     <% end -%>
   <% end -%>

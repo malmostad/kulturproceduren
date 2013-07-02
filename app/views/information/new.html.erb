@@ -21,7 +21,7 @@
 
     <%= f.validation_error_indicator %>
 
-    <% f.fields do -%>
+    <%= f.fields do -%>
 
       <%
       if @event
@@ -43,7 +43,7 @@
       <%= f.text_field :subject %>
       <%= f.text_area :body, :size => "40x5", :class => "wysiwyg" %>
 
-      <% f.buttons do -%>
+      <%= f.buttons do -%>
         <%= f.submit "Skicka", :confirm => "Detta skickar meddelandet till alla mottagare du har angett" %>
       <% end -%>
     <% end %>

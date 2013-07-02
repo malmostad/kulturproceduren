@@ -4,17 +4,17 @@
 
   <%= f.title "Redigera personuppgifter" -%>
 
-  <% f.conditional_hint user_online? && current_user.has_role?(:admin) do -%>
+  <%= f.conditional_hint user_online? && current_user.has_role?(:admin) do -%>
     Uppdaterar persondetaljer för <%= link_to h(@user.get_username), @user %>.
   <% end -%>
 
   <%= f.validation_error_indicator -%>
 
-  <% f.fields do -%>
+  <%= f.fields do -%>
     <%= f.text_field :name %>
     <%= f.text_field :email %>
     <%= f.text_field :cellphone %>
-    <% f.row do -%>
+    <%= f.row do -%>
       <%= f.validation_error_message :district_ids %>
       <label>Stadsdelar:</label>
       <div class="input-container">
@@ -34,7 +34,7 @@
     <% end %>
   <% end -%>
 
-  <% f.buttons do -%>
+  <%= f.buttons do -%>
     <%= f.submit("Uppdatera personuppgifter") %>
   <% end -%>
 

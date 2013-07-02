@@ -91,15 +91,9 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
       content = @template.capture(&block)
     end
     
-    tag = @template.content_tag :div, content,
+    return @template.content_tag :div, content,
       :class => "form-row " + extra_class,
       :style => (row_hidden ? "display: none;" : "")
-
-    if block_given?
-      @template.concat tag
-    end
-
-    tag
   end
 
   # Generates markup for the field, encapsulating it in a container
@@ -109,13 +103,8 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     content += field_help(help)
-    tag = @template.content_tag(:div, content, :class => "input-container")
 
-    if block_given?
-      @template.concat tag
-    end
-
-    tag
+    return @template.content_tag(:div, content, :class => "input-container")
   end
 
   # Generates a fieldset container with an optional legend encapsulating
@@ -128,14 +117,14 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     cls = title.blank? ? "" : "with-legend "
     cls << extra_classes
 
-    @template.concat @template.content_tag(:fieldset, title + contents, :class => cls)
+    return @template.content_tag(:fieldset, title + contents, :class => cls)
   end
 
   # Generates a container for the form submit buttons
   def buttons(&block)
     raise ArgumentError, "Missing block" unless block_given?
     contents = @template.capture(&block)
-    @template.concat @template.content_tag(:div, contents, :class => "form-buttons")
+    return @template.content_tag(:div, contents, :class => "form-buttons")
   end
 
   # Generates a title for the form
@@ -148,7 +137,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     raise ArgumentError, "Missing block" unless block_given?
 
     contents = @template.capture(&block)
-    @template.concat @template.content_tag(:p, contents, :class => "hint")
+    return @template.content_tag(:p, contents, :class => "hint")
   end
 
   # Generates a hint for a given field row if the given condition is true
@@ -157,7 +146,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
     if condition
       contents = @template.capture(&block)
-      @template.concat @template.content_tag(:p, contents, :class => "hint")
+      return @template.content_tag(:p, contents, :class => "hint")
     end
   end
 

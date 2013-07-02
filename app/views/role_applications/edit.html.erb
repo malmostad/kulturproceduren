@@ -26,13 +26,13 @@
 
   <%= f.validation_error_indicator %>
 
-  <% f.fields do -%>
+  <%= f.fields do -%>
     
     <%= f.radio_button :state, RoleApplication::ACCEPTED, :checked => true, :label => "Godkänn" %>
     <%= f.radio_button :state, RoleApplication::DENIED, :label => "Neka" %>
     <%= f.text_area :response %>
 
-    <% f.buttons do -%>
+    <%= f.buttons do -%>
       <%= f.submit("Besvara ansökan") %>
     <% end -%>
   <% end -%>

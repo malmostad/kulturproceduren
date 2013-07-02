@@ -24,7 +24,7 @@ end
 
     <%= f.validation_error_indicator -%>
 
-    <% f.fields do %>
+    <%= f.fields do %>
 
       <%= f.text_field :date, :class => "date-field auto" %>
       <%= f.time_select :start_time, :minute_step => 5 %>
@@ -37,7 +37,7 @@ end
       <%= f.check_box :telecoil %>
       <%= f.text_field :map_address %>
 
-      <% f.buttons do %>
+      <%= f.buttons do %>
         <%= f.hidden_field :event_id %>
         <%= f.submit(is_edit ? "Uppdatera" : "Lägg till") %>
       <% end %>

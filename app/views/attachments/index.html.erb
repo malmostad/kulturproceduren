@@ -20,16 +20,16 @@
 
   <%= f.validation_error_indicator %>
 
-  <% f.fields do -%>
+  <%= f.fields do -%>
 
     <%= f.text_field :description %>
 
-    <% f.row do -%>
+    <%= f.row do -%>
       <label for="kp-upload-document">Dokument:</label>
       <%= f.field file_field('upload' , 'document') %>
     <% end -%>
 
-    <% f.buttons do -%>
+    <%= f.buttons do -%>
       <%= f.submit 'Ladda upp' %>
     <% end -%>
   <% end -%>

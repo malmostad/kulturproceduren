@@ -6,11 +6,11 @@
 
   <%= f.validation_error_indicator %>
 
-  <% f.fields "Personuppgifter" do -%>
+  <%= f.fields "Personuppgifter" do -%>
     <%= f.text_field :name %>
     <%= f.text_field :email %>
     <%= f.text_field :cellphone %>
-    <% f.row do -%>
+    <%= f.row do -%>
       <%= f.validation_error_message :district_ids %>
       <label>Stadsdelar:</label>
       <div class="input-container">
@@ -30,13 +30,13 @@
     <% end %>
   <% end -%>
 
-  <% f.fields "Kontodetaljer" do -%>
+  <%= f.fields "Kontodetaljer" do -%>
     <%= f.text_field :username %>
     <%= f.password_field :password %>
     <%= f.password_field :password_confirmation %>
   <% end -%>
 
-  <% f.buttons do -%>
+  <%= f.buttons do -%>
     <%= f.submit("Skapa konto") %>
   <% end -%>
 

@@ -47,7 +47,7 @@
       <% end %>
     </p>
 
-    <% f.fields "Antal platser", "seats-container" do %>
+    <%= f.fields "Antal platser", "seats-container" do %>
       <%= f.text_field :student_count, :size => 30, :class => "num-seats" %>
       <%= f.text_field :adult_count, :size => 30, :class => "num-seats" %>
 
@@ -61,14 +61,14 @@
       <% end %>
     <% end %>
 
-    <% f.fields "Medföljande vuxen" do %>
+    <%= f.fields "Medföljande vuxen" do %>
       <%= f.text_field :companion_name %>
       <%= f.text_field :companion_email %>
       <%= f.text_field :companion_phone %>
     <% end %>
 
     <% if @occasion.bus_booking? %>
-      <% f.fields "Boka kulturbuss" do %>
+      <%= f.fields "Boka kulturbuss" do %>
         <%= f.check_box  :bus_booking %>
         <%= f.text_field :bus_stop %>
         <%= f.radio_button :bus_one_way, false, :label => "Tur och retur" %>
@@ -79,11 +79,11 @@
       <% end %>
     <% end %>
 
-    <% f.fields "Speciella krav / Extra information ang. bokning" do %>
+    <%= f.fields "Speciella krav / Extra information ang. bokning" do %>
       <%= f.text_area :requirement, :rows => 8 %>
     <% end %>
 
-    <% f.buttons do -%>
+    <%= f.buttons do -%>
       <%= f.hidden_field :group_id %>
       <%= f.hidden_field :occasion_id %>
       <%= f.submit(@is_edit ? "Uppdatera bokning" : "Boka") %>

@@ -22,10 +22,10 @@
 
       <%= f.validation_error_indicator %>
 
-      <% f.fields do -%>
+      <%= f.fields do -%>
         <%= f.text_area :message, :size => "40x5" %>
 
-        <% f.buttons do -%>
+        <%= f.buttons do -%>
           <%= f.hidden_field :role_id %>
           <%= f.submit("Skicka ansökan") %>
         <% end -%>
@@ -49,12 +49,12 @@
 
       <%= f.validation_error_indicator %>
 
-      <% f.fields do -%>
+      <%= f.fields do -%>
         <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
         <%= f.text_field :new_culture_provider_name %>
         <%= f.text_area :message, :size => "40x5" %>
 
-        <% f.buttons do -%>
+        <%= f.buttons do -%>
           <%= f.hidden_field :role_id %>
           <%= f.submit("Skicka ansökan") %>
         <% end -%>
@@ -72,10 +72,10 @@
     <%= form_for(@host_appl, :builder => KPFormBuilder, :html => { :class => "role-application-host-form" }) do |f| -%>
       <%= f.validation_error_indicator -%>
 
-      <% f.fields do -%>
+      <%= f.fields do -%>
         <%= f.text_area :message, :size => "40x5" %>
 
-        <% f.buttons do -%>
+        <%= f.buttons do -%>
           <%= f.hidden_field :role_id %>
           <%= f.submit("Skicka ansökan") %>
         <% end -%>

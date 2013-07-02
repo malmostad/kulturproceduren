@@ -9,19 +9,19 @@
 <% else -%>
 
   <%= form_for User.new, :url => { :action => "login" }, :builder => KPFormBuilder, :html => { :class => "login-form" } do |f| %>
-    <% f.title "Logga in" -%>
+    <%= f.title "Logga in" -%>
 
-    <% f.fields do -%>
+    <%= f.fields do -%>
       <%= f.text_field :username %>
       <%= f.password_field :password %>
 
-      <% f.buttons do -%>
+      <%= f.buttons do -%>
         <%= f.submit "Logga in" %>
       <% end -%>
 
     <% end -%>
 
-    <% f.hint do -%>
+    <%= f.hint do -%>
       Om du inte har ett konto kan du registrera ett <%= link_to "här", new_user_path %>.
     <% end -%>
   <% end %>

@@ -10,11 +10,11 @@
 
     <%= f.validation_error_indicator %>
 
-    <% f.fields do -%>
+    <%= f.fields do -%>
       <%= f.collection_select :category_group_id, @category_groups, :id, :name %>
       <%= f.text_field :name %>
 
-      <% f.buttons do -%>
+      <%= f.buttons do -%>
         <%= f.submit "Ok" %>
       <% end -%>
     <% end %>

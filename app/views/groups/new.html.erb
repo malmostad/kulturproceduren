@@ -6,7 +6,7 @@
 
   <%= f.title(is_edit ? "Redigera grupp" : "Skapa ny grupp") -%>
 
-  <% f.conditional_hint is_edit do -%>
+  <%= f.conditional_hint is_edit do -%>
     Redigerar gruppen <%= link_to h(@group.name), @group %>,
     <%= link_to h(@group.school.name), @group.school %>,
     <%= link_to h(@group.school.district.name), @group.school.district %>.
@@ -14,13 +14,13 @@
 
   <%= f.validation_error_indicator %>
 
-  <% f.fields do -%>
+  <%= f.fields do -%>
     <%= f.text_field :name %>
     <%= f.collection_select :school_id, @schools, :id, :name %>
     <%= f.text_field :contacts, :field_help => "Ange epostadresser, separerade med kommatecken." %>
     <%= f.check_box :active %>
 
-    <% f.buttons do -%>
+    <%= f.buttons do -%>
       <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
     <% end -%>
   <% end -%>

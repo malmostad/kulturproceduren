@@ -19,11 +19,11 @@
 
   <%= f.validation_error_indicator -%>
 
-  <% f.fields do %>
-    <% f.row '', 'types-field-row' do -%>
+  <%= f.fields do %>
+    <%= f.row '', 'types-field-row' do -%>
       <label>Svarstyp på frågan:</label>
 
-      <% f.field do -%>
+      <%= f.field do -%>
         <% Question::QTYPES.keys.each do |type| %>
           <% val = h(Question::QTYPES[type.to_s]) -%>
           <%= f.single_radio_button :qtype, val %>
@@ -39,7 +39,7 @@
 
   <% end %>
 
-  <% f.buttons do -%>
+  <%= f.buttons do -%>
     <%= f.hidden_field :template -%>
     <%= submit_tag(is_edit ? "Uppdatera" : "Lägg till") %>
   <% end -%>

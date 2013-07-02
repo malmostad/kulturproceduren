@@ -6,17 +6,17 @@
 
   <%= f.title(is_edit ? "Redigera stadsdel" : "Skapa ny stadsdel") -%>
 
-  <% f.conditional_hint is_edit do %>
+  <%= f.conditional_hint is_edit do %>
     Redigerar stadsdelen <%= link_to h(@district.name), @district %>.
   <% end %>
 
   <%= f.validation_error_indicator %>
 
-  <% f.fields do -%>
+  <%= f.fields do -%>
     <%= f.text_field :name %>
     <%= f.text_field :contacts, :field_help => "Ange epostadresser, separerade med kommatecken." %>
 
-    <% f.buttons do %>
+    <%= f.buttons do %>
       <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>
     <% end -%>
   <% end -%>
