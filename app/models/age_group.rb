@@ -31,7 +31,8 @@ class AgeGroup < ActiveRecord::Base
     sum(
       "quantity",
       :include => { :group => :school },
-      :group => "schools.district_id"
+      :group => "schools.district_id",
+      :order => "schools.district_id"
     )
   end
   def self.num_children_per_group
