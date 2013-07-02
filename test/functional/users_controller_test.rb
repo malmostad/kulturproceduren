@@ -362,10 +362,12 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal         "Användaren finns inte i systemet.", flash[:warning]
 
 
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver).twice
 
     # User found by username
     user = create(:user)
-    UserMailer.expects(:deliver_password_reset_confirmation_email).with(user)
+    UserMailer.expects(:password_reset_confirmation_email).with(user).returns(mailer_mock)
     assert_nil user.request_key
 
     post :send_password_reset_confirmation, :user => { :username => user.username }
@@ -375,7 +377,7 @@ class UsersControllerTest < ActionController::TestCase
 
     # User found by username
     user = create(:user)
-    UserMailer.expects(:deliver_password_reset_confirmation_email).with(user)
+    UserMailer.expects(:password_reset_confirmation_email).with(user).returns(mailer_mock)
     assert_nil user.request_key
 
     post :send_password_reset_confirmation, :user => { :email => user.email }
@@ -396,8 +398,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to root_url()
     assert_equal         "Felaktig förfrågan.", flash[:warning]
 
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver)
+
     # Correct request key
-    UserMailer.expects(:deliver_password_reset_email).with(user, anything())
+    UserMailer.expects(:password_reset_email).with(user, anything()).returns(mailer_mock)
 
     put :reset_password, :id => user.id, :key => user.request_key
     assert_redirected_to :controller => "login", :action => "index"

@@ -328,18 +328,18 @@ class BookingsController < ApplicationController
 
 
   def notify_admins_of_unbooking(booking, answer_form)
-    BookingMailer.deliver_booking_cancelled_email(
+    BookingMailer.booking_cancelled_email(
       Role.find_by_symbol(:admin).users,
       current_user(),
       booking,
       answer_form
-    )
+    ).deliver
   end
 
   def notify_requests_of_unbooking(event)
     if !event.fully_booked?(true) && event.unbooked_tickets(true) > APP_CONFIG[:unbooking_notification_request_seat_limit]
       event.notification_requests.for_unbooking.each do |req|
-        NotificationRequestMailer.deliver_unbooking_notification(req)
+        NotificationRequestMailer.unbooking_notification(req).deliver
       end
     end
   end

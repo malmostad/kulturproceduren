@@ -554,7 +554,9 @@ class BookingsControllerTest < ActionController::TestCase
 
     assert booking.event.fully_booked?
 
-    NotificationRequestMailer.expects(:deliver_unbooking_notification).with(notification_request)
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver)
+    NotificationRequestMailer.expects(:unbooking_notification).with(notification_request).returns(mailer_mock)
 
     put :update, :id => booking.id, :booking => { :student_count => 10 }
     assert_redirected_to booking_url(booking)
@@ -581,7 +583,7 @@ class BookingsControllerTest < ActionController::TestCase
 
     assert booking.event.fully_booked?
 
-    NotificationRequestMailer.expects(:deliver_unbooking_notification).never
+    NotificationRequestMailer.expects(:unbooking_notification).never
 
     put :update, :id => booking.id, :booking => { :student_count => 29 }
     assert_redirected_to booking_url(booking)
@@ -611,7 +613,7 @@ class BookingsControllerTest < ActionController::TestCase
 
     assert !booking.event.fully_booked?(true)
 
-    NotificationRequestMailer.expects(:deliver_unbooking_notification).never
+    NotificationRequestMailer.expects(:unbooking_notification).never
 
     put :update, :id => booking.id, :booking => { :student_count => 10 }
     assert_redirected_to booking_url(booking)
@@ -651,7 +653,9 @@ class BookingsControllerTest < ActionController::TestCase
 
     assert !booking.event.fully_booked?(true)
 
-    NotificationRequestMailer.expects(:deliver_unbooking_notification).with(notification_request)
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver)
+    NotificationRequestMailer.expects(:unbooking_notification).with(notification_request).returns(mailer_mock)
 
     put :update, :id => booking.id, :booking => { :student_count => 10 }
     assert_redirected_to booking_url(booking)
@@ -685,13 +689,15 @@ class BookingsControllerTest < ActionController::TestCase
       :target_cd => NotificationRequest.targets.for_unbooking
     )
 
-    NotificationRequestMailer.expects(:deliver_unbooking_notification).with(notification_request)
-    BookingMailer.expects(:deliver_booking_cancelled_email).with(
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver).twice
+    NotificationRequestMailer.expects(:unbooking_notification).with(notification_request).returns(mailer_mock)
+    BookingMailer.expects(:booking_cancelled_email).with(
       [],
       @user,
       booking,
       nil
-    )
+    ).returns(mailer_mock)
 
     delete :destroy, :id => booking.id
     assert_redirected_to bookings_url()
@@ -711,6 +717,8 @@ class BookingsControllerTest < ActionController::TestCase
     assert_equal booking, Booking.find(booking.id)
   end
   test "destroy with questionnaire" do
+    create(:user, :roles => [roles(:admin)])
+
     booking                 = create(:booking, :user => @user)
     questionnaire           = Questionnaire.find_unbooking
     questionnaire.questions = create_list(:question, 2, :mandatory => true)

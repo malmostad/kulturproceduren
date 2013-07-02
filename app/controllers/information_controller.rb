@@ -19,7 +19,7 @@ class InformationController < ApplicationController
       recipients = @mail.recipient_addresses
 
       recipients.each do |r|
-        InformationMailer.deliver_custom_email(r, @mail.subject, @mail.body)
+        InformationMailer.custom_email(r, @mail.subject, @mail.body).deliver
       end
       
       notice = case @mail.recipients

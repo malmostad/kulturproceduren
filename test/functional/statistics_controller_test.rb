@@ -48,9 +48,7 @@ class StatisticsControllerTest < ActionController::TestCase
       "Stadsdel\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :visitors, :id => "ht2012", :format => "xls"
-    end
+    get :visitors, :id => "ht2012", :format => "xls"
   end
   test "visitors, single event" do
     vt2012 = create(:occasion, :date => "2012-06-30")
@@ -83,9 +81,7 @@ class StatisticsControllerTest < ActionController::TestCase
       "Stadsdel\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :visitors, :id => "vt2013", :event_id => vt2013.event.id, :format => "xls"
-    end
+    get :visitors, :id => "vt2013", :event_id => vt2013.event.id, :format => "xls"
   end
 
   test "questionnaires, all events" do
@@ -154,9 +150,7 @@ class StatisticsControllerTest < ActionController::TestCase
       "Enkätsvar för #{ht2012.event.name}\nAntal besvarade enkäter\tAntal obesvarade enkäter\n1\t1\t\n\nFråga\tSvar\nbool (Procent ja-svar , Procent nej-svar)\t0\t100\nm_ch (Antal för varje ord)\tbar\tbaz\tfoo\n\"\"\t0\t1\t1\nmark (Genomsnittssvar)\t4.00\ntext (Alla svar)\ttext\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :questionnaires, :id => "ht2012", :event_id => ht2012.event.id, :format => "xls"
-    end
+    get :questionnaires, :id => "ht2012", :event_id => ht2012.event.id, :format => "xls"
   end
 
   test "unbooking_questionnaires" do
@@ -196,8 +190,6 @@ class StatisticsControllerTest < ActionController::TestCase
       "Avbokningsenkätsvar\nAntal besvarade enkäter\tAntal obesvarade enkäter\n2\t1\t\n\nFråga\tSvar\nbool (Procent ja-svar , Procent nej-svar)\t0\t100\nm_ch (Antal för varje ord)\tbar\tbaz\tfoo\n\"\"\t0\t1\t1\nmark (Genomsnittssvar)\t4.00\ntext (Alla svar)\ttext\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :unbooking_questionnaires, :id => "ht2012", :format => "xls"
-    end
+    get :unbooking_questionnaires, :id => "ht2012", :format => "xls"
   end
 end

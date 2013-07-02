@@ -118,9 +118,13 @@ class OccasionsControllerTest < ActionController::TestCase
   end
 
   test "cancel" do
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver)
+
     occasion = create(:occasion, :cancelled => false)
     booking  = create(:booking,  :occasion  => occasion)
-    OccasionMailer.expects(:deliver_occasion_cancelled_email).with(occasion)
+
+    OccasionMailer.expects(:occasion_cancelled_email).with(occasion).returns(mailer_mock)
 
     get :cancel, :id => occasion.id
     assert_redirected_to occasion

@@ -10,7 +10,7 @@ namespace :kp do
 
       if e.alloted_group? && (e.transition_to_district? || e.transition_to_free_for_all?) && e.has_bus_bookings?
         puts "Sending bus booking list for #{e.id}: #{e.name}"
-        EventMailer.deliver_bus_booking_email(e)
+        EventMailer.bus_booking_email(e).deliver
       end
 
       notification_requests = []
@@ -29,7 +29,7 @@ namespace :kp do
           districts.each do |district|
             get_relevant_addresses(e, [district]).each do |address|
               puts "Sending notification mail for district allotment on #{e.name} to #{address}"
-              EventMailer.deliver_district_allotment_notification_email(e, district, address)
+              EventMailer.district_allotment_notification_email(e, district, address).deliver
             end
           end
 
@@ -37,7 +37,7 @@ namespace :kp do
           notification_requests.each do |n|
             if n.send_mail
               puts "Notification request answered on #{e.name} to #{n.user.email}"
-              NotificationRequestMailer.deliver_tickets_available_email(n, true)
+              NotificationRequestMailer.tickets_available_email(n, true).deliver
             end
           end
         end
@@ -52,14 +52,14 @@ namespace :kp do
           # Notify contacts on districts
           get_relevant_addresses(e, District.all).each do |address|
             puts "Sending notification mail for free for all on #{e.name} to #{address}"
-            EventMailer.deliver_free_for_all_allotment_notification_email(e, address)
+            EventMailer.free_for_all_allotment_notification_email(e, address).deliver
           end
 
           # Send responses to notification requests
           notification_requests.each do |n|
             if n.send_mail
               puts "Notification request answered on #{e.name} to #{n.user.email}"
-              NotificationRequestMailer.deliver_tickets_available_email(n, false)
+              NotificationRequestMailer.tickets_available_email(n, false).deliver
             end
           end
         end

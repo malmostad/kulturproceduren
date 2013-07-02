@@ -220,7 +220,7 @@ class UsersController < ApplicationController
         user.generate_request_key()
         user.save!
 
-        UserMailer.deliver_password_reset_confirmation_email(user)
+        UserMailer.password_reset_confirmation_email(user).deliver
       end
 
       flash[:notice] = "Ett bekräftelsemeddelande har nu skickats till den epostadress som är angiven i användarkontot. Lösenordet återställs först efter att du har följt instruktionerna i meddelandet."
@@ -237,7 +237,7 @@ class UsersController < ApplicationController
 
     if params[:key] == user.request_key
       password = user.generate_new_password()
-      UserMailer.deliver_password_reset_email(user, password)
+      UserMailer.password_reset_email(user, password).deliver
       flash[:notice] = "Ditt nya lösenord har skickats till din epost."
       redirect_to :controller => "login", :action => "index"
     else

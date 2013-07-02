@@ -28,8 +28,11 @@ class InformationControllerTest < ActionController::TestCase
     assert          !assigns(:mail).valid?
   end
   test "create, all users" do
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver).times(3)
+
     create_list(:user, 3).each do |user|
-      InformationMailer.expects(:deliver_custom_email).with(user.email, "Subject", "Body")
+      InformationMailer.expects(:custom_email).with(user.email, "Subject", "Body").returns(mailer_mock)
     end
 
     post :create, :information_mail => { :recipients => "all_users", :subject => "Subject", :body => "Body" }
@@ -39,6 +42,9 @@ class InformationControllerTest < ActionController::TestCase
   test "create, all contacts" do
     contacts = 1.upto(8).collect { |i| "contact#{i}" }
 
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver).times(8)
+
     district1 = create(:district, :contacts => "#{contacts[0]},#{contacts[1]}")
     district2 = create(:district, :contacts => contacts[2])
     school1   = create(:school,   :district => district1, :contacts => contacts[3])
@@ -46,7 +52,7 @@ class InformationControllerTest < ActionController::TestCase
     group1    = create(:group,    :school => school1,     :contacts => contacts[5])
     group2    = create(:group,    :school => school1,     :contacts => "#{contacts[6]},#{contacts[7]}")
 
-    contacts.each { |c| InformationMailer.expects(:deliver_custom_email).with(c, "Subject", "Body") }
+    contacts.each { |c| InformationMailer.expects(:custom_email).with(c, "Subject", "Body").returns(mailer_mock) }
 
     post :create, :information_mail => { :recipients => "all_contacts", :subject => "Subject", :body => "Body" }
     assert_redirected_to :action => "new"
@@ -69,12 +75,15 @@ class InformationControllerTest < ActionController::TestCase
     create(:booking, :occasion => event.occasions.first,  :user => user2, :companion_email => "companion1", :student_count => 1, :adult_count => 0, :wheelchair_count => 0)
     create(:booking, :occasion => event.occasions.second, :user => user1, :companion_email => "companion2", :student_count => 1, :adult_count => 0, :wheelchair_count => 0)
 
+    mailer_mock = stub(:deliver => true)
+    mailer_mock.expects(:deliver).times(4)
+
     [
       user1.email,
       user2.email,
       "companion1",
       "companion2"
-    ].each { |c| InformationMailer.expects(:deliver_custom_email).with(c, "Subject", "Body") }
+    ].each { |c| InformationMailer.expects(:custom_email).with(c, "Subject", "Body").returns(mailer_mock) }
 
     post :create, :information_mail => { :recipients => "#{event.id}", :subject => "Subject", :body => "Body" }
     assert_redirected_to :action => "new"

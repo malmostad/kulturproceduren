@@ -26,7 +26,7 @@ namespace :kp do
 
       occasions.each do |occasion|
         occasion.bookings.active.each do |booking|
-          OccasionMailer.deliver_reminder_email(occasion, booking)
+          OccasionMailer.reminder_email(occasion, booking).deliver
           puts "Sending mail about upcoming event #{occasion.event.name}, #{occasion.date} to #{booking.companion_email}"
         end
       end
@@ -42,7 +42,7 @@ namespace :kp do
     occasions.each do |occasion|
       occasion.bookings.active.each do |booking|
         if booking.answer_form && !booking.answer_form.completed
-          OccasionMailer.deliver_answer_form_email(occasion, booking)
+          OccasionMailer.answer_form_email(occasion, booking).deliver
           puts "Sending mail about evaluation form for #{occasion.event.name}, #{occasion.date} to #{booking.companion_email}"
         end
       end
@@ -54,7 +54,7 @@ namespace :kp do
     answer_forms = AnswerForm.find_overdue(Date.today - APP_CONFIG[:evaluation_form][:reminder_days])
 
     answer_forms.each do |answer_form|
-      OccasionMailer.deliver_answer_form_reminder_email(answer_form)
+      OccasionMailer.answer_form_reminder_email(answer_form).deliver
       puts "Sending reminder mail about evaluation form for #{answer_form.occasion.event.name}, #{answer_form.occasion.date} to #{answer_form.booking.companion_email}"
     end
   end
@@ -113,7 +113,7 @@ namespace :kp do
 
       addresses.each do |a|
         puts "Sending notification mail for ticket release about #{event.name} to #{a}"
-        EventMailer.deliver_ticket_release_notification_email(event,[a],group_structure)
+        EventMailer.ticket_release_notification_email(event,[a],group_structure).deliver
       end
     end
   end

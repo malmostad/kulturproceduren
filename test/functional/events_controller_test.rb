@@ -64,9 +64,7 @@ class EventsControllerTest < ActionController::TestCase
       "Stadsdel\tSkola\tGrupp\tAntal biljetter\n#{group.school.district.name}\t#{group.school.name}\t#{group.name}\t10\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :ticket_allotment, :id => allotment.event.id, :format => "xls"
-    end
+    get :ticket_allotment, :id => allotment.event.id, :format => "xls"
   end
   test "ticket allotment, csv for district" do
     district = create(:district)
@@ -77,9 +75,7 @@ class EventsControllerTest < ActionController::TestCase
       "Stadsdel\tSkola\tGrupp\tAntal biljetter\n#{district.name}\t\"\"\t\"\"\t11\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :ticket_allotment, :id => allotment.event.id, :format => "xls"
-    end
+    get :ticket_allotment, :id => allotment.event.id, :format => "xls"
   end
   test "ticket allotment, csv for all" do
     allotment = create(:allotment, :group => nil, :district => nil, :amount => 12)
@@ -89,9 +85,7 @@ class EventsControllerTest < ActionController::TestCase
       "Stadsdel\tSkola\tGrupp\tAntal biljetter\nHela staden\t\"\"\t\"\"\t12\n"
     ).returns(true)
 
-    assert_raise ActionView::MissingTemplate do
-      get :ticket_allotment, :id => allotment.event.id, :format => "xls"
-    end
+    get :ticket_allotment, :id => allotment.event.id, :format => "xls"
   end
 
   test "new, admin" do
