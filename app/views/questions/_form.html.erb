@@ -11,7 +11,7 @@
 
 %>
 
-<% form_for question, :url => form_url, :builder => KPFormBuilder, :html => { :class => "question-form" } do |f| -%>
+<%= form_for question, :url => form_url, :builder => KPFormBuilder, :html => { :class => "question-form" } do |f| -%>
 
   <% if with_header %>
     <h2>Lägg till fråga</h2>

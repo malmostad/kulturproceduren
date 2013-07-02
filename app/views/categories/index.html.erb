@@ -4,7 +4,7 @@
 
 <% unless @category_groups.empty? %>
 
-  <% form_for @category, :builder => KPFormBuilder, :html => { :class => "category-form context-form" } do |f| -%>
+  <%= form_for @category, :builder => KPFormBuilder, :html => { :class => "category-form context-form" } do |f| -%>
 
     <%= f.title(is_edit ? "Redigera kategori" : "Lägg till kategori") %>
 

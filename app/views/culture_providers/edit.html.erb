@@ -3,7 +3,7 @@
 
 <% is_edit = !@culture_provider.id.nil? %>
 
-<% form_for(@culture_provider, :builder => KPFormBuilder, :html => { :class => "culture-provider-form" }) do |f| %>
+<%= form_for(@culture_provider, :builder => KPFormBuilder, :html => { :class => "culture-provider-form" }) do |f| %>
 
   <%= f.title(is_edit ? "Redigera arrangör" : "Lägg till arrangör") %>
 

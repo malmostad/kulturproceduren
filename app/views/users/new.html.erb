@@ -1,6 +1,6 @@
 <%= render :partial => "menu" %>
 
-<% form_for(@user, :builder => KPFormBuilder, :html => { :class => "user-form" }) do |f| %>
+<%= form_for(@user, :builder => KPFormBuilder, :html => { :class => "user-form" }) do |f| %>
 
   <%= f.title(user_online? && current_user.has_role?(:admin) ? "Skapa användare" : "Registrera konto") %>
 

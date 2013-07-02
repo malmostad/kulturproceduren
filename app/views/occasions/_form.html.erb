@@ -20,7 +20,7 @@ end
 
   <legend><%= is_edit ? "Redigera" : "Lägg till" %> föreställning</legend>
 
-  <% form_for(occasion, :builder => KPFormBuilder, :html => { :class => "occasion-form" }) do |f| -%>
+  <%= form_for(occasion, :builder => KPFormBuilder, :html => { :class => "occasion-form" }) do |f| -%>
 
     <%= f.validation_error_indicator -%>
 

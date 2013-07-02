@@ -29,7 +29,7 @@
   end
 %>
 
-<% form_for( @image, :url => form_url, :builder => KPFormBuilder, :html => { :multipart => true, :class => "image-form context-form" } ) do |f| %>
+<%= form_for( @image, :url => form_url, :builder => KPFormBuilder, :html => { :multipart => true, :class => "image-form context-form" } ) do |f| %>
 
   <%= f.title "Ladda upp ny bild" -%>
 

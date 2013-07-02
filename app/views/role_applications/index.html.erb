@@ -18,7 +18,7 @@
       Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
     </p>
 
-    <% form_for(@booker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-booker-form" }) do |f| -%>
+    <%= form_for(@booker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-booker-form" }) do |f| -%>
 
       <%= f.validation_error_indicator %>
 
@@ -45,7 +45,7 @@
       Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
     </p>
 
-    <% form_for(@culture_worker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-culture-worker-form" }) do |f| -%>
+    <%= form_for(@culture_worker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-culture-worker-form" }) do |f| -%>
 
       <%= f.validation_error_indicator %>
 
@@ -69,7 +69,7 @@
       Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
     </p>
 
-    <% form_for(@host_appl, :builder => KPFormBuilder, :html => { :class => "role-application-host-form" }) do |f| -%>
+    <%= form_for(@host_appl, :builder => KPFormBuilder, :html => { :class => "role-application-host-form" }) do |f| -%>
       <%= f.validation_error_indicator -%>
 
       <% f.fields do -%>

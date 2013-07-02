@@ -31,7 +31,7 @@
 
 <% disabled = !@event.free_for_all? && @notification_request.group_id.nil? %>
 
-<% form_for(
+<%= form_for(
   @notification_request,
   :url => event_notification_requests_path(@event),
   :builder => KPFormBuilder,

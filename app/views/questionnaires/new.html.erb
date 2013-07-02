@@ -4,7 +4,7 @@
 
 <% if is_edit || !@events.empty? %>
 
-  <% form_for @questionnaire, :builder => KPFormBuilder, :html => { :class => "questionnaire-form" } do |f| %>
+  <%= form_for @questionnaire, :builder => KPFormBuilder, :html => { :class => "questionnaire-form" } do |f| %>
 
     <%= f.title(is_edit ? "Redigera enkät" : "Lägg till enkät") -%>
 

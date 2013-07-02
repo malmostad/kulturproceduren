@@ -1,6 +1,6 @@
 <%= render :partial => "categories/menu" -%>
 
-<% form_for @category_group, :builder => KPFormBuilder, :html => { :class => "category-group-form context-form" } do |f| -%>
+<%= form_for @category_group, :builder => KPFormBuilder, :html => { :class => "category-group-form context-form" } do |f| -%>
 
   <%= f.title(@category_group.id.to_i > 0 ? "Redigera kategorigrupp" : "Lägg till kategorigrupp")  %>
 

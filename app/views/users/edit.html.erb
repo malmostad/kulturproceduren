@@ -1,6 +1,6 @@
 <%= render :partial => "menu" %>
 
-<% form_for(@user, :builder => KPFormBuilder, :html => { :class => "user-form" }) do |f| %>
+<%= form_for(@user, :builder => KPFormBuilder, :html => { :class => "user-form" }) do |f| %>
 
   <%= f.title "Redigera personuppgifter" -%>
 

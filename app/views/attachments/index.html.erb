@@ -9,7 +9,7 @@
   <%= link_to h(@event.name), @event %>
 </h2>
 
-<% form_for(
+<%= form_for(
   @attachment,
   :url => event_attachments_path(@event),
   :builder => KPFormBuilder,

@@ -20,7 +20,7 @@
   <dd><%= h(@application.message) %></dd>
 </dl>
 
-<% form_for(@application, :builder => KPFormBuilder, :html => { :class => "role-application-form" }) do |f| -%>
+<%= form_for(@application, :builder => KPFormBuilder, :html => { :class => "role-application-form" }) do |f| -%>
 
   <%= f.title "Besvara ansökan" -%>
 

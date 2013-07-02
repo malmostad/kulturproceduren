@@ -2,7 +2,7 @@
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<% form_for(@school, :builder => KPFormBuilder, :html => { :class => "school-form" }) do |f| %>
+<%= form_for(@school, :builder => KPFormBuilder, :html => { :class => "school-form" }) do |f| %>
 
   <%= f.title(is_edit ? "Redigera skola" : "Skapa ny skola") -%>
 

@@ -8,7 +8,7 @@
 
 <% else -%>
 
-  <% form_for User.new, :url => { :action => "login" }, :builder => KPFormBuilder, :html => { :class => "login-form" } do |f| %>
+  <%= form_for User.new, :url => { :action => "login" }, :builder => KPFormBuilder, :html => { :class => "login-form" } do |f| %>
     <% f.title "Logga in" -%>
 
     <% f.fields do -%>

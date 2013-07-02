@@ -24,7 +24,7 @@
 <fieldset class="with-legend">
   <legend><span>Åldersgrupper</span></legend>
 
-  <% form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
+  <%= form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
 
     <%= f.label :age %>
     <%= f.text_field :age %>
