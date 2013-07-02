@@ -14,6 +14,7 @@ gem "ruby-ldap", "0.9.16", :require => "ldap"
 
 gem "jnunemaker-validatable", "~> 1.8.4", :require => "validatable"
 gem "simple_enum", "1.6.8"
+gem "rails_autolink", "1.1.0"
 
 group :development, :test do
   gem "ruby-debug", "0.10.4"
