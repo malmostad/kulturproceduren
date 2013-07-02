@@ -79,9 +79,9 @@ class AttendanceController < ApplicationController
 
     flash[:notice] = "Närvaron uppdaterades."
     if @occasion
-      redirect_to report_occasion_attendance_url(@occasion)
+      redirect_to report_occasion_attendance_index_url(@occasion)
     else
-      redirect_to report_event_attendance_url(@event)
+      redirect_to report_event_attendance_index_url(@event)
     end
   end
 

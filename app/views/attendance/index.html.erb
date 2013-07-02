@@ -27,9 +27,9 @@
     <h4>Hantera närvaro</h4>
     <ul>
       <% if @occasion %>
-        <%= link_to "Rapportera närvaro", report_occasion_attendance_path(@occasion) %>
+        <%= link_to "Rapportera närvaro", report_occasion_attendance_index_path(@occasion) %>
       <% else %>
-        <%= link_to "Rapportera närvaro för hela evenemanget", report_event_attendance_path(@event) %>
+        <%= link_to "Rapportera närvaro för hela evenemanget", report_event_attendance_index_path(@event) %>
       <% end %>
     </ul>
   </div>

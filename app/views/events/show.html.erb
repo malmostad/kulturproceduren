@@ -407,7 +407,7 @@
                         </li>
                       <% elsif !occasion.cancelled && current_user.has_role?(:admin, :host) %>
                         <li>
-                          <%= link_to "Rapportera närvaro", report_occasion_attendance_path(occasion) %>
+                          <%= link_to "Rapportera närvaro", report_occasion_attendance_index_path(occasion) %>
                         </li>
                       <% end %>
                     <% elsif @event.bookable? %>

@@ -129,7 +129,7 @@ class AttendanceControllerTest < ActionController::TestCase
       }
     )
 
-    assert_redirected_to report_occasion_attendance_url(@occasions.first)
+    assert_redirected_to report_occasion_attendance_index_url(@occasions.first)
     assert_equal "Närvaron uppdaterades.", flash[:notice]
 
     # First group
@@ -194,7 +194,7 @@ class AttendanceControllerTest < ActionController::TestCase
       }
     )
 
-    assert_redirected_to report_event_attendance_url(@event)
+    assert_redirected_to report_event_attendance_index_url(@event)
     assert_equal "Närvaron uppdaterades.", flash[:notice]
 
     # First group
