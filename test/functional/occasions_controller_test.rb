@@ -77,11 +77,13 @@ class OccasionsControllerTest < ActionController::TestCase
     assert_equal    category_groups, assigns(:category_groups)
 
     # Valid
-    occasion_data = { :event_id => event.id, :date => Date.today, :address => "Address", :seats => 10 }
+    occasion_data = { :event_id => event.id.to_s, :date => Date.today.to_s, :address => "Address", :seats => 10.to_s }
     post :create, :occasion => occasion_data
     assert_redirected_to event
     assert_equal         "Föreställningen skapades.",  flash[:notice]
     assert_equal         occasion_data.stringify_keys, session[:last_occasion_added]
+
+    assert Occasion.new(session[:last_occasion_added]).valid?
     
     occasion = Occasion.last
     assert_equal event,      occasion.event

@@ -3,7 +3,8 @@ require 'test_helper'
 
 class ApplicationProxyController < ApplicationController
   def test_load_group_selection_collections
-    load_group_selection_collections(params[:occasion])
+    occasion = params[:occasion_id] ? Occasion.find(params[:occasion_id]) : nil
+    load_group_selection_collections(occasion)
     render :nothing => true
   end
   def test_sort_order
@@ -27,8 +28,9 @@ class ApplicationProxyController < ApplicationController
     render :nothing => true
   end
   def test_occasion_list_cache_key
+    event = Event.find(params[:event_id])
     @current_user = nil
-    @result = occasion_list_cache_key(params[:event])
+    @result = occasion_list_cache_key(event)
     render :nothing => true
   end
   def test_send_csv
@@ -73,7 +75,7 @@ class ApplicationProxyControllerTest < ActionController::TestCase
 
     # no selection, occasion
     session[:group_selection] = nil
-    get :test_load_group_selection_collections, :occasion => occasion
+    get :test_load_group_selection_collections, :occasion_id => occasion.id
     assert_equal({},         session[:group_selection])
     assert_equal [district], assigns(:group_selection_collections)[:districts]
     assert_nil   assigns(:group_selection_collections)[:schools]
@@ -81,14 +83,14 @@ class ApplicationProxyControllerTest < ActionController::TestCase
 
     # district, occasion
     session[:group_selection][:district_id] = district.id
-    get :test_load_group_selection_collections, :occasion => occasion
+    get :test_load_group_selection_collections, :occasion_id => occasion.id
     assert_equal [district], assigns(:group_selection_collections)[:districts]
     assert_equal [school],   assigns(:group_selection_collections)[:schools]
     assert_nil   assigns(:group_selection_collections)[:groups]
 
     # school, occasion
     session[:group_selection][:school_id] = school.id
-    get :test_load_group_selection_collections, :occasion => occasion
+    get :test_load_group_selection_collections, :occasion_id => occasion.id
     assert_equal [district], assigns(:group_selection_collections)[:districts]
     assert_equal [school],   assigns(:group_selection_collections)[:schools]
     assert_equal [group],    assigns(:group_selection_collections)[:groups]
@@ -140,32 +142,32 @@ class ApplicationProxyControllerTest < ActionController::TestCase
     event = create(:event)
 
     # No current user
-    get :test_occasion_list_cache_key, :event => event
+    get :test_occasion_list_cache_key, :event_id => event.id
     assert_equal "events/show/#{event.id}/occasion_list/not_online/not_bookable/not_administratable/not_reportable", assigns(:result)
 
     # Regular user online
     session[:current_user_id] = create(:user).id
-    get :test_occasion_list_cache_key, :event => event
+    get :test_occasion_list_cache_key, :event_id => event.id
     assert_equal "events/show/#{event.id}/occasion_list/online/not_bookable/not_administratable/not_reportable", assigns(:result)
 
     # Booker online
     session[:current_user_id] = create(:user, :roles => [roles(:booker)]).id
-    get :test_occasion_list_cache_key, :event => event
+    get :test_occasion_list_cache_key, :event_id => event.id
     assert_equal "events/show/#{event.id}/occasion_list/online/bookable/not_administratable/not_reportable", assigns(:result)
 
     # Culture provider online
     session[:current_user_id] = create(:user, :roles => [roles(:culture_worker)], :culture_providers => [event.culture_provider]).id
-    get :test_occasion_list_cache_key, :event => event
+    get :test_occasion_list_cache_key, :event_id => event.id
     assert_equal "events/show/#{event.id}/occasion_list/online/not_bookable/administratable/not_reportable", assigns(:result)
 
     # Host online
     session[:current_user_id] = create(:user, :roles => [roles(:host)]).id
-    get :test_occasion_list_cache_key, :event => event
+    get :test_occasion_list_cache_key, :event_id => event.id
     assert_equal "events/show/#{event.id}/occasion_list/online/not_bookable/not_administratable/reportable", assigns(:result)
 
     # Admin online
     session[:current_user_id] = create(:user, :roles => [roles(:admin)]).id
-    get :test_occasion_list_cache_key, :event => event
+    get :test_occasion_list_cache_key, :event_id => event.id
     assert_equal "events/show/#{event.id}/occasion_list/online/bookable/administratable/reportable", assigns(:result)
   end
   test "send csv" do

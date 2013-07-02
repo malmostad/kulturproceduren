@@ -48,6 +48,8 @@ class StatisticsControllerTest < ActionController::TestCase
       "Stadsdel\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
     ).returns(true)
 
+    @controller.expects(:render).returns(true) # When mocking send_csv, the view is rendered
+
     get :visitors, :id => "ht2012", :format => "xls"
   end
   test "visitors, single event" do
