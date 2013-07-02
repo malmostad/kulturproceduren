@@ -114,7 +114,6 @@ FactoryGirl.define do
 
   factory :user do
     sequence(:username)   { |n| "user_%09d" % n }
-    salt                  "abcdefg"
     password              "password"
     password_confirmation { password }
     name                  { username }

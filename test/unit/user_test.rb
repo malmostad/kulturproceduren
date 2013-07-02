@@ -221,7 +221,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert !build(:user, :username => "username").valid?
 
-    APP_CONFIG.replace(:ldap => { :username_prefix => "ldap_" })
+    APP_CONFIG.replace(:salt_length => 10, :ldap => { :username_prefix => "ldap_" })
     assert !build(:user, :username => "ldap_username").valid?
   end
 end
