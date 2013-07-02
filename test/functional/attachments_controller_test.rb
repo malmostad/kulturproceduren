@@ -65,11 +65,13 @@ class AttachmentsControllerTest < ActionController::TestCase
     assert_redirected_to event_attachments_url(@event)
     assert_equal "Du måste välja en fil att ladda upp.", flash[:warning]
 
+    upload_file = Rack::Test::UploadedFile.new("#{Rails.root}/Rakefile", "text/plain")
+
     # Proper data, unable to save
     post :create,
       :event_id => @event.id,
       :attachment => {}, # no description => invalid
-      :upload => { :document => stub(:original_filename => "foo.txt", :content_type => "text/plain") }
+      :upload => { :document => upload_file }
     assert_template "attachments/index"
     assert assigns(:attachment).new_record?
 
@@ -79,16 +81,16 @@ class AttachmentsControllerTest < ActionController::TestCase
     post :create,
       :event_id => @event.id,
       :attachment => { :description => "foo" },
-      :upload => { :document => stub(:original_filename => "foo.txt", :content_type => "text/plain", :read => "foo") }
+      :upload => { :document => upload_file }
     assert_redirected_to event_attachments_url(@event)
     assert_equal "Filen laddades upp.", flash[:notice]
 
     assert_equal "foo",        assigns(:attachment).description
-    assert_equal "foo.txt",    assigns(:attachment).filename
+    assert_equal "Rakefile",   assigns(:attachment).filename
     assert_equal "text/plain", assigns(:attachment).content_type
     assert_equal @event,       assigns(:attachment).event
 
-    outfile = Rails.root.join("tmp", "#{assigns(:attachment).id}.txt")
+    outfile = Rails.root.join("tmp", "#{assigns(:attachment).id}")
     assert File.exists?(outfile)
 
     File.delete(outfile)
