@@ -11,8 +11,8 @@
 <% end -%>
 
 <% form_for(
-  :information_mail,
   @mail,
+  :as => :information_mail,
   :url => { :action => :create },
   :builder => KPFormBuilder,
   :html => { :class => "information-mail-form context-form" }
