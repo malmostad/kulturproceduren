@@ -90,7 +90,7 @@ namespace :kp do
           booking.student_count += 1
         end
 
-        booking.save(false) || raise(ActiveRecord::RecordNotSaved)
+        booking.save(:validate => false) || raise(ActiveRecord::RecordNotSaved)
 
         ticket.booking_id = booking.id
         ticket.save!
