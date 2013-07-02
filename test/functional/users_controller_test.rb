@@ -174,7 +174,10 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil      assigns(:user).password_confirmation
 
     # Valid
-    post :create, :user => attributes_for(:user)
+    user_attributes = attributes_for(:user)
+    user_attributes[:district_ids] = user_attributes.delete(:districts).map(&:id)
+
+    post :create, :user => user_attributes
     assert_redirected_to :controller => "login"
     assert_equal         "Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.", flash[:notice]
     assert_equal         User.last.id, assigns(:user).id
@@ -195,7 +198,10 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil      assigns(:user).password_confirmation
 
     # Valid
-    post :create, :user => attributes_for(:user)
+    user_attributes = attributes_for(:user)
+    user_attributes[:district_ids] = user_attributes.delete(:districts).map(&:id)
+
+    post :create, :user => user_attributes
     assert_redirected_to User.last
     assert_equal         "Användaren skapades. Den kan nu logga in med användarnamn och lösenord.", flash[:notice]
   end
