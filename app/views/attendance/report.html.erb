@@ -1,14 +1,14 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
     <% if @event %>
-      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+      <%= link_to "Återvänd till presentationen för #{@event.name}", @event %>
     <% end %>
   </div>
 <% end -%>
 
 <h2 class="form-title">
   Rapportera närvaro för
-  <%= link_to h(@event.name), @event %>,
+  <%= link_to @event.name, @event %>,
 
   <% if @occasion %>
     föreställningen
@@ -58,13 +58,13 @@ end
 
           <tr class="<%= cycle('', 'even') %>">
 
-            <td><%= h group.school.district.name -%></td>
-            <td><%= h group.school.name -%></td>
-            <td><%= h group.name -%></td>
+            <td><%= group.school.district.name -%></td>
+            <td><%= group.school.name -%></td>
+            <td><%= group.name -%></td>
 
-            <td><%= h booking[:normal] -%></td>
-            <td><%= h booking[:adult] -%></td>
-            <td><%= h booking[:wheelchair] -%></td>
+            <td><%= booking[:normal] -%></td>
+            <td><%= booking[:adult] -%></td>
+            <td><%= booking[:wheelchair] -%></td>
 
             <td>
               <%= text_field_tag "attendance[#{@occasion.id}][#{group.id}][normal]", usage[:normal] %>
@@ -85,7 +85,7 @@ end
           <tr class="occasion-row">
             <th colspan="9" class="<%= cycle('', 'even') %>">
               Föreställningen
-              <%= h occasion.date %>
+              <%= occasion.date %>
               kl
               <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
             </th>
@@ -98,13 +98,13 @@ end
 
             <tr class="<%= cycle('', 'even') %>">
 
-              <td><%= h group.school.district.name -%></td>
-              <td><%= h group.school.name -%></td>
-              <td><%= h group.name -%></td>
+              <td><%= group.school.district.name -%></td>
+              <td><%= group.school.name -%></td>
+              <td><%= group.name -%></td>
 
-              <td><%= h booking[:normal] -%></td>
-              <td><%= h booking[:adult] -%></td>
-              <td><%= h booking[:wheelchair] -%></td>
+              <td><%= booking[:normal] -%></td>
+              <td><%= booking[:adult] -%></td>
+              <td><%= booking[:wheelchair] -%></td>
 
               <td>
                 <%= text_field_tag "attendance[#{occasion.id}][#{group.id}][normal]", usage[:normal] %>

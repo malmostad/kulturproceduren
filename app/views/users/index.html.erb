@@ -39,10 +39,10 @@
       <% css_class = cycle('', 'even') %>
       
       <tr class="<%= css_class %>">
-        <td><%= h user.get_username %></td>
-        <td><%= h user.name %></td>
-        <td><%= h user.cellphone %></td>
-        <td><a href="mailto:<%= u user.email %>"><%= h user.email %></a></td>
+        <td><%= user.get_username %></td>
+        <td><%= user.name %></td>
+        <td><%= user.cellphone %></td>
+        <td><a href="mailto:<%= u user.email %>"><%= user.email %></a></td>
       </tr>
       <tr class="<%= css_class %> action-row">
         <td colspan="4">

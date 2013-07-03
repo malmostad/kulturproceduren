@@ -1,13 +1,13 @@
-<h1>Kulturproceduren - Snart dags för <%= h @occasion.event.name %></h1>
+<h1>Kulturproceduren - Snart dags för <%= @occasion.event.name %></h1>
 
 <p>Hej!</p>
 
 <p>
   <%= @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
   är det dags för
-  <%= h @booking.group.name %> på <%= @booking.group.school.name %>
+  <%= @booking.group.name %> på <%= @booking.group.school.name %>
   att ta del av
-  <%= h @occasion.event.name %>.
+  <%= @occasion.event.name %>.
 </p>
 
 <% unless @occasion.address.blank? %>
@@ -21,7 +21,7 @@
 
 <ul>
   <li>
-    att du kan läsa mer om <%= h @occasion.event.name %> på
+    att du kan läsa mer om <%= @occasion.event.name %> på
     <%= link_to "Kulturproceduren", mail_url(event_path(@occasion.event)) %>.
     Här finns också eventuell lärarhandledning.
   </li>

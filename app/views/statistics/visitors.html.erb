@@ -2,7 +2,7 @@
 
 <% if @visitor_stats %>
 
-  <h2>Besökstatistik för <%= h @event.name -%></h2>
+  <h2>Besökstatistik för <%= @event.name -%></h2>
 
   <p>
     <%=  link_to "Ladda ner statistik för eventet #{@event.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@event.id}" %>    
@@ -23,14 +23,14 @@
 
       <% @visitor_stats.each do |v| %>
         <tr class="<%= cycle('', 'even') %>">
-          <td><%= h v["district_name"] -%></td>
-          <td><%= h v["school_name"] -%></td>
-          <td><%= h v["group_name"] -%></td>
+          <td><%= v["district_name"] -%></td>
+          <td><%= v["school_name"] -%></td>
+          <td><%= v["group_name"] -%></td>
 
 
-          <td><%= h v["num_booked"] -%></td>
-          <td><%= h v["num_children"] -%></td>
-          <td><%= h v["num_adult"] -%></td>
+          <td><%= v["num_booked"] -%></td>
+          <td><%= v["num_children"] -%></td>
+          <td><%= v["num_adult"] -%></td>
         </tr>
 
       <% end %>
@@ -41,7 +41,7 @@
 <% else %>
 
   <h2>
-    Besöksstatistik <%= h @term %>
+    Besöksstatistik <%= @term %>
   </h2>
 
   <p>
@@ -61,10 +61,10 @@
       <% @events.each do |event| %>
         <tr class="<%= cycle("", "even") %>">
           <td>
-            <%= link_to h(event.name), visitors_event_statistic_path(event, @term) -%>
+            <%= link_to event.name, visitors_event_statistic_path(event, @term) -%>
           </td>
           <td>
-            <%= h(event.culture_provider.name) %>
+            <%= event.culture_provider.name %>
           </td>
         </tr>
       <% end %>

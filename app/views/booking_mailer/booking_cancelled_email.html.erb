@@ -2,13 +2,13 @@
 
 <p>
   Biljetterna för
-  <%= h @booking.group.name %>, <%= @booking.group.school.name %>
+  <%= @booking.group.name %>, <%= @booking.group.school.name %>
   till
-  <%= h @booking.occasion.event.name %>,
+  <%= @booking.occasion.event.name %>,
   föreställningen
-  <%= h @booking.occasion.date %> kl <%= l @booking.occasion.start_time, :format => :only_time %>
+  <%= @booking.occasion.date %> kl <%= l @booking.occasion.start_time, :format => :only_time %>
   har avbokats av
-  <%= h @user.name %> (<%= h @user.email %>, <%= h @user.cellphone %>).
+  <%= @user.name %> (<%= @user.email %>, <%= @user.cellphone %>).
 </p>
 
 <% if @booking.bus_booking? %>
@@ -16,8 +16,8 @@
   Denna bokning innehåller en bussbokning:
 </p>
 <ul>
-  <li><strong>Från hållplats:</strong> <%= h @booking.bus_stop %></li>
-  <li><strong>Bokningstyp:</strong> <%= h @booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></li>
+  <li><strong>Från hållplats:</strong> <%= @booking.bus_stop %></li>
+  <li><strong>Bokningstyp:</strong> <%= @booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></li>
 </ul>
 <% end %>
 
@@ -31,11 +31,11 @@
           <b><%= question.question %>:</b>
           <%=
           case question.qtype
-          when "QuestionMark", "QuestionText" then h(answer.answer_text)
+          when "QuestionMark", "QuestionText" then answer.answer_text
           when "QuestionBool" then answer.answer_text == "y" ? "Ja" : "Nej"
           when "QuestionMchoice"
-            choices = YAML.load(answer.answer_text).collect { |c| "<li>#{h(c)}</li>" }
-            "<ul>#{choices}</ul>"
+            choices = YAML.load(answer.answer_text).collect { |c| "<li>#{h(c)}</li>".html_safe }
+            "<ul>#{choices}</ul>".html_safe
           end
           -%>
         </li>

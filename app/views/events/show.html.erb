@@ -2,7 +2,7 @@
 
 <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
   <div class="admin-tools">
-    <h4>Administrera <%= h @event.name %></h4>
+    <h4>Administrera <%= @event.name %></h4>
     <ul>
       <li><%= link_to 'Redigera', edit_event_path(@event) %></li>
 
@@ -56,14 +56,14 @@
   </div>
 <% elsif user_online? && current_user.has_role?(:host) && @event.reportable? %>
   <div class="admin-tools">
-    <h4>Administrera <%= h @event.name %></h4>
+    <h4>Administrera <%= @event.name %></h4>
     <ul>
       <li><%= link_to 'Hantera närvaro', event_attendance_index_path(@event) %></li>
     </ul>
   </div>
 <% elsif user_online? && current_user.has_role?(:coordinator) %>
   <div class="admin-tools">
-    <h4>Administrera <%= h @event.name %></h4>
+    <h4>Administrera <%= @event.name %></h4>
     <ul>
       <li>
         <%= link_to "Bokningar", event_bookings_path(@event) %>
@@ -85,7 +85,7 @@
                 <%= uploaded_image_tag image %>
 
                 <% unless image.description.blank? %>
-                  <span class="image-description"><%= h image.description %></span>
+                  <span class="image-description"><%= image.description %></span>
                 <% end %>
               </div>
             <% end -%>
@@ -94,7 +94,7 @@
       </div>
     <% end -%>
 
-    <h2><%= h @event.name %></h2>
+    <h2><%= @event.name %></h2>
 
     <%= show_description(@event.description) %>
 
@@ -105,7 +105,7 @@
         <% unless @event.linked_culture_providers.empty? %>
           <ul class="culture-provider-list">
             <% @event.linked_culture_providers.each do |link| %>
-              <li><%= link_to h(link.name), link %></li>
+              <li><%= link_to link.name, link %></li>
             <% end %>
           </ul>
         <% end %>
@@ -113,7 +113,7 @@
         <% unless @event.linked_events.empty? %>
           <ul class="event-list">
             <% @event.linked_events.each do |link| %>
-              <li><%= link_to h(link.name), link %></li>
+              <li><%= link_to link.name, link %></li>
             <% end %>
           </ul>
         <% end %>
@@ -155,31 +155,31 @@
         <tr class="map-address">
           <th>Hitta till oss</th>
           <td>
-            <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => h(@event.map_address) %>
+            <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => @event.map_address %>
           </td>
         </tr>
       <%end %>
       <% if user_online? && current_user.can_administrate?(@event.culture_provider) %>
         <tr class="show-date">
           <th>Visas mellan</th>
-          <td><%= h @event.visible_from %> och <%= h @event.visible_to %></td>
+          <td><%= @event.visible_from %> och <%= @event.visible_to %></td>
         </tr>
         <% unless @event.ticket_release_date.blank? -%>
           <tr class="ticket-release-date">
             <th>Biljettsläpp</th>
-            <td><%= h @event.ticket_release_date %></td>
+            <td><%= @event.ticket_release_date %></td>
           </tr>
         <% end -%>
         <% unless @event.district_transition_date.blank? -%>
           <tr class="district-transition-date">
             <th>Släpp till stadsdel</th>
-            <td><%= h @event.district_transition_date %></td>
+            <td><%= @event.district_transition_date %></td>
           </tr>
         <% end -%>
         <% unless @event.free_for_all_transition_date.blank? -%>
           <tr class="free-for-all-transition-date">
             <th>Släpp till hela staden</th>
-            <td><%= h @event.free_for_all_transition_date %></td>
+            <td><%= @event.free_for_all_transition_date %></td>
           </tr>
         <% end -%>
         <tr class="bus-booking">
@@ -190,7 +190,7 @@
       <% if !@event.booking_info.blank? && !@event.bookable? -%>
         <tr class="booking-info">
           <th>Bokningsinformation</th>
-          <td><%= auto_link h(@event.booking_info) %></td>
+          <td><%= auto_link @event.booking_info %></td>
         </tr>
       <% elsif @event.bookable? && !user_online? %>
         <tr class="booking-info">
@@ -208,7 +208,7 @@
       <% end -%>
       <tr class="culture-provider">
         <th>Arrangör</th>
-        <td><%= link_to h(@event.culture_provider.name), culture_provider_path(@event.culture_provider) %></td>
+        <td><%= link_to @event.culture_provider.name, culture_provider_path(@event.culture_provider) %></td>
       </tr>
       <% if @event.further_education -%>
         <tr class="further-education">
@@ -227,9 +227,9 @@
 
         <% unless category_names.empty? -%>
           <tr class="categories">
-            <th><%= h category_group.name %></th>
+            <th><%= category_group.name %></th>
             <td>
-              <%= h(category_names.join(", ")) %>
+              <%= category_names.join(", ") %>
             </td>
           </tr>
         <% end -%>
@@ -245,7 +245,7 @@
         <tr class="url">
           <th>Extern länk</th>
           <td>
-            <a href="<%= qualified_url(@event.url) %>"><%= h(@event.url) %></a>
+            <a href="<%= qualified_url(@event.url) %>"><%= @event.url %></a>
           </td>
         </tr>
       <% end -%>
@@ -253,7 +253,7 @@
         <tr class="movie-url">
           <th>Filmlänk</th>
           <td>
-            <a href="<%= qualified_url(@event.movie_url) %>"><%= h(@event.movie_url) %></a>
+            <a href="<%= qualified_url(@event.movie_url) %>"><%= @event.movie_url %></a>
           </td>
         </tr>
       <% end -%>
@@ -265,7 +265,7 @@
             <ul>
               <% @event.attachments.each do |attachment| -%>
                 <li>
-                  <%= link_to h(attachment.description), event_attachment_path(@event, attachment) %>
+                  <%= link_to attachment.description, event_attachment_path(@event, attachment) %>
                 </li>
               <% end %>
             </ul>
@@ -320,7 +320,7 @@
               <tr class="<%= row_class %> <%= "cancelled" if occasion.cancelled %>">
 
                 <td class="date-time">
-                  <span class="date"><%= h occasion.date %></span>
+                  <span class="date"><%= occasion.date %></span>
                   <span class="time">
                     <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
                   </span>
@@ -328,9 +328,9 @@
 
                 <td class="num-seats">
                   <% unless @event.tickets.empty? %>
-                    <%= h(available_seats) %>
+                    <%= available_seats %>
                   <% else %>
-                    <%= h(occasion.seats.to_i + occasion.wheelchair_seats.to_i) %>
+                    <%= occasion.seats.to_i + occasion.wheelchair_seats.to_i %>
                   <% end %>
                   <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
                 </td>
@@ -345,7 +345,7 @@
 
                     <%= link_to "Visa på karta", "#",
                       :class => "map-address-link",
-                      :title => h(occasion.map_address)
+                      :title => occasion.map_address
                     %>
                   <% end %>
                 </td>

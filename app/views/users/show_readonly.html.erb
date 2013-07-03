@@ -9,19 +9,19 @@
       Namn
     </dt>
     <dd>
-      <%= h @user.name %>
+      <%= @user.name %>
     </dd>
     <dt>
       Epost
     </dt>
     <dd>
-      <%= h @user.email %>
+      <%= @user.email %>
     </dd>
     <dt>
       Mobilnummer
     </dt>
     <dd>
-      <%= h @user.cellphone %>
+      <%= @user.cellphone %>
     </dd>
     <dt>
       Stadsdelar
@@ -30,7 +30,7 @@
       <% unless @user.districts.empty? %>
         <ul>
           <% @user.districts.each do |district| -%>
-            <li><%= h district.name %></li>
+            <li><%= district.name %></li>
           <% end %>
         </ul>
       <% end %>
@@ -46,7 +46,7 @@
       Användarnamn
     </dt>
     <dd>
-      <%= h @user.get_username -%>
+      <%= @user.get_username -%>
     </dd>
   </dl>
 </fieldset>
@@ -88,7 +88,7 @@
           <ul>
             <% @user.culture_providers.each do |provider| -%>
               <li>
-                <%= link_to h(provider.name), provider %>
+                <%= link_to provider.name, provider %>
               </li>
             <% end -%>
             <% if @user.culture_providers.empty? -%>

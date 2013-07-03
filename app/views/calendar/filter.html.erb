@@ -5,7 +5,7 @@
       <form action="<%= url_for :controller => "calendar", :action => "apply_filter", :list => @calendar_list -%>" method="post">
         <div class="free-text-cnt">
           <label for="kp-calendar-filter-free-text" id="kp-calendar-filter-free-text-label">Fritext:</label>
-          <input type="text" id="kp-calendar-filter-free-text" name="filter[free_text]" value="<%= h calendar_filter[:free_text] %>" />
+          <input type="text" id="kp-calendar-filter-free-text" name="filter[free_text]" value="<%= calendar_filter[:free_text] %>" />
 
           <%= hidden_field_tag 'authenticity_token' , form_authenticity_token %>
         </div>
@@ -53,7 +53,7 @@
                      id="kp-calendar-filter-from-date"
                      class="date-field"
                      width="30"
-                     value="<%= h calendar_filter[:from_date] %>"/>
+                     value="<%= calendar_filter[:from_date] %>"/>
             </li>
 
             <li>
@@ -101,7 +101,7 @@
                      id="kp-calendar-filter-to-date"
                      class="date-field"
                      width="30"
-                     value="<%= h calendar_filter[:to_date] %>"/>
+                     value="<%= calendar_filter[:to_date] %>"/>
             </li>
           </ul>
         </div>
@@ -109,14 +109,14 @@
         <% if !@category_groups.blank? -%>
           <dl class="category-cnt form-elements">
             <% @category_groups.each do |category_group| -%>
-              <dt><label for="kp-calendar-filter-category-group-<%= h category_group.id %>"><%= h category_group.name %>:</label></dt>
+              <dt><label for="kp-calendar-filter-category-group-<%= category_group.id %>"><%= category_group.name %>:</label></dt>
               <dd>
-                <select name="filter[categories][]" id="kp-calendar-filter-category-group-<%= h category_group.id %>">
+                <select name="filter[categories][]" id="kp-calendar-filter-category-group-<%= category_group.id %>">
                   <option value="-1">Alla</option>
                   <% category_group.categories.each do |category| -%>
-                    <option value="<%= h category.id %>"
+                    <option value="<%= category.id %>"
                             <%= 'selected="selected"' if calendar_filter[:categories] && calendar_filter[:categories].include?(category.id) %>>
-                            <%= h category.name %>
+                            <%= category.name %>
                     </option>
                   <% end -%>
                 </select>

@@ -34,7 +34,7 @@
     <% @category_groups.each do |category_group| -%>
       <% unless category_group.categories.empty? -%>
         <%= f.row do -%>
-          <label><%= h category_group.name %>:</label>
+          <label><%= category_group.name %>:</label>
 
           <ul class="checkbox-list">
             <% category_group.categories.each do |category| -%>
@@ -43,7 +43,7 @@
                   @event.categories.any? { |c| c.id == category.id },
                   :id => "kp-event-category_ids-#{category.id}" %>
 
-                <label for="kp-event-category_ids-<%= h category.id %>"><%= h category.name %></label>
+                <label for="kp-event-category_ids-<%= category.id %>"><%= category.name %></label>
               </li>
             <% end -%>
           </ul>

@@ -17,9 +17,9 @@
       <% @applications.each do |application| -%>
         <tr class="<%= cycle("", "even") %>">
           <td><%= type_string(application) %></td>
-          <td><%= h application.message %></td>
+          <td><%= application.message %></td>
           <td><%= l application.created_at, :format => :short %></td>
-          <td><%= h application.user.name %></td>
+          <td><%= application.user.name %></td>
           <td><%= link_to "Besvara", edit_role_application_path(application) %></td>
         </tr>
       <% end -%>

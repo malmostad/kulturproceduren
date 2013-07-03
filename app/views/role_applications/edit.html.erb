@@ -8,16 +8,16 @@
     <% if @application.role.symbol_name == :culture_worker -%>
       för
       <% if @application.culture_provider -%>
-        <%= link_to h(@application.culture_provider.name), culture_provider_path(@application.culture_provider) %>
+        <%= link_to @application.culture_provider.name, culture_provider_path(@application.culture_provider) %>
       <% else -%>
-        <%= h @application.new_culture_provider_name -%>
+        <%= @application.new_culture_provider_name -%>
       <% end -%>
     <% end -%>
   </dd>
   <dt>Avsändare:</dt>
-  <dd><%= link_to h(@application.user.name), @application.user %></dd>
+  <dd><%= link_to @application.user.name, @application.user %></dd>
   <dt>Meddelande:</dt>
-  <dd><%= h(@application.message) %></dd>
+  <dd><%= @application.message %></dd>
 </dl>
 
 <%= form_for(@application, :builder => KPFormBuilder, :html => { :class => "role-application-form" }) do |f| -%>

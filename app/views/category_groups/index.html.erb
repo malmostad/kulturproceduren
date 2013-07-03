@@ -27,7 +27,7 @@
 
   <% @category_groups.each do |category_group| %>
     <tr class="<%= cycle('', 'even') %>">
-      <td><%= h category_group.name %></td>
+      <td><%= category_group.name %></td>
       <td><%= category_group.visible_in_calendar ? "Ja" : "Nej" %></td>
       <td><%= link_to 'Redigera', edit_category_group_path(category_group) %></td>
       <td><%= link_to 'Radera', category_group, :confirm => 'Är du säker?', :method => :delete %></td>

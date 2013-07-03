@@ -12,7 +12,7 @@ category_groups ||= []
 
       <% category_groups.each do |category_group| -%>
         <% if category_group.visible_in_calendar %>
-          <th><%= h category_group.name %></th>
+          <th><%= category_group.name %></th>
         <% end %>
       <% end -%>
     </tr>
@@ -24,10 +24,10 @@ category_groups ||= []
 
       <tr class="<%= cycle('', 'even')  %>">
         <td class="date"><%= l event.visible_from %> - <%= l event.visible_to %></td>
-        <td class="event"><%= link_to h(event.name), event %></td>
+        <td class="event"><%= link_to event.name, event %></td>
 
         <td class="culture-provider">
-          <%= link_to h(event.culture_provider.name), event.culture_provider %>
+          <%= link_to event.culture_provider.name, event.culture_provider %>
         </td>
 
         <td class="age">
@@ -39,7 +39,7 @@ category_groups ||= []
         <% category_groups.each do |category_group| -%>
           <% if category_group.visible_in_calendar %>
             <td class="categories">
-              <%= h(event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")) %>
+              <%= event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ") %>
             </td>
           <% end %>
         <% end -%>

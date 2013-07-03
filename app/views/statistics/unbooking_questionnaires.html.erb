@@ -1,7 +1,7 @@
 <%= render :partial => "menu" %>
 
 <h2>
-  Avbokningsstatistik <%= h @term %>
+  Avbokningsstatistik <%= @term %>
 </h2>
 <p>
   <%= link_to "Ladda ner avbokningsstatistik som Excel-fil", unbooking_questionnaires_statistic_path(@term, :format => "xls") %>

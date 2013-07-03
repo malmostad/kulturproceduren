@@ -13,28 +13,28 @@
       <% end %>
       <% unless culture_provider.map_address.blank? %>
         <dd class="address">
-          <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => h(culture_provider.map_address) %>
+          <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => culture_provider.map_address %>
         </dd>
       <% end %>
     <% end -%>
     <% unless culture_provider.contact_person.blank? %>
       <dt class="contact-person">Kontaktperson</dt>
-      <dd class="contact-person"><%= h(culture_provider.contact_person) %></dd>
+      <dd class="contact-person"><%= culture_provider.contact_person %></dd>
     <% end -%>
     <% unless culture_provider.phone.blank? %>
       <dt class="phone">Telefon</dt>
-      <dd class="phone"><%= h(culture_provider.phone) %></dd>
+      <dd class="phone"><%= culture_provider.phone %></dd>
     <% end -%>
     <% unless culture_provider.email.blank? %>
       <dt class="email">Epost</dt>
       <dd class="email">
-        <a href="mailto:<%= u(culture_provider.email) %>"><%= h(culture_provider.email) %></a>
+        <a href="mailto:<%= u(culture_provider.email) %>"><%= culture_provider.email %></a>
       </dd>
     <% end -%>
     <% unless culture_provider.url.blank? %>
       <dt class="url">Hemsida</dt>
       <dd class="url">
-        <a href="<%= qualified_url(culture_provider.url) %>"><%= h(culture_provider.url) %></a>
+        <a href="<%= qualified_url(culture_provider.url) %>"><%= culture_provider.url %></a>
       </dd>
     <% end -%>
     <% unless culture_provider.opening_hours.blank? %>

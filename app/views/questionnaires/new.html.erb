@@ -10,7 +10,7 @@
 
     <%= f.conditional_hint is_edit do -%>
       <% if @questionnaire.for_event? %>
-        Redigerar enkät för <%= link_to h(@questionnaire.event.name), @questionnaire %>
+        Redigerar enkät för <%= link_to @questionnaire.event.name, @questionnaire %>
       <% else %>
         Redigerar avbokningsenkät
       <% end %>

@@ -5,7 +5,7 @@
   <%= f.title "Redigera personuppgifter" -%>
 
   <%= f.conditional_hint user_online? && current_user.has_role?(:admin) do -%>
-    Uppdaterar persondetaljer för <%= link_to h(@user.get_username), @user %>.
+    Uppdaterar persondetaljer för <%= link_to @user.get_username, @user %>.
   <% end -%>
 
   <%= f.validation_error_indicator -%>
@@ -26,7 +26,7 @@
                 :id => "kp-user-district_ids-#{district.id}"
               %>
 
-              <label for="kp-user-district_ids-<%= h district.id %>"><%= h district.name %></label>
+              <label for="kp-user-district_ids-<%= district.id %>"><%= district.name %></label>
             </li>
           <% end %>
         </ul>

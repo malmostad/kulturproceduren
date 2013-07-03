@@ -21,7 +21,7 @@
     <p class="message response">
       <% if @is_edit %>
         Uppdatera bokningen för
-        <strong><%= h @group.school.name %>, <%= h @group.name %></strong>.
+        <strong><%= @group.school.name %>, <%= @group.name %></strong>.
         Det finns ytterligare 
         <strong><%= available_tickets -%></strong>
         platser tillgängliga för bokning.
@@ -30,7 +30,7 @@
         case @occasion.event.ticket_state
         when :alloted_group
           %>
-          <strong><%= h @group.school.name %>, <%= h @group.name %></strong>
+          <strong><%= @group.school.name %>, <%= @group.name %></strong>
           har
           <strong><%= available_tickets -%></strong>
           platser tillgängliga för bokning.
@@ -38,7 +38,7 @@
           Det finns
           <strong><%= available_tickets -%></strong>
           tillgängliga platser att boka för alla förskolor och skolor i
-          <strong><%= h @group.school.district.name %></strong>.
+          <strong><%= @group.school.district.name %></strong>.
         <% when :free_for_all %>
           Det finns
           <strong><%= available_tickets -%></strong>

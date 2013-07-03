@@ -1,7 +1,7 @@
 <%= render :partial => "menu" -%>
 
 <h2 class="form-title">
-  Fördelning för <%= link_to h(@event.name), @event %>
+  Fördelning för <%= link_to @event.name, @event %>
 </h2>
 
 <div class="admin-tools">
@@ -33,14 +33,14 @@
       <% if allotment.for_group? %>
         <% if allotment.district_id != prev_district_id %>
           <tr class="district-row">
-            <td class="name"><%= h allotment.district.name %></td>
+            <td class="name"><%= allotment.district.name %></td>
             <td class="count"></td>
             <% prev_district_id = allotment.district_id %>
           </tr>
         <% end %>
         <% if allotment.group.school_id != prev_school_id %>
           <tr class="school-row">
-            <td class="name"><%= h allotment.group.school.name %></td>
+            <td class="name"><%= allotment.group.school.name %></td>
             <td class="count"></td>
             <% prev_school_id = allotment.group.school_id %>
           </tr>
@@ -49,14 +49,14 @@
       <tr class="<%= allotment.for_group? ? "group" : "district" %>-row">
         <td class="name">
           <% if allotment.for_group? %>
-            <%= h allotment.group.name %>
+            <%= allotment.group.name %>
           <% elsif allotment.for_district? %>
-            <%= h allotment.district.name %>
+            <%= allotment.district.name %>
           <% else %>
             Hela staden
           <% end %>
         </td>
-        <td class="count"><%= h allotment.amount %></td>
+        <td class="count"><%= allotment.amount %></td>
       </tr>
     <% end %>
   </tbody>

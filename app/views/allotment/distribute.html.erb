@@ -1,16 +1,16 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <%= link_to "Återvänd till presentationen för #{@event.name}", @event %>
   </div>
 <% end -%>
 
 <% is_group_distribution = session[:allotment][:ticket_state] == :alloted_group %>
 
-<h2 class="form-title">Fördelning för <%= link_to h(@event.name), @event %></h2>
+<h2 class="form-title">Fördelning för <%= link_to @event.name, @event %></h2>
 
 <dl id="kp-distribution-meta">
   <dt>Biljettsläpp:</dt>
-  <dd><%= h session[:allotment][:release_date] %></dd>
+  <dd><%= session[:allotment][:release_date] %></dd>
   <dt>Totalt antal biljetter:</dt>
   <dd class="total-tickets">
     <%= session[:allotment][:num_tickets] %>
@@ -66,18 +66,18 @@
             <tr class="group-row extra <%= fill_indicator group.total_children, group.num_tickets %>"
                 id="kp-group-<%= group.id %>">
               <td class="name">
-                <%= h group.school.name -%>
+                <%= group.school.name -%>
                 -
-                <%= h group.name %>
+                <%= group.name %>
               </td>
-              <td class="total-children"><%= h group.total_children %></td>
-              <td class="num-children"><%= h group.total_children %></td>
+              <td class="total-children"><%= group.total_children %></td>
+              <td class="num-children"><%= group.total_children %></td>
               <td class="num-tickets">
-                <input type="text" class="num-tickets-display" value="<%= h group.num_tickets %>"/>
+                <input type="text" class="num-tickets-display" value="<%= group.num_tickets %>"/>
                 <input type="hidden"
                        class="num-tickets-value"
                        name="allotment[ticket_assignment[<%= group.id %>]]"
-                       value="<%= h group.num_tickets %>"/>
+                       value="<%= group.num_tickets %>"/>
               </td>
               <td class="tools">
                 <a href="#" class="fill" title="Fyll gruppens tilldelade biljetter">+</a>
@@ -90,10 +90,10 @@
         <% @districts.each do |district| -%>
 
           <tr class="district-row" id="kp-district-<%= district.id %>">
-            <td class="name"><a href="#" class="toggler"><%= h district.name %></a></td>
+            <td class="name"><a href="#" class="toggler"><%= district.name %></a></td>
             <td class="total-children"></td>
-            <td class="num-children"><%= h district.num_children %></td>
-            <td class="num-tickets"><%= h district.num_tickets %></td>
+            <td class="num-children"><%= district.num_children %></td>
+            <td class="num-tickets"><%= district.num_tickets %></td>
             <td class="tools">
               <a href="#" class="fill" title="Fyll stadsdelens tilldelade biljetter så långt som möjligt">+</a>
               <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">&#x2212;</a>
@@ -103,10 +103,10 @@
           <% district.distribution_schools.each do |school| -%>
 
             <tr class="school-row kp-district-<%= district.id %>" id="kp-school-<%= school.id %>">
-              <td class="name"><a href="#" class="toggler"><%= h school.name %></a></td>
+              <td class="name"><a href="#" class="toggler"><%= school.name %></a></td>
               <td class="total-children"></td>
-              <td class="num-children"><%= h school.num_children %></td>
-              <td class="num-tickets"><%= h school.num_tickets %></td>
+              <td class="num-children"><%= school.num_children %></td>
+              <td class="num-tickets"><%= school.num_tickets %></td>
               <td class="tools">
                 <a href="#" class="fill" title="Fyll skolans tilldelade biljetter så långt som möjligt">+</a>
                 <a href="#" class="clear" title="Töm skolans tilldelade biljetter">&#x2212;</a>
@@ -118,7 +118,7 @@
                   id="kp-group-<%= group.id %>"
                   title="<%= fill_indicator_text group.num_children, group.num_tickets %>">
 
-                <td class="name"><%= h group.name %></td>
+                <td class="name"><%= group.name %></td>
 
                 <%
                   proximity_indicator = (
@@ -127,15 +127,15 @@
                   )
                 %>
                 <td class="total-children <%= "proximity" if proximity_indicator %>">
-                  <%= h group.total_children %>
+                  <%= group.total_children %>
                 </td>
                 <td class="num-children <%= "proximity" if proximity_indicator %>">
-                  <%= h group.num_children %>
+                  <%= group.num_children %>
                 </td>
 
                 <td class="num-tickets">
-                  <input type="text" class="num-tickets-display" value="<%= h group.num_tickets %>"/>
-                  <input type="hidden" class="num-tickets-value" name="allotment[ticket_assignment[<%= group.id %>]]" value="<%= h group.num_tickets %>"/>
+                  <input type="text" class="num-tickets-display" value="<%= group.num_tickets %>"/>
+                  <input type="hidden" class="num-tickets-value" name="allotment[ticket_assignment[<%= group.id %>]]" value="<%= group.num_tickets %>"/>
                 </td>
 
                 <td class="tools">
@@ -153,15 +153,15 @@
         <% @districts.each do |district| -%>
           <tr class="editable-district-row <%= fill_indicator district.num_children, district.num_tickets -%>"
               id="kp-district-<%= district.id %>">
-            <td class="name"><a href="#" class="toggler"><%= h district.name %></a></td>
-            <td class="num-children"><%= h district.num_children %></td>
+            <td class="name"><a href="#" class="toggler"><%= district.name %></a></td>
+            <td class="num-children"><%= district.num_children %></td>
             <td class="num-tickets">
               <input type="text"
                      class="num-tickets-display"
-                     value="<%= h district.num_tickets %>"/>
+                     value="<%= district.num_tickets %>"/>
               <input type="hidden"
                      class="num-tickets-value"
-                     name="allotment[ticket_assignment[<%= district.id %>]]" value="<%= h district.num_tickets %>"/>
+                     name="allotment[ticket_assignment[<%= district.id %>]]" value="<%= district.num_tickets %>"/>
             </td>
             <td class="tools">
               <a href="#" class="fill" title="Fyll stadsdelens tilldelade biljetter">+</a>

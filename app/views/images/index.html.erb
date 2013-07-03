@@ -1,11 +1,11 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
     <% if @image.culture_provider -%>
-      <%= link_to "Återvänd till presentationen för #{h(@image.culture_provider.name)}",
+      <%= link_to "Återvänd till presentationen för #{@image.culture_provider.name}",
         @image.culture_provider
       %> 
     <% elsif @image.event -%>
-      <%= link_to "Återvänd till presentationen för #{h(@image.event.name)}",
+      <%= link_to "Återvänd till presentationen för #{@image.event.name}",
         @image.event
       %>
     <% end -%>
@@ -15,9 +15,9 @@
 <h2 class="form-title">
   Hantera bilder för
   <% if @image.culture_provider -%>
-    <%= link_to h(@image.culture_provider.name), @image.culture_provider %>
+    <%= link_to @image.culture_provider.name, @image.culture_provider %>
   <% elsif @image.event -%>
-    <%= link_to h(@image.event.name), @image.event %>
+    <%= link_to @image.event.name, @image.event %>
   <% end -%>
 </h2>
 
@@ -75,7 +75,7 @@
           <td>
             <%= uploaded_image_tag img, true %>
           </td>
-          <td><%= h img.description %></td>
+          <td><%= img.description %></td>
 
           <% if img.culture_provider -%>
             <td><%= link_to 'Använd som logotyp', set_main_culture_provider_image_path(img.culture_provider, img) unless is_logo -%></td>

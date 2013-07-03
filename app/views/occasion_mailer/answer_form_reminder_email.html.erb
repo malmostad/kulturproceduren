@@ -1,11 +1,11 @@
-<h1>Kulturproceduren - Påminnelse utvärdering - <%= h @answer_form.occasion.event.name %></h1>
+<h1>Kulturproceduren - Påminnelse utvärdering - <%= @answer_form.occasion.event.name %></h1>
 
 <p>Hej!</p>
 
 <p>
   För en tid sedan var du och
-  <%= h @answer_form.booking.group.name %> på <%= h @answer_form.booking.group.school.name %>
-  med om <%= h @answer_form.occasion.event.name %>.
+  <%= @answer_form.booking.group.name %> på <%= @answer_form.booking.group.school.name %>
+  med om <%= @answer_form.occasion.event.name %>.
 </p>
 
 <p>Kultur för Barn och Ungas uppdrag är bland annat att:</p>

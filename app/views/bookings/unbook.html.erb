@@ -2,9 +2,9 @@
 
 <h2 class="form-title">
   Avboka 
-  <%= h @booking.group.school.name %>, <%= h @booking.group.name %> från
-  <%= link_to h(@booking.occasion.event.name), @booking.occasion.event -%>,
-  föreställningen <%= h @booking.occasion.date -%>
+  <%= @booking.group.school.name %>, <%= @booking.group.name %> från
+  <%= link_to @booking.occasion.event.name, @booking.occasion.event -%>,
+  föreställningen <%= @booking.occasion.date -%>
 </h2>
 
 <div class="flash alert">
@@ -27,7 +27,7 @@
           <div class="validation-error-message alert-field">Frågan är obligatorisk</div>
         <% end %>
 
-        <label><%= h question.question %>:</label>
+        <label><%= question.question %>:</label>
 
         <div class="input-container">
           <%= render :partial => get_question_fragment(question),

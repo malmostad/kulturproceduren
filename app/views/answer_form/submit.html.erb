@@ -2,14 +2,14 @@
 
   <h2>
     Utvärderingsenkät för
-    <%= h(@answer_form.occasion.event.name) %>
+    <%= @answer_form.occasion.event.name %>
   </h2>
 
   <p>
     Denna utvärderingsenkät är utformad för
     <%= @answer_form.group.school.name %>, <%= @answer_form.group.name %>
     som besökte
-    <%= h(@answer_form.occasion.event.name) %>
+    <%= @answer_form.occasion.event.name %>
     <%= @answer_form.occasion.date %>,
     <%= l @answer_form.occasion.start_time, :format => :only_time %> -
     <%= l @answer_form.occasion.stop_time, :format => :only_time %>.
@@ -29,7 +29,7 @@
           <div class="validation-error-message alert-field">Frågan är obligatorisk</div>
         <% end %>
 
-        <label><%= h question.question %>:</label>
+        <label><%= question.question %>:</label>
 
         <div class="input-container">
           <%= render :partial => get_question_fragment(question),

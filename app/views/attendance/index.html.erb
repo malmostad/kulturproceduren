@@ -1,14 +1,14 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
     <% if @event %>
-      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+      <%= link_to "Återvänd till presentationen för #{@event.name}", @event %>
     <% end %>
   </div>
 <% end -%>
 
 <h2 class="form-title">
   Närvarolista för
-  <%= link_to h(@event.name), @event %>,
+  <%= link_to @event.name, @event %>,
 
   <% if @occasion %>
     föreställningen
@@ -68,7 +68,7 @@
           <th colspan="<%= is_admin ? 6 : 5 %>" class="<%= cycle('', 'even') %>">
             <% link_to occasion_attendance_index_path(occasion) do %>
               Föreställningen
-              <%= h occasion.date %>
+              <%= occasion.date %>
               kl
               <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
             <% end %>
@@ -79,18 +79,18 @@
       <% occasion.bookings.hierarchically_ordered.each do |booking| %>
         <tr class="<%= cycle('', 'even') %>">
           <td>
-            <%= h booking.group.school.district.name -%><br/>
-            <%= h booking.group.school.name -%><br/>
-            <%= h booking.group.name -%>
+            <%= booking.group.school.district.name -%><br/>
+            <%= booking.group.school.name -%><br/>
+            <%= booking.group.name -%>
           </td>
           <td>
-            <%= h booking.companion_name -%><br/>
-            <%= h booking.companion_phone -%><br/>
-            <a href="mailto:<%= u booking.companion_email %>"><%= h booking.companion_email -%></a>
+            <%= booking.companion_name -%><br/>
+            <%= booking.companion_phone -%><br/>
+            <a href="mailto:<%= u booking.companion_email %>"><%= booking.companion_email -%></a>
           </td>
-          <td><%= h booking.student_count -%></td>
-          <td><%= h booking.adult_count -%></td>
-          <td><%= h booking.wheelchair_count -%></td>
+          <td><%= booking.student_count -%></td>
+          <td><%= booking.adult_count -%></td>
+          <td><%= booking.wheelchair_count -%></td>
           <% if is_admin -%>
             <td><%= linebreakize(booking.requirement) unless booking.requirement.blank? -%></td>
           <% end %>

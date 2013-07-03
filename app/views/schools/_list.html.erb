@@ -20,13 +20,13 @@ show_district ||= false
   <tbody>
     <% schools.each do |school| %>
       <tr class="<%= cycle("", "even") %>">
-        <td><%= link_to h(school.name), school %></td>
+        <td><%= link_to school.name, school %></td>
 
         <% if show_district -%>
-          <td><%= link_to h(school.district.name), school.district %></td>
+          <td><%= link_to school.district.name, school.district %></td>
         <% end -%>
 
-        <td><%= h school.elit_id %></td>
+        <td><%= school.elit_id %></td>
 
         <td><%= link_to 'Redigera', edit_school_path(school) %></td>
         <td><%= link_to 'Radera', school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></td>

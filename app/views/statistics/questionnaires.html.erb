@@ -37,7 +37,7 @@
 <% else %>
 
   <h2>
-    Enkätstatistik <%= h @term %>
+    Enkätstatistik <%= @term %>
   </h2>
 
   <h3>Evenemangsspecifik statistik</h3>
@@ -52,10 +52,10 @@
       <% @events.each do |event| %>
         <tr class="<%= cycle("", "even") %>">
           <td>
-            <%= link_to h(event.name), questionnaires_event_statistic_path(event, @term) -%>
+            <%= link_to event.name, questionnaires_event_statistic_path(event, @term) -%>
           </td>
           <td>
-            <%= h(event.culture_provider.name) %>
+            <%= event.culture_provider.name %>
           </td>
         </tr>
       <% end %>

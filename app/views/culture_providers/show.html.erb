@@ -2,7 +2,7 @@
 
 <% if user_online? && current_user.can_administrate?(@culture_provider) %>
   <div class="admin-tools">
-    <h4>Administrera <%= h @culture_provider.name %></h4>
+    <h4>Administrera <%= @culture_provider.name %></h4>
     <ul>
       <li><%= link_to "Redigera", edit_culture_provider_path(@culture_provider) %></li>
       <li>
@@ -49,7 +49,7 @@
                 <%= uploaded_image_tag image %>
 
                 <% unless image.description.blank? %>
-                  <span class="image-description"><%= h image.description %></span>
+                  <span class="image-description"><%= image.description %></span>
                 <% end %>
               </div>
             <% end -%>
@@ -58,7 +58,7 @@
       </div>
     <% end -%>
 
-    <h2><%= h @culture_provider.name %></h2>
+    <h2><%= @culture_provider.name %></h2>
 
     <%= show_description(@culture_provider.description) %>
 
@@ -69,7 +69,7 @@
         <% unless @culture_provider.linked_culture_providers.empty? %>
           <ul class="culture-provider-list">
             <% @culture_provider.linked_culture_providers.each do |link| %>
-              <li><%= link_to h(link.name), link %></li>
+              <li><%= link_to link.name, link %></li>
             <% end %>
           </ul>
         <% end %>
@@ -77,7 +77,7 @@
         <% unless @culture_provider.linked_events.empty? %>
           <ul class="event-list">
             <% @culture_provider.linked_events.each do |link| %>
-              <li><%= link_to h(link.name), link %></li>
+              <li><%= link_to link.name, link %></li>
             <% end %>
           </ul>
         <% end %>
@@ -131,7 +131,7 @@
             <% reset_cycle() %>
             <% @culture_provider.standing_events.each do |event| -%>
               <tr class="<%= cycle("", "even") %>">
-                <td><%= link_to h(event.name), event -%></td>
+                <td><%= link_to event.name, event -%></td>
               </tr>
             <% end -%>
           </tbody>
@@ -154,7 +154,7 @@
         <tbody>
           <% @culture_provider.events.each do |event| -%>
             <tr class="<%= cycle("", "even") %>">
-              <td><%= link_to h(event.name), event -%></td>
+              <td><%= link_to event.name, event -%></td>
               <td><%= l event.visible_from, :format => :long %></td>
               <td><%= l event.visible_to, :format => :long %></td>
             </tr>

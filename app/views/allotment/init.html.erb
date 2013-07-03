@@ -1,6 +1,6 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <%= link_to "Återvänd till presentationen för #{@event.name}", @event %>
   </div>
 <% end -%>
 
@@ -9,8 +9,8 @@
 <% is_edit = @event.tickets.count > 0 %>
 
 <p class="allotment-details">
-  Fördelar biljetter för evenemanget <%= link_to h(@event.name), @event %>
-  som arrangeras av <%= link_to h(@event.culture_provider.name), @event.culture_provider %>.
+  Fördelar biljetter för evenemanget <%= link_to @event.name, @event %>
+  som arrangeras av <%= link_to @event.culture_provider.name, @event.culture_provider %>.
 </p>
 
 <% if is_edit -%>
@@ -37,7 +37,7 @@
                name="allotment[release_date]"
                class="date-field"
                size="30"
-               value="<%= h @event.ticket_release_date %>"/>
+               value="<%= @event.ticket_release_date %>"/>
       </div>
     </div>
     <% if !is_edit || @event.ticket_state == :alloted_group %>
@@ -58,8 +58,8 @@
                  name="allotment[district_transition_date]"
                  class="date-field <%= "changed" unless @event.district_transition_date.blank? %>"
                  size="30"
-                 data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] %>"
-                 value="<%= h @event.district_transition_date %>"/>
+                 data-default-interval="<%= APP_CONFIG[:ticket_state][:group_days] %>"
+                 value="<%= @event.district_transition_date %>"/>
         </div>
       </div>
     <% end %>
@@ -72,8 +72,8 @@
                  name="allotment[free_for_all_transition_date]"
                  class="date-field <%= "changed" unless @event.free_for_all_transition_date.blank? %>"
                  size="30"
-                 data-default-interval="<%= h APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>"
-                 value="<%= h @event.free_for_all_transition_date %>"/>
+                 data-default-interval="<%= APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] %>"
+                 value="<%= @event.free_for_all_transition_date %>"/>
         </div>
       </div>
     <% end %>
@@ -137,7 +137,7 @@
                        <% else -%>
                          checked="checked"
                        <% end -%>/>
-                <label for="kp-allotment-district_ids-<%= district.id %>"><%= h district.name %></label>
+                <label for="kp-allotment-district_ids-<%= district.id %>"><%= district.name %></label>
               </li>
             <% end -%>
           </ul>

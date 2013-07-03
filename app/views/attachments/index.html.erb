@@ -1,12 +1,12 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
-    <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+    <%= link_to "Återvänd till presentationen för #{@event.name}", @event %>
   </div>
 <% end -%>
 
 <h2 class="form-title">
   Hantera filer för
-  <%= link_to h(@event.name), @event %>
+  <%= link_to @event.name, @event %>
 </h2>
 
 <%= form_for(
@@ -48,8 +48,8 @@
     <tbody>
       <% @event.attachments.each do |attachment| -%>
         <tr class="<%= cycle('', 'even') %>">
-          <td><%= h attachment.filename %></td>
-          <td><%= h attachment.description %></td>
+          <td><%= attachment.filename %></td>
+          <td><%= attachment.description %></td>
           <td><%= link_to "Ladda ner", event_attachment_path(@event, attachment) %></td>
           <td>
             <%= link_to "Ta bort",

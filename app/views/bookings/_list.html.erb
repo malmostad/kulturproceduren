@@ -22,18 +22,18 @@
     <tbody>
       <% bookings.each do |booking|%>
         <tr class="<%= cycle('', 'even') %> <%= "cancelled" if booking.occasion.cancelled %>">
-          <td class="school"><%= h booking.group.school.name -%></td>
-          <td class="group"><%= h booking.group.name -%></td>
-          <td class="event"><%= link_to h(booking.occasion.event.name), booking.occasion.event -%></td>
-          <td class="date"><%= h booking.occasion.date -%></td>
+          <td class="school"><%= booking.group.school.name -%></td>
+          <td class="group"><%= booking.group.name -%></td>
+          <td class="event"><%= link_to booking.occasion.event.name, booking.occasion.event -%></td>
+          <td class="date"><%= booking.occasion.date -%></td>
           <td class="num-tickets<%= " unbooked" if booking.unbooked %>">
             <% if booking.unbooked %>
-              Avbokad <%= h booking.unbooked_at.to_date %>
+              Avbokad <%= booking.unbooked_at.to_date %>
             <% else %>
-              <%= h booking.total_count -%> platser bokade
+              <%= booking.total_count -%> platser bokade
             <% end %>
           </td>
-          <td class="booked-by"><%= h booking.user.name %></td>
+          <td class="booked-by"><%= booking.user.name %></td>
           <td class="tools">
             <%= link_to "Bokningsbekräftelse", booking_path(booking) %>
             <% if !booking.unbooked && !booking.occasion.cancelled && booking.occasion.date >= Date.today %>

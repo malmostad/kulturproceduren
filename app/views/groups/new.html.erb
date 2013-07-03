@@ -7,9 +7,9 @@
   <%= f.title(is_edit ? "Redigera grupp" : "Skapa ny grupp") -%>
 
   <%= f.conditional_hint is_edit do -%>
-    Redigerar gruppen <%= link_to h(@group.name), @group %>,
-    <%= link_to h(@group.school.name), @group.school %>,
-    <%= link_to h(@group.school.district.name), @group.school.district %>.
+    Redigerar gruppen <%= link_to @group.name, @group %>,
+    <%= link_to @group.school.name, @group.school %>,
+    <%= link_to @group.school.district.name, @group.school.district %>.
   <% end -%>
 
   <%= f.validation_error_indicator %>

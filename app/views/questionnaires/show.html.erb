@@ -3,7 +3,7 @@
 <div class="model-cnt">
   <h2>
     <% if @questionnaire.for_event? %>
-      Utvärderingsformulär för <%= link_to h(@questionnaire.event.name), @questionnaire.event %>
+      Utvärderingsformulär för <%= link_to @questionnaire.event.name, @questionnaire.event %>
     <% else %>
       Avbokningsenkät
     <% end %>
@@ -17,7 +17,7 @@
   </ul>
 
   <p class="description">
-    <%= h(@questionnaire.description) %>
+    <%= @questionnaire.description %>
   </p>
 
   <div class="context-form">
@@ -81,7 +81,7 @@
 
         <% @questionnaire.questions.each do |question| -%>
           <tr class="<%= cycle("", "even") %>">
-            <td><%= h question.question %></td>
+            <td><%= question.question %></td>
             <% if @questionnaire.for_event? %>
               <td><%= "Ja" if question.template %></td>
             <% end %>

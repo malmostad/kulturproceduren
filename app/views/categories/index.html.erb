@@ -41,8 +41,8 @@
 
   <% @categories.each do |category| %>
     <tr class="<%= cycle('', 'even') %>">
-      <td><%= h category.name %></td>
-      <td><%= h category.category_group.name %></td>
+      <td><%= category.name %></td>
+      <td><%= category.category_group.name %></td>
       <td><%= link_to 'Redigera', edit_category_path(category) %></td>
       <td><%= link_to 'Radera', category, :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>

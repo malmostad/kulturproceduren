@@ -1,9 +1,9 @@
-<h1>Kulturproceduren - Restplatser till <%= h @notification_request.event.name %></h1>
+<h1>Kulturproceduren - Restplatser till <%= @notification_request.event.name %></h1>
 
 <p>Hej!</p>
 
 <p>
-  Nu har restplatser till <%= h @notification_request.event.name %>
+  Nu har restplatser till <%= @notification_request.event.name %>
   släppts
   <% if @district_release %>
     i din stadsdel
@@ -11,7 +11,7 @@
     i hela Malmö
   <% end %>
   så att du kan boka för
-  <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>.
+  <%= @notification_request.group.name %>, <%= @notification_request.group.school.name %>.
 </p>
 
 <ul>
@@ -21,8 +21,8 @@
 
     <% unless category_names.empty? -%>
       <li>
-        <strong><%= h category_group.name %>:</strong>
-        <%= h(category_names.join(", ")) %>
+        <strong><%= category_group.name %>:</strong>
+        <%= category_names.join(", ") %>
       </li>
     <% end -%>
   <% end -%>
@@ -32,7 +32,7 @@
 
 <p>
   <a href="<%= mail_url(event_path(@notification_request.event)) %>">
-    Läs mer om <%= h @notification_request.event.name %> och boka eventuella platser här.
+    Läs mer om <%= @notification_request.event.name %> och boka eventuella platser här.
   </a>
 </p>
 
@@ -42,14 +42,14 @@
     <%= @notification_request.event.free_for_all_transition_date %>,
     då eventuella restplatser från hela Malmö släpps.
     Om du inte gör någon bokning för
-    <%= h @notification_request.group.name %>, <%= h @notification_request.group.school.name %>
+    <%= @notification_request.group.name %>, <%= @notification_request.group.school.name %>
     innan restplatserna från hela Malmö släpps så kommer du automatiskt få en
     påminnelse.
   </p>
 <% end %>
 
 <p>
-  <%= h @notification_request.event.name %> är inköpt och fördelat av
+  <%= @notification_request.event.name %> är inköpt och fördelat av
   <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
   På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du information
   om all barn- och ungdomskultur i Malmö.

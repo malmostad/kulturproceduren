@@ -1,16 +1,16 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
     <% if @culture_provider %>
-      <%= link_to "Återvänd till presentationen för #{h(@culture_provider.name)}", @culture_provider %>
+      <%= link_to "Återvänd till presentationen för #{@culture_provider.name}", @culture_provider %>
     <% elsif @event %>
-      <%= link_to "Återvänd till presentationen för #{h(@event.name)}", @event %>
+      <%= link_to "Återvänd till presentationen för #{@event.name}", @event %>
     <% end %>
   </div>
 <% end -%>
 
 <h2 class="form-title">
   Välj en arrangör att länka till
-  <%= h(@culture_provider ? @culture_provider.name : @event.name) %>
+  <%= @culture_provider ? @culture_provider.name : @event.name %>
 </h2>
 
 <table class="select-culture-provider-link-list">
@@ -23,7 +23,7 @@
   <tbody>
     <% @culture_providers.each do |culture_provider| -%>
       <tr class="<%= cycle('', 'even') %>">
-        <td class="culture-provider"><%= h culture_provider.name %></td>
+        <td class="culture-provider"><%= culture_provider.name %></td>
         <td class="tools">
           <% if @culture_provider %>
             <%= link_to "Välj",

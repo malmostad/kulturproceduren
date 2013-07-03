@@ -7,7 +7,7 @@
   <%= f.title(is_edit ? "Redigera skola" : "Skapa ny skola") -%>
 
   <%= f.conditional_hint is_edit do -%>
-    Redigerar skolan <%= link_to h(@school.name), @school %>, <%= link_to h(@school.district.name), @school.district %>.
+    Redigerar skolan <%= link_to @school.name, @school %>, <%= link_to @school.district.name, @school.district %>.
   <% end -%>
 
   <%= f.validation_error_indicator -%>

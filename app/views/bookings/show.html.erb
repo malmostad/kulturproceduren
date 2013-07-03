@@ -2,9 +2,9 @@
 
 <h2 class="form-title">
   Bokningsbekräftelse för
-  <%= h @booking.group.school.name %>, <%= h @booking.group.name %> till
-  <%= link_to h(@booking.occasion.event.name), @booking.occasion.event -%>,
-  föreställningen <%= h @booking.occasion.date -%>
+  <%= @booking.group.school.name %>, <%= @booking.group.name %> till
+  <%= link_to @booking.occasion.event.name, @booking.occasion.event -%>,
+  föreställningen <%= @booking.occasion.date -%>
 </h2>
 
 <div class="admin-tools">
@@ -26,11 +26,11 @@
     </tr>
     <tr class="event">
       <th>Namn:</th>
-      <td><%= link_to h(@booking.occasion.event.name), @booking.occasion.event %></td>
+      <td><%= link_to @booking.occasion.event.name, @booking.occasion.event %></td>
     </tr>
     <tr class="occasion-date">
       <th>Datum:</th>
-      <td><%= h @booking.occasion.date %></td>
+      <td><%= @booking.occasion.date %></td>
     </tr>
     <tr class="occasion-time">
       <th>Tid:</th>
@@ -50,16 +50,16 @@
     </tr>
     <tr class="num-normal">
       <th>Antal platser för barn:</th>
-      <td><%= h @booking.student_count %></td>
+      <td><%= @booking.student_count %></td>
     </tr>
     <tr class="num-adult">
       <th>Antal platser för vuxna:</th>
-      <td><%= h @booking.adult_count %></td>
+      <td><%= @booking.adult_count %></td>
     </tr>
     <% if @booking.wheelchair_count > 0 %>
       <tr class="num-wheelchair">
         <th>Antal platser för rullstolsbundna:</th>
-        <td><%= h @booking.wheelchair_count %></td>
+        <td><%= @booking.wheelchair_count %></td>
       </tr>
     <% end %>
     <tr class="booking-time">
@@ -78,15 +78,15 @@
     </tr>
     <tr class="companion-name">
       <th>Namn:</th>
-      <td><%= h @booking.companion_name %></td>
+      <td><%= @booking.companion_name %></td>
     </tr>
     <tr class="companion-email">
       <th>Epostadress:</th>
-      <td><%= h @booking.companion_email %></td>
+      <td><%= @booking.companion_email %></td>
     </tr>
     <tr class="companion-cellphone">
       <th>Mobilnummer:</th>
-      <td><%= h @booking.companion_phone %></td>
+      <td><%= @booking.companion_phone %></td>
     </tr>
 
     <% if @booking.bus_booking? %>
@@ -95,7 +95,7 @@
       </tr>
       <tr class="bus-stop">
         <th>Från hållplats:</th>
-        <td><%= h @booking.bus_stop %></td>
+        <td><%= @booking.bus_stop %></td>
       </tr>
       <tr class="bus-stop">
         <th>Bokningstyp:</th>
@@ -129,11 +129,11 @@
           <td>
             <%=
             case question.qtype
-            when "QuestionMark", "QuestionText" then h(answer.answer_text)
+            when "QuestionMark", "QuestionText" then answer.answer_text
             when "QuestionBool" then answer.answer_text == "y" ? "Ja" : "Nej"
             when "QuestionMchoice"
-              choices = YAML.load(answer.answer_text).collect { |c| "<li>#{h(c)}</li>" }
-              "<ul>#{choices}</ul>"
+              choices = YAML.load(answer.answer_text).collect { |c| "<li>#{h(c)}</li>".html_safe }
+              "<ul>#{choices}</ul>".html_safe
             end
             -%>
           </td>

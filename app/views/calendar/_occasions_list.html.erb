@@ -18,7 +18,7 @@ num_category_groups = 0
 
       <% category_groups.each do |category_group| -%>
         <% if category_group.visible_in_calendar %>
-          <th class="categories"><%= h category_group.name %></th>
+          <th class="categories"><%= category_group.name %></th>
           <% num_category_groups += 1 %>
         <% end %>
       <% end -%>
@@ -41,10 +41,10 @@ num_category_groups = 0
 
       <tr class="<%= cycle('', 'even')  %>">
         <td class="time"><%= l occasion.start_time, :format => :only_time %></td>
-        <td class="event"><%= link_to h(occasion.event.name), occasion.event %></td>
+        <td class="event"><%= link_to occasion.event.name, occasion.event %></td>
 
         <% unless hide_culture_provider -%>
-          <td class="culture-provider"><%= link_to h(occasion.event.culture_provider.name), occasion.event.culture_provider %></td>
+          <td class="culture-provider"><%= link_to occasion.event.culture_provider.name, occasion.event.culture_provider %></td>
         <% end -%>
 
         <td class="age">
@@ -56,7 +56,7 @@ num_category_groups = 0
         <% category_groups.each do |category_group| -%>
           <% if category_group.visible_in_calendar %>
             <td class="categories">
-              <%= h(occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")) %>
+              <%= occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ") %>
             </td>
           <% end %>
         <% end -%>
@@ -75,7 +75,7 @@ num_category_groups = 0
 
               <a href="<%= ticket_availability_occasion_path(occasion) %>"
                  class="ticket-availability-link"
-                 title="Platstillgänglighet för <%= h(occasion.event.name) %> <%= occasion.date %> <%= l occasion.start_time, :format => :only_time %>">
+                 title="Platstillgänglighet för <%= occasion.event.name %> <%= occasion.date %> <%= l occasion.start_time, :format => :only_time %>">
                 <%= image_tag "information.png", :alt => "Platstillgänglighet" %>
               </a>
             <% end %>

@@ -2,13 +2,13 @@
 
 <div class="model-cnt">
 
-  <h2><%= h @district.name %></h2>
+  <h2><%= @district.name %></h2>
 
   <dl class="meta">
     <dt class="contacts">Kontaktadresser:</dt>
-    <dd class="contacts"><%= h(@district.contacts) %></dd>
+    <dd class="contacts"><%= @district.contacts %></dd>
     <dt class="elit-id">ELIT-ID:</dt>
-    <dd class="elit-id"><%= h @district.elit_id || "-" %></dd>
+    <dd class="elit-id"><%= @district.elit_id || "-" %></dd>
   </dl>
 
   <ul class="admin-tools">

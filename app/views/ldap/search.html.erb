@@ -16,10 +16,10 @@
     <tbody>
       <% @result.each do |userdata| -%>
         <tr class="<%= cycle('', 'even') %>">
-          <td><%= h userdata[:name] %></td>
-          <td><%= h userdata[:email] %></td>
-          <td><%= h userdata[:cellphone] %></td>
-          <td><%= h userdata[:username] %></td>
+          <td><%= userdata[:name] %></td>
+          <td><%= userdata[:email] %></td>
+          <td><%= userdata[:cellphone] %></td>
+          <td><%= userdata[:username] %></td>
           <td><%= link_to "Hantera", ldap_handle_path(userdata[:username]) %></td>
         </tr>
       <% end %>

@@ -2,15 +2,15 @@
 
 <div class="model-cnt">
 
-  <h2><%= h @school.name %></h2>
+  <h2><%= @school.name %></h2>
 
   <dl class="meta">
     <dt class="district">Stadsdel:</dt>
-    <dd class="district"><%= link_to h(@school.district.name), @school.district %></dd>
+    <dd class="district"><%= link_to @school.district.name, @school.district %></dd>
     <dt class="contacts">Kontaktadresser:</dt>
-    <dd class="contacts"><%= h(@school.contacts) %></dd>
+    <dd class="contacts"><%= @school.contacts %></dd>
     <dt class="elit-id">ELIT-ID:</dt>
-    <dd class="elit-id"><%= h @school.elit_id || "-" %></dd>
+    <dd class="elit-id"><%= @school.elit_id || "-" %></dd>
   </dl>
 
   <ul class="admin-tools">
