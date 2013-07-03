@@ -50,6 +50,7 @@
 <% unless ActionController::Base.asset_host.blank? %>
   <%= javascript_include_tag "kp-standalone.js" %>
 <% else %>
+  <%= javascript_include_tag "rails.js" %>
   <%= javascript_include_tag "standard.js" %>
   <%= javascript_include_tag "map.js" %>
 <% end %>
@@ -91,5 +92,7 @@ kpConfig = {
   }
 };
 </script>
+
+<%= csrf_meta_tag %>
 
 <%= yield :head %>

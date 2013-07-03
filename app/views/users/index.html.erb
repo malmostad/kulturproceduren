@@ -51,7 +51,7 @@
             <% if current_user.has_role?(:admin) %>
               <li><%= link_to 'Redigera', edit_user_path(user) %></li>
               <li><%= link_to 'Byt lösenord', edit_password_user_path(user) %></li>
-              <li><%= link_to 'Ta bort', user, :confirm => 'Are you säker?', :method => :delete %></li>
+              <li><%= link_to 'Ta bort', user, :confirm => "Är du säker?", :method => :delete %></li>
             <% end %>
           </ul>
         </td>
