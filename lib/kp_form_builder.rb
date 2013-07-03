@@ -113,9 +113,9 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     raise ArgumentError, "Missing block" unless block_given?
 
     contents = @template.capture(&block)
-    title = @template.content_tag(:legend, @template.content_tag(:span, title)) unless title.blank?
-    cls = title.blank? ? "" : "with-legend "
-    cls << extra_classes
+    title    = title.blank? ? title.html_safe : @template.content_tag(:legend, @template.content_tag(:span, title))
+    cls      = title.blank? ? "" : "with-legend "
+    cls      << extra_classes
 
     return @template.content_tag(:fieldset, title + contents, :class => cls)
   end
