@@ -45,7 +45,7 @@ namespace :kp do
         puts "Changing to free for all for #{e.id}: #{e.name}"
         e.transition_to_free_for_all!
 
-        if e.fully_booked?
+        if !e.fully_booked?
           puts "Notifying free for all for #{e.id}: #{e.name}"
           notification_requests = NotificationRequest.for_transition.find_by_event(e)
 
