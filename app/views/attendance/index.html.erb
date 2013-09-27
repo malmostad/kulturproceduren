@@ -65,7 +65,7 @@
     <% occasions.each do |occasion| %>
       <% unless @occasion %>
         <tr class="occasion-row">
-          <th colspan="<%= is_admin ? 9 : 8 %>" class="<%= cycle('', 'even') %>">
+          <th colspan="<%= is_admin ? 6 : 5 %>" class="<%= cycle('', 'even') %>">
             <% link_to occasion_attendance_index_path(occasion) do %>
               Föreställningen
               <%= h occasion.date %>
