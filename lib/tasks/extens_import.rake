@@ -209,8 +209,6 @@ namespace :kp do
           group = Group.first(:conditions => { :extens_id => group_guid })
 
           if !group
-            puts "\tUnknown group #{group_guid}, creating new"
-
             school = School.first(:conditions => { :extens_id => school_guid })
 
             if !school
@@ -218,14 +216,22 @@ namespace :kp do
               next
             end
 
+            puts "\tUnknown group #{group_guid}, creating new"
+
             group = Group.new
             group.name = group_name
             group.extens_id = group_guid
             group.school = school
             group.active = true
             group.save!
+          else
+            puts "\tFound group #{group_guid}, updating name"
+            group.name = group_name
+            group.active = true
+            group.save!
+          end
 
-          elsif !cleared_age_groups.include?(group.id)
+          if !cleared_age_groups.include?(group.id)
             puts "\tClearing age groups for #{group.id}"
             cleared_age_groups << group.id
             group.age_groups.clear
