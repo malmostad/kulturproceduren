@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    render :file => "#{Rails.root}/public/404.html", :layout => false, :status => :not_found
+  end
+
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
 
