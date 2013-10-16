@@ -121,10 +121,10 @@ class LoginController < ApplicationController
           return user
         end
       else
-        return User.authenticate(params[:user][:username], params[:user][:password])
+        return params[:user] && User.authenticate(params[:user][:username], params[:user][:password])
       end
     else
-      return User.authenticate(params[:user][:username], params[:user][:password])
+      return params[:user] && User.authenticate(params[:user][:username], params[:user][:password])
     end
   end
 end
