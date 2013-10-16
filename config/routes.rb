@@ -55,7 +55,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :occasions, :except => [ :index ],
     :member => {
     :ticket_availability => :get,
-    :cancel => :delete
+    :cancel => :get
   } do |oc|
     oc.resources :bookings, :collection => { :apply_filter => :post }
     oc.resources :attendance,
