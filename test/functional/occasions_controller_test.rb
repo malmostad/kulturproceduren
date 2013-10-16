@@ -119,6 +119,7 @@ class OccasionsControllerTest < ActionController::TestCase
 
   test "cancel" do
     occasion = create(:occasion, :cancelled => false)
+    booking  = create(:booking,  :occasion  => occasion)
     OccasionMailer.expects(:deliver_occasion_cancelled_email).with(occasion)
 
     get :cancel, :id => occasion.id

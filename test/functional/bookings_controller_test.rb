@@ -89,18 +89,18 @@ class BookingsControllerTest < ActionController::TestCase
 
   test "load booking for change, inactive booking" do
     booking = book(@group, @event.occasions.second, 1, 0, 0, :unbooked => true)
-    assert_raise ActiveRecord::RecordNotFound do
-      get :edit, :id => booking.id
-    end
-    assert_raise ActiveRecord::RecordNotFound do
-      put :update, :id => booking.id
-    end
-    assert_raise ActiveRecord::RecordNotFound do
-      post :unbook, :id => booking.id
-    end
-    assert_raise ActiveRecord::RecordNotFound do
-      delete :destroy, :id => booking.id
-    end
+
+    get :edit, :id => booking.id
+    assert_response 404
+
+    put :update, :id => booking.id
+    assert_response 404
+
+    post :unbook, :id => booking.id
+    assert_response 404
+
+    delete :destroy, :id => booking.id
+    assert_response 404
   end
   test "load booking for change, cancelled occasion" do
     occasion = @event.occasions.second
