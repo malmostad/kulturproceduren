@@ -3,7 +3,6 @@
 <p>Hej!</p>
 
 <p>Nu har du möjlighet att boka platser till <%= h @event.name %>.</p>
-<p>Platser är reserverade till <%= h @district.name %> men inom stadsdelen gäller "först till kvarn".</p>
 
 <ul>
   <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
@@ -19,6 +18,15 @@
   <% end -%>
 </ul>
 
+<p>Begränsat antal platser. &quot;Först till kvarn&quot; gäller.</p>
+
+<p>
+  Platserna är reserverade till er stadsdel till och med
+  <%= @event.free_for_all_transition_date - 1 %>.
+  Därefter släpps de till samtliga förskolor/skolor i Malmö.
+</p>
+
+
 <p>
   <a href="<%= mail_url(event_path(@event)) %>">
     Läs mer om <%= h @event.name %> och boka eventuella platser här.
@@ -26,21 +34,17 @@
 </p>
 
 <p>
-  Om platserna inte räcker till er, tänk på att ni kan få en ny chans
-  <%= @event.free_for_all_transition_date %>,
-  då eventuella restplatser från hela Malmö släpps.
-</p>
-
-<p>
-  <%= h @event.name %> är inköpt och fördelat av
-  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
-  På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du information
-  om all barn- och ungdomskultur i Malmö.
-</p>
-
-<p>
-  Vänliga hälsningar!
+  Till detta evenemang är Kulturbuss <strong>inte garanterad</strong>.
   <br/>
-  Kultur för Barn och Unga
+  <%= link_to "Gör en förfrågan om Kulturbuss här.", APP_CONFIG[:culture_bus_link] %>.
 </p>
 
+<p>
+  Varmt välkomna!
+  <br/>
+  <strong>Kultur för Barn och Unga</strong>
+</p>
+
+<p>
+  <%= link_to "Gilla oss på Facebook", APP_CONFIG[:kbu_facebook] %>.
+</p>

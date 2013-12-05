@@ -3,7 +3,8 @@
 <p>Hej!</p>
 
 <p>Nu har du möjlighet att boka platser till <%= h @event.name %></p>
-<p>För dessa platser gäller "först till kvarn".</p>
+
+<p>Begränsat antal platser. &quot;Först till kvarn&quot; gäller.</p>
 
 <ul>
   <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
@@ -26,15 +27,17 @@
 </p>
 
 <p>
-  <%= h @event.name %> är inköpt och fördelat av
-  <%= link_to "Kultur för Barn och Unga", APP_CONFIG[:kbu_link] %>.
-  På <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %> hittar du information
-  om all barn- och ungdomskultur i Malmö.
+  Till detta evenemang är Kulturbuss <strong>inte garanterad</strong>.
+  <br/>
+  <%= link_to "Gör en förfrågan om Kulturbuss här.", APP_CONFIG[:culture_bus_link] %>.
 </p>
 
 <p>
-  Vänliga hälsningar!
+  Varmt välkomna!
   <br/>
-  Kultur för Barn och Unga
+  <strong>Kultur för Barn och Unga</strong>
 </p>
 
+<p>
+  <%= link_to "Gilla oss på Facebook", APP_CONFIG[:kbu_facebook] %>.
+</p>
