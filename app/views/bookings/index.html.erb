@@ -11,7 +11,7 @@
     end
     %>
 
-    <% form_tag url do %>
+    <%= form_tag url do %>
       <% filter = (session[:booking_list_filter] || {}) %>
       <ul>
         <li class="district-filter">

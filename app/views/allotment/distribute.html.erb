@@ -25,7 +25,7 @@
   </div>
 <% end -%>
 
-<% form_tag({ :action => "create_tickets", :id => params[:id] }, { :id => "kp-distribution-form" }) do -%>
+<%= form_tag({ :action => "create_tickets", :id => params[:id] }, { :id => "kp-distribution-form" }) do -%>
 
   <% if is_group_distribution %>
     <div class="allotment-group-selection">

@@ -1,7 +1,7 @@
 <%= render :partial => "menu" -%>
 
 <div class="filter-tools">
-  <% form_tag apply_filter_users_path() do %>
+  <%= form_tag apply_filter_users_path() do %>
     <ul>
       <% filter = (session[:user_list_filter] || {}) -%>
       <li class="district-filter">

@@ -11,7 +11,7 @@
   Detta avbokar alla <%= @booking.total_count %> platser.
 </div>
 
-<% form_tag({ :action => :destroy }, { :class => "evaluation-form", :method => :delete }) do %>
+<%= form_tag({ :action => :destroy }, { :class => "evaluation-form", :method => :delete }) do %>
 
   <% if @answer_form && @answer_form.missing_answers %>
     <div class="validation-error-indicator alert">

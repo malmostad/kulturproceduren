@@ -11,7 +11,7 @@
     <%= label_tag "group_selection-district_id", "Välj stadsdel:" %>
 
     <div class="input-container">
-      <% form_tag({ :controller => "districts", :action => "select" }) do %>
+      <%= form_tag({ :controller => "districts", :action => "select" }) do %>
         <%= hidden_field_tag "return_to", return_to %>
         <%= hidden_field_tag("occasion_id", occasion.id) if occasion  %>
 
@@ -33,7 +33,7 @@
     <%= label_tag "group_selection-school_id", "Välj skola:" %>
 
     <div class="input-container">
-      <% form_tag({ :controller => "schools", :action => "select" }) do %>
+      <%= form_tag({ :controller => "schools", :action => "select" }) do %>
         <%= hidden_field_tag "return_to", return_to %>
         <%= hidden_field_tag("occasion_id", occasion.id) if occasion %>
 
@@ -66,7 +66,7 @@
     <%= label_tag "group_selection-group_id", "Välj klass/avdelning:" %>
 
     <div class="input-container">
-      <% form_tag({ :controller => "groups", :action => "select" }) do %>
+      <%= form_tag({ :controller => "groups", :action => "select" }) do %>
         <%= hidden_field_tag "return_to", return_to %>
 
         <% if @group_selection_collections[:groups] %>

@@ -22,7 +22,7 @@
 %>
 
 <div id="kp-event-link-culture-provider-selection">
-  <% form_tag(form_url) do %>
+  <%= form_tag(form_url) do %>
     <%= select_tag(
       "selected_culture_provider_id",
       options_from_collection_for_select(@culture_providers, :id, :name, session[:event_links][:selected_culture_provider])
