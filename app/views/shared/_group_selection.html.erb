@@ -17,9 +17,8 @@
 
         <%= select_tag(
           "district_id",
-          "<option>Välj stadsdel</option>" +
           options_from_collection_for_select(@group_selection_collections[:districts], :id, :name, session[:group_selection][:district_id]),
-          { :id => "kp-group_selection-district_id" })
+          { :id => "kp-group_selection-district_id", :prompt => "Välj stadsdel" })
         %>
 
         <noscript>
@@ -40,9 +39,8 @@
         <% if @group_selection_collections[:schools] %>
           <%= select_tag(
             "school_id",
-            "<option>Välj skola</option>" +
             options_from_collection_for_select(@group_selection_collections[:schools], :id, :name, session[:group_selection][:school_id]),
-            { :id => "kp-group_selection-school_id" })
+            { :id => "kp-group_selection-school_id", :prompt => "Välj skola" })
           %>
 
           <noscript>

@@ -17,7 +17,7 @@
         <li class="district-filter">
           <label for="kp-booking-filter-district_id">Stadsdel:</label>
           <%= select_tag "district_id",
-            '<option value="all">Alla</option>' + options_from_collection_for_select(@districts, :id, :name, filter[:district_id]),
+            options_from_collection_for_select(@districts, :id, :name, filter[:district_id]).insert(0,'<option value="all">Alla</option>'),
             :id => "kp-booking-filter-district_id"
           %>
         </li>
