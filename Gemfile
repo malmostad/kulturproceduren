@@ -16,10 +16,6 @@ gem "jnunemaker-validatable", "~> 1.8.4", :require => "validatable"
 gem "simple_enum", "1.6.8"
 gem "rails_autolink", "1.1.0"
 
-group :development, :test do
-  gem "ruby-debug", "0.10.4"
-end
-
 group :test do
   gem "factory_girl", "~> 2.6.4"
   gem "factory_girl_rails", "~> 1.7.0"
