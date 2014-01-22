@@ -8,7 +8,6 @@ gem "pg", "0.17.1"
 
 gem "rmagick", "2.13.2", :require => "RMagick"
 gem "will_paginate", "3.0.5"
-gem "soap4r", "1.5.8"
 gem "pdf-writer", "1.1.8"
 gem "ruby-ldap", "0.9.16", :require => "ldap"
 
