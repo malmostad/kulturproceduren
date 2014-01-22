@@ -39,7 +39,7 @@ class AttachmentsControllerTest < ActionController::TestCase
     get :index, :event_id => @event.id
     assert_response :success
     assert assigns(:attachment).new_record?
-    assert @event, assigns(:attachment).event
+    assert_equal @event, assigns(:attachment).event
   end
 
   test "show" do

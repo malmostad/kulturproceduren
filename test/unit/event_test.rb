@@ -87,7 +87,7 @@ class EventTest < ActiveSupport::TestCase
 
     booked_users = event.booked_users
     assert_equal 1, booked_users.length
-    assert users.first.id, booked_users.first.id
+    assert_equal users.first.id, booked_users.first.id
   end
 
   test "groups by district" do

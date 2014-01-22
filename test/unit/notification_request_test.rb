@@ -68,6 +68,6 @@ class NotificationRequestTest < ActiveSupport::TestCase
     create(:notification_request, :event => events.first)
     create(:notification_request, :event => events.second)
 
-    assert nr.id, NotificationRequest.unbooking_for(users.first, events.first).id
+    assert_equal nr.id, NotificationRequest.unbooking_for(users.first, events.first).id
   end
 end

@@ -38,7 +38,7 @@ class OccasionTest < ActiveSupport::TestCase
     ordered_bookings = occasion.bookings.hierarchically_ordered
 
     0.upto(7) do |i|
-      assert groups[7-i].id, ordered_bookings[i].group.id
+      assert_equal groups[7-i].id, ordered_bookings[i].group.id
     end
   end
 
@@ -65,7 +65,7 @@ class OccasionTest < ActiveSupport::TestCase
     ordered_bookings = occasion.bookings.school_ordered
 
     0.upto(7) do |i|
-      assert groups[7-i].id, ordered_bookings[i].group.id
+      assert_equal groups[7-i].id, ordered_bookings[i].group.id
     end
   end
 
@@ -93,7 +93,7 @@ class OccasionTest < ActiveSupport::TestCase
     ordered_groups = occasion.groups.hierarchically_ordered
 
     0.upto(7) do |i|
-      assert groups[7-i].id, ordered_groups[i].id
+      assert_equal groups[7-i].id, ordered_groups[i].id
     end
   end
 
@@ -120,7 +120,7 @@ class OccasionTest < ActiveSupport::TestCase
     ordered_groups = occasion.groups.school_ordered
 
     0.upto(7) do |i|
-      assert groups[7-i].id, ordered_groups[i].id
+      assert_equal groups[7-i].id, ordered_groups[i].id
     end
   end
   
