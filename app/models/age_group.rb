@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # An age group is a representation of the number of children of a specific age
 # in a specific group.
 class AgeGroup < ActiveRecord::Base
@@ -10,7 +11,7 @@ class AgeGroup < ActiveRecord::Base
   scope :with_district, lambda { |district_ids|
     {
       :include => { :group => :school },
-      :conditions => { "schools.district_id", district_ids }
+      :conditions => { "schools.district_id" => district_ids }
     }
   }
   scope :with_age, lambda { |from_age, to_age|

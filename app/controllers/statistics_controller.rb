@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'csv'
 
 # Controller for showing global statistics

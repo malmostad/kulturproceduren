@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Sweeper for fragment caching involving the calendar
 class CalendarSweeper < ActionController::Caching::Sweeper
   observe Event, Occasion, CultureProvider, Category, CategoryGroup

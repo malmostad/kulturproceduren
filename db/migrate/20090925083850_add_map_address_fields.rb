@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddMapAddressFields < ActiveRecord::Migration
   def self.up
     add_column :culture_providers, :map_address, :string

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 source "https://rubygems.org"
 
 gem "bundler", "1.5.2"

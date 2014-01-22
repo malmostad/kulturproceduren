@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Model representing an attachment, currently used for
 # documents attached to events
 class Attachment < ActiveRecord::Base

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Form builder implementing the markup guidelines for malmo.se
 # 
 # Fields are encapsulated in rows with labels automatically

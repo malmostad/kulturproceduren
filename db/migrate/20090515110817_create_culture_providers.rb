@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateCultureProviders < ActiveRecord::Migration
   def self.up
     create_table :culture_providers do |t|

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Mailer for actions concerning role applications.
 class RoleApplicationMailer < ActionMailer::Base
   layout 'mail'

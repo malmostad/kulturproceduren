@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Monkeypatching of Rails default classes
 #
 # Used to coerce the Rails classes into conforming to the markup

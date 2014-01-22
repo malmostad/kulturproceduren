@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddSingleGroupAttributes < ActiveRecord::Migration
   def self.up
     add_column :events, :single_group_per_occasion, :boolean, :default => false

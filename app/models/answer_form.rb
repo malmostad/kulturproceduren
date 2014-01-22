@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # An answer form is the collective object for a
 # group's answers to a specific questionnaire.
 class AnswerForm < ActiveRecord::Base

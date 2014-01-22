@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AllotmentHelper
   # Returns a CSS class indicating whether a row has a partial
   # or full allotment of tickets.

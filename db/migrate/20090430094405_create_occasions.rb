@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateOccasions < ActiveRecord::Migration
   def self.up
     create_table :occasions do |t|

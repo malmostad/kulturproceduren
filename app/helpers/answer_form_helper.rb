@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AnswerFormHelper
 
   # Helper returning the name of the Rails fragment to render

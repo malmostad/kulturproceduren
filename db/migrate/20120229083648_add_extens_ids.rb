@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddExtensIds < ActiveRecord::Migration
   def self.up
     add_column :districts, :extens_id, :string, :limit => 64

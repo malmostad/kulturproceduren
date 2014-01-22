@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module UtilityModels
   class InformationMail
     include ::Validatable

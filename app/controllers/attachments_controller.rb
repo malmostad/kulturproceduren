@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing an event's attachments
 class AttachmentsController < ApplicationController
   layout "standard"

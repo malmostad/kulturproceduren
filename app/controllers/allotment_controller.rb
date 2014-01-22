@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for doing the allotment of tickets to groups for a specific
 # event
 class AllotmentController < ApplicationController

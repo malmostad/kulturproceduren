@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddActiveFlagToCultureProviders < ActiveRecord::Migration
   def self.up
     add_column :culture_providers, :active, :boolean, :default => true

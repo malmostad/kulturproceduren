@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # A culture provider is an arranger of events.
 #
 # The culture provider has additional information about it,

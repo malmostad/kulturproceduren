@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing schools.
 class SchoolsController < ApplicationController
   layout "admin", :except => [ :options_list ]

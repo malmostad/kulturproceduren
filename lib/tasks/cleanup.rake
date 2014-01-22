@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Cleanup rake tasks
 namespace :kp do
   namespace :cleanup do

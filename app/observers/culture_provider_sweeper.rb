@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Sweeper for fragment caches concerning culture providers
 class CultureProviderSweeper < ActionController::Caching::Sweeper
   observe Event, Occasion, CultureProvider, Category, CategoryGroup

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing category groups
 class CategoryGroupsController < ApplicationController
   layout "admin"

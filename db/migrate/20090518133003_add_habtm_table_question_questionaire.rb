@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddHabtmTableQuestionQuestionaire < ActiveRecord::Migration
   def self.up
     create_table :questionaires_questions, :id => false do |t|

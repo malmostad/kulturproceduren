@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateStatisticsViews < ActiveRecord::Migration
   def self.up
     sql = "CREATE TYPE nb_type AS ( group_id int , event_name varchar(255) , event_id int , num_booked bigint)"

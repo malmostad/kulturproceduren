@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Sweeper for Event caches
 class EventSweeper < ActionController::Caching::Sweeper
   observe Event, Occasion

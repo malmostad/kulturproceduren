@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # A question belonging to one or more questionnaires.
 #
 # A question can be of different types:

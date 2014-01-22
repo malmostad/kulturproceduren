@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Observer for events on role applications
 class RoleApplicationObserver < ActiveRecord::Observer
 

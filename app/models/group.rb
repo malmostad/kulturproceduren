@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # A group is the representation of a group of children in a school.
 class Group < ActiveRecord::Base
   has_many :allotments, :dependent => :nullify

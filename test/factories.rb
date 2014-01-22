@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 FactoryGirl.define do
   factory :district do
     sequence(:name)      { |n| "District %09d" % n }

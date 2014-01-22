@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddForeignKeys < ActiveRecord::Migration
   def self.up
     add_foreign_key :age_groups, :group

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # A companion is personal details of a person accompanying children
 # to booked occasions.
 class Companion < ActiveRecord::Base

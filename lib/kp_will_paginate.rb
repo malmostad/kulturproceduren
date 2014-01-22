@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module KPWillPaginate
 
   # LinkRenderer for WillPaginate that implements the markup guidelines for malmo.se.

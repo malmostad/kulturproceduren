@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddInactiveFlagToGroups < ActiveRecord::Migration
   def self.up
     add_column :groups, :active, :boolean, :default => true

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Model for a bookable ticket.
 #
 # A ticket can be in several states:

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing events
 class EventsController < ApplicationController
   layout "standard", :except => [ :options_list ]

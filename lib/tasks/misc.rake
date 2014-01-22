@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Miscellaneous rake tasks
 namespace :kp do
   desc "Generates documentation for KP"

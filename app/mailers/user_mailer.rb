@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer

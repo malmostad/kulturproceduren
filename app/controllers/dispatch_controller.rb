@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for handling dispatching of incoming URLs. This is
 # used when the application runs as a Proxy Portlet to get around
 # the problem of linking directly into a specific page in the application.

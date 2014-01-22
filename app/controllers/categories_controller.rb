@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing categories
 class CategoriesController < ApplicationController
 

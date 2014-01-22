@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Mailer for actions concerning notification requests.
 class NotificationRequestMailer < ActionMailer::Base
   layout 'mail'

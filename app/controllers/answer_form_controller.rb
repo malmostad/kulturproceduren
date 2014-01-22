@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing answer forms
 class AnswerFormController < ApplicationController
   layout "standard"

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # A booking requirement is a container for a group's specific
 # requirements when booking tickets for an occasion.
 class BookingRequirement < ActiveRecord::Base

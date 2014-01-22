@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Mailer for actions concerning occasions.
 class OccasionMailer < ActionMailer::Base
   layout 'mail'

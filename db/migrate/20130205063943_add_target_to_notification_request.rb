@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddTargetToNotificationRequest < ActiveRecord::Migration
   def self.up
     # simple_enum column

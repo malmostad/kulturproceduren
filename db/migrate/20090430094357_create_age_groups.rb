@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateAgeGroups < ActiveRecord::Migration
   def self.up
     create_table :age_groups do |t|

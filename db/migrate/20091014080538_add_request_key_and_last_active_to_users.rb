@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddRequestKeyAndLastActiveToUsers < ActiveRecord::Migration
   def self.up
     add_column :users, :last_active, :timestamp

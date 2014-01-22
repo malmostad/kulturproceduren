@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Controller for managing role applications
 class RoleApplicationsController < ApplicationController
   layout "standard"

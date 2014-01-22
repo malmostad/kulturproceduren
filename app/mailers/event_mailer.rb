@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Sends mail for actions concerning Events
 class EventMailer < ActionMailer::Base
   layout 'mail'

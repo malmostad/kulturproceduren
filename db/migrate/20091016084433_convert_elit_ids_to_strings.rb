@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class ConvertElitIdsToStrings < ActiveRecord::Migration
   def self.up
     change_column :districts, :elit_id, :string
