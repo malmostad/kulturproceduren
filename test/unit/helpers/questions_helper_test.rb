@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class QuestionsHelperTest < ActionView::TestCase
+  include ERB::Util
+
   test "question statistics" do
     question = build(:question, :qtype => "dummy")
     assert_equal "", question_statistics(question, nil)
