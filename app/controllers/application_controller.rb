@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    render :file => "#{Rails.root}/public/404.html", :layout => false, :status => :not_found
+    render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found, :formats => [ :html ]
   end
 
   # Scrub sensitive parameters from your log
