@@ -150,7 +150,7 @@ class StatisticsControllerTest < ActionController::TestCase
     # tsv
     @controller.expects(:send_csv).with(
       "enkatstatistik_ht2012.tsv",
-      "Enkätsvar för #{ht2012.event.name}\nAntal besvarade enkäter\tAntal obesvarade enkäter\n1\t1\t\n\nFråga\tSvar\nbool (Procent ja-svar , Procent nej-svar)\t0\t100\nm_ch (Antal för varje ord)\tbar\tbaz\tfoo\n\"\"\t0\t1\t1\nmark (Genomsnittssvar)\t4.00\ntext (Alla svar)\ttext\n"
+      "Enkätsvar för #{ht2012.event.name}\nAntal besvarade enkäter\tAntal obesvarade enkäter\n1\t1\n\nFråga\tSvar\nbool (Procent ja-svar , Procent nej-svar)\t0\t100\nm_ch (Antal för varje ord)\tbar\tbaz\tfoo\n\"\"\t0\t1\t1\nmark (Genomsnittssvar)\t4.00\ntext (Alla svar)\ttext\n"
     ).returns(true)
 
     get :questionnaires, :id => "ht2012", :event_id => ht2012.event.id, :format => "xls"
@@ -190,7 +190,7 @@ class StatisticsControllerTest < ActionController::TestCase
     # tsv
     @controller.expects(:send_csv).with(
       "avbokningsstatistik_ht2012.tsv",
-      "Avbokningsenkätsvar\nAntal besvarade enkäter\tAntal obesvarade enkäter\n2\t1\t\n\nFråga\tSvar\nbool (Procent ja-svar , Procent nej-svar)\t0\t100\nm_ch (Antal för varje ord)\tbar\tbaz\tfoo\n\"\"\t0\t1\t1\nmark (Genomsnittssvar)\t4.00\ntext (Alla svar)\ttext\n"
+      "Avbokningsenkätsvar\nAntal besvarade enkäter\tAntal obesvarade enkäter\n2\t1\n\nFråga\tSvar\nbool (Procent ja-svar , Procent nej-svar)\t0\t100\nm_ch (Antal för varje ord)\tbar\tbaz\tfoo\n\"\"\t0\t1\t1\nmark (Genomsnittssvar)\t4.00\ntext (Alla svar)\ttext\n"
     ).returns(true)
 
     get :unbooking_questionnaires, :id => "ht2012", :format => "xls"

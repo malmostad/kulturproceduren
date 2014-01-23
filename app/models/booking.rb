@@ -133,45 +133,45 @@ class Booking < ActiveRecord::Base
 
 
   def self.bus_booking_csv(bookings)
-    csv = ""
+    CSV.generate(:col_sep => "\t") do |csv|
 
-    row = %w(
-    Evenemang
-    Datum
-    Adress
-    Stadsdel
-    Skola
-    Grupp
-    Medföljande\ vuxen
-    Telefonnummer
-    E-postadress
-    Antal\ platser
-    Resa
-    Hållplats
-    )
+      row = %w(
+      Evenemang
+      Datum
+      Adress
+      Stadsdel
+      Skola
+      Grupp
+      Medföljande\ vuxen
+      Telefonnummer
+      E-postadress
+      Antal\ platser
+      Resa
+      Hållplats
+      )
 
-    CSV.generate_row(row, row.length, csv, "\t")
+      csv << row
 
-    bookings.each do |booking|
-      row = [
-        booking.occasion.event.name,
-        "#{booking.occasion.date} #{I18n.localize(booking.occasion.start_time, :format => :only_time)}",
-        booking.occasion.address,
-        booking.group.school.district.name,
-        booking.group.school.name,
-        booking.group.name,
-        booking.companion_name,
-        booking.companion_phone,
-        booking.companion_email,
-        booking.total_count,
-        booking.bus_one_way ? "Enkel resa" : "Tur och retur",
-        booking.bus_stop
-      ]
+      bookings.each do |booking|
+        row = [
+          booking.occasion.event.name,
+          "#{booking.occasion.date} #{I18n.localize(booking.occasion.start_time, :format => :only_time)}",
+          booking.occasion.address,
+          booking.group.school.district.name,
+          booking.group.school.name,
+          booking.group.name,
+          booking.companion_name,
+          booking.companion_phone,
+          booking.companion_email,
+          booking.total_count,
+          booking.bus_one_way ? "Enkel resa" : "Tur och retur",
+          booking.bus_stop
+        ]
 
-      CSV.generate_row(row, row.length, csv, "\t")
+        csv << row
+      end
+
     end
-
-    return csv
   end
 
 

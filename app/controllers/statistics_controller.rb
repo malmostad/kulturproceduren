@@ -86,45 +86,46 @@ class StatisticsController < ApplicationController
   private
 
   def questionnaire_stats_csv(title, questionnaire)
-    res = ""
-    answer_forms = questionnaire.answer_forms
+    CSV.generate(:col_sep => "\t") do |csv|
+      answer_forms = questionnaire.answer_forms
 
-    CSV.generate_row([title], 1, res, "\t")
-    CSV.generate_row(["Antal besvarade enkäter", "Antal obesvarade enkäter"], 2, res, "\t")
-    CSV.generate_row([answer_forms.count(:all, :conditions => { :completed => true })], 2, res, "\t" )
-    CSV.generate_row([answer_forms.count(:all, :conditions => { :completed => false })], 2, res, "\t")
-    CSV.generate_row([], 0, res)
-    CSV.generate_row([], 0, res)
-    CSV.generate_row(["Fråga", "Svar"], 2, res, "\t")
+      csv << [title]
+      csv << ["Antal besvarade enkäter", "Antal obesvarade enkäter"]
+      csv << [
+        answer_forms.count(:all, :conditions => { :completed => true }),
+        answer_forms.count(:all, :conditions => { :completed => false })
+      ]
+      csv << []
+      csv << ["Fråga", "Svar"]
 
-    questionnaire.questions.each do |q|
-      row = []
-      stat = q.statistics_for_answer_forms(answer_forms)
+      questionnaire.questions.each do |q|
+        row = []
+        stat = q.statistics_for_answer_forms(answer_forms)
 
-      case q.qtype
-      when "QuestionMark"
-        row = [ "#{q.question} (Genomsnittssvar)" ]
-        row += [ stat[0] ]
-        CSV.generate_row(row, row.length, res, "\t")
-      when "QuestionText"
-        row = [ "#{q.question} (Alla svar)" ]
-        row += stat.reject { |s| s.blank? }
-        CSV.generate_row(row, row.length, res, "\t") 
-      when "QuestionBool"
-        row = [ "#{q.question} (Procent ja-svar , Procent nej-svar)" ]
-        row += stat
-        CSV.generate_row(row, row.length, res, "\t")
-      when "QuestionMchoice"
-        choices = stat.keys.sort
-        row = [ "#{q.question} (Antal för varje ord)" ]
-        row += choices
-        CSV.generate_row(row, row.length, res, "\t") 
-        row = [""]
-        row += choices.collect { |c| stat[c] }
-        CSV.generate_row(row, row.length, res, "\t") 
+        case q.qtype
+        when "QuestionMark"
+          row = [ "#{q.question} (Genomsnittssvar)" ]
+          row += stat[0]
+          csv << row
+        when "QuestionText"
+          row = [ "#{q.question} (Alla svar)" ]
+          row += stat.reject { |s| s.blank? }
+          csv << row
+        when "QuestionBool"
+          row = [ "#{q.question} (Procent ja-svar , Procent nej-svar)" ]
+          row += stat
+          csv << row
+        when "QuestionMchoice"
+          choices = stat.keys.sort
+          row = [ "#{q.question} (Antal för varje ord)" ]
+          row += choices
+          csv << row
+          row = [""]
+          row += choices.collect { |c| stat[c] }
+          csv << row
+        end
       end
     end
-    return res
   end
 
   # Returns all avaiable terms in an array
@@ -170,17 +171,13 @@ class StatisticsController < ApplicationController
 
   # Returns a comma-seperated values (CSV) string
   def visitor_stats_csv(visitor_stats)
-    output_buffer = ""
-    row = ["Stadsdel" , "Skola" , "Grupp" , "Föreställning" , "Antal bokade" , "Antal barn" , "Antal vuxna" ]
+    CSV.generate(:col_sep => "\t") do |csv|
+      csv << [ "Stadsdel", "Skola", "Grupp", "Föreställning", "Antal bokade", "Antal barn", "Antal vuxna" ]
 
-    CSV.generate_row(row, row.length, output_buffer, "\t")
-
-    visitor_stats.each do |v|
-      row = [ v["district_name"] , v["school_name"] ,v["group_name"] ,v["event_name"] ,v["num_booked"] ,v["num_children"] ,v["num_adult"] ]
-      CSV.generate_row(row, row.length, output_buffer, "\t")
+      visitor_stats.each do |v|
+        csv << [ v["district_name"], v["school_name"], v["group_name"], v["event_name"], v["num_booked"], v["num_children"], v["num_adult"] ]
+      end
     end
-
-    return output_buffer
   end
 
 end

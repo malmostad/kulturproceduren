@@ -46,7 +46,7 @@ class QuestionTest < ActiveSupport::TestCase
     create(:answer, :question => question, :answer_form => answer_forms.third,  :answer_text => "n")
 
     result = question.statistics_for_answer_forms(answer_forms)
-    assert_equal ["33", "66"], result
+    assert_equal ["33", "67"], result
 
     question_wo  = create(:question, :qtype => "QuestionBool")
     result = question_wo.statistics_for_answer_forms(answer_forms)

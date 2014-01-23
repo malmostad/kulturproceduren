@@ -174,22 +174,21 @@ class EventsController < ApplicationController
   end
 
   def ticket_allotment_csv(event)
-    csv = ""
-    row = [ "Stadsdel", "Skola", "Grupp", "Antal biljetter" ]
-    CSV.generate_row(row, row.length, csv, "\t")
+    CSV.generate(:col_sep => "\t") do |csv|
+      csv << [ "Stadsdel", "Skola", "Grupp", "Antal biljetter" ]
 
-    event.allotments.each do |allotment|
-      if allotment.for_group?
-        row = [ allotment.district.name, allotment.group.school.name, allotment.group.name, allotment.amount ]
-      elsif allotment.for_district?
-        row = [ allotment.district.name, "", "", allotment.amount ]
-      else
-        row = [ "Hela staden", "", "", allotment.amount ]
+      event.allotments.each do |allotment|
+        if allotment.for_group?
+          row = [ allotment.district.name, allotment.group.school.name, allotment.group.name, allotment.amount ]
+        elsif allotment.for_district?
+          row = [ allotment.district.name, "", "", allotment.amount ]
+        else
+          row = [ "Hela staden", "", "", allotment.amount ]
+        end
+
+        csv << row
       end
 
-      CSV.generate_row(row, row.length, csv, "\t")
     end
-
-    return csv
   end
 end

@@ -91,7 +91,7 @@ class Question < ActiveRecord::Base
       if no_answers == 0
         result = [ 0.0 , 0.0 ]
       else
-        result = ["%.0d" % (( no_yes.to_f / no_answers.to_f).to_f * 100.to_f ) , "%.0d" % ((no_no.to_f / no_answers.to_f).to_f * 100.to_f) ]
+        result = ["%.0f" % (( no_yes.to_f / no_answers.to_f).to_f * 100.to_f ) , "%.0f" % ((no_no.to_f / no_answers.to_f).to_f * 100.to_f) ]
       end
     when "QuestionMchoice"
       return mchoice_stat
