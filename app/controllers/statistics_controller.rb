@@ -105,7 +105,7 @@ class StatisticsController < ApplicationController
         case q.qtype
         when "QuestionMark"
           row = [ "#{q.question} (Genomsnittssvar)" ]
-          row += stat[0]
+          row << stat[0]
           csv << row
         when "QuestionText"
           row = [ "#{q.question} (Alla svar)" ]

@@ -17,7 +17,7 @@ class QuestionTest < ActiveSupport::TestCase
     create(:answer, :question => question, :answer_form => answer_forms.second, :answer_text => "3")
 
     result = question.statistics_for_answer_forms(answer_forms)
-    assert_equal [["2.50"]], result
+    assert_equal ["2.50"], result
 
     question_wo  = create(:question, :qtype => "QuestionMark")
     result = question_wo.statistics_for_answer_forms(answer_forms)

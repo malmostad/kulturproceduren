@@ -84,7 +84,7 @@ class Question < ActiveRecord::Base
 
     case self.qtype
     when "QuestionMark"
-      result.push( no_answers == 0 ? 0.0 : [ "%2.2f" % (sum.to_f / no_answers.to_f) ] )
+      result.push( no_answers == 0 ? 0.0 : "%2.2f" % (sum.to_f / no_answers.to_f) )
     when "QuestionText"
       #do noting
     when "QuestionBool"
