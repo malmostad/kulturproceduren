@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 module UtilityModels
   class InformationMail
-    include ::Validatable
+    include ActiveModel::Validations
 
     attr_accessor :recipients,
       :subject,
@@ -11,9 +11,7 @@ module UtilityModels
 
     validates_presence_of :recipients,
       :message => "En mottagare måste anges"
-    validates_true_for :recipients,
-      :logic => -> { !recipients.blank? && ([ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients)) },
-      :message => "Ogiltig mottagare"
+    validate :validate_recipients
     validates_presence_of :subject,
       :message => "Ämnesraden får inte vara tom"
     validates_presence_of :body,
@@ -47,6 +45,14 @@ module UtilityModels
       end
 
       return addresses
+    end
+
+    private
+
+    def validate_recipients
+      unless !recipients.blank? && ([ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients))
+        errors.add(:recipients, "Ogiltig mottagare")
+      end
     end
   end
 end

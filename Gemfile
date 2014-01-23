@@ -12,7 +12,6 @@ gem "will_paginate", "3.0.5"
 gem "pdf-writer", "1.1.8"
 gem "ruby-ldap", "0.9.16", :require => "ldap"
 
-gem "jnunemaker-validatable", "~> 1.8.4", :require => "validatable"
 gem "simple_enum", "1.6.8"
 gem "rails_autolink", "1.1.0"
 
