@@ -23,10 +23,10 @@ class Event < ActiveRecord::Base
   # Scope for operating on events without questionnaires
   scope :without_questionnaires, :conditions => 'id not in (select event_id from questionnaires where event_id is not null)'
 
-  scope :not_linked_to_event, lambda { |event|
+  scope :not_linked_to_event, ->(event) {
     { :conditions => [ "id not in (select to_id from event_links where from_id = ?) and id != ?", event.id, event.id ] }
   }
-  scope :not_linked_to_culture_provider, lambda { |culture_provider|
+  scope :not_linked_to_culture_provider, ->(culture_provider) {
     { :conditions => [ "id not in (select event_id from culture_providers_events where culture_provider_id = ?)", culture_provider.id ] }
   }
 
@@ -58,7 +58,7 @@ class Event < ActiveRecord::Base
   has_many :reportable_occasions,
     :class_name => "Occasion",
     :order => "date ASC, start_time ASC, stop_time ASC",
-    :conditions => lambda { [ 'occasions.date < ?', Date.today ] }
+    :conditions => proc { [ 'occasions.date < ?', Date.today ] }
   belongs_to :culture_provider
 
   has_and_belongs_to_many :categories, :include => :category_group
@@ -68,7 +68,7 @@ class Event < ActiveRecord::Base
   # All images
   has_many :images, :dependent => :destroy
   # All images, excluding the main image (logotype)
-  has_many :images_excluding_main, :class_name => "Image", :conditions => lambda { [ "id != ?", self.main_image_id || 0 ] }
+  has_many :images_excluding_main, :class_name => "Image", :conditions => proc { [ "id != ?", self.main_image_id || 0 ] }
   # The main image (logotype)
   belongs_to :main_image, :class_name => "Image", :dependent => :destroy
 

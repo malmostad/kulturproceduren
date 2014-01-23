@@ -8,13 +8,13 @@ class AgeGroup < ActiveRecord::Base
     :quantity,
     :group_id, :group
 
-  scope :with_district, lambda { |district_ids|
+  scope :with_district, ->(district_ids) {
     {
       :include => { :group => :school },
       :conditions => { "schools.district_id" => district_ids }
     }
   }
-  scope :with_age, lambda { |from_age, to_age|
+  scope :with_age, ->(from_age, to_age) {
     { :conditions => [ "age between ? and ?", from_age, to_age ] }
   }
   scope :active, :include => :group, :conditions => { "groups.active" => true }

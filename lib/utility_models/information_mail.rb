@@ -12,7 +12,7 @@ module UtilityModels
     validates_presence_of :recipients,
       :message => "En mottagare måste anges"
     validates_true_for :recipients,
-      :logic => lambda { !recipients.blank? && ([ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients)) },
+      :logic => -> { !recipients.blank? && ([ :all_contacts, :all_users ].include?(recipients) || Event.exists?(recipients)) },
       :message => "Ogiltig mottagare"
     validates_presence_of :subject,
       :message => "Ämnesraden får inte vara tom"
