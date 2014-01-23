@@ -38,7 +38,7 @@ class AttachmentsController < ApplicationController
     if @attachment.save
       filepath = get_filepath(@attachment)
 
-      File.open(filepath, "w") do |file|
+      File.open(filepath, "wb") do |file|
         file.write(uploaded_file.read)
       end
 
