@@ -125,8 +125,7 @@ class ApplicationController < ActionController::Base
 
 
   def send_csv(filename, csv)
-    my_iconv = Iconv.new("windows-1252" , "utf-8")
-    csv = my_iconv.iconv(csv.gsub(/\n/,"\r\n"));
+    csv = csv.gsub(/\n/,"\r\n").encode("windows-1252")
     send_data(
       csv,
       :filename => filename,

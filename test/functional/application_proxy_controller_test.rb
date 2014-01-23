@@ -176,7 +176,7 @@ class ApplicationProxyControllerTest < ActionController::TestCase
     data = "ÅÄÖ\tåäö\nABC\tabc"
 
     get :test_send_csv, :filename => filename, :csv => data
-    assert_equal Iconv.new("windows-1252", "utf-8").iconv(data.gsub(/\n/, "\r\n")), @response.body
+    assert_equal data.gsub(/\n/, "\r\n").encode("windows-1252"), @response.body
     assert_equal "inline; filename=\"test.tsv\"", @response.headers["Content-Disposition"]
     assert_equal "text/csv; charset=windows-1252; header=present", @response.headers["Content-Type"]
   end

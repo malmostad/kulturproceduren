@@ -120,16 +120,16 @@ class AttendanceController < ApplicationController
 
     (@occasion ? [ @occasion ] : @event.occasions).each do |occasion|
       PDF::SimpleTable.new do |tab|
-        tab.title = "Deltagarlista för #{occasion.event.name}, föreställningen #{occasion.date.to_s} kl #{l(occasion.start_time, :format => :only_time)}".to_iso
+        tab.title = "Deltagarlista för #{occasion.event.name}, föreställningen #{occasion.date.to_s} kl #{l(occasion.start_time, :format => :only_time)}".encode("ISO-8859-15")
 
         tab.column_order.push(*%w(group comp att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
 
         tab.columns["group"] = PDF::SimpleTable::Column.new("group") { |col|
-          col.heading = "Skola / Grupp".to_iso
+          col.heading = "Skola / Grupp".encode("ISO-8859-15")
           col.width = 130
         }
         tab.columns["comp"] = PDF::SimpleTable::Column.new("com") { |col|
-          col.heading = "Medföljande vuxen".to_iso
+          col.heading = "Medföljande vuxen".encode("ISO-8859-15")
           col.width = 180
         }
         tab.columns["att_normal"] = PDF::SimpleTable::Column.new("att_normal") { |col|
@@ -142,17 +142,17 @@ class AttendanceController < ApplicationController
           col.heading = "Rullstol"
         }
         tab.columns["req"]  = PDF::SimpleTable::Column.new("req") { |col|
-          col.heading = "Övriga önskemål".to_iso
+          col.heading = "Övriga önskemål".encode("ISO-8859-15")
           col.width = 130
         }
         tab.columns["pres_normal"]  = PDF::SimpleTable::Column.new("pres_normal") { |col|
-          col.heading = "Barn".to_iso
+          col.heading = "Barn".encode("ISO-8859-15")
         }
         tab.columns["pres_adult"]  = PDF::SimpleTable::Column.new("pres_adult") { |col|
-          col.heading = "Vuxna".to_iso
+          col.heading = "Vuxna".encode("ISO-8859-15")
         }
         tab.columns["pres_wheel"]  = PDF::SimpleTable::Column.new("pres_wheel") { |col|
-          col.heading = "Rullstol".to_iso
+          col.heading = "Rullstol".encode("ISO-8859-15")
         }
 
         tab.show_lines = :all
@@ -176,15 +176,15 @@ class AttendanceController < ApplicationController
         if data.blank?
           # Add empty row
           data << {
-            "group" => " ".to_iso,
-            "comp" => " ".to_iso,
-            "att_normal" => " ".to_iso,
-            "att_adult" => " ".to_iso,
-            "att_wheel" => " ".to_iso,
-            "req" => " ".to_iso,
-            "pres_normal" => " ".to_iso,
-            "pres_adult" => " ".to_iso,
-            "pres_wheel" => " ".to_iso
+            "group" => " ".encode("ISO-8859-15"),
+            "comp" => " ".encode("ISO-8859-15"),
+            "att_normal" => " ".encode("ISO-8859-15"),
+            "att_adult" => " ".encode("ISO-8859-15"),
+            "att_wheel" => " ".encode("ISO-8859-15"),
+            "req" => " ".encode("ISO-8859-15"),
+            "pres_normal" => " ".encode("ISO-8859-15"),
+            "pres_adult" => " ".encode("ISO-8859-15"),
+            "pres_wheel" => " ".encode("ISO-8859-15")
           }
         end
 
@@ -198,15 +198,15 @@ class AttendanceController < ApplicationController
 
   def create_pdf_row(occasion, booking)
     row = {}
-    row["group"] = (booking.group.school.name.to_s + " - " + booking.group.name.to_s).to_iso
-    row["comp"] = "#{booking.companion_name}\n#{booking.companion_phone}\n#{booking.companion_email}".to_iso
+    row["group"] = (booking.group.school.name.to_s + " - " + booking.group.name.to_s).encode("ISO-8859-15")
+    row["comp"] = "#{booking.companion_name}\n#{booking.companion_phone}\n#{booking.companion_email}".encode("ISO-8859-15")
     row["att_normal"] = booking.student_count || 0
     row["att_adult"] = booking.adult_count || 0
     row["att_wheel"] = booking.wheelchair_count || 0
-    row["req"] = (booking.requirement.blank? ? " " : booking.requirement).to_iso
-    row["pres_normal"] = " ".to_iso
-    row["pres_adult"] = " ".to_iso
-    row["pres_wheel"] = " ".to_iso
+    row["req"] = (booking.requirement.blank? ? " " : booking.requirement).encode("ISO-8859-15")
+    row["pres_normal"] = " ".encode("ISO-8859-15")
+    row["pres_adult"] = " ".encode("ISO-8859-15")
+    row["pres_wheel"] = " ".encode("ISO-8859-15")
 
     return row
   end
