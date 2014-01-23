@@ -19,7 +19,7 @@ class LdapControllerTest < ActionController::TestCase
     ldap_mock   = stub(:max_results= => true, :search => result_mock)
     @controller.stubs(:get_ldap).returns(ldap_mock)
 
-    get :search, :ldapquery => "zomg"
+    get :search, :ldapquery => {}
     assert_response :success
     assert_equal    result_mock, assigns(:result)
     assert_nil      flash[:warning]
@@ -31,7 +31,7 @@ class LdapControllerTest < ActionController::TestCase
     ldap_mock   = stub(:max_results= => true, :search => result_mock)
     @controller.stubs(:get_ldap).returns(ldap_mock)
 
-    get :search, :ldapquery => "zomg"
+    get :search, :ldapquery => {}
     assert_response :success
     assert_equal    result_mock, assigns(:result)
     assert_equal    "Sökningen resulterade i för många träffar. Var god begränsa sökningen nedan.", flash[:warning]
@@ -43,7 +43,7 @@ class LdapControllerTest < ActionController::TestCase
     ldap_mock   = stub(:max_results= => true, :search => result_mock)
     @controller.stubs(:get_ldap).returns(ldap_mock)
 
-    get :search, :ldapquery => "zomg"
+    get :search, :ldapquery => {}
     assert_response :success
     assert_equal    result_mock, assigns(:result)
     assert_equal    "Inga träffar hittades.", flash[:warning]
