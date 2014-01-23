@@ -14,8 +14,8 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
   # Dynamically override the original form builder methods
   pre_labeled.each do |name|
     # Define a method calling the super method for later renaming
-    define_method(name) do
-      super
+    define_method(name) do |*args|
+      super(*args)
     end
 
     # Aliases the method so the parent versions of the methods can be
@@ -24,22 +24,22 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
     # Define the new methods implementing the new markup
     define_method(name) do |field, *args|
-      options = args.last.is_a?(Hash) ? args.pop : {}
+      options = args.last.is_a?(Hash) ? args.last : {}
 
       label = label(field, options.delete(:label), :class => options.delete(:label_class))
       error = validation_error_message(field)
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
 
-      row error + label + field(super, help), row_class(field, !error.blank?), row_hidden
+      row error + label + field(super(field, *args), help), row_class(field, !error.blank?), row_hidden
     end
   end
 
   # Dynamically override the original form builder methods
   post_labeled.each do |name|
     # Define a method calling the super method for later renaming
-    define_method(name) do
-      super
+    define_method(name) do |*args|
+      super(*args)
     end
 
     # Aliases the method so the parent versions of the methods can be
@@ -48,14 +48,14 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     
     # Define the new methods implementing the new markup
     define_method(name) do |field, *args|
-      options = args.last.is_a?(Hash) ? args.pop : {}
+      options = args.last.is_a?(Hash) ? args.last : {}
 
       label = label(field, options.delete(:label), :class => options.delete(:label_class))
       error = validation_error_message(field)
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
 
-      row error + super + label + field_help(help), row_class(field, !error.blank?, "post-label-form-row"), row_hidden
+      row error + super(field, *args) + label + field_help(help), row_class(field, !error.blank?, "post-label-form-row"), row_hidden
     end
   end
 
