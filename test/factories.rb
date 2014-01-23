@@ -8,7 +8,7 @@ FactoryGirl.define do
 
     factory :district_with_schools do
       ignore { school_count 5 }
-      after_create do |district, evaluator|
+      after(:create) do |district, evaluator|
         FactoryGirl.create_list(:school, evaluator.school_count, :district => district)
       end
     end
@@ -17,7 +17,7 @@ FactoryGirl.define do
         school_count 5
         group_count  5
       end
-      after_create do |district, evaluator|
+      after(:create) do |district, evaluator|
         FactoryGirl.create_list(:school, evaluator.school_count, :district => district).each do |school|
           FactoryGirl.create_list(:group, evaluator.group_count, :school => school)
         end
@@ -29,7 +29,7 @@ FactoryGirl.define do
         group_count    5
         age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
-      after_create do |district, evaluator|
+      after(:create) do |district, evaluator|
         FactoryGirl.create_list(:school, evaluator.school_count, :district => district).each do |school|
           FactoryGirl.create_list(:group, evaluator.group_count, :school => school).each do |group|
             evaluator.age_group_data.each do |age, quantity|
@@ -52,7 +52,7 @@ FactoryGirl.define do
       ignore do
         group_count  5
       end
-      after_create do |school, evaluator|
+      after(:create) do |school, evaluator|
         FactoryGirl.create_list(:group, evaluator.group_count, :school => school)
       end
     end
@@ -61,7 +61,7 @@ FactoryGirl.define do
         group_count    5
         age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
-      after_create do |school, evaluator|
+      after(:create) do |school, evaluator|
         FactoryGirl.create_list(:group, evaluator.group_count, :school => school).each do |group|
           evaluator.age_group_data.each do |age, quantity|
             FactoryGirl.create(:age_group, :group => group, :age => age, :quantity => quantity)
@@ -84,7 +84,7 @@ FactoryGirl.define do
       ignore do
         age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
-      after_create do |group, evaluator|
+      after(:create) do |group, evaluator|
         evaluator.age_group_data.each do |age, quantity|
           FactoryGirl.create(:age_group, :group => group, :age => age, :quantity => quantity)
         end
@@ -174,7 +174,7 @@ FactoryGirl.define do
         occasion_dates [ Date.today ] # Allows for an array occasion dates for the children
       end
 
-      after_create do |event, evaluator|
+      after(:create) do |event, evaluator|
         dates = evaluator.occasion_dates
         len = dates.length
 
@@ -206,7 +206,7 @@ FactoryGirl.define do
       ignore do
         ticket_count 5
       end
-      after_create do |occasion, evaluator|
+      after(:create) do |occasion, evaluator|
         FactoryGirl.create_list(:ticket, evaluator.ticket_count,
           :event => occasion.event,
           :occasion => occasion,
@@ -245,7 +245,7 @@ FactoryGirl.define do
 
     ignore { skip_tickets false }
 
-    after_build do |booking, evaluator|
+    after(:build) do |booking, evaluator|
       if !evaluator.skip_tickets
         FactoryGirl.create_list(
           :ticket,

@@ -13,10 +13,9 @@ gem "pdf-writer", :git => "https://github.com/metaskills/pdf-writer.git", :ref =
 gem "ruby-ldap", "0.9.16", :require => "ldap"
 
 gem "simple_enum", "1.6.8"
-gem "rails_autolink", "1.1.0"
+gem "rails_autolink", "1.1.5"
 
 group :test do
-  gem "factory_girl", "~> 2.6.4"
-  gem "factory_girl_rails", "~> 1.7.0"
+  gem "factory_girl_rails", "~> 4.3.0"
   gem "mocha", "1.0.0", :require => false
 end

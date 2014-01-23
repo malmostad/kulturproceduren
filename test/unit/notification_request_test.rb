@@ -34,7 +34,7 @@ class NotificationRequestTest < ActiveSupport::TestCase
     districts = create_list(:district, 3)
     districts.each do |d|
       create_list(:school, 3, :district => d) do |s|
-        create_list(:groups, 3, :school => s) do |g|
+        create_list(:group, 3, :school => s) do |g|
           events.each do |e|
             create_list(:notification_request, 3, :event => e, :group => g)
           end
@@ -44,7 +44,7 @@ class NotificationRequestTest < ActiveSupport::TestCase
 
     ds = districts.first(2)
     NotificationRequest.find_by_event_and_districts(events.first, ds).each do |nr|
-      assert nr.event.id == event.id && ds.collect(&:id).include?(nr.group.school.district.id)
+      assert nr.event.id == events.first.id && ds.collect(&:id).include?(nr.group.school.district.id)
     end
   end
 
