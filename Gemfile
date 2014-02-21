@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 source "https://rubygems.org"
 
-gem "bundler", "1.5.2"
-gem "rails", "3.2.16"
+gem "rails", "3.2.17"
 gem "json", "1.8.1"
 
 gem "pg", "0.17.1"
