@@ -11,8 +11,6 @@ show_district ||= false
         <th><%= sort_link "Stadsdel", "district" %></th>
       <% end -%>
 
-      <th><%= sort_link "ELIT-ID", "elit_id" %></th>
-
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -25,8 +23,6 @@ show_district ||= false
         <% if show_district -%>
           <td><%= link_to h(school.district.name), school.district %></td>
         <% end -%>
-
-        <td><%= h school.elit_id %></td>
 
         <td><%= link_to 'Redigera', edit_school_path(school) %></td>
         <td><%= link_to 'Radera', school, :confirm => 'Är du säker på att du vill radera skolan?', :method => :delete %></td>
