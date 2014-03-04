@@ -49,27 +49,32 @@ class Question < ActiveRecord::Base
     answer_forms.each do |answer_form| 
       answer_form.answers.each do |answer| 
         if answer.question.id == self.id
-          no_answers = no_answers + 1
-          case self.qtype
-          when "QuestionMark"
-            sum = sum + answer.answer_text.to_i
-          when "QuestionText"
-            result.push(answer.answer_text)
-          when "QuestionBool"
-            if answer.answer_text == "y"
-              no_yes = no_yes +1
-            else
-              no_no = no_no +1
-            end
-          when "QuestionMchoice"
-            data = YAML.load(answer.answer_text)
-            data.keys.each do |key|
-              if mchoice_stat.has_key?(key)
-                mchoice_stat[key] = mchoice_stat[key] + 1
+          begin
+            case self.qtype
+            when "QuestionMark"
+              sum = sum + answer.answer_text.to_i
+            when "QuestionText"
+              result.push(answer.answer_text)
+            when "QuestionBool"
+              if answer.answer_text == "y"
+                no_yes = no_yes +1
               else
-                mchoice_stat[key] = 1
+                no_no = no_no +1
+              end
+            when "QuestionMchoice"
+              data = YAML.load(answer.answer_text)
+              data.keys.each do |key|
+                if mchoice_stat.has_key?(key)
+                  mchoice_stat[key] = mchoice_stat[key] + 1
+                else
+                  mchoice_stat[key] = 1
+                end
               end
             end
+
+            no_answers = no_answers + 1
+          rescue => e
+            Rails.logger.error(e)
           end
         end
       end
