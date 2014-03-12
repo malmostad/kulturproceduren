@@ -25,4 +25,5 @@ group :test do
   gem "mocha", "1.0.0", :require => false
   gem 'simplecov', "~> 0.7.1", :require => false
   gem "pry"
+  gem "timecop"
 end

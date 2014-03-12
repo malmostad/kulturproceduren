@@ -131,6 +131,7 @@ GEM
       tins (~> 1.0)
     thor (0.18.1)
     tilt (1.4.1)
+    timecop (0.7.1)
     tins (1.0.0)
     transaction-simple (1.4.0.2)
     treetop (1.4.15)
@@ -158,4 +159,5 @@ DEPENDENCIES
   ruby-ldap (= 0.9.16)
   simple_enum (= 1.6.8)
   simplecov (~> 0.7.1)
+  timecop
   will_paginate (= 3.0.5)

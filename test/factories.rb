@@ -146,8 +146,8 @@ FactoryGirl.define do
     culture_provider
     sequence(:name)              { |n| "event_%09d" % n }
     description                  "lorem ipsum dolor sit amet"
-    visible_from                 Date.today - 1
-    visible_to                   Date.today + 1
+    visible_from                 { Date.today - 1 }
+    visible_to                   { Date.today + 1 }
     from_age                     10
     to_age                       11
     further_education            false
