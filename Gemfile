@@ -23,4 +23,6 @@ end
 group :test do
   gem "factory_girl_rails", "~> 4.3.0"
   gem "mocha", "1.0.0", :require => false
+  gem 'simplecov', "~> 0.7.1", :require => false
+  gem "pry"
 end

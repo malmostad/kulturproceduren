@@ -13,6 +13,9 @@
 /config/app_config.local.yml
 /config/app_config.confidential.yml
 
+# /coverage
+/coverage
+
 # /db/
 /db/*.sqlite3
 
