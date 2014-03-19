@@ -69,14 +69,8 @@ class Question < ActiveRecord::Base
               no_no = no_no +1
             end
           when "QuestionMchoice"
-            data = YAML.load(answer.answer_text)
-            data.keys.each do |key|
-              if mchoice_stat.has_key?(key)
-                mchoice_stat[key] = mchoice_stat[key] + 1
-              else
-                mchoice_stat[key] = 1
-              end
-            end
+            mchoice_stat[answer.answer_text] ||= 0
+            mchoice_stat[answer.answer_text]  += 1
           end
         end
       end
