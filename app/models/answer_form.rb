@@ -13,7 +13,6 @@ class AnswerForm < ActiveRecord::Base
   belongs_to :group
 
   attr_accessible :completed,
-    :companion_id,     :companion,
     :occasion_id,      :occasion,
     :group_id,         :group,
     :questionnaire_id, :questionnaire,
