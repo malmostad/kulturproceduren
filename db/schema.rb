@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130501073933) do
+ActiveRecord::Schema.define(version: 20140319094405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 20130501073933) do
   create_table "answer_forms", id: false, force: true do |t|
     t.string   "id",               limit: 46, null: false
     t.boolean  "completed"
-    t.integer  "companion_id"
     t.integer  "occasion_id"
     t.integer  "group_id"
     t.integer  "questionnaire_id"
@@ -59,6 +58,15 @@ ActiveRecord::Schema.define(version: 20130501073933) do
     t.string   "description"
     t.string   "filename"
     t.string   "content_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "backup_merged_answers", id: false, force: true do |t|
+    t.integer  "id"
+    t.integer  "question_id"
+    t.string   "answer_form_id", limit: 46
+    t.text     "answer_text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -340,7 +348,6 @@ ActiveRecord::Schema.define(version: 20130501073933) do
     t.integer  "event_id"
     t.integer  "occasion_id"
     t.integer  "district_id"
-    t.integer  "companion_id"
     t.integer  "user_id"
     t.boolean  "adult"
     t.boolean  "wheelchair",   default: false

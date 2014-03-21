@@ -31,7 +31,6 @@ class Ticket < ActiveRecord::Base
     :event_id,     :event,
     :occasion_id,  :occasion,
     :district_id,  :district,
-    :companion_id, :companion,
     :user_id,      :user,
     :booking_id,   :booking,
     :allotment_id, :allotment

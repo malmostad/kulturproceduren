@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class QuestionTest < ActiveSupport::TestCase
   test "validations" do
@@ -56,9 +56,11 @@ class QuestionTest < ActiveSupport::TestCase
     question     = create(:question, :qtype => "QuestionMchoice", :choice_csv => "foo,bar,baz")
     answer_forms = create_list(:answer_form, 3)
 
-    create(:answer, :question => question, :answer_form => answer_forms.first,  :answer_text => "--- !map:HashWithIndifferentAccess \n\"foo\": \"1\"\n\"baz\": \"1\"\n")
-    create(:answer, :question => question, :answer_form => answer_forms.second, :answer_text => "--- !map:HashWithIndifferentAccess \n\"baz\": \"1\"\n")
-    create(:answer, :question => question, :answer_form => answer_forms.third,  :answer_text => "--- !map:HashWithIndifferentAccess \n\"baz\": \"1\"\n")
+    create(:answer, :question => question, :answer_form => answer_forms.first,  :answer_text => "foo")
+    create(:answer, :question => question, :answer_form => answer_forms.first,  :answer_text => "baz")
+
+    create(:answer, :question => question, :answer_form => answer_forms.second, :answer_text => "baz")
+    create(:answer, :question => question, :answer_form => answer_forms.third,  :answer_text => "baz")
 
     result = question.statistics_for_answer_forms(answer_forms)
     assert_equal({ "foo" => 1, "baz" => 3, "bar" => 0}, result)

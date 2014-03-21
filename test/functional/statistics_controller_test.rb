@@ -132,7 +132,9 @@ class StatisticsControllerTest < ActionController::TestCase
     create(:answer, :answer_form => answer_form, :question => mark, :answer_text => "4")
     create(:answer, :answer_form => answer_form, :question => text, :answer_text => "text")
     create(:answer, :answer_form => answer_form, :question => bool, :answer_text => "1")
-    create(:answer, :answer_form => answer_form, :question => m_ch, :answer_text => "--- !map:HashWithIndifferentAccess \n\"foo\": \"1\"\n\"baz\": \"1\"\n")
+
+    create(:answer, :answer_form => answer_form, :question => m_ch, :answer_text => "foo")
+    create(:answer, :answer_form => answer_form, :question => m_ch, :answer_text => "baz")
 
     # Errors
     get :questionnaires, :id => "ht2012", :event_id => ht2012_no_questionnaire.event.id
@@ -178,7 +180,9 @@ class StatisticsControllerTest < ActionController::TestCase
     create(:answer, :answer_form => answer_form, :question => mark, :answer_text => "4")
     create(:answer, :answer_form => answer_form, :question => text, :answer_text => "text")
     create(:answer, :answer_form => answer_form, :question => bool, :answer_text => "1")
-    create(:answer, :answer_form => answer_form, :question => m_ch, :answer_text => "--- !map:HashWithIndifferentAccess \n\"foo\": \"1\"\n\"baz\": \"1\"\n")
+    
+    create(:answer, :answer_form => answer_form, :question => m_ch, :answer_text => "foo")
+    create(:answer, :answer_form => answer_form, :question => m_ch, :answer_text => "baz")
 
     # No tsv
     get :unbooking_questionnaires, :id => "ht2012"

@@ -13,7 +13,6 @@ class AnswerForm < ActiveRecord::Base
   belongs_to :group
 
   attr_accessible :completed,
-    :companion_id,     :companion,
     :occasion_id,      :occasion,
     :group_id,         :group,
     :questionnaire_id, :questionnaire,
@@ -47,10 +46,13 @@ class AnswerForm < ActiveRecord::Base
       self.save!
 
       answer.each do |question_id, answer_text|
-        answers.create(
-          :question_id => question_id,
-          :answer_text => answer_text
-        )
+        answer_texts = [answer_text].flatten
+        answer_texts.each do |answer_text|
+          answers.create! do |a|
+            a.question_id = question_id
+            a.answer_text = answer_text
+          end
+        end
       end
       return true
     end
