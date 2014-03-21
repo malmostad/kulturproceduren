@@ -7,4 +7,6 @@ class Answer < ActiveRecord::Base
   attr_accessible :answer_text,
     :question_id,    :question,
     :answer_form_id, :answer_form
+
+  serialize :answer_text, YAML
 end

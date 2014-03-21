@@ -15,9 +15,6 @@ gem "simple_enum", "1.6.8"
 gem "rails_autolink", "1.1.5"
 
 
-#
-#
-#
 gem "protected_attributes", "1.0.7"
 gem "activerecord-session_store", "0.1.0"
 gem "rails-observers", "0.1.2"
@@ -26,6 +23,7 @@ group :development do
   gem "capistrano", "~> 3.1.0"
   gem "capistrano-rails", "~> 1.1.1"
   gem "capistrano-rbenv", "~> 2.0.2"
+  gem "pry"
 end
 
 group :test do
