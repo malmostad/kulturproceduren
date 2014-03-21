@@ -11,24 +11,19 @@ class EventLinksController < ApplicationController
   def new
     session[:event_links] ||= {}
 
-    @culture_providers = CultureProvider.find :all, :order => "name"
+    @culture_providers = CultureProvider.order "name"
 
     if session[:event_links][:selected_culture_provider]
       @selected_culture_provider = CultureProvider.find session[:event_links][:selected_culture_provider]
 
+      @events = Event.where(culture_provider_id: @selected_culture_provider.id).order(sort_order("name"))
       if @culture_provider
-        @events = Event.not_linked_to_culture_provider(@culture_provider).paginate(
-          :page => params[:page],
-          :order => sort_order("name"),
-          :conditions => { :culture_provider_id => @selected_culture_provider.id }
-        )
+        @events = @events.not_linked_to_culture_provider(@culture_provider)
       else
-        @events = Event.not_linked_to_event(@event).paginate(
-          :page => params[:page],
-          :order => sort_order("name"),
-          :conditions => { :culture_provider_id => @selected_culture_provider.id }
-        )
+        @events = @events.not_linked_to_event(@event)
       end
+
+      @events = @events.paginate(page: params[:page])
     end
   end
 
@@ -84,7 +79,7 @@ class EventLinksController < ApplicationController
         redirect_to @culture_provider
       end
     elsif !params[:event_id].blank?
-      @event = Event.find params[:event_id], :include => :culture_provider
+      @event = Event.includes(:culture_provider).find params[:event_id]
 
       unless current_user.can_administrate?(@event.culture_provider)
         flash[:error] = "Du har inte behörighet att komma åt sidan."

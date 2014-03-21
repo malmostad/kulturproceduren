@@ -70,9 +70,7 @@ class StatisticsController < ApplicationController
     @term = params[:id]
     @questionnaire = Questionnaire.find_unbooking
     from, to = term_to_date_span(@term)
-    @answer_forms = @questionnaire.answer_forms.all(
-      :conditions => { :created_at => from..to }
-    )
+    @answer_forms = @questionnaire.answer_forms.where(:created_at => from..to)
     send_csv(
       "avbokningsstatistik_#{@term}.tsv",
       questionnaire_stats_csv(
@@ -92,8 +90,8 @@ class StatisticsController < ApplicationController
       csv << [title]
       csv << ["Antal besvarade enkäter", "Antal obesvarade enkäter"]
       csv << [
-        answer_forms.count(:all, :conditions => { :completed => true }),
-        answer_forms.count(:all, :conditions => { :completed => false })
+        answer_forms.where(:completed => true).count,
+        answer_forms.where(:completed => false).count
       ]
       csv << []
       csv << ["Fråga", "Svar"]
@@ -137,8 +135,8 @@ class StatisticsController < ApplicationController
     available_terms = []
     2009.upto(Date.today.year) do |year|
 
-      num_vt = Occasion.count :all, :conditions => "date between '#{year}-01-01' and '#{year}-06-30'"
-      num_ht = Occasion.count :all, :conditions => "date between '#{year}-07-01' and '#{year}-12-31'"
+      num_vt = Occasion.where("date between '#{year}-01-01' and '#{year}-06-30'").count
+      num_ht = Occasion.where("date between '#{year}-07-01' and '#{year}-12-31'").count
 
       available_terms << "vt#{year}" if num_vt > 0
       available_terms << "ht#{year}" if num_ht > 0
@@ -165,8 +163,8 @@ class StatisticsController < ApplicationController
   # The format of a term is "ht|vtYYYY", e.g. ht2007 (autumn term 2007)
   def available_events(term)
     from, to = term_to_date_span(term)
-    Event.find :all, :include => :culture_provider,
-      :conditions => [ "events.id in (select event_id from occasions where occasions.date between ? and ?)", from, to ]
+    Event.includes(:culture_provider).references(:culture_providers)
+      .where("events.id in (select event_id from occasions where occasions.date between ? and ?)", from, to)
   end
 
   # Returns a comma-seperated values (CSV) string

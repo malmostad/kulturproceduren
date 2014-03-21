@@ -9,25 +9,21 @@ class QuestionnairesController < ApplicationController
   
   # Displays a list of all questionnaires in the system.
   def index
-    @questionnaires = Questionnaire.for_event.paginate :page => params[:page],
-      :include => :event,
-      :order => sort_order("events.name")
+    @questionnaires = Questionnaire.for_event.includes(:event)
+      .order(sort_order("events.name"))
+      .paginate(page: params[:page])
   end
 
   # Displays details about a questionnaire, as well as a form
   # for adding questions to the questionnaire.
   def show
-    @questionnaire = Questionnaire.find params[:id], :include => :event
+    @questionnaire = Questionnaire.includes(:event).find params[:id]
     @question = Question.new do |q|
       q.template = false
       q.qtype = "QuestionMark"
     end
 
-    @template_questions = Question.find(
-      :all,
-      :conditions => { :template => true },
-      :order => "question ASC"
-    ) if @questionnaire.for_event?
+    @template_questions = Question.where(template: true).order(question: :asc) if @questionnaire.for_event?
   end
 
   # Displays details about the unbooking questionnaire
@@ -58,24 +54,24 @@ class QuestionnairesController < ApplicationController
   end
 
   def new
-    @events = Event.without_questionnaires.find :all, :order => "name"
+    @events = Event.without_questionnaires.order("name")
     @questionnaire = Questionnaire.new
   end
 
   def edit
-    @questionnaire = Questionnaire.find params[:id], :include => :event
+    @questionnaire = Questionnaire.includes(:event).find params[:id]
     render :action => "new"
   end
 
   def create
     @questionnaire = Questionnaire.new(params[:questionnaire])
     @questionnaire.target_cd = Questionnaire.targets.for_event
-    @questionnaire.questions = Question.find(:all , :conditions => { :template => true })
+    @questionnaire.questions = Question.where(template: true)
     if @questionnaire.save
       flash[:notice] = 'Enkäten skapades.'
       redirect_to @questionnaire 
     else
-      @events = Event.without_questionnaires.find :all, :order => "name"
+      @events = Event.without_questionnaires.order "name"
       render :action => "new" 
     end
   end
@@ -87,7 +83,7 @@ class QuestionnairesController < ApplicationController
       flash[:notice] = 'Enkäten uppdaterades.'
       redirect_to(@questionnaire) 
     else
-      @events = Event.without_questionnaires.find :all, :order => "name"
+      @events = Event.without_questionnaires.order("name")
       render :action => "new"
     end
   end

@@ -14,7 +14,7 @@
 
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_district_path(@district) %></li>
-    <li><%= link_to 'Radera', @district, :confirm => 'Är du säker på att du vill radera stadsdelen', :method => :delete %></li>
+    <li><%= link_to 'Radera', @district, :data => {:confirm => 'Är du säker på att du vill radera stadsdelen'}, :method => :delete %></li>
   </ul>
 
 </div>

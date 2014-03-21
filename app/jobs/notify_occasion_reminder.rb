@@ -11,9 +11,7 @@ class NotifyOccasionReminder
       real_days = num_weekdays_to_real_days(@today.wday, @occasion_reminder_days)
       occasion_date = @today + real_days
 
-      occasions = Occasion.find :all,
-        :conditions => { :date => occasion_date, :cancelled => false },
-        :include => :event
+      occasions = Occasion.where(date: occasion_date, cancelled: false).includes(:event)
 
       # Notify for Saturday and Sunday when the targeted notification date is a Monday.
       if occasion_date.wday == 1

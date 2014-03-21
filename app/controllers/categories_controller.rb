@@ -14,8 +14,7 @@ class CategoriesController < ApplicationController
   # Displays a list of all categories currently in the system, as well
   # as a form for adding new categories
   def index
-    @categories = Category.all :include => :category_group,
-      :order => "category_groups.name ASC, categories.name ASC"
+    @categories = Category.includes(:category_group).order("category_groups.name ASC, categories.name ASC")
     @category_groups = CategoryGroup.all
     
     @category = Category.new
@@ -25,7 +24,7 @@ class CategoriesController < ApplicationController
   # Displays a form for editing the given category instead of
   # the new category form in the index action.
   def edit
-    @categories = Category.all :include => :category_group
+    @categories = Category.includes(:category_group)
     @category_groups = CategoryGroup.all
 
     @category = Category.find params[:id]
@@ -42,7 +41,7 @@ class CategoriesController < ApplicationController
       flash[:notice] = 'Kategorin skapades.'
       redirect_to :action => "index"
     else
-      @categories = Category.all :include => :category_group
+      @categories = Category.includes(:category_group)
       @category_groups = CategoryGroup.all
       render :action => "index"
     end
@@ -55,7 +54,7 @@ class CategoriesController < ApplicationController
       flash[:notice] = 'Kategorin uppdaterades.'
       redirect_to :action => "index"
     else
-      @categories = Category.all :include => :category_group
+      @categories = Category.includes(:category_group)
       @category_groups = CategoryGroup.all
       render :action => "index"
     end

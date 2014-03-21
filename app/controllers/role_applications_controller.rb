@@ -13,10 +13,10 @@ class RoleApplicationsController < ApplicationController
   # of all the user's applications
   def index
     if current_user.has_role? :admin
-      @applications = RoleApplication.paginate :page => params[:page],
-        :conditions => [ "state = ?", RoleApplication::PENDING ],
-        :order => sort_order("created_at"),
-        :include => [ :user, :role, :culture_provider ]
+      @applications = RoleApplication.includes(:user, :role, :culture_provider)
+        .where("state = ?", RoleApplication::PENDING)
+        .order(sort_order("created_at"))
+        .paginate(page: params[:page])
 
       render :action => "admin_index", :layout => "admin"
     else
@@ -25,7 +25,7 @@ class RoleApplicationsController < ApplicationController
       @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
       @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
 
-      @culture_providers = CultureProvider.find :all, :order => "name"
+      @culture_providers = CultureProvider.order("name")
       
     end
   end
@@ -33,11 +33,9 @@ class RoleApplicationsController < ApplicationController
   # Displays a list of all answered appliations
   def archive
     params[:d] ||= "down"
-
-    @applications = RoleApplication.paginate :page => params[:page],
-      :order => sort_order("created_at"),
-      :include => [ :user, :role, :culture_provider ]
-
+    @applications = RoleApplication.includes(:user, :role, :culture_provider)
+      .order(sort_order("created_at"))
+      .paginate(page: params[:page])
     render :layout => "admin"
   end
   
@@ -63,7 +61,7 @@ class RoleApplicationsController < ApplicationController
       flash[:notice] = "Din ansökan har skickats till administratörerna."
       redirect_to current_user
     else
-      @culture_providers = CultureProvider.find :all, :order => "name"
+      @culture_providers = CultureProvider.order("name")
 
       @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
       @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }

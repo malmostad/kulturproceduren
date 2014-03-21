@@ -7,16 +7,13 @@ class SchoolsController < ApplicationController
   before_filter :require_admin, :except => [ :options_list, :select ]
 
   def index
-    @schools = School.paginate :page => params[:page],
-      :order => sort_order("name"),
-      :include => :district
+    @schools = School.includes(:district).order(sort_order("name")).paginate(:page => params[:page])
   end
 
 
   def show
     @school = School.find(params[:id])
-    @groups = @school.groups.paginate :page => params[:page],
-      :order => sort_order("name")
+    @groups = @school.groups.order(sort_order("name")).paginate(:page => params[:page])
   end
 
   def new
@@ -104,11 +101,11 @@ class SchoolsController < ApplicationController
 
     if occasion_id > 0
       occasion = Occasion.find occasion_id
-      @schools = School.find(:all, :conditions => conditions).select { |s|
+      @schools = School.where(conditions).select { |s|
         s.available_tickets_by_occasion(occasion) > 0
       }
     else
-      @schools = School.all :order => "name ASC", :conditions => conditions
+      @schools = School.where(conditions).order("name ASC")
     end
 
     render :action => "options_list", :content_type => 'text/plain'

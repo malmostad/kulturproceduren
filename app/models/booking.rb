@@ -42,7 +42,7 @@ class Booking < ActiveRecord::Base
   after_save :synchronize_tickets
   before_create :set_booked_at_timestamp
 
-  scope :active, :conditions => { :unbooked => false }
+  scope :active, lambda{ where(unbooked: false) }
 
   def student_count
     read_attribute(:student_count).to_i
@@ -90,45 +90,39 @@ class Booking < ActiveRecord::Base
 
 
   def self.find_for_user(user, page)
-    paginate(
-      :conditions => { :user_id => user.id },
-      :include => :occasion,
-      :order => "occasions.date desc, group_id desc",
-      :page => page
-    )
+    self.includes(:occasion)
+      .where(user_id: user.id)
+      .order("occasions.date desc, group_id desc")
+      .paginate(page: page)
   end
 
   def self.find_for_group(group, page)
-    paginate(
-      :conditions => { :group_id => group.id },
-      :include => :occasion,
-      :order => "occasions.date desc",
-      :page => page
-    )
+    self.includes(:occasion)
+      .where(group_id: group.id)
+      .order("occasions.date desc")
+      .paginate(page: page)
   end
 
   def self.find_for_event(event_id, filter, page)
+
     conditions = [ " occasions.event_id = ? ", event_id ]
     apply_filter(conditions, filter)
 
-    paginate(
-      :conditions => conditions,
-      :include => [ :occasion, { :group => :school } ],
-      :order => "schools.name, groups.name desc",
-      :page => page
-    )
+    self.includes(:occasion, :group => :school)
+      .where(conditions[0], *conditions[1..-1])
+      .order("schools.name, groups.name desc")
+      .paginate(page: page)
   end
 
   def self.find_for_occasion(occasion_id, filter, page)
     conditions = [ "occasions.id = ?", occasion_id ]
     apply_filter(conditions, filter)
 
-    paginate(
-      :conditions => conditions,
-      :include => [ :occasion, { :group => :school } ],
-      :order => "schools.name, groups.name desc",
-      :page => page
-    )
+
+    self.includes(:occasion, :group => :school)
+      .where(conditions[0], *conditions[1..-1])
+      .order("schools.name, groups.name desc")
+      .paginate(page: page)
   end
 
 

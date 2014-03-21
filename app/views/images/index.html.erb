@@ -80,7 +80,7 @@
 
           <% if img.culture_provider -%>
             <td><%= link_to 'Använd som logotyp', set_main_culture_provider_image_path(img.culture_provider, img) unless is_logo -%></td>
-            <td><%= link_to 'Ta bort', culture_provider_image_path(img.culture_provider, img), :confirm => "Är du säker?", :method => :delete %></td>
+            <td><%= link_to 'Ta bort', culture_provider_image_path(img.culture_provider, img), :data =>{:confirm => "Är du säker?"}, :method => :delete %></td>
           <% elsif img.event -%>
             <td><%= link_to 'Ta bort', event_image_path(img.event, img), :confirm => "Är du säker?", :method => :delete %></td>
           <% end -%>

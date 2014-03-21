@@ -22,10 +22,10 @@ class BookingsController < ApplicationController
     }
 
     if params[:occasion_id]
-      @districts = District.all :order => "name asc"
+      @districts = District.order("name asc")
       @bookings = Booking.find_for_occasion(params[:occasion_id], session[:booking_list_filter], params[:page])
     elsif params[:event_id]
-      @districts = District.all :order => "name asc"
+      @districts = District.order("name asc")
       @bookings = Booking.find_for_event(params[:event_id], session[:booking_list_filter], params[:page])
     else
       @bookings = Booking.active.find_for_user(current_user, params[:page])
@@ -35,7 +35,7 @@ class BookingsController < ApplicationController
   # List of bus bookings for an event
   def bus
     @event = Event.find(params[:event_id])
-    @bookings = @event.bookings.all(:conditions => { :bus_booking => true }, :include => :occasion, :order => "occasions.date, occasions.start_time")
+    @bookings = @event.bookings.where(:bus_booking => true).includes(:occasion).order("occasions.date, occasions.start_time")
 
     if params[:format] == "xls"
       send_csv(
@@ -72,7 +72,7 @@ class BookingsController < ApplicationController
 
   # Returns a list of bookings for a group. For use in Ajax calls.
   def group_list
-    @group = Group.find params[:group_id], :include => :school
+    @group = Group.includes(:school).find params[:group_id]
     @bookings = Booking.active.find_for_group(@group, 1)
     render :partial => "list",
       :content_type => "text/plain",
@@ -83,10 +83,7 @@ class BookingsController < ApplicationController
   def show
     query = Booking
     query = Booking.active unless current_user.has_role?(:admin)
-    @booking = query.find(
-      params[:id],
-      :include => [ { :group => :school }, :occasion ]
-    )
+    @booking = query.includes(:occasion, :group => :school).find params[:id]
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "Klassen/avdelningen har ingen bokning på den efterfrågade föreställningen."
     redirect_to bookings_url()
@@ -94,10 +91,10 @@ class BookingsController < ApplicationController
 
   # Returns a form for creating/editing a booking. For use in Ajax calls.
   def form
-    @group = Group.find params[:group_id], :include => :school
+    @group = Group.includes(:school).find params[:group_id]
     @occasion = Occasion.find(params[:occasion_id])
 
-    @booking = Booking.active.first(:conditions => { :group_id => @group.id, :occasion_id => @occasion.id })
+    @booking = Booking.active.where(:group_id => @group.id, :occasion_id => @occasion.id).first
 
     if @booking
       @is_edit = true
@@ -118,7 +115,7 @@ class BookingsController < ApplicationController
     load_group_selection_collections(@occasion)
 
     if @group
-      @booking = Booking.active.first(:conditions => { :group_id => @group.id, :occasion_id => @occasion.id })
+      @booking = Booking.active.where(:group_id => @group.id, :occasion_id => @occasion.id).first
 
       if @booking
         redirect_to edit_booking_url(@booking)
@@ -270,15 +267,14 @@ class BookingsController < ApplicationController
   # the group selection widget.
   def load_group
     if params[:group_id]
-      @group = Group.find(params[:group_id], :include => { :school => :district })
+      @group = Group.includes(:school => :district).find(params[:group_id])
       session[:group_selection] = {
         :district_id => @group.school.district_id,
         :school_id => @group.school.id,
         :group_id => @group.id
       }
     elsif session[:group_selection] && session[:group_selection][:group_id]
-      @group = Group.find session[:group_selection][:group_id],
-        :include => { :school => :district }
+      @group = Group.includes(:school => :district).find session[:group_selection][:group_id]
     end
   end
 

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class CultureProviderLinksControllerTest < ActionController::TestCase
   def setup
@@ -47,9 +47,9 @@ class CultureProviderLinksControllerTest < ActionController::TestCase
 
   test "new" do
     get :new, :culture_provider_id => @culture_provider.id
-    assert_equal CultureProvider.not_linked_to_culture_provider(@culture_provider).all(:order => "name asc"), assigns(:culture_providers)
+    assert_equal CultureProvider.not_linked_to_culture_provider(@culture_provider).order("name asc").to_a, assigns(:culture_providers)
     get :new, :event_id => @event.id
-    assert_equal CultureProvider.not_linked_to_event(@event).all(:order => "name asc"), assigns(:culture_providers)
+    assert_equal CultureProvider.not_linked_to_event(@event).order("name asc").to_a, assigns(:culture_providers)
   end
 
   test "select, culture provider" do

@@ -167,13 +167,13 @@ class BookingsControllerTest < ActionController::TestCase
     # Occasion id
     get :index, :occasion_id => @event.occasions.second.id
     assert_equal [bookings.second], assigns(:bookings)
-    assert_equal District.all(:order => "name asc"), assigns(:districts)
+    assert_equal District.order("name asc").to_a, assigns(:districts)
 
     # Event id
     get :index, :event_id => @event.id
     assert_equal 3, assigns(:bookings).length
     assigns(:bookings).each { |b| assert [bookings.first, bookings.second, unbooked].include?(b) }
-    assert_equal District.all(:order => "name asc"), assigns(:districts)
+    assert_equal District.order("name asc").to_a, assigns(:districts)
 
     # Booking list filter
     session[:booking_list_filter] = {
@@ -472,7 +472,7 @@ class BookingsControllerTest < ActionController::TestCase
     assert_equal         occasion,             booking.occasion
     assert_equal         occasion,             assigns(:occasion)
     assert_nil           booking.answer_form
-    assert_nil           NotificationRequest.first(:conditions => { :id => notification_request.id })
+    assert_nil           NotificationRequest.where(:id => notification_request.id).first
   end
   test "create with answer form" do
     occasion      = create(:occasion)

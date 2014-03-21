@@ -7,9 +7,9 @@ class GroupsController < ApplicationController
   before_filter :require_admin, :except => [ :options_list, :select ]
 
   def index
-    @groups = Group.paginate :page => params[:page],
-      :order => sort_order("name"),
-      :include => { :school => :district }
+    @groups = Group.includes(:school => :district)
+      .order(sort_order("name"))
+      .paginate(page: params[:page])
   end
 
   def show
@@ -21,12 +21,12 @@ class GroupsController < ApplicationController
     @group = Group.new
     @group.school_id = params[:school_id] if params[:school_id]
     
-    @schools = School.all :order => "name ASC"
+    @schools = School.order("name ASC")
   end
 
   def edit
     @group = Group.find(params[:id])
-    @schools = School.all :order => "name ASC"
+    @schools = School.order("name ASC")
     render :action => "new"
   end
 
@@ -37,7 +37,7 @@ class GroupsController < ApplicationController
       flash[:notice] = 'Gruppen skapades.'
       redirect_to(@group)
     else
-      @schools = School.all :order => "name ASC"
+      @schools = School.order("name ASC")
       render :action => "new"
     end
   end
@@ -49,7 +49,7 @@ class GroupsController < ApplicationController
       flash[:notice] = 'Gruppen uppdaterades.'
       redirect_to(@group)
     else
-      @schools = School.all :order => "name ASC"
+      @schools = School.order("name ASC")
       render :action => "new"
     end
   end
@@ -78,7 +78,7 @@ class GroupsController < ApplicationController
   # Selects a group for the working session. Used by the select group
   # fragment.
   def select
-    group = Group.find params[:group_id], :include => :school
+    group = Group.includes(:school).find(params[:group_id])
     session[:group_selection] = {
       :district_id => group.school.district_id,
       :school_id => group.school.id,
@@ -117,11 +117,11 @@ class GroupsController < ApplicationController
 
     if occasion_id > 0
       @occasion = Occasion.find params[:occasion_id]
-      @groups = Group.find(:all, :conditions => conditions).select { |g|
+      @groups = Group.where(conditions).to_a.select { |g|
         g.available_tickets_by_occasion(@occasion) > 0
       }
     else
-      @groups = Group.all :order => "name ASC", :conditions => conditions
+      @groups = Group.where(conditions).order("name ASC")
     end
 
     render :action => "options_list", :content_type => 'text/plain'

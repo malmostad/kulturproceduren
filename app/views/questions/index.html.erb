@@ -28,7 +28,7 @@
         <td><%= "Ja" if question.mandatory %></td>
         <td><%= question.choice_csv if question.qtype = "QuestionMchoice" %></td>
         <td><%= link_to "Redigera", edit_question_path(question) -%></td>
-        <td><%= link_to "Radera", question, :confirm => "Är du säker?", :method => :delete %></td>
+        <td><%= link_to "Radera", question, :data => {:confirm => "Är du säker?"}, :method => :delete %></td>
       </tr>
     <% end -%>
   </tbody>

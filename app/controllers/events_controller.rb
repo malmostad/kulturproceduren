@@ -14,7 +14,7 @@ class EventsController < ApplicationController
   # Displays the presentation page for an event
   def show
     @event = Event.find(params[:id])
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @category_groups = CategoryGroup.order "name ASC"
   end
 
   # Displays the ticket allotment for an event
@@ -44,14 +44,14 @@ class EventsController < ApplicationController
         e.map_address = culture_provider.map_address
       end
     end  
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @category_groups = CategoryGroup.order "name ASC"
     
     load_culture_providers()
   end
 
   def edit
     @event = Event.find(params[:id])
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @category_groups = CategoryGroup.order "name ASC"
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
@@ -85,7 +85,7 @@ class EventsController < ApplicationController
       redirect_to(@event)
     else
       load_culture_providers()
-      @category_groups = CategoryGroup.all :order => "name ASC"
+      @category_groups = CategoryGroup.order "name ASC"
       render :action => "new"
     end
   end
@@ -114,7 +114,7 @@ class EventsController < ApplicationController
       flash[:notice] = 'Evenemanget uppdaterades.'
       redirect_to(@event)
     else
-      @category_groups = CategoryGroup.all :order => "name ASC"
+      @category_groups = CategoryGroup.order "name ASC"
       render :action => "new"
     end
   end
@@ -137,11 +137,8 @@ class EventsController < ApplicationController
 
   # Renders a list of <tt>option</tt>-tags of events. For use in Ajax calls.
   def options_list
-    conditions = {}
-    conditions[:culture_provider_id] = params[:culture_provider_id] if params[:culture_provider_id]
-
-    @events = Event.find :all, :conditions => conditions, :order => "name ASC"
-
+    @events = Event.order(name: :asc)
+    @events = @events.where(culture_provider_id: params[:culture_provider_id]) if params[:culture_provider_id]
     render :action => "options_list", :content_type => 'text/plain'
   rescue
     render :text => "", :content_type => 'text/plain', :status => 404
@@ -156,11 +153,9 @@ class EventsController < ApplicationController
   # culture providers they are associated with.
   def load_culture_providers
     if current_user.has_role?(:admin)
-      @culture_providers = CultureProvider.all :order => "name ASC"
+      @culture_providers = CultureProvider.order "name ASC"
     else
-      @culture_providers = current_user.culture_providers.find :all,
-        :conditions => { :active => true },
-        :order => "name ASC"
+      @culture_providers = current_user.culture_providers.where(active: true).order("name ASC")
     end
   end
 

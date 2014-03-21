@@ -34,11 +34,11 @@ module UtilityModels
     def recipient_addresses
       case recipients
       when :all_contacts
-        addresses = District.all(:select => :contacts).collect { |m| m.contacts.try(:split, ",") }.compact.flatten
-        addresses += School.all(:select => :contacts).collect { |m| m.contacts.try(:split, ",") }.compact.flatten
-        addresses += Group.all(:select => :contacts).collect { |m| m.contacts.try(:split, ",") }.compact.flatten
+        addresses = District.select(:contacts).collect { |m| m.contacts.try(:split, ",") }.compact.flatten
+        addresses += School.select(:contacts).collect { |m| m.contacts.try(:split, ",") }.compact.flatten
+        addresses += Group.select(:contacts).collect { |m| m.contacts.try(:split, ",") }.compact.flatten
       when :all_users
-        addresses = User.all(:select => "email").collect(&:email)
+        addresses = User.select("email").pluck(:email)
       else
         addresses = @event.booked_users.collect(&:email)
         addresses += @event.bookings.collect(&:companion_email)

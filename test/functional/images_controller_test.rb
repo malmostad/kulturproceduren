@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class ImagesControllerTest < ActionController::TestCase
   def setup
@@ -123,7 +123,7 @@ class ImagesControllerTest < ActionController::TestCase
     delete :destroy, :id => image.id
     assert_redirected_to culture_provider_images_url(culture_provider)
     assert_equal         "Bilden togs bort", flash[:notice]
-    assert_nil           Image.first(:conditions => { :id => image.id })
+    assert_nil           Image.where(:id => image.id).first
     assert_equal         main_image, CultureProvider.find(culture_provider.id).main_image
 
     delete :destroy, :id => main_image.id
@@ -137,6 +137,6 @@ class ImagesControllerTest < ActionController::TestCase
     delete :destroy, :id => image.id
     assert_redirected_to event_images_url(event)
     assert_equal         "Bilden togs bort", flash[:notice]
-    assert_nil           Image.first(:conditions => { :id => image.id })
+    assert_nil           Image.where(:id => image.id).first
   end
 end

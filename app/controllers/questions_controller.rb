@@ -10,10 +10,8 @@ class QuestionsController < ApplicationController
   # Lists all questions in the system as well as a form
   # for adding template questions.
   def index
-    @questions = Question.find :all,
-      :conditions => { :template => true },
-      :order => sort_order("question")
-    @question = Question.new do |q|
+    @questions = Question.where(template: true).order(sort_order("question"))
+    @question  = Question.new do |q|
       q.template = true
       q.mandatory = true
       q.qtype = "QuestionMark"
@@ -24,15 +22,11 @@ class QuestionsController < ApplicationController
     @question = Question.find params[:id]
 
     if @question.template
-      @questions = Question.find :all,
-        :conditions => { :template => true },
-        :order => sort_order("question")
+      @questions =Question.where(template: true).order(sort_order("question"))
       render :action => "index"
     else
       @questionnaire = Questionnaire.find params[:questionnaire_id]
-      @template_questions = Question.find :all,
-        :conditions => { :template => true },
-        :order => "question ASC"
+      @template_questions = Question.where(template: true).order("question ASC")
     end
   end
 
@@ -52,17 +46,11 @@ class QuestionsController < ApplicationController
       end
     else
       if params[:questionnaire_id]
-        @questionnaire = Questionnaire.find params[:questionnaire_id]
-        @template_questions = Question.find :all,
-          :conditions => { :template => true },
-          :order => "question ASC"
-        
+        @questionnaire      = Questionnaire.find params[:questionnaire_id]
+        @template_questions = Question.where(template: true).order("question ASC")
         render :template => "questionnaires/show"
       else
-        @questions = Question.find :all,
-          :conditions => { :template => true },
-          :order => sort_order("question")
-
+        @questions = Question.where(template: true).order(sort_order("question"))
         render :action => "index"
       end
     end
@@ -82,17 +70,11 @@ class QuestionsController < ApplicationController
       end
     else      
       if params[:questionnaire_id]
-        @questionnaire = Questionnaire.find params[:questionnaire_id]
-        @template_questions = Question.find :all,
-          :conditions => { :template => true },
-          :order => "question ASC"
-
+        @questionnaire      = Questionnaire.find params[:questionnaire_id]
+        @template_questions = Question.where(template: true).order("question ASC")
         render :action => "edit"
       else
-        @questions = Question.find :all,
-          :conditions => { :template => true },
-          :order => sort_order("question")
-
+        @questions = Question.where(template: true).order(sort_order("question"))
         render :action => "index"
       end
     end

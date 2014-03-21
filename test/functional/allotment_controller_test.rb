@@ -54,7 +54,7 @@ class AllotmentControllerTest < ActionController::TestCase
   test "init" do
     get :init, :id => @event.id
     assert_response :success
-    assert_equal District.all(:order => "name ASC"), assigns(:districts)
+    assert_equal District.order("name ASC").to_a, assigns(:districts)
   end
 
   def build_params(override = {})
@@ -289,8 +289,8 @@ class AllotmentControllerTest < ActionController::TestCase
     }
 
     get :distribute, :id => @event.id
-    assert_equal District.all(:order => "name ASC"), assigns(:districts)
-    assert_equal 100,                                assigns(:tickets_left)
+    assert_equal District.order("name ASC").to_a, assigns(:districts)
+    assert_equal 100,                             assigns(:tickets_left)
     assert_nil   assigns(:extra_groups)
 
     # Specific districts
@@ -398,7 +398,7 @@ class AllotmentControllerTest < ActionController::TestCase
 
     @event.allotments(true)
     assert_equal 3, @event.allotments.length # 2 groups + extra tickets
-    @event.allotments.all(:conditions => "group_id is not null").each do |allotment|
+    @event.allotments.where("group_id is not null").each do |allotment|
       assert_equal allotment.group.school.district, allotment.district
       assert_equal user,                            allotment.user
 
@@ -411,12 +411,12 @@ class AllotmentControllerTest < ActionController::TestCase
         flunk("Unexpected group")
       end
     end
-    extra_allotments = @event.allotments.all(:conditions => "group_id is null")
+    extra_allotments = @event.allotments.where("group_id is null").to_a
     assert_equal 1,    extra_allotments.length
     assert_equal 7,    extra_allotments.first.amount
     assert_equal user, extra_allotments.first.user
 
-    last_prio_groups = Group.all(:order => "priority desc", :limit => 2)
+    last_prio_groups = Group.order("priority desc").limit(2).to_a
     assert last_prio_groups.include?(@groups[1])
     assert last_prio_groups.include?(@groups[4])
   end
@@ -448,7 +448,7 @@ class AllotmentControllerTest < ActionController::TestCase
 
     @event.allotments(true)
     assert_equal 3, @event.allotments.length # 2 groups + extra tickets
-    @event.allotments.all(:conditions => "allotments.district_id is not null").each do |allotment|
+    @event.allotments.where("allotments.district_id is not null").each do |allotment|
       assert_equal user, allotment.user
       assert_nil   allotment.group
 
@@ -461,7 +461,7 @@ class AllotmentControllerTest < ActionController::TestCase
         flunk("Unexpected district")
       end
     end
-    extra_allotments = @event.allotments.all(:conditions => "allotments.district_id is null")
+    extra_allotments = @event.allotments.where("allotments.district_id is null").to_a
     assert_equal 1,    extra_allotments.length
     assert_equal 7,    extra_allotments.first.amount
     assert_equal user, extra_allotments.first.user

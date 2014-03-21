@@ -11,6 +11,6 @@ class BookingRequirement < ActiveRecord::Base
 
   # Fetches the booking requirement for a specific group at a specific occasion
   def self.get(group, occasion)
-    find :first, :conditions => { :group_id => group.id, :occasion_id => occasion.id }
+    self.where(group_id: group.id, occasion_id: occasion.id).first
   end
 end 

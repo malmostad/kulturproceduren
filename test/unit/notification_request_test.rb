@@ -1,16 +1,16 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class NotificationRequestTest < ActiveSupport::TestCase
   test "for transition" do
     create_list(:notification_request, 4, :target_cd => 1)
     create_list(:notification_request, 4, :target_cd => 2)
-    NotificationRequest.for_transition.all.each { |nr| assert nr.for_transition? }
+    NotificationRequest.for_transition.each { |nr| assert nr.for_transition? }
   end
   test "for unbooking" do
     create_list(:notification_request, 4, :target_cd => 1)
     create_list(:notification_request, 4, :target_cd => 2)
-    NotificationRequest.for_unbooking.all.each { |nr| assert nr.for_unbooking? }
+    NotificationRequest.for_unbooking.each { |nr| assert nr.for_unbooking? }
   end
   test "find by event and group" do
     event = create(:event)

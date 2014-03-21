@@ -36,7 +36,7 @@
             move_last_in_priority_group_path(group, :return_to => return_to) %>
         </td>
         <td><%= link_to 'Redigera', edit_group_path(group) %></td>
-        <td><%= link_to 'Radera', group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></td>
+        <td><%= link_to 'Radera', group, :data => {:confirm => 'Är du säker på att du vill radera gruppen?'}, :method => :delete %></td>
       </tr>
     <% end %>
   </tbody>

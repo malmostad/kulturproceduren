@@ -14,7 +14,7 @@ class CategoriesControllerTest < ActionController::TestCase
 
   test "index" do
     get :index
-    assert_equal Category.all(:include => :category_group, :order => "category_groups.name asc, categories.name asc"), assigns(:categories)
+    assert_equal Category.includes(:category_group).order("category_groups.name asc, categories.name asc").to_a, assigns(:categories)
     assert_equal CategoryGroup.all, assigns(:category_groups)
     assert       assigns(:category).new_record?
     assert_nil   assigns(:category).category_group_id
@@ -85,6 +85,6 @@ class CategoriesControllerTest < ActionController::TestCase
     delete :destroy, :id => category.id
     assert_redirected_to :action => "index"
     assert_equal "Kategorin togs bort.", flash[:notice]
-    assert_nil Category.first(:conditions => { :id => category.id })
+    assert_nil Category.where( :id => category.id ).first
   end
 end

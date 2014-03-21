@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class UserTest < ActiveSupport::TestCase
   test "validations" do
@@ -23,7 +23,7 @@ class UserTest < ActiveSupport::TestCase
     assert user.errors.include?(:cellphone)
     user = build(:user, :password => "foo", :password_confirmation => "bar")
     assert !user.valid?
-    assert user.errors.include?(:password)
+    assert user.errors.include?(:password_confirmation), user.errors.to_yaml
     user = build(:user, :district_ids => nil)
     assert !user.valid?
     assert user.errors.include?(:district_ids)

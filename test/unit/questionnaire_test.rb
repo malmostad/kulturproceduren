@@ -1,16 +1,16 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class QuestionnaireTest < ActiveSupport::TestCase
   test "for event" do
     create_list(:questionnaire, 5, :target_cd => 1)
     create_list(:questionnaire, 5, :target_cd => 2)
-    Questionnaire.for_event.all.each { |q| assert q.for_event? }
+    Questionnaire.for_event.each { |q| assert q.for_event? }
   end
   test "for unbooking" do
     create_list(:questionnaire, 5, :target_cd => 1)
     create_list(:questionnaire, 5, :target_cd => 2)
-    Questionnaire.for_unbooking.all.each { |q| assert q.for_unbooking? }
+    Questionnaire.for_unbooking.each { |q| assert q.for_unbooking? }
   end
   test "answered" do
     questionnaire = create(:questionnaire)

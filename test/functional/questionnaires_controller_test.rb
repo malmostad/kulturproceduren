@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class QuestionnairesControllerTest < ActionController::TestCase
   def setup
@@ -142,6 +142,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
     delete :destroy, :id => questionnaire.id
     assert_redirected_to questionnaires_url()
-    assert_nil           Questionnaire.first(:conditions => { :id => questionnaire.id })
+    assert_nil           Questionnaire.where(:id => questionnaire.id).first
   end
 end

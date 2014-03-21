@@ -16,7 +16,7 @@
         <td><%= link_to district.name, district %></td>
         <td><%= district.elit_id %></td>
         <td><%= link_to 'Redigera', edit_district_path(district) %></td>
-        <td><%= link_to 'Radera', district, :confirm => 'Är du säker på att du vill radera stadsdelen', :method => :delete %></td>
+        <td><%= link_to 'Radera', district, :data => {:confirm => 'Är du säker på att du vill radera stadsdelen'}, :method => :delete %></td>
       </tr>
     <% end %>
   </tbody>

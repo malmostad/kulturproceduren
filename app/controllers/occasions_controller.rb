@@ -16,7 +16,7 @@ class OccasionsController < ApplicationController
   def show
     @selected_occasion = Occasion.find(params[:id])
     @event = @selected_occasion.event
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @category_groups = CategoryGroup.order "name ASC"
 
     render :template => "events/show"
   end
@@ -25,7 +25,7 @@ class OccasionsController < ApplicationController
   # event presentation
   def edit
     @event = @occasion.event
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @category_groups = CategoryGroup.order "name ASC"
     render :template => "events/show"
   end
 
@@ -44,7 +44,7 @@ class OccasionsController < ApplicationController
       redirect_to(@occasion.event)
     else
       @event = @occasion.event
-      @category_groups = CategoryGroup.all :order => "name ASC"
+      @category_groups = CategoryGroup.order "name ASC"
       render :template => "events/show"
     end
   end
@@ -55,7 +55,7 @@ class OccasionsController < ApplicationController
       redirect_to(@occasion.event)
     else
       @event = @occasion.event
-      @category_groups = CategoryGroup.all :order => "name ASC"
+      @category_groups = CategoryGroup.order "name ASC"
       render :template => "events/show"
     end
   end
@@ -80,14 +80,14 @@ class OccasionsController < ApplicationController
 
   # Displays the ticket availability on the occasion's event. For use in an Ajax request.
   def ticket_availability
-    @occasion = Occasion.find(params[:id], :include => { :event => :culture_provider })
+    @occasion = Occasion.includes(:event => :culture_provider).find(params[:id])
     wrong_state = false
 
     case @occasion.event.ticket_state
     when :alloted_group
       @entities = School.find_with_tickets_to_event(@occasion.event)
     when :alloted_district
-      @entities = @occasion.event.districts.find :all, :order => "districts.name ASC"
+      @entities = @occasion.event.districts.order "districts.name ASC"
     when :free_for_all
       nil
     else

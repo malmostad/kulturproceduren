@@ -101,7 +101,7 @@ class LoginController < ApplicationController
       ldap_user = ldap.authenticate params[:user][:username], params[:user][:password]
 
       if ldap_user
-        user = User.find :first, :conditions => { :username => "#{APP_CONFIG[:ldap][:username_prefix]}#{params[:user][:username]}" }
+        user = User.where(username: "#{APP_CONFIG[:ldap][:username_prefix]}#{params[:user][:username]}").first
 
         if user
           return user

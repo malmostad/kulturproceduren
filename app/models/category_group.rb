@@ -3,7 +3,7 @@
 #
 # Category groups are used in the UI to more clearly present the categories.
 class CategoryGroup < ActiveRecord::Base
-  has_many :categories, :dependent => :destroy, :order => "name ASC"
+  has_many :categories, lambda{ order(name: :asc) }, :dependent => :destroy
   has_many :events, :through => :categories
 
   attr_accessible :name,

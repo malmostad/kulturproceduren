@@ -45,7 +45,7 @@
       <td><%= category.name %></td>
       <td><%= category.category_group.name %></td>
       <td><%= link_to 'Redigera', edit_category_path(category) %></td>
-      <td><%= link_to 'Radera', category, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Radera', category, :data =>{:confirm => 'Are you sure?'}, :method => :delete %></td>
     </tr>
   <% end %>
 

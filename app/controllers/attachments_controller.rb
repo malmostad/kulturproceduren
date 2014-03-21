@@ -72,7 +72,7 @@ class AttachmentsController < ApplicationController
   # Checks if the user has administration privileges on the occasion.
   # For use in <tt>before_filter</tt>.
   def require_culture_worker
-    @event = Event.find(params[:event_id], :include => :culture_provider)
+    @event = Event.includes(:culture_provider).find(params[:event_id])
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."

@@ -93,7 +93,7 @@ class AttendanceController < ApplicationController
     if !params[:event_id].blank?
       @event = Event.find params[:event_id]
     elsif !params[:occasion_id].blank?
-      @occasion = Occasion.find params[:occasion_id], :include => :event
+      @occasion = Occasion.includes(:event).find(params[:occasion_id])
       @event = @occasion.event
     else
       flash[:error] = "Felaktig adress angiven"

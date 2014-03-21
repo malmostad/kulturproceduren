@@ -16,9 +16,16 @@
         <%= link_to "Avboka", unbook_booking_path(@booking) %>
       </li>
     <% end %>
-    <li><%= link_to_function "Skriv ut", "window.print()" %></li>
+    <li><%= link_to "Skriv ut", "#", :id => "link-to-print" %></li>
   </ul>
 </div>
+
+<script type="text/javascript">
+  $('#link-to-print').click(function(e) {
+    window.print();
+    return false;
+  });
+</script>
 
 <table class="booking-confirmation-list">
   <tbody>

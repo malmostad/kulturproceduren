@@ -7,35 +7,38 @@ class Occasion < ActiveRecord::Base
   has_many :tickets
   has_many :bookings do
     def hierarchically_ordered
-      active.find :all,
-        :include => { :group => { :school => :district } },
-        :order => "districts.name ASC, schools.name ASC, groups.name ASC"
+      active.includes(:group =>{:school => :district}).order("districts.name ASC, schools.name ASC, groups.name ASC")
     end
     def school_ordered
-      active.find :all,
-        :include => { :group => { :school => :district } },
-        :order => "schools.name ASC, groups.name ASC"
+      active.includes(:group => {:school => :district}).order("schools.name ASC").order("groups.name ASC")
     end
   end
 
-  has_many :groups, :through => :tickets , :uniq => true do
+  has_many(:groups, lambda{ distinct }, :through => :tickets) do
     def hierarchically_ordered
-      find :all,
-        :include => { :school => :district },
-        :order => "districts.name ASC, schools.name ASC, groups.name ASC"
+      includes(:school => :district).order("districts.name ASC, schools.name ASC").order("groups.name ASC")
     end
+
     def school_ordered
-      find :all,
-        :include => { :school => :district },
-        :order => "schools.name ASC, groups.name ASC"
+      includes(:school => :district).order("schools.name ASC").order("groups.name ASC")
     end
   end
-  has_many :attending_groups, :class_name => "Group",
-    :source => :group, :through => :tickets, :uniq => true,
-    :conditions => "tickets.state != 0",
-    :include => { :school => :district },
-    :order => "districts.name ASC, schools.name ASC, groups.name ASC"
-  has_many :users, :through => :tickets, :uniq => true
+
+
+  has_many :attending_groups,
+    lambda{ includes(:school => :district) 
+      .where("tickets.state != 0")
+      .distinct
+      .order("districts.name ASC")
+      .order("schools.name ASC")
+      .order("groups.name ASC")
+    },
+    :class_name => "Group",
+    :source     => :group,
+    :through    => :tickets
+  
+  has_many :users, lambda{ distinct }, :through => :tickets
+
   belongs_to :answer
 
   attr_accessible :date,
@@ -58,26 +61,15 @@ class Occasion < ActiveRecord::Base
   validates_numericality_of :seats, :only_integer => true,
     :message => "Antalet platser måste vara ett giltigt heltal"
 
-  scope :upcoming, -> {
-    {
-      :conditions => [
-        "date > :date or (date = :date and start_time > :time)",
-        {
-          :date => Date.today,
-          :time => Time.zone.now.strftime("%H:%M")
-        }
-      ]
-    }
+  scope :upcoming, lambda{
+    where("date > :date or (date = :date and start_time > :time)", date: Date.today, time: Time.zone.now.strftime("%H:%M"))
   }
 
   # Returns an array of the ticket usage on this occasion. The first element
   # in the array contains the total amount of tickets on this occasion, and the
   # second the total amount of booked tickets on this occasion.
   def ticket_usage
-    return [
-      Ticket.count(:conditions => { :occasion_id => self.id }),
-      Ticket.booked.count(:conditions => { :occasion_id => self.id })
-    ]
+    [Ticket.where(occasion_id: self.id).count, Ticket.booked.where(occasion_id: self.id).count]
   end
 
   # Search method for occasions. Returns a paginated result.
@@ -91,6 +83,9 @@ class Occasion < ActiveRecord::Base
   # [<tt>:date_span</tt>] Sets a date span limit from <tt>from_date</tt>, can be <tt>:day</tt>, <tt>:week</tt>, <tt>:month</tt> and <tt>:date</tt>
   # [<tt>:to_age</tt>] If <tt>:date_span</tt> is <tt>:date</tt>, this value sets an upper limit on the date of the returned events.
   # [<tt>:categories</tt>] An array of the categories to limit the search to
+  #
+  # TODO: Rewrite to make better use of arel.
+  #
   def self.search(filter, page)
 
     conditions = [ " current_date between events.visible_from and events.visible_to and occasions.cancelled = ? and culture_providers.active = ? ", false, true ]
@@ -147,13 +142,16 @@ class Occasion < ActiveRecord::Base
       conditions << filter[:categories]
     end
 
-    return paginate(
-      :page => page,
-      :conditions => conditions,
-      :order => "occasions.date ASC, events.name ASC, occasions.start_time ASC",
-      :include => { :event => :culture_provider }
-    )
+    # Convert to non-deprecated way of finding records
+    where_fragment, variables = conditions[0], conditions[1..-1]
+    self.includes(:event => :culture_provider)
+      .references(:events, :culture_providers)
+      .where(where_fragment, *variables)
+      .order("occasions.date ASC, events.name ASC, occasions.start_time ASC")
+      .paginate(:page => page)
   end
+
+
 
   # Returns the amount of available wheelchair seats on this occasion.
   def available_wheelchair_seats

@@ -25,7 +25,7 @@ class CalendarControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert          !assigns(:category_groups).blank?
-    assert_equal    CategoryGroup.all(:order => "name ASC"),            assigns(:category_groups)
+    assert_equal    CategoryGroup.order("name ASC").to_a,            assigns(:category_groups)
     assert          !assigns(:occasions).blank?
     assert_equal    Occasion.search({ :from_date => Date.today }, nil), assigns(:occasions)
 
@@ -33,7 +33,7 @@ class CalendarControllerTest < ActionController::TestCase
     get :index, :list => "events"
     assert_response :success
     assert          !assigns(:category_groups).blank?
-    assert_equal    CategoryGroup.all(:order => "name ASC"),                  assigns(:category_groups)
+    assert_equal    CategoryGroup.order("name ASC").to_a,                  assigns(:category_groups)
     assert          !assigns(:events).blank?
     assert_equal    Event.search_standing({ :from_date => Date.today }, nil), assigns(:events)
   end
@@ -64,7 +64,7 @@ class CalendarControllerTest < ActionController::TestCase
     get :filter
     assert_response :success
     assert          !assigns(:category_groups).blank?
-    assert_equal    CategoryGroup.all(:order => "name ASC"),            assigns(:category_groups)
+    assert_equal    CategoryGroup.order("name ASC").to_a,            assigns(:category_groups)
     assert          !assigns(:occasions).blank?
     assert_equal    Occasion.search({ :from_date => Date.today - 1 }, nil), assigns(:occasions)
 
@@ -72,7 +72,7 @@ class CalendarControllerTest < ActionController::TestCase
     get :filter, :list => "events"
     assert_response :success
     assert          !assigns(:category_groups).blank?
-    assert_equal    CategoryGroup.all(:order => "name ASC"),                  assigns(:category_groups)
+    assert_equal    CategoryGroup.order("name ASC").to_a,                  assigns(:category_groups)
     assert          !assigns(:events).blank?
     assert_equal    Event.search_standing({ :from_date => Date.today - 1 }, nil), assigns(:events)
   end

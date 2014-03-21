@@ -18,7 +18,7 @@ class CultureProvidersControllerTest < ActionController::TestCase
     get :index
 
     assert_response :success
-    assert_equal    CultureProvider.all(:order => "name asc"), assigns(:culture_providers)
+    assert_equal    CultureProvider.order("name asc").to_a, assigns(:culture_providers)
   end
   test "index, no admin" do
     @controller.unstub(:authenticate)
@@ -116,7 +116,7 @@ class CultureProvidersControllerTest < ActionController::TestCase
 
     delete :destroy, :id => culture_provider.id
     assert_redirected_to culture_providers_url()
-    assert_nil           CultureProvider.first(:conditions => { :id => culture_provider.id })
+    assert_nil           CultureProvider.where(:id => culture_provider.id).first
   end
 
   test "activate" do

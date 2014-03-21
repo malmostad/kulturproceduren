@@ -27,14 +27,14 @@ class CultureProviderSweeper < ActionController::Caching::Sweeper
 
   # Removes the cache of a single culture provider
   def invalidate_single(culture_provider)
-    expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/bookable"
-    expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/not_bookable"
-    expire_fragment "culture_providers/show/#{culture_provider.id}/standing_events"
+    ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/bookable"
+    ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/not_bookable"
+    ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/standing_events"
   end
 
   # Removes the cache for all culture providers
   def invalidate_all
-    expire_fragment %r{culture_providers/show/\d+/upcoming_occasions}
-    expire_fragment %r{culture_providers/show/\d+/standing_events}
+    ActionController::Base.new.expire_fragment %r{culture_providers/show/\d+/upcoming_occasions}
+    ActionController::Base.new.expire_fragment %r{culture_providers/show/\d+/standing_events}
   end
 end

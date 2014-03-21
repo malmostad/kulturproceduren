@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 # Sweeper for fragment caching involving the calendar
 class CalendarSweeper < ActionController::Caching::Sweeper
+
   observe Event, Occasion, CultureProvider, Category, CategoryGroup
 
   def after_save(record)
@@ -19,6 +20,6 @@ class CalendarSweeper < ActionController::Caching::Sweeper
 
   # Removes all cached fragments for the calendar
   def invalidate_cache
-    expire_fragment %r{calendar/list/(events|occasions)/(not_)?bookable/\d+}
+    ActionController::Base.new.expire_fragment %r{calendar/list/(events|occasions)/(not_)?bookable/\d+}
   end
 end

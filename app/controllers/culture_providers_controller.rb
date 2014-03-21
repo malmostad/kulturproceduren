@@ -12,20 +12,17 @@ class CultureProvidersController < ApplicationController
 
   # Displays a paginated list of all culture providers
   def index
-    if user_online? && current_user.has_role?(:admin)
-      @culture_providers = CultureProvider.paginate :page => params[:page],
-        :order => sort_order("name")
+    @culture_providers = if user_online? && current_user.has_role?(:admin)
+      CultureProvider.order(sort_order("name")).paginate :page => params[:page]
     else
-      @culture_providers = CultureProvider.paginate :page => params[:page],
-        :conditions => { :active => true },
-        :order => sort_order("name")
+      CultureProvider.where(active: true).order(sort_order("name")).paginate(page: params[:page])
     end
   end
 
   # Displays a culture provider's presentation page
   def show
-    @culture_provider = CultureProvider.find params[:id], :include => [ :main_image ]
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @culture_provider = CultureProvider.includes(:main_image).find params[:id]
+    @category_groups = CategoryGroup.order "name ASC"
   end
 
   # Displays a form for adding a culture provider

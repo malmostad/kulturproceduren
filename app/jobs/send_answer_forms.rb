@@ -5,9 +5,7 @@ class SendAnswerForms
   end
 
   def run
-    occasions = Occasion.find :all,
-      :conditions => { :date => @today - @activation_days, :cancelled => false },
-      :include => :event
+    occasions = Occasion.where(date: @today - @activation_days, cancelled: false).includes(:event)
     
     occasions.each do |occasion|
       occasion.bookings.active.each do |booking|

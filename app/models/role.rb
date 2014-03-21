@@ -17,7 +17,7 @@ class Role < ActiveRecord::Base
   # Finds a specific role using a symbol, for constantized referencing of
   # roles in the code
   def self.find_by_symbol(sym)
-    find :first, :conditions => [ "lower(name) = ?", sym.to_s.downcase ]
+    self.where("lower(name) = ?", sym.to_s.downcase).first
   end
 
   # Returns the role's name as a symbol

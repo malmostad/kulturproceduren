@@ -30,21 +30,15 @@ class ApplicationController < ActionController::Base
     session[:group_selection] ||= {}
 
     gsc = {
-      :districts => District.find(:all, :order => "name")
+      :districts => District.order("name")
     }
 
     if session[:group_selection][:district_id]
-      gsc[:schools] = School.find(
-        :all,
-        :order => "name",
-        :conditions => { :district_id => session[:group_selection][:district_id] })
+      gsc[:schools] = School.where(district_id: session[:group_selection][:district_id]).order("name")
     end
 
     if session[:group_selection][:school_id]
-      gsc[:groups] = Group.find(
-        :all,
-        :order => "name",
-        :conditions => { :school_id => session[:group_selection][:school_id] })
+      gsc[:groups] = Group.where(school_id: session[:group_selection][:school_id]).order("name")
     end
 
     if occasion

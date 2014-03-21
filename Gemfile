@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 source "https://rubygems.org"
 
-gem "rails", "3.2.17"
+gem "rails", "4.0.4"
 gem "json", "1.8.1"
 
 gem "pg", "0.17.1"
@@ -13,6 +13,14 @@ gem "ruby-ldap", "0.9.16", :require => "ldap"
 
 gem "simple_enum", "1.6.8"
 gem "rails_autolink", "1.1.5"
+
+
+#
+#
+#
+gem "protected_attributes", "1.0.7"
+gem "activerecord-session_store", "0.1.0"
+gem "rails-observers", "0.1.2"
 
 group :development do
   gem "capistrano", "~> 3.1.0"

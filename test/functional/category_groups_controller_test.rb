@@ -67,6 +67,6 @@ class CategoryGroupsControllerTest < ActionController::TestCase
     delete :destroy, :id => category_group.id
     assert_redirected_to :action => "index"
     assert_equal         "Kategorigruppen togs bort.", flash[:notice]
-    assert_nil           CategoryGroup.first(:conditions => { :id => category_group.id })
+    assert_nil           CategoryGroup.where(:id => category_group.id).first
   end
 end

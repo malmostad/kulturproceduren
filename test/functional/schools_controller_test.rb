@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class SchoolsControllerTest < ActionController::TestCase
   def setup
@@ -18,8 +18,8 @@ class SchoolsControllerTest < ActionController::TestCase
     school = create(:school_with_groups)
     get :show, :id => school.id
     assert_response :success
-    assert_equal    school,        assigns(:school)
-    assert_equal    school.groups, assigns(:groups)
+    assert_equal    school,             assigns(:school)
+    assert_equal    school.groups.to_a, assigns(:groups)
   end
 
   test "new" do
@@ -91,7 +91,7 @@ class SchoolsControllerTest < ActionController::TestCase
     delete :destroy, :id => school.id
     assert_redirected_to school.district
     assert_equal         "Skolan togs bort.", flash[:notice]
-    assert_nil           School.first(:conditions => { :id => school.id })
+    assert_nil           School.where(id: school.id).first
   end
 
   test "select" do

@@ -8,17 +8,18 @@ class AgeGroup < ActiveRecord::Base
     :quantity,
     :group_id, :group
 
-  scope :with_district, ->(district_ids) {
-    {
-      :include => { :group => :school },
-      :conditions => { "schools.district_id" => district_ids }
-    }
+  scope :with_district, lambda{ |district_ids|
+    where("schools.district_id" => district_ids).includes(:group => :school)
   }
-  scope :with_age, ->(from_age, to_age) {
-    { :conditions => [ "age between ? and ?", from_age, to_age ] }
+
+  scope :with_age, lambda{ |from_age, to_age|
+    where("age BETWEEN ? AND ?", from_age, to_age)
   }
-  scope :active, :include => :group, :conditions => { "groups.active" => true }
-  scope :order_by_group_priority, :include => :group, :order => "groups.priority ASC"
+
+  scope :active, lambda{ where("groups.active").includes(:group).references(:groups) }
+
+  scope :order_by_group_priority, lambda{ includes(:group).order("groups.priority ASC") }
+
 
   validates_numericality_of :age,
     :only_integer => true,
@@ -29,17 +30,14 @@ class AgeGroup < ActiveRecord::Base
 
 
   def self.num_children_per_district
-    sum(
-      "quantity",
-      :include => { :group => :school },
-      :group => "schools.district_id",
-      :order => "schools.district_id"
-    )
+    {}.tap do |result|
+      counts = self.includes(:group => :school).order("schools.district_id").group("schools.district_id").sum(:quantity)
+      counts.each{ |k, v| result[k.to_s] = v }
+    end
   end
+
+
   def self.num_children_per_group
-    sum(
-      "quantity",
-      :group => "group_id"
-    )
+    self.group(:group_id).sum(:quantity)
   end
 end

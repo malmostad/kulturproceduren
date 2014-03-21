@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class EventTest < ActiveSupport::TestCase
   test "validations" do
@@ -27,7 +27,7 @@ class EventTest < ActiveSupport::TestCase
     create_list(:event, 5)
     create_list(:event_with_occasions, 5)
 
-    events = Event.standing.all
+    events = Event.standing.to_a
     assert_equal 5, events.length
     events.each { |e| assert e.occasions.blank? }
   end
@@ -35,7 +35,7 @@ class EventTest < ActiveSupport::TestCase
     create_list(:event, 5)
     create_list(:event_with_occasions, 5)
 
-    events = Event.non_standing.all
+    events = Event.non_standing.to_a
     assert_equal 5, events.length
     events.each { |e| assert !e.occasions.blank? }
   end
@@ -45,7 +45,7 @@ class EventTest < ActiveSupport::TestCase
     without = create(:event)
     create(:ticket, :event => with)
 
-    events = Event.without_tickets.all
+    events = Event.without_tickets.to_a
     assert_equal 1, events.length
     assert_equal without.id, events.first.id
   end
@@ -54,7 +54,7 @@ class EventTest < ActiveSupport::TestCase
     without = create(:event)
     create(:questionnaire, :event => with)
 
-    events = Event.without_questionnaires.all
+    events = Event.without_questionnaires.to_a
     assert_equal 1, events.length
     assert_equal without.id, events.first.id
   end
@@ -64,7 +64,7 @@ class EventTest < ActiveSupport::TestCase
     event2 = create(:event)
     event3 = create(:event, :linked_events => [event1])
 
-    events = Event.not_linked_to_event(event3).all
+    events = Event.not_linked_to_event(event3).to_a
     assert_equal 1, events.length
     assert_equal event2.id, events.first.id
   end
@@ -73,7 +73,7 @@ class EventTest < ActiveSupport::TestCase
     event1 = create(:event)
     create(:event, :linked_culture_providers => [culture_provider])
 
-    events = Event.not_linked_to_culture_provider(culture_provider).all
+    events = Event.not_linked_to_culture_provider(culture_provider).to_a
     assert_equal 1, events.length
     assert_equal event1.id, events.first.id
   end

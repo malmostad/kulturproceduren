@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   def index
     if current_user.has_role?(:admin, :coordinator)
       @users = User.filter session[:user_list_filter], params[:page], sort_order("username")
-      @districts = District.all :order => "name ASC"
+      @districts = District.order("name ASC")
     else
       redirect_to current_user
     end
@@ -77,11 +77,11 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @districts = District.all :order => "name ASC"
+    @districts = District.order(name: :asc)
   end
 
   def edit
-    @districts = District.all :order => "name ASC"
+    @districts = District.order(name: :asc)
   end
 
   # Displays a form for changing a user's password.
@@ -110,7 +110,7 @@ class UsersController < ApplicationController
       return
     end
 
-    @districts = District.all :order => "name ASC"
+    @districts = District.order("name ASC")
     @user.reset_password
     render :action => "new"
   end
@@ -125,7 +125,7 @@ class UsersController < ApplicationController
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
-      @districts = District.all :order => "name ASC"
+      @districts = District.order("name ASC")
       render :action => "edit"
     end
   end
@@ -201,9 +201,9 @@ class UsersController < ApplicationController
   # Sends a confirmation email to the user requesting the password reset
   def send_password_reset_confirmation
     if !params[:user][:username].blank?
-      users = User.find :all, :conditions => { :username => params[:user][:username] }
+      users = User.where(username: params[:user][:username])
     elsif !params[:user][:email].blank?
-      users = User.find :all, :conditions => { :email => params[:user][:email] }
+      users = User.where(email: params[:user][:email])
     else
       flash[:warning] = "Du måste ange ett användarnamn eller en epostadress."
       redirect_to request_password_reset_users_url()

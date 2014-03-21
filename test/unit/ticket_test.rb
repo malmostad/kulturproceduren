@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class TicketTest < ActiveSupport::TestCase
   test "state" do
@@ -101,33 +101,33 @@ class TicketTest < ActiveSupport::TestCase
     not_used    = create(:ticket, :state => :not_used)
     deactivated = create(:ticket, :state => :deactivated)
 
-    assert_equal [unbooked],    Ticket.with_states(:unbooked).all(:order => "state")
-    assert_equal [booked],      Ticket.with_states(:booked).all(:order => "state")
-    assert_equal [used],        Ticket.with_states(:used).all(:order => "state")
-    assert_equal [not_used],    Ticket.with_states(:not_used).all(:order => "state")
-    assert_equal [deactivated], Ticket.with_states(:deactivated).all(:order => "state")
+    assert_equal [unbooked],    Ticket.with_states(:unbooked).to_a
+    assert_equal [booked],      Ticket.with_states(:booked).to_a
+    assert_equal [used],        Ticket.with_states(:used).to_a
+    assert_equal [not_used],    Ticket.with_states(:not_used).to_a
+    assert_equal [deactivated], Ticket.with_states(:deactivated).to_a
 
-    assert_equal [deactivated, unbooked, used], Ticket.with_states(:unbooked, :used, :deactivated).all(:order => "state")
-    assert_equal [booked, not_used],            Ticket.with_states([:booked, :not_used]).all(:order => "state")
+    assert_equal [deactivated, unbooked, used], Ticket.with_states(:unbooked, :used, :deactivated).order(:state).to_a
+    assert_equal [booked, not_used],            Ticket.with_states([:booked, :not_used]).order(:state).to_a
 
-    assert_equal [unbooked],    Ticket.unbooked.all(:order => "state")
-    assert_equal [booked],      Ticket.booked.all(:order => "state")
-    assert_equal [used],        Ticket.used.all(:order => "state")
-    assert_equal [not_used],    Ticket.not_used.all(:order => "state")
-    assert_equal [deactivated], Ticket.deactivated.all(:order => "state")
+    assert_equal [unbooked],    Ticket.unbooked.to_a
+    assert_equal [booked],      Ticket.booked.to_a
+    assert_equal [used],        Ticket.used.to_a
+    assert_equal [not_used],    Ticket.not_used.to_a
+    assert_equal [deactivated], Ticket.deactivated.to_a
 
-    assert_equal [deactivated, booked, used, not_used],     Ticket.without_states(:unbooked).all(:order => "state")
-    assert_equal [deactivated, unbooked, used, not_used],   Ticket.without_states(:booked).all(:order => "state")
-    assert_equal [deactivated, unbooked, booked, not_used], Ticket.without_states(:used).all(:order => "state")
-    assert_equal [deactivated, unbooked, booked, used],     Ticket.without_states(:not_used).all(:order => "state")
-    assert_equal [unbooked, booked, used, not_used],        Ticket.without_states(:deactivated).all(:order => "state")
+    assert_equal [deactivated, booked, used, not_used],     Ticket.without_states(:unbooked).order(:state).to_a
+    assert_equal [deactivated, unbooked, used, not_used],   Ticket.without_states(:booked).order(:state).to_a
+    assert_equal [deactivated, unbooked, booked, not_used], Ticket.without_states(:used).order(:state).to_a
+    assert_equal [deactivated, unbooked, booked, used],     Ticket.without_states(:not_used).order(:state).to_a
+    assert_equal [unbooked, booked, used, not_used],        Ticket.without_states(:deactivated).order(:state).to_a
 
-    assert_equal [deactivated, unbooked, used], Ticket.without_states([:booked, :not_used]).all(:order => "state")
-    assert_equal [booked, not_used],            Ticket.without_states(:unbooked, :used, :deactivated).all(:order => "state")
+    assert_equal [deactivated, unbooked, used], Ticket.without_states([:booked, :not_used]).order(:state).to_a
+    assert_equal [booked, not_used],            Ticket.without_states(:unbooked, :used, :deactivated).order(:state).to_a
 
-    assert_equal [deactivated, booked, used, not_used],   Ticket.not_unbooked.all(:order => "state")
-    assert_equal [deactivated, unbooked, used, not_used], Ticket.not_booked.all(:order => "state")
-    assert_equal [unbooked, booked, used, not_used],      Ticket.not_deactivated.all(:order => "state")
+    assert_equal [deactivated, booked, used, not_used],   Ticket.not_unbooked.order(:state).to_a
+    assert_equal [deactivated, unbooked, used, not_used], Ticket.not_booked.order(:state).to_a
+    assert_equal [unbooked, booked, used, not_used],      Ticket.not_deactivated.order(:state).to_a
   end
 
   test "unbook!" do

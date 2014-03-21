@@ -12,7 +12,7 @@ class AllotmentController < ApplicationController
   # Intializing view for the allotment process, displays a form
   # for allotment parameters
   def init
-    @districts = District.all :order => "name ASC"
+    @districts = District.order("name ASC")
   end
 
   # Stores the allotment parameters in the session and redirects
@@ -110,8 +110,7 @@ class AllotmentController < ApplicationController
     @districts = load_working_districts()
 
     if session[:allotment][:extra_groups]
-      @extra_groups = Group.find session[:allotment][:extra_groups],
-        :include => :school
+      @extra_groups = Group.includes(:school).find session[:allotment][:extra_groups]
     end
 
     @tickets_left = assign_working_distribution(@event,
@@ -142,7 +141,7 @@ class AllotmentController < ApplicationController
 
       if session[:allotment][:ticket_state] == :alloted_group
         # Assign the tickets to groups
-        groups = Group.find assignment.keys, :include => { :school => :district }
+        groups = Group.includes(:school => :district).find assignment.keys
 
         groups.each do |group|
           amount = assignment[group.id]
@@ -218,16 +217,16 @@ class AllotmentController < ApplicationController
   # Loads the working districts from the session
   def load_working_districts
     if session[:allotment][:district_ids]
-      return District.find(session[:allotment][:district_ids], :order => "name ASC")
+      return District.order("name ASC").find(session[:allotment][:district_ids])
     else
-      return District.all(:order => "name ASC")
+      return District.order("name ASC")
     end
   end
 
   # Load the current event
   def load_event
     begin
-      @event = Event.find params[:id], :include => :culture_provider
+      @event = Event.includes(:culture_provider).find params[:id]
 
       if @event.ticket_release_date && @event.ticket_release_date <= Date.today
         flash[:error] = "Fördelning kan inte göras efter ett evenemangs biljettsläpp."
@@ -320,7 +319,7 @@ class AllotmentController < ApplicationController
     assign_children(event, districts)
 
     if ticket_state == :alloted_group
-      group_counts = event.tickets.count(:group => "group_id")
+      group_counts = event.tickets.group("group_id").count
 
       districts.each do |district|
         district.distribution_schools.each do |school|
@@ -337,7 +336,7 @@ class AllotmentController < ApplicationController
       end
 
     elsif ticket_state == :alloted_district
-      district_counts = event.tickets.count(:group => "district_id")
+      district_counts = event.tickets.group("district_id").count
       districts.each { |d| distribution[d.id] = district_counts[d.id].to_i }
     end
 

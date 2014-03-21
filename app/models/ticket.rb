@@ -78,14 +78,24 @@ class Ticket < ActiveRecord::Base
     self.state == :deactivated
   end
 
-  def self.with_states(*states)
+  scope :with_states, lambda{ |*states|
+    ids = states.flatten.collect{ |s| state_id_from_symbol(s) }
+    where(state: ids)
+  }
+  #def self.with_states(*states)
+  #  ids = states.flatten.collect { |s| state_id_from_symbol(s) }
+  #  scoped(:conditions => { :state => ids })
+  #end
+
+  scope :without_states, lambda { |*states|
     ids = states.flatten.collect { |s| state_id_from_symbol(s) }
-    scoped(:conditions => { :state => ids })
-  end
-  def self.without_states(*states)
-    ids = states.flatten.collect { |s| state_id_from_symbol(s) }
-    scoped(:conditions => [ "tickets.state not in (?)", ids ])
-  end
+    where.not("tickets.state" => ids)
+  }
+  #def self.without_states(*states)
+  #  ids = states.flatten.collect { |s| state_id_from_symbol(s) }
+  #  scoped(:conditions => [ "tickets.state not in (?)", ids ])
+  #end
+  
   def self.unbooked
     with_states(:unbooked)
   end
@@ -130,13 +140,9 @@ class Ticket < ActiveRecord::Base
 
   # Counts the number of available wheelchair tickets booked on an occasion
   def self.count_wheelchair_by_occasion(occasion)
-    with_states(:booked, :used, :not_used).count(
-      :all,
-      :conditions => {
-        :occasion_id => occasion.id,
-        :wheelchair => true
-      }
-    )
+    with_states(:booked, :used, :not_used)
+      .where(occasion_id: occasion.id, wheelchair: true)
+      .count
   end
 
   # Returns all bookings a user has made, in a paged result
@@ -207,22 +213,12 @@ class Ticket < ActiveRecord::Base
 
   # Returns a group's booked tickets for an occasion
   def self.find_booked(group, occasion)
-    with_states(:booked, :deactivated).all(
-      :conditions => {
-        :group_id => group.id,
-        :occasion_id => occasion.id
-      }
-    )
+    with_states(:booked, :deactivated).where(group_id: group.id, occasion_id: occasion.id)
   end
 
   # Returns a group's tickets for an occasion that are not unbooked
   def self.find_not_unbooked(group, occasion)
-    not_unbooked.all(
-      :conditions => {
-        :group_id => group.id,
-        :occasion_id => occasion.id
-      }
-    )
+    not_unbooked.where(group_id: group.id, occasion_id: occasion.id)
   end
 
   # Returns a group's booked tickets for an occasion of a given type
@@ -233,26 +229,24 @@ class Ticket < ActiveRecord::Base
       :adult => false,
       :wheelchair => false
     }
-
     conditions[type] = true if type != :normal
-
-    booked.all :conditions => conditions
+    booked.where(conditions)
   end
 
   # Counts a group's tickets for an occasion of a given type with the given
   # state
   def self.count_by_type_state(group, occasion, type, states = [ :booked, :used, :not_used ])
-    conditions = {
-      :group_id => group.id,
-      :occasion_id => occasion.id,
-      :adult => false,
-      :wheelchair => false
-    }
+    conditions = {}.tap do |h|
+      h[:group_id]    = group.id
+      h[:occasion_id] = occasion.id
+      h[:adult]       = false
+      h[:wheelchair]  = false
 
-    conditions[type] = true if type != :normal
-
-    with_states(states).count :conditions => conditions
+      h[type] = true unless type == :normal
+    end
+    with_states(states).where(conditions).count
   end
+
 
   # Returns the group's booking count for a given occasion
   def self.booking(group, occasion)

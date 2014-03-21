@@ -77,7 +77,7 @@ class DistrictsControllerTest < ActionController::TestCase
     delete :destroy, :id => district.id
     assert_redirected_to districts_url()
     assert_equal         "Stadsdelen togs bort.", flash[:notice]
-    assert_nil           District.first(:conditions => { :id => district.id })
+    assert_nil           District.where(:id => district.id).first
   end
 
   test "select" do

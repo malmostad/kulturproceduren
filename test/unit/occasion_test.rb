@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class OccasionTest < ActiveSupport::TestCase
   test "validations" do
@@ -168,7 +168,7 @@ class OccasionTest < ActiveSupport::TestCase
       :start_time => (ts + 22.hours).strftime("%H:%M"),
       :stop_time  => (ts + 23.hours).strftime("%H:%M"))
 
-    result = Occasion.upcoming.all
+    result = Occasion.upcoming.to_a
     assert_equal 2, result.length # The last two defined above
 
     result.each do |occasion|

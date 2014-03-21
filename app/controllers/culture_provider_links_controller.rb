@@ -12,15 +12,13 @@ class CultureProviderLinksController < ApplicationController
 
   def new
     if @culture_provider
-      @culture_providers = CultureProvider.not_linked_to_culture_provider(@culture_provider).paginate(
-        :page => params[:page],
-        :order => sort_order("name")
-      )
+      @culture_providers = CultureProvider.not_linked_to_culture_provider(@culture_provider)
+        .order(sort_order("name"))
+        .paginate(:page => params[:page])
     elsif @event
-      @culture_providers = CultureProvider.not_linked_to_event(@event).paginate(
-        :page => params[:page],
-        :order => sort_order("name")
-      )
+      @culture_providers = CultureProvider.not_linked_to_event(@event)
+        .order(sort_order("name"))
+        .paginate(:page => params[:page])
     end
   end
 
@@ -68,7 +66,7 @@ class CultureProviderLinksController < ApplicationController
         redirect_to @culture_provider
       end
     elsif !params[:event_id].blank?
-      @event = Event.find params[:event_id], :include => :culture_provider
+      @event = Event.includes(:culture_provider).find params[:event_id]
 
       unless current_user.can_administrate?(@event.culture_provider)
         flash[:error] = "Du har inte behörighet att komma åt sidan."

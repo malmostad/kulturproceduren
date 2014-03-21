@@ -45,7 +45,7 @@
       <%= f.text_area :body, :size => "40x5", :class => "wysiwyg" %>
 
       <%= f.buttons do -%>
-        <%= f.submit "Skicka", :confirm => "Detta skickar meddelandet till alla mottagare du har angett" %>
+        <%= f.submit "Skicka", :data => {:confirm => "Detta skickar meddelandet till alla mottagare du har angett"} %>
       <% end -%>
     <% end %>
 <% end -%>

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class OccasionsControllerTest < ActionController::TestCase
   def setup
@@ -117,7 +117,7 @@ class OccasionsControllerTest < ActionController::TestCase
     delete :destroy, :id => occasion.id
     assert_redirected_to occasion.event
     assert_equal         "Föreställningen togs bort.", flash[:notice]
-    assert_nil           Occasion.first(:conditions => { :id => occasion.id })
+    assert_nil           Occasion.where(:id => occasion.id).first
   end
 
   test "cancel" do

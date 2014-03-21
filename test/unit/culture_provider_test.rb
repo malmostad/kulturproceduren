@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class CultureProviderTest < ActiveSupport::TestCase
   test "validations" do
@@ -57,7 +57,7 @@ class CultureProviderTest < ActiveSupport::TestCase
     culture_provider2 = create(:culture_provider)
     culture_provider3 = create(:culture_provider, :linked_culture_providers => [culture_provider1])
 
-    culture_providers = CultureProvider.not_linked_to_culture_provider(culture_provider3).all
+    culture_providers = CultureProvider.not_linked_to_culture_provider(culture_provider3).to_a
     assert_equal 1, culture_providers.length
     assert_equal culture_provider2.id, culture_providers.first.id
   end
@@ -67,7 +67,7 @@ class CultureProviderTest < ActiveSupport::TestCase
     culture_provider1 = create(:culture_provider)
     create(:culture_provider, :linked_events => [event])
 
-    culture_providers = CultureProvider.not_linked_to_event(event).all
+    culture_providers = CultureProvider.not_linked_to_event(event).to_a
     assert_equal 1, culture_providers.length
     assert_equal culture_provider1.id, culture_providers.first.id
   end

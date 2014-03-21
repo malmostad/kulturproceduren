@@ -2,7 +2,7 @@
 # A questionnare for a specific event, containing questions for a companion to answer.
 class Questionnaire < ActiveRecord::Base
   belongs_to                :event
-  has_and_belongs_to_many   :questions, :order => "questions.question ASC"
+  has_and_belongs_to_many   :questions, lambda{ order("questions.question ASC") }
   has_many                  :answer_forms, :dependent => :destroy
 
   attr_accessible :description,
@@ -11,15 +11,15 @@ class Questionnaire < ActiveRecord::Base
 
   as_enum :target, { :for_event => 1, :for_unbooking => 2 }, :slim => :class
 
-  scope :for_event, :conditions => { :target_cd => targets.for_event }
-  scope :for_unbooking, :conditions => { :target_cd => targets.for_unbooking }
+  scope :for_event,     lambda{ where(target_cd: targets.for_event) }
+  scope :for_unbooking, lambda{ where(target_cd: targets.for_unbooking) }
 
   # Returns an array of the numbers of answers. The first element is the number of answers
   # that are not submitted, and the second is the number of submitted.
   def answered
     return [
-      AnswerForm.count(:conditions => {:questionnaire_id => self.id , :completed => true}) , 
-      AnswerForm.count(:conditions => {:questionnaire_id => self.id , :completed => false}) 
+      AnswerForm.where(questionnaire_id: self.id, completed: true).count, 
+      AnswerForm.where(questionnaire_id: self.id, completed: false).count 
     ]
   end
   

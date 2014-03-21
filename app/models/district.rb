@@ -2,15 +2,12 @@
 # A district contains multiple schools.
 class District < ActiveRecord::Base
   
-  has_many :schools,
-    :order => "name ASC",
-    :dependent => :destroy do
+  has_many(:schools, lambda{ order "name ASC" }, :dependent => :destroy) do
 
     # Finds all schools in the district that has children in the given age span.
     def find_by_age_span(from, to)
-      find :all,
-        :order => "schools.name ASC",
-        :conditions => [ "schools.id in (select s.id from age_groups ag left join groups g on ag.group_id = g.id left join schools s on g.school_id = s.id  where age between ? and ? and g.active = ?)", from, to, true ]
+      where("schools.id in (select s.id from age_groups ag left join groups g on ag.group_id = g.id left join schools s on g.school_id = s.id  where age between ? and ? and g.active = ?)", from, to, true )
+      .order("schools.name ASC")
     end
   end
 
@@ -38,27 +35,19 @@ class District < ActiveRecord::Base
   # event, otherwise only tickets associated with this district
   # is counted.
   def available_tickets_by_occasion(o)
-    o = Occasion.find(o) if o.is_a?(Integer)
-    return nil unless o.is_a?(Occasion)
-
-    tickets = 0
-
+    if o.is_a? Integer
+      o = Occasion.where(id: o).first
+      return nil if o.nil?
+    end
     case o.event.ticket_state
     when :alloted_group, :alloted_district
       # Count all tickets belonging to this district
-      tickets = Ticket.unbooked.count(
-        :conditions => {
-          :event_id => o.event.id,
-          :district_id => self.id
-        }
-      )
+      Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
     when :free_for_all
       # Count all tickets
-      tickets = Ticket.unbooked.count(
-        :conditions => { :event_id => o.event.id }
-      )
+      Ticket.unbooked.where(event_id: o.event.id).count
+    else
+      0
     end
-
-    return tickets
   end
 end

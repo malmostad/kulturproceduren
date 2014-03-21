@@ -12,79 +12,101 @@
 class Event < ActiveRecord::Base
 
   # Scope for operating on standing events
-  scope :standing, :conditions => "events.id not in (select x.event_id from occasions x)"
+  scope :standing, lambda{ where("events.id not in (select x.event_id from occasions x)") }
+
   # Scope for operating on non-standing events
-  scope :non_standing, :conditions => "events.id in (select x.event_id from occasions x)"
+  scope :non_standing, lambda{ where("events.id in (select x.event_id from occasions x)") }
 
   # Scope for operating on events without tickets
-  scope :without_tickets, :conditions => 'id not in (select event_id from tickets)'
+  scope :without_tickets, lambda{ where('id not in (select event_id from tickets)') }
+
   # Scope for operating on events that are visible
-  scope :visible, :conditions => "current_date between visible_from and visible_to"
+  scope :visible, lambda{ where("current_date between visible_from and visible_to") }
+
   # Scope for operating on events without questionnaires
-  scope :without_questionnaires, :conditions => 'id not in (select event_id from questionnaires where event_id is not null)'
+  scope :without_questionnaires, lambda{ where('id not in (select event_id from questionnaires where event_id is not null)') }
 
-  scope :not_linked_to_event, ->(event) {
-    { :conditions => [ "id not in (select to_id from event_links where from_id = ?) and id != ?", event.id, event.id ] }
+  scope :not_linked_to_event, lambda{ |event|
+    where("id not in (select to_id from event_links where from_id = ?)", event.id)
+    .where("id != ?", event.id) 
   }
-  scope :not_linked_to_culture_provider, ->(culture_provider) {
-    { :conditions => [ "id not in (select event_id from culture_providers_events where culture_provider_id = ?)", culture_provider.id ] }
+  scope :not_linked_to_culture_provider, lambda{ |culture_provider|
+    where("id not in (select event_id from culture_providers_events where culture_provider_id = ?)", culture_provider.id)
   }
 
-  has_many :allotments,
-    :dependent => :destroy,
-    :include => [ :district, { :group => :school } ],
-    :order => "districts.name asc nulls last, schools.name asc nulls last, groups.name asc nulls last"
+  has_many :allotments, lambda {
+      includes(:district, :group => :school)
+      .order("districts.name asc nulls last")
+      .order("schools.name asc nulls last")
+      .order("groups.name asc nulls last") },
+    :dependent => :destroy
+
   has_many :tickets, :dependent => :delete_all
-  has_many :bookings, :through => :tickets, :uniq => true
-  has_many :users, :through => :tickets, :uniq => true
-  has_many :booked_users, :through => :tickets, :uniq => true,
-    :source => :user,
-    :conditions => "tickets.state = #{Ticket::BOOKED}"
+
+  has_many :bookings, lambda{ distinct }, :through => :tickets
+
+  has_many :users, lambda{ distinct }, :through => :tickets
+
+  has_many :booked_users, lambda{ where("tickets.state = ?", Ticket::BOOKED).distinct },
+    :through => :tickets,
+    :source  => :user
   
-  has_many :districts, :through => :tickets, :uniq => true, :order => "name ASC"
-  has_many :groups, :through => :tickets, :uniq => true, :order => "groups.name ASC" do
+  has_many :districts, lambda{ distinct.order(name: :asc) }, through: :tickets
+  
+
+  has_many(:groups, lambda{ distinct.order("groups.name ASC") }, :through => :tickets) do
     # Scope by district
     def find_by_district(district)
-      find :all,
-        :conditions => [ 'tickets.district_id = ?', district.id ],
-        :include => :school,
-        :order => "schools.name ASC, groups.name ASC"
+      includes(:school)
+        .where('tickets.district_id = ?', district.id)
+        .order("schools.name ASC, groups.name ASC")
     end
   end
-  has_many :unordered_groups, :through => :tickets, :uniq => true,
-    :class_name => "Group", :source => :group
+
+
+  has_many :unordered_groups, lambda{ distinct },
+    :through    => :tickets,
+    :class_name => "Group",
+    :source     => :group
   
-  has_many :occasions, :order => "date ASC, start_time ASC, stop_time ASC", :dependent => :destroy
+  has_many :occasions, lambda{ order("date ASC, start_time ASC, stop_time ASC") }, :dependent => :destroy
   has_many :reportable_occasions,
-    :class_name => "Occasion",
-    :order => "date ASC, start_time ASC, stop_time ASC",
-    :conditions => proc { [ 'occasions.date < ?', Date.today ] }
+    lambda{ where("occasions.date <?", Date.today).order("date ASC, start_time ASC, stop_time ASC") },
+    :class_name => "Occasion"
+
   belongs_to :culture_provider
 
-  has_and_belongs_to_many :categories, :include => :category_group
+  has_and_belongs_to_many :categories, lambda{ includes(:category_group) }
 
   has_one :questionnaire, :dependent => :destroy
 
   # All images
   has_many :images, :dependent => :destroy
+  
+
   # All images, excluding the main image (logotype)
-  has_many :images_excluding_main, :class_name => "Image", :conditions => proc { [ "id != ?", self.main_image_id || 0 ] }
+  has_many :images_excluding_main,
+    lambda{ |record| where("id != ?", record.main_image_id.to_i) },
+    #:conditions => proc { [ "id != ?", self.main_image_id || 0 ] },
+    :class_name => "Image"
+
+
   # The main image (logotype)
   belongs_to :main_image, :class_name => "Image", :dependent => :destroy
 
-  has_many :attachments, :order => "filename ASC", :dependent => :destroy
+  has_many :attachments, lambda{ order "filename ASC" }, :dependent => :destroy
 
   has_many :notification_requests, :dependent => :destroy
 
   has_and_belongs_to_many :linked_events,
+    lambda{ order "name ASC" },
     :class_name => "Event",
     :foreign_key => "from_id",
     :association_foreign_key => "to_id",
-    :order => "name ASC",
     :join_table => "event_links"
   has_and_belongs_to_many :linked_culture_providers,
-    :class_name => "CultureProvider",
-    :order => "name ASC"
+    lambda{ order "name ASC" },
+    :class_name => "CultureProvider"
 
   attr_accessible :name,
     :description,
@@ -198,11 +220,11 @@ class Event < ActiveRecord::Base
 
   # Gets the ticket count grouped by groups
   def ticket_count_by_group
-    tickets.count :group => :group_id
+    tickets.group(:group_id).count
   end
   # Gets the ticket count grouped by districts
   def ticket_count_by_district
-    tickets.count :group => :district_id
+    tickets.group(:district_id).count
   end
 
   def has_booking?
@@ -237,19 +259,15 @@ class Event < ActiveRecord::Base
   # total number of tickets on the event, and the second is the number of tickets
   # that are booked.
   def ticket_usage
-    return [
-      Ticket.count( :conditions => { :event_id => self.id } ) ,
-      Ticket.booked.count( :conditions => { :event_id => self.id })
-    ]
+    [Ticket.where(event_id: self.id).count, Ticket.booked.where(event_id: self.id).count]
   end
 
   # Returns the ids of all groups that are not targeted by this event.
   def not_targeted_group_ids
-    unordered_groups.all(
-      :select => "groups.id",
-      :conditions => [ "groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false ],
-      :order => "groups.id ASC"
-    ).collect { |g| g.id.to_i }
+    unordered_groups
+      .select("groups.id")
+      .where("groups.id not in (select g.id from groups g left join age_groups ag on g.id = ag.group_id where ag.age between ? and ?) or groups.active = ?", from_age, to_age, false )
+      .order("groups.id ASC").map(&:id).map(&:to_i)
   end
 
 
@@ -331,12 +349,17 @@ class Event < ActiveRecord::Base
       conditions << filter[:categories]
     end
 
-    return paginate(
-      :page => page,
-      :conditions => conditions,
-      :order => 'events.visible_from ASC, events.name ASC',
-      :include => :culture_provider
-    )
+    #
+    # Convert to scoped syntax
+    # TODO: This method should be rewritten to make proper use of the scoped syntax
+    #
+    sql_fragment = conditions[0]
+    variables    = conditions[1..-1]
+    self.includes(:culture_provider)
+      .references(:events, :culture_providers, :catagories_events)
+      .where(sql_fragment, *variables)
+      .order('events.visible_from ASC, events.name ASC')
+      .paginate(page: page)
   end
 
 

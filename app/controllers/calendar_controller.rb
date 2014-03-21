@@ -9,7 +9,7 @@ class CalendarController < ApplicationController
   # Displays a regular calendar for occasions/events without any search filter
   def index
     unless fragment_exist?(list_cache_key())
-      @category_groups = CategoryGroup.all :order => "name ASC"
+      @category_groups = CategoryGroup.order "name ASC"
       if @calendar_list == :events
         @events = Event.search_standing({ :from_date => Date.today }, params[:page])
       else
@@ -25,7 +25,7 @@ class CalendarController < ApplicationController
     else
       @occasions = Occasion.search(calendar_filter, params[:page])
     end
-    @category_groups = CategoryGroup.all :order => "name ASC"
+    @category_groups = CategoryGroup.order "name ASC"
   end
 
   # Stores the search parameters from the calendar filter in the session

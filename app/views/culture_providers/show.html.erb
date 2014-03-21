@@ -11,13 +11,13 @@
           <%= link_to "Deaktivera",
             deactivate_culture_provider_path(@culture_provider),
             :method => :post,
-            :confirm => "Är du säker på att du vill deaktivera arrangören?"
+            :data   => {:confirm => "Är du säker på att du vill deaktivera arrangören?"}
           %>
         <% else %>
           <%= link_to "Aktivera",
             activate_culture_provider_path(@culture_provider),
             :method => :post,
-            :confirm => "Är du säker på att du vill aktivera arrangören?"
+            :data   => {:confirm => "Är du säker på att du vill aktivera arrangören?"}
           %>
         <% end %>
       </li>

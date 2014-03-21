@@ -1,7 +1,8 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../../test_helper'
 
 class RoleApplicationsHelperTest < ActionView::TestCase
+
   include ERB::Util
 
   test "state string" do

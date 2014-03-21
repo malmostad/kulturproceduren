@@ -18,7 +18,7 @@
 
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_group_path(@group) %></li>
-    <li><%= link_to 'Radera', @group, :confirm => 'Är du säker på att du vill radera gruppen?', :method => :delete %></li>
+    <li><%= link_to 'Radera', @group, :data =>{:confirm => 'Är du säker på att du vill radera gruppen?'}, :method => :delete %></li>
   </ul>
 </div>
 
@@ -54,7 +54,7 @@
           <td><%= age_group.age %></td>
           <td><%= age_group.quantity %></td>
           <td><%= link_to 'Redigera', edit_age_group_path(age_group) %></td>
-          <td><%= link_to 'Radera', age_group, :confirm => 'Är du säker på att du vill radera åldersgruppen?', :method => :delete %></td>
+          <td><%= link_to 'Radera', age_group, :data =>{:confirm => 'Är du säker på att du vill radera åldersgruppen?'}, :method => :delete %></td>
         </tr>
       <% end %>
     </tbody>

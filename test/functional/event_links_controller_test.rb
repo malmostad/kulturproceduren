@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class EventLinksControllerTest < ActionController::TestCase
   def setup
@@ -46,7 +46,7 @@ class EventLinksControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal(   {}, session[:event_links])
-    assert_equal    CultureProvider.all(:order => "name"), assigns(:culture_providers)
+    assert_equal    CultureProvider.order("name"), assigns(:culture_providers)
     assert_nil      assigns(:events)
 
     # Culture provider
@@ -54,18 +54,18 @@ class EventLinksControllerTest < ActionController::TestCase
     get :new, :culture_provider_id => @culture_provider.id
 
     assert_response :success
-    assert_equal    CultureProvider.all(:order => "name"),                                assigns(:culture_providers)
-    assert_equal    @culture_provider,                                                    assigns(:selected_culture_provider)
-    assert_equal    Event.all(:conditions => [ "id != ?", @event.id ], :order => "name"), assigns(:events)
+    assert_equal    CultureProvider.order("name"),                        assigns(:culture_providers)
+    assert_equal    @culture_provider,                                    assigns(:selected_culture_provider)
+    assert_equal    Event.where("id != ?", @event.id).order("name").to_a, assigns(:events)
 
     # Event
     session[:event_links][:selected_culture_provider] = @culture_provider.id
     get :new, :event_id => @event.id
 
     assert_response :success
-    assert_equal    CultureProvider.all(:order => "name"),                                assigns(:culture_providers)
-    assert_equal    @culture_provider,                                                    assigns(:selected_culture_provider)
-    assert_equal    Event.all(:conditions => [ "id != ?", @event.id ], :order => "name"), assigns(:events)
+    assert_equal    CultureProvider.order("name"),                        assigns(:culture_providers)
+    assert_equal    @culture_provider,                                    assigns(:selected_culture_provider)
+    assert_equal    Event.where("id != ?", @event.id).order("name").to_a, assigns(:events)
   end
 
   test "select culture provider, for culture provider" do

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class GroupsControllerTest < ActionController::TestCase
   def setup
@@ -138,7 +138,7 @@ class GroupsControllerTest < ActionController::TestCase
     delete :destroy, :id => group.id
     assert_redirected_to group.school
     assert_equal         "Gruppen togs bort.", flash[:notice]
-    assert_nil           Group.first(:conditions => { :id => group.id })
+    assert_nil           Group.where(:id => group.id).first
   end
 
   test "select" do

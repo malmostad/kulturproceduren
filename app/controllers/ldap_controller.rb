@@ -28,7 +28,7 @@ class LdapController < ApplicationController
   # Creates a local user object from the data in the LDAP if the local
   # user object does not exist
   def handle
-    user = User.find :first, :conditions => { :username => params[:username] }
+    user = User.where(username: params[:username]).first
 
     unless user
       ldap = get_ldap()

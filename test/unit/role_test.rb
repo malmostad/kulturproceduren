@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class RoleTest < ActiveSupport::TestCase
   test "validations" do

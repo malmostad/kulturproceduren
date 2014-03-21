@@ -6,14 +6,14 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :culture_providers
-  has_many :role_applications, :order => "updated_at DESC", :include => [ :role ], :dependent => :destroy
+  has_many :role_applications, lambda{ order("updated_at DESC").includes(:role) }, :dependent => :destroy
 
   has_many :allotments, :dependent => :nullify
   has_many :tickets, :dependent => :nullify
-  has_many :occasions, :through => :tickets, :uniq => true
-  has_many :groups, :through => :tickets, :uniq => true do
+  has_many :occasions, lambda{ uniq true }, :through => :tickets
+  has_many(:groups, lambda{ uniq true }, :through => :tickets) do
     def find_by_occasion(occasion)
-      find :all, :conditions => [ " tickets.occasion_id = ? ", occasion.id ]
+      where("tickets.occasion_id = ?", occasion.id)
     end
   end
 
@@ -62,25 +62,20 @@ class User < ActiveRecord::Base
   #
   # Supported keys are: <tt>:district_id</tt>
   def self.filter(filter, page, order)
-    if filter.blank?
-      return paginate(:page => page, :order => order)
-    else
-      conditions = [ " 1=1 " ]
+    relation = where(true).order(order).paginate(page: page)
+    return relation if filter.blank?
 
-      if filter.has_key?(:district_id)
-        conditions[0] << " and users.id in (select user_id from districts_users where district_id = ?) "
-        conditions << filter[:district_id]
-      end
-
-      if filter.has_key?(:name)
-        name_query = "%#{filter[:name]}%"
-        conditions[0] << " and (users.name ilike ? or users.username ilike ?) "
-        conditions << name_query
-        conditions << name_query
-      end
-
-      return paginate(:conditions => conditions, :page => page, :order => order)
+    if filter.has_key? :district_id
+      relation = relation.where("users.id IN (SELECT user_id FROM districts_users WHERE district_id = ?)", filter[:district_id])
     end
+
+    # Does this really work?
+    if filter.has_key? :name
+      name     = "%#{filter[:name]}%"
+      relation = relation.where("(users.name ILIKE ? OR users.username ILIKE ?)", name, name)
+    end
+
+    relation
   end
 
   # Returns true if this user is authenticated when using the given password
@@ -91,7 +86,7 @@ class User < ActiveRecord::Base
   # Returns the user with the given name if authentication using the username
   # and password succeeds.
   def self.authenticate(username, password)
-    u = find :first, :conditions => { :username => username }
+    u = where(username: username).first
     
     return nil if u.nil?
     return u if u.authenticate(password)
@@ -112,10 +107,8 @@ class User < ActiveRecord::Base
     bookings = []
 
     self.occasions.each do |o|
-      Ticket.find(:all ,
-        :select => "distinct group_id" ,
-        :conditions => { :user_id => self.id , :occasion_id => o.id }
-      ).each do |t|
+      tickets = Ticket.select(:group_id).where(user_id: self.id, occasion_id: o.id).distinct
+      tickets.each do |t|
         bookings << { "occasion" => o , "group" => t.group }
       end
     end

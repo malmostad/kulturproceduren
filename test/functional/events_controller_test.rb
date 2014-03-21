@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class EventsControllerTest < ActionController::TestCase
   def setup
@@ -284,8 +284,8 @@ class EventsControllerTest < ActionController::TestCase
     delete :destroy, :id => event.id
     assert_redirected_to root_url()
     assert_equal         "Evenemanget raderades.", flash[:notice]
-    assert_nil           Event.first(:conditions => { :id => event.id })
-    assert_nil           Questionnaire.first(:conditions => { :id => questionnaire.id })
+    assert_nil           Event.where(:id => event.id).first
+    assert_nil           Questionnaire.where(:id => questionnaire.id).first
   end
 
   test "options list" do
@@ -305,7 +305,7 @@ class EventsControllerTest < ActionController::TestCase
   end
 
   test "options list, errors" do
-    Event.stubs(:find).raises
+    Event.stubs(:order).raises
     get :options_list
     assert_response 404
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/

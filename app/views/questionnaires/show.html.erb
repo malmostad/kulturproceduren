@@ -13,7 +13,7 @@
   <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_questionnaire_path(@questionnaire) %></li>
     <% unless @questionnaire.for_unbooking? %>
-      <li><%= link_to "Radera", @questionnaire, :confirm => "Är du säker?", :method => :delete %></li>
+      <li><%= link_to "Radera", @questionnaire, :data =>{:confirm => "Är du säker?"}, :method => :delete %></li>
     <% end %>
   </ul>
 
@@ -94,7 +94,8 @@
               </td>
             <% else -%>
               <td>
-                <%= link_to "Ta bort från enkät", questionnaire_question_path(@questionnaire, question), :confirm => "Är du säker?", :method => :delete %>
+                <%= link_to "Ta bort från enkät", questionnaire_question_path(@questionnaire, question),
+                  :data =>{:confirm => "Är du säker?"}, :method => :delete %>
               </td>
             <% end -%>
           </tr>

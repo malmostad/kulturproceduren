@@ -60,8 +60,11 @@ class AnswerForm < ActiveRecord::Base
 
   # Finds all unanswered forms for occasions the given date
   def self.find_overdue(date)
-    find :all, :conditions => [ "occasions.date = ? and occasions.cancelled = ? and answer_forms.completed = ?", date, false, false ],
-      :include => [ :occasion, :booking, :group ]
+    self.includes(:occasion, :booking, :group)
+      .references(:occasions)
+      .where("occasions.date = ?", date)
+      .where("occasions.cancelled = ?", false)
+      .where("answer_forms.completed = ?", false)
   end
 
   protected

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require_relative '../test_helper'
 
 class UsersControllerTest < ActionController::TestCase
   def setup
@@ -302,7 +302,7 @@ class UsersControllerTest < ActionController::TestCase
     user = create(:user)
     delete :destroy, :id => user.id
     assert_redirected_to users_url()
-    assert_nil           User.first(:conditions => { :id => user.id})
+    assert_nil           User.where(:id => user.id).first
   end
 
   test "add culture provider" do
