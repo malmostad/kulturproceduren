@@ -52,7 +52,7 @@
 
           <%= select_tag(
             "school_id",
-            "<option>Välj stadsdel först</option>",
+            "<option>Välj stadsdel först</option>".html_safe,
             :disabled => true, :id => "kp-group_selection-school_id")
           %>
 
@@ -94,7 +94,7 @@
 
           <%= select_tag(
             "group_id",
-            "<option>Välj klass/avdelning</option>" + opts,
+            ("<option>Välj klass/avdelning</option>" + opts).html_safe,
             { :id => "kp-group_selection-group_id" })
           %>
 
@@ -105,7 +105,7 @@
         <% else %>
           <%= select_tag(
             "group_id",
-            "<option>Välj skola först</option>",
+            "<option>Välj skola först</option>".html_safe,
             :disabled => true, :id => "kp-group_selection-group_id")
           %>
         <% end %>
