@@ -8,7 +8,7 @@ gem "pg", "0.17.1"
 
 gem "rmagick", "2.13.2", :require => "RMagick"
 gem "will_paginate", "3.0.5"
-gem "pdf-writer", :git => "https://github.com/metaskills/pdf-writer.git", :ref => "7f5bc6c9ce69c26574bbfde36ebdb9ecf06709d0"
+gem "pdf-writer", :git => "https://github.com/Hermanverschooten/pdf-writer.git", :ref => "f57c298a2527893acd62430aefc2516e76499633"
 gem "ruby-ldap", "0.9.16", :require => "ldap"
 
 gem "simple_enum", "1.6.8"
