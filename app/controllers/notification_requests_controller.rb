@@ -34,6 +34,7 @@ class NotificationRequestsController < ApplicationController
     @notification_request = NotificationRequest.new(params[:notification_request]) do |req|
       req.event = @event
       req.user = current_user
+      req.send_mail = true
 
       if @event.free_for_all?
         req.target_cd = NotificationRequest.targets.for_unbooking
