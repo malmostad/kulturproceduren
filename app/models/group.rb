@@ -3,6 +3,7 @@
 class Group < ActiveRecord::Base
   has_many :allotments, :dependent => :nullify
   has_many :tickets, :dependent => :destroy
+  has_many :bookings, :dependent => :destroy
 
   has_many :occasions, lambda{ distinct }, :through => :tickets
 

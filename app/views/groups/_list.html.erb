@@ -9,7 +9,6 @@
         <th><%= sort_link "Skola", "school" %></th>
         <th><%= sort_link "Stadsdel", "district" %></th>
       <% end -%>
-      <th><%= sort_link "ELIT-ID", "elit_id" %></th>
       <th><%= sort_link "Aktiv", "active" %></th>
       <th colspan="2"><%= sort_link "Prioritering", "priority" %></th>
       <th colspan="2"></th>
@@ -24,7 +23,6 @@
           <td><%= link_to group.school.name, group.school %></td>
           <td><%= link_to group.school.district.name, group.school.district %></td>
         <% end -%>
-        <td><%= group.elit_id %></td>
         <td><%= group.active ? "Ja" : "Nej" %></td>
         <% return_to = url_for(request.query_parameters.update(request.path_parameters)) %>
         <td>
