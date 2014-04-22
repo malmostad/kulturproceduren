@@ -332,3 +332,7 @@ sv:
         subject: "Ämnesrad:"
         body: "Meddelande:"
 
+  will_paginate:
+    previous_label: Föregående
+    next_label: Nästa
+    page_gap: "&hellip;"
