@@ -1,12 +1,15 @@
+set :passenger_port, 3002
+set :relative_url_root, "/kp-archive"
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don"t declare `role :all`, it"s a meta role
-role :app, %w{kp@webapps.malmo.se}
-role :web, %w{kp@webapps.malmo.se}
-role :db,  %w{kp@webapps.malmo.se}
+role :app, %w{kulturproceduren-archive}
+role :web, %w{kulturproceduren-archive}
+role :db,  %w{kulturproceduren-archive}
 
 # Extended Server Syntax
 # ======================
