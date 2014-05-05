@@ -26,7 +26,7 @@ namespace :kp do
     # Creates an administrator account in the application
     desc "Create admin account if it does not exist"
     task(create_admin_account: :environment) do
-      unless User.find_by_name "admin"
+      unless User.where(username: "admin").exists?
         u = User.new
         u.username = "admin"
         u.password = "admin"
