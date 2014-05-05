@@ -107,7 +107,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.1.1)
     rmagick (2.13.2)
-    ruby-ldap (0.9.16)
+    ruby-ldap (0.9.12)
     simple_enum (1.6.8)
       activesupport (>= 3.0.0)
     simplecov (0.7.1)
@@ -161,7 +161,7 @@ DEPENDENCIES
   rails-observers (= 0.1.2)
   rails_autolink (= 1.1.5)
   rmagick (= 2.13.2)
-  ruby-ldap (= 0.9.16)
+  ruby-ldap (= 0.9.12)
   simple_enum (= 1.6.8)
   simplecov (~> 0.7.1)
   timecop
