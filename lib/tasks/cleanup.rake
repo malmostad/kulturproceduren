@@ -67,10 +67,8 @@ namespace :kp do
       Booking.destroy_all
       puts "Removing allotments"
       Allotment.destroy_all
-      puts "Removing Companions and associated AnswerForms and Answers"
-      Companion.destroy_all
-      puts "Removing orphan AnswerForms"
-      AnswerForm.destroy_all("companion_id is null")
+      puts "Removing AnswerForms and Answers"
+      AnswerForm.destroy_all
       puts "Removing NotificationRequests"
       NotificationRequest.destroy_all
       puts "Removing non-standing events and associated Occasions, Questionnaires, Attachments, Images"
