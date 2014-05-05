@@ -6,6 +6,8 @@ gem "json", "1.8.1"
 
 gem "pg", "0.17.1"
 
+gem 'passenger', '~> 4.0.41'
+
 gem "rmagick", "2.13.2", :require => "RMagick"
 gem "will_paginate", "3.0.5"
 gem "pdf-writer", :git => "https://github.com/Hermanverschooten/pdf-writer.git", :ref => "f57c298a2527893acd62430aefc2516e76499633"
