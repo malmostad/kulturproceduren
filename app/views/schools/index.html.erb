@@ -1,6 +1,6 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
-<%= render :partial => "list", :locals => { :schools => @schools, :show_district => true } %>
+<%= render partial: "list", locals: { schools: @schools, show_district: true } %>
 
 <%= will_paginate @schools %>

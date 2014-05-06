@@ -2,13 +2,13 @@
 # Model for schools. A schools belongs to a district and has many groups within it.
 class School < ActiveRecord::Base
   
-  has_many :groups, :dependent => :destroy do
+  has_many :groups, dependent: :destroy do
     def find_by_age_span(from, to)
       where("id in (select g.id from age_groups ag left join groups g on ag.group_id = g.id where age between ? and ? and g.active = ?)", from, to, true)
       .order(name: :asc)
     end
   end
-  has_many :age_groups, :through => :groups
+  has_many :age_groups, through: :groups
 
   attr_accessible :name,
     :contacts,
@@ -19,9 +19,9 @@ class School < ActiveRecord::Base
   belongs_to :district
 
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt"
+    message: "Namnet får inte vara tomt"
   validates_presence_of :district,
-    :message => "Skolan måste tillhöra en stadsdel"
+    message: "Skolan måste tillhöra en stadsdel"
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups

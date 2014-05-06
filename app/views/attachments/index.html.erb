@@ -12,9 +12,9 @@
 
 <%= form_for(
   @attachment,
-  :url => event_attachments_path(@event),
-  :builder => KPFormBuilder,
-  :html => { :multipart => true, :class => "attachment-form context-form" }
+  url: event_attachments_path(@event),
+  builder: KPFormBuilder,
+  html: { multipart: true, class: "attachment-form context-form" }
 ) do |f| %>
 
   <%= f.title "Ladda upp dokument" -%>
@@ -55,8 +55,8 @@
           <td>
             <%= link_to "Ta bort",
               event_attachment_path(@event, attachment),
-              :method => :delete,
-              :confirm => "Är du säker på att du vill ta bort filen?"
+              method: :delete,
+              confirm: "Är du säker på att du vill ta bort filen?"
             %>
           </td>
         </tr>

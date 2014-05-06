@@ -20,12 +20,12 @@
       <% if @culture_provider %>
         <%= link_to "Lägg till evenemang",
           new_culture_provider_event_link_path(
-            :culture_provider_id => @culture_provider.id
+            culture_provider_id: @culture_provider.id
         ) %>
       <% elsif @event %>
         <%= link_to "Lägg till arrangör",
           new_event_event_link_path(
-            :event_id => @event.id
+            event_id: @event.id
         ) %>
       <% end %>
     </li>
@@ -50,18 +50,18 @@
             <% if @culture_provider %>
               <%= link_to "Ta bort",
                 culture_provider_event_link_path(
-                  :culture_provider_id => @culture_provider.id,
-                  :id => link.id
+                  culture_provider_id: @culture_provider.id,
+                  id: link.id
               ),
-                :method => :delete
+                method: :delete
               %>
             <% elsif @event %>
               <%= link_to "Ta bort",
                 event_event_link_path(
-                  :event_id => @event.id,
-                  :id => link.id
+                  event_id: @event.id,
+                  id: link.id
               ),
-                :method => :delete
+                method: :delete
               %>
             <% end %>
           </td>

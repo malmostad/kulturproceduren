@@ -6,7 +6,7 @@ class EventsControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:check_roles).at_least_once.returns(true)
 
-    @user = create(:user, :roles => [roles(:admin)])
+    @user = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @user.id
   end
 
@@ -14,7 +14,7 @@ class EventsControllerTest < ActionController::TestCase
     @controller.unstub(:authenticate)
     @controller.unstub(:check_roles)
 
-    session[:current_user_id] = create(:user, :roles => [roles(:culture_worker)])
+    session[:current_user_id] = create(:user, roles: [roles(:culture_worker)])
 
     get :options_list
     assert_response :success
@@ -23,7 +23,7 @@ class EventsControllerTest < ActionController::TestCase
     @controller.unstub(:authenticate)
     @controller.unstub(:check_roles)
 
-    session[:current_user_id] = create(:user, :roles => [roles(:booker)])
+    session[:current_user_id] = create(:user, roles: [roles(:booker)])
 
     get :options_list
     assert_redirected_to root_url()
@@ -37,7 +37,7 @@ class EventsControllerTest < ActionController::TestCase
     event = create(:event)
     category_groups = create_list(:category_group, 3)
 
-    get :show, :id => event.id
+    get :show, id: event.id
 
     assert_response :success
     assert_equal    event,                           assigns(:event)
@@ -46,54 +46,54 @@ class EventsControllerTest < ActionController::TestCase
 
   test "ticket allotment, no allotments" do
     event = create(:event)
-    get :ticket_allotment, :id => event.id
+    get :ticket_allotment, id: event.id
     assert_redirected_to event
     assert_equal         "Evenemanget har ingen aktiv fördelning.", flash[:error]
   end
   test "ticket allotment, html" do
     allotment = create(:allotment)
-    get :ticket_allotment, :id => allotment.event.id
+    get :ticket_allotment, id: allotment.event.id
     assert_response :success
     assert_equal    allotment.event, assigns(:event)
   end
   test "ticket allotment, csv for group" do
     group = create(:group)
-    allotment = create(:allotment, :group => group, :district => group.school.district, :amount => 10)
+    allotment = create(:allotment, group: group, district: group.school.district, amount: 10)
 
     @controller.expects(:send_csv).with(
       "fordelning_evenemang#{allotment.event.id}.tsv",
       "Stadsdel\tSkola\tGrupp\tAntal biljetter\n#{group.school.district.name}\t#{group.school.name}\t#{group.name}\t10\n"
     ).returns(true)
 
-    get :ticket_allotment, :id => allotment.event.id, :format => "xls"
+    get :ticket_allotment, id: allotment.event.id, format: "xls"
   end
   test "ticket allotment, csv for district" do
     district = create(:district)
-    allotment = create(:allotment, :group => nil, :district => district, :amount => 11)
+    allotment = create(:allotment, group: nil, district: district, amount: 11)
 
     @controller.expects(:send_csv).with(
       "fordelning_evenemang#{allotment.event.id}.tsv",
       "Stadsdel\tSkola\tGrupp\tAntal biljetter\n#{district.name}\t\"\"\t\"\"\t11\n"
     ).returns(true)
 
-    get :ticket_allotment, :id => allotment.event.id, :format => "xls"
+    get :ticket_allotment, id: allotment.event.id, format: "xls"
   end
   test "ticket allotment, csv for all" do
-    allotment = create(:allotment, :group => nil, :district => nil, :amount => 12)
+    allotment = create(:allotment, group: nil, district: nil, amount: 12)
 
     @controller.expects(:send_csv).with(
       "fordelning_evenemang#{allotment.event.id}.tsv",
       "Stadsdel\tSkola\tGrupp\tAntal biljetter\nHela staden\t\"\"\t\"\"\t12\n"
     ).returns(true)
 
-    get :ticket_allotment, :id => allotment.event.id, :format => "xls"
+    get :ticket_allotment, id: allotment.event.id, format: "xls"
   end
 
   test "new, admin" do
     category_groups   = create_list(:category_group,   2).sort_by(&:name)
     culture_providers = [
-      create(:culture_provider, :name => "a", :map_address => "map address"),
-      create(:culture_provider, :name => "b", :map_address => "dummy")
+      create(:culture_provider, name: "a", map_address: "map address"),
+      create(:culture_provider, name: "b", map_address: "dummy")
     ]
 
     # No culture provider
@@ -108,7 +108,7 @@ class EventsControllerTest < ActionController::TestCase
     assert_equal    culture_providers, assigns(:culture_providers)
 
     # Culture provider
-    get :new, :culture_provider_id => culture_providers.first.id
+    get :new, culture_provider_id: culture_providers.first.id
 
     assert_response :success
     assert          assigns(:event).new_record?
@@ -120,10 +120,10 @@ class EventsControllerTest < ActionController::TestCase
   end
   test "new, culture worker" do
     create(:culture_provider) # Not authed
-    active = create(:culture_provider,   :active => true)
-    inactive = create(:culture_provider, :active => false)
+    active = create(:culture_provider,   active: true)
+    inactive = create(:culture_provider, active: false)
 
-    user = create(:user, :roles => [roles(:culture_worker)])
+    user = create(:user, roles: [roles(:culture_worker)])
     user.culture_providers << active
     user.culture_providers << inactive
     session[:current_user_id] = user.id
@@ -136,7 +136,7 @@ class EventsControllerTest < ActionController::TestCase
     category_groups = create_list(:category_group, 2).sort_by(&:name)
     event           = create(:event)
 
-    get :edit, :id => event.id
+    get :edit, id: event.id
     assert_response :success
     assert_template "events/new"
     assert_equal    event,           assigns(:event)
@@ -145,10 +145,10 @@ class EventsControllerTest < ActionController::TestCase
   test "edit, unauthed" do
     category_groups           = create_list(:category_group, 2).sort_by(&:name)
     event                     = create(:event)
-    user                      = create(:user, :roles => [roles(:culture_worker)])
+    user                      = create(:user, roles: [roles(:culture_worker)])
     session[:current_user_id] = user.id
 
-    get :edit, :id => event.id
+    get :edit, id: event.id
     assert_redirected_to event
     assert_equal         "Du har inte behörighet att komma åt sidan.", flash[:error]
   end
@@ -160,7 +160,7 @@ class EventsControllerTest < ActionController::TestCase
 
     # Invalid
     culture_providers = [ create_list(:culture_provider, 2), culture_provider ].flatten.sort_by(&:name)
-    post :create, :event => { :culture_provider_id => culture_provider.id }
+    post :create, event: { culture_provider_id: culture_provider.id }
     assert_response :success
     assert_template "events/new"
     assert_equal    category_groups,   assigns(:category_groups)
@@ -169,16 +169,16 @@ class EventsControllerTest < ActionController::TestCase
     # Valid
     post(
       :create,
-      :event => {
-        :name => "Event",
-        :description => "Foo",
-        :from_age => 10,
-        :to_age => 11,
-        :visible_from => Date.today - 1,
-        :visible_to => Date.today + 1,
-        :culture_provider_id => culture_provider.id
+      event: {
+        name: "Event",
+        description: "Foo",
+        from_age: 10,
+        to_age: 11,
+        visible_from: Date.today - 1,
+        visible_to: Date.today + 1,
+        culture_provider_id: culture_provider.id
       },
-      :category_ids => [ categories.first.id, "-1" ]
+      category_ids: [ categories.first.id, "-1" ]
     )
 
     event = Event.last
@@ -191,16 +191,16 @@ class EventsControllerTest < ActionController::TestCase
     category_groups  = categories.collect(&:category_group).sort_by(&:name)
 
     create(:culture_provider) # Not authed
-    active   = create(:culture_provider, :active => true)
-    inactive = create(:culture_provider, :active => false)
+    active   = create(:culture_provider, active: true)
+    inactive = create(:culture_provider, active: false)
 
-    user = create(:user, :roles => [roles(:culture_worker)])
+    user = create(:user, roles: [roles(:culture_worker)])
     user.culture_providers << active
     user.culture_providers << inactive
     session[:current_user_id] = user.id
 
     # Invalid
-    post :create, :event => { :culture_provider_id => active.id }
+    post :create, event: { culture_provider_id: active.id }
     assert_response :success
     assert_template "events/new"
     assert_equal    category_groups, assigns(:category_groups)
@@ -209,16 +209,16 @@ class EventsControllerTest < ActionController::TestCase
     # Valid
     post(
       :create,
-      :event => {
-        :name => "Event",
-        :description => "Foo",
-        :from_age => 10,
-        :to_age => 11,
-        :visible_from => Date.today - 1,
-        :visible_to => Date.today + 1,
-        :culture_provider_id => active.id
+      event: {
+        name: "Event",
+        description: "Foo",
+        from_age: 10,
+        to_age: 11,
+        visible_from: Date.today - 1,
+        visible_to: Date.today + 1,
+        culture_provider_id: active.id
       },
-      :category_ids => [ categories.first.id, "-1" ]
+      category_ids: [ categories.first.id, "-1" ]
     )
 
     event = Event.last
@@ -227,30 +227,30 @@ class EventsControllerTest < ActionController::TestCase
     assert_equal         [categories.first], event.categories
   end
   test "create, unauthed" do
-    user                      = create(:user, :roles => [roles(:culture_worker)])
+    user                      = create(:user, roles: [roles(:culture_worker)])
     session[:current_user_id] = user.id
 
-    post :create, :event => {}
+    post :create, event: {}
     assert_redirected_to root_url()
     assert_equal         "Du har inte behörighet att komma åt sidan.", flash[:error]
   end
 
   test "update, unauthed" do
     event                     = create(:event)
-    user                      = create(:user, :roles => [roles(:culture_worker)])
+    user                      = create(:user, roles: [roles(:culture_worker)])
     session[:current_user_id] = user.id
 
-    put :update, :id => event.id
+    put :update, id: event.id
     assert_redirected_to event
     assert_equal         "Du har inte behörighet att komma åt sidan.", flash[:error]
   end
   test "update, authed" do
     categories      = create_list(:category, 2)
     category_groups = categories.collect(&:category_group).sort_by(&:name)
-    event           = create(:event, :name => "foo")
+    event           = create(:event, name: "foo")
     
     # Invalid
-    put :update, :id => event.id, :event => { :name => "" }
+    put :update, id: event.id, event: { name: "" }
     assert_response :success
     assert_template "events/new"
     assert_equal    event, assigns(:event)
@@ -258,7 +258,7 @@ class EventsControllerTest < ActionController::TestCase
     assert_equal    category_groups, assigns(:category_groups)
 
     # Valid
-    put :update, :id => event.id, :event => { :name => "bar" }, :category_ids => [categories.last.id, "-1"]
+    put :update, id: event.id, event: { name: "bar" }, category_ids: [categories.last.id, "-1"]
     assert_redirected_to event
     assert_equal         "Evenemanget uppdaterades.", flash[:notice]
 
@@ -269,23 +269,23 @@ class EventsControllerTest < ActionController::TestCase
 
   test "destroy, unauthed" do
     event                     = create(:event)
-    user                      = create(:user, :roles => [roles(:culture_worker)])
+    user                      = create(:user, roles: [roles(:culture_worker)])
     session[:current_user_id] = user.id
 
-    delete :destroy, :id => event.id
+    delete :destroy, id: event.id
     assert_redirected_to event
     assert_equal         "Du har inte behörighet att komma åt sidan.", flash[:error]
     assert               Event.find(event.id)
   end
   test "destroy, authed" do
     event         = create(:event)
-    questionnaire = create(:questionnaire, :event => event)
+    questionnaire = create(:questionnaire, event: event)
 
-    delete :destroy, :id => event.id
+    delete :destroy, id: event.id
     assert_redirected_to root_url()
     assert_equal         "Evenemanget raderades.", flash[:notice]
-    assert_nil           Event.where(:id => event.id).first
-    assert_nil           Questionnaire.where(:id => questionnaire.id).first
+    assert_nil           Event.where(id: event.id).first
+    assert_nil           Questionnaire.where(id: questionnaire.id).first
   end
 
   test "options list" do
@@ -297,7 +297,7 @@ class EventsControllerTest < ActionController::TestCase
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
     assert_equal    events, assigns(:events)
 
-    get :options_list, :culture_provider_id => events.first.culture_provider.id
+    get :options_list, culture_provider_id: events.first.culture_provider.id
     assert_response :success
     assert_template "events/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/

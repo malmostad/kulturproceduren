@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <div class="filter-tools">
   <%= form_tag apply_filter_users_path() do %>
@@ -9,12 +9,12 @@
         <label for="kp-user-filter-district_id">Stadsdel:</label>
         <%= select_tag "district_id",
           options_from_collection_for_select(@districts, :id, :name, filter[:district_id]).insert(0,'<option value="all">Alla</option>'),
-          :id => "kp-user-filter-district_id"
+          id: "kp-user-filter-district_id"
         %>
       </li>
       <li class="name-filter">
         <label for="kp-user-filter-name">Namn/användarnamn:</label>
-        <%= text_field_tag "name", filter[:name], :id => "kp-user-filter-name" %>
+        <%= text_field_tag "name", filter[:name], id: "kp-user-filter-name" %>
       </li>
     </ul>
     <div class="button-container">
@@ -52,7 +52,7 @@
             <% if current_user.has_role?(:admin) %>
               <li><%= link_to 'Redigera', edit_user_path(user) %></li>
               <li><%= link_to 'Byt lösenord', edit_password_user_path(user) %></li>
-              <li><%= link_to 'Ta bort', user, :data => {:confirm => "Är du säker?"}, :method => :delete %></li>
+              <li><%= link_to 'Ta bort', user, data: {confirm: "Är du säker?"}, method: :delete %></li>
             <% end %>
           </ul>
         </td>

@@ -6,7 +6,7 @@ class CategoriesControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    @user = create(:user, :roles => [roles(:admin)])
+    @user = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @user.id
 
     @categories = create_list(:category, 2)
@@ -25,7 +25,7 @@ class CategoriesControllerTest < ActionController::TestCase
   end
 
   test "edit" do
-    get :edit, :id => @categories.second.id
+    get :edit, id: @categories.second.id
 
     assert_template "categories/index"
 
@@ -35,7 +35,7 @@ class CategoriesControllerTest < ActionController::TestCase
   end
 
   test "create, invalid" do
-    post :create, :category => { :name => "" }
+    post :create, category: { name: "" }
     assert_response :success
     assert_template "categories/index"
     assert          assigns(:category).new_record?
@@ -44,8 +44,8 @@ class CategoriesControllerTest < ActionController::TestCase
     assert_equal    CategoryGroup.all, assigns(:category_groups)
   end
   test "create, valid" do
-    post :create, :category => { :name => "zomg", :category_group_id => @categories.second.category_group_id }
-    assert_redirected_to :action => "index"
+    post :create, category: { name: "zomg", category_group_id: @categories.second.category_group_id }
+    assert_redirected_to action: "index"
     assert_equal         "Kategorin skapades.", flash[:notice]
     assert_nil           assigns(:categories)
     assert_nil           assigns(:category_groups)
@@ -57,7 +57,7 @@ class CategoriesControllerTest < ActionController::TestCase
   end
 
   test "update, invalid" do
-    put :update, :id => @categories.second.id, :category => { :name => "" }
+    put :update, id: @categories.second.id, category: { name: "" }
     assert_response :success
     assert_template "categories/index"
     assert_equal    @categories.second, assigns(:category)
@@ -66,8 +66,8 @@ class CategoriesControllerTest < ActionController::TestCase
     assert_equal    CategoryGroup.all,  assigns(:category_groups)
   end
   test "update, valid" do
-    put :update, :id => @categories.second.id, :category => { :name => "zomg", :category_group_id => @categories.first.category_group_id }
-    assert_redirected_to :action => "index"
+    put :update, id: @categories.second.id, category: { name: "zomg", category_group_id: @categories.first.category_group_id }
+    assert_redirected_to action: "index"
     assert_equal         "Kategorin uppdaterades.", flash[:notice]
     assert_nil           assigns(:categories)
     assert_nil           assigns(:category_groups)
@@ -82,9 +82,9 @@ class CategoriesControllerTest < ActionController::TestCase
   test "destroy" do
     category = @categories.second
 
-    delete :destroy, :id => category.id
-    assert_redirected_to :action => "index"
+    delete :destroy, id: category.id
+    assert_redirected_to action: "index"
     assert_equal "Kategorin togs bort.", flash[:notice]
-    assert_nil Category.where( :id => category.id ).first
+    assert_nil Category.where( id: category.id ).first
   end
 end

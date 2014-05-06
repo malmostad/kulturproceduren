@@ -26,7 +26,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     define_method(name) do |field, *args|
       options = args.last.is_a?(Hash) ? args.last : {}
 
-      label = label(field, options.delete(:label), :class => options.delete(:label_class))
+      label = label(field, options.delete(:label), class: options.delete(:label_class))
       error = validation_error_message(field)
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
@@ -50,7 +50,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     define_method(name) do |field, *args|
       options = args.last.is_a?(Hash) ? args.last : {}
 
-      label = label(field, options.delete(:label), :class => options.delete(:label_class))
+      label = label(field, options.delete(:label), class: options.delete(:label_class))
       error = validation_error_message(field)
       help = options.delete(:field_help)
       row_hidden = options.delete(:row_hidden)
@@ -65,7 +65,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
       @template.content_tag(
         :div,
         error.is_a?(Array) ? error.first : error,
-        :class => "validation-error-message alert-field"
+        class: "validation-error-message alert-field"
       )
     else
       "".html_safe
@@ -79,7 +79,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
       @template.content_tag(
         :div,
         "Vänligen korrigera markerade uppgifter nedan.",
-        :class => "validation-error-indicator alert"
+        class: "validation-error-indicator alert"
       )
     else
       ""
@@ -93,8 +93,8 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     end
     
     return @template.content_tag :div, content,
-      :class => "form-row " + extra_class,
-      :style => (row_hidden ? "display: none;" : "")
+      class: "form-row " + extra_class,
+      style: (row_hidden ? "display: none;" : "")
   end
 
   # Generates markup for the field, encapsulating it in a container
@@ -105,7 +105,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
     content += field_help(help)
 
-    return @template.content_tag(:div, content, :class => "input-container")
+    return @template.content_tag(:div, content, class: "input-container")
   end
 
   # Generates a fieldset container with an optional legend encapsulating
@@ -118,14 +118,14 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     cls      = title.blank? ? "" : "with-legend "
     cls      << extra_classes
 
-    return @template.content_tag(:fieldset, title + contents, :class => cls)
+    return @template.content_tag(:fieldset, title + contents, class: cls)
   end
 
   # Generates a container for the form submit buttons
   def buttons(&block)
     raise ArgumentError, "Missing block" unless block_given?
     contents = @template.capture(&block)
-    return @template.content_tag(:div, contents, :class => "form-buttons")
+    return @template.content_tag(:div, contents, class: "form-buttons")
   end
 
   # Generates a title for the form
@@ -138,7 +138,7 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
     raise ArgumentError, "Missing block" unless block_given?
 
     contents = @template.capture(&block)
-    return @template.content_tag(:p, contents, :class => "hint")
+    return @template.content_tag(:p, contents, class: "hint")
   end
 
   # Generates a hint for a given field row if the given condition is true
@@ -147,14 +147,14 @@ class KPFormBuilder < ActionView::Helpers::FormBuilder
 
     if condition
       contents = @template.capture(&block)
-      return @template.content_tag(:p, contents, :class => "hint")
+      return @template.content_tag(:p, contents, class: "hint")
     end
   end
 
   # Generates a help text for a field.
   def field_help(text)
     unless text.blank?
-      @template.content_tag(:span, text, :class => "field-help")
+      @template.content_tag(:span, text, class: "field-help")
     else
       ''
     end

@@ -6,7 +6,7 @@
 
     <title>Kulturproceduren<%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %></title>
 
-    <%= render :partial => "shared/head" %>
+    <%= render partial: "shared/head" %>
   </head>
   <body class="kp-standalone">
 
@@ -45,7 +45,7 @@
           <%= link_to "Sändlistor", new_information_path -%>
           </li><li class="pri-nav-leave-logout">
           <%= link_to "Lämna administrationen", root_url() -%>
-          <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
+          <%= link_to "Logga ut från Kulturproceduren", controller: "login", action: "logout" -%>
         </li>
       </ul>
 

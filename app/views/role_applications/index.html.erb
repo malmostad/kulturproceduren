@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "users/menu" -%>
+<%= render partial: "users/menu" -%>
 
 <div class="tabs">
   <ul>
@@ -19,12 +19,12 @@
       Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
     </p>
 
-    <%= form_for(@booker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-booker-form" }) do |f| -%>
+    <%= form_for(@booker_appl, builder: KPFormBuilder, html: { class: "role-application-booker-form" }) do |f| -%>
 
       <%= f.validation_error_indicator %>
 
       <%= f.fields do -%>
-        <%= f.text_area :message, :size => "40x5" %>
+        <%= f.text_area :message, size: "40x5" %>
 
         <%= f.buttons do -%>
           <%= f.hidden_field :role_id %>
@@ -46,14 +46,14 @@
       Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
     </p>
 
-    <%= form_for(@culture_worker_appl, :builder => KPFormBuilder, :html => { :class => "role-application-culture-worker-form" }) do |f| -%>
+    <%= form_for(@culture_worker_appl, builder: KPFormBuilder, html: { class: "role-application-culture-worker-form" }) do |f| -%>
 
       <%= f.validation_error_indicator %>
 
       <%= f.fields do -%>
-        <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { :prompt => "Välj arrangör" } %>
+        <%= f.collection_select :culture_provider_id, @culture_providers, :id, :name, { prompt: "Välj arrangör" } %>
         <%= f.text_field :new_culture_provider_name %>
-        <%= f.text_area :message, :size => "40x5" %>
+        <%= f.text_area :message, size: "40x5" %>
 
         <%= f.buttons do -%>
           <%= f.hidden_field :role_id %>
@@ -70,11 +70,11 @@
       Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din profil.
     </p>
 
-    <%= form_for(@host_appl, :builder => KPFormBuilder, :html => { :class => "role-application-host-form" }) do |f| -%>
+    <%= form_for(@host_appl, builder: KPFormBuilder, html: { class: "role-application-host-form" }) do |f| -%>
       <%= f.validation_error_indicator -%>
 
       <%= f.fields do -%>
-        <%= f.text_area :message, :size => "40x5" %>
+        <%= f.text_area :message, size: "40x5" %>
 
         <%= f.buttons do -%>
           <%= f.hidden_field :role_id %>
@@ -105,9 +105,9 @@
       <% current_user.role_applications.each do |application| -%>
         <tr class="<%= cycle('', 'even') %>">
           <td><%= type_string(application) %></td>
-          <td><%= l application.created_at, :format => :short %></td>
+          <td><%= l application.created_at, format: :short %></td>
           <td><%= state_string(application) %></td>
-          <td><%= l(application.updated_at, :format => :short) unless application.created_at == application.updated_at %></td>
+          <td><%= l(application.updated_at, format: :short) unless application.created_at == application.updated_at %></td>
           <td><%= application.response %></td>
         </tr>
       <% end -%>

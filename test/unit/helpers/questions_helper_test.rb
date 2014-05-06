@@ -5,7 +5,7 @@ class QuestionsHelperTest < ActionView::TestCase
   include ERB::Util
 
   test "question statistics" do
-    question = build(:question, :qtype => "dummy")
+    question = build(:question, qtype: "dummy")
     assert_equal "", question_statistics(question, nil)
 
     question.qtype = "QuestionMark"

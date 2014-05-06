@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "questionnaires/menu" %>
+<%= render partial: "questionnaires/menu" %>
 
 <div class="model-cnt">
   <h2>
@@ -13,7 +13,7 @@
   <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_questionnaire_path(@questionnaire) %></li>
     <% unless @questionnaire.for_unbooking? %>
-      <li><%= link_to "Radera", @questionnaire, :data =>{:confirm => "Är du säker?"}, :method => :delete %></li>
+      <li><%= link_to "Radera", @questionnaire, data:{confirm: "Är du säker?"}, method: :delete %></li>
     <% end %>
   </ul>
 
@@ -44,20 +44,20 @@
       <fieldset class="with-legend">
         <legend><span>eller lägg till ny fråga</span></legend>
         <%= render(
-          :partial => "questions/form",
-          :locals => {
-            :question => @question,
-            :questionnaire => @questionnaire
+          partial: "questions/form",
+          locals: {
+            question: @question,
+            questionnaire: @questionnaire
           }
         ) %>
       </fieldset>
     <% else %>
       <%= render(
-        :partial => "questions/form",
-        :locals => {
-          :question => @question,
-          :questionnaire => @questionnaire,
-          :with_header => true
+        partial: "questions/form",
+        locals: {
+          question: @question,
+          questionnaire: @questionnaire,
+          with_header: true
         }
       ) %>
     <% end -%>
@@ -90,12 +90,12 @@
             <td><%= link_to "Redigera", edit_questionnaire_question_path(@questionnaire, question) unless question.template %></td>
             <% if question.template -%>
               <td>
-                <%= link_to "Ta bort från enkät", remove_template_question_questionnaire_path(@questionnaire, :question_id => question.id), :method => :delete %>
+                <%= link_to "Ta bort från enkät", remove_template_question_questionnaire_path(@questionnaire, question_id: question.id), method: :delete %>
               </td>
             <% else -%>
               <td>
                 <%= link_to "Ta bort från enkät", questionnaire_question_path(@questionnaire, question),
-                  :data =>{:confirm => "Är du säker?"}, :method => :delete %>
+                  data:{confirm: "Är du säker?"}, method: :delete %>
               </td>
             <% end -%>
           </tr>

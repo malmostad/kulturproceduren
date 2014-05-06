@@ -1,42 +1,42 @@
 <%# coding: utf-8 %>
 <% if APP_CONFIG[:asset_host] %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/jquery/malmo-theme.css", :media => "all") %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/external.css", :media => "all") %>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-print.css", :media => "print") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/jquery/malmo-theme.css", media: "all") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/external.css", media: "all") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-print.css", media: "print") %>
   <!--[if lt IE 7]>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie-css-fix.css", :media => "all") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie-css-fix.css", media: "all") %>
   <![endif]-->
   <!--[if IE 7]>
-  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie7-css-fix.css", :media => "all") %>
+  <%= stylesheet_link_tag(APP_CONFIG[:asset_host] + "/css/malmo-ie7-css-fix.css", media: "all") %>
   <![endif]-->
 <% else %>
-  <%= stylesheet_link_tag "malmo-theme/malmo-theme.css", :media => "all" %>
-  <%= stylesheet_link_tag "malmo-external.css", :media => "all" %>
-  <%= stylesheet_link_tag "malmo-print.css", :media => "print" %>
+  <%= stylesheet_link_tag "malmo-theme/malmo-theme.css", media: "all" %>
+  <%= stylesheet_link_tag "malmo-external.css", media: "all" %>
+  <%= stylesheet_link_tag "malmo-print.css", media: "print" %>
   <!--[if lt IE 7]>
-  <%= stylesheet_link_tag "malmo-ie-css-fix.css", :media => "all" %>
+  <%= stylesheet_link_tag "malmo-ie-css-fix.css", media: "all" %>
   <![endif]-->
   <!--[if IE 7]>
-  <%= stylesheet_link_tag "malmo-ie7-css-fix.css", :media => "all" %>
+  <%= stylesheet_link_tag "malmo-ie7-css-fix.css", media: "all" %>
   <![endif]-->
 <% end %>
 
 <% unless ActionController::Base.asset_host.blank? %>
-  <%= stylesheet_link_tag "kp", :media => "all" %>
+  <%= stylesheet_link_tag "kp", media: "all" %>
 <% else %>
-  <%= stylesheet_link_tag "standard", :media => "all" %>
+  <%= stylesheet_link_tag "standard", media: "all" %>
 <% end %>
 
 <!--[if IE 8]>
-<%= stylesheet_link_tag "standard-ie8", :media => "all" %>
+<%= stylesheet_link_tag "standard-ie8", media: "all" %>
 <![endif]-->
 <!--[if lte IE 7]>
-<%= stylesheet_link_tag "standard-ie7", :media => "all" %>
+<%= stylesheet_link_tag "standard-ie7", media: "all" %>
 <![endif]-->
 <!--[if lte IE 6]>
-<%= stylesheet_link_tag "standard-ie6", :media => "all" %>
+<%= stylesheet_link_tag "standard-ie6", media: "all" %>
 <![endif]-->
-<%= stylesheet_link_tag "print", :media => "print" %>
+<%= stylesheet_link_tag "print", media: "print" %>
 
 <% if APP_CONFIG[:asset_host] %>
   <%= javascript_include_tag(APP_CONFIG[:asset_host] + "/jquery/jquery.js") %>
@@ -59,10 +59,10 @@
 <script type="text/javascript">
 kpConfig = {
   ping: {
-    url: "<%= url_for :controller => "ping", :action => "ping" %>"
+    url: "<%= url_for controller: "ping", action: "ping" %>"
   },
   sessionfix: {
-    url: "<%= url_for :controller => "login", :action => "session_fix" %>"
+    url: "<%= url_for controller: "login", action: "session_fix" %>"
   },
   districts: {
     select: { url: "<%= select_districts_path %>" }
@@ -76,8 +76,8 @@ kpConfig = {
     select: { url: "<%= select_groups_path %>" }
   },
   booking: {
-    form: { url: "<%= url_for :controller => "bookings", :action => "form" %>" },
-    groupList: { url: "<%= url_for :controller => "bookings", :action => "group_list" %>"}
+    form: { url: "<%= url_for controller: "bookings", action: "form" %>" },
+    groupList: { url: "<%= url_for controller: "bookings", action: "group_list" %>"}
   },
   events: {
     list: { url: "<%= options_list_events_path %>"}

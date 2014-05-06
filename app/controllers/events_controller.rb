@@ -1,14 +1,14 @@
 # -*- encoding : utf-8 -*-
 # Controller for managing events
 class EventsController < ApplicationController
-  layout "standard", :except => [ :options_list ]
+  layout "standard", except: [ :options_list ]
 
-  before_filter :authenticate, :except => :show
-  before_filter :check_roles, :except => :show
+  before_filter :authenticate, except: :show
+  before_filter :check_roles, except: :show
 
-  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
-  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
-  cache_sweeper :event_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :calendar_sweeper, only: [ :create, :update, :destroy ]
+  cache_sweeper :culture_provider_sweeper, only: [ :create, :update, :destroy ]
+  cache_sweeper :event_sweeper, only: [ :create, :update, :destroy ]
 
 
   # Displays the presentation page for an event
@@ -59,7 +59,7 @@ class EventsController < ApplicationController
       return
     end
 
-    render :action => "new"
+    render action: "new"
   end
 
   def create
@@ -86,7 +86,7 @@ class EventsController < ApplicationController
     else
       load_culture_providers()
       @category_groups = CategoryGroup.order "name ASC"
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -115,7 +115,7 @@ class EventsController < ApplicationController
       redirect_to(@event)
     else
       @category_groups = CategoryGroup.order "name ASC"
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -139,9 +139,9 @@ class EventsController < ApplicationController
   def options_list
     @events = Event.order(name: :asc)
     @events = @events.where(culture_provider_id: params[:culture_provider_id]) if params[:culture_provider_id]
-    render :action => "options_list", :content_type => 'text/plain'
+    render action: "options_list", content_type: 'text/plain'
   rescue
-    render :text => "", :content_type => 'text/plain', :status => 404
+    render text: "", content_type: 'text/plain', status: 404
   end
 
 
@@ -169,7 +169,7 @@ class EventsController < ApplicationController
   end
 
   def ticket_allotment_csv(event)
-    CSV.generate(:col_sep => "\t") do |csv|
+    CSV.generate(col_sep: "\t") do |csv|
       csv << [ "Stadsdel", "Skola", "Grupp", "Antal biljetter" ]
 
       event.allotments.each do |allotment|

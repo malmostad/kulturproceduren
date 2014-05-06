@@ -4,15 +4,15 @@ namespace :kp do
   namespace :cleanup do
 
     desc "Cleans out orphaned companions"
-    task(:orphan_companions => :environment) do
+    task(orphan_companions: :environment) do
       puts "Cleaning orphaned companions"
-      cs = Companion.find :all, :include => :tickets, :conditions => "tickets.id is null"
+      cs = Companion.find :all, include: :tickets, conditions: "tickets.id is null"
       cs.each { |c| c.destroy }
       puts "Cleaned out #{cs.length} companions"
     end
 
     desc "Purges all data transient in a school year"
-    task(:purge => :environment) do
+    task(purge: :environment) do
       return if Rails.env.production?
       puts "WARNING: This removes the following data:\n"
       puts " * AgeGroups belonging to inactive groups"
@@ -74,9 +74,9 @@ namespace :kp do
       puts "Removing non-standing events and associated Occasions, Questionnaires, Attachments, Images"
       Event.non_standing.all.each { |e| e.destroy }
       puts "Removing inactive Groups with associated AgeGroups"
-      Group.all(:conditions => { :active => false }).each { |g| g.destroy }
+      Group.all(conditions: { active: false }).each { |g| g.destroy }
       puts "Removing orphaned Questions"
-      Question.all(:conditions => "template = false and id not in (select question_id from questionnaires_questions)").each { |q| q.destroy }
+      Question.all(conditions: "template = false and id not in (select question_id from questionnaires_questions)").each { |q| q.destroy }
     end
 
   end

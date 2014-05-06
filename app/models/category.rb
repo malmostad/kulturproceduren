@@ -11,5 +11,5 @@ class Category < ActiveRecord::Base
     :category_group_id, :category_group
 
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt"
+    message: "Namnet får inte vara tomt"
 end

@@ -6,8 +6,8 @@ class CategoryGroupsController < ApplicationController
   before_filter :authenticate
   before_filter :require_admin
 
-  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
-  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy ]
+  cache_sweeper :calendar_sweeper, only: [ :create, :update, :destroy ]
+  cache_sweeper :culture_provider_sweeper, only: [ :create, :update, :destroy ]
 
 
   # Displays a list of all categories in the system as well as a
@@ -23,7 +23,7 @@ class CategoryGroupsController < ApplicationController
     @category_groups = CategoryGroup.all
     @category_group = CategoryGroup.find params[:id]
 
-    render :action => "index"
+    render action: "index"
   end
 
   def create
@@ -31,10 +31,10 @@ class CategoryGroupsController < ApplicationController
 
     if @category_group.save
       flash[:notice] = 'Kategorigruppen skapades.'
-      redirect_to :action => "index"
+      redirect_to action: "index"
     else
       @category_groups = CategoryGroup.all
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -43,10 +43,10 @@ class CategoryGroupsController < ApplicationController
 
     if @category_group.update_attributes(params[:category_group])
       flash[:notice] = 'Kategorigruppen uppdaterades.'
-      redirect_to :action => "index"
+      redirect_to action: "index"
     else
       @category_groups = CategoryGroup.all
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -55,7 +55,7 @@ class CategoryGroupsController < ApplicationController
     @category_group.destroy
 
     flash[:notice] = 'Kategorigruppen togs bort.'
-    redirect_to :action => "index"
+    redirect_to action: "index"
   end
 
 end

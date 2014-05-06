@@ -1,9 +1,9 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<%= form_for(@group, :builder => KPFormBuilder, :html => { :class => "group-form" }) do |f| %>
+<%= form_for(@group, builder: KPFormBuilder, html: { class: "group-form" }) do |f| %>
 
   <%= f.title(is_edit ? "Redigera grupp" : "Skapa ny grupp") -%>
 
@@ -18,7 +18,7 @@
   <%= f.fields do -%>
     <%= f.text_field :name %>
     <%= f.collection_select :school_id, @schools, :id, :name %>
-    <%= f.text_field :contacts, :field_help => "Ange epostadresser, separerade med kommatecken." %>
+    <%= f.text_field :contacts, field_help: "Ange epostadresser, separerade med kommatecken." %>
     <%= f.check_box :active %>
 
     <%= f.buttons do -%>

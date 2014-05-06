@@ -4,10 +4,10 @@ class DistrictsController < ApplicationController
   layout "admin"
   
   before_filter :authenticate
-  before_filter :require_admin, :except => [ :select ]
+  before_filter :require_admin, except: [ :select ]
 
   def index
-    @districts = District.order(sort_order("name")).paginate :page => params[:page]
+    @districts = District.order(sort_order("name")).paginate page: params[:page]
   end
 
   def show
@@ -20,7 +20,7 @@ class DistrictsController < ApplicationController
 
   def edit
     @district = District.find(params[:id])
-    render :action => "new"
+    render action: "new"
   end
 
   def create
@@ -30,7 +30,7 @@ class DistrictsController < ApplicationController
       flash[:notice] = 'Stadsdelen skapades.'
       redirect_to(@district)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -41,7 +41,7 @@ class DistrictsController < ApplicationController
       flash[:notice] = 'Stadsdelen uppdaterades.'
       redirect_to(@district)
     else
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -59,11 +59,11 @@ class DistrictsController < ApplicationController
   # process by selecting a district.
   def select
     district = District.find params[:district_id]
-    session[:group_selection] = { :district_id => district.id }
+    session[:group_selection] = { district_id: district.id }
   rescue
   ensure
     if request.xhr?
-      render :text => "", :content_type => "text/plain"
+      render text: "", content_type: "text/plain"
     else
       redirect_to params[:return_to]
     end

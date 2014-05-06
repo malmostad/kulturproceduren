@@ -1,9 +1,9 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<%= form_for(@district, :builder => KPFormBuilder, :html => { :class => "district-form" }) do |f| %>
+<%= form_for(@district, builder: KPFormBuilder, html: { class: "district-form" }) do |f| %>
 
   <%= f.title(is_edit ? "Redigera stadsdel" : "Skapa ny stadsdel") -%>
 
@@ -15,7 +15,7 @@
 
   <%= f.fields do -%>
     <%= f.text_field :name %>
-    <%= f.text_field :contacts, :field_help => "Ange epostadresser, separerade med kommatecken." %>
+    <%= f.text_field :contacts, field_help: "Ange epostadresser, separerade med kommatecken." %>
 
     <%= f.buttons do %>
       <%= f.submit(is_edit ? "Uppdatera" : "Skapa") %>

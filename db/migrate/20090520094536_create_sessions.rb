@@ -2,7 +2,7 @@
 class CreateSessions < ActiveRecord::Migration
   def self.up
     create_table :sessions do |t|
-      t.string :session_id, :null => false, :limit => 512
+      t.string :session_id, null: false, limit: 512
       t.text :data
       t.timestamps
     end

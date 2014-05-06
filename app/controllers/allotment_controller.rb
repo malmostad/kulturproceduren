@@ -32,7 +32,7 @@ class AllotmentController < ApplicationController
     end
 
     session[:allotment][:num_tickets] = incoming[:num_tickets].to_i
-    session[:allotment][:ticket_state] = Event.new(:ticket_state => incoming[:ticket_state].to_i).ticket_state
+    session[:allotment][:ticket_state] = Event.new(ticket_state: incoming[:ticket_state].to_i).ticket_state
 
     session[:allotment][:bus_booking] = incoming[:bus_booking].to_i == 1
 
@@ -65,7 +65,7 @@ class AllotmentController < ApplicationController
     if session[:allotment][:ticket_state] == :free_for_all
       # If the selected ticket state is free for all, we don't need to do any
       # distribution
-      redirect_to :action => "create_free_for_all_tickets", :id => params[:id]
+      redirect_to action: "create_free_for_all_tickets", id: params[:id]
       return
     elsif @event.allotments.empty?
       # Store the preliminary distribution in the session as the working distribution
@@ -83,7 +83,7 @@ class AllotmentController < ApplicationController
         session[:allotment][:ticket_state])
     end
 
-    redirect_to :action => "distribute", :id => params[:id]
+    redirect_to action: "distribute", id: params[:id]
   end
 
   # Creates tickets that are in the free for all state
@@ -95,8 +95,8 @@ class AllotmentController < ApplicationController
     @event.save!
 
     @event.allotments.create!(
-      :user => current_user,
-      :amount => session[:allotment][:num_tickets]
+      user: current_user,
+      amount: session[:allotment][:num_tickets]
     )
 
     session[:allotment] = nil
@@ -141,15 +141,15 @@ class AllotmentController < ApplicationController
 
       if session[:allotment][:ticket_state] == :alloted_group
         # Assign the tickets to groups
-        groups = Group.includes(:school => :district).find assignment.keys
+        groups = Group.includes(school: :district).find assignment.keys
 
         groups.each do |group|
           amount = assignment[group.id]
           @event.allotments.create!(
-            :user => current_user,
-            :group => group,
-            :district => group.school.district,
-            :amount => amount
+            user: current_user,
+            group: group,
+            district: group.school.district,
+            amount: amount
           )
           tickets_created += amount
 
@@ -164,9 +164,9 @@ class AllotmentController < ApplicationController
         districts.each do |district|
           amount = assignment[district.id]
           @event.allotments.create!(
-            :user => current_user,
-            :district => district,
-            :amount => amount
+            user: current_user,
+            district: district,
+            amount: amount
           )
           tickets_created += amount
         end
@@ -176,8 +176,8 @@ class AllotmentController < ApplicationController
       # district or group
       extra_tickets = session[:allotment][:num_tickets] - tickets_created
       @event.allotments.create!(
-        :user => current_user,
-        :amount => extra_tickets
+        user: current_user,
+        amount: extra_tickets
       ) if extra_tickets > 0
 
       session[:allotment] = nil
@@ -190,7 +190,7 @@ class AllotmentController < ApplicationController
 
       session[:allotment][:working_distribution] = assignment
 
-      redirect_to :action => "distribute", :id => params[:id]
+      redirect_to action: "distribute", id: params[:id]
     end
   end
 
@@ -234,7 +234,7 @@ class AllotmentController < ApplicationController
       end
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Ett giltigt evenemang måste väljas för fördelning av biljetter."
-      redirect_to :controller => "events", :action => "index"
+      redirect_to controller: "events", action: "index"
     end
   end
 

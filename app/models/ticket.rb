@@ -81,19 +81,11 @@ class Ticket < ActiveRecord::Base
     ids = states.flatten.collect{ |s| state_id_from_symbol(s) }
     where(state: ids)
   }
-  #def self.with_states(*states)
-  #  ids = states.flatten.collect { |s| state_id_from_symbol(s) }
-  #  scoped(:conditions => { :state => ids })
-  #end
 
   scope :without_states, lambda { |*states|
     ids = states.flatten.collect { |s| state_id_from_symbol(s) }
     where.not("tickets.state" => ids)
   }
-  #def self.without_states(*states)
-  #  ids = states.flatten.collect { |s| state_id_from_symbol(s) }
-  #  scoped(:conditions => [ "tickets.state not in (?)", ids ])
-  #end
   
   def self.unbooked
     with_states(:unbooked)
@@ -153,7 +145,7 @@ class Ticket < ActiveRecord::Base
       group by t.group_id, t.occasion_id, t.user_id, o.date
       order by o.date DESC",
       user.id
-    ], :page => page)
+    ], page: page)
   end
 
   # Returns all bookings for an event
@@ -174,7 +166,7 @@ class Ticket < ActiveRecord::Base
     sql << " group by t.group_id, t.occasion_id, t.user_id, s.name, g.name
       order by s.name, g.name DESC " 
 
-    paginate_by_sql( [ sql, *sql_params ], :page => page)
+    paginate_by_sql( [ sql, *sql_params ], page: page)
   end
 
   # Returns all bookings for an occasion
@@ -195,7 +187,7 @@ class Ticket < ActiveRecord::Base
     sql << " group by t.group_id, t.occasion_id, t.user_id, s.name, g.name
       order by s.name, g.name DESC " 
 
-    paginate_by_sql( [ sql, *sql_params ], :page => page)
+    paginate_by_sql( [ sql, *sql_params ], page: page)
   end
 
   # Returns all bookings for a specific group, in a paged result
@@ -207,7 +199,7 @@ class Ticket < ActiveRecord::Base
       group by t.group_id, t.occasion_id, t.user_id, o.date
       order by o.date DESC",
       group.id
-    ], :page => page)
+    ], page: page)
   end
 
   # Returns a group's booked tickets for an occasion
@@ -223,10 +215,10 @@ class Ticket < ActiveRecord::Base
   # Returns a group's booked tickets for an occasion of a given type
   def self.find_booked_by_type(group, occasion, type)
     conditions = {
-      :group_id => group.id,
-      :occasion_id => occasion.id,
-      :adult => false,
-      :wheelchair => false
+      group_id: group.id,
+      occasion_id: occasion.id,
+      adult: false,
+      wheelchair: false
     }
     conditions[type] = true if type != :normal
     booked.where(conditions)

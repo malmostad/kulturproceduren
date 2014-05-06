@@ -20,7 +20,7 @@ class LoginController < ApplicationController
 
     if u.nil?
       flash[:warning] = "Felaktigt användarnamn/lösenord"
-      render :action => "index"
+      render action: "index"
     else
       session[:current_user_id] = u.id
       flash[:notice] = "Du är nu inloggad"
@@ -50,7 +50,7 @@ class LoginController < ApplicationController
       flash[:notice] = "Du är nu utloggad."
       redirect_to root_url()
     else
-      redirect_to :action => "index"
+      redirect_to action: "index"
     end
   end
 
@@ -67,15 +67,15 @@ class LoginController < ApplicationController
   # on the client.
   def session_fix
     session_cookie = {
-      :name => request.session_options[:key],
-      :value => cookies[request.session_options[:key]],
-      :options => {
-        :path => request.session_options[:path],
-        :domain => request.session_options[:domain],
-        :secure => request.session_options[:secure]
+      name: request.session_options[:key],
+      value: cookies[request.session_options[:key]],
+      options: {
+        path: request.session_options[:path],
+        domain: request.session_options[:domain],
+        secure: request.session_options[:secure]
       }
     }
-    render :json => session_cookie.to_json
+    render json: session_cookie.to_json
   end
 
   private

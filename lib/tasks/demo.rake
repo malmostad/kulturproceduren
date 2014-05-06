@@ -4,7 +4,7 @@ namespace :kp do
   namespace :demo do
 
     desc "Creates a group structure (district/school/group/age group) from demo/group_structure.yml"
-    task(:create_group_structure => :environment) do
+    task(create_group_structure: :environment) do
       YAML.load_file("#{Rails.root}/demo/group_structure.yml").each do |district_name, schools|
 
         puts "District \"#{district_name}\""
@@ -13,8 +13,8 @@ namespace :kp do
         schools.each do |school_name, classes|
           puts "\tSchool \"#{school_name}\""
           school = School.find_or_initialize_by_name(
-            :name => school_name,
-            :district => district
+            name: school_name,
+            district: district
           )
 
           school.save! if school.new_record?
@@ -82,7 +82,7 @@ namespace :kp do
     end
 
     desc "Creates categories and category groups"
-    task(:create_categories => :environment) do
+    task(create_categories: :environment) do
       YAML.load_file("#{Rails.root}/demo/categories.yml").each do |group_name, category_names|
         puts "Group: #{group_name}"
         group = CategoryGroup.find_or_create_by_name(group_name)
@@ -102,7 +102,7 @@ namespace :kp do
     end
 
     desc "Creates template questions"
-    task(:create_questions => :environment) do
+    task(create_questions: :environment) do
       YAML.load_file("#{Rails.root}/demo/questions.yml").each do |id, question_data|
         question = Question.new do |q|
           q.qtype = question_data[:type]
@@ -118,7 +118,7 @@ namespace :kp do
     end
 
     desc "Generates a random culture provider"
-    task(:generate_culture_provider => :environment) do
+    task(generate_culture_provider: :environment) do
       # Culture provider name seeds
       cp_seed = YAML.load_file("#{Rails.root}/demo/culture_provider_seed.yml")
       # Contact person name seeds
@@ -146,12 +146,12 @@ namespace :kp do
     end
 
     desc "Lists all culture providers with their ids"
-    task(:list_culture_providers => :environment) do
-      CultureProvider.all(:order => "id ASC").each { |cp| puts "#{cp.id}: #{cp.name}" }
+    task(list_culture_providers: :environment) do
+      CultureProvider.all(order: "id ASC").each { |cp| puts "#{cp.id}: #{cp.name}" }
     end
 
     desc "Generates a standing event for a culture provider"
-    task(:generate_standing_event => :environment) do
+    task(generate_standing_event: :environment) do
       # Seed for event names
       event_seed = YAML.load_file("#{Rails.root}/demo/event_seed.yml")
 
@@ -187,7 +187,7 @@ namespace :kp do
     end
 
     desc "Generates an event with occasions for a culture provider"
-    task(:generate_event => :environment) do
+    task(generate_event: :environment) do
       # Seed for event names
       event_seed = YAML.load_file("#{Rails.root}/demo/event_seed.yml")
 
@@ -228,8 +228,8 @@ namespace :kp do
           occasion = Occasion.new do |o|
             o.event = event
             o.date = occasion_date
-            o.start_time = occasion_date.to_time.advance(:hours => 10 + rand(7))
-            o.stop_time = o.start_time.advance(:hours => 1 + rand(3))
+            o.start_time = occasion_date.to_time.advance(hours: 10 + rand(7))
+            o.stop_time = o.start_time.advance(hours: 1 + rand(3))
             o.seats = 25 + rand(175)
             o.wheelchair_seats = rand(10)
             o.address = "n/a"
@@ -247,14 +247,14 @@ namespace :kp do
     end
 
     desc "Lists events with occasions"
-    task(:list_events => :environment) do
-      Event.all(:conditions => [ " events.id in (select x.event_id from occasions x) " ]).each do |e|
+    task(list_events: :environment) do
+      Event.all(conditions: [ " events.id in (select x.event_id from occasions x) " ]).each do |e|
         puts "#{e.id}: #{e.name}"
       end
     end
 
     desc "Creates tickets (not booked/booked/used/not used) for an event"
-    task(:create_tickets => :environment) do
+    task(create_tickets: :environment) do
       # Seed for companion names
       name_seed = YAML.load_file("#{Rails.root}/demo/name_seed.yml")
 
@@ -278,7 +278,7 @@ namespace :kp do
 
         occasions = event.occasions.find(:all)
 
-        groups = Group.all :conditions => [
+        groups = Group.all conditions: [
           "id in (select group_id from age_groups where age between ? and ?)",
           event.from_age, event.to_age
         ]
@@ -333,14 +333,14 @@ namespace :kp do
     end
 
     desc "Creates questionnaires with answers for already passed occasions"
-    task(:create_questionnaires => :environment) do
+    task(create_questionnaires: :environment) do
       event = Event.find ENV["event_id"]
 
       unless event.questionnaire
         questionnaire = Questionnaire.new do |q|
           q.event = event
           q.description = "n/a"
-          q.questions = Question.find(:all , :conditions => { :template => true })
+          q.questions = Question.find(:all , conditions: { template: true })
         end
 
         puts "Questionnaire"

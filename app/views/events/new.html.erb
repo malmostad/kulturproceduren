@@ -1,10 +1,10 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 <%= wysiwyg_init %>
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
-<%= form_for(@event, :builder => KPFormBuilder, :html => { :class => "event-form" }) do |f| %>
+<%= form_for(@event, builder: KPFormBuilder, html: { class: "event-form" }) do |f| %>
 
   <%= f.title(is_edit ? "Redigera evenemang" : "Skapa evenemang") %>
 
@@ -20,17 +20,17 @@
 
     <%= f.check_box :further_education %>
 
-    <%= f.select :from_age, (0..19).to_a, :row_hidden => is_edit && @event.further_education %>
-    <%= f.select :to_age, (0..19).to_a, :row_hidden => is_edit && @event.further_education %>
+    <%= f.select :from_age, (0..19).to_a, row_hidden: is_edit && @event.further_education %>
+    <%= f.select :to_age, (0..19).to_a, row_hidden: is_edit && @event.further_education %>
 
     <%= f.check_box :single_group_per_occasion %>
 
     <% if !is_edit || @event.ticket_release_date.nil? || @event.ticket_release_date > Date.today %>
-      <%= f.text_field :visible_from, :class => "date-field auto" %>
+      <%= f.text_field :visible_from, class: "date-field auto" %>
     <% end -%>
 
-    <%= f.text_field :visible_to, :class => "date-field auto" %>
-    <%= f.text_area :description, :class => "wysiwyg" %>
+    <%= f.text_field :visible_to, class: "date-field auto" %>
+    <%= f.text_area :description, class: "wysiwyg" %>
 
     <% @category_groups.each do |category_group| -%>
       <% unless category_group.categories.empty? -%>
@@ -42,7 +42,7 @@
               <li>
                 <%= check_box_tag "category_ids[]", category.id,
                   @event.categories.any? { |c| c.id == category.id },
-                  :id => "kp-event-category_ids-#{category.id}" %>
+                  id: "kp-event-category_ids-#{category.id}" %>
 
                 <label for="kp-event-category_ids-<%= category.id %>"><%= category.name %></label>
               </li>
@@ -54,11 +54,11 @@
 
     <%= f.text_field :url %>
     <%= f.text_field :booking_info,
-      :field_help => "Detta fält visas inte om evenemanget är bokningsbart i Kulturproceduren"
+      field_help: "Detta fält visas inte om evenemanget är bokningsbart i Kulturproceduren"
     %>
     <%= f.text_field :movie_url %>
-    <%= f.text_area :opening_hours, :rows => 5 %>
-    <%= f.text_area :cost, :rows => 5 %>
+    <%= f.text_area :opening_hours, rows: 5 %>
+    <%= f.text_area :cost, rows: 5 %>
     <%= f.text_field :map_address %>
 
     <%= f.buttons do -%>

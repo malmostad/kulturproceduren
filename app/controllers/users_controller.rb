@@ -4,11 +4,11 @@ class UsersController < ApplicationController
   layout :set_layout
 
   before_filter :authenticate,
-    :except => [ :new, :create, :request_password_reset, :send_password_reset_confirmation, :reset_password ]
+    except: [ :new, :create, :request_password_reset, :send_password_reset_confirmation, :reset_password ]
   before_filter :require_admin,
-    :only => [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
+    only: [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
   before_filter :load_user,
-    :only => [ :edit, :edit_password, :update, :update_password ]
+    only: [ :edit, :edit_password, :update, :update_password ]
 
   # Displays a list of users in the system.
   def index
@@ -42,7 +42,7 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
 
       if current_user.has_role?(:coordinator)
-        render :action => "show_readonly"
+        render action: "show_readonly"
       end
     else
       @user = current_user
@@ -96,15 +96,15 @@ class UsersController < ApplicationController
       @user.valid?
       @user.errors.add(:username,
                        :taken,
-                       :default => "Användarnamnet är redan taget",
-                       :value => params[:user][:username])
+                       default: "Användarnamnet är redan taget",
+                       value: params[:user][:username])
     elsif @user.save
       if user_online? && current_user.has_role?(:admin)
         flash[:notice] = 'Användaren skapades. Den kan nu logga in med användarnamn och lösenord.'
         redirect_to(@user)
       else
         flash[:notice] = 'Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.'
-        redirect_to(:controller => "login")
+        redirect_to(controller: "login")
       end
 
       return
@@ -112,7 +112,7 @@ class UsersController < ApplicationController
 
     @districts = District.order("name ASC")
     @user.reset_password
-    render :action => "new"
+    render action: "new"
   end
 
   def update
@@ -126,7 +126,7 @@ class UsersController < ApplicationController
       redirect_to(@user)
     else
       @districts = District.order("name ASC")
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
@@ -152,7 +152,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = "Lösenordet uppdaterades."
-      redirect_to :action => "index"
+      redirect_to action: "index"
     else
       flash[:warning] = "Ett fel uppstod när lösenordet uppdaterades."
       redirect_to edit_password_user_url(@user)
@@ -240,7 +240,7 @@ class UsersController < ApplicationController
       password = user.generate_new_password()
       UserMailer.password_reset_email(user, password).deliver
       flash[:notice] = "Ditt nya lösenord har skickats till din epost."
-      redirect_to :controller => "login", :action => "index"
+      redirect_to controller: "login", action: "index"
     else
       flash[:warning] = "Felaktig förfrågan."
       redirect_to root_url()

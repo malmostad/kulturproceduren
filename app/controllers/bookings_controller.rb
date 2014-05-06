@@ -5,20 +5,20 @@ class BookingsController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
-  before_filter :require_admin, :only => :bus
-  before_filter :require_booker, :except => [ :index, :apply_filter, :group, :group_list, :show ]
-  before_filter :require_booking_viewer, :only => [ :index, :apply_filter, :group, :group_list, :show ]
-  before_filter :load_booking_for_change, :only => [ :edit, :update, :unbook, :destroy ]
+  before_filter :require_admin, only: :bus
+  before_filter :require_booker, except: [ :index, :apply_filter, :group, :group_list, :show ]
+  before_filter :require_booking_viewer, only: [ :index, :apply_filter, :group, :group_list, :show ]
+  before_filter :load_booking_for_change, only: [ :edit, :update, :unbook, :destroy ]
 
-  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy ]
-  after_filter :sweep_culture_provider_cache, :only => [ :create, :update, :destroy ]
-  after_filter :sweep_event_cache, :only => [ :create, :update, :destroy ]
+  cache_sweeper :calendar_sweeper, only: [ :create, :update, :destroy ]
+  after_filter :sweep_culture_provider_cache, only: [ :create, :update, :destroy ]
+  after_filter :sweep_event_cache, only: [ :create, :update, :destroy ]
 
 
   # Displays a list of a user's bookings
   def index
     session[:booking_list_filter] ||= {
-      :district_id => current_user.districts.first.try(:id)
+      district_id: current_user.districts.first.try(:id)
     }
 
     if params[:occasion_id]
@@ -35,7 +35,7 @@ class BookingsController < ApplicationController
   # List of bus bookings for an event
   def bus
     @event = Event.find(params[:event_id])
-    @bookings = @event.bookings.where(:bus_booking => true).includes(:occasion).order("occasions.date, occasions.start_time")
+    @bookings = @event.bookings.where(bus_booking: true).includes(:occasion).order("occasions.date, occasions.start_time")
 
     if params[:format] == "xls"
       send_csv(
@@ -74,16 +74,16 @@ class BookingsController < ApplicationController
   def group_list
     @group = Group.includes(:school).find params[:group_id]
     @bookings = Booking.active.find_for_group(@group, 1)
-    render :partial => "list",
-      :content_type => "text/plain",
-      :locals => { :bookings => @bookings }
+    render partial: "list",
+      content_type: "text/plain",
+      locals: { bookings: @bookings }
   end
 
   # Displays a booking confirmation
   def show
     query = Booking
     query = Booking.active unless current_user.has_role?(:admin)
-    @booking = query.includes(:occasion, :group => :school).find params[:id]
+    @booking = query.includes(:occasion, group: :school).find params[:id]
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "Klassen/avdelningen har ingen bokning på den efterfrågade föreställningen."
     redirect_to bookings_url()
@@ -94,7 +94,7 @@ class BookingsController < ApplicationController
     @group = Group.includes(:school).find params[:group_id]
     @occasion = Occasion.find(params[:occasion_id])
 
-    @booking = Booking.active.where(:group_id => @group.id, :occasion_id => @occasion.id).first
+    @booking = Booking.active.where(group_id: @group.id, occasion_id: @occasion.id).first
 
     if @booking
       @is_edit = true
@@ -105,7 +105,7 @@ class BookingsController < ApplicationController
       end
     end
 
-    render :partial => "form", :content_type => "text/plain"
+    render partial: "form", content_type: "text/plain"
   end
 
   # Displays a form for creating a new booking
@@ -115,7 +115,7 @@ class BookingsController < ApplicationController
     load_group_selection_collections(@occasion)
 
     if @group
-      @booking = Booking.active.where(:group_id => @group.id, :occasion_id => @occasion.id).first
+      @booking = Booking.active.where(group_id: @group.id, occasion_id: @occasion.id).first
 
       if @booking
         redirect_to edit_booking_url(@booking)
@@ -163,7 +163,7 @@ class BookingsController < ApplicationController
     else
       load_group_selection_collections(@occasion)
 
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -175,7 +175,7 @@ class BookingsController < ApplicationController
 
     load_group_selection_collections(@occasion)
 
-    render :action => "new"
+    render action: "new"
   end
 
   def update
@@ -205,7 +205,7 @@ class BookingsController < ApplicationController
       @group = @booking.group
       load_group_selection_collections(@occasion)
 
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -235,7 +235,7 @@ class BookingsController < ApplicationController
       end
 
       unless @answer_form.valid_answer?(@answer)
-        render :action => "unbook"
+        render action: "unbook"
         return
       end
     end
@@ -267,14 +267,14 @@ class BookingsController < ApplicationController
   # the group selection widget.
   def load_group
     if params[:group_id]
-      @group = Group.includes(:school => :district).find(params[:group_id])
+      @group = Group.includes(school: :district).find(params[:group_id])
       session[:group_selection] = {
-        :district_id => @group.school.district_id,
-        :school_id => @group.school.id,
-        :group_id => @group.id
+        district_id: @group.school.district_id,
+        school_id: @group.school.id,
+        group_id: @group.id
       }
     elsif session[:group_selection] && session[:group_selection][:group_id]
-      @group = Group.includes(:school => :district).find session[:group_selection][:group_id]
+      @group = Group.includes(school: :district).find session[:group_selection][:group_id]
     end
   end
 
@@ -282,7 +282,7 @@ class BookingsController < ApplicationController
   def require_booker
     if !current_user.can_book?
       if current_user.can_view_bookings?
-        redirect_to :action => "group"
+        redirect_to action: "group"
       else
         flash[:error] = "Du har inte behörighet att komma åt sidan."
         redirect_to root_url()

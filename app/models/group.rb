@@ -1,28 +1,28 @@
 # -*- encoding : utf-8 -*-
 # A group is the representation of a group of children in a school.
 class Group < ActiveRecord::Base
-  has_many :allotments, :dependent => :nullify
-  has_many :tickets, :dependent => :destroy
-  has_many :bookings, :dependent => :destroy
+  has_many :allotments, dependent: :nullify
+  has_many :tickets, dependent: :destroy
+  has_many :bookings, dependent: :destroy
 
-  has_many :occasions, lambda{ distinct }, :through => :tickets
+  has_many :occasions, lambda{ distinct }, through: :tickets
 
-  has_many :events, lambda{ distinct }, :through => :tickets
+  has_many :events, lambda{ distinct }, through: :tickets
 
-  has_many(:age_groups, lambda{ order(age: :asc) }, :dependent => :destroy) do
+  has_many(:age_groups, lambda{ order(age: :asc) }, dependent: :destroy) do
     # Returns the number of children in this group that is within the given age span
     def num_children_by_age_span(from, to)
       where("age BETWEEN ? AND ?", from, to).sum(:quantity)
     end
   end
   
-  has_many :answer_forms, :dependent => :destroy
-  has_many :booking_requirements, :dependent => :destroy do
+  has_many :answer_forms, dependent: :destroy
+  has_many :booking_requirements, dependent: :destroy do
     def for_occasion(occasion)
       where(occasion_id: occasion.id).first
     end
   end
-  has_many :notification_requests, :dependent => :destroy
+  has_many :notification_requests, dependent: :destroy
   belongs_to :school
 
   attr_accessible :name,
@@ -34,9 +34,9 @@ class Group < ActiveRecord::Base
     :extens_id
   
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt"
+    message: "Namnet får inte vara tomt"
   validates_presence_of :school,
-    :message => "Gruppen måste tillhöra en skola"
+    message: "Gruppen måste tillhöra en skola"
 
   before_create :set_default_priority
 

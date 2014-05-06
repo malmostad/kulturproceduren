@@ -55,7 +55,7 @@ class UseCaseTest < ActionDispatch::IntegrationTest
     # Notification to booker
     Timecop.freeze(Time.parse(OCCASION_DATE) - 2.days)
 
-    occasion_mailer = stub(:deliver => true)
+    occasion_mailer = stub(deliver: true)
     OccasionMailer.expects(:reminder_email).once.returns(occasion_mailer)
     NotifyOccasionReminder.new(Date.today, 2).run
 

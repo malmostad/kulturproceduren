@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "groups/menu" -%>
+<%= render partial: "groups/menu" -%>
 
 <div class="model-cnt">
 
@@ -16,14 +16,14 @@
 
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_group_path(@group) %></li>
-    <li><%= link_to 'Radera', @group, :data =>{:confirm => 'Är du säker på att du vill radera gruppen?'}, :method => :delete %></li>
+    <li><%= link_to 'Radera', @group, data:{confirm: 'Är du säker på att du vill radera gruppen?'}, method: :delete %></li>
   </ul>
 </div>
 
 <fieldset class="with-legend">
   <legend><span>Åldersgrupper</span></legend>
 
-  <%= form_for(@age_group, :html => { :class => "age-group-form" }) do |f| %>
+  <%= form_for(@age_group, html: { class: "age-group-form" }) do |f| %>
 
     <%= f.label :age %>
     <%= f.text_field :age %>
@@ -52,7 +52,7 @@
           <td><%= age_group.age %></td>
           <td><%= age_group.quantity %></td>
           <td><%= link_to 'Redigera', edit_age_group_path(age_group) %></td>
-          <td><%= link_to 'Radera', age_group, :data =>{:confirm => 'Är du säker på att du vill radera åldersgruppen?'}, :method => :delete %></td>
+          <td><%= link_to 'Radera', age_group, data:{confirm: 'Är du säker på att du vill radera åldersgruppen?'}, method: :delete %></td>
         </tr>
       <% end %>
     </tbody>

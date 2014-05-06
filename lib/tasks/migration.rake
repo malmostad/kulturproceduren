@@ -3,7 +3,7 @@
 namespace :kp do
   namespace :migration do
     desc "Create temporary groups for 6 year olds based on 7 year olds for the new school year"
-    task(:create_temporary_groups_for_6_year_olds => :environment) do
+    task(create_temporary_groups_for_6_year_olds: :environment) do
       # No pre schools, they already have 6 year olds, and ignore
       # age groups with 3 or less students
       base_groups = Group.find_by_sql "select * from groups where id in (select group_id from age_groups where age = 7 and quantity > 3) and elit_id not like 'forsk%';"
@@ -21,7 +21,7 @@ namespace :kp do
 
         temp_group.save!
 
-        base_age_group = AgeGroup.first :conditions => { :group_id => bg.id, :age => 7 }
+        base_age_group = AgeGroup.first conditions: { group_id: bg.id, age: 7 }
 
         temp_age = AgeGroup.new do |a|
           a.age = 6
@@ -34,20 +34,20 @@ namespace :kp do
     end
 
     desc "Generate bookings from existing tickets without bookings"
-    task(:generate_bookings_from_tickets => :environment) do
+    task(generate_bookings_from_tickets: :environment) do
       # Generate bookings from tickets
       Ticket.find_each(
-        :conditions => "state > 0" # Only booked tickets
+        conditions: "state > 0" # Only booked tickets
       ) do |ticket|
 
         Booking.before_create.clear
         Booking.after_save.clear
 
         booking = Booking.first(
-          :conditions => {
-            :group_id => ticket.group_id,
-            :occasion_id => ticket.occasion_id,
-            :user_id => ticket.user_id
+          conditions: {
+            group_id: ticket.group_id,
+            occasion_id: ticket.occasion_id,
+            user_id: ticket.user_id
           }
         )
 
@@ -78,7 +78,7 @@ namespace :kp do
           end
 
           # Booking requirements
-          req = BookingRequirement.first(:conditions => { :group_id => ticket.group_id, :occasion_id => ticket.occasion_id })
+          req = BookingRequirement.first(conditions: { group_id: ticket.group_id, occasion_id: ticket.occasion_id })
           b.requirement = req.requirement if req
         end
 
@@ -91,7 +91,7 @@ namespace :kp do
           booking.student_count += 1
         end
 
-        booking.save(:validate => false) || raise(ActiveRecord::RecordNotSaved)
+        booking.save(validate: false) || raise(ActiveRecord::RecordNotSaved)
 
         ticket.booking_id = booking.id
         ticket.save!

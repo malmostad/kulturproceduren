@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <div class="model-cnt">
 
@@ -12,7 +12,7 @@
 
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_district_path(@district) %></li>
-    <li><%= link_to 'Radera', @district, :data => {:confirm => 'Är du säker på att du vill radera stadsdelen'}, :method => :delete %></li>
+    <li><%= link_to 'Radera', @district, data: {confirm: 'Är du säker på att du vill radera stadsdelen'}, method: :delete %></li>
   </ul>
 
 </div>
@@ -21,9 +21,9 @@
   <legend><span>Skolor i stadsdelen</span></legend>
 
   <ul class="admin-tools">
-    <li><%= link_to 'Lägg till skola', new_school_path(:district_id => @district.id) %></li>
+    <li><%= link_to 'Lägg till skola', new_school_path(district_id: @district.id) %></li>
   </ul>
 
-  <%= render :partial => "schools/list", :locals => { :schools => @district.schools } %>
+  <%= render partial: "schools/list", locals: { schools: @district.schools } %>
 
 </fieldset>

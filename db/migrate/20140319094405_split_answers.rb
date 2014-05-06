@@ -16,7 +16,7 @@ class SplitAnswers < ActiveRecord::Migration
   def up
     execute "SELECT * INTO TABLE backup_merged_answers FROM answers"
     puts "Before: #{Answer.count}"
-    Question.where(:qtype => "QuestionMchoice").find_each do |question|
+    Question.where(qtype: "QuestionMchoice").find_each do |question|
       question.answers.each { |a| split_answer(a) }
     end
     puts "After: #{Answer.count}"

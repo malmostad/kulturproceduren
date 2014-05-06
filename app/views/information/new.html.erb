@@ -13,10 +13,10 @@
 
 <%= form_for(
   @mail,
-  :as => :information_mail,
-  :url => { :action => :create },
-  :builder => KPFormBuilder,
-  :html => { :class => "information-mail-form context-form" }
+  as: :information_mail,
+  url: { action: :create },
+  builder: KPFormBuilder,
+  html: { class: "information-mail-form context-form" }
 ) do |f| -%>
     <%= f.title("Skicka e-post med information") %>
 
@@ -38,14 +38,14 @@
       <%= f.select(
         :recipients,
         recipients,
-        :include_blank => @event.blank?
+        include_blank: @event.blank?
       ) %>
 
       <%= f.text_field :subject %>
-      <%= f.text_area :body, :size => "40x5", :class => "wysiwyg" %>
+      <%= f.text_area :body, size: "40x5", class: "wysiwyg" %>
 
       <%= f.buttons do -%>
-        <%= f.submit "Skicka", :data => {:confirm => "Detta skickar meddelandet till alla mottagare du har angett"} %>
+        <%= f.submit "Skicka", data: {confirm: "Detta skickar meddelandet till alla mottagare du har angett"} %>
       <% end -%>
     <% end %>
 <% end -%>

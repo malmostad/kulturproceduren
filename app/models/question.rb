@@ -21,7 +21,7 @@ class Question < ActiveRecord::Base
   }
     
   has_and_belongs_to_many :questionnaire 
-  has_many :answers, :dependent => :destroy
+  has_many :answers, dependent: :destroy
 
   attr_accessible :qtype,
     :question,
@@ -30,7 +30,7 @@ class Question < ActiveRecord::Base
     :mandatory
 
   validates_presence_of :question,
-    :message => "Frågan får inte vara tom"
+    message: "Frågan får inte vara tom"
 
   def statistics_for_event(event)
     statistics_for_answer_forms(event.questionnaire.answer_forms)

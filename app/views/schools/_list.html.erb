@@ -26,7 +26,7 @@ show_district ||= false
         <% end -%>
 
         <td><%= link_to 'Redigera', edit_school_path(school) %></td>
-        <td><%= link_to 'Radera', school, :data => {:confirm => 'Är du säker på att du vill radera skolan?'}, :method => :delete %></td>
+        <td><%= link_to 'Radera', school, data: {confirm: 'Är du säker på att du vill radera skolan?'}, method: :delete %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 <% if @event %>
 
@@ -7,11 +7,11 @@
     Enkätstatistik för <%= @event.name -%>
   </h2>
   <p>
-    <%=link_to "Ladda ner enkätstatistik för #{@event.name} som Excel-fil", :event_id => @event,  :format => "xls" %>
+    <%=link_to "Ladda ner enkätstatistik för #{@event.name} som Excel-fil", event_id: @event,  format: "xls" %>
   </p>
   <p>
-    Antal besvarade enkäter: <%= @event.questionnaire.answer_forms.where(:completed => true).count -%>
-    Antal obesvarade enkäter: <%= @event.questionnaire.answer_forms.where(:completed => false).count -%> 
+    Antal besvarade enkäter: <%= @event.questionnaire.answer_forms.where(completed: true).count -%>
+    Antal obesvarade enkäter: <%= @event.questionnaire.answer_forms.where(completed: false).count -%> 
   </p>
   <table>
     <thead>

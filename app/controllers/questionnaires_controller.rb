@@ -60,7 +60,7 @@ class QuestionnairesController < ApplicationController
 
   def edit
     @questionnaire = Questionnaire.includes(:event).find params[:id]
-    render :action => "new"
+    render action: "new"
   end
 
   def create
@@ -72,7 +72,7 @@ class QuestionnairesController < ApplicationController
       redirect_to @questionnaire 
     else
       @events = Event.without_questionnaires.order "name"
-      render :action => "new" 
+      render action: "new" 
     end
   end
 
@@ -84,7 +84,7 @@ class QuestionnairesController < ApplicationController
       redirect_to(@questionnaire) 
     else
       @events = Event.without_questionnaires.order("name")
-      render :action => "new"
+      render action: "new"
     end
   end
 

@@ -58,10 +58,10 @@ module ApplicationHelper
       content_tag(:div,
         sanitize(
           description,
-          :tags => %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
-          :attributes => %w(href target title style)
+          tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
+          attributes: %w(href target title style)
         ),
-        :class => "description"
+        class: "description"
       )
     else
       paragraphize(description, 'class="description"')
@@ -80,7 +80,7 @@ module ApplicationHelper
     condition = options[:unless] if options.has_key?(:unless)
     sort_dir = params[:d] == 'up' && params[:c] == column ? 'down' : 'up'
     link_to_unless condition, title,
-      params.merge(:c => column, :d => sort_dir)
+      params.merge(c: column, d: sort_dir)
   end
 
   # Generates an image tag for uploaded images
@@ -89,8 +89,8 @@ module ApplicationHelper
   # [<tt>thumb</tt>] Indicates if the image tag should show the thumbnail or not
   def uploaded_image_tag(image, thumb = false)
     options = {
-      :alt => html_escape(image.description),
-      :title => html_escape(image.description)
+      alt: html_escape(image.description),
+      title: html_escape(image.description)
     }
 
     image_path = "/images/"
@@ -116,9 +116,9 @@ module ApplicationHelper
   # current page, or to the specified URL.
   def login_link(text, url = nil)
     link_to text,
-      :controller => "login",
-      :action => "index",
-      :return_to => url || url_for(request.query_parameters.update(request.path_parameters))
+      controller: "login",
+      action: "index",
+      return_to: url || url_for(request.query_parameters.update(request.path_parameters))
   end
 
   # Wrapper around <tt>cache()</tt> do for conditional caching.
@@ -137,7 +137,7 @@ module ApplicationHelper
 
   # Includes wysiwyg libraries and initialization files
   def wysiwyg_init
-    render :partial => "shared/wysiwyg_init"
+    render partial: "shared/wysiwyg_init"
   end
 
   # Change the default link renderer for will_paginate
@@ -146,7 +146,7 @@ module ApplicationHelper
       options, collection_or_options = collection_or_options, nil
     end
     unless options[:renderer]
-      options = options.merge :renderer => KPWillPaginate::LinkRenderer
+      options = options.merge renderer: KPWillPaginate::LinkRenderer
     end
     super *[collection_or_options, options].compact
   end

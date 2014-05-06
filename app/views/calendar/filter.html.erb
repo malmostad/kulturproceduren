@@ -3,7 +3,7 @@
   <div class="section-info">
 
     <div class="calendar-filter">
-      <form action="<%= url_for :controller => "calendar", :action => "apply_filter", :list => @calendar_list -%>" method="post">
+      <form action="<%= url_for controller: "calendar", action: "apply_filter", list: @calendar_list -%>" method="post">
         <div class="free-text-cnt">
           <label for="kp-calendar-filter-free-text" id="kp-calendar-filter-free-text-label">Fritext:</label>
           <input type="text" id="kp-calendar-filter-free-text" name="filter[free_text]" value="<%= calendar_filter[:free_text] %>" />
@@ -129,8 +129,8 @@
         <div class="form-buttons">
           <input type="submit" name="do_filter" value="Sök"/>
           <input type="submit" name="clear_filter" value="Återställ"/>
-          <%#= link_to "Återställ filter", :controller => "calendar", :action => "clear_filter", :list => @calendar_list %>
-          <%= link_to "Ingen sökning", { :action => "index", :list => @calendar_list }, { :class => "hide-calendar-filter-action" } %>
+          <%#= link_to "Återställ filter", controller: "calendar", action: "clear_filter", list: @calendar_list %>
+          <%= link_to "Ingen sökning", { action: "index", list: @calendar_list }, { class: "hide-calendar-filter-action" } %>
         </div>
 
       </form>
@@ -139,4 +139,4 @@
   </div>
 <% end -%>
 
-<%= render :partial => "list" %>
+<%= render partial: "list" %>

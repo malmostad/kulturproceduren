@@ -3,17 +3,17 @@ require 'test_helper'
 
 class AllotmentTest < ActiveSupport::TestCase
   test "validations" do
-    allotment = build(:allotment, :user => nil)
+    allotment = build(:allotment, user: nil)
     assert !allotment.valid?
     assert allotment.errors.include?(:user)
-    allotment = build(:allotment, :event => nil)
+    allotment = build(:allotment, event: nil)
     assert !allotment.valid?
     assert allotment.errors.include?(:event)
   end
   test "synchronize tickets" do
     assert !Ticket.exists?
     group = create(:group)
-    allotment = build(:allotment, :district => group.school.district, :group => group)
+    allotment = build(:allotment, district: group.school.district, group: group)
     assert allotment.save
 
     tickets = Ticket.all
@@ -32,8 +32,8 @@ class AllotmentTest < ActiveSupport::TestCase
   end
   test "allotment type" do
     group              = create(:group)
-    group_allotment    = create(:allotment, :group => group)
-    district_allotment = create(:allotment, :district => group.school.district)
+    group_allotment    = create(:allotment, group: group)
+    district_allotment = create(:allotment, district: group.school.district)
     for_all_allotment  = create(:allotment)
 
     assert_equal :group,        group_allotment.allotment_type
@@ -42,8 +42,8 @@ class AllotmentTest < ActiveSupport::TestCase
   end
   test "for group?" do
     group              = create(:group)
-    group_allotment    = create(:allotment, :group => group)
-    district_allotment = create(:allotment, :district => group.school.district)
+    group_allotment    = create(:allotment, group: group)
+    district_allotment = create(:allotment, district: group.school.district)
     for_all_allotment  = create(:allotment)
 
     assert group_allotment.for_group?
@@ -52,8 +52,8 @@ class AllotmentTest < ActiveSupport::TestCase
   end
   test "for district?" do
     group              = create(:group)
-    group_allotment    = create(:allotment, :group => group)
-    district_allotment = create(:allotment, :district => group.school.district)
+    group_allotment    = create(:allotment, group: group)
+    district_allotment = create(:allotment, district: group.school.district)
     for_all_allotment  = create(:allotment)
 
     assert !group_allotment.for_district?
@@ -62,8 +62,8 @@ class AllotmentTest < ActiveSupport::TestCase
   end
   test "for all?" do
     group              = create(:group)
-    group_allotment    = create(:allotment, :group => group)
-    district_allotment = create(:allotment, :district => group.school.district)
+    group_allotment    = create(:allotment, group: group)
+    district_allotment = create(:allotment, district: group.school.district)
     for_all_allotment  = create(:allotment)
 
     assert !group_allotment.for_all?

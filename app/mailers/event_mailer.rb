@@ -4,7 +4,7 @@ class EventMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
 
-  default :from => APP_CONFIG[:mailers][:from_address]
+  default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email to contacts when tickets have been released
   def ticket_release_notification_email(event, addresses, group_structure = nil)
@@ -19,9 +19,9 @@ class EventMailer < ActionMailer::Base
     @category_groups = CategoryGroup.all
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Fördelade platser till #{event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Fördelade platser till #{event.name}"
     )
   end
 
@@ -37,9 +37,9 @@ class EventMailer < ActionMailer::Base
     @category_groups = CategoryGroup.all
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Restplatser till #{event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Restplatser till #{event.name}"
     )
   end
 
@@ -56,9 +56,9 @@ class EventMailer < ActionMailer::Base
     @category_groups = CategoryGroup.all
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Restplatser till #{event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Restplatser till #{event.name}"
     )
   end
 
@@ -73,20 +73,20 @@ class EventMailer < ActionMailer::Base
     @event = event
 
     bookings = event.bookings.all(
-      :conditions => { :bus_booking => true },
-      :include => :occasion,
-      :order => "occasions.date, occasions.start_time"
+      conditions: { bus_booking: true },
+      include: :occasion,
+      order: "occasions.date, occasions.start_time"
     )
 
     attachments["bussbokning_evenemang#{event.id}.tsv"] = {
-      :mime_type => "text/csv",
-      :content   => Booking.bus_booking_csv(bookings)
+      mime_type: "text/csv",
+      content: Booking.bus_booking_csv(bookings)
     }
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Kulturbussbokningar för #{event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Kulturbussbokningar för #{event.name}"
     )
   end
 end

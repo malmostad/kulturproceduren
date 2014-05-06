@@ -15,14 +15,10 @@ class CultureProvider < ActiveRecord::Base
   # All images, excluding the main image (logotype)
   has_many :images_excluding_main,
     lambda{ |record| where("id != ?", record.main_image_id.to_i) },
-    :class_name => "Image"
-
-  #has_many :images_excluding_main,:class_name => "Image",
-  #  :conditions => proc { [ "id != ?", self.main_image_id || 0 ] }
-  
+    class_name: "Image"
 
   # The main image (logotype)
-  belongs_to :main_image, :class_name => "Image", :dependent => :delete
+  belongs_to :main_image, class_name: "Image", dependent: :delete
   
   # Standing events - Events without occasions
   has_many :standing_events, lambda {
@@ -30,25 +26,25 @@ class CultureProvider < ActiveRecord::Base
       .where("CURRENT_DATE BETWEEN events.visible_from AND events.visible_to")
       .order(name: :asc)
     },
-    :class_name => "Event"
+    class_name: "Event"
 
-  has_many :occasions, :through => :events
+  has_many :occasions, through: :events
 
   has_many :upcoming_occasions, lambda{
       where("CURRENT_DATE BETWEEN events.visible_from AND events.visible_to")
       .where("occasions.date >= CURRENT_DATE")
       .order("occasions.date ASC")
     },
-    :through => :events,
-    :source  => :occasions
+    through: :events,
+    source: :occasions
 
   has_and_belongs_to_many :linked_culture_providers, lambda{ order(name: :asc) },
-    :class_name              => "CultureProvider",
-    :foreign_key             => "from_id",
-    :association_foreign_key => "to_id",
-    :join_table              => "culture_provider_links"
+    class_name: "CultureProvider",
+    foreign_key: "from_id",
+    association_foreign_key: "to_id",
+    join_table: "culture_provider_links"
 
-  has_and_belongs_to_many :linked_events, lambda{ order(name: :asc) }, :class_name => "Event"
+  has_and_belongs_to_many :linked_events, lambda{ order(name: :asc) }, class_name: "Event"
 
   attr_accessible :name,
     :description,
@@ -63,7 +59,7 @@ class CultureProvider < ActiveRecord::Base
     :active
 
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt."
+    message: "Namnet får inte vara tomt."
 
   default_scope lambda{ order(name: :asc) }
 

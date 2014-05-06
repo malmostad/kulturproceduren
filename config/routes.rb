@@ -15,7 +15,7 @@ Kulturproceduren::Application.routes.draw do
 
   end
 
-  resources :statistics, :only => [:index] do
+  resources :statistics, only: [:index] do
     member do
       get :visitors
       get :questionnaires
@@ -28,18 +28,18 @@ Kulturproceduren::Application.routes.draw do
       post :deactivate
       post :activate
     end
-    resources :images, :except => [:show, :edit, :update, :new] do
+    resources :images, except: [:show, :edit, :update, :new] do
       member do
         get :set_main
       end
     end
-    resources :culture_provider_links, :except => [:create, :edit, :update] do
+    resources :culture_provider_links, except: [:create, :edit, :update] do
       member do
         get :select
       end
     end
 
-    resources :event_links, :except => [:create, :edit, :update] do
+    resources :event_links, except: [:create, :edit, :update] do
       collection do
         post :select_culture_provider
       end
@@ -49,7 +49,7 @@ Kulturproceduren::Application.routes.draw do
     end
   end
 
-  resources :events, :except => [:index] do
+  resources :events, except: [:index] do
     collection do
       get :options_list
     end
@@ -57,25 +57,25 @@ Kulturproceduren::Application.routes.draw do
       get :ticket_allotment
     end
 
-    resources :images,                :except => [:show, :edit, :update, :new]
-    resources :attachments,           :except => [:edit, :update, :new]
-    resources :notification_requests, :only => [:new, :create] do
+    resources :images,                except: [:show, :edit, :update, :new]
+    resources :attachments,           except: [:edit, :update, :new]
+    resources :notification_requests, only: [:new, :create] do
       collection do
         get :get_input_area
       end
     end
-    resources :statistics, :only => [:index] do
+    resources :statistics, only: [:index] do
       member do
         get :visitors
         get :questionnaires
       end
     end
-    resources :culture_provider_links, :except => [:create, :edit, :update] do
+    resources :culture_provider_links, except: [:create, :edit, :update] do
       member do
         get :select
       end
     end
-    resources :event_links, :except => [:create, :edit, :update] do
+    resources :event_links, except: [:create, :edit, :update] do
       collection do
         post :select_culture_provider
       end
@@ -83,23 +83,23 @@ Kulturproceduren::Application.routes.draw do
         get :select_event
       end
     end
-    resources :attendance, :only => [:index] do
+    resources :attendance, only: [:index] do
       collection do
         post :update_report
         get  :report
       end
     end
-    resources :bookings, :only => [:index, :new] do
+    resources :bookings, only: [:index, :new] do
       collection do
         post :apply_filter
         get  :bus
       end
     end
 
-    resource :information, :only => [:new, :create]
+    resource :information, only: [:new, :create]
   end
 
-  resources :occasions, :except => [:index] do
+  resources :occasions, except: [:index] do
     member do
       get :cancel
       get :ticket_availability
@@ -110,7 +110,7 @@ Kulturproceduren::Application.routes.draw do
         post :apply_filter
       end
     end
-    resources :attendance, :only => [:index] do
+    resources :attendance, only: [:index] do
       collection do
         post :update_report
         get :report
@@ -118,7 +118,7 @@ Kulturproceduren::Application.routes.draw do
     end
   end
 
-  resources :bookings, :except => [:new] do
+  resources :bookings, except: [:new] do
     collection do
       get :group_list
       get :group
@@ -137,13 +137,13 @@ Kulturproceduren::Application.routes.draw do
       delete :remove_template_question
       post :add_template_question
     end
-    resources :questions, :except => [:show, :new]
+    resources :questions, except: [:show, :new]
   end
 
   resources :answers
-  resources :questions,       :except => [:show, :new]
-  resources :categories,      :except => [:show, :new]
-  resources :category_groups, :except => [:show, :new]
+  resources :questions,       except: [:show, :new]
+  resources :categories,      except: [:show, :new]
+  resources :category_groups, except: [:show, :new]
   resources :districts do
     collection do
       get  :select
@@ -172,24 +172,24 @@ Kulturproceduren::Application.routes.draw do
 
   end
 
-  resources :age_groups, :except => [:show, :index, :new]
-  resources :role_applications, :except => [:new] do
+  resources :age_groups, except: [:show, :index, :new]
+  resources :role_applications, except: [:new] do
     collection do
       get :archive
     end
   end
 
-  resource :information, :only => [:new, :create]
+  resource :information, only: [:new, :create]
 
-  root :to => "calendar#index"
+  root to: "calendar#index"
 
-  match "calendar/:action/:list" => "calendar#index", :as => :calendar, :via => [:get, :post]
-  match "questionnaires/:answer_form_id/answer" => "answer_form#submit", :as => :answer_questionnaire, :via => [:get, :post]
-  match "users/:id/grant/:role" => "users#grant", :as => :grant_role, :via => [:get, :post]
-  match "users/:id/revoke/:role" => "users#revoke", :as => :revoke_role, :via => [:get, :post]
-  match "users/:id/remove_culture_provider/:culture_provider_id" => "users#remove_culture_provider", :as => :remove_culture_provider_user, :via => [:get, :post]
-  match "ldap/" => "ldap#index", :as => :ldap, :via => [:get, :post]
-  match "ldap/search" => "ldap#search", :as => :ldap_search, :via => [:get, :post]
-  match "ldap/handle/:username" => "ldap#handle", :as => :ldap_handle, :via => [:get, :post]
-  match "/:controller(/:action(/:id))", :via => [:get, :post]
+  match "calendar/:action/:list" => "calendar#index", as: :calendar, via: [:get, :post]
+  match "questionnaires/:answer_form_id/answer" => "answer_form#submit", as: :answer_questionnaire, via: [:get, :post]
+  match "users/:id/grant/:role" => "users#grant", as: :grant_role, via: [:get, :post]
+  match "users/:id/revoke/:role" => "users#revoke", as: :revoke_role, via: [:get, :post]
+  match "users/:id/remove_culture_provider/:culture_provider_id" => "users#remove_culture_provider", as: :remove_culture_provider_user, via: [:get, :post]
+  match "ldap/" => "ldap#index", as: :ldap, via: [:get, :post]
+  match "ldap/search" => "ldap#search", as: :ldap_search, via: [:get, :post]
+  match "ldap/handle/:username" => "ldap#handle", as: :ldap_handle, via: [:get, :post]
+  match "/:controller(/:action(/:id))", via: [:get, :post]
 end

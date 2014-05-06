@@ -10,9 +10,9 @@ class Attachment < ActiveRecord::Base
     :event_id, :event
 
   validates_presence_of :description,
-    :message => "Beskrivningen får inte vara tom"
+    message: "Beskrivningen får inte vara tom"
   validates_presence_of :filename,
-    :message => "Filnamnet får inte vara tomt"
+    message: "Filnamnet får inte vara tomt"
   validates_presence_of :content_type,
-    :message => "Content type får inte vara tom"
+    message: "Content type får inte vara tom"
 end

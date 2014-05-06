@@ -5,7 +5,7 @@ class CultureProvidersControllerTest < ActionController::TestCase
   def setup
     @controller.expects(:authenticate).at_least_once.returns(true)
 
-    @user = create(:user, :roles => [roles(:admin)])
+    @user = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @user.id
   end
 
@@ -25,7 +25,7 @@ class CultureProvidersControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).never
 
     culture_providers = create_list(:culture_provider, 3)
-    create_list(:culture_provider, 3, :active => false)
+    create_list(:culture_provider, 3, active: false)
     session[:current_user_id] = nil
 
     get :index
@@ -41,7 +41,7 @@ class CultureProvidersControllerTest < ActionController::TestCase
     culture_provider = create(:culture_provider)
     category_groups = create_list(:category_group, 2)
 
-    get :show, :id => culture_provider.id
+    get :show, id: culture_provider.id
 
     assert_response :success
     assert_equal    culture_provider,                assigns(:culture_provider)
@@ -58,17 +58,17 @@ class CultureProvidersControllerTest < ActionController::TestCase
 
   test "edit, unauthorized" do
     culture_provider          = create(:culture_provider)
-    user                      = create(:user, :roles => [roles(:culture_worker)], :culture_providers => [])
+    user                      = create(:user, roles: [roles(:culture_worker)], culture_providers: [])
     session[:current_user_id] = user.id
 
-    get :edit, :id => culture_provider.id
+    get :edit, id: culture_provider.id
     assert_redirected_to culture_provider
     assert_equal         "Du har inte behörighet att komma åt sidan.", flash[:error]
   end
   test "edit, authorized" do
     culture_provider = create(:culture_provider)
 
-    get :edit, :id => culture_provider.id
+    get :edit, id: culture_provider.id
 
     assert_response :success
     assert_equal    culture_provider, assigns(:culture_provider)
@@ -78,13 +78,13 @@ class CultureProvidersControllerTest < ActionController::TestCase
     @controller.expects(:require_admin).twice.returns(true)
 
     # Invalid
-    post :create, :culture_provider => { :name => "" }
+    post :create, culture_provider: { name: "" }
     assert_response :success
     assert_template "culture_providers/edit"
     assert          !assigns(:culture_provider).valid?
 
     # Valid
-    post :create, :culture_provider => { :name => "zomg" }
+    post :create, culture_provider: { name: "zomg" }
     assert_redirected_to assigns(:culture_provider)
     assert_equal         "Arrangören skapades.", flash[:notice]
     assert_equal         "zomg", assigns(:culture_provider).name
@@ -92,17 +92,17 @@ class CultureProvidersControllerTest < ActionController::TestCase
   end
 
   test "update" do
-    culture_provider = create(:culture_provider, :name => "foo")
+    culture_provider = create(:culture_provider, name: "foo")
 
     # Invalid
-    put :update, :id => culture_provider.id, :culture_provider => { :name => "" }
+    put :update, id: culture_provider.id, culture_provider: { name: "" }
     assert_response :success
     assert_template "culture_providers/edit"
     assert_equal    culture_provider, assigns(:culture_provider)
     assert          !assigns(:culture_provider).valid?
 
     # Valid
-    put :update, :id => culture_provider.id, :culture_provider => { :name => "zomg" }
+    put :update, id: culture_provider.id, culture_provider: { name: "zomg" }
     assert_redirected_to culture_provider
     assert_equal         "Arrangören uppdaterades.", flash[:notice]
     
@@ -112,18 +112,18 @@ class CultureProvidersControllerTest < ActionController::TestCase
 
   test "destroy" do
     @controller.expects(:require_admin).returns(true)
-    culture_provider = create(:culture_provider, :name => "foo")
+    culture_provider = create(:culture_provider, name: "foo")
 
-    delete :destroy, :id => culture_provider.id
+    delete :destroy, id: culture_provider.id
     assert_redirected_to culture_providers_url()
-    assert_nil           CultureProvider.where(:id => culture_provider.id).first
+    assert_nil           CultureProvider.where(id: culture_provider.id).first
   end
 
   test "activate" do
     @controller.expects(:require_admin).returns(true)
-    culture_provider = create(:culture_provider, :active => false)
+    culture_provider = create(:culture_provider, active: false)
 
-    get :activate, :id => culture_provider.id
+    get :activate, id: culture_provider.id
 
     assert_redirected_to culture_provider
     assert_equal         "Arrangören aktiverades.", flash[:notice]
@@ -134,9 +134,9 @@ class CultureProvidersControllerTest < ActionController::TestCase
 
   test "deactivate" do
     @controller.expects(:require_admin).returns(true)
-    culture_provider = create(:culture_provider, :active => true)
+    culture_provider = create(:culture_provider, active: true)
 
-    get :deactivate, :id => culture_provider.id
+    get :deactivate, id: culture_provider.id
 
     assert_redirected_to culture_provider
     assert_equal         "Arrangören deaktiverades.", flash[:notice]

@@ -33,9 +33,9 @@ class InformationController < ApplicationController
       end
 
       flash[:notice] = "E-post skickat till #{notice} (#{recipients.length} mottagare)"
-      redirect_to :action => :new
+      redirect_to action: :new
     else
-      render :action => :new
+      render action: :new
     end
 
   end

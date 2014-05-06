@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found, :formats => [ :html ]
+    render file: "#{Rails.root}/public/404", layout: false, status: :not_found, formats: [ :html ]
   end
 
   # Scrub sensitive parameters from your log
@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 
   #def maintenance_redirect
   #  url_root = ActionController::Base.relative_url_root || ""
-  #  redirect_to(url_root + "/maintenance.html", :status => :found)
+  #  redirect_to(url_root + "/maintenance.html", status: :found)
   #end
 
   # Loads the appropriate data for the group selection fragment
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
     session[:group_selection] ||= {}
 
     gsc = {
-      :districts => District.order("name")
+      districts: District.order("name")
     }
 
     if session[:group_selection][:district_id]
@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
 
       session[:return_to] = request.parameters
       flash[:error] = "Du har inte behörighet att komma åt sidan. Var god logga in."
-      redirect_to :controller => "login"
+      redirect_to controller: "login"
       return false
     end
   end
@@ -85,7 +85,7 @@ class ApplicationController < ActionController::Base
   def require_admin
     unless current_user.has_role? :admin
       flash[:notice] = "Du har inte behörighet att komma åt sidan."
-      redirect_to :action => "index"
+      redirect_to action: "index"
       return false
     end
   end
@@ -122,9 +122,9 @@ class ApplicationController < ActionController::Base
     csv = csv.gsub(/\n/,"\r\n").encode("windows-1252")
     send_data(
       csv,
-      :filename => filename,
-      :type => "text/csv; charset=windows-1252; header=present",
-      :disposition => "inline"
+      filename: filename,
+      type: "text/csv; charset=windows-1252; header=present",
+      disposition: "inline"
     )
   end
 

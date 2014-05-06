@@ -7,7 +7,7 @@
   till
   <%= @booking.occasion.event.name %>,
   föreställningen
-  <%= @booking.occasion.date %> kl <%= l @booking.occasion.start_time, :format => :only_time %>
+  <%= @booking.occasion.date %> kl <%= l @booking.occasion.start_time, format: :only_time %>
   har avbokats av
   <%= @user.name %> (<%= @user.email %>, <%= @user.cellphone %>).
 </p>

@@ -12,7 +12,7 @@
 <div class="admin-tools">
   <ul>
     <li>
-      <%= link_to "Ladda ner listan som Excel-fil", bus_event_bookings_path(@event, :format => :xls) %>
+      <%= link_to "Ladda ner listan som Excel-fil", bus_event_bookings_path(@event, format: :xls) %>
     </li>
   </ul>
 </div>
@@ -36,7 +36,7 @@
         <tr class="<%= cycle('', 'even') %>">
           <td class="school"><%= booking.group.school.name -%></td>
           <td class="group"><%= booking.group.name -%></td>
-          <td class="occasion"><%= booking.occasion.date %> <%= l booking.occasion.start_time, :format => :only_time %></td>
+          <td class="occasion"><%= booking.occasion.date %> <%= l booking.occasion.start_time, format: :only_time %></td>
           <td class="seats"><%= booking.total_count %></td>
           <td class="bus-stop"><%= booking.bus_stop %></td>
           <td class="type"><%= booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></td>

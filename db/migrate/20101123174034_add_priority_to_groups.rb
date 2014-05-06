@@ -7,11 +7,11 @@ class AddPriorityToGroups < ActiveRecord::Migration
 
     if defined?(SchoolPrio)
       groups = Group.all(
-        :include => { :school => :school_prio },
-        :order => "school_prios.prio ASC"
+        include: { school: :school_prio },
+        order: "school_prios.prio ASC"
       )
     else
-      groups = Group.all(:order => "name ASC")
+      groups = Group.all(order: "name ASC")
     end
 
     groups.each do |group|

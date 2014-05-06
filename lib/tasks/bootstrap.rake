@@ -12,7 +12,7 @@ namespace :kp do
 
     # Creates all system roles required in the application
     desc "Create system roles if they do not exist"
-    task(:create_system_roles => :environment) do
+    task(create_system_roles: :environment) do
       [:admin, :booker, :culture_worker, :host, :coordinator].each do |role|
         unless Role.find_by_symbol role
           r = Role.new
@@ -26,7 +26,7 @@ namespace :kp do
 
     # Creates an administrator account in the application
     desc "Create admin account if it does not exist"
-    task(:create_admin_account => :environment) do
+    task(create_admin_account: :environment) do
       unless User.find_by_name "admin"
         u = User.new
         u.username = "admin"
@@ -36,7 +36,7 @@ namespace :kp do
         u.cellphone = "0"
 
         puts "User: #{u.username}"
-        u.save(:validate => false)
+        u.save(validate: false)
 
         u.roles << Role.find_by_symbol(:admin)
       end

@@ -1,7 +1,7 @@
 <%# coding: utf-8 %>
-<%= render :partial => "categories/menu" -%>
+<%= render partial: "categories/menu" -%>
 
-<%= form_for @category_group, :builder => KPFormBuilder, :html => { :class => "category-group-form context-form" } do |f| -%>
+<%= form_for @category_group, builder: KPFormBuilder, html: { class: "category-group-form context-form" } do |f| -%>
 
   <%= f.title(@category_group.id.to_i > 0 ? "Redigera kategorigrupp" : "Lägg till kategorigrupp")  %>
 
@@ -31,7 +31,7 @@
       <td><%= category_group.name %></td>
       <td><%= category_group.visible_in_calendar ? "Ja" : "Nej" %></td>
       <td><%= link_to 'Redigera', edit_category_group_path(category_group) %></td>
-      <td><%= link_to 'Radera', category_group, :data => {:confirm => 'Är du säker?'}, :method => :delete %></td>
+      <td><%= link_to 'Radera', category_group, data: {confirm: 'Är du säker?'}, method: :delete %></td>
     </tr>
   <% end %>
 

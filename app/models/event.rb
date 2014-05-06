@@ -35,26 +35,26 @@ class Event < ActiveRecord::Base
   }
 
   has_many :allotments, lambda {
-      includes(:district, :group => :school)
+      includes(:district, group: :school)
       .order("districts.name asc nulls last")
       .order("schools.name asc nulls last")
       .order("groups.name asc nulls last") },
-    :dependent => :destroy
+    dependent: :destroy
 
-  has_many :tickets, :dependent => :delete_all
+  has_many :tickets, dependent: :delete_all
 
-  has_many :bookings, lambda{ distinct }, :through => :tickets
+  has_many :bookings, lambda{ distinct }, through: :tickets
 
-  has_many :users, lambda{ distinct }, :through => :tickets
+  has_many :users, lambda{ distinct }, through: :tickets
 
   has_many :booked_users, lambda{ where("tickets.state = ?", Ticket::BOOKED).distinct },
-    :through => :tickets,
-    :source  => :user
+    through: :tickets,
+    source: :user
   
   has_many :districts, lambda{ distinct.order(name: :asc) }, through: :tickets
   
 
-  has_many(:groups, lambda{ distinct.order("groups.name ASC") }, :through => :tickets) do
+  has_many(:groups, lambda{ distinct.order("groups.name ASC") }, through: :tickets) do
     # Scope by district
     def find_by_district(district)
       includes(:school)
@@ -65,48 +65,47 @@ class Event < ActiveRecord::Base
 
 
   has_many :unordered_groups, lambda{ distinct },
-    :through    => :tickets,
-    :class_name => "Group",
-    :source     => :group
+    through: :tickets,
+    class_name: "Group",
+    source: :group
   
-  has_many :occasions, lambda{ order("date ASC, start_time ASC, stop_time ASC") }, :dependent => :destroy
+  has_many :occasions, lambda{ order("date ASC, start_time ASC, stop_time ASC") }, dependent: :destroy
   has_many :reportable_occasions,
     lambda{ where("occasions.date <?", Date.today).order("date ASC, start_time ASC, stop_time ASC") },
-    :class_name => "Occasion"
+    class_name: "Occasion"
 
   belongs_to :culture_provider
 
   has_and_belongs_to_many :categories, lambda{ includes(:category_group) }
 
-  has_one :questionnaire, :dependent => :destroy
+  has_one :questionnaire, dependent: :destroy
 
   # All images
-  has_many :images, :dependent => :destroy
+  has_many :images, dependent: :destroy
   
 
   # All images, excluding the main image (logotype)
   has_many :images_excluding_main,
     lambda{ |record| where("id != ?", record.main_image_id.to_i) },
-    #:conditions => proc { [ "id != ?", self.main_image_id || 0 ] },
-    :class_name => "Image"
+    class_name: "Image"
 
 
   # The main image (logotype)
-  belongs_to :main_image, :class_name => "Image", :dependent => :destroy
+  belongs_to :main_image, class_name: "Image", dependent: :destroy
 
-  has_many :attachments, lambda{ order "filename ASC" }, :dependent => :destroy
+  has_many :attachments, lambda{ order "filename ASC" }, dependent: :destroy
 
-  has_many :notification_requests, :dependent => :destroy
+  has_many :notification_requests, dependent: :destroy
 
   has_and_belongs_to_many :linked_events,
     lambda{ order "name ASC" },
-    :class_name => "Event",
-    :foreign_key => "from_id",
-    :association_foreign_key => "to_id",
-    :join_table => "event_links"
+    class_name: "Event",
+    foreign_key: "from_id",
+    association_foreign_key: "to_id",
+    join_table: "event_links"
   has_and_belongs_to_many :linked_culture_providers,
     lambda{ order "name ASC" },
-    :class_name => "CultureProvider"
+    class_name: "CultureProvider"
 
   attr_accessible :name,
     :description,
@@ -131,15 +130,15 @@ class Event < ActiveRecord::Base
     :bus_booking
   
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt"
+    message: "Namnet får inte vara tomt"
   validates_presence_of :description,
-    :message => "Beskrivningen får inte vara tom"
-  validates_numericality_of :from_age, :to_age, :only_integer => true,
-    :message => "Åldern måste vara ett giltigt heltal."
+    message: "Beskrivningen får inte vara tom"
+  validates_numericality_of :from_age, :to_age, only_integer: true,
+    message: "Åldern måste vara ett giltigt heltal."
   validates_presence_of :visible_from,
-    :message => "Du måste ange datum"
+    message: "Du måste ange datum"
   validates_presence_of :visible_to,
-    :message => "Du måste ange datum"
+    message: "Du måste ange datum"
 
   before_save :set_further_education_age
 
@@ -329,13 +328,13 @@ class Event < ActiveRecord::Base
     case filter[:date_span]
     when :day
       conditions[0] << " and events.visible_from <= ? "
-      conditions << from_date.advance(:days => 1)
+      conditions << from_date.advance(days: 1)
     when :week
       conditions[0] << " and events.visible_from <= ? "
-      conditions << from_date.advance(:weeks => 1)
+      conditions << from_date.advance(weeks: 1)
     when :month
       conditions[0] << " and events.visible_from <= ? "
-      conditions << from_date.advance(:months => 1)
+      conditions << from_date.advance(months: 1)
     when :date
       unless filter[:to_date].blank?
         conditions[0] << " and events.visible_from <= ? "
@@ -364,8 +363,8 @@ class Event < ActiveRecord::Base
 
 
   # Returns an array containg hashes with the stats in the following format:
-  # [{:event =>, :distict =>, :school =>, :group =>, :booked_tickets =>,
-  #   :used_tickets_children =>, :used_tickets_adults =>}]
+  # [{event:, distict:, school:, group:, booked_tickets:,
+  #   used_tickets_children:, used_tickets_adults:}]
   def get_visitor_stats_for_event
     return Event.get_visitor_stats_for_events([self])
   end

@@ -5,7 +5,7 @@ class OccasionMailer < ActionMailer::Base
   helper :mailer
   helper :application
 
-  default :from => APP_CONFIG[:mailers][:from_address]
+  default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email when an occasion is cancelled
   def occasion_cancelled_email(occasion)
@@ -18,9 +18,9 @@ class OccasionMailer < ActionMailer::Base
     @occasion = occasion
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Inställt evenemang - #{occasion.event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Inställt evenemang - #{occasion.event.name}"
     )
   end
 
@@ -36,9 +36,9 @@ class OccasionMailer < ActionMailer::Base
     @booking  = booking
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Snart dags för #{occasion.event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Snart dags för #{occasion.event.name}"
     )
   end
 
@@ -54,9 +54,9 @@ class OccasionMailer < ActionMailer::Base
     @booking  = booking
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Utvärdering av #{occasion.event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Utvärdering av #{occasion.event.name}"
     )
   end
 
@@ -71,9 +71,9 @@ class OccasionMailer < ActionMailer::Base
     @answer_form = answer_form
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Påminnelse utvärdering - #{answer_form.occasion.event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Påminnelse utvärdering - #{answer_form.occasion.event.name}"
     )
   end
 end

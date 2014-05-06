@@ -5,14 +5,14 @@ class RoleApplicationsControllerTest < ActionController::TestCase
   def setup
     @controller.expects(:authenticate).at_least_once.returns(true)
 
-    @user  = create(:user, :roles => [])
-    @admin = create(:user, :roles => [roles(:admin)])
+    @user  = create(:user, roles: [])
+    @admin = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @admin.id
   end
 
   test "index, admin" do
-    role_applications = create_list(:role_application, 2, :state => RoleApplication::PENDING).sort_by(&:created_at)
-    create_list(:role_application, 2, :state => RoleApplication::ACCEPTED) # dummies
+    role_applications = create_list(:role_application, 2, state: RoleApplication::PENDING).sort_by(&:created_at)
+    create_list(:role_application, 2, state: RoleApplication::ACCEPTED) # dummies
 
     get :index
     assert_response :success
@@ -47,29 +47,29 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     @controller.expects(:require_admin).at_least_once.returns(true)
 
     # Pending
-    role_application = create(:role_application, :state => RoleApplication::PENDING)
+    role_application = create(:role_application, state: RoleApplication::PENDING)
 
-    get :edit, :id => role_application.id
+    get :edit, id: role_application.id
     assert_response :success
     assert_equal    role_application, assigns(:application)
 
     # Accepted
-    role_application = create(:role_application, :state => RoleApplication::ACCEPTED)
+    role_application = create(:role_application, state: RoleApplication::ACCEPTED)
 
-    get :edit, :id => role_application.id
-    assert_redirected_to :action => "archive"
+    get :edit, id: role_application.id
+    assert_redirected_to action: "archive"
     assert_equal         "Behörighetsansökan är redan besvarad", flash[:warning]
   end
 
   test "create, for admin" do
     post :create
-    assert_redirected_to :action => "index"
+    assert_redirected_to action: "index"
     assert_equal         "Du har redan administratörsbehörigheter och kan därför inte ansöka om behörigheter.", flash[:notice]
   end
   test "create, for user, valid" do
     session[:current_user_id] = @user.id
 
-    post :create, :role_application => { :role_id => roles(:host).id }
+    post :create, role_application: { role_id: roles(:host).id }
 
     assert_redirected_to @user
     assert_equal         "Din ansökan har skickats till administratörerna.", flash[:notice]
@@ -83,7 +83,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     RoleApplication.any_instance.stubs(:valid?).returns(false)
 
     # booker
-    post :create, :role_application => { :role_id => roles(:booker).id }
+    post :create, role_application: { role_id: roles(:booker).id }
     assert_response :success
     assert_template "role_applications/index"
     assert_equal    :booker,                assigns(:application_type)
@@ -93,7 +93,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     assert_equal    assigns(:booker_appl),  assigns(:application)
     assert_equal    culture_providers,      assigns(:culture_providers)
     # culture_worker
-    post :create, :role_application => { :role_id => roles(:culture_worker).id }
+    post :create, role_application: { role_id: roles(:culture_worker).id }
     assert_response :success
     assert_template "role_applications/index"
     assert_equal    :culture_worker,               assigns(:application_type)
@@ -103,7 +103,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     assert_equal    assigns(:culture_worker_appl), assigns(:application)
     assert_equal    culture_providers,             assigns(:culture_providers)
     # host
-    post :create, :role_application => { :role_id => roles(:host).id }
+    post :create, role_application: { role_id: roles(:host).id }
     assert_response :success
     assert_template "role_applications/index"
     assert_equal    :host,                  assigns(:application_type)
@@ -117,11 +117,11 @@ class RoleApplicationsControllerTest < ActionController::TestCase
   test "update, invalid" do
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    role_application = create(:role_application, :state => RoleApplication::PENDING)
+    role_application = create(:role_application, state: RoleApplication::PENDING)
 
     RoleApplication.any_instance.stubs(:valid?).returns(false)
 
-    put :update, :id => role_application.id, :role_application => { :state => RoleApplication::DENIED }
+    put :update, id: role_application.id, role_application: { state: RoleApplication::DENIED }
 
     assert_response :success
     assert_template "role_applications/edit"
@@ -131,12 +131,12 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     @controller.expects(:require_admin).at_least_once.returns(true)
 
     # basic
-    role_application = create(:role_application, :state => RoleApplication::PENDING, :role => roles(:host))
+    role_application = create(:role_application, state: RoleApplication::PENDING, role: roles(:host))
     assert role_application.user.roles(true).blank?
 
-    put :update, :id => role_application.id, :role_application => { :state => RoleApplication::ACCEPTED }
+    put :update, id: role_application.id, role_application: { state: RoleApplication::ACCEPTED }
 
-    assert_redirected_to :action => "index"
+    assert_redirected_to action: "index"
     assert_equal         "Ansökan besvarades.",     flash[:notice]
     assert_equal         RoleApplication::ACCEPTED, role_application.reload.state
     assert               role_application.user.roles(true).include?(roles(:host))
@@ -146,16 +146,16 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     culture_provider = create(:culture_provider)
     role_application = create(
       :role_application,
-      :state => RoleApplication::PENDING,
-      :role => roles(:culture_worker),
-      :culture_provider => culture_provider
+      state: RoleApplication::PENDING,
+      role: roles(:culture_worker),
+      culture_provider: culture_provider
     )
     assert role_application.user.roles(true).blank?
     assert role_application.user.culture_providers(true).blank?
 
-    put :update, :id => role_application.id, :role_application => { :state => RoleApplication::ACCEPTED }
+    put :update, id: role_application.id, role_application: { state: RoleApplication::ACCEPTED }
 
-    assert_redirected_to :action => "index"
+    assert_redirected_to action: "index"
     assert_equal         "Ansökan besvarades.",     flash[:notice]
     assert_equal         RoleApplication::ACCEPTED, role_application.reload.state
     assert               role_application.user.roles(true).include?(roles(:culture_worker))
@@ -165,17 +165,17 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     culture_provider = create(:culture_provider)
     role_application = create(
       :role_application,
-      :state => RoleApplication::PENDING,
-      :role => roles(:culture_worker),
-      :culture_provider => nil,
-      :new_culture_provider_name => "zomg"
+      state: RoleApplication::PENDING,
+      role: roles(:culture_worker),
+      culture_provider: nil,
+      new_culture_provider_name: "zomg"
     )
     assert role_application.user.roles(true).blank?
     assert role_application.user.culture_providers(true).blank?
 
-    put :update, :id => role_application.id, :role_application => { :state => RoleApplication::ACCEPTED }
+    put :update, id: role_application.id, role_application: { state: RoleApplication::ACCEPTED }
 
-    assert_redirected_to :action => "index"
+    assert_redirected_to action: "index"
     assert_equal         "Ansökan besvarades.",     flash[:notice]
     assert_equal         RoleApplication::ACCEPTED, role_application.reload.state
     assert_equal         "zomg",                    CultureProvider.last.name
@@ -185,11 +185,11 @@ class RoleApplicationsControllerTest < ActionController::TestCase
   test "update, denied" do
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    role_application = create(:role_application, :state => RoleApplication::PENDING)
+    role_application = create(:role_application, state: RoleApplication::PENDING)
 
-    put :update, :id => role_application.id, :role_application => { :state => RoleApplication::DENIED }
+    put :update, id: role_application.id, role_application: { state: RoleApplication::DENIED }
 
-    assert_redirected_to :action => "index"
+    assert_redirected_to action: "index"
     assert_equal         "Ansökan besvarades.",   flash[:notice]
     assert_equal         RoleApplication::DENIED, role_application.reload.state
   end

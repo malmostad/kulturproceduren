@@ -5,7 +5,7 @@ class ImagesController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
-  before_filter :load_image, :only => [ :index, :create ]
+  before_filter :load_image, only: [ :index, :create ]
 
   # Displays an administration interface for the images
   # associated with a culture provider or an event
@@ -34,7 +34,7 @@ class ImagesController < ApplicationController
 
       flash[:notice] = "Bilden laddades upp."
     else
-      render :action => "index"
+      render action: "index"
     end
   end
 

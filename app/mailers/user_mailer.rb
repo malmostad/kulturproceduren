@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
 
-  default :from => APP_CONFIG[:mailers][:from_address]
+  default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email requiring the user to confirm a password reset
   def password_reset_confirmation_email(user)
@@ -16,9 +16,9 @@ class UserMailer < ActionMailer::Base
     @user = user
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Bekräfta återställning av lösenord"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Bekräfta återställning av lösenord"
     )
   end
 
@@ -34,9 +34,9 @@ class UserMailer < ActionMailer::Base
     @password = password
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Nytt lösenord"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Nytt lösenord"
     )
   end
 

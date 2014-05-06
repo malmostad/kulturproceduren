@@ -62,7 +62,7 @@ ActionView::Helpers::FormBuilder.class_eval do
     value, options = nil, value if value.is_a?(Hash)
     value ||= submit_default_value
     # MONKEYPATCH: Added kp- prefix to id
-    @template.submit_tag(value, options.reverse_merge(:id => "kp-#{object_name}-submit"))
+    @template.submit_tag(value, options.reverse_merge(id: "kp-#{object_name}-submit"))
   end
 end
 

@@ -4,7 +4,7 @@
 <p>Hej!</p>
 
 <p>
-  <%= @occasion.date %> kl <%= l @occasion.start_time, :format => :only_time %>
+  <%= @occasion.date %> kl <%= l @occasion.start_time, format: :only_time %>
   är det dags för
   <%= @booking.group.name %> på <%= @booking.group.school.name %>
   att ta del av

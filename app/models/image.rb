@@ -17,7 +17,7 @@ class Image < ActiveRecord::Base
     :culture_provider_id, :culture_provider
 
   validates_presence_of :description,
-    :message => "Bildtexten får inte vara tom"
+    message: "Bildtexten får inte vara tom"
 
   after_destroy :cleanup
 

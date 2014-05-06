@@ -4,7 +4,7 @@ class RoleApplicationMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
 
-  default :from => APP_CONFIG[:mailers][:from_address]
+  default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email to administrators when a user has submitted a role application
   def application_submitted_email(role_application, administrators)
@@ -17,9 +17,9 @@ class RoleApplicationMailer < ActionMailer::Base
     @role_application = role_application
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Behörighetsansökan"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Behörighetsansökan"
     )
   end
 
@@ -34,9 +34,9 @@ class RoleApplicationMailer < ActionMailer::Base
     @role_application = role_application
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Behörighet"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Behörighet"
     )
   end
 end

@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 <h2 class="form-title">
   Boka platser för
@@ -8,8 +8,8 @@
 </h2>
 
 <div class="booking-group-selection">
-  <%= render :partial => "shared/group_selection",
-    :locals => { :occasion => @occasion, :return_to => new_occasion_booking_path(@occasion) }
+  <%= render partial: "shared/group_selection",
+    locals: { occasion: @occasion, return_to: new_occasion_booking_path(@occasion) }
   %>
 
   <div class="notification-request-info">
@@ -27,5 +27,5 @@
 
 
 <div id="kp-booking-form-container">
-  <%= render :partial => "form" if @group %>
+  <%= render partial: "form" if @group %>
 </div>

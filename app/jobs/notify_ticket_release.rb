@@ -1,7 +1,7 @@
 class NotifyTicketRelease
 
   def run
-    events = Event.find :all, :conditions => "ticket_release_date = current_date"
+    events = Event.find :all, conditions: "ticket_release_date = current_date"
     events.each{ |e| process_event(e) }
   end
 

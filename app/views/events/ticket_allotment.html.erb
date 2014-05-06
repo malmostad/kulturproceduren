@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <h2 class="form-title">
   Fördelning för <%= link_to @event.name, @event %>
@@ -8,10 +8,10 @@
 <div class="admin-tools">
   <ul>
     <% if current_user.has_role?(:admin) && !@event.further_education && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
-      <li><%= link_to "Ändra fördelning", :controller => "allotment", :action => "init", :id => @event.id %></li>
+      <li><%= link_to "Ändra fördelning", controller: "allotment", action: "init", id: @event.id %></li>
     <% end -%>
     <li>
-      <%= link_to "Ladda ner fördelningen som Excel-fil", ticket_allotment_event_path(@event, :format => :xls) %>
+      <%= link_to "Ladda ner fördelningen som Excel-fil", ticket_allotment_event_path(@event, format: :xls) %>
     </li>
   </ul>
 </div>

@@ -3,7 +3,7 @@ require_relative '../test_helper'
 
 class RoleTest < ActiveSupport::TestCase
   test "validations" do
-    role = build(:role, :name => "")
+    role = build(:role, name: "")
     assert !role.valid?
     assert role.errors.include?(:name)
   end

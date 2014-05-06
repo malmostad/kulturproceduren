@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 class CreateAnswerForms < ActiveRecord::Migration
   def self.up
-    create_table :answer_forms, :id => false do |t|
-      t.string  :id, :limit => 46
+    create_table :answer_forms, id: false do |t|
+      t.string  :id, limit: 46
       t.boolean :completed
       t.integer :companion_id
       t.integer :occasion_id

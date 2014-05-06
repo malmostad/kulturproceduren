@@ -12,7 +12,7 @@
 
 %>
 
-<%= form_for question, :url => form_url, :builder => KPFormBuilder, :html => { :class => "question-form" } do |f| -%>
+<%= form_for question, url: form_url, builder: KPFormBuilder, html: { class: "question-form" } do |f| -%>
 
   <% if with_header %>
     <h2>Lägg till fråga</h2>
@@ -37,7 +37,7 @@
     <% end -%>
 
     <%= f.text_field :question %>
-    <%= f.text_field :choice_csv, :field_help => "Ange alternativen separerade med kommatecken", :row_hidden => (question.qtype != "QuestionMchoice") -%>
+    <%= f.text_field :choice_csv, field_help: "Ange alternativen separerade med kommatecken", row_hidden: (question.qtype != "QuestionMchoice") -%>
     <%= f.check_box :mandatory %>
 
   <% end %>

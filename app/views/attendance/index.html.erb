@@ -15,7 +15,7 @@
     föreställningen
     <%= @occasion.date %>
     kl
-    <%= l @occasion.start_time, :format => :only_time %> - <%= l @occasion.stop_time, :format => :only_time %>
+    <%= l @occasion.start_time, format: :only_time %> - <%= l @occasion.stop_time, format: :only_time %>
   <% else %>
     alla föreställningar
   <% end %>
@@ -36,9 +36,9 @@
   </div>
   <p>
     <% if @occasion %>
-      <%= link_to "Ladda ner som PDF", occasion_attendance_index_path(@occasion, :format => "pdf") %>
+      <%= link_to "Ladda ner som PDF", occasion_attendance_index_path(@occasion, format: "pdf") %>
     <% else %>
-      <%= link_to "Ladda ner som PDF", event_attendance_index_path(@event, :format => "pdf") %>
+      <%= link_to "Ladda ner som PDF", event_attendance_index_path(@event, format: "pdf") %>
     <% end %>
   </p>
 <% end -%>
@@ -71,7 +71,7 @@
               Föreställningen
               <%= occasion.date %>
               kl
-              <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
+              <%= l occasion.start_time, format: :only_time %> - <%= l occasion.stop_time, format: :only_time %>
             <% end %>
           </th>
         </tr>

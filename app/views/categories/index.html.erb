@@ -1,11 +1,11 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <% is_edit = ["edit", "update"].include?(params[:action]) -%>
 
 <% unless @category_groups.empty? %>
 
-  <%= form_for @category, :builder => KPFormBuilder, :html => { :class => "category-form context-form" } do |f| -%>
+  <%= form_for @category, builder: KPFormBuilder, html: { class: "category-form context-form" } do |f| -%>
 
     <%= f.title(is_edit ? "Redigera kategori" : "Lägg till kategori") %>
 
@@ -25,7 +25,7 @@
 
   <p>
     Du kan inte lägga till kategorier innan det finns minst en kategorigrupp.
-    <%= link_to "Klicka här", :controller => "category_groups" %> för att lägga
+    <%= link_to "Klicka här", controller: "category_groups" %> för att lägga
     till kategorigrupper.
   </p>
 
@@ -45,7 +45,7 @@
       <td><%= category.name %></td>
       <td><%= category.category_group.name %></td>
       <td><%= link_to 'Redigera', edit_category_path(category) %></td>
-      <td><%= link_to 'Radera', category, :data =>{:confirm => 'Are you sure?'}, :method => :delete %></td>
+      <td><%= link_to 'Radera', category, data:{confirm: 'Are you sure?'}, method: :delete %></td>
     </tr>
   <% end %>
 

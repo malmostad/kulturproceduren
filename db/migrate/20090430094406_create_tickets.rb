@@ -11,7 +11,7 @@ class CreateTickets < ActiveRecord::Migration
       t.integer  :user_id
 
       t.boolean  :adult
-      t.boolean  :wheelchair, :default => false
+      t.boolean  :wheelchair, default: false
       t.datetime :booked_when
 
       t.timestamps

@@ -6,7 +6,7 @@ class RoleApplicationsHelperTest < ActionView::TestCase
   include ERB::Util
 
   test "state string" do
-    role_application = build(:role_application, :state => RoleApplication::PENDING)
+    role_application = build(:role_application, state: RoleApplication::PENDING)
     assert_equal "Inskickad", state_string(role_application)
     role_application.state = RoleApplication::ACCEPTED
     assert_equal "Godkänd", state_string(role_application)
@@ -15,7 +15,7 @@ class RoleApplicationsHelperTest < ActionView::TestCase
   end
 
   test "type string" do
-    role_application = build(:role_application, :culture_provider => create(:culture_provider), :new_culture_provider_name => "New provider")
+    role_application = build(:role_application, culture_provider: create(:culture_provider), new_culture_provider_name: "New provider")
 
     role_application.role = roles(:booker)
     assert_equal "Bokning", type_string(role_application)

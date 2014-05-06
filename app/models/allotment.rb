@@ -4,7 +4,7 @@ class Allotment < ActiveRecord::Base
   belongs_to :event
   belongs_to :district
   belongs_to :group
-  has_many :tickets, :dependent => :delete_all
+  has_many :tickets, dependent: :delete_all
 
   attr_accessible :amount,
     :user_id,     :user,
@@ -14,8 +14,8 @@ class Allotment < ActiveRecord::Base
 
   after_save :synchronize_tickets
 
-  validates_presence_of :user, :message => "Tilldelningen måste tillhöra en grupp"
-  validates_presence_of :event, :message => "Tilldelningen måste tillhöra ett evenemang"
+  validates_presence_of :user, message: "Tilldelningen måste tillhöra en grupp"
+  validates_presence_of :event, message: "Tilldelningen måste tillhöra ett evenemang"
 
   def allotment_type
     if self.group_id
@@ -45,12 +45,12 @@ class Allotment < ActiveRecord::Base
   def synchronize_tickets
     1.upto(self.amount) do
       self.tickets.create!(
-        :event => self.event,
-        :district => self.district,
-        :group => self.group,
-        :state => :unbooked,
-        :wheelchair => false,
-        :adult => false
+        event: self.event,
+        district: self.district,
+        group: self.group,
+        state: :unbooked,
+        wheelchair: false,
+        adult: false
       )
     end
   end

@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "questionnaires/menu" -%>
+<%= render partial: "questionnaires/menu" -%>
 
 <h2 class="form-title">Uppdatera fråga</h2>
-<%= render :partial => "form", :locals => { :question => @question, :questionnaire => @questionnaire } %>
+<%= render partial: "form", locals: { question: @question, questionnaire: @questionnaire } %>

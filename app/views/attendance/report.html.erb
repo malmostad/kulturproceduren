@@ -15,7 +15,7 @@
     föreställningen
     <%= @occasion.date %>
     kl
-    <%= l @occasion.start_time, :format => :only_time %> - <%= l @occasion.stop_time, :format => :only_time %>
+    <%= l @occasion.start_time, format: :only_time %> - <%= l @occasion.stop_time, format: :only_time %>
   <% else %>
     alla föreställningar
   <% end %>
@@ -88,7 +88,7 @@ end
               Föreställningen
               <%= occasion.date %>
               kl
-              <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
+              <%= l occasion.start_time, format: :only_time %> - <%= l occasion.stop_time, format: :only_time %>
             </th>
           </tr>
 

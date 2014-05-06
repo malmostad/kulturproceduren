@@ -1,19 +1,19 @@
 # -*- encoding : utf-8 -*-
 # Controller for managing schools.
 class SchoolsController < ApplicationController
-  layout "admin", :except => [ :options_list ]
+  layout "admin", except: [ :options_list ]
   
-  before_filter :authenticate, :except => [ :options_list, :select ]
-  before_filter :require_admin, :except => [ :options_list, :select ]
+  before_filter :authenticate, except: [ :options_list, :select ]
+  before_filter :require_admin, except: [ :options_list, :select ]
 
   def index
-    @schools = School.includes(:district).order(sort_order("name")).paginate(:page => params[:page])
+    @schools = School.includes(:district).order(sort_order("name")).paginate(page: params[:page])
   end
 
 
   def show
     @school = School.find(params[:id])
-    @groups = @school.groups.order(sort_order("name")).paginate(:page => params[:page])
+    @groups = @school.groups.order(sort_order("name")).paginate(page: params[:page])
   end
 
   def new
@@ -26,7 +26,7 @@ class SchoolsController < ApplicationController
   def edit
     @school = School.find(params[:id])
     @districts = District.all
-    render :action => "new"
+    render action: "new"
   end
 
   def create
@@ -37,7 +37,7 @@ class SchoolsController < ApplicationController
       redirect_to(@school)
     else
       @districts = District.all
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -49,7 +49,7 @@ class SchoolsController < ApplicationController
       redirect_to(@school)
     else
       @districts = District.all
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -68,13 +68,13 @@ class SchoolsController < ApplicationController
   def select
     school = School.find params[:school_id]
     session[:group_selection] = {
-      :district_id => school.district_id,
-      :school_id => school.id
+      district_id: school.district_id,
+      school_id: school.id
     }
   rescue
   ensure
     if request.xhr?
-      render :text => "", :content_type => "text/plain"
+      render text: "", content_type: "text/plain"
     else
       redirect_to params[:return_to]
     end
@@ -88,7 +88,7 @@ class SchoolsController < ApplicationController
     occasion_id = params[:occasion_id].to_i
 
     if (params[:district_id] && district_id <= 0) || (params[:occasion_id] && occasion_id <= 0)
-      render :text => "", :content_type => 'text/plain', :status => 404
+      render text: "", content_type: 'text/plain', status: 404
       return
     end
 
@@ -96,7 +96,7 @@ class SchoolsController < ApplicationController
       conditions[:district_id] = district_id
 
       district = District.find params[:district_id]
-      session[:group_selection] = { :district_id => district.id }
+      session[:group_selection] = { district_id: district.id }
     end
 
     if occasion_id > 0
@@ -108,10 +108,10 @@ class SchoolsController < ApplicationController
       @schools = School.where(conditions).order("name ASC")
     end
 
-    render :action => "options_list", :content_type => 'text/plain'
+    render action: "options_list", content_type: 'text/plain'
   rescue => e
     logger.debug(e)
-    render :text => "", :content_type => 'text/plain', :status => 404
+    render text: "", content_type: 'text/plain', status: 404
   end
 
   protected

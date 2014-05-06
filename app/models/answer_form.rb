@@ -5,7 +5,7 @@ class AnswerForm < ActiveRecord::Base
   # Answer forms have ASCII-ID:s for URL obfuscation
   self.primary_key = "id"
   
-  has_many :answers, -> { order("answers.question_id, answers.id") }, :dependent => :destroy
+  has_many :answers, -> { order("answers.question_id, answers.id") }, dependent: :destroy
   belongs_to :booking
   belongs_to :occasion
   belongs_to :booking

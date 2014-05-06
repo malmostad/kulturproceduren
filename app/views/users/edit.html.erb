@@ -1,7 +1,7 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
-<%= form_for(@user, :builder => KPFormBuilder, :html => { :class => "user-form" }) do |f| %>
+<%= form_for(@user, builder: KPFormBuilder, html: { class: "user-form" }) do |f| %>
 
   <%= f.title "Redigera personuppgifter" -%>
 
@@ -24,7 +24,7 @@
             <li>
               <%= check_box_tag "user[district_ids][]", district.id,
                 @user.districts.any? { |d| d.id == district.id },
-                :id => "kp-user-district_ids-#{district.id}"
+                id: "kp-user-district_ids-#{district.id}"
               %>
 
               <label for="kp-user-district_ids-<%= district.id %>"><%= district.name %></label>

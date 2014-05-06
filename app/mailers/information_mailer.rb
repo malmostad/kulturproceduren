@@ -3,7 +3,7 @@
 class InformationMailer < ActionMailer::Base
   layout "mail"
 
-  default :from => APP_CONFIG[:mailers][:from_address]
+  default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends a custom mail
   def custom_email(address, subject, body)
@@ -16,9 +16,9 @@ class InformationMailer < ActionMailer::Base
     @message = body
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => subject
+      to: recipients,
+      date: Time.zone.now,
+      subject: subject
     )
   end
 end

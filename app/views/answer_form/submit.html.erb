@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= form_tag({ :action => "submit", :answer_form_id => params[:answer_form_id] }, { :class => "evaluation-form" }) do %>
+<%= form_tag({ action: "submit", answer_form_id: params[:answer_form_id] }, { class: "evaluation-form" }) do %>
 
   <h2>
     Utvärderingsenkät för
@@ -12,8 +12,8 @@
     som besökte
     <%= @answer_form.occasion.event.name %>
     <%= @answer_form.occasion.date %>,
-    <%= l @answer_form.occasion.start_time, :format => :only_time %> -
-    <%= l @answer_form.occasion.stop_time, :format => :only_time %>.
+    <%= l @answer_form.occasion.start_time, format: :only_time %> -
+    <%= l @answer_form.occasion.stop_time, format: :only_time %>.
   </p>
 
   <% if @answer_form.missing_answers %>
@@ -33,8 +33,8 @@
         <label><%= question.question %>:</label>
 
         <div class="input-container">
-          <%= render :partial => get_question_fragment(question),
-            :locals => { :question => question, :value => @answer[question.id.to_s] }
+          <%= render partial: get_question_fragment(question),
+            locals: { question: question, value: @answer[question.id.to_s] }
           %>
         </div>
       </div>

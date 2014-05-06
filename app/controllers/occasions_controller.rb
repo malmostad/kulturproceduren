@@ -4,12 +4,12 @@ class OccasionsController < ApplicationController
 
   layout "standard"
   
-  before_filter :authenticate, :except => :show
-  before_filter :require_culture_worker, :only => [ :edit, :update, :destroy, :cancel ]
+  before_filter :authenticate, except: :show
+  before_filter :require_culture_worker, only: [ :edit, :update, :destroy, :cancel ]
 
-  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy, :cancel ]
-  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy, :cancel ]
-  cache_sweeper :event_sweeper, :only => [ :create, :update, :destroy, :cancel ]
+  cache_sweeper :calendar_sweeper, only: [ :create, :update, :destroy, :cancel ]
+  cache_sweeper :culture_provider_sweeper, only: [ :create, :update, :destroy, :cancel ]
+  cache_sweeper :event_sweeper, only: [ :create, :update, :destroy, :cancel ]
 
 
   # Displays a specific occasion as the part of an event presentation
@@ -18,7 +18,7 @@ class OccasionsController < ApplicationController
     @event = @selected_occasion.event
     @category_groups = CategoryGroup.order "name ASC"
 
-    render :template => "events/show"
+    render template: "events/show"
   end
 
   # Displays an editing form in place of the new occasion form in the
@@ -26,7 +26,7 @@ class OccasionsController < ApplicationController
   def edit
     @event = @occasion.event
     @category_groups = CategoryGroup.order "name ASC"
-    render :template => "events/show"
+    render template: "events/show"
   end
 
   def create
@@ -45,7 +45,7 @@ class OccasionsController < ApplicationController
     else
       @event = @occasion.event
       @category_groups = CategoryGroup.order "name ASC"
-      render :template => "events/show"
+      render template: "events/show"
     end
   end
 
@@ -56,7 +56,7 @@ class OccasionsController < ApplicationController
     else
       @event = @occasion.event
       @category_groups = CategoryGroup.order "name ASC"
-      render :template => "events/show"
+      render template: "events/show"
     end
   end
 
@@ -80,7 +80,7 @@ class OccasionsController < ApplicationController
 
   # Displays the ticket availability on the occasion's event. For use in an Ajax request.
   def ticket_availability
-    @occasion = Occasion.includes(:event => :culture_provider).find(params[:id])
+    @occasion = Occasion.includes(event: :culture_provider).find(params[:id])
     wrong_state = false
 
     case @occasion.event.ticket_state
@@ -95,9 +95,9 @@ class OccasionsController < ApplicationController
     end
 
     if request.xhr? && wrong_state
-      render :text => "", :content_type => "text/plain", :status => 404
+      render text: "", content_type: "text/plain", status: 404
     elsif request.xhr?
-      render :partial => "ticket_availability_list", :content_type => "text/plain", :layout => false
+      render partial: "ticket_availability_list", content_type: "text/plain", layout: false
     elsif wrong_state
       flash[:error] = "Platstillgänglighet kan inte presenteras för den önskade föreställningen."
       redirect_to root_url()

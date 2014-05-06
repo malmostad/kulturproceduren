@@ -4,7 +4,7 @@ class NotificationRequestMailer < ActionMailer::Base
   layout 'mail'
   helper :mailer
 
-  default :from => APP_CONFIG[:mailers][:from_address]
+  default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email when tickets have become available for
   # a group that has a registered notification request on the given
@@ -21,9 +21,9 @@ class NotificationRequestMailer < ActionMailer::Base
     @category_groups      = CategoryGroup.all
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Restplatser till #{notification_request.event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Restplatser till #{notification_request.event.name}"
     )
   end
 
@@ -37,9 +37,9 @@ class NotificationRequestMailer < ActionMailer::Base
     @notification_request = notification_request
 
     mail(
-      :to      => recipients,
-      :date    => Time.zone.now,
-      :subject => "Kulturproceduren: Reservplatser till #{notification_request.event.name}"
+      to: recipients,
+      date: Time.zone.now,
+      subject: "Kulturproceduren: Reservplatser till #{notification_request.event.name}"
     )
   end
 end

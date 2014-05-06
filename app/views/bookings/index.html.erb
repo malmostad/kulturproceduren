@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <% if params[:occasion_id] || params[:event_id] %>
   <div class="filter-tools">
@@ -19,12 +19,12 @@
           <label for="kp-booking-filter-district_id">Stadsdel:</label>
           <%= select_tag "district_id",
             options_from_collection_for_select(@districts, :id, :name, filter[:district_id]).insert(0,'<option value="all">Alla</option>'),
-            :id => "kp-booking-filter-district_id"
+            id: "kp-booking-filter-district_id"
           %>
         </li>
         <% if current_user.has_role?(:admin) %>
           <li class="district-filter">
-            <%= check_box_tag "unbooked", 1, filter[:unbooked], :id => "kp-booking-filter-unbooked" %>
+            <%= check_box_tag "unbooked", 1, filter[:unbooked], id: "kp-booking-filter-unbooked" %>
             <label for="kp-booking-filter-unbooked">Visa avbokade</label>
           </li>
         <% end %>
@@ -36,4 +36,4 @@
   </div>
 <% end %>
 
-<%= render :partial => "list", :locals => { :bookings => @bookings } %>
+<%= render partial: "list", locals: { bookings: @bookings } %>

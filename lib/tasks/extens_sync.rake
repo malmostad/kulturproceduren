@@ -20,14 +20,14 @@ namespace :kp do
       end
 
       desc "Synchronize districts with Extens"
-      task(:districts => :environment) do
+      task(districts: :environment) do
         puts "\n\nSynchronizing KP districts with Extens\n\n"
         conn = get_connection()
         extens_districts = conn.select_all('select stadsdel_guid, namn from vvkultstadsdel')
 
         extens_districts.each do |extens_district|
           puts "District from Extens:\t\t\t\t#{extens_district['stadsdel_guid']}\t#{extens_district['namn']}"
-          local_district = District.find :first, :conditions => { :extens_id => extens_district['stadsdel_guid'] }
+          local_district = District.find :first, conditions: { extens_id: extens_district['stadsdel_guid'] }
 
           if local_district
             puts "\tFound local district:\t\t#{local_district.id}\t#{local_district.extens_id}\t#{local_district.name}"
@@ -51,11 +51,11 @@ namespace :kp do
       end
 
       desc "Synchronize schools"
-      task(:schools => :environment) do
+      task(schools: :environment) do
         puts "\n\nSynchronizing KP schools with Extens\n\n"
         conn = get_connection()
 
-        districts = District.find :all, :conditions => "extens_id is not null"
+        districts = District.find :all, conditions: "extens_id is not null"
 
         districts.each do |district|
           puts "\n\tSynchronizing district #{district.name}\n\n"
@@ -73,11 +73,11 @@ namespace :kp do
       end
 
       desc "Synchronize school contacts"
-      task(:school_contacts => :environment) do
+      task(school_contacts: :environment) do
         puts "\n\nSynchronizing KP school contacts with Extens\n\n"
         conn = get_connection()
 
-        schools = School.find :all, :conditions => "extens_id is not null"
+        schools = School.find :all, conditions: "extens_id is not null"
 
         schools.each do |school|
           # Only contacts on schools, not preschools
@@ -116,11 +116,11 @@ namespace :kp do
       end
 
       desc "Synchronize groups"
-      task(:groups => :environment) do
+      task(groups: :environment) do
         puts "\n\nSynchronizing KP groups with Extens\n\n"
         conn = get_connection()
 
-        schools = School.find :all, :conditions => "extens_id is not null"
+        schools = School.find :all, conditions: "extens_id is not null"
 
         schools.each do |school|
           puts "\n\tSynchronizing school #{school.name}\n\n"
@@ -143,7 +143,7 @@ namespace :kp do
 
           extens_groups.each do |extens_group|
             puts "\tGroup from Extens:\t\t\t#{prefix}#{extens_group['extens_id']}\t#{extens_group['name']}"
-            local_group = Group.find :first, :conditions => { :extens_id => "#{prefix}#{extens_group['extens_id'].strip}" }
+            local_group = Group.find :first, conditions: { extens_id: "#{prefix}#{extens_group['extens_id'].strip}" }
 
             if local_group
               puts "\t\tFound local group:\t#{local_group.id}\t#{local_group.extens_id}\t#{local_group.name}"
@@ -169,11 +169,11 @@ namespace :kp do
       end
 
       desc "Synchronize group contacts"
-      task(:group_contacts => :environment) do
+      task(group_contacts: :environment) do
         puts "\n\nSynchronizing KP group contacts with Extens\n\n"
         conn = get_connection()
 
-        groups = Group.find :all, :conditions => "extens_id is not null"
+        groups = Group.find :all, conditions: "extens_id is not null"
 
         groups.each do |group|
           puts "\n\tSynchronizing group #{group.name}\n\n"
@@ -216,11 +216,11 @@ namespace :kp do
       end
 
       desc "Synchronize age groups"
-      task(:age_groups => :environment) do
+      task(age_groups: :environment) do
         puts "\n\nSynchronizing KP age groups with Extens\n\n"
         conn = get_connection()
 
-        groups = Group.find :all, :conditions => "extens_id is not null"
+        groups = Group.find :all, conditions: "extens_id is not null"
 
         # Calculate the age based on the current school year
         base_year = (Date.today - 6.months).year
@@ -269,7 +269,7 @@ namespace :kp do
 
       def sync_school(district, extens_id, extens_name)
         puts "\tSchool from Extens:\t\t\t#{extens_id}\t#{extens_name}"
-        local_school = School.find :first, :conditions => { :extens_id => extens_id }
+        local_school = School.find :first, conditions: { extens_id: extens_id }
 
         if local_school
           puts "\t\tFound local school:\t#{local_school.id}\t#{local_school.extens_id}\t#{local_school.name}"

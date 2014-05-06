@@ -6,7 +6,7 @@
 
     <title>Kulturproceduren<%= " - #{APP_CONFIG[:instance_title]}" if APP_CONFIG[:instance_title] %></title>
 
-    <%= render :partial => "shared/head" %>
+    <%= render partial: "shared/head" %>
   </head>
   <body class="kp-standalone">
 
@@ -25,7 +25,7 @@
 
       <ul class="pri-nav">
         <li class="pri-nav-calendar <%= active_by_controller "calendar" %>">
-          <%= link_to "Kalendarium", :controller => "calendar" -%>
+          <%= link_to "Kalendarium", controller: "calendar" -%>
         </li>
         <li class="pri-nav-culture-providers <%= active_by_controller "culture_providers" %>">
           <%= link_to "Arrangörer", culture_providers_path -%>
@@ -46,14 +46,14 @@
           <% end %>
 
           <% if current_user.has_role?(:admin) -%>
-            <li class="pri-nav-admin"><%= link_to "Administration", :controller => "role_applications" -%></li>
+            <li class="pri-nav-admin"><%= link_to "Administration", controller: "role_applications" -%></li>
           <% end -%>
 
           <li class="pri-nav-user <%= active_by_controller "role_applications" %> <%= active_by_action "users", "new", "create", "show", "edit", "update", "edit_password" %>">
             <%= link_to "Konto", current_user %>
           </li>
           <li class="pri-nav-logout">
-            <%= link_to "Logga ut från Kulturproceduren", :controller => "login", :action => "logout" -%>
+            <%= link_to "Logga ut från Kulturproceduren", controller: "login", action: "logout" -%>
           </li>
         <% else -%>
           <li class="pri-nav-login <%= active_by_controller "login" %>">

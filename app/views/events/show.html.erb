@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "events/menu" -%>
+<%= render partial: "events/menu" -%>
 
 <% if user_online? && current_user.can_administrate?(@event.culture_provider) -%>
   <div class="admin-tools">
@@ -9,7 +9,7 @@
 
       <% unless @event.bookable? %>
         <li>
-          <%= link_to 'Radera', event_path(@event), :method => :delete, :data =>{:confirm => "Är du säker på att du vill radera evenemanget?"} %>
+          <%= link_to 'Radera', event_path(@event), method: :delete, data:{confirm: "Är du säker på att du vill radera evenemanget?"} %>
         </li>
       <% end %>
 
@@ -17,17 +17,17 @@
       <li><%= link_to 'Hantera filer', event_attachments_path(@event) %></li>
       <li>
         <%= link_to 'Hantera länkade arrangörer',
-          event_culture_provider_links_path(:event_id => @event.id)
+          event_culture_provider_links_path(event_id: @event.id)
         %>
       </li>
       <li>
         <%= link_to 'Hantera länkade evenemang',
-          event_event_links_path(:event_id => @event.id)
+          event_event_links_path(event_id: @event.id)
         %>
       </li>
 
       <% if current_user.has_role?(:admin) && !@event.further_education && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today) -%>
-        <li><%= link_to 'Fördela inköpta biljetter', :controller => "allotment", :action => "init", :id => @event.id %></li>
+        <li><%= link_to 'Fördela inköpta biljetter', controller: "allotment", action: "init", id: @event.id %></li>
       <% end -%>
 
       <% if current_user.has_role?(:admin) && !@event.tickets.empty? %>
@@ -123,7 +123,7 @@
 
     <% if user_online? -%>
       <% if current_user.can_administrate?(@event.culture_provider) -%>
-        <%= render :partial => "occasions/form", :locals => { :event => @event } %>
+        <%= render partial: "occasions/form", locals: { event: @event } %>
       <% end %>
 
       <% if current_user.can_book? && @event.bookable? && @event.fully_booked? -%>
@@ -138,7 +138,7 @@
 </div>
 
 <div id="kp-sec-content" class="event-sec-content">
-  <%= render :partial => "culture_providers/info_box", :locals => { :culture_provider => @event.culture_provider } -%>
+  <%= render partial: "culture_providers/info_box", locals: { culture_provider: @event.culture_provider } -%>
 </div>
 
 
@@ -156,7 +156,7 @@
         <tr class="map-address">
           <th>Hitta till oss</th>
           <td>
-            <%= link_to "Visa på karta", "#", :class => "map-address-link", :title => @event.map_address %>
+            <%= link_to "Visa på karta", "#", class: "map-address-link", title: @event.map_address %>
           </td>
         </tr>
       <%end %>
@@ -323,7 +323,7 @@
                 <td class="date-time">
                   <span class="date"><%= occasion.date %></span>
                   <span class="time">
-                    <%= l occasion.start_time, :format => :only_time %> - <%= l occasion.stop_time, :format => :only_time %>
+                    <%= l occasion.start_time, format: :only_time %> - <%= l occasion.stop_time, format: :only_time %>
                   </span>
                 </td>
 
@@ -333,7 +333,7 @@
                   <% else %>
                     <%= occasion.seats.to_i + occasion.wheelchair_seats.to_i %>
                   <% end %>
-                  <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
+                  <%= image_tag "icon_rullstol.png", alt: "Rullstolsplatser finns", title: "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
                 </td>
 
                 <td class="address">
@@ -345,8 +345,8 @@
                     <% end %>
 
                     <%= link_to "Visa på karta", "#",
-                      :class => "map-address-link",
-                      :title => occasion.map_address
+                      class: "map-address-link",
+                      title: occasion.map_address
                     %>
                   <% end %>
                 </td>
@@ -366,7 +366,7 @@
                           <% if available_seats > 0 %>
                             <%= link_to "Boka",
                               new_occasion_booking_path(occasion),
-                              :title => "#{available_seats} lediga platser"
+                              title: "#{available_seats} lediga platser"
                             %>
                           <% else %>
                             <span class="sold-out">Fullbokat</span>
@@ -382,15 +382,15 @@
                             <li>
                               <%= link_to "Ställ in",
                                 cancel_occasion_path(occasion),
-                                :data =>{ :confirm => "Är du säker på att du vill ställa in föreställningen?" }
+                                data:{ confirm: "Är du säker på att du vill ställa in föreställningen?" }
                               %>
                             </li>
                           <% end %>
                         <% else %>
                           <li>
                             <%= link_to "Ta bort", occasion,
-                              :method => "delete",
-                              :data => {:confirm => "Är du säker på att du vill radera föreställningen?"}
+                              method: "delete",
+                              data: {confirm: "Är du säker på att du vill radera föreställningen?"}
                             %>
                           </li>
                         <% end %>

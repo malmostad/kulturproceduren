@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 <h2 class="form-title">
   Bokningsbekräftelse för
@@ -16,7 +16,7 @@
         <%= link_to "Avboka", unbook_booking_path(@booking) %>
       </li>
     <% end %>
-    <li><%= link_to "Skriv ut", "#", :id => "link-to-print" %></li>
+    <li><%= link_to "Skriv ut", "#", id: "link-to-print" %></li>
   </ul>
 </div>
 
@@ -42,7 +42,7 @@
     </tr>
     <tr class="occasion-time">
       <th>Tid:</th>
-      <td><%= l @booking.occasion.start_time, :format => :only_time %> - <%= l @booking.occasion.stop_time, :format => :only_time %></td>
+      <td><%= l @booking.occasion.start_time, format: :only_time %> - <%= l @booking.occasion.stop_time, format: :only_time %></td>
     </tr>
     <tr class="occasion-address">
       <th>Adress:</th>
@@ -72,12 +72,12 @@
     <% end %>
     <tr class="booking-time">
       <th>Bokad:</th>
-      <td><%= l @booking.booked_at, :format => :long %></td>
+      <td><%= l @booking.booked_at, format: :long %></td>
     </tr>
     <% if @booking.unbooked %>
       <tr class="unbooking-time">
         <th>Avbokad:</th>
-        <td><%= l @booking.unbooked_at, :format => :long %> av <%= link_to @booking.unbooked_by.name, @booking.unbooked_by %></td>
+        <td><%= l @booking.unbooked_at, format: :long %> av <%= link_to @booking.unbooked_by.name, @booking.unbooked_by %></td>
       </tr>
     <% end %>
 

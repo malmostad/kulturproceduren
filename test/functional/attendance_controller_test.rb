@@ -6,14 +6,14 @@ class AttendanceControllerTest < ActionController::TestCase
     # Stub ActionController filters
     @controller.expects(:authenticate).at_least_once.returns(true)
 
-    @event     = create(:event, :ticket_state => :free_for_all)
-    @occasions = create_list(:occasion, 3, :event => @event, :date => Date.today - 1)
+    @event     = create(:event, ticket_state: :free_for_all)
+    @occasions = create_list(:occasion, 3, event: @event, date: Date.today - 1)
     @occasion  = @occasions.first
-    @user      = create(:user, :roles => [roles(:host)])
+    @user      = create(:user, roles: [roles(:host)])
     session[:current_user_id] = @user.id
 
     # Not reportable
-    @not_reportable_occasion = create(:occasion, :event => @event, :date => Date.today + 1)
+    @not_reportable_occasion = create(:occasion, event: @event, date: Date.today + 1)
   end
 
   test "entity loading" do
@@ -28,45 +28,45 @@ class AttendanceControllerTest < ActionController::TestCase
     assert_equal "Felaktig adress angiven", flash[:error]
   end
   test "require host" do
-    user = create(:user, :roles => [roles(:booker)])
+    user = create(:user, roles: [roles(:booker)])
     session[:current_user_id] = user.id
-    get :report, :event_id => @event.id
+    get :report, event_id: @event.id
     assert_redirected_to root_url()
     assert_equal "Du har inte behörighet att rapportera närvaro", flash[:error]
-    post :update_report, :event_id => @event.id
+    post :update_report, event_id: @event.id
     assert_redirected_to root_url()
     assert_equal "Du har inte behörighet att rapportera närvaro", flash[:error]
   end
 
   test "index" do
     # Event
-    get :index, :event_id => @event.id
+    get :index, event_id: @event.id
     assert_response :success
     assert_equal @event, assigns(:event)
 
     # Occasion
-    get :index, :occasion_id => @occasion.id
+    get :index, occasion_id: @occasion.id
     assert_response :success
     assert_equal @occasion, assigns(:occasion)
     assert_equal @event, assigns(:event)
   end
   test "index pdf" do
     @controller.expects(:render).twice
-    @controller.expects(:generate_pdf).twice.returns(stub(:render => "render called"))
+    @controller.expects(:generate_pdf).twice.returns(stub(render: "render called"))
     @controller.expects(:send_data).with(
       "render called",
-      :filename => "narvaro.pdf",
-      :type => "application/pdf",
-      :disposition => "inline"
+      filename: "narvaro.pdf",
+      type: "application/pdf",
+      disposition: "inline"
     ).twice
 
     # Event
-    get :index, :event_id => @event.id, :format => "pdf"
+    get :index, event_id: @event.id, format: "pdf"
     assert_response :success
     assert_equal @event, assigns(:event)
 
     # Occasion
-    get :index, :occasion_id => @occasion.id, :format => "pdf"
+    get :index, occasion_id: @occasion.id, format: "pdf"
     assert_response :success
     assert_equal @occasion, assigns(:occasion)
     assert_equal @event, assigns(:event)
@@ -74,17 +74,17 @@ class AttendanceControllerTest < ActionController::TestCase
 
   test "report" do
     # Event
-    get :report, :event_id => @event.id
+    get :report, event_id: @event.id
     assert_response :success
 
     # Occasion
-    get :report, :occasion_id => @occasion.id
+    get :report, occasion_id: @occasion.id
     assert_response :success
 
     # Occasion, upcoming
     @occasion.date = Date.today + 1
     @occasion.save
-    get :report, :occasion_id => @occasion.id
+    get :report, occasion_id: @occasion.id
     assert_redirected_to occasion_attendance_index_url(@occasion)
     assert_equal "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit", flash[:error]
   end
@@ -92,18 +92,18 @@ class AttendanceControllerTest < ActionController::TestCase
   def book(group, occasion, student_count, adult_count = 0, wheelchair_count = 0)
     create(
       :booking,
-      :group => group,
-      :occasion => occasion,
-      :student_count => student_count,
-      :adult_count => adult_count,
-      :wheelchair_count => wheelchair_count
+      group: group,
+      occasion: occasion,
+      student_count: student_count,
+      adult_count: adult_count,
+      wheelchair_count: wheelchair_count
     )
   end
 
   test "update report for occasion" do
     # Booking setup
     groups = create_list(:group, 3)
-    create(:allotment, :event => @event, :amount => 15)
+    create(:allotment, event: @event, amount: 15)
 
     assert_equal 15, Ticket.count(:all)
     assert groups.first.tickets.empty?
@@ -120,8 +120,8 @@ class AttendanceControllerTest < ActionController::TestCase
 
     post(
       :update_report,
-      :occasion_id => @occasions.first.id,
-      :attendance => {
+      occasion_id: @occasions.first.id,
+      attendance: {
         @occasions.first.id.to_s => {
           groups.first.id.to_s  => { "normal" => "2", "adult" => "1" },
           groups.second.id.to_s => { "normal" => "4", "adult" => "1", "wheelchair" => "1" },
@@ -158,7 +158,7 @@ class AttendanceControllerTest < ActionController::TestCase
   test "update report for event" do
     # Booking setup
     groups = create_list(:group, 4)
-    create(:allotment, :event => @event, :amount => 20)
+    create(:allotment, event: @event, amount: 20)
 
     assert_equal 20, Ticket.count(:all)
     assert groups.first.tickets.empty?
@@ -178,8 +178,8 @@ class AttendanceControllerTest < ActionController::TestCase
 
     post(
       :update_report,
-      :event_id => @event.id,
-      :attendance => {
+      event_id: @event.id,
+      attendance: {
         @occasions.first.id.to_s => {
           groups.first.id.to_s  => { "normal" => "2", "adult" => "1" }
         },
@@ -229,7 +229,7 @@ class AttendanceControllerTest < ActionController::TestCase
     # Occasion, upcoming
     @occasion.date = Date.today + 1
     @occasion.save
-    post :update_report, :occasion_id => @occasion.id
+    post :update_report, occasion_id: @occasion.id
     assert_redirected_to root_url()
     assert_equal "Du kan inte rapportera närvaro på en föreställning som ännu inte har varit", flash[:error]
   end

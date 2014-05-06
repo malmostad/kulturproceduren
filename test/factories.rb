@@ -9,7 +9,7 @@ FactoryGirl.define do
     factory :district_with_schools do
       ignore { school_count 5 }
       after(:create) do |district, evaluator|
-        FactoryGirl.create_list(:school, evaluator.school_count, :district => district)
+        FactoryGirl.create_list(:school, evaluator.school_count, district: district)
       end
     end
     factory :district_with_groups do
@@ -18,8 +18,8 @@ FactoryGirl.define do
         group_count  5
       end
       after(:create) do |district, evaluator|
-        FactoryGirl.create_list(:school, evaluator.school_count, :district => district).each do |school|
-          FactoryGirl.create_list(:group, evaluator.group_count, :school => school)
+        FactoryGirl.create_list(:school, evaluator.school_count, district: district).each do |school|
+          FactoryGirl.create_list(:group, evaluator.group_count, school: school)
         end
       end
     end
@@ -30,10 +30,10 @@ FactoryGirl.define do
         age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |district, evaluator|
-        FactoryGirl.create_list(:school, evaluator.school_count, :district => district).each do |school|
-          FactoryGirl.create_list(:group, evaluator.group_count, :school => school).each do |group|
+        FactoryGirl.create_list(:school, evaluator.school_count, district: district).each do |school|
+          FactoryGirl.create_list(:group, evaluator.group_count, school: school).each do |group|
             evaluator.age_group_data.each do |age, quantity|
-              FactoryGirl.create(:age_group, :group => group, :age => age, :quantity => quantity)
+              FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
             end
           end
         end
@@ -53,7 +53,7 @@ FactoryGirl.define do
         group_count  5
       end
       after(:create) do |school, evaluator|
-        FactoryGirl.create_list(:group, evaluator.group_count, :school => school)
+        FactoryGirl.create_list(:group, evaluator.group_count, school: school)
       end
     end
     factory :school_with_age_groups do
@@ -62,9 +62,9 @@ FactoryGirl.define do
         age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |school, evaluator|
-        FactoryGirl.create_list(:group, evaluator.group_count, :school => school).each do |group|
+        FactoryGirl.create_list(:group, evaluator.group_count, school: school).each do |group|
           evaluator.age_group_data.each do |age, quantity|
-            FactoryGirl.create(:age_group, :group => group, :age => age, :quantity => quantity)
+            FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
           end
         end
       end
@@ -86,7 +86,7 @@ FactoryGirl.define do
       end
       after(:create) do |group, evaluator|
         evaluator.age_group_data.each do |age, quantity|
-          FactoryGirl.create(:age_group, :group => group, :age => age, :quantity => quantity)
+          FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
         end
       end
     end
@@ -180,8 +180,8 @@ FactoryGirl.define do
 
         1.upto(evaluator.occasion_count) do |i|
           FactoryGirl.create(:occasion,
-            :event => event,
-            :date => evaluator.occasion_dates[(i-1)%len] # Cycle through the occasion dates
+            event: event,
+            date: evaluator.occasion_dates[(i-1)%len] # Cycle through the occasion dates
           )
         end
       end
@@ -189,7 +189,7 @@ FactoryGirl.define do
   end
 
   factory :occasion do
-    association      :event, :factory => :event, :ticket_state => :alloted_group, :ticket_release_date => Date.today - 1
+    association      :event, factory: :event, ticket_state: :alloted_group, ticket_release_date: Date.today - 1
     date             Date.today
     start_time       (Time.zone.now + 1.hour).strftime("%H:%M")
     stop_time        (Time.zone.now + 2.hours).strftime("%H:%M")
@@ -208,9 +208,9 @@ FactoryGirl.define do
       end
       after(:create) do |occasion, evaluator|
         FactoryGirl.create_list(:ticket, evaluator.ticket_count,
-          :event => occasion.event,
-          :occasion => occasion,
-          :state => :booked
+          event: occasion.event,
+          occasion: occasion,
+          state: :booked
         )
       end
     end
@@ -250,12 +250,12 @@ FactoryGirl.define do
         FactoryGirl.create_list(
           :ticket,
           evaluator.student_count.to_i + evaluator.adult_count.to_i + evaluator.wheelchair_count.to_i,
-          :booking => nil,
-          :group => evaluator.group,
-          :district => evaluator.group.try(:school).try(:district),
-          :occasion => evaluator.occasion,
-          :event => evaluator.occasion.try(:event),
-          :state => :unbooked
+          booking: nil,
+          group: evaluator.group,
+          district: evaluator.group.try(:school).try(:district),
+          occasion: evaluator.occasion,
+          event: evaluator.occasion.try(:event),
+          state: :unbooked
         )
       end
     end

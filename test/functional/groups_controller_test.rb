@@ -6,7 +6,7 @@ class GroupsControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    @user = create(:user, :roles => [roles(:admin)])
+    @user = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @user.id
   end
 
@@ -19,7 +19,7 @@ class GroupsControllerTest < ActionController::TestCase
 
   test "show" do
     group = create(:group)
-    get :show, :id => group.id
+    get :show, id: group.id
     assert_response :success
     assert_equal    group, assigns(:group)
     assert          assigns(:age_group).new_record?
@@ -35,7 +35,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_nil      assigns(:group).school_id
     assert_equal    schools, assigns(:schools)
 
-    get :new, :school_id => schools.last.id
+    get :new, school_id: schools.last.id
     assert_response :success
     assert          assigns(:group).new_record?
     assert_equal    schools.last, assigns(:group).school
@@ -44,9 +44,9 @@ class GroupsControllerTest < ActionController::TestCase
 
   test "edit" do
     schools = create_list(:school, 3).sort_by(&:name)
-    group   = create(:group, :school => schools.last)
+    group   = create(:group, school: schools.last)
 
-    get :edit, :id => group.id
+    get :edit, id: group.id
     assert_response :success
     assert_template "groups/new"
     assert_equal    group, assigns(:group)
@@ -57,14 +57,14 @@ class GroupsControllerTest < ActionController::TestCase
     schools = create_list(:school, 3).sort_by(&:name)
 
     # Invalid
-    post :create, :group => { :name => "" }
+    post :create, group: { name: "" }
     assert_response :success
     assert_template "groups/new"
     assert          !assigns(:group).valid?
     assert_equal    schools, assigns(:schools)
 
     # Valid
-    post :create, :group => { :name => "zomg", :school_id => schools.last.id }
+    post :create, group: { name: "zomg", school_id: schools.last.id }
 
     group = Group.last
     assert_redirected_to group
@@ -74,10 +74,10 @@ class GroupsControllerTest < ActionController::TestCase
 
   test "update" do
     schools = create_list(:school, 3).sort_by(&:name)
-    group = create(:group, :school => schools.last, :name => "foo")
+    group = create(:group, school: schools.last, name: "foo")
 
     # Invalid
-    put :update, :id => group.id, :group => { :name => "" }
+    put :update, id: group.id, group: { name: "" }
     assert_response :success
     assert_template "groups/new"
     assert_equal    group, assigns(:group)
@@ -85,7 +85,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal    schools, assigns(:schools)
 
     # Valid
-    put :update, :id => group.id, :group => { :name => "zomg" }
+    put :update, id: group.id, group: { name: "zomg" }
 
     group.reload
     assert_redirected_to group
@@ -94,19 +94,19 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test "move first in priority" do
-    group1 = create(:group, :priority => 1)
-    group2 = create(:group, :priority => 2)
-    group3 = create(:group, :priority => 3)
+    group1 = create(:group, priority: 1)
+    group2 = create(:group, priority: 2)
+    group3 = create(:group, priority: 3)
 
     # No redirect
-    get :move_first_in_priority, :id => group3.id
+    get :move_first_in_priority, id: group3.id
     assert_redirected_to group_url()
     assert_equal 1, group3.reload.priority
     assert_equal 2, group1.reload.priority
     assert_equal 3, group2.reload.priority
 
     # Redirect
-    get :move_first_in_priority, :id => group1.id, :return_to => "/foo/bar"
+    get :move_first_in_priority, id: group1.id, return_to: "/foo/bar"
     assert_redirected_to "/foo/bar"
     assert_equal 1, group1.reload.priority
     assert_equal 2, group3.reload.priority
@@ -114,19 +114,19 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test "move last in priority" do
-    group1 = create(:group, :priority => 1)
-    group2 = create(:group, :priority => 2)
-    group3 = create(:group, :priority => 3)
+    group1 = create(:group, priority: 1)
+    group2 = create(:group, priority: 2)
+    group3 = create(:group, priority: 3)
 
     # No redirect
-    get :move_last_in_priority, :id => group1.id
+    get :move_last_in_priority, id: group1.id
     assert_redirected_to group_url()
     assert_equal 1, group2.reload.priority
     assert_equal 2, group3.reload.priority
     assert_equal 3, group1.reload.priority
 
     # Redirect
-    get :move_last_in_priority, :id => group3.id, :return_to => "/foo/bar"
+    get :move_last_in_priority, id: group3.id, return_to: "/foo/bar"
     assert_redirected_to "/foo/bar"
     assert_equal 1, group2.reload.priority
     assert_equal 2, group1.reload.priority
@@ -135,10 +135,10 @@ class GroupsControllerTest < ActionController::TestCase
 
   test "destroy" do
     group = create(:group)
-    delete :destroy, :id => group.id
+    delete :destroy, id: group.id
     assert_redirected_to group.school
     assert_equal         "Gruppen togs bort.", flash[:notice]
-    assert_nil           Group.where(:id => group.id).first
+    assert_nil           Group.where(id: group.id).first
   end
 
   test "select" do
@@ -148,25 +148,25 @@ class GroupsControllerTest < ActionController::TestCase
     group                     = create(:group)
     session[:group_selection] = nil
 
-    get :select, :group_id => group.id, :return_to => "/foo/bar"
+    get :select, group_id: group.id, return_to: "/foo/bar"
     assert_redirected_to "/foo/bar"
     assert_equal({
-      :group_id => group.id,
-      :school_id => group.school.id,
-      :district_id => group.school.district.id
+      group_id: group.id,
+      school_id: group.school.id,
+      district_id: group.school.district.id
     }, session[:group_selection])
 
     # XHR and error
     @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
 
-    get :select, :group_id => -1, :return_to => "/foo/bar"
+    get :select, group_id: -1, return_to: "/foo/bar"
     assert_response :success
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
     assert_equal({
-      :group_id => group.id,
-      :school_id => group.school.id,
-      :district_id => group.school.district.id
+      group_id: group.id,
+      school_id: group.school.id,
+      district_id: group.school.district.id
     }, session[:group_selection])
   end
 
@@ -175,19 +175,19 @@ class GroupsControllerTest < ActionController::TestCase
     @controller.unstub(:require_admin)
 
     # 404 by school_id == -1
-    get :options_list, :school_id => "-1"
+    get :options_list, school_id: "-1"
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
     
     # 404 by occasion_id == -1
-    get :options_list, :occasion_id => "-1"
+    get :options_list, occasion_id: "-1"
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
 
     # 404 by error (school not found)
-    get :options_list, :school_id => 1
+    get :options_list, school_id: 1
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -211,14 +211,14 @@ class GroupsControllerTest < ActionController::TestCase
     groups                    = create_list(:group, 3).sort_by(&:name)
     session[:group_selection] = nil
 
-    get :options_list, :school_id => groups.first.school.id
+    get :options_list, school_id: groups.first.school.id
     assert_response :success
     assert_template "groups/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
     assert_equal    [groups.first], assigns(:groups)
     assert_equal({
-      :school_id   => groups.first.school.id,
-      :district_id => groups.first.school.district.id
+      school_id: groups.first.school.id,
+      district_id: groups.first.school.district.id
     }, session[:group_selection])
   end
   test "options list, without school and with occasion" do
@@ -228,9 +228,9 @@ class GroupsControllerTest < ActionController::TestCase
     occasion = create(:occasion)
     groups   = create_list(:group, 3).sort_by(&:name)
 
-    create(:ticket, :occasion => occasion, :event => occasion.event, :group => groups.second)
+    create(:ticket, occasion: occasion, event: occasion.event, group: groups.second)
 
-    get :options_list, :occasion_id => occasion.id
+    get :options_list, occasion_id: occasion.id
     assert_response :success
     assert_template "groups/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -243,14 +243,14 @@ class GroupsControllerTest < ActionController::TestCase
 
     occasion = create(:occasion)
     school   = create(:school)
-    group1   = create(:group, :school => school) # match by both school and ticket below
+    group1   = create(:group, school: school) # match by both school and ticket below
     group2   = create(:group) # only match by ticket
-    create(:group, :school => school) # only match by school
+    create(:group, school: school) # only match by school
 
-    create(:ticket, :occasion => occasion, :event => occasion.event, :group => group1)
-    create(:ticket, :occasion => occasion, :event => occasion.event, :group => group2)
+    create(:ticket, occasion: occasion, event: occasion.event, group: group1)
+    create(:ticket, occasion: occasion, event: occasion.event, group: group2)
 
-    get :options_list, :occasion_id => occasion.id, :school_id => school.id
+    get :options_list, occasion_id: occasion.id, school_id: school.id
     assert_response :success
     assert_template "groups/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/

@@ -6,18 +6,18 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :culture_providers
-  has_many :role_applications, lambda{ order("updated_at DESC").includes(:role) }, :dependent => :destroy
+  has_many :role_applications, lambda{ order("updated_at DESC").includes(:role) }, dependent: :destroy
 
-  has_many :allotments, :dependent => :nullify
-  has_many :tickets, :dependent => :nullify
-  has_many :occasions, lambda{ uniq true }, :through => :tickets
-  has_many(:groups, lambda{ uniq true }, :through => :tickets) do
+  has_many :allotments, dependent: :nullify
+  has_many :tickets, dependent: :nullify
+  has_many :occasions, lambda{ uniq true }, through: :tickets
+  has_many(:groups, lambda{ uniq true }, through: :tickets) do
     def find_by_occasion(occasion)
       where("tickets.occasion_id = ?", occasion.id)
     end
   end
 
-  has_many :notification_requests, :dependent => :destroy
+  has_many :notification_requests, dependent: :destroy
 
   has_and_belongs_to_many :districts
 
@@ -31,28 +31,28 @@ class User < ActiveRecord::Base
     :request_key
   
   validate :username_unique,
-    :on => :create,
-    :message => "Användarnamnet är redan taget"
+    on: :create,
+    message: "Användarnamnet är redan taget"
 
   validates_presence_of :username,
-    :message => "Användarnamnet får inte vara tomt"
+    message: "Användarnamnet får inte vara tomt"
   validates_presence_of :password,
-    :message => "Lösenordet får inte vara tomt"
+    message: "Lösenordet får inte vara tomt"
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt"
+    message: "Namnet får inte vara tomt"
   validates_presence_of :email,
-    :message => "Epostadressen får inte vara tom"
+    message: "Epostadressen får inte vara tom"
   validates_format_of :email,
-    :with => /[^@]+@[^@]+/,
-    :message => "Epostadressen måste vara en giltig epostadress"
+    with: /[^@]+@[^@]+/,
+    message: "Epostadressen måste vara en giltig epostadress"
   validates_presence_of :cellphone,
-    :message => "Mobilnumret får inte vara tomt"
+    message: "Mobilnumret får inte vara tomt"
   validates_uniqueness_of :username,
-    :message => "Användarnamnet är redan taget"
+    message: "Användarnamnet är redan taget"
   validates_confirmation_of :password,
-    :message => "Lösenordsbekräftelsen matchar inte lösenordet"
+    message: "Lösenordsbekräftelsen matchar inte lösenordet"
   validates_presence_of :district_ids,
-    :message => "Minst en stadsdel måste väljas"
+    message: "Minst en stadsdel måste väljas"
 
   # The id and salt is automatically generated and should not be changed.
   attr_protected :id, :salt
@@ -217,7 +217,7 @@ class User < ActiveRecord::Base
       prefix = ""
     end
     if User.find_by_username("#{prefix}#{username}") || User.find_by_username(username.sub(prefix , ""))
-      self.errors.add(:username, :taken , :message => "Användarnamnet är redan taget" )
+      self.errors.add(:username, :taken , message: "Användarnamnet är redan taget" )
     end
   end
 

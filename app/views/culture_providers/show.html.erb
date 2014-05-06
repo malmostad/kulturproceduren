@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 <% if user_online? && current_user.can_administrate?(@culture_provider) %>
   <div class="admin-tools">
@@ -10,27 +10,27 @@
         <% if @culture_provider.active %>
           <%= link_to "Deaktivera",
             deactivate_culture_provider_path(@culture_provider),
-            :method => :post,
-            :data   => {:confirm => "Är du säker på att du vill deaktivera arrangören?"}
+            method: :post,
+            data: {confirm: "Är du säker på att du vill deaktivera arrangören?"}
           %>
         <% else %>
           <%= link_to "Aktivera",
             activate_culture_provider_path(@culture_provider),
-            :method => :post,
-            :data   => {:confirm => "Är du säker på att du vill aktivera arrangören?"}
+            method: :post,
+            data: {confirm: "Är du säker på att du vill aktivera arrangören?"}
           %>
         <% end %>
       </li>
       <li><%= link_to "Hantera bilder", culture_provider_images_path(@culture_provider) %></li>
-      <li><%= link_to "Lägg till evenemang", new_event_path(:culture_provider_id => @culture_provider.id) %></li>
+      <li><%= link_to "Lägg till evenemang", new_event_path(culture_provider_id: @culture_provider.id) %></li>
       <li>
         <%= link_to "Hantera länkade arrangörer",
-          culture_provider_culture_provider_links_path(:culture_provider_id => @culture_provider.id)
+          culture_provider_culture_provider_links_path(culture_provider_id: @culture_provider.id)
         %>
       </li>
       <li>
         <%= link_to "Hantera länkade evenemang",
-          culture_provider_event_links_path(:culture_provider_id => @culture_provider.id)
+          culture_provider_event_links_path(culture_provider_id: @culture_provider.id)
         %>
       </li>
     </ul>
@@ -90,7 +90,7 @@
 </div>
 
 <div id="kp-sec-content" class="cp-sec-content">
-  <%= render :partial => "info_box", :locals => { :culture_provider => @culture_provider } -%>
+  <%= render partial: "info_box", locals: { culture_provider: @culture_provider } -%>
 </div>
 
 <div class="tabs">
@@ -109,10 +109,10 @@
   <% cache upcoming_occasions_cache_key(@culture_provider) do %>
     <% unless @culture_provider.upcoming_occasions.empty? -%>
       <div id="kp-cp-meta-occasions">
-        <%= render :partial => "calendar/occasions_list", :locals => {
-          :occasions => @culture_provider.upcoming_occasions,
-          :hide_culture_provider => true,
-          :category_groups => @category_groups
+        <%= render partial: "calendar/occasions_list", locals: {
+          occasions: @culture_provider.upcoming_occasions,
+          hide_culture_provider: true,
+          category_groups: @category_groups
         } -%>
       </div>
     <% end -%>
@@ -156,8 +156,8 @@
           <% @culture_provider.events.each do |event| -%>
             <tr class="<%= cycle("", "even") %>">
               <td><%= link_to event.name, event -%></td>
-              <td><%= l event.visible_from, :format => :long %></td>
-              <td><%= l event.visible_to, :format => :long %></td>
+              <td><%= l event.visible_from, format: :long %></td>
+              <td><%= l event.visible_to, format: :long %></td>
             </tr>
           <% end -%>
         </tbody>

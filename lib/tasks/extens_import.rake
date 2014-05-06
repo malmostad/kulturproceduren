@@ -12,7 +12,7 @@ namespace :kp do
     namespace :import do
 
       desc "Import districts from Extens"
-      task(:districts => :environment) do
+      task(districts: :environment) do
         puts "\n"
         verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 2)
 
@@ -21,12 +21,12 @@ namespace :kp do
 
           puts "Processing #{name}\t#{guid}"
 
-          district = District.first(:conditions => { :extens_id => guid })
+          district = District.first(conditions: { extens_id: guid })
 
           if !district
             puts "\tDistrict with ID not found"
 
-            district = District.first(:conditions => [ "name ilike ?", name ])
+            district = District.first(conditions: [ "name ilike ?", name ])
 
             if district
               puts "\tDistrict with matching name found, updating ID"
@@ -50,7 +50,7 @@ namespace :kp do
       end
 
       desc "Import schools"
-      task(:schools => :environment) do
+      task(schools: :environment) do
         raise "Missing school_prefix" unless ENV["school_prefix"]
         puts "\n"
 
@@ -64,7 +64,7 @@ namespace :kp do
 
           puts "Processing #{name}\t#{guid}"
 
-          school = School.first(:conditions => { :extens_id => guid })
+          school = School.first(conditions: { extens_id: guid })
 
           if !school
             puts "\tSchool with ID not found"
@@ -76,7 +76,7 @@ namespace :kp do
               next
             end
 
-            school = School.first(:conditions => [ "name ilike ? and district_id = ?", name, district.id ])
+            school = School.first(conditions: [ "name ilike ? and district_id = ?", name, district.id ])
 
             if school
               puts "\tSchool with matching name found: #{school.name}, updating ID"
@@ -101,7 +101,7 @@ namespace :kp do
       end
 
       desc "Import groups"
-      task(:groups => :environment) do
+      task(groups: :environment) do
         raise "Missing school_prefix" unless ENV["school_prefix"]
         raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
@@ -115,12 +115,12 @@ namespace :kp do
 
           puts "Processing #{name}\t#{guid}"
 
-          group = Group.first(:conditions => { :extens_id => guid })
+          group = Group.first(conditions: { extens_id: guid })
 
           if !group
             puts "\tGroup with ID not found, creating new"
 
-            school = School.first(:conditions => { :extens_id => school_guid })
+            school = School.first(conditions: { extens_id: school_guid })
 
             if !school
               puts "\tUnknown school #{school_guid}, skipping"
@@ -145,7 +145,7 @@ namespace :kp do
       end
 
       desc "Import age groups"
-      task(:age_groups => :environment) do
+      task(age_groups: :environment) do
         raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
 
@@ -162,7 +162,7 @@ namespace :kp do
 
           puts "Processing #{birth_year} - #{group_name}\t#{group_guid}"
 
-          group = Group.first(:conditions => { :extens_id => group_guid })
+          group = Group.first(conditions: { extens_id: group_guid })
 
           if !group
             puts "\tUnknown group #{group_guid}, skipping"
@@ -188,7 +188,7 @@ namespace :kp do
       end
 
       desc "Import preschool data - both groups and amounts"
-      task(:preschool => :environment) do
+      task(preschool: :environment) do
         raise "Missing school_prefix" unless ENV["school_prefix"]
         raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
@@ -207,10 +207,10 @@ namespace :kp do
 
           puts "Processing #{birth_year} - #{group_name}\t#{group_guid}"
 
-          group = Group.first(:conditions => { :extens_id => group_guid })
+          group = Group.first(conditions: { extens_id: group_guid })
 
           if !group
-            school = School.first(:conditions => { :extens_id => school_guid })
+            school = School.first(conditions: { extens_id: school_guid })
 
             if !school
               puts "\tUnknown school #{school_guid}, skipping"
@@ -251,7 +251,7 @@ namespace :kp do
       end
 
       desc "Import school contacts"
-      task(:school_contacts => :environment) do
+      task(school_contacts: :environment) do
         raise "Missing school_prefix" unless ENV["school_prefix"]
         puts "\n"
 
@@ -265,7 +265,7 @@ namespace :kp do
 
           puts "Processing #{school_guid}"
 
-          school = School.first(:conditions => { :extens_id => school_guid })
+          school = School.first(conditions: { extens_id: school_guid })
           next unless school
 
           school.contacts = merge_extens_contacts(school.contacts || "", emails || "")
@@ -275,7 +275,7 @@ namespace :kp do
       end
 
       desc "Import school class contacts"
-      task(:school_class_contacts => :environment) do
+      task(school_class_contacts: :environment) do
         raise "Missing group_prefix" unless ENV["group_prefix"]
         puts "\n"
 
@@ -289,7 +289,7 @@ namespace :kp do
 
           puts "Processing #{group_guid}"
 
-          group = Group.first(:conditions => { :extens_id => group_guid })
+          group = Group.first(conditions: { extens_id: group_guid })
 
           next unless group
 

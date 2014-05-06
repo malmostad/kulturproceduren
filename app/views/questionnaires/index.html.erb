@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <table>
   <thead>
@@ -15,7 +15,7 @@
       <td><%= questionnaire.event.name %></td>
       <td><%= questionnaire.description %></td>
       <td><%= link_to 'Visa enkät', questionnaire %></td>
-      <td><%= link_to 'Radera enkät', questionnaire, :data =>{:confirm => 'Är du säker?'}, :method => :delete %></td>
+      <td><%= link_to 'Radera enkät', questionnaire, data:{confirm: 'Är du säker?'}, method: :delete %></td>
     </tr>
   <% end %>
 </table>

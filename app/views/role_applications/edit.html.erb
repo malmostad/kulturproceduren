@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <dl class="specification-info role-application-specification">
   <dt>Typ av ansökan:</dt>
@@ -21,7 +21,7 @@
   <dd><%= @application.message %></dd>
 </dl>
 
-<%= form_for(@application, :builder => KPFormBuilder, :html => { :class => "role-application-form" }) do |f| -%>
+<%= form_for(@application, builder: KPFormBuilder, html: { class: "role-application-form" }) do |f| -%>
 
   <%= f.title "Besvara ansökan" -%>
 
@@ -29,8 +29,8 @@
 
   <%= f.fields do -%>
     
-    <%= f.radio_button :state, RoleApplication::ACCEPTED, :checked => true, :label => "Godkänn" %>
-    <%= f.radio_button :state, RoleApplication::DENIED, :label => "Neka" %>
+    <%= f.radio_button :state, RoleApplication::ACCEPTED, checked: true, label: "Godkänn" %>
+    <%= f.radio_button :state, RoleApplication::DENIED, label: "Neka" %>
     <%= f.text_area :response %>
 
     <%= f.buttons do -%>

@@ -1,12 +1,12 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 <% if @visitor_stats %>
 
   <h2>Besökstatistik för <%= @event.name -%></h2>
 
   <p>
-    <%=  link_to "Ladda ner statistik för eventet #{@event.name} #{@term} som Excel-fil", :format => "xls", :event_id => "#{@event.id}" %>    
+    <%=  link_to "Ladda ner statistik för eventet #{@event.name} #{@term} som Excel-fil", format: "xls", event_id: "#{@event.id}" %>    
   </p>
 
   <table class="visitor-list" >
@@ -46,7 +46,7 @@
   </h2>
 
   <p>
-    <%=link_to "Ladda ner all besöksstatistik för #{@term} som Excel-fil", :format => "xls" %>
+    <%=link_to "Ladda ner all besöksstatistik för #{@term} som Excel-fil", format: "xls" %>
     <i>OBS Det kan ta tid att ladda ner all besöksstatistik</i>
   </p>
 

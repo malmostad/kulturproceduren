@@ -29,14 +29,14 @@
           <% if @culture_provider %>
             <%= link_to "Välj",
               select_culture_provider_culture_provider_link_path(
-                :culture_provider_id => @culture_provider.id,
-                :id => culture_provider.id
+                culture_provider_id: @culture_provider.id,
+                id: culture_provider.id
             ) %>
           <% elsif @event %>
             <%= link_to "Välj",
               select_event_culture_provider_link_path(
-                :event_id => @event.id,
-                :id => culture_provider.id
+                event_id: @event.id,
+                id: culture_provider.id
             ) %>
           <% end %>
         </td>

@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 <h2 class="form-title">
   Avboka 
@@ -12,7 +12,7 @@
   Detta avbokar alla <%= @booking.total_count %> platser.
 </div>
 
-<%= form_tag({ :action => :destroy }, { :class => "evaluation-form", :method => :delete }) do %>
+<%= form_tag({ action: :destroy }, { class: "evaluation-form", method: :delete }) do %>
 
   <% if @answer_form && @answer_form.missing_answers %>
     <div class="validation-error-indicator alert">
@@ -31,8 +31,8 @@
         <label><%= question.question %>:</label>
 
         <div class="input-container">
-          <%= render :partial => get_question_fragment(question),
-            :locals => { :question => question, :value => @answer[question.id.to_s] }
+          <%= render partial: get_question_fragment(question),
+            locals: { question: question, value: @answer[question.id.to_s] }
           %>
         </div>
       </div>

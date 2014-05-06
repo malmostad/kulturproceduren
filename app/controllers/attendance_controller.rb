@@ -5,12 +5,12 @@ class AttendanceController < ApplicationController
   before_filter :authenticate
   before_filter :load_entity
 
-  before_filter :require_host, :only => [ :report, :update_report ]
+  before_filter :require_host, only: [ :report, :update_report ]
 
   # Lists the attendance of an event or a single occasion
   def index
     if params[:format] == "pdf"
-      send_data generate_pdf().render, :filename => "narvaro.pdf", :type => "application/pdf", :disposition => "inline"
+      send_data generate_pdf().render, filename: "narvaro.pdf", type: "application/pdf", disposition: "inline"
     end
   end
 
@@ -114,13 +114,13 @@ class AttendanceController < ApplicationController
 
   # Creates a pdf document of the attendants on an occasion or event
   def generate_pdf
-    pdf = PDF::Writer.new :paper => "A4", :orientation => :landscape
+    pdf = PDF::Writer.new paper: "A4", orientation: :landscape
     pdf.select_font("Helvetica")
     pdf.margins_cm(2, 2, 2, 2)
 
     (@occasion ? [ @occasion ] : @event.occasions).each do |occasion|
       PDF::SimpleTable.new do |tab|
-        tab.title = "Deltagarlista för #{occasion.event.name}, föreställningen #{occasion.date.to_s} kl #{l(occasion.start_time, :format => :only_time)}".encode("ISO-8859-15")
+        tab.title = "Deltagarlista för #{occasion.event.name}, föreställningen #{occasion.date.to_s} kl #{l(occasion.start_time, format: :only_time)}".encode("ISO-8859-15")
 
         tab.column_order.push(*%w(group comp att_normal att_adult att_wheel req pres_normal pres_adult pres_wheel))
 

@@ -15,7 +15,7 @@ class NotificationRequest < ActiveRecord::Base
     :user_id,  :user,
     :target_cd
 
-  as_enum :target, { :for_transition => 1, :for_unbooking => 2 }, :slim => :class
+  as_enum :target, { for_transition: 1, for_unbooking: 2 }, slim: :class
 
   scope :for_transition, lambda{ where(target_cd: targets.for_transition) }
   scope :for_unbooking,  lambda{ where(target_cd: targets.for_unbooking) }
@@ -33,7 +33,7 @@ class NotificationRequest < ActiveRecord::Base
   # Finds all notification requests for a specific event that belongs
   # to groups in specific districts
   def self.find_by_event_and_districts(event, districts)
-    self.includes(:user, {:group => :school}, :event)
+    self.includes(:user, {group: :school}, :event)
       .where("event_id" => event.id, "schools.district_id" => districts.map(&:id))
   end
 

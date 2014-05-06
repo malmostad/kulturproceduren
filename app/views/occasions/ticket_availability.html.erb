@@ -1,6 +1,6 @@
 <%# coding: utf-8 %>
-<%= render :partial => "events/menu" -%>
+<%= render partial: "events/menu" -%>
 
 <h2>Platsstillgänglighet för <%= link_to @occasion.event.name, @occasion.event %></h2>
 
-<%= render :partial => "ticket_availability_list" %>
+<%= render partial: "ticket_availability_list" %>

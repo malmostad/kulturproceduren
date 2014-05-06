@@ -21,18 +21,18 @@ module KPWillPaginate
     # Wrap page numbers in list entries
     def page_number(page)
       unless page == current_page
-        tag(:li, link(page, page, :rel => rel_value(page)))
+        tag(:li, link(page, page, rel: rel_value(page)))
       else
-        tag(:li, tag(:span, page, :class => 'current'))
+        tag(:li, tag(:span, page, class: 'current'))
       end
     end
 
     # Wrap previous/next links in list entries
     def previous_or_next_page(page, text, classname)
       if page
-        tag(:li, link(text, page, :class => classname))
+        tag(:li, link(text, page, class: classname))
       else
-        tag(:li, tag(:span, text, :class => classname + ' disabled'))
+        tag(:li, tag(:span, text, class: classname + ' disabled'))
       end
     end
   end

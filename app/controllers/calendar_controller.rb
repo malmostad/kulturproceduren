@@ -11,9 +11,9 @@ class CalendarController < ApplicationController
     unless fragment_exist?(list_cache_key())
       @category_groups = CategoryGroup.order "name ASC"
       if @calendar_list == :events
-        @events = Event.search_standing({ :from_date => Date.today }, params[:page])
+        @events = Event.search_standing({ from_date: Date.today }, params[:page])
       else
-        @occasions = Occasion.search({ :from_date => Date.today }, params[:page])
+        @occasions = Occasion.search({ from_date: Date.today }, params[:page])
       end
     end
   end
@@ -31,7 +31,7 @@ class CalendarController < ApplicationController
   # Stores the search parameters from the calendar filter in the session
   def apply_filter
     if params[:clear_filter]
-      session[:calendar_filter] = { :from_date => Date.today }
+      session[:calendar_filter] = { from_date: Date.today }
     elsif params[:filter]
       calendar_filter[:free_text] = params[:filter][:free_text]
 
@@ -55,13 +55,13 @@ class CalendarController < ApplicationController
       calendar_filter[:categories] = categories.map{ |i| i.to_i }.select { |i| i != -1 }
 
     end
-    redirect_to :action => "filter", :list => @calendar_list
+    redirect_to action: "filter", list: @calendar_list
   end
 
   # Removes all search parameters from the session
   def clear_filter
-    session[:calendar_filter] = { :from_date => Date.today }
-    redirect_to :action => "filter", :list => @calendar_list
+    session[:calendar_filter] = { from_date: Date.today }
+    redirect_to action: "filter", list: @calendar_list
   end
 
 
@@ -69,7 +69,7 @@ class CalendarController < ApplicationController
 
   # Convenience accessor for the calendar filter in the session
   def calendar_filter
-    session[:calendar_filter] ||= { :from_date => Date.today }
+    session[:calendar_filter] ||= { from_date: Date.today }
     session[:calendar_filter]
   end
   helper_method :calendar_filter

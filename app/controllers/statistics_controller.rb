@@ -57,7 +57,7 @@ class StatisticsController < ApplicationController
         ) if params[:format] == "xls"
       else
         flash[:warning] = "Evenemanget saknar enkät eller enkätsvar."
-        redirect_to :action => "questionnaires"
+        redirect_to action: "questionnaires"
       end
     else
       @events = available_events(@term).select { |e|
@@ -70,7 +70,7 @@ class StatisticsController < ApplicationController
     @term = params[:id]
     @questionnaire = Questionnaire.find_unbooking
     from, to = term_to_date_span(@term)
-    @answer_forms = @questionnaire.answer_forms.where(:created_at => from..to)
+    @answer_forms = @questionnaire.answer_forms.where(created_at: from..to)
     send_csv(
       "avbokningsstatistik_#{@term}.tsv",
       questionnaire_stats_csv(
@@ -84,14 +84,14 @@ class StatisticsController < ApplicationController
   private
 
   def questionnaire_stats_csv(title, questionnaire)
-    CSV.generate(:col_sep => "\t") do |csv|
+    CSV.generate(col_sep: "\t") do |csv|
       answer_forms = questionnaire.answer_forms
 
       csv << [title]
       csv << ["Antal besvarade enkäter", "Antal obesvarade enkäter"]
       csv << [
-        answer_forms.where(:completed => true).count,
-        answer_forms.where(:completed => false).count
+        answer_forms.where(completed: true).count,
+        answer_forms.where(completed: false).count
       ]
       csv << []
       csv << ["Fråga", "Svar"]
@@ -169,7 +169,7 @@ class StatisticsController < ApplicationController
 
   # Returns a comma-seperated values (CSV) string
   def visitor_stats_csv(visitor_stats)
-    CSV.generate(:col_sep => "\t") do |csv|
+    CSV.generate(col_sep: "\t") do |csv|
       csv << [ "Stadsdel", "Skola", "Grupp", "Föreställning", "Antal bokade", "Antal barn", "Antal vuxna" ]
 
       visitor_stats.each do |v|

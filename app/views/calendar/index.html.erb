@@ -2,7 +2,7 @@
 <% content_for :section_sub do -%>
   <div class="section-info">
 
-    <%= link_to "Detaljerad sökning", { :action => "filter", :list => @calendar_list }, { :class => "show-calendar-filter-action" } %>
+    <%= link_to "Detaljerad sökning", { action: "filter", list: @calendar_list }, { class: "show-calendar-filter-action" } %>
 
     <p class="description">
       Välkommen till Kulturproceduren. I kalendariet hittar du kulturutbud för
@@ -17,7 +17,7 @@
     <% unless user_online? %>
       <p class="description after">
         Är du kulturproducent i Malmö och vill presentera ditt utbud på
-        Kulturproceduren, <%= link_to "skapa ett konto här", :controller => "login", :action => "index" %>.
+        Kulturproceduren, <%= link_to "skapa ett konto här", controller: "login", action: "index" %>.
       </p>
     <% end %>
 
@@ -30,5 +30,5 @@
 <% end -%>
 
 <% cache(list_cache_key()) do %>
-  <%= render :partial => 'list' %>
+  <%= render partial: 'list' %>
 <% end %>

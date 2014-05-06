@@ -1,7 +1,7 @@
 class UpdateTickets
 
   def run
-    events = Event.find(:all, :conditions => { :ticket_state => [ Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT ] })
+    events = Event.find(:all, conditions: { ticket_state: [ Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT ] })
     events.each{ |e| process_event(e) }
   end
 
@@ -21,7 +21,7 @@ class UpdateTickets
       if !e.fully_booked?
         puts "Notifying district allotment for #{e.id}: #{e.name}"
 
-        districts = e.districts.find(:all, :conditions => [ " tickets.state = ? ", Ticket::UNBOOKED ])
+        districts = e.districts.find(:all, conditions: [ " tickets.state = ? ", Ticket::UNBOOKED ])
         notification_requests = NotificationRequest.for_transition.find_by_event_and_districts(e, districts)
 
         # Notify contacts on districts

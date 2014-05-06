@@ -4,7 +4,7 @@ class AttachmentsController < ApplicationController
   layout "standard"
 
   before_filter :authenticate
-  before_filter :require_culture_worker, :except => :show
+  before_filter :require_culture_worker, except: :show
 
   # Lists all attachments belonging to an event, with a form for
   # adding more events
@@ -18,7 +18,7 @@ class AttachmentsController < ApplicationController
     @attachment = Attachment.find(params[:id])
     filepath = get_filepath(@attachment)
 
-    send_file filepath, :type => @attachment.content_type, :filename => @attachment.filename
+    send_file filepath, type: @attachment.content_type, filename: @attachment.filename
   end
 
   def create
@@ -45,7 +45,7 @@ class AttachmentsController < ApplicationController
       flash[:notice] = "Filen laddades upp."
       redirect_to event_attachments_url(@event)
     else
-      render :action => "index"
+      render action: "index"
     end
 
   end

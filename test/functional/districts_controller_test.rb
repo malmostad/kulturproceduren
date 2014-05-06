@@ -6,7 +6,7 @@ class DistrictsControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    @user = create(:user, :roles => [roles(:admin)])
+    @user = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @user.id
   end
 
@@ -19,7 +19,7 @@ class DistrictsControllerTest < ActionController::TestCase
 
   test "show" do
     district = create(:district)
-    get :show, :id => district.id
+    get :show, id: district.id
     assert_response :success
     assert_equal    district, assigns(:district)
   end
@@ -32,7 +32,7 @@ class DistrictsControllerTest < ActionController::TestCase
 
   test "edit" do
     district = create(:district)
-    get :edit, :id => district.id
+    get :edit, id: district.id
     assert_response :success
     assert_template "districts/new"
     assert_equal    district, assigns(:district)
@@ -40,31 +40,31 @@ class DistrictsControllerTest < ActionController::TestCase
 
   test "create" do
     # Invalid
-    post :create, :district => { :name => "" }
+    post :create, district: { name: "" }
     assert_response :success
     assert_template "districts/new"
     assert          assigns(:district).new_record?
     assert          !assigns(:district).valid?
 
     # Invalid
-    post :create, :district => { :name => "zomg" }
+    post :create, district: { name: "zomg" }
     assert_redirected_to assigns(:district)
     assert_equal         "Stadsdelen skapades.", flash[:notice]
     assert_equal         "zomg", District.find(assigns(:district).id).name
   end
 
   test "update" do
-    district = create(:district, :name => "foo")
+    district = create(:district, name: "foo")
 
     # Invalid
-    put :update, :id => district.id, :district => { :name => "" }
+    put :update, id: district.id, district: { name: "" }
     assert_response :success
     assert_template "districts/new"
     assert_equal    district, assigns(:district)
     assert          !assigns(:district).valid?
 
     # Invalid
-    put :update, :id => district.id, :district => { :name => "zomg" }
+    put :update, id: district.id, district: { name: "zomg" }
     assert_redirected_to district
     assert_equal         "Stadsdelen uppdaterades.", flash[:notice]
 
@@ -74,10 +74,10 @@ class DistrictsControllerTest < ActionController::TestCase
 
   test "destroy" do
     district = create(:district)
-    delete :destroy, :id => district.id
+    delete :destroy, id: district.id
     assert_redirected_to districts_url()
     assert_equal         "Stadsdelen togs bort.", flash[:notice]
-    assert_nil           District.where(:id => district.id).first
+    assert_nil           District.where(id: district.id).first
   end
 
   test "select" do
@@ -88,15 +88,15 @@ class DistrictsControllerTest < ActionController::TestCase
     district2                 = create(:district)
 
     # Normal
-    get :select, :district_id => district1.id, :return_to => "/foo"
+    get :select, district_id: district1.id, return_to: "/foo"
     assert_redirected_to "/foo"
-    assert_equal(        { :district_id => district1.id }, session[:group_selection])
+    assert_equal(        { district_id: district1.id }, session[:group_selection])
 
     # XHR
     @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :select, :district_id => district2.id, :return_to => "/foo"
+    get :select, district_id: district2.id, return_to: "/foo"
     assert_response :success
-    assert_equal(   { :district_id => district2.id }, session[:group_selection])
+    assert_equal(   { district_id: district2.id }, session[:group_selection])
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
   end
@@ -106,13 +106,13 @@ class DistrictsControllerTest < ActionController::TestCase
     session[:group_selection] = nil
 
     # Normal
-    get :select, :district_id => nil, :return_to => "/foo"
+    get :select, district_id: nil, return_to: "/foo"
     assert_redirected_to "/foo"
     assert_nil           session[:group_selection]
 
     # XHR
     @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :select, :district_id => nil, :return_to => "/foo"
+    get :select, district_id: nil, return_to: "/foo"
     assert_response :success
     assert_nil      session[:group_selection]
     assert          @response.body.blank?

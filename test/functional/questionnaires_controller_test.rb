@@ -6,7 +6,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    @user = create(:user, :roles => [roles(:admin)])
+    @user = create(:user, roles: [roles(:admin)])
     session[:current_user_id] = @user.id
   end
 
@@ -20,11 +20,11 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test "show, for event" do
-    questions = create_list(:question, 2, :template => false)
-    templates = create_list(:question, 2, :template => true).sort_by(&:question)
+    questions = create_list(:question, 2, template: false)
+    templates = create_list(:question, 2, template: true).sort_by(&:question)
     questionnaire = create(:questionnaire)
 
-    get :show, :id => questionnaire.id
+    get :show, id: questionnaire.id
 
     assert_response :success
     assert_equal    questionnaire, assigns(:questionnaire)
@@ -36,7 +36,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   test "show, for unbooking" do
     questionnaire = Questionnaire.find_unbooking
 
-    get :show, :id => questionnaire.id
+    get :show, id: questionnaire.id
 
     assert_response :success
     assert_equal    questionnaire, assigns(:questionnaire)
@@ -57,7 +57,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
     assert !questionnaire.questions.include?(question)
 
-    post :add_template_question, :id => questionnaire.id, :question_id => question.id
+    post :add_template_question, id: questionnaire.id, question_id: question.id
     assert_redirected_to questionnaire
     assert               questionnaire.questions(true).include?(question)
   end
@@ -68,7 +68,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
     questionnaire.questions << question
 
-    post :remove_template_question, :id => questionnaire.id, :question_id => question.id
+    post :remove_template_question, id: questionnaire.id, question_id: question.id
     assert_redirected_to questionnaire
     assert               !questionnaire.questions(true).include?(question)
   end
@@ -86,7 +86,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   test "edit" do
     questionnaire = create(:questionnaire)
     
-    get :edit, :id => questionnaire.id
+    get :edit, id: questionnaire.id
     assert_response :success
     assert_template "questionnaires/new"
     assert_equal    questionnaire, assigns(:questionnaire)
@@ -94,10 +94,10 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
   test "create, valid" do
     event     = create(:event)
-    questions = create_list(:question, 2, :template => false)
-    templates = create_list(:question, 2, :template => true).sort_by(&:question)
+    questions = create_list(:question, 2, template: false)
+    templates = create_list(:question, 2, template: true).sort_by(&:question)
 
-    post :create, :questionnaire => { :event_id => event.id }
+    post :create, questionnaire: { event_id: event.id }
     assert_equal "Enkäten skapades.", flash[:notice]
 
     questionnaire = Questionnaire.last
@@ -111,16 +111,16 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
     Questionnaire.any_instance.stubs(:valid?).returns(false)
 
-    post :create, :questionnaire => {}
+    post :create, questionnaire: {}
     assert_response :success
     assert_template "questionnaires/new"
     assert_equal    [event], assigns(:events)
   end
 
   test "update, valid" do
-    questionnaire = create(:questionnaire, :description => "Bar")
+    questionnaire = create(:questionnaire, description: "Bar")
 
-    put :update, :id => questionnaire.id, :questionnaire => { :description => "Foo" }
+    put :update, id: questionnaire.id, questionnaire: { description: "Foo" }
     assert_redirected_to questionnaire
     assert_equal         "Enkäten uppdaterades.", flash[:notice]
     assert_equal         "Foo", questionnaire.reload.description
@@ -131,7 +131,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
     Questionnaire.any_instance.stubs(:valid?).returns(false)
 
-    put :update, :id => questionnaire.id, :questionnaire => {}
+    put :update, id: questionnaire.id, questionnaire: {}
     assert_response :success
     assert_template "questionnaires/new"
     assert_equal    [event], assigns(:events)
@@ -140,8 +140,8 @@ class QuestionnairesControllerTest < ActionController::TestCase
   test "destroy" do
     questionnaire = create(:questionnaire)
 
-    delete :destroy, :id => questionnaire.id
+    delete :destroy, id: questionnaire.id
     assert_redirected_to questionnaires_url()
-    assert_nil           Questionnaire.where(:id => questionnaire.id).first
+    assert_nil           Questionnaire.where(id: questionnaire.id).first
   end
 end

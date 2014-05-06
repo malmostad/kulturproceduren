@@ -7,37 +7,37 @@ class Occasion < ActiveRecord::Base
   has_many :tickets
   has_many :bookings do
     def hierarchically_ordered
-      active.includes(:group =>{:school => :district}).order("districts.name ASC, schools.name ASC, groups.name ASC")
+      active.includes(group: {school: :district}).order("districts.name ASC, schools.name ASC, groups.name ASC")
     end
     def school_ordered
-      active.includes(:group => {:school => :district}).order("schools.name ASC").order("groups.name ASC")
+      active.includes(group: {school: :district}).order("schools.name ASC").order("groups.name ASC")
     end
   end
 
-  has_many(:groups, lambda{ distinct }, :through => :tickets) do
+  has_many(:groups, lambda{ distinct }, through: :tickets) do
     def hierarchically_ordered
-      includes(:school => :district).order("districts.name ASC, schools.name ASC").order("groups.name ASC")
+      includes(school: :district).order("districts.name ASC, schools.name ASC").order("groups.name ASC")
     end
 
     def school_ordered
-      includes(:school => :district).order("schools.name ASC").order("groups.name ASC")
+      includes(school: :district).order("schools.name ASC").order("groups.name ASC")
     end
   end
 
 
   has_many :attending_groups,
-    lambda{ includes(:school => :district) 
+    lambda{ includes(school: :district) 
       .where("tickets.state != 0")
       .distinct
       .order("districts.name ASC")
       .order("schools.name ASC")
       .order("groups.name ASC")
     },
-    :class_name => "Group",
-    :source     => :group,
-    :through    => :tickets
+    class_name: "Group",
+    source: :group,
+    through: :tickets
   
-  has_many :users, lambda{ distinct }, :through => :tickets
+  has_many :users, lambda{ distinct }, through: :tickets
 
   belongs_to :answer
 
@@ -55,11 +55,11 @@ class Occasion < ActiveRecord::Base
     :single_group
 
   validates_presence_of :date,
-    :message => "Datumet får inte vara tom"
+    message: "Datumet får inte vara tom"
   validates_presence_of :address,
-    :message => "Adressen får inte vara tom"
-  validates_numericality_of :seats, :only_integer => true,
-    :message => "Antalet platser måste vara ett giltigt heltal"
+    message: "Adressen får inte vara tom"
+  validates_numericality_of :seats, only_integer: true,
+    message: "Antalet platser måste vara ett giltigt heltal"
 
   scope :upcoming, lambda{
     where("date > :date or (date = :date and start_time > :time)", date: Date.today, time: Time.zone.now.strftime("%H:%M"))
@@ -123,13 +123,13 @@ class Occasion < ActiveRecord::Base
     case filter[:date_span]
     when :day
       conditions[0] << " and occasions.date < ? "
-      conditions << from_date.advance(:days => 1)
+      conditions << from_date.advance(days: 1)
     when :week
       conditions[0] << " and occasions.date <= ? "
-      conditions << from_date.advance(:weeks => 1)
+      conditions << from_date.advance(weeks: 1)
     when :month
       conditions[0] << " and occasions.date <= ? "
-      conditions << from_date.advance(:months => 1)
+      conditions << from_date.advance(months: 1)
     when :date
       unless filter[:to_date].blank?
         conditions[0] << " and occasions.date <= ? "
@@ -144,11 +144,11 @@ class Occasion < ActiveRecord::Base
 
     # Convert to non-deprecated way of finding records
     where_fragment, variables = conditions[0], conditions[1..-1]
-    self.includes(:event => :culture_provider)
+    self.includes(event: :culture_provider)
       .references(:events, :culture_providers)
       .where(where_fragment, *variables)
       .order("occasions.date ASC, events.name ASC, occasions.start_time ASC")
-      .paginate(:page => page)
+      .paginate(page: page)
   end
 
 

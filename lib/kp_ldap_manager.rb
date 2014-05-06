@@ -109,10 +109,10 @@ class KPLdapManager
   # Creates a result has from an entry returned from an LDAP query.
   def entry_to_result(entry)
     return {
-      :name => entry["cn"].join(' '),
-      :email => entry["mail"].join(' '),
-      :cellphone => "0",
-      :username => entry["uid"].join(' ')
+      name: entry["cn"].join(' '),
+      email: entry["mail"].join(' '),
+      cellphone: "0",
+      username: entry["uid"].join(' ')
     }
   end
 

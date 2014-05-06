@@ -8,10 +8,10 @@ gem "pg", "0.17.1"
 
 gem 'passenger', '~> 4.0.41'
 
-gem "rmagick", "2.13.2", :require => "RMagick"
+gem "rmagick", "2.13.2", require: "RMagick"
 gem "will_paginate", "3.0.5"
-gem "pdf-writer", :git => "https://github.com/Hermanverschooten/pdf-writer.git", :ref => "f57c298a2527893acd62430aefc2516e76499633"
-gem "ruby-ldap", "0.9.12", :require => "ldap"
+gem "pdf-writer", git: "https://github.com/Hermanverschooten/pdf-writer.git", ref: "f57c298a2527893acd62430aefc2516e76499633"
+gem "ruby-ldap", "0.9.12", require: "ldap"
 
 gem "simple_enum", "1.6.8"
 gem "rails_autolink", "1.1.5"
@@ -29,8 +29,8 @@ end
 
 group :test do
   gem "factory_girl_rails", "~> 4.3.0"
-  gem "mocha", "1.0.0", :require => false
-  gem 'simplecov', "~> 0.7.1", :require => false
+  gem "mocha", "1.0.0", require: false
+  gem 'simplecov', "~> 0.7.1", require: false
   gem "timecop"
 end
 

@@ -4,9 +4,9 @@ require "csv"
 class Booking < ActiveRecord::Base
   belongs_to :group
   belongs_to :occasion
-  has_one :event, :through => :occasion
+  has_one :event, through: :occasion
   belongs_to :user
-  belongs_to :unbooked_by, :class_name => "User", :foreign_key => "unbooked_by_id"
+  belongs_to :unbooked_by, class_name: "User", foreign_key: "unbooked_by_id"
 
   has_many :tickets
   has_one :answer_form
@@ -27,17 +27,17 @@ class Booking < ActiveRecord::Base
     :bus_one_way,
     :bus_stop
 
-  validates_presence_of :group, :message => "Bokningen måste tillhöra en grupp"
-  validates_presence_of :occasion, :message => "Bokningen måste tillhöra en föreställning"
-  validates_presence_of :user, :message => "Bokningen måste tillhöra en användare"
+  validates_presence_of :group, message: "Bokningen måste tillhöra en grupp"
+  validates_presence_of :occasion, message: "Bokningen måste tillhöra en föreställning"
+  validates_presence_of :user, message: "Bokningen måste tillhöra en användare"
 
   validate :validate_seats
 
-  validates_presence_of :companion_name, :message => "Namnet får inte vara tomt"
-  validates_presence_of :companion_email, :message => "Epostadressen får inte vara tom"
-  validates_presence_of :companion_phone, :message => "Telefonnumret får inte vara tomt"
+  validates_presence_of :companion_name, message: "Namnet får inte vara tomt"
+  validates_presence_of :companion_email, message: "Epostadressen får inte vara tom"
+  validates_presence_of :companion_phone, message: "Telefonnumret får inte vara tomt"
 
-  validates_presence_of :bus_stop, :if => :bus_booking, :message => "Du måste ange en hållplats"
+  validates_presence_of :bus_stop, if: :bus_booking, message: "Du måste ange en hållplats"
 
   after_save :synchronize_tickets
   before_create :set_booked_at_timestamp
@@ -108,7 +108,7 @@ class Booking < ActiveRecord::Base
     conditions = [ " occasions.event_id = ? ", event_id ]
     apply_filter(conditions, filter)
 
-    self.includes(:occasion, :group => :school)
+    self.includes(:occasion, group: :school)
       .where(conditions[0], *conditions[1..-1])
       .order("schools.name, groups.name desc")
       .paginate(page: page)
@@ -119,7 +119,7 @@ class Booking < ActiveRecord::Base
     apply_filter(conditions, filter)
 
 
-    self.includes(:occasion, :group => :school)
+    self.includes(:occasion, group: :school)
       .where(conditions[0], *conditions[1..-1])
       .order("schools.name, groups.name desc")
       .paginate(page: page)
@@ -127,7 +127,7 @@ class Booking < ActiveRecord::Base
 
 
   def self.bus_booking_csv(bookings)
-    CSV.generate(:col_sep => "\t") do |csv|
+    CSV.generate(col_sep: "\t") do |csv|
 
       row = %w(
       Evenemang
@@ -149,7 +149,7 @@ class Booking < ActiveRecord::Base
       bookings.each do |booking|
         row = [
           booking.occasion.event.name,
-          "#{booking.occasion.date} #{I18n.localize(booking.occasion.start_time, :format => :only_time)}",
+          "#{booking.occasion.date} #{I18n.localize(booking.occasion.start_time, format: :only_time)}",
           booking.occasion.address,
           booking.group.school.district.name,
           booking.group.school.name,

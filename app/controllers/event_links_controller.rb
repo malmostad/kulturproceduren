@@ -32,9 +32,9 @@ class EventLinksController < ApplicationController
     session[:event_links][:selected_culture_provider] = params[:selected_culture_provider_id].to_i
 
     if @culture_provider
-      redirect_to new_culture_provider_event_link_url(:culture_provider_id => @culture_provider.id)
+      redirect_to new_culture_provider_event_link_url(culture_provider_id: @culture_provider.id)
     elsif @event
-      redirect_to new_event_event_link_url(:event_id => @event.id)
+      redirect_to new_event_event_link_url(event_id: @event.id)
     end
   end
 
@@ -45,11 +45,11 @@ class EventLinksController < ApplicationController
       @event.linked_events << new_link
       new_link.linked_events << @event
       flash[:notice] = "Länken mellan evenemangen skapades."
-      redirect_to event_event_links_url(:event_id => @event.id)
+      redirect_to event_event_links_url(event_id: @event.id)
     elsif @culture_provider
       @culture_provider.linked_events << new_link
       flash[:notice] = "Länken mellan evenemanget och arrangören skapades."
-      redirect_to culture_provider_event_links_url(:culture_provider_id => @culture_provider.id)
+      redirect_to culture_provider_event_links_url(culture_provider_id: @culture_provider.id)
     end
   end
 
@@ -60,11 +60,11 @@ class EventLinksController < ApplicationController
       @event.linked_events.delete(linked)
       linked.linked_events.delete(@event)
       flash[:notice] = "Länken mellan evenemangen togs bort."
-      redirect_to event_event_links_url(:event_id => @event.id)
+      redirect_to event_event_links_url(event_id: @event.id)
     elsif @culture_provider
       @culture_provider.linked_events.delete(linked)
       flash[:notice] = "Länken mellan evenemanget och arrangören togs bort."
-      redirect_to culture_provider_event_links_url(:culture_provider_id => @culture_provider.id)
+      redirect_to culture_provider_event_links_url(culture_provider_id: @culture_provider.id)
     end
   end
 

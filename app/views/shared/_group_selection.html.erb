@@ -12,14 +12,14 @@
     <%= label_tag "group_selection-district_id", "Välj stadsdel:" %>
 
     <div class="input-container">
-      <%= form_tag({ :controller => "districts", :action => "select" }) do %>
+      <%= form_tag({ controller: "districts", action: "select" }) do %>
         <%= hidden_field_tag "return_to", return_to %>
         <%= hidden_field_tag("occasion_id", occasion.id) if occasion  %>
 
         <%= select_tag(
           "district_id",
           options_from_collection_for_select(@group_selection_collections[:districts], :id, :name, session[:group_selection][:district_id]),
-          { :id => "kp-group_selection-district_id", :prompt => "Välj stadsdel" })
+          { id: "kp-group_selection-district_id", prompt: "Välj stadsdel" })
         %>
 
         <noscript>
@@ -33,7 +33,7 @@
     <%= label_tag "group_selection-school_id", "Välj skola:" %>
 
     <div class="input-container">
-      <%= form_tag({ :controller => "schools", :action => "select" }) do %>
+      <%= form_tag({ controller: "schools", action: "select" }) do %>
         <%= hidden_field_tag "return_to", return_to %>
         <%= hidden_field_tag("occasion_id", occasion.id) if occasion %>
 
@@ -41,7 +41,7 @@
           <%= select_tag(
             "school_id",
             options_from_collection_for_select(@group_selection_collections[:schools], :id, :name, session[:group_selection][:school_id]),
-            { :id => "kp-group_selection-school_id", :prompt => "Välj skola" })
+            { id: "kp-group_selection-school_id", prompt: "Välj skola" })
           %>
 
           <noscript>
@@ -53,7 +53,7 @@
           <%= select_tag(
             "school_id",
             "<option>Välj stadsdel först</option>".html_safe,
-            :disabled => true, :id => "kp-group_selection-school_id")
+            disabled: true, id: "kp-group_selection-school_id")
           %>
 
         <% end %>
@@ -65,7 +65,7 @@
     <%= label_tag "group_selection-group_id", "Välj klass/avdelning:" %>
 
     <div class="input-container">
-      <%= form_tag({ :controller => "groups", :action => "select" }) do %>
+      <%= form_tag({ controller: "groups", action: "select" }) do %>
         <%= hidden_field_tag "return_to", return_to %>
 
         <% if @group_selection_collections[:groups] %>
@@ -95,7 +95,7 @@
           <%= select_tag(
             "group_id",
             ("<option>Välj klass/avdelning</option>" + opts).html_safe,
-            { :id => "kp-group_selection-group_id" })
+            { id: "kp-group_selection-group_id" })
           %>
 
           <noscript>
@@ -106,7 +106,7 @@
           <%= select_tag(
             "group_id",
             "<option>Välj skola först</option>".html_safe,
-            :disabled => true, :id => "kp-group_selection-group_id")
+            disabled: true, id: "kp-group_selection-group_id")
           %>
         <% end %>
       <% end %>

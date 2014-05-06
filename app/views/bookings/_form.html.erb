@@ -10,7 +10,7 @@
 
 <% else %>
 
-  <%= form_for @booking, :builder => KPFormBuilder, :html => { :class => "booking-form" } do |f| %>
+  <%= form_for @booking, builder: KPFormBuilder, html: { class: "booking-form" } do |f| %>
     <%= f.validation_error_indicator %>
 
     <% if @group.age_groups.num_children_by_age_span(@occasion.event.from_age, @occasion.event.to_age) == 0 %>
@@ -49,15 +49,15 @@
     </p>
 
     <%= f.fields "Antal platser", "seats-container" do %>
-      <%= f.text_field :student_count, :size => 30, :class => "num-seats" %>
-      <%= f.text_field :adult_count, :size => 30, :class => "num-seats" %>
+      <%= f.text_field :student_count, size: 30, class: "num-seats" %>
+      <%= f.text_field :adult_count, size: 30, class: "num-seats" %>
 
       <% if @occasion.wheelchair_seats.to_i > 0 %>
         <%= f.text_field(
           :wheelchair_count,
-          :size => 30,
-          :class => "num-seats",
-          :field_help => "#{@occasion.wheelchair_seats.to_i - Ticket.count_wheelchair_by_occasion(@occasion)} rullstolsplatser tillgängligt på den här föreställningen."
+          size: 30,
+          class: "num-seats",
+          field_help: "#{@occasion.wheelchair_seats.to_i - Ticket.count_wheelchair_by_occasion(@occasion)} rullstolsplatser tillgängligt på den här föreställningen."
         ) %>
       <% end %>
     <% end %>
@@ -72,7 +72,7 @@
       <%= f.fields "Boka kulturbuss" do %>
         <%= f.check_box  :bus_booking %>
         <%= f.text_field :bus_stop %>
-        <%= f.radio_button :bus_one_way, false, :label => "Tur och retur" %>
+        <%= f.radio_button :bus_one_way, false, label: "Tur och retur" %>
         <%= f.radio_button :bus_one_way, true %>
         <p class="message notice in-form-message">
           <span>Bussbolaget kontaktar medföljande vuxen via epost om hämtningstider</span>
@@ -81,7 +81,7 @@
     <% end %>
 
     <%= f.fields "Speciella krav / Extra information ang. bokning" do %>
-      <%= f.text_area :requirement, :rows => 8 %>
+      <%= f.text_area :requirement, rows: 8 %>
     <% end %>
 
     <%= f.buttons do -%>

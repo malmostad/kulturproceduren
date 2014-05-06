@@ -13,9 +13,9 @@ class ImagesControllerTest < ActionController::TestCase
   end
   test "index, culture provider" do
     culture_provider = create(:culture_provider)
-    images           = create_list(:image, 2, :culture_provider => culture_provider)
+    images           = create_list(:image, 2, culture_provider: culture_provider)
 
-    get :index, :culture_provider_id => culture_provider.id
+    get :index, culture_provider_id: culture_provider.id
 
     assert_response :success
     assert          assigns(:image).new_record?
@@ -24,9 +24,9 @@ class ImagesControllerTest < ActionController::TestCase
   end
   test "index, event" do
     event  = create(:event)
-    images = create_list(:image, 2, :event => event)
+    images = create_list(:image, 2, event: event)
 
-    get :index, :event_id => event.id
+    get :index, event_id: event.id
 
     assert_response :success
     assert          assigns(:image).new_record?
@@ -36,12 +36,12 @@ class ImagesControllerTest < ActionController::TestCase
 
   test "set main" do
     culture_provider = create(:culture_provider)
-    images           = create_list(:image, 2, :culture_provider => culture_provider)
+    images           = create_list(:image, 2, culture_provider: culture_provider)
 
     culture_provider.main_image = images.first
     culture_provider.save!
 
-    get :set_main, :culture_provider_id => culture_provider.id, :id => images.last.id
+    get :set_main, culture_provider_id: culture_provider.id, id: images.last.id
     assert_redirected_to culture_provider_images_url(culture_provider)
     assert_equal         images.last, CultureProvider.find(culture_provider.id).main_image(true)
   end
@@ -52,7 +52,7 @@ class ImagesControllerTest < ActionController::TestCase
     assert_equal         "Felaktigt anrop.", flash[:error]
   end
   def stub_rmagick!
-    magick = stub(:columns => 20, :rows => 21)
+    magick = stub(columns: 20, rows: 21)
     Magick::Image.stubs(:read).returns([magick])
     magick.stubs(:resize_to_fit!).returns(true)
     magick.stubs(:write).returns(true)
@@ -60,20 +60,20 @@ class ImagesControllerTest < ActionController::TestCase
   test "create, culture provider" do
     File.stubs(:open)
     old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :width => 10, :height => 20, :thumb_width => 1, :thumb_height => 2 } } }
+    Kernel::silence_warnings { ::APP_CONFIG = { upload_image: { width: 10, height: 20, thumb_width: 1, thumb_height: 2 } } }
     stub_rmagick!
-    upload = { "datafile" => stub(:read => "foo") }
+    upload = { "datafile" => stub(read: "foo") }
 
     culture_provider = create(:culture_provider)
 
     # Invalid
-    post :create, :culture_provider_id => culture_provider.id, :upload => upload, :image => { :description => "" }
+    post :create, culture_provider_id: culture_provider.id, upload: upload, image: { description: "" }
     assert_response :success
     assert_template "images/index"
     assert          !assigns(:image).valid?
 
     # Valid
-    post :create, :culture_provider_id => culture_provider.id, :upload => upload, :image => { :description => "foo" }
+    post :create, culture_provider_id: culture_provider.id, upload: upload, image: { description: "foo" }
 
     image = Image.last
     assert_redirected_to culture_provider_images_url(culture_provider)
@@ -86,20 +86,20 @@ class ImagesControllerTest < ActionController::TestCase
   test "create, event" do
     File.stubs(:open)
     old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { :upload_image => { :width => 10, :height => 20, :thumb_width => 1, :thumb_height => 2 } } }
+    Kernel::silence_warnings { ::APP_CONFIG = { upload_image: { width: 10, height: 20, thumb_width: 1, thumb_height: 2 } } }
     stub_rmagick!
-    upload = { "datafile" => stub(:read => "foo") }
+    upload = { "datafile" => stub(read: "foo") }
 
     event = create(:event)
 
     # Invalid
-    post :create, :event_id => event.id, :upload => upload, :image => { :description => "" }
+    post :create, event_id: event.id, upload: upload, image: { description: "" }
     assert_response :success
     assert_template "images/index"
     assert          !assigns(:image).valid?
 
     # Valid
-    post :create, :event_id => event.id, :upload => upload, :image => { :description => "foo" }
+    post :create, event_id: event.id, upload: upload, image: { description: "foo" }
 
     image = Image.last
     assert_redirected_to event_images_url(event)
@@ -114,29 +114,29 @@ class ImagesControllerTest < ActionController::TestCase
     File.stubs(:delete)
 
     culture_provider = create(:culture_provider)
-    image            = create(:image, :culture_provider => culture_provider, :event => nil)
-    main_image       = create(:image, :culture_provider => culture_provider, :event => nil)
+    image            = create(:image, culture_provider: culture_provider, event: nil)
+    main_image       = create(:image, culture_provider: culture_provider, event: nil)
 
     culture_provider.main_image = main_image
     culture_provider.save!
 
-    delete :destroy, :id => image.id
+    delete :destroy, id: image.id
     assert_redirected_to culture_provider_images_url(culture_provider)
     assert_equal         "Bilden togs bort", flash[:notice]
-    assert_nil           Image.where(:id => image.id).first
+    assert_nil           Image.where(id: image.id).first
     assert_equal         main_image, CultureProvider.find(culture_provider.id).main_image
 
-    delete :destroy, :id => main_image.id
+    delete :destroy, id: main_image.id
     assert_nil CultureProvider.find(culture_provider.id).main_image
   end
   test "destroy, event" do
     File.stubs(:delete)
     event = create(:event)
-    image = create(:image, :event => event, :culture_provider => nil)
+    image = create(:image, event: event, culture_provider: nil)
 
-    delete :destroy, :id => image.id
+    delete :destroy, id: image.id
     assert_redirected_to event_images_url(event)
     assert_equal         "Bilden togs bort", flash[:notice]
-    assert_nil           Image.where(:id => image.id).first
+    assert_nil           Image.where(id: image.id).first
   end
 end

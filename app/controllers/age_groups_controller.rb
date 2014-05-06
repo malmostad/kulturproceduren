@@ -11,7 +11,7 @@ class AgeGroupsController < ApplicationController
   def edit
     @age_group = AgeGroup.find(params[:id])
     @group = @age_group.group
-    render :template => "groups/show"
+    render template: "groups/show"
   end
   
   # Any errors is rendered in the age group's group's view
@@ -23,7 +23,7 @@ class AgeGroupsController < ApplicationController
       redirect_to(@age_group.group)
     else
       @group = @age_group.group
-      render :template => "groups/show"
+      render template: "groups/show"
     end
   end
 
@@ -36,7 +36,7 @@ class AgeGroupsController < ApplicationController
       redirect_to(@age_group.group)
     else
       @group = @age_group.group
-      render :template => "groups/show"
+      render template: "groups/show"
     end
   end
 

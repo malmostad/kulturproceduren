@@ -13,7 +13,7 @@ class LoginControllerTest < ActionController::TestCase
     assert_response :success
     assert_nil      session[:return_to]
 
-    get :index, :return_to => "/foo/bar"
+    get :index, return_to: "/foo/bar"
     assert_response :success
     assert_equal    "/foo/bar", session[:return_to]
   end
@@ -25,16 +25,16 @@ class LoginControllerTest < ActionController::TestCase
   end
   test "login, auth failed" do
     # Auth failed
-    post :login, :user => { :username => "invalid", :password => "invalid" }
+    post :login, user: { username: "invalid", password: "invalid" }
     assert_response :success
     assert_template "login/index"
     assert_equal    "Felaktigt användarnamn/lösenord", flash[:warning]
   end
   test "login, invalid user" do
-    user = create(:user, :username => "testuser", :password => "zomg", :roles => [roles(:admin)])
+    user = create(:user, username: "testuser", password: "zomg", roles: [roles(:admin)])
     user.districts.clear
 
-    post :login, :user => { :username => "testuser", :password => "zomg" }
+    post :login, user: { username: "testuser", password: "zomg" }
 
     assert_redirected_to edit_user_url(user)
     assert_equal         "Du är nu inloggad", flash[:notice]
@@ -42,9 +42,9 @@ class LoginControllerTest < ActionController::TestCase
     assert_equal         user.id,     session[:current_user_id]
   end
   test "login, no roles" do
-    user = create(:user, :last_active => nil, :username => "testuser", :password => "zomg", :roles => [])
+    user = create(:user, last_active: nil, username: "testuser", password: "zomg", roles: [])
 
-    post :login, :user => { :username => "testuser", :password => "zomg" }
+    post :login, user: { username: "testuser", password: "zomg" }
 
     assert_redirected_to role_applications_url()
     assert_equal         "Du är nu inloggad", flash[:notice]
@@ -54,17 +54,17 @@ class LoginControllerTest < ActionController::TestCase
   end
   test "login, return to" do
     session[:return_to] = "/foo/bar"
-    user = create(:user, :last_active => nil, :username => "testuser", :password => "zomg", :roles => [roles(:admin)])
+    user = create(:user, last_active: nil, username: "testuser", password: "zomg", roles: [roles(:admin)])
 
-    post :login, :user => { :username => "testuser", :password => "zomg" }
+    post :login, user: { username: "testuser", password: "zomg" }
 
     assert_redirected_to "/foo/bar"
     assert_nil           session[:return_to]
   end
   test "login, normal user" do
-    user = create(:user, :last_active => nil, :username => "testuser", :password => "zomg", :roles => [roles(:admin)])
+    user = create(:user, last_active: nil, username: "testuser", password: "zomg", roles: [roles(:admin)])
 
-    post :login, :user => { :username => "testuser", :password => "zomg" }
+    post :login, user: { username: "testuser", password: "zomg" }
 
     assert_redirected_to root_url()
     assert_equal         "Du är nu inloggad", flash[:notice]
@@ -73,16 +73,16 @@ class LoginControllerTest < ActionController::TestCase
     assert_not_nil       user.reload.last_active
   end
   test "login, ldap user, new user" do
-    APP_CONFIG.replace(:salt_length => 4, :ldap => { :username_prefix => "ldap" })
+    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap" })
 
     create(:district)
-    ldap_user_mock = { :name => "Name", :email => "name@example.com", :cellphone => "123", :username => "zomglol" }
-    ldap_mock      = stub(:get_user => ldap_user_mock)
+    ldap_user_mock = { name: "Name", email: "name@example.com", cellphone: "123", username: "zomglol" }
+    ldap_mock      = stub(get_user: ldap_user_mock)
 
     ldap_mock.expects(:authenticate).with("zomglol", "zomglol").returns(true)
     @controller.stubs(:get_ldap).returns(ldap_mock)
 
-    post :login, :user => { :username => "zomglol", :password => "zomglol" }
+    post :login, user: { username: "zomglol", password: "zomglol" }
     user = User.last
 
     assert_equal user.id,            session[:current_user_id]
@@ -92,25 +92,25 @@ class LoginControllerTest < ActionController::TestCase
     assert       user.authenticate("ldap")
   end
   test "login, ldap user, existing user" do
-    APP_CONFIG.replace(:salt_length => 4, :ldap => { :username_prefix => "ldap" })
+    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap" })
 
-    user = create(:user, :last_active => nil, :username => "ldaptestuser", :password => "zomg", :roles => [roles(:admin)])
-    @controller.stubs(:get_ldap).returns(stub(:authenticate => true))
+    user = create(:user, last_active: nil, username: "ldaptestuser", password: "zomg", roles: [roles(:admin)])
+    @controller.stubs(:get_ldap).returns(stub(authenticate: true))
 
-    post :login, :user => { :username => "testuser", :password => "doesntmatter" }
+    post :login, user: { username: "testuser", password: "doesntmatter" }
     assert_equal user.id, session[:current_user_id]
   end
   test "login, ldap user, fallback" do
-    user = create(:user, :last_active => nil, :username => "testuser", :password => "zomg", :roles => [roles(:admin)])
-    @controller.stubs(:get_ldap).returns(stub(:authenticate => false))
+    user = create(:user, last_active: nil, username: "testuser", password: "zomg", roles: [roles(:admin)])
+    @controller.stubs(:get_ldap).returns(stub(authenticate: false))
 
-    post :login, :user => { :username => "testuser", :password => "zomg" }
+    post :login, user: { username: "testuser", password: "zomg" }
     assert_equal user.id, session[:current_user_id]
   end
 
   test "logout" do
     get :logout
-    assert_redirected_to :action => "index"
+    assert_redirected_to action: "index"
 
     session[:current_user_id] = create(:user).id
 
@@ -128,12 +128,12 @@ class LoginControllerTest < ActionController::TestCase
     @request.session_options[:secure] = true
 
     expected = {
-      :name => "testcookie",
-      :value => "zomg",
-      :options => {
-        :path => "/foo/bar",
-        :domain => "example.com",
-        :secure => true
+      name: "testcookie",
+      value: "zomg",
+      options: {
+        path: "/foo/bar",
+        domain: "example.com",
+        secure: true
       }
     }
 

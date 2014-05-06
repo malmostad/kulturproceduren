@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" %>
+<%= render partial: "menu" %>
 
 
 <fieldset class="with-legend">
@@ -8,7 +8,7 @@
   <ul class="admin-tools">
     <li><%= link_to "Redigera", edit_user_path(@user) %></li>
     <% if current_user.has_role?(:admin) %>
-      <li><%= link_to "Radera", @user, :data => {:confirm => 'Är du säker?'}, :method => :delete %></li>
+      <li><%= link_to "Radera", @user, data: {confirm: 'Är du säker?'}, method: :delete %></li>
     <% end -%>
   </ul>
 
@@ -85,30 +85,30 @@
       <li>
         <%= denom %> kan inte boka platser.
         <span class="inline-tool">
-          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %>
+          <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :booker) %>
         </span>
       </li>
       <li>
         <%= denom %> är inte evenemangsvärd.
         <span class="inline-tool">
-          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %>
+          <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :host) %>
         </span>
       </li>
       <li>
         <%= denom %> är inte samordnare.
         <span class="inline-tool">
-          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :coordinator) %>
+          <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :coordinator) %>
         </span>
       </li>
       <li>
         <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
         <span class="inline-tool">
-          <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %>
+          <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :culture_worker) %>
         </span>
       </li>
 
       <li>
-        <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(:id => @user.id, :role => :admin) %>
+        <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(id: @user.id, role: :admin) %>
       </li>
 
     <% elsif @user.has_role?(:admin) -%>
@@ -117,7 +117,7 @@
         <%= denom %> är administratör och har fulla rättigheter i systemet.
         <% if current_user.has_role?(:admin) -%>
           <span class="inline-tool">
-            <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :admin) %>
+            <%= link_to "Återkalla rättigheter", revoke_role_path(id: @user.id, role: :admin) %>
           </span>
         <% end -%>
       </li>
@@ -131,7 +131,7 @@
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool">
-              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :booker) %>
+              <%= link_to "Återkalla rättigheter", revoke_role_path(id: @user.id, role: :booker) %>
             </span>
           <% end -%>
         </li>
@@ -139,7 +139,7 @@
         <li>
           <%= denom %> kan inte boka platser.
           <span class="inline-tool">
-            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :booker) %>
+            <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :booker) %>
           </span>
         </li>
       <% end -%>
@@ -150,7 +150,7 @@
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool">
-              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :host) %>
+              <%= link_to "Återkalla rättigheter", revoke_role_path(id: @user.id, role: :host) %>
             </span>
           <% end -%>
         </li>
@@ -158,7 +158,7 @@
         <li>
           <%= denom %> är inte evenemangsvärd.
           <span class="inline-tool">
-            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :host) %>
+            <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :host) %>
           </span>
         </li>
       <% end -%>
@@ -169,7 +169,7 @@
 
           <% if current_user.has_role?(:admin) -%>
             <span class="inline-tool">
-              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :coordinator) %>
+              <%= link_to "Återkalla rättigheter", revoke_role_path(id: @user.id, role: :coordinator) %>
             </span>
           <% end -%>
         </li>
@@ -177,7 +177,7 @@
         <li>
           <%= denom %> är inte samordnare.
           <span class="inline-tool">
-            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :coordinator) %>
+            <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :coordinator) %>
           </span>
         </li>
       <% end -%>
@@ -193,7 +193,7 @@
 
                 <% if current_user.has_role?(:admin) %>
                   <span class="inline-tool">
-                    <%= link_to "Ta bort", remove_culture_provider_user_path(:id => @user.id, :culture_provider_id => provider.id) %>
+                    <%= link_to "Ta bort", remove_culture_provider_user_path(id: @user.id, culture_provider_id: provider.id) %>
                   </span>
                 <% end %>
               </li>
@@ -214,7 +214,7 @@
             </form>
 
             <span class="inline-tool">
-              <%= link_to "Återkalla rättigheter", revoke_role_path(:id => @user.id, :role => :culture_worker) %>
+              <%= link_to "Återkalla rättigheter", revoke_role_path(id: @user.id, role: :culture_worker) %>
             </span>
           <% end -%>
         </li>
@@ -222,14 +222,14 @@
         <li>
           <%= denom %> kan inte publicera evenemang och administrera profilen för arrangörer:
           <span class="inline-tool">
-            <%= link_to "Tilldela rättigheter", grant_role_path(:id => @user.id, :role => :culture_worker) %>
+            <%= link_to "Tilldela rättigheter", grant_role_path(id: @user.id, role: :culture_worker) %>
           </span>
         </li>
       <% end -%>
 
       <% if current_user.has_role?(:admin) -%>
         <li>
-          <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(:id => @user.id, :role => :admin) %>
+          <%= link_to "Tilldela användaren administratörsrättigheter", grant_role_path(id: @user.id, role: :admin) %>
         </li>
       <% end %>
 

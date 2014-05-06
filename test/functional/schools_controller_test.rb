@@ -16,7 +16,7 @@ class SchoolsControllerTest < ActionController::TestCase
 
   test "show" do
     school = create(:school_with_groups)
-    get :show, :id => school.id
+    get :show, id: school.id
     assert_response :success
     assert_equal    school,             assigns(:school)
     assert_equal    school.groups.to_a, assigns(:groups)
@@ -31,7 +31,7 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_nil      assigns(:school).district
     assert_equal    districts, assigns(:districts)
 
-    get :new, :district_id => districts.second.id
+    get :new, district_id: districts.second.id
     assert_response :success
     assert          assigns(:school).new_record?
     assert_equal    districts.second, assigns(:school).district
@@ -40,9 +40,9 @@ class SchoolsControllerTest < ActionController::TestCase
 
   test "edit" do
     districts = create_list(:district, 3)
-    school    = create(:school, :district => districts.first)
+    school    = create(:school, district: districts.first)
 
-    get :edit, :id => school.id
+    get :edit, id: school.id
     assert_response :success
     assert_template "schools/new"
     assert_equal    school,    assigns(:school)
@@ -53,13 +53,13 @@ class SchoolsControllerTest < ActionController::TestCase
     districts = create_list(:district, 3)
 
     # Invalid
-    post :create, :school => {}
+    post :create, school: {}
     assert_response :success
     assert          assigns(:school).new_record?
     assert_equal    districts, assigns(:districts)
 
     # Valid
-    post :create, :school => { :name => "School", :district_id => districts.second.id }
+    post :create, school: { name: "School", district_id: districts.second.id }
 
     school = School.last
     assert_redirected_to school
@@ -70,17 +70,17 @@ class SchoolsControllerTest < ActionController::TestCase
 
   test "update" do
     districts = create_list(:district, 3)
-    school    = create(:school, :district => districts.second, :name => "Update me")
+    school    = create(:school, district: districts.second, name: "Update me")
 
     # Invalid
-    put :update, :id => school.id, :school => { :name => "" }
+    put :update, id: school.id, school: { name: "" }
     assert_response :success
     assert_equal    school,    assigns(:school)
     assert          !assigns(:school).valid?
     assert_equal    districts, assigns(:districts)
 
     # Valid
-    put :update, :id => school.id, :school => { :name => "Updated" }
+    put :update, id: school.id, school: { name: "Updated" }
     assert_redirected_to school
     assert_equal         "Skolan uppdaterades.", flash[:notice]
     assert_equal         "Updated",              school.reload.name
@@ -88,7 +88,7 @@ class SchoolsControllerTest < ActionController::TestCase
 
   test "destroy" do
     school = create(:school)
-    delete :destroy, :id => school.id
+    delete :destroy, id: school.id
     assert_redirected_to school.district
     assert_equal         "Skolan togs bort.", flash[:notice]
     assert_nil           School.where(id: school.id).first
@@ -102,18 +102,18 @@ class SchoolsControllerTest < ActionController::TestCase
 
     school = create(:school)
 
-    get :select, :school_id => school.id, :return_to => "/foo/bar"
+    get :select, school_id: school.id, return_to: "/foo/bar"
     assert_redirected_to "/foo/bar"
-    assert_equal(        { :school_id => school.id, :district_id => school.district.id }, session[:group_selection])
+    assert_equal(        { school_id: school.id, district_id: school.district.id }, session[:group_selection])
 
     school = create(:school)
 
     @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :select, :school_id => school.id, :return_to => "/foo/bar"
+    get :select, school_id: school.id, return_to: "/foo/bar"
     assert_response :success
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
-    assert_equal(   { :school_id => school.id, :district_id => school.district.id }, session[:group_selection])
+    assert_equal(   { school_id: school.id, district_id: school.district.id }, session[:group_selection])
   end
   test "select, no school" do
     @controller.unstub(:authenticate)
@@ -121,12 +121,12 @@ class SchoolsControllerTest < ActionController::TestCase
 
     session[:group_selection] = nil
 
-    get :select, :school_id => -1, :return_to => "/foo/bar"
+    get :select, school_id: -1, return_to: "/foo/bar"
     assert_redirected_to "/foo/bar"
     assert_nil           session[:group_selection]
 
     @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :select, :school_id => -1, :return_to => "/foo/bar"
+    get :select, school_id: -1, return_to: "/foo/bar"
     assert_response :success
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -137,7 +137,7 @@ class SchoolsControllerTest < ActionController::TestCase
     @controller.unstub(:authenticate)
     @controller.unstub(:require_admin)
 
-    get :options_list, :district_id => -1, :occasion_id => -1
+    get :options_list, district_id: -1, occasion_id: -1
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -145,7 +145,7 @@ class SchoolsControllerTest < ActionController::TestCase
     error_stub = stub do
       stubs(:to_i).raises
     end
-    get :options_list, :district_id => error_stub
+    get :options_list, district_id: error_stub
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -169,12 +169,12 @@ class SchoolsControllerTest < ActionController::TestCase
     schools                   = create_list(:school, 3).sort_by(&:name)
     session[:group_selection] = nil
 
-    get :options_list, :district_id => schools.second.district.id
+    get :options_list, district_id: schools.second.district.id
     assert_response :success
     assert_template "schools/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
     assert_equal    [schools.second], assigns(:schools)
-    assert_equal(   { :district_id => schools.second.district.id }, session[:group_selection])
+    assert_equal(   { district_id: schools.second.district.id }, session[:group_selection])
   end
   test "options list, without district with occasion" do
     @controller.unstub(:authenticate)
@@ -183,9 +183,9 @@ class SchoolsControllerTest < ActionController::TestCase
     occasion = create(:occasion)
     schools  = create_list(:school_with_groups, 3).sort_by(&:name)
 
-    create(:ticket, :occasion => occasion, :event => occasion.event, :group => schools.second.groups.second)
+    create(:ticket, occasion: occasion, event: occasion.event, group: schools.second.groups.second)
 
-    get :options_list, :occasion_id => occasion.id
+    get :options_list, occasion_id: occasion.id
     assert_response :success
     assert_template "schools/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -198,10 +198,10 @@ class SchoolsControllerTest < ActionController::TestCase
     occasion = create(:occasion)
     schools  = create_list(:school_with_groups, 3).sort_by(&:name)
 
-    create(:ticket, :occasion => occasion, :event => occasion.event, :group => schools.first.groups.second)
-    create(:ticket, :occasion => occasion, :event => occasion.event, :group => schools.second.groups.second)
+    create(:ticket, occasion: occasion, event: occasion.event, group: schools.first.groups.second)
+    create(:ticket, occasion: occasion, event: occasion.event, group: schools.second.groups.second)
 
-    get :options_list, :occasion_id => occasion.id, :district_id => schools.second.district.id
+    get :options_list, occasion_id: occasion.id, district_id: schools.second.district.id
     assert_response :success
     assert_template "schools/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/

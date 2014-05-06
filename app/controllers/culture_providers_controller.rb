@@ -3,17 +3,17 @@
 class CultureProvidersController < ApplicationController
   layout "standard"
 
-  before_filter :authenticate, :except => [ :index, :show ]
-  before_filter :require_admin, :only => [ :new, :create, :destroy, :activate, :deactivate ]
+  before_filter :authenticate, except: [ :index, :show ]
+  before_filter :require_admin, only: [ :new, :create, :destroy, :activate, :deactivate ]
 
-  cache_sweeper :calendar_sweeper, :only => [ :create, :update, :destroy, :activate, :deactivate ]
-  cache_sweeper :culture_provider_sweeper, :only => [ :create, :update, :destroy, :activate, :deactivate ]
+  cache_sweeper :calendar_sweeper, only: [ :create, :update, :destroy, :activate, :deactivate ]
+  cache_sweeper :culture_provider_sweeper, only: [ :create, :update, :destroy, :activate, :deactivate ]
   
 
   # Displays a paginated list of all culture providers
   def index
     @culture_providers = if user_online? && current_user.has_role?(:admin)
-      CultureProvider.order(sort_order("name")).paginate :page => params[:page]
+      CultureProvider.order(sort_order("name")).paginate page: params[:page]
     else
       CultureProvider.where(active: true).order(sort_order("name")).paginate(page: params[:page])
     end
@@ -28,7 +28,7 @@ class CultureProvidersController < ApplicationController
   # Displays a form for adding a culture provider
   def new
     @culture_provider = CultureProvider.new
-    render :action => "edit"
+    render action: "edit"
   end
 
   # Displays a form for editing an existing culture provider
@@ -48,7 +48,7 @@ class CultureProvidersController < ApplicationController
       flash[:notice] = 'Arrangören skapades.'
       redirect_to(@culture_provider)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 
@@ -59,7 +59,7 @@ class CultureProvidersController < ApplicationController
       flash[:notice] = 'Arrangören uppdaterades.'
       redirect_to(@culture_provider)
     else
-      render :action => "edit"
+      render action: "edit"
     end
   end
 

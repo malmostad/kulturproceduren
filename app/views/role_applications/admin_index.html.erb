@@ -1,5 +1,5 @@
 <%# coding: utf-8 %>
-<%= render :partial => "menu" -%>
+<%= render partial: "menu" -%>
 
 <% unless @applications.empty? -%>
   <table>
@@ -19,7 +19,7 @@
         <tr class="<%= cycle("", "even") %>">
           <td><%= type_string(application) %></td>
           <td><%= application.message %></td>
-          <td><%= l application.created_at, :format => :short %></td>
+          <td><%= l application.created_at, format: :short %></td>
           <td><%= application.user.name %></td>
           <td><%= link_to "Besvara", edit_role_application_path(application) %></td>
         </tr>

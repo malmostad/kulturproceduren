@@ -14,11 +14,11 @@ class CultureProviderLinksController < ApplicationController
     if @culture_provider
       @culture_providers = CultureProvider.not_linked_to_culture_provider(@culture_provider)
         .order(sort_order("name"))
-        .paginate(:page => params[:page])
+        .paginate(page: params[:page])
     elsif @event
       @culture_providers = CultureProvider.not_linked_to_event(@event)
         .order(sort_order("name"))
-        .paginate(:page => params[:page])
+        .paginate(page: params[:page])
     end
   end
 
@@ -30,11 +30,11 @@ class CultureProviderLinksController < ApplicationController
       new_link.linked_culture_providers << @culture_provider
 
       flash[:notice] = "Länken mellan arrangörerna skapades."
-      redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
+      redirect_to culture_provider_culture_provider_links_url(culture_provider_id: @culture_provider.id)
     elsif @event
       @event.linked_culture_providers << new_link
       flash[:notice] = "Länken mellan arrangören och evenemanget skapades."
-      redirect_to event_culture_provider_links_url(:event_id => @event.id)
+      redirect_to event_culture_provider_links_url(event_id: @event.id)
     end
   end
 
@@ -47,11 +47,11 @@ class CultureProviderLinksController < ApplicationController
 
       flash[:notice] = "Länken mellan arrangörerna togs bort."
 
-      redirect_to culture_provider_culture_provider_links_url(:culture_provider_id => @culture_provider.id)
+      redirect_to culture_provider_culture_provider_links_url(culture_provider_id: @culture_provider.id)
     elsif @event
       @event.linked_culture_providers.delete(linked)
       flash[:notice] = "Länken mellan arrangören och evenemanget togs bort."
-      redirect_to event_culture_provider_links_url(:event_id => @event.id)
+      redirect_to event_culture_provider_links_url(event_id: @event.id)
     end
   end
 

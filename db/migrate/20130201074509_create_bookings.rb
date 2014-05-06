@@ -3,7 +3,7 @@ class CreateBookings < ActiveRecord::Migration
   def self.up
     create_table :bookings do |t|
       t.datetime :booked_at
-      t.boolean :unbooked, :default => false
+      t.boolean :unbooked, default: false
       t.datetime :unbooked_at
       t.integer :unbooked_by_id
 

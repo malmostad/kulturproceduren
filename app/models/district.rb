@@ -2,7 +2,7 @@
 # A district contains multiple schools.
 class District < ActiveRecord::Base
   
-  has_many(:schools, lambda{ order "name ASC" }, :dependent => :destroy) do
+  has_many(:schools, lambda{ order "name ASC" }, dependent: :destroy) do
 
     # Finds all schools in the district that has children in the given age span.
     def find_by_age_span(from, to)
@@ -11,7 +11,7 @@ class District < ActiveRecord::Base
     end
   end
 
-  has_many :allotments, :dependent => :nullify
+  has_many :allotments, dependent: :nullify
   has_many :tickets
 
   has_and_belongs_to_many :users
@@ -22,7 +22,7 @@ class District < ActiveRecord::Base
     :extens_id
 
   validates_presence_of :name,
-    :message => "Namnet får inte vara tomt."
+    message: "Namnet får inte vara tomt."
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_schools

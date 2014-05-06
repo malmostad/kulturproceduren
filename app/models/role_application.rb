@@ -26,10 +26,10 @@ class RoleApplication < ActiveRecord::Base
     :culture_provider_id,       :culture_provider
 
   validates_presence_of :message,
-    :message => "Meddelandet får inte vara tomt",
-    :if => Proc.new { |application| application.role.is? :booker }
+    message: "Meddelandet får inte vara tomt",
+    if: Proc.new { |application| application.role.is? :booker }
   validate :must_have_culture_provider,
-    :if => Proc.new { |application| application.role.is? :culture_worker }
+    if: Proc.new { |application| application.role.is? :culture_worker }
 
 
   protected

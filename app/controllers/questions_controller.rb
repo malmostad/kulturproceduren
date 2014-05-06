@@ -23,7 +23,7 @@ class QuestionsController < ApplicationController
 
     if @question.template
       @questions =Question.where(template: true).order(sort_order("question"))
-      render :action => "index"
+      render action: "index"
     else
       @questionnaire = Questionnaire.find params[:questionnaire_id]
       @template_questions = Question.where(template: true).order("question ASC")
@@ -42,16 +42,16 @@ class QuestionsController < ApplicationController
 
         redirect_to questionnaire
       else
-        redirect_to :action => "index"
+        redirect_to action: "index"
       end
     else
       if params[:questionnaire_id]
         @questionnaire      = Questionnaire.find params[:questionnaire_id]
         @template_questions = Question.where(template: true).order("question ASC")
-        render :template => "questionnaires/show"
+        render template: "questionnaires/show"
       else
         @questions = Question.where(template: true).order(sort_order("question"))
-        render :action => "index"
+        render action: "index"
       end
     end
   end
@@ -66,16 +66,16 @@ class QuestionsController < ApplicationController
         questionnaire = Questionnaire.find params[:questionnaire_id]
         redirect_to questionnaire
       else
-        redirect_to :action => "index"
+        redirect_to action: "index"
       end
     else      
       if params[:questionnaire_id]
         @questionnaire      = Questionnaire.find params[:questionnaire_id]
         @template_questions = Question.where(template: true).order("question ASC")
-        render :action => "edit"
+        render action: "edit"
       else
         @questions = Question.where(template: true).order(sort_order("question"))
-        render :action => "index"
+        render action: "index"
       end
     end
   end
@@ -90,7 +90,7 @@ class QuestionsController < ApplicationController
       questionnaire = Questionnaire.find params[:questionnaire_id]
       redirect_to questionnaire
     else      
-      redirect_to :action => "index"
+      redirect_to action: "index"
     end
   end
 

@@ -1,15 +1,15 @@
 <%# coding: utf-8 %>
-<%= render :partial => "users/menu" %>
+<%= render partial: "users/menu" %>
 
 <% if user_online? -%>
 
   <p>
-    <%= link_to "Logga ut", :action => "logout" %>
+    <%= link_to "Logga ut", action: "logout" %>
   </p>
 
 <% else -%>
 
-  <%= form_for User.new, :url => { :action => "login" }, :builder => KPFormBuilder, :html => { :class => "login-form" } do |f| %>
+  <%= form_for User.new, url: { action: "login" }, builder: KPFormBuilder, html: { class: "login-form" } do |f| %>
     <%= f.title "Logga in" -%>
 
     <%= f.fields do -%>

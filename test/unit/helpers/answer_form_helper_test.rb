@@ -3,7 +3,7 @@ require 'test_helper'
 
 class AnswerFormHelperTest < ActionView::TestCase
   test "get question fragment" do
-    q = build(:question, :qtype => "QuestionMark")
+    q = build(:question, qtype: "QuestionMark")
     assert_equal "answer_form/mark", get_question_fragment(q)
     q.qtype = "QuestionText"
     assert_equal "answer_form/text", get_question_fragment(q)

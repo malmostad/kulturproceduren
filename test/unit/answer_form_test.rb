@@ -9,10 +9,10 @@ class AnswerFormTest < ActiveSupport::TestCase
   end
 
   test "valid answer?" do
-    mandatory     = create_list(:question, 2, :mandatory => true)
+    mandatory     = create_list(:question, 2, mandatory: true)
     regular       = create_list(:question, 2)
-    questionnaire = create(:questionnaire, :questions => mandatory + regular)
-    answer_form   = create(:answer_form,   :questionnaire => questionnaire)
+    questionnaire = create(:questionnaire, questions: mandatory + regular)
+    answer_form   = create(:answer_form,   questionnaire: questionnaire)
 
     mandatory_ids = mandatory.collect(&:id)
     regular_ids   = regular.collect(&:id)
@@ -37,10 +37,10 @@ class AnswerFormTest < ActiveSupport::TestCase
   end
 
   test "answer" do
-    mandatory     = create_list(:question, 2, :mandatory => true)
+    mandatory     = create_list(:question, 2, mandatory: true)
     regular       = create_list(:question, 2)
-    questionnaire = create(:questionnaire, :questions    => mandatory + regular)
-    answer_form   = create(:answer_form, :questionnaire  => questionnaire)
+    questionnaire = create(:questionnaire, questions: mandatory + regular)
+    answer_form   = create(:answer_form, questionnaire: questionnaire)
     # Generate an answer hash: { question_id => "answer", question_id => "answer" ... }
     answer        = Hash[(mandatory.collect(&:id) + regular.collect(&:id)).zip(["foo"]*4)]
 
@@ -54,14 +54,14 @@ class AnswerFormTest < ActiveSupport::TestCase
   end
 
   test "find_overdue" do
-    regular    = create(:occasion, :date => Date.today - 10)
-    wrong_date = create(:occasion, :date => Date.today - 5)
-    cancelled  = create(:occasion, :date => Date.today - 10, :cancelled => true)
+    regular    = create(:occasion, date: Date.today - 10)
+    wrong_date = create(:occasion, date: Date.today - 5)
+    cancelled  = create(:occasion, date: Date.today - 10, cancelled: true)
 
-    create_list(:answer_form, 10, :occasion => regular)
-    create(:answer_form, :occasion => regular, :completed => true)
-    create(:answer_form, :occasion => wrong_date)
-    create(:answer_form, :occasion => cancelled)
+    create_list(:answer_form, 10, occasion: regular)
+    create(:answer_form, occasion: regular, completed: true)
+    create(:answer_form, occasion: wrong_date)
+    create(:answer_form, occasion: cancelled)
 
     result = AnswerForm.find_overdue(Date.today - 10)
     assert_equal 10, result.length

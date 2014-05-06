@@ -9,14 +9,14 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   test "active by controller" do
-    @dummy_params = { :controller => "test", :action => "test" }
+    @dummy_params = { controller: "test", action: "test" }
     assert_equal " active ", active_by_controller("test", "test2")
     assert_equal " active ", active_by_controller("test2", "test")
     assert_nil active_by_controller("test2")
   end
 
   test "active by action" do
-    @dummy_params = { :controller => "test", :action => "test" }
+    @dummy_params = { controller: "test", action: "test" }
     assert_equal " active ", active_by_action("test", "test", "test1")
     assert_equal " active ", active_by_action("test", "test1", "test")
     assert_nil active_by_action("test1", "test")
@@ -55,25 +55,25 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal paragraphize("abc\ndef\n\nghi", 'class="description"'), show_description("abc\ndef\n\nghi")
     self.expects(:sanitize).with(
       "<p>foo</p>",
-      :tags => %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
-      :attributes => %w(href target title style)
+      tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
+      attributes: %w(href target title style)
     ).returns("ok_value")
     assert_equal '<div class="description">ok_value</div>', show_description("<p>foo</p>")
   end
 
   def link_to_unless(condition, title, url)
     @link_to_result = {
-      :condition => condition,
-      :title => title,
-      :url => url
+      condition: condition,
+      title: title,
+      url: url
     }
   end
 
   test "sort link" do
     @dummy_params = {
-      :controller => "test",
-      :action => "test",
-      :d => "up", :c => "testcolumn"
+      controller: "test",
+      action: "test",
+      d: "up", c: "testcolumn"
     }
     sort_link("link title", "testcolumn")
     assert_equal "link title", @link_to_result[:title]

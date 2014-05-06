@@ -4,8 +4,8 @@ class RoleApplicationsController < ApplicationController
   layout "standard"
   
   before_filter :authenticate
-  before_filter :deny_admin, :only => [ :create ]
-  before_filter :require_admin, :only => [ :archive, :edit, :update ]
+  before_filter :deny_admin, only: [ :create ]
+  before_filter :require_admin, only: [ :archive, :edit, :update ]
   
   # For administrators: displays a list of all incoming unanswered role applications.
   #
@@ -18,7 +18,7 @@ class RoleApplicationsController < ApplicationController
         .order(sort_order("created_at"))
         .paginate(page: params[:page])
 
-      render :action => "admin_index", :layout => "admin"
+      render action: "admin_index", layout: "admin"
     else
 
       @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
@@ -36,7 +36,7 @@ class RoleApplicationsController < ApplicationController
     @applications = RoleApplication.includes(:user, :role, :culture_provider)
       .order(sort_order("created_at"))
       .paginate(page: params[:page])
-    render :layout => "admin"
+    render layout: "admin"
   end
   
   def edit
@@ -44,9 +44,9 @@ class RoleApplicationsController < ApplicationController
 
     if @application.state != RoleApplication::PENDING
       flash[:warning] = "Behörighetsansökan är redan besvarad"
-      redirect_to :action => "archive"
+      redirect_to action: "archive"
     else
-      render :layout => "admin"
+      render layout: "admin"
     end
   end
 
@@ -78,7 +78,7 @@ class RoleApplicationsController < ApplicationController
         @host_appl = @application
       end
 
-      render :action => "index"
+      render action: "index"
     end
   end
 
@@ -99,16 +99,16 @@ class RoleApplicationsController < ApplicationController
           if @application.culture_provider
             @application.user.culture_providers << @application.culture_provider
           else
-            @application.user.culture_providers << CultureProvider.create(:name => @application.new_culture_provider_name)
+            @application.user.culture_providers << CultureProvider.create(name: @application.new_culture_provider_name)
           end
         end
 
       end
 
       flash[:notice] = 'Ansökan besvarades.'
-      redirect_to :action => "index"
+      redirect_to action: "index"
     else
-      render :action => "edit", :layout => "admin"
+      render action: "edit", layout: "admin"
     end
   end
   
@@ -134,7 +134,7 @@ class RoleApplicationsController < ApplicationController
   def deny_admin
     if current_user.has_role? :admin
       flash[:notice] = "Du har redan administratörsbehörigheter och kan därför inte ansöka om behörigheter."
-      redirect_to :action => "index"
+      redirect_to action: "index"
     end
   end
 

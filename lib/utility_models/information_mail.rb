@@ -10,12 +10,12 @@ module UtilityModels
     attr_reader :event
 
     validates_presence_of :recipients,
-      :message => "En mottagare måste anges"
+      message: "En mottagare måste anges"
     validate :validate_recipients
     validates_presence_of :subject,
-      :message => "Ämnesraden får inte vara tom"
+      message: "Ämnesraden får inte vara tom"
     validates_presence_of :body,
-      :message => "Meddelandet får inte vara tomt"
+      message: "Meddelandet får inte vara tomt"
 
     def initialize(params = {})
       @recipients = params[:recipients]

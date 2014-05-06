@@ -41,7 +41,7 @@ num_category_groups = 0
       <% end -%>
 
       <tr class="<%= cycle('', 'even')  %>">
-        <td class="time"><%= l occasion.start_time, :format => :only_time %></td>
+        <td class="time"><%= l occasion.start_time, format: :only_time %></td>
         <td class="event"><%= link_to occasion.event.name, occasion.event %></td>
 
         <% unless hide_culture_provider -%>
@@ -69,15 +69,15 @@ num_category_groups = 0
               <% available_seats = [ occasion.available_seats.to_i, occasion.event.unbooked_tickets.to_i ].min %>
 
               <% if available_seats > 0 %>
-                <%= link_to "Boka", new_occasion_booking_path(occasion), :title => "#{available_seats} lediga platser" %>
+                <%= link_to "Boka", new_occasion_booking_path(occasion), title: "#{available_seats} lediga platser" %>
               <% else %>
                 <span class="sold-out">Fullbokat</span>
               <% end %>
 
               <a href="<%= ticket_availability_occasion_path(occasion) %>"
                  class="ticket-availability-link"
-                 title="Platstillgänglighet för <%= occasion.event.name %> <%= occasion.date %> <%= l occasion.start_time, :format => :only_time %>">
-                <%= image_tag "information.png", :alt => "Platstillgänglighet" %>
+                 title="Platstillgänglighet för <%= occasion.event.name %> <%= occasion.date %> <%= l occasion.start_time, format: :only_time %>">
+                <%= image_tag "information.png", alt: "Platstillgänglighet" %>
               </a>
             <% end %>
           <% else %>
@@ -90,8 +90,8 @@ num_category_groups = 0
         </td>
 
         <td class="icon-indicator">
-          <%= image_tag "icon_rullstol.png", :alt => "Rullstolsplatser finns", :title => "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
-          <%= image_tag "icon_horslinga.png", :alt => "Hörselslinga finns", :title => "Hörselslinga finns" if occasion.telecoil %>
+          <%= image_tag "icon_rullstol.png", alt: "Rullstolsplatser finns", title: "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0 %>
+          <%= image_tag "icon_horslinga.png", alt: "Hörselslinga finns", title: "Hörselslinga finns" if occasion.telecoil %>
         </td>
       </tr>
 

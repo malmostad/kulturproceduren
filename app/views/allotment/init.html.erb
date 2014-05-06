@@ -19,14 +19,14 @@
     Detta evenemang har redan <%= @event.tickets.count %> st biljetter fördelade.
 
     <%= link_to "Ta bort fördelningen helt",
-    { :action => "destroy", :id => params[:id] },
-    { :confirm => "Är du säker?" } %>.
+    { action: "destroy", id: params[:id] },
+    { confirm: "Är du säker?" } %>.
   </p>
 <% end -%>
 
 <%= form_tag(
-  { :action => "assign_params", :id => params[:id] },
-  { :id => "kp-allotment-init-form", :class => "allotment-init-form" }
+  { action: "assign_params", id: params[:id] },
+  { id: "kp-allotment-init-form", class: "allotment-init-form" }
 ) do -%>
 
   <fieldset>

@@ -16,9 +16,9 @@
 
 <%
   if @culture_provider
-    form_url = select_culture_provider_culture_provider_event_links_path(:culture_provider_id => @culture_provider.id)
+    form_url = select_culture_provider_culture_provider_event_links_path(culture_provider_id: @culture_provider.id)
   elsif @event
-    form_url = select_culture_provider_event_event_links_path(:event_id => @event.id)
+    form_url = select_culture_provider_event_event_links_path(event_id: @event.id)
   end
 %>
 
@@ -49,14 +49,14 @@
             <% if @culture_provider %>
               <%= link_to "Välj",
                 select_event_culture_provider_event_link_path(
-                  :culture_provider_id => @culture_provider.id,
-                  :id => event.id
+                  culture_provider_id: @culture_provider.id,
+                  id: event.id
               ) %>
             <% elsif @event %>
               <%= link_to "Välj",
                 select_event_event_event_link_path(
-                  :event_id => @event.id,
-                  :id => event.id
+                  event_id: @event.id,
+                  id: event.id
               ) %>
             <% end %>
           </td>

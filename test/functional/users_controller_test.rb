@@ -5,13 +5,13 @@ class UsersControllerTest < ActionController::TestCase
   def setup
     @controller.expects(:authenticate).at_least_once.returns(true)
 
-    @admin = create(:user, :roles => [roles(:admin)])
+    @admin = create(:user, roles: [roles(:admin)])
   end
 
   test "load user" do
     user = create(:user)
     session[:current_user_id] = user.id
-    get :edit, :id => @admin.id
+    get :edit, id: @admin.id
     assert_equal user, assigns(:user)
   end
 
@@ -25,7 +25,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal    [@admin],  assigns(:users)
   end
   test "index for coordinator" do
-    coordinator               = create(:user, :roles => [roles(:coordinator)])
+    coordinator               = create(:user, roles: [roles(:coordinator)])
     session[:current_user_id] = coordinator.id
     districts                 = [create_list(:district, 3), @admin.districts, coordinator.districts].flatten.sort_by(&:name)
 
@@ -44,9 +44,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test "apply filter" do
     session[:user_list_filter] = nil
-    post :apply_filter, :district_id => "10", :name => "name"
+    post :apply_filter, district_id: "10", name: "name"
     assert_redirected_to users_url()
-    assert_equal(        { :district_id => 10, :name => "name" }, session[:user_list_filter])
+    assert_equal(        { district_id: 10, name: "name" }, session[:user_list_filter])
 
     session[:user_list_filter] = nil
     post :apply_filter
@@ -54,12 +54,12 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal(        {}, session[:user_list_filter])
 
     session[:user_list_filter] = nil
-    post :apply_filter, :district_id => "-1", :name => ""
+    post :apply_filter, district_id: "-1", name: ""
     assert_redirected_to users_url()
     assert_equal(        {}, session[:user_list_filter])
 
-    session[:user_list_filter] = { :district_id => 10, :name => "name"}
-    post :apply_filter, :district_id => "21", :name => "name2", :clear => true
+    session[:user_list_filter] = { district_id: 10, name: "name"}
+    post :apply_filter, district_id: "21", name: "name2", clear: true
     assert_redirected_to users_url()
     assert_equal(        {}, session[:user_list_filter])
   end
@@ -69,18 +69,18 @@ class UsersControllerTest < ActionController::TestCase
 
     user = create(:user)
 
-    get :show, :id => user.id
+    get :show, id: user.id
     assert_response :success
     assert_template "users/show"
     assert_equal    user, assigns(:user)
   end
   test "show for coordinator" do
-    coordinator               = create(:user, :roles => [roles(:coordinator)])
+    coordinator               = create(:user, roles: [roles(:coordinator)])
     session[:current_user_id] = coordinator.id
 
     user = create(:user)
 
-    get :show, :id => user.id
+    get :show, id: user.id
     assert_response :success
     assert_template "users/show_readonly"
     assert_equal    user, assigns(:user)
@@ -91,7 +91,7 @@ class UsersControllerTest < ActionController::TestCase
 
     requested_user = create(:user)
 
-    get :show, :id => requested_user.id
+    get :show, id: requested_user.id
     assert_response :success
     assert_template "users/show"
     assert_equal    user, assigns(:user)
@@ -100,13 +100,13 @@ class UsersControllerTest < ActionController::TestCase
   test "grant" do
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    user = create(:user, :roles => [roles(:booker)])
+    user = create(:user, roles: [roles(:booker)])
 
-    post :grant, :id => user.id, :role => "booker"
+    post :grant, id: user.id, role: "booker"
     assert_redirected_to user
     assert_nil           flash[:notice]
 
-    post :grant, :id => user.id, :role => "coordinator"
+    post :grant, id: user.id, role: "coordinator"
     assert_redirected_to user
     assert_equal         "Användaren tilldelades rättigheter.", flash[:notice]
     assert               user.roles(true).include?(roles(:coordinator))
@@ -115,13 +115,13 @@ class UsersControllerTest < ActionController::TestCase
   test "revoke" do
     @controller.expects(:require_admin).at_least_once.returns(true)
 
-    user = create(:user, :roles => [roles(:booker)])
+    user = create(:user, roles: [roles(:booker)])
 
-    post :revoke, :id => user.id, :role => "coordinator"
+    post :revoke, id: user.id, role: "coordinator"
     assert_redirected_to user
     assert_nil           flash[:notice]
 
-    post :revoke, :id => user.id, :role => "booker"
+    post :revoke, id: user.id, role: "booker"
     assert_redirected_to user
     assert_equal         "Användarens rättigheter återkallades.", flash[:notice]
     assert               !user.roles(true).include?(roles(:booker))
@@ -142,9 +142,9 @@ class UsersControllerTest < ActionController::TestCase
     session[:current_user_id] = @admin.id
 
     districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
-    user      = create(:user, :districts => [districts.second])
+    user      = create(:user, districts: [districts.second])
     
-    get :edit, :id => user.id
+    get :edit, id: user.id
     assert_response :success
     assert_equal    user,      assigns(:user)
     assert_equal    districts, assigns(:districts)
@@ -154,7 +154,7 @@ class UsersControllerTest < ActionController::TestCase
     user                      = create(:user)
     session[:current_user_id] = user.id
     
-    get :edit_password, :id => user.id
+    get :edit_password, id: user.id
     assert_response :success
     assert_equal    user, assigns(:user)
     assert_nil      assigns(:user).password
@@ -166,7 +166,7 @@ class UsersControllerTest < ActionController::TestCase
     districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
 
     # Invalid
-    post :create, :user => { :username => "foo", :password => "foo", :password_confirmation => "bar" }
+    post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
     assert_response :success
     assert_equal    districts, assigns(:districts)
     assert          assigns(:user).new_record?
@@ -178,8 +178,8 @@ class UsersControllerTest < ActionController::TestCase
     user_attributes = attributes_for(:user)
     user_attributes[:district_ids] = user_attributes.delete(:districts).map(&:id)
 
-    post :create, :user => user_attributes
-    assert_redirected_to :controller => "login"
+    post :create, user: user_attributes
+    assert_redirected_to controller: "login"
     assert_equal         "Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.", flash[:notice]
     assert_equal         User.last.id, assigns(:user).id
   end
@@ -190,7 +190,7 @@ class UsersControllerTest < ActionController::TestCase
     districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
 
     # Invalid
-    post :create, :user => { :username => "foo", :password => "foo", :password_confirmation => "bar" }
+    post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
     assert_response :success
     assert_equal    districts, assigns(:districts)
     assert          assigns(:user).new_record?
@@ -202,19 +202,19 @@ class UsersControllerTest < ActionController::TestCase
     user_attributes = attributes_for(:user)
     user_attributes[:district_ids] = user_attributes.delete(:districts).map(&:id)
 
-    post :create, :user => user_attributes
+    post :create, user: user_attributes
     assert_redirected_to User.last
     assert_equal         "Användaren skapades. Den kan nu logga in med användarnamn och lösenord.", flash[:notice]
   end
   test "create, ldap username taken" do
-    APP_CONFIG.replace(:salt_length => 4, :ldap => { :username_prefix => "ldap_" })
+    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap_" })
 
     @controller.unstub(:authenticate)
     districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
 
     @controller.expects(:ldap_user_exists).with("foo").returns false
 
-    post :create, :user => { :username => "foo", :password => "foo", :password_confirmation => "bar" }
+    post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
 
     assert_response :success
     assert_equal    districts, assigns(:districts)
@@ -226,11 +226,11 @@ class UsersControllerTest < ActionController::TestCase
 
   test "update" do
     districts                 = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
-    user                      = create(:user, :username => "old_username", :name => "old name", :districts => @admin.districts)
+    user                      = create(:user, username: "old_username", name: "old name", districts: @admin.districts)
     session[:current_user_id] = user.id
 
     # Invalid
-    put :update, :id => user.id, :user => { :name => ""}
+    put :update, id: user.id, user: { name: ""}
     assert_response :success
     assert_template "users/edit"
     assert_equal    districts, assigns(:districts)
@@ -238,13 +238,13 @@ class UsersControllerTest < ActionController::TestCase
 
     # Valid
     put(:update,
-      :id => user.id,
-      :user => {
-        :name         => "new name",
-        :username     => "new_username",
-        :email        => "a@b.com",
-        :cellphone    => "123",
-        :district_ids => user.districts.collect(&:id)
+      id: user.id,
+      user: {
+        name: "new name",
+        username: "new_username",
+        email: "a@b.com",
+        cellphone: "123",
+        district_ids: user.districts.collect(&:id)
       }
     )
     assert_redirected_to user
@@ -254,55 +254,55 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "update password, normal user" do
-    user = create(:user, :password => "foo")
+    user = create(:user, password: "foo")
     session[:current_user_id] = user.id
 
     # Wrong current password
-    put :update_password, :id => user.id, :current_password => "bar", :user => { :password => "bar", :password_confirmation => "baz" }
+    put :update_password, id: user.id, current_password: "bar", user: { password: "bar", password_confirmation: "baz" }
     assert_redirected_to edit_password_user_url(user)
     assert_equal         "Felaktigt lösenord.", flash[:warning]
 
     # Empty password
-    put :update_password, :id => user.id, :current_password => "foo", :user => { :password => "", :password_confirmation => "baz" }
+    put :update_password, id: user.id, current_password: "foo", user: { password: "", password_confirmation: "baz" }
     assert_redirected_to edit_password_user_url(user)
     assert_equal         "Lösenordet får inte vara tomt.", flash[:warning]
 
     # Confirmation not matching password
-    put :update_password, :id => user.id, :current_password => "foo", :user => { :password => "bar", :password_confirmation => "baz" }
+    put :update_password, id: user.id, current_password: "foo", user: { password: "bar", password_confirmation: "baz" }
     assert_redirected_to edit_password_user_url(user)
     assert_equal         "Lösenordsbekräftelsen matchar inte.", flash[:warning]
 
     # OK
-    put :update_password, :id => user.id, :current_password => "foo", :user => { :password => "bar", :password_confirmation => "bar" }
-    assert_redirected_to :action => "index"
+    put :update_password, id: user.id, current_password: "foo", user: { password: "bar", password_confirmation: "bar" }
+    assert_redirected_to action: "index"
     assert_equal         "Lösenordet uppdaterades.", flash[:notice]
   end
   test "update password, admin" do
-    user = create(:user, :password => "foo")
+    user = create(:user, password: "foo")
     session[:current_user_id] = @admin.id
 
     # Empty password
-    put :update_password, :id => user.id, :user => { :password => "", :password_confirmation => "baz" }
+    put :update_password, id: user.id, user: { password: "", password_confirmation: "baz" }
     assert_redirected_to edit_password_user_url(user)
     assert_equal         "Lösenordet får inte vara tomt.", flash[:warning]
 
     # Confirmation not matching password
-    put :update_password, :id => user.id, :user => { :password => "bar", :password_confirmation => "baz" }
+    put :update_password, id: user.id, user: { password: "bar", password_confirmation: "baz" }
     assert_redirected_to edit_password_user_url(user)
     assert_equal         "Lösenordsbekräftelsen matchar inte.", flash[:warning]
 
     # OK
-    put :update_password, :id => user.id, :user => { :password => "bar", :password_confirmation => "bar" }
-    assert_redirected_to :action => "index"
+    put :update_password, id: user.id, user: { password: "bar", password_confirmation: "bar" }
+    assert_redirected_to action: "index"
     assert_equal         "Lösenordet uppdaterades.", flash[:notice]
   end
 
   test "destroy" do
     @controller.expects(:require_admin).at_least_once.returns(true)
     user = create(:user)
-    delete :destroy, :id => user.id
+    delete :destroy, id: user.id
     assert_redirected_to users_url()
-    assert_nil           User.where(:id => user.id).first
+    assert_nil           User.where(id: user.id).first
   end
 
   test "add culture provider" do
@@ -312,13 +312,13 @@ class UsersControllerTest < ActionController::TestCase
     user             = create(:user)
     user.culture_providers << culture_provider
 
-    post :add_culture_provider, :id => user.id, :culture_provider_id => culture_provider.id
+    post :add_culture_provider, id: user.id, culture_provider_id: culture_provider.id
     assert_redirected_to user
     assert_nil           flash[:notice]
 
     user.culture_providers.clear
 
-    post :add_culture_provider, :id => user.id, :culture_provider_id => culture_provider.id
+    post :add_culture_provider, id: user.id, culture_provider_id: culture_provider.id
     assert_redirected_to user
     assert_equal         "Användarens rättigheter uppdaterades.", flash[:notice]
     assert               user.culture_providers(true).include?(culture_provider)
@@ -330,13 +330,13 @@ class UsersControllerTest < ActionController::TestCase
     culture_provider = create(:culture_provider)
     user             = create(:user)
 
-    post :remove_culture_provider, :id => user.id, :culture_provider_id => culture_provider.id
+    post :remove_culture_provider, id: user.id, culture_provider_id: culture_provider.id
     assert_redirected_to user
     assert_nil           flash[:notice]
 
     user.culture_providers << culture_provider
 
-    post :remove_culture_provider, :id => user.id, :culture_provider_id => culture_provider.id
+    post :remove_culture_provider, id: user.id, culture_provider_id: culture_provider.id
     assert_redirected_to user
     assert_equal         "Användarens rättigheter uppdaterades.", flash[:notice]
     assert               !user.culture_providers(true).include?(culture_provider)
@@ -353,17 +353,17 @@ class UsersControllerTest < ActionController::TestCase
     @controller.unstub(:authenticate)
 
     # Neither username nor password
-    post :send_password_reset_confirmation, :user => {}
+    post :send_password_reset_confirmation, user: {}
     assert_redirected_to request_password_reset_users_url()
     assert_equal         "Du måste ange ett användarnamn eller en epostadress.", flash[:warning]
 
     # No user found
-    post :send_password_reset_confirmation, :user => { :username => "does not exist" }
+    post :send_password_reset_confirmation, user: { username: "does not exist" }
     assert_redirected_to request_password_reset_users_url()
     assert_equal         "Användaren finns inte i systemet.", flash[:warning]
 
 
-    mailer_mock = stub(:deliver => true)
+    mailer_mock = stub(deliver: true)
     mailer_mock.expects(:deliver).twice
 
     # User found by username
@@ -371,7 +371,7 @@ class UsersControllerTest < ActionController::TestCase
     UserMailer.expects(:password_reset_confirmation_email).with(user).returns(mailer_mock)
     assert_nil user.request_key
 
-    post :send_password_reset_confirmation, :user => { :username => user.username }
+    post :send_password_reset_confirmation, user: { username: user.username }
     assert_redirected_to root_url()
     assert_equal         "Ett bekräftelsemeddelande har nu skickats till den epostadress som är angiven i användarkontot. Lösenordet återställs först efter att du har följt instruktionerna i meddelandet.", flash[:notice]
     assert               !user.reload.request_key.nil?
@@ -381,7 +381,7 @@ class UsersControllerTest < ActionController::TestCase
     UserMailer.expects(:password_reset_confirmation_email).with(user).returns(mailer_mock)
     assert_nil user.request_key
 
-    post :send_password_reset_confirmation, :user => { :email => user.email }
+    post :send_password_reset_confirmation, user: { email: user.email }
     assert_redirected_to root_url()
     assert_equal         "Ett bekräftelsemeddelande har nu skickats till den epostadress som är angiven i användarkontot. Lösenordet återställs först efter att du har följt instruktionerna i meddelandet.", flash[:notice]
     assert               !user.reload.request_key.nil?
@@ -390,23 +390,23 @@ class UsersControllerTest < ActionController::TestCase
   test "reset password" do
     @controller.unstub(:authenticate)
 
-    user = create(:user, :password => "foo")
+    user = create(:user, password: "foo")
     user.generate_request_key()
     user.save!
 
     # Wrong request key
-    put :reset_password, :id => user.id, :key => "abc"
+    put :reset_password, id: user.id, key: "abc"
     assert_redirected_to root_url()
     assert_equal         "Felaktig förfrågan.", flash[:warning]
 
-    mailer_mock = stub(:deliver => true)
+    mailer_mock = stub(deliver: true)
     mailer_mock.expects(:deliver)
 
     # Correct request key
     UserMailer.expects(:password_reset_email).with(user, anything()).returns(mailer_mock)
 
-    put :reset_password, :id => user.id, :key => user.request_key
-    assert_redirected_to :controller => "login", :action => "index"
+    put :reset_password, id: user.id, key: user.request_key
+    assert_redirected_to controller: "login", action: "index"
     assert_equal         "Ditt nya lösenord har skickats till din epost.", flash[:notice]
     assert               !User.find(user.id).authenticate("foo")
   end

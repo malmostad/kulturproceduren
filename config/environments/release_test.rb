@@ -69,8 +69,8 @@ Kulturproceduren::Application.configure do
   config.action_mailer.perform_deliveries = false
 
   config.action_mailer.smtp_settings = {
-    :address => "localhost",
-    :port => 1025,
-    :domain => "localhost"
+    address: "localhost",
+    port: 1025,
+    domain: "localhost"
   }
 end

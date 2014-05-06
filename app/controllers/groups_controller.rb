@@ -1,13 +1,13 @@
 # -*- encoding : utf-8 -*-
 # Controller for managing groups
 class GroupsController < ApplicationController
-  layout "admin", :except => [ :options_list ]
+  layout "admin", except: [ :options_list ]
   
-  before_filter :authenticate, :except => [ :options_list, :select ]
-  before_filter :require_admin, :except => [ :options_list, :select ]
+  before_filter :authenticate, except: [ :options_list, :select ]
+  before_filter :require_admin, except: [ :options_list, :select ]
 
   def index
-    @groups = Group.includes(:school => :district)
+    @groups = Group.includes(school: :district)
       .order(sort_order("name"))
       .paginate(page: params[:page])
   end
@@ -27,7 +27,7 @@ class GroupsController < ApplicationController
   def edit
     @group = Group.find(params[:id])
     @schools = School.order("name ASC")
-    render :action => "new"
+    render action: "new"
   end
 
   def create
@@ -38,7 +38,7 @@ class GroupsController < ApplicationController
       redirect_to(@group)
     else
       @schools = School.order("name ASC")
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -50,7 +50,7 @@ class GroupsController < ApplicationController
       redirect_to(@group)
     else
       @schools = School.order("name ASC")
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -80,14 +80,14 @@ class GroupsController < ApplicationController
   def select
     group = Group.includes(:school).find(params[:group_id])
     session[:group_selection] = {
-      :district_id => group.school.district_id,
-      :school_id => group.school.id,
-      :group_id => group.id
+      district_id: group.school.district_id,
+      school_id: group.school.id,
+      group_id: group.id
     }
   rescue
   ensure
     if request.xhr?
-      render :text => "", :content_type => "text/plain"
+      render text: "", content_type: "text/plain"
     else
       redirect_to params[:return_to]
     end
@@ -101,7 +101,7 @@ class GroupsController < ApplicationController
     occasion_id = params[:occasion_id].to_i
 
     if (params[:school_id] && school_id <= 0) || (params[:occasion_id] && occasion_id <= 0)
-      render :text => "", :content_type => 'text/plain', :status => 404
+      render text: "", content_type: 'text/plain', status: 404
       return
     end
 
@@ -110,8 +110,8 @@ class GroupsController < ApplicationController
 
       school = School.find params[:school_id]
       session[:group_selection] = {
-        :district_id => school.district_id,
-        :school_id => school.id
+        district_id: school.district_id,
+        school_id: school.id
       }
     end
 
@@ -124,9 +124,9 @@ class GroupsController < ApplicationController
       @groups = Group.where(conditions).order("name ASC")
     end
 
-    render :action => "options_list", :content_type => 'text/plain'
+    render action: "options_list", content_type: 'text/plain'
   rescue
-    render :text => "", :content_type => 'text/plain', :status => 404
+    render text: "", content_type: 'text/plain', status: 404
   end
 
   private
