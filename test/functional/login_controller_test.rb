@@ -29,17 +29,6 @@ class LoginControllerTest < ActionController::TestCase
     assert_template "login/index"
     assert_equal    "Felaktigt användarnamn/lösenord", flash[:warning]
   end
-  test "login, invalid user" do
-    user = create(:user, username: "testuser", password: "zomg", roles: [roles(:admin)])
-    user.districts.clear
-
-    post :login, user: { username: "testuser", password: "zomg" }
-
-    assert_redirected_to edit_user_url(user)
-    assert_equal         "Du är nu inloggad", flash[:notice]
-    assert_equal         "Kulturproceduren har uppdaterats med ytterligare fält i din profil. Var god uppdatera din profil.", flash[:warning]
-    assert_equal         user.id,     session[:current_user_id]
-  end
   test "login, no roles" do
     user = create(:user, last_active: nil, username: "testuser", password: "zomg", roles: [])
 

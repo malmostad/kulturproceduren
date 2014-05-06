@@ -14,24 +14,6 @@
     <%= f.text_field :name %>
     <%= f.text_field :email %>
     <%= f.text_field :cellphone %>
-    <%= f.row do -%>
-      <%= f.validation_error_message :district_ids %>
-      <label>Område:</label>
-      <div class="input-container">
-        <ul class="checkbox-list">
-          <% @districts.each do |district| -%>
-            <li>
-              <%= check_box_tag "user[district_ids][]", district.id,
-                @user.districts.any? { |d| d.id == district.id },
-                id: "kp-user-district_ids-#{district.id}"
-              %>
-
-              <label for="kp-user-district_ids-<%= district.id %>"><%= district.name %></label>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
   <% end -%>
 
   <%= f.buttons do -%>

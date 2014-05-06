@@ -125,7 +125,6 @@ FactoryGirl.define do
     name                  { username }
     email                 { "#{username}@example.com" }
     cellphone             "012 - 34 567"
-    districts             { [FactoryGirl.create(:district)] }
     roles                 { [] }
   end
 

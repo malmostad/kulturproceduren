@@ -13,7 +13,6 @@ class UsersController < ApplicationController
   def index
     if current_user.has_role?(:admin, :coordinator)
       @users = User.filter session[:user_list_filter], params[:page], sort_order("username")
-      @districts = District.order("name ASC")
     else
       redirect_to current_user
     end
@@ -23,7 +22,6 @@ class UsersController < ApplicationController
     filter = {}
 
     if !params[:clear]
-      filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
       filter[:name] = params[:name].strip if !params[:name].blank?
 
       session[:user_list_filter] = filter
@@ -76,11 +74,9 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @districts = District.order(name: :asc)
   end
 
   def edit
-    @districts = District.order(name: :asc)
   end
 
   # Displays a form for changing a user's password.
@@ -109,7 +105,6 @@ class UsersController < ApplicationController
       return
     end
 
-    @districts = District.order("name ASC")
     @user.reset_password
     render action: "new"
   end
@@ -118,13 +113,11 @@ class UsersController < ApplicationController
     @user.name = params[:user][:name]
     @user.email = params[:user][:email]
     @user.cellphone = params[:user][:cellphone]
-    @user.district_ids = params[:user][:district_ids]
 
     if @user.save
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
-      @districts = District.order("name ASC")
       render action: "edit"
     end
   end

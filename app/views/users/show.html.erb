@@ -30,18 +30,6 @@
     <dd>
       <%= @user.cellphone %>
     </dd>
-    <dt>
-      Områden
-    </dt>
-    <dd>
-      <% unless @user.districts.empty? %>
-        <ul>
-          <% @user.districts.each do |district| -%>
-            <li><%= district.name %></li>
-          <% end %>
-        </ul>
-      <% end %>
-    </dd>
   </dl>
 </fieldset>
 
