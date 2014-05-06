@@ -8,7 +8,7 @@
   <legend><span>Välj klass/avdelning</span></legend>
 
   <div class="form-row district_id-field-row">
-    <%= label_tag "group_selection-district_id", "Välj stadsdel:" %>
+    <%= label_tag "group_selection-district_id", "Välj område:" %>
 
     <div class="input-container">
       <%= form_tag({ controller: "districts", action: "select" }) do %>
@@ -18,11 +18,11 @@
         <%= select_tag(
           "district_id",
           options_from_collection_for_select(@group_selection_collections[:districts], :id, :name, session[:group_selection][:district_id]),
-          { id: "kp-group_selection-district_id", prompt: "Välj stadsdel" })
+          { id: "kp-group_selection-district_id", prompt: "Välj område" })
         %>
 
         <noscript>
-          <%= submit_tag "Välj stadsdel" %>
+          <%= submit_tag "Välj område" %>
         </noscript>
       <% end %>
     </div>
@@ -51,7 +51,7 @@
 
           <%= select_tag(
             "school_id",
-            "<option>Välj stadsdel först</option>".html_safe,
+            "<option>Välj område först</option>".html_safe,
             disabled: true, id: "kp-group_selection-school_id")
           %>
 

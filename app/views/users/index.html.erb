@@ -5,7 +5,7 @@
     <ul>
       <% filter = (session[:user_list_filter] || {}) -%>
       <li class="district-filter">
-        <label for="kp-user-filter-district_id">Stadsdel:</label>
+        <label for="kp-user-filter-district_id">Område:</label>
         <%= select_tag "district_id",
           options_from_collection_for_select(@districts, :id, :name, filter[:district_id]).insert(0,'<option value="all">Alla</option>'),
           id: "kp-user-filter-district_id"

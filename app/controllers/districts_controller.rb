@@ -28,7 +28,7 @@ class DistrictsController < ApplicationController
     @district = District.new(params[:district])
 
     if @district.save
-      flash[:notice] = 'Stadsdelen skapades.'
+      flash[:notice] = 'Området skapades.'
       redirect_to(@district)
     else
       @school_types = SchoolType.order(:name)
@@ -40,7 +40,7 @@ class DistrictsController < ApplicationController
     @district = District.find(params[:id])
 
     if @district.update_attributes(params[:district])
-      flash[:notice] = 'Stadsdelen uppdaterades.'
+      flash[:notice] = 'Området uppdaterades.'
       redirect_to(@district)
     else
       @school_types = SchoolType.order(:name)
@@ -52,7 +52,7 @@ class DistrictsController < ApplicationController
     @district = District.find(params[:id])
     @district.destroy
 
-    flash[:notice] = "Stadsdelen togs bort."
+    flash[:notice] = "Området togs bort."
     redirect_to(districts_url)
   end
 

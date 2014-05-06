@@ -12,13 +12,17 @@
     <% end %>
   <% else %>
     <p class="description">
-      <%= event.alloted_group? ? "Skolor" : "Stadsdelar" %>
+      <%= event.alloted_group? ? "Skolor" : "Områden" %>
       med tilldelade eller bokade platser till evenemanget.
     </p>
 
     <p class="description">
-      Om inte din 
-      <%= event.alloted_group? ? "skola" : "stadsdel" %>
+      Om inte
+      <% if event.alloted_group? %>
+        din skola
+      <% else %>
+        ditt område
+      <% end %>
       finns med i listan kan du 
       <%= link_to "klicka här", new_event_notification_request_path(event) %>
       för att få ett meddelande när platser blir tillgängliga för din klass/avdelning.

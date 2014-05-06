@@ -20,7 +20,7 @@ class School < ActiveRecord::Base
   validates_presence_of :name,
     message: "Namnet får inte vara tomt"
   validates_presence_of :district,
-    message: "Skolan måste tillhöra en stadsdel"
+    message: "Skolan måste tillhöra ett område"
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups

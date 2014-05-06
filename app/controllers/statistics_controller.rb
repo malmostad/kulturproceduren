@@ -169,7 +169,7 @@ class StatisticsController < ApplicationController
   # Returns a comma-seperated values (CSV) string
   def visitor_stats_csv(visitor_stats)
     CSV.generate(col_sep: "\t") do |csv|
-      csv << [ "Stadsdel", "Skola", "Grupp", "Föreställning", "Antal bokade", "Antal barn", "Antal vuxna" ]
+      csv << [ "Område", "Skola", "Grupp", "Föreställning", "Antal bokade", "Antal barn", "Antal vuxna" ]
 
       visitor_stats.each do |v|
         csv << [ v["district_name"], v["school_name"], v["group_name"], v["event_name"], v["num_booked"], v["num_children"], v["num_adult"] ]

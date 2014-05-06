@@ -50,7 +50,7 @@
                         $("#kp-group_selection-school_id").html(data).removeAttr("disabled");
                     },
                     error: function() {
-                        $("#kp-group_selection-school_id").html("<option>Välj stadsdel först</option>");
+                        $("#kp-group_selection-school_id").html("<option>Välj område först</option>");
                     },
                     complete: function() {
                         $("#kp-group-selection-form").trigger("districtSelected", [ districtId ]);

@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,
     message: "Lösenordsbekräftelsen matchar inte lösenordet"
   validates_presence_of :district_ids,
-    message: "Minst en stadsdel måste väljas"
+    message: "Minst ett område måste väljas"
 
   # The id and salt is automatically generated and should not be changed.
   attr_protected :id, :salt

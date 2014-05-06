@@ -45,7 +45,7 @@ class StatisticsControllerTest < ActionController::TestCase
     ])
     @controller.expects(:send_csv).with(
       "besokstatistik_ht2012.tsv",
-      "Stadsdel\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
+      "Område\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
     ).returns(true)
 
     @controller.expects(:render).returns(true) # When mocking send_csv, the view is rendered
@@ -80,7 +80,7 @@ class StatisticsControllerTest < ActionController::TestCase
     ])
     @controller.expects(:send_csv).with(
       "besokstatistik_vt2013.tsv",
-      "Stadsdel\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
+      "Område\tSkola\tGrupp\tFöreställning\tAntal bokade\tAntal barn\tAntal vuxna\ndistrict name\tschool name\tgroup name\tevent name\t10\t9\t1\n"
     ).returns(true)
 
     get :visitors, id: "vt2013", event_id: vt2013.event.id, format: "xls"

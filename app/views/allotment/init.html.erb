@@ -47,11 +47,11 @@
                  id="kp-allotment-skip-district-transition"
                  name="allotment[skip_district_transition]"
                  class="checkbox"/>
-          <label for="kp-allotment-skip-district-transition">Hoppa över övergång till stadsdel</label>
+          <label for="kp-allotment-skip-district-transition">Hoppa över övergång till område</label>
         </div>
       </div>
       <div class="form-row district_transition_date-field-row">
-        <label for="kp-allotment-district_transition_date">Övergång till stadsdel:</label>
+        <label for="kp-allotment-district_transition_date">Övergång till område:</label>
         <div class="input-container">
           <input type="text"
                  id="kp-allotment-district_transition_date"
@@ -117,7 +117,7 @@
         <div class="input-container">
           <select id="kp-allotment-ticket_state" name="allotment[ticket_state]">
             <option value="<%= Event::ALLOTED_GROUP %>">Grupp</option>
-            <option value="<%= Event::ALLOTED_DISTRICT %>">Stadsdel</option>
+            <option value="<%= Event::ALLOTED_DISTRICT %>">Område</option>
             <option value="<%= Event::FREE_FOR_ALL %>">Hela staden</option>
           </select>
         </div>
@@ -126,7 +126,7 @@
 
     <% if !is_edit || [:alloted_group, :alloted_district].include?(@event.ticket_state) %>
       <div class="form-row district_id-field-row">
-        <label for="kp-allotment-district_id-all">Stadsdelar:</label>
+        <label for="kp-allotment-district_id-all">Områden:</label>
         <div class="input-container">
           <ul class="allotment-district-list checkbox-list">
             <li>

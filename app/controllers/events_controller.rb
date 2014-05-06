@@ -203,7 +203,7 @@ class EventsController < ApplicationController
 
   def ticket_allotment_csv(event)
     CSV.generate(col_sep: "\t") do |csv|
-      csv << [ "Stadsdel", "Skola", "Grupp", "Antal biljetter" ]
+      csv << [ "Område", "Skola", "Grupp", "Antal biljetter" ]
 
       event.allotments.each do |allotment|
         if allotment.for_group?

@@ -49,7 +49,7 @@ class DistrictsControllerTest < ActionController::TestCase
     school_type = create(:school_type)
     post :create, district: { name: "zomg", school_type_id: school_type.id }
     assert_redirected_to assigns(:district)
-    assert_equal         "Stadsdelen skapades.", flash[:notice]
+    assert_equal         "Området skapades.", flash[:notice]
     assert_equal         "zomg", District.find(assigns(:district).id).name
   end
 
@@ -66,7 +66,7 @@ class DistrictsControllerTest < ActionController::TestCase
     # Invalid
     put :update, id: district.id, district: { name: "zomg" }
     assert_redirected_to district
-    assert_equal         "Stadsdelen uppdaterades.", flash[:notice]
+    assert_equal         "Området uppdaterades.", flash[:notice]
 
     district.reload
     assert_equal "zomg", district.name
@@ -76,7 +76,7 @@ class DistrictsControllerTest < ActionController::TestCase
     district = create(:district)
     delete :destroy, id: district.id
     assert_redirected_to districts_url()
-    assert_equal         "Stadsdelen togs bort.", flash[:notice]
+    assert_equal         "Området togs bort.", flash[:notice]
     assert_nil           District.where(id: district.id).first
   end
 

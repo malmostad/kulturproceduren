@@ -61,7 +61,7 @@ class EventsControllerTest < ActionController::TestCase
 
     @controller.expects(:send_csv).with(
       "fordelning_evenemang#{allotment.event.id}.tsv",
-      "Stadsdel\tSkola\tGrupp\tAntal biljetter\n#{group.school.district.name}\t#{group.school.name}\t#{group.name}\t10\n"
+      "Område\tSkola\tGrupp\tAntal biljetter\n#{group.school.district.name}\t#{group.school.name}\t#{group.name}\t10\n"
     ).returns(true)
 
     get :ticket_allotment, id: allotment.event.id, format: "xls"
@@ -72,7 +72,7 @@ class EventsControllerTest < ActionController::TestCase
 
     @controller.expects(:send_csv).with(
       "fordelning_evenemang#{allotment.event.id}.tsv",
-      "Stadsdel\tSkola\tGrupp\tAntal biljetter\n#{district.name}\t\"\"\t\"\"\t11\n"
+      "Område\tSkola\tGrupp\tAntal biljetter\n#{district.name}\t\"\"\t\"\"\t11\n"
     ).returns(true)
 
     get :ticket_allotment, id: allotment.event.id, format: "xls"
@@ -82,7 +82,7 @@ class EventsControllerTest < ActionController::TestCase
 
     @controller.expects(:send_csv).with(
       "fordelning_evenemang#{allotment.event.id}.tsv",
-      "Stadsdel\tSkola\tGrupp\tAntal biljetter\nHela staden\t\"\"\t\"\"\t12\n"
+      "Område\tSkola\tGrupp\tAntal biljetter\nHela staden\t\"\"\t\"\"\t12\n"
     ).returns(true)
 
     get :ticket_allotment, id: allotment.event.id, format: "xls"
