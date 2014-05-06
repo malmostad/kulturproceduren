@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 module RoleApplicationsHelper
   # Converts a role application state into a string readable for humans.
   def state_string(application)

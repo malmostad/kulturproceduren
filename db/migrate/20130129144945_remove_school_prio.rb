@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class RemoveSchoolPrio < ActiveRecord::Migration
   def self.up
     drop_table :school_prios

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managin login and logout
 class LoginController < ApplicationController
 

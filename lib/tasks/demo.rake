@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Methods for generating demo data
 namespace :kp do
   namespace :demo do

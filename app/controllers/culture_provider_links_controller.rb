@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing links to culture providers from events
 # or other culture providers
 class CultureProviderLinksController < ApplicationController

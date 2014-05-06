@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class CreateCompanions < ActiveRecord::Migration
   def self.up
     create_table :companions do |t|

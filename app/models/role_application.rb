@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # A container for role applications in the system.
 #
 # A user can apply for privileges themselves in the system. The

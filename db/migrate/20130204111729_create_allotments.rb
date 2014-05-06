@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class CreateAllotments < ActiveRecord::Migration
   def self.up
     create_table :allotments do |t|

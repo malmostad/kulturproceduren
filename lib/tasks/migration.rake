@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Misc migration tasks
 namespace :kp do
   namespace :migration do

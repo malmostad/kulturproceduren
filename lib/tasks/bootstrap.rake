@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Bootstrapping methods for the application
 namespace :kp do
 

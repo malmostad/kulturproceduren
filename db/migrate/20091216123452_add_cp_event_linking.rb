@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddCpEventLinking < ActiveRecord::Migration
   def self.up
     create_table :culture_providers_events, id: false do |t|

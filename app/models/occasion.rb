@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # An occasion is a specific occasion where an event is shown. An occasion can
 # be booked if there are tickets available on the event.
 class Occasion < ActiveRecord::Base

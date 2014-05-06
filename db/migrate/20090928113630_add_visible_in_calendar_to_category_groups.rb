@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddVisibleInCalendarToCategoryGroups < ActiveRecord::Migration
   def self.up
     add_column :category_groups, :visible_in_calendar, :boolean,

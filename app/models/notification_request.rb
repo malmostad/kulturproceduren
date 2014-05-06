@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # A notification request is a registration for users who wish to
 # be notified when a specific group receives tickets for booking an occasion
 # on a specific event. This class is used when transiting between

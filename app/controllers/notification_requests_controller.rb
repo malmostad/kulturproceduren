@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing notification requests
 class NotificationRequestsController < ApplicationController
   layout "standard"

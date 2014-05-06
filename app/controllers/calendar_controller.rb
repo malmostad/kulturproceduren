@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for displaying the welcoming occasion/event calendar for the user
 class CalendarController < ApplicationController
 

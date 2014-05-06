@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 module QuestionsHelper
 
   # Renders a fragment for displaying questionnaire statistics

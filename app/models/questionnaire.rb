@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # A questionnare for a specific event, containing questions for a companion to answer.
 class Questionnaire < ActiveRecord::Base
   belongs_to                :event

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Sends information mails to recipients in the system
 class InformationMailer < ActionMailer::Base
   layout "mail"

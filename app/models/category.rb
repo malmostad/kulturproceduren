@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # An category, currently used only for categorizing events.
 #
 # Event categories are grouped by category groups, which affects how

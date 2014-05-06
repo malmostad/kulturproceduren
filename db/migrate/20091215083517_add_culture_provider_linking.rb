@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddCultureProviderLinking < ActiveRecord::Migration
   def self.up
     create_table :culture_provider_links, id: false do |t|

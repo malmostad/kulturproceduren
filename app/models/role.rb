@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # A container for the role definitions iun the system.
 #
 # The roles in the system are the following:

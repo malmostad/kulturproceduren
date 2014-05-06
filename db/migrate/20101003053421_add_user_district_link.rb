@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddUserDistrictLink < ActiveRecord::Migration
   def self.up
     create_table :districts_users, id: false do |t|

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing the LDAP integration
 class LdapController < ApplicationController
   layout "admin"

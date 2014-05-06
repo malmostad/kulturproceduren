@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddIndeciesOnTickets < ActiveRecord::Migration
   def self.up
     add_index(:tickets , :group_id)

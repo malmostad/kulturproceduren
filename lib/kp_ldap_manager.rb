@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'ldap'
 
 # Model responsible for managing the LDAP connection from the application

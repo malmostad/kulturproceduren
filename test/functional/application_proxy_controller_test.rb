@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Tests ApplicationController
 require 'test_helper'
 

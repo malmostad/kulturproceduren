@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddBusBookingDetails < ActiveRecord::Migration
   def self.up
     add_column :events,  :bus_booking, :boolean, default: false

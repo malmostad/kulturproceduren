@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Dummy controller for Ajax ping.
 #
 # Used to prevent the session from timing out, escpecially

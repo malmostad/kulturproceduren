@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 Kulturproceduren::Application.routes.draw do
   resources :users do
     collection do

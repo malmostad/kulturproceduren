@@ -1,4 +1,3 @@
-<%# coding: utf-8 %>
 <% (1..4).each do |i| -%>
   <%= radio_button_tag "answer[#{question.id}]", i, i == value, { class: "radio" } %>
   <%= label_tag "answer_#{question.id}_#{i}", i %>

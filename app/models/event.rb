@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # A culture event, possibly with bookable occasions.
 #
 # An event can be in in several states significant for the booking of tickets:

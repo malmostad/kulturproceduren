@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Tasks for sending notifications
 namespace :kp do
 

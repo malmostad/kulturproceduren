@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Helpers for mailers
 module MailerHelper
   # Helper for generating links in outgoing mails

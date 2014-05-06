@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Mailer for actions concerning bookings
 class BookingMailer < ActionMailer::Base
   layout "mail"

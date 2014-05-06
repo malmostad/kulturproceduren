@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class CreateCategoryGroups < ActiveRecord::Migration
   def self.up
     create_table :category_groups do |t|

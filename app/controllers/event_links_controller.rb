@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class EventLinksController < ApplicationController
   layout "standard"
 

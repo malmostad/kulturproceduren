@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class RenameImageNameDescription < ActiveRecord::Migration
   def self.up
     rename_column :images, :name, :description

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # An answer is the answer to a question in a questionnaire.
 class Answer < ActiveRecord::Base
   belongs_to :question

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Tasks for updating ticket states
 namespace :kp do
 

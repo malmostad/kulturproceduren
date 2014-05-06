@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddTransitionDatesToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :district_transition_date, :date

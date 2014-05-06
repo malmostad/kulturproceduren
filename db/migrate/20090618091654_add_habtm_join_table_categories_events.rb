@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddHabtmJoinTableCategoriesEvents < ActiveRecord::Migration
   def self.up
     create_table :categories_events, id: false do |t|

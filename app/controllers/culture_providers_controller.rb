@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing culture providers
 class CultureProvidersController < ApplicationController
   layout "standard"

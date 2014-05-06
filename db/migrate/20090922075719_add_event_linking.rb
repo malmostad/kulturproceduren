@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Adds HABTM-joining of events.
 class AddEventLinking < ActiveRecord::Migration
   def self.up

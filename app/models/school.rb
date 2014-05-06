@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Model for schools. A schools belongs to a district and has many groups within it.
 class School < ActiveRecord::Base
   

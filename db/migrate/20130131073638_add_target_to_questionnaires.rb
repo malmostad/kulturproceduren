@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class AddTargetToQuestionnaires < ActiveRecord::Migration
   def self.up
     # simple_enum column

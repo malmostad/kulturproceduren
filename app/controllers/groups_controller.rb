@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing groups
 class GroupsController < ApplicationController
   layout "admin", except: [ :options_list ]

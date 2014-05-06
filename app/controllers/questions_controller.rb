@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing questions in a questionnaire.
 class QuestionsController < ApplicationController
 

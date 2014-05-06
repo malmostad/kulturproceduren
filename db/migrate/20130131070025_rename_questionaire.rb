@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class RenameQuestionaire < ActiveRecord::Migration
   def self.up
     rename_table :questionaires, :questionnaires

@@ -1,4 +1,3 @@
-<%# coding: utf-8 %>
 <% if user_online? && (current_user.has_role?(:admin) || current_user.has_role?(:culture_worker)) %>
   <% content_for :section_sub do -%>
     <ul class="section-nav">

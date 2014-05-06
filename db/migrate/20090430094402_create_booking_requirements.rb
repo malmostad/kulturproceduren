@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class CreateBookingRequirements < ActiveRecord::Migration
   def self.up
     create_table :booking_requirements do |t|

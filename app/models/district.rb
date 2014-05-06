@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # A district contains multiple schools.
 class District < ActiveRecord::Base
   

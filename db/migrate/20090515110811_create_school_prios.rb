@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class CreateSchoolPrios < ActiveRecord::Migration
   def self.up
     create_table :school_prios do |t|

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class Allotment < ActiveRecord::Base
   belongs_to :user
   belongs_to :event

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 class CreateAnswerForms < ActiveRecord::Migration
   def self.up
     create_table :answer_forms, id: false do |t|

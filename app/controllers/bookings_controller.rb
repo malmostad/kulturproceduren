@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing bookings
 class BookingsController < ApplicationController
 

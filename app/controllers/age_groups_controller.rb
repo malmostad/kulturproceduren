@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing age groups
 class AgeGroupsController < ApplicationController
   layout "admin"

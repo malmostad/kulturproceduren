@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # An age group is a representation of the number of children of a specific age
 # in a specific group.
 class AgeGroup < ActiveRecord::Base

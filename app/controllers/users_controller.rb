@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # Controller for managing users.
 class UsersController < ApplicationController
   layout :set_layout
