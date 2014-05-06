@@ -6,7 +6,7 @@ class DistrictsController < ApplicationController
   before_filter :require_admin, except: [ :select ]
 
   def index
-    @districts = District.order(sort_order("name")).paginate page: params[:page]
+    @districts = District.includes(:school_type).order(sort_order("name")).paginate page: params[:page]
   end
 
   def show
@@ -14,10 +14,12 @@ class DistrictsController < ApplicationController
   end
 
   def new
+    @school_types = SchoolType.order(:name)
     @district = District.new
   end
 
   def edit
+    @school_types = SchoolType.order(:name)
     @district = District.find(params[:id])
     render action: "new"
   end
@@ -29,6 +31,7 @@ class DistrictsController < ApplicationController
       flash[:notice] = 'Stadsdelen skapades.'
       redirect_to(@district)
     else
+      @school_types = SchoolType.order(:name)
       render action: "new"
     end
   end
@@ -40,6 +43,7 @@ class DistrictsController < ApplicationController
       flash[:notice] = 'Stadsdelen uppdaterades.'
       redirect_to(@district)
     else
+      @school_types = SchoolType.order(:name)
       render action: "new"
     end
   end
@@ -72,12 +76,12 @@ class DistrictsController < ApplicationController
   
   # Sort by the name by default
   def sort_column_from_param(p)
-    return "name" if p.blank?
+    return "districts.name" if p.blank?
 
     case p.to_sym
-    when :elit_id then "elit_id"
+    when :school_type then "school_types.name"
     else
-      "name"
+      "districts.name"
     end
   end
 end

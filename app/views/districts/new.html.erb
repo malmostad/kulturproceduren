@@ -13,6 +13,7 @@
   <%= f.validation_error_indicator %>
 
   <%= f.fields do -%>
+    <%= f.collection_select :school_type_id, @school_types, :id, :name  %>
     <%= f.text_field :name %>
     <%= f.text_field :contacts, field_help: "Ange epostadresser, separerade med kommatecken." %>
 

@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th><%= sort_link "Namn", "name" %></th>
+      <th><%= sort_link "Skolform", "school_type" %></th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -12,6 +13,7 @@
     <% @districts.each do |district| %>
       <tr class="<%= cycle("", "even") %>">
         <td><%= link_to district.name, district %></td>
+        <td><%= district.school_type.name %></td>
         <td><%= link_to 'Redigera', edit_district_path(district) %></td>
         <td><%= link_to 'Radera', district, data: {confirm: 'Är du säker på att du vill radera stadsdelen'}, method: :delete %></td>
       </tr>

@@ -2,9 +2,10 @@ require_relative '../test_helper'
 
 class DistrictTest < ActiveSupport::TestCase
   test "validations" do
-    district = build(:district, name: "")
+    district = build(:district, name: "", school_type: nil)
     assert !district.valid?
     assert district.errors.include?(:name)
+    assert district.errors.include?(:school_type)
   end
 
   test "schools by age span" do

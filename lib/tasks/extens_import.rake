@@ -15,6 +15,8 @@ namespace :kp do
         puts "\n"
         verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 2)
 
+        school_type = SchoolType.where(name: "Gamla stadsdelar").first!
+
         CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
           guid, name = row
 
@@ -34,6 +36,7 @@ namespace :kp do
             else
               puts "\tDistrict with matching name not found, creating new"
               district = District.new
+              district.school_type = school_type
               district.name = name
               district.extens_id = guid
               district.save!

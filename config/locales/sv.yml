@@ -243,6 +243,8 @@ sv:
         map_address: "Kartadress:"
         single_group: "Endast en grupp kan boka denna föreställning"
       district:
+        school_type: "Skolform:"
+        school_type_id: "Skolform:"
         name: "Namn:"
         contacts: "Kontaktadresser:"
         elit_id: "ELIT-ID:"

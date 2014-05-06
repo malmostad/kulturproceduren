@@ -45,8 +45,9 @@ class DistrictsControllerTest < ActionController::TestCase
     assert          assigns(:district).new_record?
     assert          !assigns(:district).valid?
 
-    # Invalid
-    post :create, district: { name: "zomg" }
+    # Valid
+    school_type = create(:school_type)
+    post :create, district: { name: "zomg", school_type_id: school_type.id }
     assert_redirected_to assigns(:district)
     assert_equal         "Stadsdelen skapades.", flash[:notice]
     assert_equal         "zomg", District.find(assigns(:district).id).name
