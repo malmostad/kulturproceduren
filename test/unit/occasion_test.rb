@@ -13,34 +13,6 @@ class OccasionTest < ActiveSupport::TestCase
     assert occasion.errors.include?(:seats)
   end
   
-  test "bookings hierarchically ordered" do
-    districts = [ create(:district, name: "adistrict"), create(:district, name: "bdistrict") ]
-    schools = [
-      create(:school, name: "aschool", district: districts[0]),
-      create(:school, name: "bschool", district: districts[0]),
-      create(:school, name: "aschool", district: districts[1]),
-      create(:school, name: "bschool", district: districts[1]),
-    ]
-    groups = [
-      create(:group, name: "bgroup", school: schools[3]),
-      create(:group, name: "agroup", school: schools[3]),
-      create(:group, name: "bgroup", school: schools[2]),
-      create(:group, name: "agroup", school: schools[2]),
-      create(:group, name: "bgroup", school: schools[1]),
-      create(:group, name: "agroup", school: schools[1]),
-      create(:group, name: "bgroup", school: schools[0]),
-      create(:group, name: "agroup", school: schools[0])
-    ]
-    occasion = create(:occasion, seats: 3000, wheelchair_seats: 3000)
-    groups.each { |g| create(:booking, occasion: occasion, group: g) }
-
-    ordered_bookings = occasion.bookings.hierarchically_ordered
-
-    0.upto(7) do |i|
-      assert_equal groups[7-i].id, ordered_bookings[i].group.id
-    end
-  end
-
   test "bookings school ordered" do
     schools = [
       create(:school, name: "aschool"),
@@ -68,61 +40,6 @@ class OccasionTest < ActiveSupport::TestCase
     end
   end
 
-  test "groups hierarchically ordered" do
-    districts = [ create(:district, name: "adistrict"), create(:district, name: "bdistrict") ]
-    schools = [
-      create(:school, name: "aschool", district: districts[0]),
-      create(:school, name: "bschool", district: districts[0]),
-      create(:school, name: "aschool", district: districts[1]),
-      create(:school, name: "bschool", district: districts[1]),
-    ]
-    groups = [
-      create(:group, name: "bgroup", school: schools[3]),
-      create(:group, name: "agroup", school: schools[3]),
-      create(:group, name: "bgroup", school: schools[2]),
-      create(:group, name: "agroup", school: schools[2]),
-      create(:group, name: "bgroup", school: schools[1]),
-      create(:group, name: "agroup", school: schools[1]),
-      create(:group, name: "bgroup", school: schools[0]),
-      create(:group, name: "agroup", school: schools[0])
-    ]
-    occasion = create(:occasion)
-    groups.each { |g| create(:ticket, occasion: occasion, group: g) }
-
-    ordered_groups = occasion.groups.hierarchically_ordered
-
-    0.upto(7) do |i|
-      assert_equal groups[7-i].id, ordered_groups[i].id
-    end
-  end
-
-  test "groups school ordered" do
-    schools = [
-      create(:school, name: "aschool"),
-      create(:school, name: "bschool"),
-      create(:school, name: "cschool"),
-      create(:school, name: "dschool"),
-    ]
-    groups = [
-      create(:group, name: "bgroup", school: schools[3]),
-      create(:group, name: "agroup", school: schools[3]),
-      create(:group, name: "bgroup", school: schools[2]),
-      create(:group, name: "agroup", school: schools[2]),
-      create(:group, name: "bgroup", school: schools[1]),
-      create(:group, name: "agroup", school: schools[1]),
-      create(:group, name: "bgroup", school: schools[0]),
-      create(:group, name: "agroup", school: schools[0])
-    ]
-    occasion = create(:occasion)
-    groups.each { |g| create(:ticket, occasion: occasion, group: g) }
-
-    ordered_groups = occasion.groups.school_ordered
-
-    0.upto(7) do |i|
-      assert_equal groups[7-i].id, ordered_groups[i].id
-    end
-  end
-  
   test "attending groups" do
     occasion           = create(:occasion)
     attending          = create_list(:group, 3)

@@ -46,7 +46,6 @@
   <thead>
     <tr>
       <th>
-        Område<br/>
         Skola<br/>
         Grupp
       </th>
@@ -76,10 +75,9 @@
         </tr>
       <% end %>
 
-      <% occasion.bookings.hierarchically_ordered.each do |booking| %>
+      <% occasion.bookings.school_ordered.each do |booking| %>
         <tr class="<%= cycle('', 'even') %>">
           <td>
-            <%= booking.group.school.district.name -%><br/>
             <%= booking.group.school.name -%><br/>
             <%= booking.group.name -%>
           </td>
