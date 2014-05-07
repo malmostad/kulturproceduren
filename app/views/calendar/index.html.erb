@@ -28,6 +28,6 @@
   </div>
 <% end -%>
 
-<% cache(list_cache_key()) do %>
+<% cache list_cache_key(), skip_digest: true do %>
   <%= render partial: 'list' %>
 <% end %>

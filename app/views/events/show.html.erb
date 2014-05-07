@@ -293,7 +293,7 @@
     </table>
   </div>
 
-  <% cache occasion_list_cache_key(@event) do %>
+  <% cache occasion_list_cache_key(@event), skip_digest: true do %>
     <% unless @event.occasions.empty? -%>
       <div id="kp-ev-meta-occasions">
         <table class="occasion-list multirow">

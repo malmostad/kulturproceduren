@@ -105,7 +105,7 @@
     <% end -%>
   </ul>
 
-  <% cache upcoming_occasions_cache_key(@culture_provider) do %>
+  <% cache upcoming_occasions_cache_key(@culture_provider), skip_digest: true do %>
     <% unless @culture_provider.upcoming_occasions.empty? -%>
       <div id="kp-cp-meta-occasions">
         <%= render partial: "calendar/occasions_list", locals: {
@@ -117,7 +117,7 @@
     <% end -%>
   <% end %>
 
-  <% cache standing_events_cache_key(@culture_provider) do %>
+  <% cache standing_events_cache_key(@culture_provider), skip_digest: true do %>
     <% unless @culture_provider.standing_events.empty? -%>
       <div id="kp-cp-meta-events">
         <table>
