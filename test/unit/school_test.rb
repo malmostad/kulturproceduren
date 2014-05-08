@@ -72,4 +72,25 @@ class SchoolTest < ActiveSupport::TestCase
     end
   end
 
+  test "active" do
+    active = create(:school)
+    inactive = create(:school)
+
+    inactive.school_type.active = false
+    inactive.school_type.save
+
+    assert_equal [active], School.active
+  end
+
+  test "name_search" do
+    school1 = create(:school, name: "foo")
+    school2 = create(:school, name: "bar")
+
+    # Normal
+    assert_equal [school1], School.name_search("foo")
+    # Case insensitive
+    assert_equal [school1], School.name_search("FOO")
+    # Wildcard
+    assert_equal [school1], School.name_search("%o%")
+  end
 end

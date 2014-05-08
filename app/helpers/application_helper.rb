@@ -149,4 +149,37 @@ module ApplicationHelper
     end
     super *[collection_or_options, options].compact
   end
+
+
+  # Renders a form for selecting a group
+  def group_selection_form(occasion: nil, return_to: nil)
+    state = session[:group_selection] || {}
+    return_to ||= url_for(request.query_parameters.update(request.path_parameters))
+
+    group_options = group_selection_group_options(occasion, state[:school_id])
+
+    render partial: "shared/group_selection_form",
+      locals: { occasion: occasion, return_to: return_to, state: state, group_options: group_options }
+  end
+
+
+  private
+
+  def group_selection_group_options(occasion, school_id)
+    return [] if school_id.blank?
+
+    groups = Group.where(school_id: school_id).order("name")
+
+    if occasion
+      groups = groups.select { |g| g.available_tickets_by_occasion(occasion) > 0 }
+
+      return [[ "Välj klass/avdelning", nil ]] + groups.collect { |g| [
+        g.name + (occasion.event.alloted_group? ? " (#{g.available_tickets_by_occasion(occasion)} platser)" : ""),
+        g.id
+      ] }
+    else
+      return [[ "Välj klass/avdelning", nil ]] + groups.collect { |g| [ g.name, g.id ] }
+    end
+
+  end
 end

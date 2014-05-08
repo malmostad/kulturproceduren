@@ -118,4 +118,89 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal "vt2010", to_term(Date.new(2010, 1, 1))
   end
 
+  test "group_selection_form, no arguments, no state" do
+    request = stub(
+      path_parameters: { controller: "booking" },
+      query_parameters: { action: "new" }
+    )
+    self.stubs(:request).returns(request)
+
+    group_selection_form()
+
+    assert_select "form", 2
+    assert_select "#kp-group_selection-group_id option", 0
+    assert_select "#kp-group_selection-group_id[disabled]", 1
+    assert_select "[name=return_to][value=/booking/new]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, return_to, no state" do
+    group_selection_form(return_to: "/foo/bar")
+
+    assert_select "form", 2
+    assert_select "#kp-group_selection-group_id option", 0
+    assert_select "#kp-group_selection-group_id[disabled]", 1
+    assert_select "[name=return_to][value=/foo/bar]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, return_to, school selected" do
+    group = create(:group)
+    session[:group_selection] = {
+      school_id: group.school.id,
+      school_name: group.school.name
+    }
+
+    group_selection_form(return_to: "/")
+
+    assert_select "form", 2
+    assert_select "#kp-group_selection-group_id option", 1+1 # Blank entry and one group
+    assert_select "#kp-group_selection-group_id[disabled]", 0
+    assert_select "#kp-group_selection-group_id option[selected]", 0
+    assert_select "[name=return_to][value=/]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, return_to, group selected" do
+    group = create(:group)
+    session[:group_selection] = {
+      school_id: group.school.id,
+      school_name: group.school.name,
+      group_id: group.id
+    }
+
+    group_selection_form(return_to: "/")
+
+    assert_select "form", 2
+    assert_select "#kp-group_selection-group_id option", 1+1 # Blank entry and one group
+    assert_select "#kp-group_selection-group_id[disabled]", 0
+    assert_select "#kp-group_selection-group_id option[selected]", { count: 1, text: group.name }
+    assert_select "[name=return_to][value=/]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, occasion allotted to group, group selected" do
+    group1 = create(:group)
+    group2 = create(:group, school: group1.school)
+
+    occasion = create(:occasion, seats: 2)
+    event = occasion.event
+
+    create_list(:ticket, 1, group: group1, district: group1.school.district, event: event, state: :unbooked)
+
+    session[:group_selection] = {
+      school_id: group1.school.id,
+      school_name: group1.school.name,
+      group_id: group1.id
+    }
+
+    group_selection_form(occasion: occasion, return_to: "/")
+
+    assert_select "form", 2
+    assert_select "#kp-group_selection-group_id option", 1+1 # Blank entry and one group
+    assert_select "#kp-group_selection-group_id[disabled]", 0
+    assert_select "#kp-group_selection-group_id option[selected]", { count: 1, text: "#{group1.name} (1 platser)" }
+    assert_select "[name=return_to][value=/]", 2
+    assert_select "[name=occasion_id]", 2
+  end
 end

@@ -119,6 +119,12 @@ Kulturproceduren::Application.routes.draw do
         get :report
       end
     end
+    resources :schools, only: [] do
+      collection do
+        get :search
+        post :search
+      end
+    end
   end
 
   resources :bookings, except: [:new] do
@@ -158,6 +164,8 @@ Kulturproceduren::Application.routes.draw do
     collection do
       get  :select
       post :select
+      get  :search
+      post :search
       get  :options_list
     end
   end

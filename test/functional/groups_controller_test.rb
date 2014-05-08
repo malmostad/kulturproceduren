@@ -152,6 +152,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal({
       group_id: group.id,
       school_id: group.school.id,
+      school_name: group.school.name,
       district_id: group.school.district.id
     }, session[:group_selection])
 
@@ -165,6 +166,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal({
       group_id: group.id,
       school_id: group.school.id,
+      school_name: group.school.name,
       district_id: group.school.district.id
     }, session[:group_selection])
   end
@@ -173,20 +175,20 @@ class GroupsControllerTest < ActionController::TestCase
     @controller.unstub(:authenticate)
     @controller.unstub(:require_admin)
 
-    # 404 by school_id == -1
-    get :options_list, school_id: "-1"
-    assert_response 404
-    assert          @response.body.blank?
-    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
-    
-    # 404 by occasion_id == -1
-    get :options_list, occasion_id: "-1"
+    # 404 by error (school not found, by id)
+    get :options_list, school_id: 1
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
 
-    # 404 by error (school not found)
-    get :options_list, school_id: 1
+    # 404 by error (school not found, by name)
+    get :options_list, school_name: "does-not-exist"
+    assert_response 404
+    assert          @response.body.blank?
+    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
+
+    # 404 by error (occasion not found)
+    get :options_list, occasion_id: 1
     assert_response 404
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
@@ -210,6 +212,7 @@ class GroupsControllerTest < ActionController::TestCase
     groups                    = create_list(:group, 3).sort_by(&:name)
     session[:group_selection] = nil
 
+    # By id
     get :options_list, school_id: groups.first.school.id
     assert_response :success
     assert_template "groups/options_list"
@@ -217,7 +220,20 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal    [groups.first], assigns(:groups)
     assert_equal({
       school_id: groups.first.school.id,
+      school_name: groups.first.school.name,
       district_id: groups.first.school.district.id
+    }, session[:group_selection])
+
+    # By name
+    get :options_list, school_name: groups.second.school.name
+    assert_response :success
+    assert_template "groups/options_list"
+    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
+    assert_equal    [groups.second], assigns(:groups)
+    assert_equal({
+      school_id: groups.second.school.id,
+      school_name: groups.second.school.name,
+      district_id: groups.second.school.district.id
     }, session[:group_selection])
   end
   test "options list, without school and with occasion" do
@@ -249,7 +265,16 @@ class GroupsControllerTest < ActionController::TestCase
     create(:ticket, occasion: occasion, event: occasion.event, group: group1)
     create(:ticket, occasion: occasion, event: occasion.event, group: group2)
 
+    # By school id
     get :options_list, occasion_id: occasion.id, school_id: school.id
+    assert_response :success
+    assert_template "groups/options_list"
+    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
+    assert_equal    occasion, assigns(:occasion)
+    assert_equal    [group1], assigns(:groups)
+
+    # By school name
+    get :options_list, occasion_id: occasion.id, school_name: school.name
     assert_response :success
     assert_template "groups/options_list"
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/

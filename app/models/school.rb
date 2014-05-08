@@ -16,6 +16,7 @@ class School < ActiveRecord::Base
     :extens_id
 
   belongs_to :district
+  has_one :school_type, through: :district
 
   validates_presence_of :name,
     message: "Namnet får inte vara tomt"
@@ -52,4 +53,14 @@ class School < ActiveRecord::Base
       .order("schools.name ASC")
   end
 
+
+  # Scopes to schools belong to a school type which is active
+  def self.active
+    includes(:school_type).where("school_types.active = ?", true).references(:school_type)
+  end
+
+  # Scopes by name using ilike
+  def self.name_search(name_query)
+    where([ "schools.name ilike ?", name_query ])
+  end
 end
