@@ -11,7 +11,11 @@ class AllotmentController < ApplicationController
   # Intializing view for the allotment process, displays a form
   # for allotment parameters
   def init
-    @districts = District.order("name ASC")
+    if @event.school_types.blank?
+      @districts = District.order("name ASC")
+    else
+      @districts = @event.school_type_districts
+    end
   end
 
   # Stores the allotment parameters in the session and redirects
@@ -221,6 +225,8 @@ class AllotmentController < ApplicationController
   def load_working_districts
     if session[:allotment][:district_ids]
       return District.order("name ASC").find(session[:allotment][:district_ids])
+    elsif !@event.school_types.blank?
+      return @event.school_type_districts
     else
       return District.order("name ASC")
     end

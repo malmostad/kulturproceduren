@@ -226,6 +226,15 @@
         </tr>
       <% end -%>
 
+      <% if (num_school_types = @event.school_types.length) > 0 %>
+        <tr class="school-types">
+          <th>Skolform<%= "er" if num_school_types > 1 %></th>
+          <td>
+            <%= @event.school_types.collect(&:name).join(", ") %>
+          </td>
+        </tr>
+      <% end %>
+
       <% @category_groups.each do |category_group| -%>
         <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
 

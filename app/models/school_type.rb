@@ -1,5 +1,6 @@
 class SchoolType < ActiveRecord::Base
   has_many :districts, dependent: :destroy
+  has_and_belongs_to_many :events
 
   attr_accessible :name
 

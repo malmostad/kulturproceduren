@@ -218,6 +218,11 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.date     "last_bus_booking_date"
   end
 
+  create_table "events_school_types", force: true do |t|
+    t.integer "event_id"
+    t.integer "school_type_id"
+  end
+
   create_table "groups", force: true do |t|
     t.string   "name"
     t.string   "contacts"
