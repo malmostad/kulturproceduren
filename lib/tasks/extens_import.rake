@@ -1,5 +1,5 @@
-require "pp"
 require "csv"
+require "kp/import/district_importer"
 
 namespace :kp do
   namespace :extens do
@@ -10,44 +10,37 @@ namespace :kp do
 
     namespace :import do
 
+      def import!(importer, csv_separator)
+        if importer.valid?
+          print "No invalid rows found, importing..."
+          result = importer.import!
+          puts " done!"
+
+          puts "New: #{result[:new]}"
+          puts "Updated: #{result[:updated]}"
+          puts "Unchanged: #{result[:unchanged]}"
+        else
+          puts "Invalid rows found:\n"
+          importer.invalid_rows.each do |row|
+            puts row.join(csv_separator)
+          end
+          puts "Aborting..."
+        end
+      end
+
       desc "Import districts from Extens"
       task(districts: :environment) do
-        puts "\n"
-        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 2)
+        csv_separator = ENV["csv_separator"] || "\t"
 
-        school_type = SchoolType.where(name: "Gamla stadsdelar").first!
+        school_type = SchoolType.find(ENV["school_type_id"])
+        csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
 
-        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
-          guid, name = row
+        puts "Importing districts from #{ENV["file"]}"
 
-          puts "Processing #{name}\t#{guid}"
-
-          district = District.first(conditions: { extens_id: guid })
-
-          if !district
-            puts "\tDistrict with ID not found"
-
-            district = District.first(conditions: [ "name ilike ?", name ])
-
-            if district
-              puts "\tDistrict with matching name found, updating ID"
-              district.extens_id = guid
-              district.save!
-            else
-              puts "\tDistrict with matching name not found, creating new"
-              district = District.new
-              district.school_type = school_type
-              district.name = name
-              district.extens_id = guid
-              district.save!
-            end
-          else
-            puts "\tDistrict with ID already exists, updating name"
-            district.name = name
-            district.save!
-          end
-
-          puts "\n"
+        begin
+          import!(KP::Import::DistrictImporter.new(csv, school_type.id), csv_separator)
+        rescue KP::Import::ParseError => e
+          puts "Found errors when importing:\n#{e.message}"
         end
       end
 

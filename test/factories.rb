@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  sequence :email do |n|
+    "person#{n}@example.com"
+  end
+
   factory :school_type do
     sequence(:name) { |n| "School type %09d" % n }
     active          true
