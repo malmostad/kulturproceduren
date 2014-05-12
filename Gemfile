@@ -27,12 +27,18 @@ group :development do
 end
 
 group :test do
-  gem "factory_girl_rails", "~> 4.3.0"
+  gem 'shoulda-matchers', '~> 2.6.1'
+  gem "timecop", "~> 0.7.1"
+
   gem "mocha", "1.0.0", require: false
   gem 'simplecov', "~> 0.7.1", require: false
-  gem "timecop"
 end
 
 group :development, :test do
   gem "pry"
+
+  gem 'rspec-rails', '~> 2.14.2'
+  gem "factory_girl_rails", "~> 4.4.1"
+  gem 'capybara', '~> 2.2.1'
+  gem 'jasmine-rails', '~> 0.8.1'
 end
