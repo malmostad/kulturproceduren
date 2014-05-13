@@ -130,6 +130,8 @@ module KP
           unchanged: 0
         }
 
+        before_import(result) if respond_to?(:before_import)
+
         @valid.each do |model|
           if model.new_record?
             result[:new] +=1
@@ -141,6 +143,8 @@ module KP
 
           model.save!
         end
+
+        after_import(result) if respond_to?(:after_import)
 
         return result
       end

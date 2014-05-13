@@ -114,7 +114,7 @@ describe KP::Import::Base do
     end
   end
 
-  describe ".save!" do
+  describe ".import!" do
     let(:csv) { "foo,bar\nbaz,apa\nbepa,cepa" }
     let(:model1) { double(:model, valid?: true, new_record?: false, changed?: true) }
     let(:model2) { double(:model, valid?: true, new_record?: true, changed?: true) }
@@ -131,8 +131,17 @@ describe KP::Import::Base do
       expect(importer.import!).to eq(new: 1, updated: 1, unchanged: 1)
     end
 
+    it "calls before_import and after_import callbacks if defined" do
+      model1.should_receive(:save!).once
+      model2.should_receive(:save!).once
+      model3.should_receive(:save!).once
+      importer.should_receive(:before_import).with(new: 0, updated: 0, unchanged: 0).once
+      importer.should_receive(:after_import).with(new: 1, updated: 1, unchanged: 1).once
+      importer.import!
+    end
+
     context "with invalid models" do
-    let(:model2) { double(:model, :valid? => false) }
+      let(:model2) { double(:model, :valid? => false) }
       it "does not save anything" do
         model1.should_not_receive(:save!)
         model2.should_not_receive(:save!)

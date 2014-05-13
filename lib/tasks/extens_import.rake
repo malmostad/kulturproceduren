@@ -2,6 +2,7 @@ require "csv"
 require "kp/import/district_importer"
 require "kp/import/school_importer"
 require "kp/import/group_importer"
+require "kp/import/age_group_importer"
 
 namespace :kp do
   namespace :extens do
@@ -21,6 +22,7 @@ namespace :kp do
           puts "New: #{result[:new]}"
           puts "Updated: #{result[:updated]}"
           puts "Unchanged: #{result[:unchanged]}"
+          puts "Deleted: #{result[:deleted]}" if result[:deleted]
         else
           puts "Invalid rows found:\n"
           importer.invalid_rows.each do |row|
@@ -80,44 +82,17 @@ namespace :kp do
 
       desc "Import age groups"
       task(age_groups: :environment) do
-        raise "Missing group_prefix" unless ENV["group_prefix"]
-        puts "\n"
+        csv_separator = ENV["csv_separator"] || "\t"
 
-        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 6)
+        school_type = SchoolType.find(ENV["school_type_id"])
+        csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
 
-        # Calculate the age based on the current school year
-        base_year = (Date.today - 6.months).year
+        puts "Importing age groups from #{ENV["file"]}"
 
-        cleared_age_groups = []
-
-        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
-          school_guid, group_guid, group_name, school_name, amount, birth_year = row
-          group_guid = "#{ENV["group_prefix"]}-#{group_guid}"
-
-          puts "Processing #{birth_year} - #{group_name}\t#{group_guid}"
-
-          group = Group.first(conditions: { extens_id: group_guid })
-
-          if !group
-            puts "\tUnknown group #{group_guid}, skipping"
-            next
-          end
-
-          if !cleared_age_groups.include?(group.id)
-            puts "\tClearing age groups for #{group.id}"
-            cleared_age_groups << group.id
-            group.age_groups.clear
-          end
-
-          puts "\tCreating age group"
-
-          age_group = AgeGroup.new
-          age_group.group = group
-          age_group.age = base_year - birth_year.to_i
-          age_group.quantity = amount
-          age_group.save!
-
-          puts "\n"
+        begin
+          import!(KP::Import::AgeGroupImporter.new(csv, school_type.id), csv_separator)
+        rescue KP::Import::ParseError => e
+          puts "Found errors when importing:\n#{e.message}"
         end
       end
 
