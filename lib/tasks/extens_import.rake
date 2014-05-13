@@ -1,5 +1,6 @@
 require "csv"
 require "kp/import/district_importer"
+require "kp/import/school_importer"
 
 namespace :kp do
   namespace :extens do
@@ -44,54 +45,19 @@ namespace :kp do
         end
       end
 
-      desc "Import schools"
+      desc "Import schools from Extens"
       task(schools: :environment) do
-        raise "Missing school_prefix" unless ENV["school_prefix"]
-        puts "\n"
+        csv_separator = ENV["csv_separator"] || "\t"
 
-        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 3)
+        school_type = SchoolType.find(ENV["school_type_id"])
+        csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
 
-        districts = District.all
+        puts "Importing schools from #{ENV["file"]}"
 
-        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
-          guid, district_guid, name = row
-          guid = "#{ENV["school_prefix"]}-#{guid}"
-
-          puts "Processing #{name}\t#{guid}"
-
-          school = School.first(conditions: { extens_id: guid })
-
-          if !school
-            puts "\tSchool with ID not found"
-
-            district = districts.detect { |d| d.extens_id == district_guid }
-
-            if !district
-              puts "\tUnknown district, skipping"
-              next
-            end
-
-            school = School.first(conditions: [ "name ilike ? and district_id = ?", name, district.id ])
-
-            if school
-              puts "\tSchool with matching name found: #{school.name}, updating ID"
-              school.extens_id = guid
-              school.save!
-            else
-              puts "\tSchool with matching name not found, creating new"
-              school = School.new
-              school.name = name
-              school.extens_id = guid
-              school.district = district
-              school.save!
-            end
-          else
-            puts "\tSchool with ID already exists: #{school.name}, updating name"
-            school.name = name
-            school.save!
-          end
-
-          puts "\n"
+        begin
+          import!(KP::Import::SchoolImporter.new(csv, school_type.id), csv_separator)
+        rescue KP::Import::ParseError => e
+          puts "Found errors when importing:\n#{e.message}"
         end
       end
 
