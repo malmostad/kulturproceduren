@@ -1,6 +1,7 @@
 require "csv"
 require "kp/import/district_importer"
 require "kp/import/school_importer"
+require "kp/import/group_importer"
 
 namespace :kp do
   namespace :extens do
@@ -63,45 +64,17 @@ namespace :kp do
 
       desc "Import groups"
       task(groups: :environment) do
-        raise "Missing school_prefix" unless ENV["school_prefix"]
-        raise "Missing group_prefix" unless ENV["group_prefix"]
-        puts "\n"
+        csv_separator = ENV["csv_separator"] || "\t"
 
-        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 6)
+        school_type = SchoolType.find(ENV["school_type_id"])
+        csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
 
-        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
-          guid, school_guid, school_name, name = row
-          guid = "#{ENV["group_prefix"]}-#{guid}"
-          school_guid = "#{ENV["school_prefix"]}-#{school_guid}"
+        puts "Importing groups from #{ENV["file"]}"
 
-          puts "Processing #{name}\t#{guid}"
-
-          group = Group.first(conditions: { extens_id: guid })
-
-          if !group
-            puts "\tGroup with ID not found, creating new"
-
-            school = School.first(conditions: { extens_id: school_guid })
-
-            if !school
-              puts "\tUnknown school #{school_guid}, skipping"
-              next
-            end
-
-            group = Group.new
-            group.name = name
-            group.extens_id = guid
-            group.school = school
-            group.active = true
-            group.save!
-          else
-            puts "\tGroup with ID already exists: #{group.name}, updating name"
-            group.name = name
-            group.active = true
-            group.save!
-          end
-
-          puts "\n"
+        begin
+          import!(KP::Import::GroupImporter.new(csv, school_type.id), csv_separator)
+        rescue KP::Import::ParseError => e
+          puts "Found errors when importing:\n#{e.message}"
         end
       end
 
