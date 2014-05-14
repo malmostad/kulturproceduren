@@ -3,6 +3,8 @@ require "kp/import/district_importer"
 require "kp/import/school_importer"
 require "kp/import/group_importer"
 require "kp/import/age_group_importer"
+require "kp/import/school_contact_importer"
+require "kp/import/group_contact_importer"
 
 namespace :kp do
   namespace :extens do
@@ -161,51 +163,34 @@ namespace :kp do
 
       desc "Import school contacts"
       task(school_contacts: :environment) do
-        raise "Missing school_prefix" unless ENV["school_prefix"]
-        puts "\n"
+        csv_separator = ENV["csv_separator"] || "\t"
 
-        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 3)
+        school_type = SchoolType.find(ENV["school_type_id"])
+        csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
 
-        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
-          school_guid, school_name, emails = row
-          school_guid = "#{ENV["school_prefix"]}-#{school_guid}"
+        puts "Importing school contacts from #{ENV["file"]}"
 
-          emails = nil if emails == "(null)"
-
-          puts "Processing #{school_guid}"
-
-          school = School.first(conditions: { extens_id: school_guid })
-          next unless school
-
-          school.contacts = merge_extens_contacts(school.contacts || "", emails || "")
-          school.save!
+        begin
+          import!(KP::Import::SchoolContactImporter.new(csv, school_type.id), csv_separator)
+        rescue KP::Import::ParseError => e
+          puts "Found errors when importing:\n#{e.message}"
         end
-
       end
 
-      desc "Import school class contacts"
-      task(school_class_contacts: :environment) do
-        raise "Missing group_prefix" unless ENV["group_prefix"]
-        puts "\n"
+      desc "Import group contacts"
+      task(group_contacts: :environment) do
+        csv_separator = ENV["csv_separator"] || "\t"
 
-        verify_extens_csv_file(ENV["from"], ENV["csv_sep"], 4)
+        school_type = SchoolType.find(ENV["school_type_id"])
+        csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
 
-        CSV.open(ENV["from"], "r", ENV["csv_sep"][0]) do |row|
-          group_guid, school_guid, group_name, emails = row
-          group_guid = "#{ENV["group_prefix"]}-#{group_guid}"
+        puts "Importing group contacts from #{ENV["file"]}"
 
-          emails = nil if emails == "(null)"
-
-          puts "Processing #{group_guid}"
-
-          group = Group.first(conditions: { extens_id: group_guid })
-
-          next unless group
-
-          group.contacts = merge_extens_contacts(group.contacts || "", emails || "")
-          group.save!
+        begin
+          import!(KP::Import::GroupContactImporter.new(csv, school_type.id), csv_separator)
+        rescue KP::Import::ParseError => e
+          puts "Found errors when importing:\n#{e.message}"
         end
-
       end
 
 
