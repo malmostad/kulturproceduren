@@ -1,5 +1,8 @@
 # A group is the representation of a group of children in a school.
 class Group < ActiveRecord::Base
+
+  has_paper_trail
+
   has_many :allotments, dependent: :nullify
   has_many :tickets, dependent: :destroy
   has_many :bookings, dependent: :destroy
