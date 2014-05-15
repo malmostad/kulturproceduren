@@ -134,6 +134,8 @@ class ApplicationProxyControllerTest < ActionController::TestCase
   end
   test "current user" do
     user = create(:user)
+    get :test_current_user
+    assert_nil assigns(:result)
     session[:current_user_id] = user.id
     get :test_current_user
     assert_equal user, assigns(:result)
