@@ -25,6 +25,13 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal    group, assigns(:age_group).group
   end
 
+  test "history" do
+    group = create(:group)
+    get :history, id: group.id
+    assert_response :success
+    assert_equal    group, assigns(:group)
+  end
+
   test "new" do
     schools = create_list(:school, 3).sort_by(&:name)
 

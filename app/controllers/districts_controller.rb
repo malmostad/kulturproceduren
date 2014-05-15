@@ -13,6 +13,10 @@ class DistrictsController < ApplicationController
     @district = District.find(params[:id])
   end
 
+  def history
+    @district = District.find(params[:id])
+  end
+
   def new
     @school_types = SchoolType.order(:name)
     @district = District.new

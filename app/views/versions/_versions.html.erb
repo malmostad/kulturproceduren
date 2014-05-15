@@ -1,0 +1,27 @@
+<table>
+  <thead>
+    <tr>
+      <% fields.each do |field| %>
+        <th><%= model.human_attribute_name(field) %></th>
+      <% end %>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% versions.each do |version| %>
+      <tr class="<%= cycle("", "even") %>">
+        <% old_object = version.object ? PaperTrail.serializer.load(version.object) : {} %>
+        <% fields.each do |field| %>
+          <td><%= old_object[field] %></th>
+        <% end %>
+        <td>
+          <%= link_to "Återställ",
+            revert_version_path(version.id),
+            data: { confirm: "Är du säker på att du vill återställa till den här versionen?" },
+            method: :put %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

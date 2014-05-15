@@ -14,6 +14,7 @@
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_district_path(@district) %></li>
     <li><%= link_to 'Radera', @district, data: {confirm: 'Är du säker på att du vill radera området?'}, method: :delete %></li>
+    <li><%= link_to 'Historik', history_district_path(@district) %></li>
   </ul>
 
 </div>
