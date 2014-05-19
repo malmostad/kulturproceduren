@@ -415,9 +415,9 @@ class EventTest < ActiveSupport::TestCase
 
   test "not targeted group ids" do
     event = create(:event, from_age: 10, to_age: 11)
-    targeted1    = create(:group_with_age_groups, age_group_data: [[10,20]])
-    targeted2    = create(:group_with_age_groups, age_group_data: [[11,20]])
-    not_targeted = create(:group_with_age_groups, age_group_data: [[9,20]])
+    targeted1    = create(:group_with_age_groups, _age_group_data: [[10,20]])
+    targeted2    = create(:group_with_age_groups, _age_group_data: [[11,20]])
+    not_targeted = create(:group_with_age_groups, _age_group_data: [[9,20]])
 
     create_list(:ticket, 2, event: event, group: targeted1)
     create_list(:ticket, 2, event: event, group: targeted2)

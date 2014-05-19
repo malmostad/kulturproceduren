@@ -685,4 +685,14 @@ body.kp-standalone { background: #fff; }
 }
 
 
+/*** Version display ***/
+#kp .versions-table .extra-data ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#kp .versions-table .extra-data li {
+    margin: 0;
+    padding: 0;
+}
 

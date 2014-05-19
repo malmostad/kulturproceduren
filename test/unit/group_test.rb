@@ -11,7 +11,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "age group, number of children by age span" do
-    group = create(:group_with_age_groups, age_group_data: [[9, 10], [10,10], [11,20], [12,15]])
+    group = create(:group_with_age_groups, _age_group_data: [[9, 10], [10,10], [11,20], [12,15]])
 
     assert_equal 10+20, group.age_groups.num_children_by_age_span(10, 11)
     assert_equal 15,    group.age_groups.num_children_by_age_span(12, 13)
@@ -29,7 +29,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "total children" do
-    group = create(:group_with_age_groups, age_group_data: [[9, 10], [10,10], [11,20], [12,15]])
+    group = create(:group_with_age_groups, _age_group_data: [[9, 10], [10,10], [11,20], [12,15]])
     create(:group_with_age_groups) # dummy
     assert_equal 10+10+20+15, group.total_children
   end
@@ -177,5 +177,37 @@ class GroupTest < ActiveSupport::TestCase
       assert last_prio < prio
       last_prio = prio
     end
+  end
+
+  test "age_group_data" do
+    group = create(:group_with_age_groups, _age_group_data: [[10, 20], [11, 10], [12, 1]])
+    age_group_data = group.age_group_data
+
+    assert_equal 20, age_group_data[10]
+    assert_equal 10, age_group_data[11]
+    assert_equal 1, age_group_data[12]
+  end
+
+  test "set_extra_data_from_version!" do
+    # Group without age groups
+    group = create(:group)
+    group.set_extra_data_from_version!({ 10 => 20, 11 => 10, 12 => 1 })
+
+    age_groups = group.age_groups(true)
+
+    assert_equal 3, age_groups.length
+    assert_equal 20, age_groups.detect { |ag| ag.age == 10 }.quantity
+    assert_equal 10, age_groups.detect { |ag| ag.age == 11 }.quantity
+    assert_equal 1, age_groups.detect { |ag| ag.age == 12 }.quantity
+
+    # Group with age groups
+    group.set_extra_data_from_version!({ 10 => 21, 11 => 10, 13 => 2 })
+
+    age_groups = group.age_groups(true)
+
+    assert_equal 3, age_groups.length
+    assert_equal 21, age_groups.detect { |ag| ag.age == 10 }.quantity
+    assert_equal 10, age_groups.detect { |ag| ag.age == 11 }.quantity
+    assert_equal 2, age_groups.detect { |ag| ag.age == 13 }.quantity
   end
 end

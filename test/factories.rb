@@ -36,12 +36,12 @@ FactoryGirl.define do
       ignore do
         school_count   5
         group_count    5
-        age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
+        _age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |district, evaluator|
         FactoryGirl.create_list(:school, evaluator.school_count, district: district).each do |school|
           FactoryGirl.create_list(:group, evaluator.group_count, school: school).each do |group|
-            evaluator.age_group_data.each do |age, quantity|
+            evaluator._age_group_data.each do |age, quantity|
               FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
             end
           end
@@ -68,11 +68,11 @@ FactoryGirl.define do
     factory :school_with_age_groups do
       ignore do
         group_count    5
-        age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
+        _age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |school, evaluator|
         FactoryGirl.create_list(:group, evaluator.group_count, school: school).each do |group|
-          evaluator.age_group_data.each do |age, quantity|
+          evaluator._age_group_data.each do |age, quantity|
             FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
           end
         end
@@ -91,10 +91,10 @@ FactoryGirl.define do
 
     factory :group_with_age_groups do
       ignore do
-        age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
+        _age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |group, evaluator|
-        evaluator.age_group_data.each do |age, quantity|
+        evaluator._age_group_data.each do |age, quantity|
           FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
         end
       end

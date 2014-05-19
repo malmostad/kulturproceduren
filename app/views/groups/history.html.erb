@@ -12,4 +12,4 @@
 
 <%= render partial: "versions/versions",
   object: @group.versions.updates,
-  locals: { model: Group, fields: %w(name contacts) } %>
+  locals: { model: Group, fields: %w(name contacts), extra_title: "Åldersgrupper (ålder: antal)" } %>

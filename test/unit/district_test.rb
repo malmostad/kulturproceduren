@@ -13,21 +13,21 @@ class DistrictTest < ActiveSupport::TestCase
     create(:district_with_age_groups) # dummy
 
     forskola = create(:school, district: district)
-    create(:group_with_age_groups, school: forskola, age_group_data: [[3, 1], [4, 1]])
-    create(:group_with_age_groups, school: forskola, age_group_data: [[5, 1], [6, 1]])
-    create(:group_with_age_groups, school: forskola, age_group_data: [[1, 1]], active: false)
+    create(:group_with_age_groups, school: forskola, _age_group_data: [[3, 1], [4, 1]])
+    create(:group_with_age_groups, school: forskola, _age_group_data: [[5, 1], [6, 1]])
+    create(:group_with_age_groups, school: forskola, _age_group_data: [[1, 1]], active: false)
 
     lagstadie = create(:school, district: district)
-    create(:group_with_age_groups, school: lagstadie, age_group_data: [[7, 1]])
-    create(:group_with_age_groups, school: lagstadie, age_group_data: [[8, 1]])
-    create(:group_with_age_groups, school: lagstadie, age_group_data: [[9, 1]])
-    create(:group_with_age_groups, school: lagstadie, age_group_data: [[1, 1]], active: false)
+    create(:group_with_age_groups, school: lagstadie, _age_group_data: [[7, 1]])
+    create(:group_with_age_groups, school: lagstadie, _age_group_data: [[8, 1]])
+    create(:group_with_age_groups, school: lagstadie, _age_group_data: [[9, 1]])
+    create(:group_with_age_groups, school: lagstadie, _age_group_data: [[1, 1]], active: false)
 
     mellanstadie = create(:school, district: district)
-    create(:group_with_age_groups, school: mellanstadie, age_group_data: [[10, 1]])
-    create(:group_with_age_groups, school: mellanstadie, age_group_data: [[11, 1]])
-    create(:group_with_age_groups, school: mellanstadie, age_group_data: [[12, 1]])
-    create(:group_with_age_groups, school: mellanstadie, age_group_data: [[1, 1]], active: false)
+    create(:group_with_age_groups, school: mellanstadie, _age_group_data: [[10, 1]])
+    create(:group_with_age_groups, school: mellanstadie, _age_group_data: [[11, 1]])
+    create(:group_with_age_groups, school: mellanstadie, _age_group_data: [[12, 1]])
+    create(:group_with_age_groups, school: mellanstadie, _age_group_data: [[1, 1]], active: false)
 
     schools = district.schools.find_by_age_span(8, 11)
     assert !schools.blank?

@@ -55,6 +55,9 @@ class KP::Import::AgeGroupImporter < KP::Import::Base
     result[:deleted] = 0
 
     @updated.each do |group_id, age_group_ids|
+
+      Group.find(group_id).touch_with_version
+
       unless age_group_ids.blank?
         result[:deleted] += AgeGroup.where(group_id: group_id)
           .where([ "id not in (?)", age_group_ids ])
