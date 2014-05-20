@@ -1,5 +1,6 @@
 set :passenger_port, 3002
 set :relative_url_root, "/kp-archive"
+set :tmp_dir, "/tmp/kulturproceduren-archive"
 
 # Simple Role Syntax
 # ==================
