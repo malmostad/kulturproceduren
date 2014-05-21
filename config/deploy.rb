@@ -8,7 +8,7 @@ set :repo_url, "https://github.com/malmostad/kulturproceduren.git"
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/home/kp-#{fetch(:stage)}/app/"
+set :deploy_to, "$HOME/app/"
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -36,7 +36,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 set :rbenv_type, :user
 set :rbenv_ruby, "2.1.0"
 set :default_env, proc { {
-  "LD_LIBRARY_PATH" => "/home/$USER/.rbenv/versions/#{fetch(:rbenv_ruby)}/lib:$LD_LIBRARY_PATH",
+  "LD_LIBRARY_PATH" => "$HOME/.rbenv/versions/#{fetch(:rbenv_ruby)}/lib:$LD_LIBRARY_PATH",
   "RAILS_RELATIVE_URL_ROOT" => fetch(:relative_url_root)
 } }
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
