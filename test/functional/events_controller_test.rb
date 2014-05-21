@@ -309,4 +309,49 @@ class EventsControllerTest < ActionController::TestCase
     assert_response 404
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
   end
+
+  test "transition, no allotment" do
+    event = create(:event)
+    get :transition, id: event.id
+    assert_redirected_to event
+    assert_equal         "Evenemanget har ingen aktiv fördelning.", flash[:error]
+  end
+  test "transition, html" do
+    event = create(:event,
+                   ticket_release_date: Date.today + 7,
+                   ticket_state: :alloted_group,
+                   district_transition_date: Date.today + 14,
+                   free_for_all_transition_date: Date.today + 21)
+    create(:allotment, event: event)
+
+    get :transition, id: event.id
+    assert_response :success
+    assert_equal    event, assigns(:event)
+  end
+  test "next transition, alloted to group" do
+    event = create(:event,
+                   ticket_release_date: Date.today + 7,
+                   ticket_state: :alloted_group,
+                   district_transition_date: Date.today + 14,
+                   free_for_all_transition_date: Date.today + 21)
+
+    create(:allotment, event: event)
+
+    # Ticket release
+    patch :next_transition, id: event.id
+    assert_redirected_to event
+    assert_equal event.reload.ticket_release_date, Date.today
+
+    # Transition to district
+    patch :next_transition, id: event.id
+    assert_redirected_to event
+    assert_equal event.reload.district_transition_date, Date.today
+    assert_equal event.ticket_state, :alloted_district
+
+    # Transition to free for all
+    patch :next_transition, id: event.id
+    assert_redirected_to event
+    assert_equal event.reload.free_for_all_transition_date, Date.today
+    assert_equal event.ticket_state, :free_for_all
+  end
 end

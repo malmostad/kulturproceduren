@@ -144,6 +144,40 @@ class EventsController < ApplicationController
   end
 
 
+  def transition
+    @event = Event.find(params[:id])
+
+    if Rails.env.production?
+      redirect_to @event
+    elsif @event.allotments.empty?
+      flash[:error] = "Evenemanget har ingen aktiv fördelning."
+      redirect_to @event
+    end
+  end
+  def next_transition
+    @event = Event.find(params[:id])
+
+    if Rails.env.production?
+      redirect_to @event
+      return
+    elsif @event.ticket_release_date > Date.today
+      @event.ticket_release_date = Date.today
+      @event.save!
+      flash[:notice] = "Biljetterna släpptes. Evenemanget är nu bokningsbart."
+    elsif @event.alloted_group?
+      @event.district_transition_date = Date.today
+      @event.transition_to_district!
+      flash[:notice] = "Biljetterna är nu fördelade till området."
+    elsif @event.alloted_district?
+      @event.free_for_all_transition_date = Date.today
+      @event.transition_to_free_for_all!
+      flash[:notice] = "Biljetterna är nu fria att boka för alla."
+    end
+
+    redirect_to @event
+  end
+
+
   private
 
   # Loads the culture providers for the event creation sequence.

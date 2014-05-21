@@ -56,6 +56,8 @@ Kulturproceduren::Application.routes.draw do
     end
     member do
       get :ticket_allotment
+      get :transition
+      patch :next_transition
     end
 
     resources :images,                except: [:show, :edit, :update, :new]

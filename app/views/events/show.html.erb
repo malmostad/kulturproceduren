@@ -52,6 +52,10 @@
       <% if current_user.has_role?(:admin) && @event.has_booking? %>
         <li><%= link_to "Skicka e-post till alla bokade", new_event_information_path(@event) %></li>
       <% end %>
+
+      <% if !Rails.env.production? && current_user.has_role?(:admin) && (@event.alloted_group? || @event.alloted_district?) %>
+        <li><%= link_to 'Manuell fördelningsövergång', transition_event_path(@event) %></li>
+      <% end %>
     </ul>
   </div>
 <% elsif user_online? && current_user.has_role?(:host) && @event.reportable? %>
