@@ -73,3 +73,6 @@ archive:
     :instance_title: "ARKIV"
     :instance_message: "Detta är en arkivinstans för föregående läsår. Inga ändringar här kommer att kunna flyttas till malmo.se."
 
+acceptance:
+    <<: *common
+    :instance_title: "Acceptanstest"
