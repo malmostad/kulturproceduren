@@ -3,7 +3,7 @@ class AddTransitionDatesToEvents < ActiveRecord::Migration
     add_column :events, :district_transition_date, :date
     add_column :events, :free_for_all_transition_date, :date
 
-    Event.find_each(conditions: "ticket_release_date is not null") do |event|
+    Event.where("ticket_release_date is not null").find_each do |event|
       event.district_transition_date = event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days]
       event.free_for_all_transition_date = event.ticket_release_date + APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days]
       event.save!

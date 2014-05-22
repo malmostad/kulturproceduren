@@ -5,7 +5,6 @@ class AnswerForm < ActiveRecord::Base
   self.primary_key = "id"
   
   has_many :answers, -> { order("answers.question_id, answers.id") }, dependent: :destroy
-  belongs_to :booking
   belongs_to :occasion
   belongs_to :booking
   belongs_to :questionnaire

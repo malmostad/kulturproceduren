@@ -733,7 +733,6 @@ class BookingsControllerTest < ActionController::TestCase
     assert_equal booking.occasion, assigns(:occasion)
     assert_equal questionnaire,    assigns(:questionnaire)
     assert_equal({},               assigns(:answer))
-    assert_equal booking,          assigns(:answer_form).booking
     assert_equal booking.occasion, assigns(:answer_form).occasion
     assert_equal booking.group,    assigns(:answer_form).group
     assert_equal questionnaire,    assigns(:answer_form).questionnaire

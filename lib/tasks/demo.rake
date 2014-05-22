@@ -86,7 +86,7 @@ namespace :kp do
     task(create_categories: :environment) do
       YAML.load_file("#{Rails.root}/demo/categories.yml").each do |group_name, category_names|
         puts "Group: #{group_name}"
-        group = CategoryGroup.find_or_create_by_name(group_name)
+        group = CategoryGroup.find_or_create_by(name: group_name)
 
         group.categories.clear
 

@@ -227,7 +227,6 @@ class BookingsController < ApplicationController
     unless @questionnaire.questions.empty?
       @answer = params[:answer] || {}
       @answer_form = AnswerForm.new do |a|
-        a.booking = @booking
         a.occasion = @occasion
         a.group = @booking.group
         a.questionnaire = @questionnaire
@@ -240,7 +239,11 @@ class BookingsController < ApplicationController
     end
 
     @booking.unbook!(current_user)
-    @answer_form.answer(@answer) if @answer_form
+
+    if @answer_form
+      @answer_form.booking = @booking
+      @answer_form.answer(@answer) if @answer_form
+    end
 
     notify_admins_of_unbooking(@booking, @answer_form)
     notify_requests_of_unbooking(@booking.event)
