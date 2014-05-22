@@ -1,5 +1,21 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+  # Returns a css class for the body tag which indicates what type of environment
+  # the app is running as. This is used for Google Analytics according to the WAG
+  def malmo_body_class
+    case Rails.env
+    when "production"
+      return ""
+    when "development"
+      return "development"
+    when "acceptance"
+      return "test"
+    else
+      return "staging"
+    end
+  end
+
   # Returns the css class <tt>active</tt> if the current controller is among
   # the names in the arguments.
   #
