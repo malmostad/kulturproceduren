@@ -11,4 +11,7 @@
 // about supported directives.
 //
 //= require jquery_ujs
+//= require bootstrap-datepicker/core
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.sv
+//= require core
 //= require_tree .
