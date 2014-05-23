@@ -1,6 +1,19 @@
 .preamble.calendar {
     .about {
         @include columns(8);
+        position: relative;
+
+        .contact-us-map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .contact-us-map iframe {
+            width: 100%;
+            height: 15em;
+        }
     }
     .contact-us {
         @include columns(4, true);
