@@ -13,6 +13,9 @@ gem "will_paginate", "3.0.5"
 gem "pdf-writer", git: "https://github.com/Hermanverschooten/pdf-writer.git", ref: "f57c298a2527893acd62430aefc2516e76499633"
 gem "ruby-ldap", "0.9.12", require: "ldap"
 
+gem "simple_form", "~> 3.1.0.rc1", :git => "https://github.com/plataformatec/simple_form"
+gem "active_attr", "~> 0.8.3"
+
 gem "simple_enum", "1.6.9"
 gem "rails_autolink", "1.1.5"
 
@@ -29,6 +32,7 @@ gem "sass-rails", "~> 4.0.3"
 gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.0.0"
 gem "therubyracer", "~> 0.12.1"
+gem "bootstrap-datepicker-rails", "~> 1.3.0.2"
 
 
 group :development do
