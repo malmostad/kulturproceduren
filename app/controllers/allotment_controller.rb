@@ -34,6 +34,9 @@ class AllotmentController < ApplicationController
     session[:allotment][:ticket_state] = Event.new(ticket_state: incoming[:ticket_state].to_i).ticket_state
 
     session[:allotment][:bus_booking] = incoming[:bus_booking].to_i == 1
+    if incoming.has_key?(:last_bus_booking_date)
+      session[:allotment][:last_bus_booking_date] = Date.parse(incoming[:last_bus_booking_date])
+    end
 
     unless @event.tickets.empty?
       # Add the number of tickets already assigned to an event
@@ -134,6 +137,7 @@ class AllotmentController < ApplicationController
       @event.free_for_all_transition_date = session[:allotment][:free_for_all_transition_date]
       @event.ticket_state                 = session[:allotment][:ticket_state]
       @event.bus_booking                  = session[:allotment][:bus_booking]
+      @event.last_bus_booking_date        = session[:allotment][:last_bus_booking_date]
       @event.save!
 
       tickets_created = 0

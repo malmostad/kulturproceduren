@@ -97,6 +97,20 @@
       </div>
     </div>
 
+    <div class="form-row last_bus_booking_date-field-row">
+      <label for="kp-allotment-last_bus_booking_date">Sista datum för bussbokning:</label>
+      <div class="input-container">
+        <input type="text"
+               id="kp-allotment-last_bus_booking_date"
+               name="allotment[last_bus_booking_date]"
+               class="date-field <%= "changed" unless @event.last_bus_booking_date.blank? %>"
+               size="30"
+               <%= "disabled=\"disabled\"" unless @event.bus_booking? %>
+               data-default-interval="<%= APP_CONFIG[:bus_booking][:active_days] %>"
+               value="<%= @event.last_bus_booking_date %>"/>
+      </div>
+    </div>
+
     <% unless is_edit -%>
       <div class="form-row ticket_state-field-row">
         <label for="kp-allotment-ticket_state">Fördelningsnivå:</label>

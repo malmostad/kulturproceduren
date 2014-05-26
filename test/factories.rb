@@ -163,6 +163,7 @@ FactoryGirl.define do
     district_transition_date     nil
     free_for_all_transition_date nil
     bus_booking                  false
+    last_bus_booking_date        nil
 
     linked_culture_providers     { [] }
     linked_events                { [] }

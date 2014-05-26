@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140319094405) do
+ActiveRecord::Schema.define(version: 20140520081802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,6 +214,7 @@ ActiveRecord::Schema.define(version: 20140319094405) do
     t.date     "district_transition_date"
     t.date     "free_for_all_transition_date"
     t.boolean  "bus_booking",                  default: false
+    t.date     "last_bus_booking_date"
   end
 
   create_table "groups", force: true do |t|

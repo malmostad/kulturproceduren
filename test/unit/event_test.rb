@@ -428,6 +428,16 @@ class EventTest < ActiveSupport::TestCase
     assert_equal not_targeted.id, ids.first
   end
 
+  test "bus booking?" do
+    event = create(:event, bus_booking: true, last_bus_booking_date: Date.today)
+    assert event.bus_booking?
+    event.bus_booking = false
+    assert !event.bus_booking?
+    event.bus_booking = true
+    event.last_bus_booking_date = Date.yesterday
+    assert !event.bus_booking?
+  end
+
   test "has bus bookings?" do
     booking = create(:booking, bus_booking: true, bus_stop: "bus stop")
     assert booking.event.has_bus_bookings?

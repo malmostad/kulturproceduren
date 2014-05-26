@@ -80,6 +80,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_nil   session[:allotment][:district_ids]
     assert_nil   session[:allotment][:district_transition_date]
     assert_nil   session[:allotment][:free_for_all_transition_date]
+    assert_nil   session[:allotment][:last_bus_booking_date]
   end
 
   test "assign params for free for all with all common parameters" do
@@ -89,7 +90,8 @@ class AllotmentControllerTest < ActionController::TestCase
       free_for_all_transition_date: (Date.today + 12).to_s,
       district_ids: [district.id.to_s],
       ticket_state: Event::FREE_FOR_ALL.to_s,
-      bus_booking: "1"
+      bus_booking: "1",
+      last_bus_booking_date: (Date.today + 13).to_s
     )
 
     post :assign_params, id: @event.id, allotment: allotment_params
@@ -103,6 +105,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal :free_for_all,   session[:allotment][:ticket_state]
     assert_equal [district.id],   session[:allotment][:district_ids]
     assert_equal true,            session[:allotment][:bus_booking]
+    assert_equal Date.today + 13, session[:allotment][:last_bus_booking_date]
   end
 
   test "assign params with existing tickets" do
@@ -377,7 +380,8 @@ class AllotmentControllerTest < ActionController::TestCase
       free_for_all_transition_date: Date.today + 13,
       ticket_state: :alloted_group,
       num_tickets: 30,
-      bus_booking: "1"
+      bus_booking: "1",
+      last_bus_booking_date: Date.today + 14
     }
 
     post :create_tickets,
@@ -394,6 +398,7 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal Date.today + 13, @event.free_for_all_transition_date
     assert_equal :alloted_group,  @event.ticket_state
     assert_equal true,            @event.bus_booking
+    assert_equal Date.today + 14, @event.last_bus_booking_date
 
     @event.allotments(true)
     assert_equal 3, @event.allotments.length # 2 groups + extra tickets

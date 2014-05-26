@@ -28,6 +28,7 @@ bundle exec rake RAILS_ENV=$RAILS_ENV kp:notify_ticket_release
 bundle exec rake RAILS_ENV=$RAILS_ENV kp:remind_answer_form
 bundle exec rake RAILS_ENV=$RAILS_ENV kp:send_answer_forms
 bundle exec rake RAILS_ENV=$RAILS_ENV kp:update_tickets
+bundle exec rake RAILS_ENV=$RAILS_ENV kp:send_bus_bookings
 
 echo -n "all tasks done at "
 date

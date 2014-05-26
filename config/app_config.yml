@@ -11,6 +11,8 @@ common: &common
     :ticket_state:
         :group_days: 14
         :district_days: 14
+    :bus_booking:
+        :active_days: 14
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:

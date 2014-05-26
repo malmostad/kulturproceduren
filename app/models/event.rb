@@ -126,7 +126,8 @@ class Event < ActiveRecord::Base
     :single_group_per_occasion,
     :district_transition_date,
     :free_for_all_transition_date,
-    :bus_booking
+    :bus_booking,
+    :last_bus_booking_date
   
   validates_presence_of :name,
     message: "Namnet får inte vara tomt"
@@ -269,6 +270,9 @@ class Event < ActiveRecord::Base
   end
 
 
+  def bus_booking?
+    self.bus_booking && self.last_bus_booking_date && Date.today <= self.last_bus_booking_date
+  end
   def has_bus_bookings?
     bookings.any?(&:bus_booking)
   end

@@ -325,7 +325,7 @@ class OccasionTest < ActiveSupport::TestCase
   end
 
   test "bus booking?" do
-    event = create(:event, bus_booking: true, ticket_state: :alloted_group)
+    event = create(:event, bus_booking: true, last_bus_booking_date: Date.today)
     occasion = create(
       :occasion,
       event: event
@@ -339,10 +339,10 @@ class OccasionTest < ActiveSupport::TestCase
     event.bus_booking = true
     assert occasion.bus_booking?
 
-    # Event must be alloted to group
-    event.ticket_state = :alloted_district
+    # The last bus booking date cannot be passed
+    event.last_bus_booking_date = Date.yesterday
     assert !occasion.bus_booking?
-    event.ticket_state = :alloted_group
+    event.last_bus_booking_date = Date.today
     assert occasion.bus_booking?
   end
 end

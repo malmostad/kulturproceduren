@@ -261,7 +261,8 @@
             onSelect: function(dateText, inst) {
                 var date = new Date(dateText);
                 $("#kp #kp-allotment-district_transition_date:not(.changed),\
-                    #kp #kp-allotment-free_for_all_transition_date:not(.changed)").each(function() {
+                    #kp #kp-allotment-free_for_all_transition_date:not(.changed),\
+                    #kp #kp-allotment-last_bus_booking_date:not(.changed)").each(function() {
                     var $field = $(this),
                         defaultInterval = parseInt($field.attr("data-default-interval")),
                         newDate = new Date();
@@ -271,7 +272,8 @@
             }
         });
         $("#kp #kp-allotment-district_transition_date,\
-            #kp #kp-allotment-free_for_all_transition_date").datepicker({
+            #kp #kp-allotment-free_for_all_transition_date,\
+            #kp #kp-allotment-last_bus_booking_date").datepicker({
             minDate: tomorrow,
             onSelect: function() {
                 $(this).addClass("changed");
@@ -287,6 +289,15 @@
                 $("#kp #kp-allotment-district_transition_date").attr("disabled", "disabled");
             } else {
                 $("#kp #kp-allotment-district_transition_date").removeAttr("disabled");
+            }
+        });
+
+        // Bus booking activation
+        $("#kp #kp-allotment-bus_booking").change(function() {
+            if ($(this).is(":checked")) {
+                $("#kp #kp-allotment-last_bus_booking_date").removeAttr("disabled");
+            } else {
+                $("#kp #kp-allotment-last_bus_booking_date").attr("disabled", "disabled");
             }
         });
     });

@@ -169,7 +169,7 @@ class Occasion < ActiveRecord::Base
   end
 
   def bus_booking?
-    self.event.bus_booking? && self.event.alloted_group?
+    self.event.bus_booking?
   end
  
 end
