@@ -1,15 +1,13 @@
 # Controller for displaying the welcoming occasion/event calendar for the user
 class CalendarController < ApplicationController
 
-  layout "standard"
+  layout "application"
 
-  before_filter :set_list
-  
   # Displays a regular calendar for occasions/events without any search filter
   def index
     unless fragment_exist?(list_cache_key())
       @category_groups = CategoryGroup.order "name ASC"
-      if @calendar_list == :events
+      if events_calendar?
         @events = Event.search_standing({ from_date: Date.today }, params[:page])
       else
         @occasions = Occasion.search({ from_date: Date.today }, params[:page])
@@ -19,11 +17,12 @@ class CalendarController < ApplicationController
 
   # Displays a regular calendar for occasions/events with a search filter
   def filter
-    if @calendar_list == :events
+    if events_calendar?
       @events = Event.search_standing(calendar_filter, params[:page])
     else
       @occasions = Occasion.search(calendar_filter, params[:page])
     end
+
     @category_groups = CategoryGroup.order "name ASC"
   end
 
@@ -54,13 +53,13 @@ class CalendarController < ApplicationController
       calendar_filter[:categories] = categories.map{ |i| i.to_i }.select { |i| i != -1 }
 
     end
-    redirect_to action: "filter", list: @calendar_list
+    redirect_to action: "filter", list: calendar_list
   end
 
   # Removes all search parameters from the session
   def clear_filter
     session[:calendar_filter] = { from_date: Date.today }
-    redirect_to action: "filter", list: @calendar_list
+    redirect_to action: "filter", list: calendar_list
   end
 
 
@@ -76,17 +75,26 @@ class CalendarController < ApplicationController
 
   # Convenience accessor for the list cache key
   def list_cache_key
-    "calendar/list/#{@calendar_list}/#{user_online? && current_user.can_book? ? "" : "not_" }bookable/#{params[:page] || 1}"
+    "calendar/list/#{calendar_list}/#{user_online? && current_user.can_book? ? "" : "not_" }bookable/#{params[:page] || 1}"
   end
   helper_method :list_cache_key
 
-
-  private
+  def occasions_calendar?
+    calendar_list == :occasions
+  end
+  helper_method :occasions_calendar?
+  def events_calendar?
+    calendar_list == :events
+  end
+  helper_method :events_calendar?
 
   # Sets the list to used based on the incoming list parameter
-  def set_list
-    @calendar_list = params[:list] == 'events' ? :events : :occasions
+  def calendar_list
+    params[:list] == 'events' ? :events : :occasions
   end
+  helper_method :calendar_list
+
+  private
 
   # Parses a date from a string, returning nil if the date is not of the correct format
   def parse_date(date_str)

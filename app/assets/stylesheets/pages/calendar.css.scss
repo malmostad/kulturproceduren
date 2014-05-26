@@ -1,0 +1,64 @@
+.preamble.calendar {
+    .about {
+        @include columns(8);
+    }
+    .contact-us {
+        @include columns(4, true);
+        margin-top: 0;
+    }
+}
+
+.calendar-nav {
+    @include clearfix();
+    margin: 1em 0;
+
+    & > a {
+        display: inline-block;
+        margin-left: 1em;
+        line-height: 34px;
+    }
+
+    .culture-providers {
+        float: right;
+    }
+}
+
+form.basic.calendar-filter {
+    @include clearfix();
+
+    position: relative;
+
+    h4 {
+        margin-top: 0;
+    }
+
+    .text-fields .control-label {
+        width: 10%;
+    }
+    .text-fields .controls {
+        width: 88%;
+    }
+
+    .target-fields, .date-fields {
+        @include columns(4);
+    }
+
+    .target-fields .form-control {
+        display: inline-block;
+        width: auto;
+    }
+
+    .date-fields .control-label {
+        width: 15%;
+    }
+
+    .category-fields {
+        @include columns(4, true);
+    }
+
+    .form-buttons {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+}
