@@ -1,0 +1,36 @@
+- content_for(:page_title) do
+  Manuell fördelningsövergång för
+  = link_to @event.name, @event
+
+%main.with-aside
+  - if @event.ticket_release_date > Date.today
+    - submit_copy = "Släpp biljetterna"
+    .warning
+      Evenemangets nästa steg är att släppa biljetter. Klicka på knappen nedan
+      för att släppa biljetterna och göra evenemanget bokningsbart.
+
+  - elsif @event.alloted_group?
+    - submit_copy = "Släpp biljetterna till områden"
+    .warning
+      Evenemangets nästa steg är att biljetterna blir tillgängliga för
+      områdena. Klicka på knappen nedan för att övergå till områden.
+
+  - elsif @event.alloted_district?
+    - submit_copy = "Släpp biljetterna till alla i hela staden"
+    .warning
+      Evenemangets nästa steg är att biljetterna blir tillgängliga för alla i
+      hela staden. Klicka på knappen nedan för att övergå till hela staden.
+
+  - else
+    - submit_copy = false
+    .success Evenemanget är redan fritt för alla att boka.
+
+  - if submit_copy
+    = simple_form_for @event, url: next_transition_event_path(@event) do |f|
+      .form-group
+        %span.control-label
+        .controls
+          = f.submit submit_copy, class: "btn btn-primary"
+          = link_to "Avbryt", @event, class: "btn btn-default"
+
+= render partial: "administration_menu", locals: { event: @event }

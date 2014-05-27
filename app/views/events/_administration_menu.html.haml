@@ -1,0 +1,45 @@
+%nav.basic.administration
+  %h1 Administrera
+  %ul
+    %li= link_to "Redigera", edit_event_path(event)
+    - unless event.bookable?
+      %li
+        = link_to "Radera",
+          event_path(event),
+          method: :delete,
+          data: { confirm: "Är du säker på att du vill radera evenemanget?" }
+    
+    %li= link_to "Hantera bilder", event_images_path(event)
+    %li= link_to 'Hantera filer', event_attachments_path(event)
+    %li
+      = link_to 'Hantera länkade arrangörer',
+        event_culture_provider_links_path(event_id: event.id)
+    %li
+      = link_to 'Hantera länkade evenemang',
+        event_event_links_path(event_id: event.id)
+
+    - if current_user.has_role?(:admin) && !event.further_education && (event.ticket_release_date.nil? || event.ticket_release_date > Date.today)
+      %li
+        = link_to "Fördela inköpta biljetter",
+          controller: "allotment",
+          action: "init",
+          id: event.id
+
+    - if current_user.has_role?(:admin) && !event.tickets.empty?
+      %li
+        = link_to "Visa biljettfördelning",
+          ticket_allotment_event_path(event)
+
+    - if current_user.can_view_bookings?
+      %li= link_to "Bokningar", event_bookings_path(event)
+    - if current_user.has_role?(:admin)
+      %li= link_to "Bussbokningar", bus_event_bookings_path(event)
+
+    - if event.reportable?
+      %li= link_to 'Hantera närvaro', event_attendance_index_path(event)
+
+    - if current_user.has_role?(:admin) && event.has_booking?
+      %li= link_to "Skicka e-post till alla bokade", new_event_information_path(event)
+
+    - if !Rails.env.production? && current_user.has_role?(:admin) && (event.alloted_group? || event.alloted_district?)
+      %li= link_to "Manuell fördelningsövergång", transition_event_path(event)

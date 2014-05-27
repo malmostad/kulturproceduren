@@ -1,0 +1,89 @@
+- content_for(:page_title) do
+  - if @event.new_record?
+    Skapa nytt evenemang
+  - else
+    Redigera
+    = @event.name_was
+
+- content_for(:javascript) do
+  = javascript_include_tag "wysiwyg"
+
+%main.with-aside
+
+  = simple_form_for @event do |f|
+
+    = f.error_notification class: "warning"
+
+    - if @event.new_record?
+      = f.input :culture_provider_id, collection: @culture_providers
+
+    = f.input :name
+    = f.input :further_education,
+      as: :radio_buttons,
+      wrapper: :radio,
+      collection: [ [ "Ja", true ], [ "Nej", false ] ]
+
+    = f.input :school_type_ids,
+      as: :check_boxes,
+      wrapper: :checkbox,
+      collection: @school_types
+
+    = f.input :from_age
+    = f.input :to_age
+
+    = f.input :single_group_per_occasion,
+      as: :radio_buttons,
+      wrapper: :radio,
+      collection: [ [ "Ja", true ], ["Nej", false ] ]
+
+    - if @event.new_record? || @event.ticket_release_date.nil? || @event.ticket_release_date > Date.today
+      .form-group
+        = f.label :visible_from, class: "control-label"
+        .controls.input-group
+          = f.input_field :visible_from,
+            as: :string,
+            class: "form-control datepicker",
+            data: { "start-date" => Date.today }
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-calendar
+
+    .form-group
+      = f.label :visible_to, class: "control-label"
+      .controls.input-group
+        = f.input_field :visible_to,
+          as: :string,
+          class: "form-control datepicker",
+          data: { "start-date" => Date.today }
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-calendar
+
+    = f.input :description, input_html: { class: "ckeditor" }
+
+    - @category_groups.each do |category_group|
+      - unless category_group.categories.blank?
+        .form-group
+          %label.control-label
+            = succeed ":" do
+              = category_group.name
+          .controls.checkbox
+            - category_group.categories.each do |category|
+              %label.checkbox
+                = check_box_tag "category_ids[]",
+                  category.id,
+                  @event.categories.any? { |c| c.id == category.id }
+                = category.name
+
+    = f.input :url
+    = f.input :booking_info, hint: "Detta fält visas inte om evenemanget är bokningsbart i Kulturproceduren"
+    = f.input :movie_url
+    = f.input :opening_hours, input_html: { rows: 5 }
+    = f.input :cost, input_html: { rows: 5 }
+    = f.input :map_address
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit(@event.new_record? ? "Skapa evenemang" : "Uppdatera evenemang", class: "btn btn-primary")
+        = link_to "Avbryt", @event.new_record? ? @event.culture_provider : @event, class: "btn btn-default"
+
+= render partial: "administration_menu", locals: { event: @event } unless @event.new_record?

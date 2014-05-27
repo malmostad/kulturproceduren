@@ -231,6 +231,7 @@ sv:
         cost: "Kostnad:"
         further_education: "Fortbildning pedagoger/vuxna"
         map_address: "Kartadress:"
+        school_type_ids: "Skolformer:"
       occasion:
         date: "Datum:"
         seats: "Antal platser:"
