@@ -1,0 +1,38 @@
+%aside.basic.details.culture-provider.header
+  - if culture_provider.main_image
+    .image= uploaded_image_tag culture_provider.main_image
+
+  %dl
+    - if !culture_provider.address.blank? || !culture_provider.map_address.blank?
+      %dt.address Adress
+      - unless culture_provider.address.blank?
+        %dd.address= linebreakize(culture_provider.address)
+      - unless culture_provider.map_address.blank?
+        %dd.address= link_to "Visa på karta",
+          "http://www.malmo.se/karta?poi=#{u(culture_provider.map_address)}&amp;zoomlevel=4&amp;maptype=karta",
+          class: "show-on-map m-icon-location",
+          title: culture_provider.map_address,
+          "data-poi" => culture_provider.map_address,
+          "data-map-selector" => ".map-container",
+          "data-scroll-to" => ".map-container"
+
+    - unless culture_provider.contact_person.blank?
+      %dt.contact-person Kontaktperson
+      %dd.contact-person= culture_provider.contact_person
+
+    - unless culture_provider.phone.blank?
+      %dt.phone Telefon
+      %dd.phone= culture_provider.phone
+
+    - unless culture_provider.email.blank?
+      %dt.email Epost
+      %dd.email
+        %a{href:"mailto:#{u(culture_provider.email)}"}= culture_provider.email
+
+    - unless culture_provider.url.blank?
+      %dt.url Hemsida
+      %dd.url= link_to culture_provider.url, qualified_url(culture_provider.url)
+
+    - unless culture_provider.opening_hours.blank?
+      %dt.opening-hours Öppettider
+      %dd.opening-hours= linebreakize(culture_provider.opening_hours)

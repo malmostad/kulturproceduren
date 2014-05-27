@@ -51,13 +51,13 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "show description" do
     assert_equal "", show_description(nil)
-    assert_equal paragraphize("abc\ndef\n\nghi", 'class="description"'), show_description("abc\ndef\n\nghi")
+    assert_equal paragraphize("abc\ndef\n\nghi"), show_description("abc\ndef\n\nghi")
     self.expects(:sanitize).with(
       "<p>foo</p>",
       tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
       attributes: %w(href target title style)
     ).returns("ok_value")
-    assert_equal '<div class="description">ok_value</div>', show_description("<p>foo</p>")
+    assert_equal "ok_value", show_description("<p>foo</p>")
   end
 
   def link_to_unless(condition, title, url)

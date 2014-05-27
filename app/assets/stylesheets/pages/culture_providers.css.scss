@@ -1,0 +1,17 @@
+ul.culture-providers {
+    font-family: $sans-serif;
+}
+section.events {
+    @include clearfix();
+
+    .occasions {
+        @include columns(8);
+    }
+    .events {
+        @include columns(4, true);
+
+        li {
+            margin-bottom: 0.3em;
+        }
+    }
+}

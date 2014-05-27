@@ -16,6 +16,13 @@ module ApplicationHelper
     end
   end
 
+  # Partitions a collection by the first letter in the attribute given by
+  # +attribute+. Returns a hash with the first letters as keys.
+  def partition_by_first_letter(collection, attribute)
+    collection.group_by { |e| e[attribute].first.mb_chars.upcase.to_s }
+  end
+
+
   # Returns the css class <tt>active</tt> if the current controller is among
   # the names in the arguments.
   #
@@ -70,16 +77,13 @@ module ApplicationHelper
   def show_description(description)
     return "" if description.blank?
     if description.include?("<p")
-      content_tag(:div,
-        sanitize(
-          description,
-          tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
-          attributes: %w(href target title style)
-        ),
-        class: "description"
+      sanitize(
+        description,
+        tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
+        attributes: %w(href target title style)
       )
     else
-      paragraphize(description, 'class="description"')
+      paragraphize(description)
     end
   end
 

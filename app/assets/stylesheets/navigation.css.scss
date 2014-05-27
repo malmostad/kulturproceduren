@@ -1,0 +1,35 @@
+nav.letter {
+    @include clearfix();
+    padding-bottom: 1em;
+
+    h2 {
+        margin: 0.33em 0 0 0;
+
+        font-size: 3em;
+
+        @include columns(1);
+    }
+
+    & > ul {
+        margin: 1em 0 1em 0;
+        padding: 0.5em 0 0 0;
+        border-top: 3px solid #000;
+        list-style-type: none;
+
+        @include columns(10, true);
+
+        li {
+            margin: 0;
+            padding: 0.5em 0;
+            border-bottom: 1px solid $border-color;
+        }
+
+        li a {
+            display: block;
+        }
+    }
+}
+
+nav.administration {
+    @include columns(4, true);
+}

@@ -9,3 +9,10 @@
     @include clearfix();
 }
 
+main.with-aside {
+    @include columns(8);
+}
+
+.wrapper > aside {
+    @include columns(4, true);
+}
