@@ -28,6 +28,15 @@
   %body.mf-v4{class: malmo_body_class}
     .wrapper
 
+      %ul#user-menu
+        - if user_online?
+          - if current_user.has_role?(:admin)
+            %li= link_to "Administration", role_applications_path
+          %li= link_to "Mitt konto", current_user
+          %li= link_to "Logga ut", controller: "login", action: "logout"
+        - else
+          %li= login_link "Logga in på Kulturproceduren"
+
       %ol.breadcrumbs
         %li= link_to "Start", "http://www.malmo.se/"
         %li= link_to "Kultur & nöje", "http://www.malmo.se/Medborgare/Kultur--noje.html"

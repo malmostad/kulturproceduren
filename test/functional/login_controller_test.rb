@@ -16,6 +16,11 @@ class LoginControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal    "/foo/bar", session[:return_to]
   end
+  test "index, user online" do
+    session[:current_user_id] = create(:user).id
+    get :index
+    assert_redirected_to root_url()
+  end
 
   test "login, user online" do
     session[:current_user_id] = create(:user).id

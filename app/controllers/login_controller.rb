@@ -1,10 +1,15 @@
 # Controller for managin login and logout
 class LoginController < ApplicationController
 
-  layout "standard"
+  layout "application"
 
   # Display a form for logging in
   def index
+    if user_online?
+      redirect_to root_url()
+      return
+    end
+
     session[:return_to] = params[:return_to] if params[:return_to]
   end
 

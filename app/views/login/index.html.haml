@@ -1,0 +1,20 @@
+- content_for(:page_title) do
+  Logga in på Kulturproceduren
+
+%main.article
+  .body-copy
+    %p
+      Om du inte har ett konto kan du
+      = link_to "registrera ett här", new_user_path
+
+  = simple_form_for User.new, url: { action: "login" }, html: { class: "basic" } do |f|
+
+    = f.error_notification class: "warning"
+
+    = f.input :username
+    = f.input :password
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit "Logga in", class: "btn btn-primary"

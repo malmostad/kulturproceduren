@@ -9,6 +9,9 @@
     @include clearfix();
 }
 
+main.article {
+    @include columns(6);
+}
 main.with-aside {
     @include columns(8);
 }
