@@ -1,7 +1,7 @@
 - content_for(:page_title) do
   Logga in på Kulturproceduren
 
-%main.article
+%main.with-aside
   .body-copy
     %p
       Om du inte har ett konto kan du
@@ -18,3 +18,7 @@
       %span.control-label
       .controls
         = f.submit "Logga in", class: "btn btn-primary"
+        = link_to "Har du glömt ditt lösenord?",
+          request_password_reset_users_path
+
+= render partial: "users/menu"

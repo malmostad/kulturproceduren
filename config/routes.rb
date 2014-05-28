@@ -8,10 +8,10 @@ Kulturproceduren::Application.routes.draw do
       post :send_password_reset_confirmation
     end
     member do
-      get  :edit_password
-      put  :update_password
-      post :add_culture_provider
-      get  :reset_password
+      get   :edit_password
+      patch :update_password
+      post  :add_culture_provider
+      get   :reset_password
     end
 
   end

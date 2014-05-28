@@ -1,0 +1,25 @@
+- content_for(:page_title) do
+  - if user_online? && current_user.has_role?(:admin)
+    Skapa användare
+  - else
+    Registrera konto
+
+%main.with-aside
+
+  = simple_form_for @user, html: { class: "basic" } do |f|
+
+    = f.error_notification class: "warning"
+
+    = f.input :name
+    = f.input :email
+    = f.input :cellphone
+    = f.input :username
+    = f.input :password
+    = f.input :password_confirmation
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit "Skapa konto", class: "btn btn-primary"
+
+= render partial: "menu"

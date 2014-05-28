@@ -1,13 +1,13 @@
 # Controller for managing users.
 class UsersController < ApplicationController
-  layout :set_layout
+  layout "application"
 
   before_filter :authenticate,
     except: [ :new, :create, :request_password_reset, :send_password_reset_confirmation, :reset_password ]
   before_filter :require_admin,
     only: [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
   before_filter :load_user,
-    only: [ :edit, :edit_password, :update, :update_password ]
+    only: [ :update, :update_password ]
 
   # Displays a list of users in the system.
   def index
@@ -37,10 +37,6 @@ class UsersController < ApplicationController
   def show
     if current_user.has_role?(:admin, :coordinator)
       @user = User.find(params[:id])
-
-      if current_user.has_role?(:coordinator)
-        render action: "show_readonly"
-      end
     else
       @user = current_user
     end
@@ -74,14 +70,6 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-  end
-
-  def edit
-  end
-
-  # Displays a form for changing a user's password.
-  def edit_password
-    @user.reset_password
   end
 
   def create
@@ -118,43 +106,38 @@ class UsersController < ApplicationController
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
-      render action: "edit"
+      render action: "show"
     end
   end
 
   # Updates a user's password. If the user is not an administrator, the user's
   # current password is required in order to change it.
   def update_password
-    if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:current_password])
+    if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:user][:current_password])
       flash[:warning] = "Felaktigt lösenord."
-      redirect_to edit_password_user_url(@user)
-      return
     elsif params[:user][:password].blank?
       flash[:warning] = "Lösenordet får inte vara tomt."
-      redirect_to edit_password_user_url(@user)
-      return
     elsif params[:user][:password] != params[:user][:password_confirmation]
       flash[:warning] = "Lösenordsbekräftelsen matchar inte."
-      redirect_to edit_password_user_url(@user)
-      return
-    end
-
-    @user.password = params[:user][:password]
-    @user.password_confirmation = params[:user][:password_confirmation]
-
-    if @user.save
-      flash[:notice] = "Lösenordet uppdaterades."
-      redirect_to action: "index"
     else
-      flash[:warning] = "Ett fel uppstod när lösenordet uppdaterades."
-      redirect_to edit_password_user_url(@user)
+      @user.password = params[:user][:password]
+      @user.password_confirmation = params[:user][:password_confirmation]
+
+      if @user.save
+        flash[:notice] = "Lösenordet uppdaterades."
+      else
+        flash[:warning] = "Ett fel uppstod när lösenordet uppdaterades."
+      end
     end
+
+    redirect_to @user
   end
 
   def destroy
     user = User.find(params[:id])
     user.destroy
 
+    flash[:notice] = "Användaren raderades från Kulturproceduren."
     redirect_to(users_url)
   end
 
@@ -244,24 +227,19 @@ class UsersController < ApplicationController
 
   # Sort users by their username by default.
   def sort_column_from_param(p)
-    return "username" if p.blank?
+    return "name" if p.blank?
 
     case p.to_sym
-    when :name then "name"
+    when :username then "username"
     when :cellphone then "cellphone"
     when :email then "email"
     else
-      "username"
+      "name"
     end
   end
 
 
   private
-
-  # Use the admin layout if the user is an administrator.
-  def set_layout
-    user_online? && current_user.has_role?(:admin) ? "admin" : "standard"
-  end
 
   # Loads the requested user from the database.
   def load_user
