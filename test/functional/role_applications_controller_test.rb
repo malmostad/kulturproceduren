@@ -24,12 +24,11 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_equal    culture_providers, assigns(:culture_providers)
-    assert          assigns(:booker_appl).new_record?
-    assert          assigns(:culture_worker_appl).new_record?
-    assert          assigns(:host_appl).new_record?
-    assert_equal    roles(:booker),         assigns(:booker_appl).role
-    assert_equal    roles(:culture_worker), assigns(:culture_worker_appl).role
-    assert_equal    roles(:host),           assigns(:host_appl).role
+    assert          assigns(:role_application).new_record?
+    assert_equal    roles(:booker),         assigns(:role_application).role
+    assert_equal    roles(:booker),         assigns(:booker)
+    assert_equal    roles(:culture_worker), assigns(:culture_worker)
+    assert_equal    roles(:host),           assigns(:host)
   end
 
   test "archive" do
@@ -85,31 +84,28 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     post :create, role_application: { role_id: roles(:booker).id }
     assert_response :success
     assert_template "role_applications/index"
-    assert_equal    :booker,                assigns(:application_type)
-    assert_equal    roles(:booker),         assigns(:booker_appl).role
-    assert_equal    roles(:culture_worker), assigns(:culture_worker_appl).role
-    assert_equal    roles(:host),           assigns(:host_appl).role
-    assert_equal    assigns(:booker_appl),  assigns(:application)
+    assert_equal    roles(:booker),         assigns(:role_application).role
+    assert_equal    roles(:booker),         assigns(:booker)
+    assert_equal    roles(:culture_worker), assigns(:culture_worker)
+    assert_equal    roles(:host),           assigns(:host)
     assert_equal    culture_providers,      assigns(:culture_providers)
     # culture_worker
     post :create, role_application: { role_id: roles(:culture_worker).id }
     assert_response :success
     assert_template "role_applications/index"
-    assert_equal    :culture_worker,               assigns(:application_type)
-    assert_equal    roles(:booker),                assigns(:booker_appl).role
-    assert_equal    roles(:culture_worker),        assigns(:culture_worker_appl).role
-    assert_equal    roles(:host),                  assigns(:host_appl).role
-    assert_equal    assigns(:culture_worker_appl), assigns(:application)
-    assert_equal    culture_providers,             assigns(:culture_providers)
+    assert_equal    roles(:culture_worker), assigns(:role_application).role
+    assert_equal    roles(:booker),         assigns(:booker)
+    assert_equal    roles(:culture_worker), assigns(:culture_worker)
+    assert_equal    roles(:host),           assigns(:host)
+    assert_equal    culture_providers,      assigns(:culture_providers)
     # host
     post :create, role_application: { role_id: roles(:host).id }
     assert_response :success
     assert_template "role_applications/index"
-    assert_equal    :host,                  assigns(:application_type)
-    assert_equal    roles(:booker),         assigns(:booker_appl).role
-    assert_equal    roles(:culture_worker), assigns(:culture_worker_appl).role
-    assert_equal    roles(:host),           assigns(:host_appl).role
-    assert_equal    assigns(:host_appl),    assigns(:application)
+    assert_equal    roles(:host),           assigns(:role_application).role
+    assert_equal    roles(:booker),         assigns(:booker)
+    assert_equal    roles(:culture_worker), assigns(:culture_worker)
+    assert_equal    roles(:host),           assigns(:host)
     assert_equal    culture_providers,      assigns(:culture_providers)
   end
 

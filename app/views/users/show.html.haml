@@ -154,5 +154,26 @@
             grant_role_path(id: @user.id, role: :admin),
             class: "btn btn-default btn-xs"
 
+  - unless @user.role_applications.empty?
+    %h2 Ansökningshistorik
+
+    %table
+      %thead
+        %tr
+          %th Typ
+          %th Inskickad
+          %th Status
+          %th Besvarad
+          %th Svar
+
+      %tbody
+        - @user.role_applications.each do |role_application|
+          %tr
+            %td= type_string(role_application)
+            %td= l role_application.created_at, format: :short
+            %td= state_string(role_application)
+            %td= l role_application.updated_at, format: :short unless role_application.created_at == role_application.updated_at
+            %td= role_application.response
+
 
 = render partial: "menu"
