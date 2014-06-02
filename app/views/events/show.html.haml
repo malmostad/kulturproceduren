@@ -48,8 +48,11 @@
         %dt Hitta till oss
         %dd
           = link_to "Visa på karta",
-            "#",
-            title: @event.map_address
+            "http://www.malmo.se/karta?poi=#{u(@event.map_address)}&amp;zoomlevel=4&amp;maptype=karta",
+            class: "show-on-map m-icon-location",
+            "data-poi" => @event.map_address,
+            "data-map-selector" => ".map-container",
+            "data-scroll-to" => ".map-container"
 
       - if user_online? && current_user.can_administrate?(@event.culture_provider)
         %dt Visas mellan
@@ -188,8 +191,11 @@
                     - unless occasion.address.blank?
                       %br
                     = link_to "Visa på karta",
-                      "#",
-                      title: occasion.map_address
+                      "http://www.malmo.se/karta?poi=#{u(occasion.map_address)}&amp;zoomlevel=4&amp;maptype=karta",
+                      class: "show-on-map m-icon-location",
+                      "data-poi" => occasion.map_address,
+                      "data-map-selector" => ".map-container",
+                      "data-scroll-to" => ".map-container"
 
                 %td.description= linebreakize(occasion.description)
 

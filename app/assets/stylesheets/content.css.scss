@@ -1,3 +1,9 @@
 article.description {
     @include columns(8);
 }
+
+a.show-on-map {
+    background-size: 1em;
+    background-position: 0 3px;
+    padding-left: 1.4em;
+}
