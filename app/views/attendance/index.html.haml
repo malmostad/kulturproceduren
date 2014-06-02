@@ -1,0 +1,75 @@
+- content_for(:page_title) do
+  Närvarolista för
+  = @event.name
+  %span.subtitle
+    - if @occasion
+      Föreställningen
+      = @occasion.date
+      kl
+      = "#{l(@occasion.start_time, format: :only_time)} - #{l(@occasion.stop_time, format: :only_time)}"
+    - else
+      Alla föreställningar
+
+- is_admin = current_user.has_role?(:host, :admin)
+
+%main
+  %nav.return
+    = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  %ul.context-menu
+    %li
+      - if @occasion
+        = link_to "Ladda ner närvaron som PDF", occasion_attendance_index_path(@occasion, format: "pdf")
+      - else
+        = link_to "Ladda ner närvaron som PDF", event_attendance_index_path(@event, format: "pdf")
+    - if is_admin
+      %li
+        - if @occasion
+          = link_to "Rapportera närvaro", report_occasion_attendance_index_path(@occasion)
+        - else
+          = link_to "Rapportera närvaro för hela evenemanget", report_event_attendance_index_path(@event)
+
+  %table
+    %thead
+      %tr
+        %th
+          Skola
+          %br
+          Grupp
+        %th Medföljande vuxen
+        %th Antal barn
+        %th Antal vuxna
+        %th Antal rullstolsplatser
+        - if is_admin
+          %th Övriga önskemål
+
+    %tbody
+      - occasions = @occasion ? [@occasion] : @event.occasions
+
+      - occasions.each do |occasion|
+        - unless @occasion
+          %tr
+            %th{colspan: "#{is_admin ? 6 : 5}"}
+              Föreställningen
+              = occasion.date
+              kl
+              = "#{l(occasion.start_time, format: :only_time)} - #{l(occasion.stop_time, format: :only_time)}"
+
+        - occasion.bookings.school_ordered.each do |booking|
+          %tr
+            %td
+              = booking.group.school.name
+              %br
+              = booking.group.name
+            %td
+              = booking.companion_name
+              %br
+              = booking.companion_phone
+              %br
+              = link_to booking.companion_email, "mailto:#{u(booking.companion_email)}"
+            %td= booking.student_count
+            %td= booking.adult_count
+            %td= booking.wheelchair_count
+            - if is_admin
+              %td= linebreakize(booking.requirement) unless booking.requirement.blank?
+
