@@ -132,6 +132,7 @@ Kulturproceduren::Application.routes.draw do
       get :group_list
       get :group
       get :form
+      post :apply_filter
     end
     member do
       get :unbook

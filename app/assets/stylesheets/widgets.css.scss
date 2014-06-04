@@ -86,3 +86,17 @@ aside.details {
         margin: 0;
     }
 }
+
+#group-selection-form {
+    legend {
+        font-family: $sans-serif;
+    }
+}
+
+.no-hits {
+    clear: both;
+}
+
+.context-actions {
+    margin-bottom: 1em;
+}

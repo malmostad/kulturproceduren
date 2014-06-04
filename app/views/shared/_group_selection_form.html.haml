@@ -1,0 +1,38 @@
+%section#group-selection-form.box{data: { list: { group: options_list_groups_path },
+  select: { group: select_groups_path } } }
+  %h1.box-title Välj klass/avdelning
+  .box-content
+    = form_tag select_schools_path, class: "basic" do
+      .form-group
+        %span.control-label
+          = label_tag "group-selection-school", "Sök och välj en skola:"
+        .controls
+          = hidden_field_tag "return_to", return_to
+          = hidden_field_tag("occasion_id", occasion.id) if occasion
+          = text_field_tag "school_name",
+            state[:school_name],
+            id: "group-selection-school",
+            class: "form-control",
+            placeholder: "Skriv namnet på skolan",
+            "data-search-path" => school_search_path
+          %noscript= submit_tag "Sök och välj skola", class: "btn btn-default"
+
+    = form_tag select_groups_path, class: "basic" do
+      .form-group
+        %span.control-label
+          = label_tag "group-selection-group", "Välj klass/avdelning:"
+        .controls
+          = hidden_field_tag "return_to", return_to
+          = hidden_field_tag("occasion_id", occasion.id) if occasion
+          = select_tag "group_id",
+            options_for_select(group_options, state[:group_id]),
+            id: "group-selection-group",
+            class: "form-control",
+            disabled: state[:school_id].blank?
+          %noscript= submit_tag "Välj klass/avdelning", class: "btn btn-default"
+
+          - if notification_request_hint
+            %p.help-block
+              Hittar du inte din klass/avdelning?
+              = link_to "Klicka här", new_event_notification_request_path(occasion.event)
+              för att få ett meddelande när platser blir tillgängliga.

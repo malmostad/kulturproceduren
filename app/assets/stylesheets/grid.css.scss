@@ -16,3 +16,10 @@ main.with-aside {
 .wrapper > aside {
     @include columns(4, true);
 }
+
+
+@media print {
+    main.with-aside {
+        width: 100%;
+    }
+}

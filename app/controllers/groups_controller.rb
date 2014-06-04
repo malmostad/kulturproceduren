@@ -126,9 +126,9 @@ class GroupsController < ApplicationController
       @groups = Group.where(conditions).order("name ASC")
     end
 
-    render action: "options_list", content_type: 'text/plain'
+    render action: "options_list", content_type: 'text/plain', layout: false
   rescue
-    render text: "", content_type: 'text/plain', status: 404
+    render text: "", content_type: 'text/plain', status: 404, layout: false
   end
 
   private

@@ -1,8 +1,0 @@
-<ul class="multiple-choice checkbox-list">
-  <% question.choice_csv.split(',').each do |option| %>
-    <li>
-      <%= check_box_tag "answer[#{question.id}][]", option %>
-      <%= label_tag "answer[#{question.id}]", option %>
-    </li>
-  <% end %>
-</ul>

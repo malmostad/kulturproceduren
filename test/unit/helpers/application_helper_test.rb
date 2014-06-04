@@ -128,9 +128,10 @@ class ApplicationHelperTest < ActionView::TestCase
     group_selection_form()
 
     assert_select "form", 2
-    assert_select "#kp-group_selection-group_id option", 0
-    assert_select "#kp-group_selection-group_id[disabled]", 1
+    assert_select "#group-selection-group option", 0
+    assert_select "#group-selection-group[disabled]", 1
     assert_select "[name=return_to][value=/booking/new]", 2
+    assert_select "[data-search-path=/schools/search]", 1
     assert_select "[name=occasion_id]", 0
   end
 
@@ -138,10 +139,21 @@ class ApplicationHelperTest < ActionView::TestCase
     group_selection_form(return_to: "/foo/bar")
 
     assert_select "form", 2
-    assert_select "#kp-group_selection-group_id option", 0
-    assert_select "#kp-group_selection-group_id[disabled]", 1
+    assert_select "#group-selection-group option", 0
+    assert_select "#group-selection-group[disabled]", 1
     assert_select "[name=return_to][value=/foo/bar]", 2
     assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, school_search_path, no state" do
+    group_selection_form(return_to: "/foo", school_search_path: "/foo/bar")
+    assert_select "[data-search-path=/foo/bar]", 1
+  end
+  test "group_selection_form, notification_request_hint, no state" do
+    occasion = create(:occasion)
+    group_selection_form(return_to: "/foo", notification_request_hint: true, occasion: occasion)
+    assert_select "p.help-block", 1
+    assert_select "p.help-block a[href=/events/#{occasion.event_id}/notification_requests/new]"
   end
 
   test "group_selection_form, return_to, school selected" do
@@ -154,9 +166,9 @@ class ApplicationHelperTest < ActionView::TestCase
     group_selection_form(return_to: "/")
 
     assert_select "form", 2
-    assert_select "#kp-group_selection-group_id option", 1+1 # Blank entry and one group
-    assert_select "#kp-group_selection-group_id[disabled]", 0
-    assert_select "#kp-group_selection-group_id option[selected]", 0
+    assert_select "#group-selection-group option", 1+1 # Blank entry and one group
+    assert_select "#group-selection-group[disabled]", 0
+    assert_select "#group-selection-group option[selected]", 0
     assert_select "[name=return_to][value=/]", 2
     assert_select "[name=occasion_id]", 0
   end
@@ -172,9 +184,9 @@ class ApplicationHelperTest < ActionView::TestCase
     group_selection_form(return_to: "/")
 
     assert_select "form", 2
-    assert_select "#kp-group_selection-group_id option", 1+1 # Blank entry and one group
-    assert_select "#kp-group_selection-group_id[disabled]", 0
-    assert_select "#kp-group_selection-group_id option[selected]", { count: 1, text: group.name }
+    assert_select "#group-selection-group option", 1+1 # Blank entry and one group
+    assert_select "#group-selection-group[disabled]", 0
+    assert_select "#group-selection-group option[selected]", { count: 1, text: group.name }
     assert_select "[name=return_to][value=/]", 2
     assert_select "[name=occasion_id]", 0
   end
@@ -197,9 +209,9 @@ class ApplicationHelperTest < ActionView::TestCase
     group_selection_form(occasion: occasion, return_to: "/")
 
     assert_select "form", 2
-    assert_select "#kp-group_selection-group_id option", 1+1 # Blank entry and one group
-    assert_select "#kp-group_selection-group_id[disabled]", 0
-    assert_select "#kp-group_selection-group_id option[selected]", { count: 1, text: "#{group1.name} (1 platser)" }
+    assert_select "#group-selection-group option", 1+1 # Blank entry and one group
+    assert_select "#group-selection-group[disabled]", 0
+    assert_select "#group-selection-group option[selected]", { count: 1, text: "#{group1.name} (1 platser)" }
     assert_select "[name=return_to][value=/]", 2
     assert_select "[name=occasion_id]", 2
   end

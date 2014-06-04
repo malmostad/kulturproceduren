@@ -1,0 +1,16 @@
+- missing ||= false
+.form-group{class: "#{"warning" if missing}"}
+  %label.control-label= question.question + (question.mandatory ? "*" : "")
+  .controls
+    - (1..4).each do |i|
+      %label.radio-inline
+        = radio_button_tag "answer[#{question.id}]",
+          i,
+          i == value.to_i,
+          class: "radio"
+        = i
+
+    %p.help-block 1 är sämst och 4 är bäst
+
+    - if missing
+      .help-block Frågan är obligatorisk

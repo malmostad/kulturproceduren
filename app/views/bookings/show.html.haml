@@ -1,0 +1,115 @@
+- content_for(:page_title) do
+  Bokningsbekräftelse för
+  = succeed "," do
+    = @booking.group.school.name
+  = @booking.group.name
+  %span.subtitle
+    till
+    = succeed "," do
+      = @booking.occasion.event.name
+    föreställningen
+    = @booking.occasion.date
+
+%main.with-aside
+
+  #booking-confirmation
+
+    .btn-group.context-actions
+      - if current_user.can_book? && !@booking.unbooked && !@booking.occasion.cancelled && @booking.occasion.date >= Date.today
+        = link_to "Ändra bokning", edit_booking_path(@booking), class: "btn btn-default"
+        = link_to "Avboka", unbook_booking_path(@booking), class: "btn btn-default"
+      = link_to "Skriv ut", "#", class: "btn btn-default print-action"
+
+    %fieldset
+      %legend Arrangemang
+      %dl
+        %dt Namn:
+        %dd= link_to @booking.occasion.event.name, @booking.occasion.event
+        %dt Datum:
+        %dd= @booking.occasion.date
+        %dt Tid:
+        %dd
+          = l @booking.occasion.start_time, format: :only_time
+          = "-"
+          = l @booking.occasion.stop_time, format: :only_time
+        %dt Adress:
+        %dd= linebreakize(@booking.occasion.address)
+        %dt Beskrivning:
+        %dd= linebreakize(@booking.occasion.description)
+
+    %fieldset
+      %legend Bokning
+      %dl
+        %dt Antal platser för barn:
+        %dd= @booking.student_count
+        %dt Antal platser för vuxna:
+        %dd= @booking.adult_count
+        - if @booking.wheelchair_count > 0
+          %dt Antal platser för rullstolsbundna:
+          %dd= @booking.wheelchair_count
+        %dt Bokad
+        %dd= l @booking.booked_at, format: :long
+        - if @booking.unbooked
+          %dt Avbokad:
+          %dd.unbooked-at
+            = l @booking.unbooked_at, format: :long
+            av
+            = link_to @booking.unbooked_by.name, @booking.unbooked_by
+
+    %fieldset
+      %legend Medföljande vuxen
+      %dl
+        %dt Namn:
+        %dd= @booking.companion_name
+        %dt E-postadress:
+        %dd= link_to @booking.companion_email, "mailto:#{u(@booking.companion_email)}"
+        %dt Mobilnummer:
+        %dd= @booking.companion_phone
+
+    - if @booking.bus_booking?
+      %fieldset
+        %legend Kulturbussbokning
+        %dl
+          %dt Från hållplats:
+          %dd= @booking.bus_stop
+          %dt Bokningstyp:
+          %dt= @booking.bus_one_way ? "Enkel resa" : "Tur och retur"
+
+    - unless @booking.requirement.blank?
+      %fieldset
+        %legend Speciella krav / Extra information ang. bokning
+        %dl
+          %dt Extra behov:
+          %dd= paragraphize(@booking.requirement)
+
+    - if @booking.unbooked
+
+      - if @booking.answer_form
+        %h2 Svar på avbokningsenkäten
+
+        %dl
+          - @booking.answer_form.questions.each do |question|
+            %dt= question.question
+            %dd
+              - answers = @booking.answer_form.answers_for(question)
+              - case question.qtype
+              - when "QuestionMark", "QuestionText"
+                = answers.first.answer_text
+              - when "QuestionBool"
+                = answers.first.answer_text == "y" ? "Ja" : "Nej"
+              - when "QuestionMchoice"
+                %ul
+                  - answers.each do |answer|
+                    %li= answer.answer_text
+
+    - else
+      .success
+        %p
+          Eventuell avbokning av platser görs via er bokningsbekräftelse på
+          www.malmo.se/kulturproceduren fram tills dagen före evenemanget.
+        %p
+          Behöver ni avboka era platser samma dag som evenemanget ber vi er
+          ringa 0709-17 38 77.
+
+
+= render partial: "menu"

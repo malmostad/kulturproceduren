@@ -1,0 +1,12 @@
+- missing ||= false
+.form-group{class: "#{"warning" if missing}"}
+  %label.control-label= question.question + (question.mandatory ? "*" : "")
+  .controls
+    %label.radio-inline
+      = radio_button_tag "answer[#{question.id}]", "y", value == "y", { class: "radio" }
+      Ja
+    %label.radio-inline
+      = radio_button_tag "answer[#{question.id}]", "n", value == "n", { class: "radio" }
+      Nej
+    - if missing
+      .help-block Frågan är obligatorisk

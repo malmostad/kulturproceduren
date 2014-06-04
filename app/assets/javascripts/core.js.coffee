@@ -30,3 +30,7 @@ $ ->
             next: "#slideshow menu .next, #slideshow img"
             prev: "#slideshow menu .prev"
         )
+
+    $(".print-action").on "click", ->
+        window.print()
+        return false
