@@ -51,3 +51,18 @@ $ ->
         groupSelection.on "school-select", ->
             form.html("")
 
+    $("#notification-request-form").each ->
+        form = $(this)
+
+        # Handle changes in the group selection
+        groupSelection = $("#group-selection-form")
+
+        groupSelection.on "group-select", (event, groupId) ->
+            if !isNaN(groupId)
+                form.find("#notification_request_group_id").val(groupId)
+                form.find(":input").prop("disabled", false)
+            else
+                form.find(":input").prop("disabled", true)
+
+        groupSelection.on "school-select", ->
+            form.find(":input").prop("disabled", true)

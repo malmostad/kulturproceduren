@@ -1,0 +1,42 @@
+- content_for(:page_title) do
+  Meddelande vid
+  = @event.free_for_all? ? "avbokningar" : "platssläpp"
+  för
+  = @event.name
+
+
+%main.with-aside
+  %article.body-copy
+    - if @event.free_for_all?
+      %p
+        Om
+        = link_to @event.name, @event
+        är fullbokat så kan du registrera dig här för att få ett meddelande om
+        reservplatser släpps till evenemanget.
+      %p
+        Det är först till kvarn på restplatser som släpps till evenemang.
+    - else
+      %p
+        Om den klass/avdelning du vill boka platser för inte har fått platser
+        tilldelade till
+        = link_to @event.name, @event
+        så kan du här registrera dig så att du får ett meddelande när platser
+        blir tillgängliga.
+
+  = group_selection_form unless @event.free_for_all?
+
+  - disabled = !@event.free_for_all? && @notification_request.group_id.nil?
+
+  = simple_form_for @notification_request,
+    url: event_notification_requests_path(@event),
+    html: { id: "notification-request-form" } do |f|
+
+    = f.hidden_field :group_id, disabled: disabled
+
+    = f.submit "Jag vill få ett e-postmeddelande när platser blir tillgängliga",
+      class: "btn btn-primary",
+      disabled: disabled
+
+    = link_to "Avbryt", @event, class: "btn btn-default"
+
+= render partial: "bookings/menu"
