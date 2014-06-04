@@ -1,0 +1,36 @@
+- content_for(:page_title) do
+  Utvärderingsenkät för
+  = @answer_form.occasion.event.name
+
+%main
+  %article.body-copy
+    %p
+      Denna utvärderingsenkät är utformad för
+      = succeed "," do
+        = @answer_form.group.school.name
+      = @answer_form.group.name
+      som besökte
+      = @answer_form.occasion.event.name
+      = succeed "," do
+        = @answer_form.occasion.date
+      = l @answer_form.occasion.start_time, format: :only_time
+      = "-"
+      = succeed "." do
+        = l @answer_form.occasion.stop_time, format: :only_time
+
+  = form_tag({ action: "submit", answer_form_id: params[:answer_form_id] }, class: "basic") do
+
+    - if @answer_form.missing_answers
+      - missing_answers = @answer_form.missing_answers
+      .warning Vänligen korrigera uppgifterna nedan:
+    - else
+      - missing_answers = []
+
+    - @answer_form.questionnaire.questions.each do |question|
+      = render partial: get_question_fragment(question),
+        locals: { question: question, value: @answer[question.id.to_s], missing: missing_answers.include?(question.id) }
+
+    .form-group
+      %span.control-label
+      .controls
+        = submit_tag "Besvara", class: "btn btn-primary"

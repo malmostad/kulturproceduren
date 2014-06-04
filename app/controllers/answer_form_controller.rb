@@ -1,6 +1,6 @@
 # Controller for managing answer forms
 class AnswerFormController < ApplicationController
-  layout "standard"
+  layout "application"
 
   # Saves the answers to a questionnaire
   def submit
