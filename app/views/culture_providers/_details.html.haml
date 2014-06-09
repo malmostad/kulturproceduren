@@ -1,6 +1,6 @@
 %aside.basic.details.culture-provider.header
   - if culture_provider.main_image
-    .image= uploaded_image_tag culture_provider.main_image
+    .image= uploaded_image_tag(culture_provider.main_image, true)
 
   %dl
     - if !culture_provider.address.blank? || !culture_provider.map_address.blank?

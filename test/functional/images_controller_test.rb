@@ -3,6 +3,8 @@ require_relative '../test_helper'
 class ImagesControllerTest < ActionController::TestCase
   def setup
     @controller.expects(:authenticate).at_least_once.returns(true)
+    @user = create(:user, roles: [roles(:admin)])
+    session[:current_user_id] = @user.id
   end
 
   test "index, wrong parameters" do
@@ -50,29 +52,19 @@ class ImagesControllerTest < ActionController::TestCase
     assert_redirected_to root_url()
     assert_equal         "Felaktigt anrop.", flash[:error]
   end
-  def stub_rmagick!
-    magick = stub(columns: 20, rows: 21)
-    Magick::Image.stubs(:read).returns([magick])
-    magick.stubs(:resize_to_fit!).returns(true)
-    magick.stubs(:write).returns(true)
-  end
   test "create, culture provider" do
-    File.stubs(:open)
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { upload_image: { width: 10, height: 20, thumb_width: 1, thumb_height: 2 } } }
-    stub_rmagick!
-    upload = { "datafile" => stub(read: "foo") }
+    file = Rack::Test::UploadedFile.new("#{Rails.root}/test/fixtures/image.jpg", "image/jpeg")
 
     culture_provider = create(:culture_provider)
 
     # Invalid
-    post :create, culture_provider_id: culture_provider.id, upload: upload, image: { description: "" }
+    post :create, culture_provider_id: culture_provider.id, image: { file: file, description: "" }
     assert_response :success
     assert_template "images/index"
     assert          !assigns(:image).valid?
 
     # Valid
-    post :create, culture_provider_id: culture_provider.id, upload: upload, image: { description: "foo" }
+    post :create, culture_provider_id: culture_provider.id, image: { file: file, description: "foo" }
 
     image = Image.last
     assert_redirected_to culture_provider_images_url(culture_provider)
@@ -80,25 +72,22 @@ class ImagesControllerTest < ActionController::TestCase
     assert_equal         culture_provider,       image.culture_provider
     assert_equal         "foo",                  image.description
 
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
+    # Cleanup, removes the uploaded file
+    image.destroy
   end
   test "create, event" do
-    File.stubs(:open)
-    old_app_config = APP_CONFIG
-    Kernel::silence_warnings { ::APP_CONFIG = { upload_image: { width: 10, height: 20, thumb_width: 1, thumb_height: 2 } } }
-    stub_rmagick!
-    upload = { "datafile" => stub(read: "foo") }
+    file = Rack::Test::UploadedFile.new("#{Rails.root}/test/fixtures/image.jpg", "image/jpeg")
 
     event = create(:event)
 
     # Invalid
-    post :create, event_id: event.id, upload: upload, image: { description: "" }
+    post :create, event_id: event.id, image: { file: file, description: "" }
     assert_response :success
     assert_template "images/index"
     assert          !assigns(:image).valid?
 
     # Valid
-    post :create, event_id: event.id, upload: upload, image: { description: "foo" }
+    post :create, event_id: event.id, image: { file: file, description: "foo" }
 
     image = Image.last
     assert_redirected_to event_images_url(event)
@@ -106,7 +95,8 @@ class ImagesControllerTest < ActionController::TestCase
     assert_equal         event,                  image.event
     assert_equal         "foo",                  image.description
 
-    Kernel::silence_warnings { ::APP_CONFIG = old_app_config }
+    # Cleanup, removes the uploaded file
+    image.destroy
   end
 
   test "destroy, culture provider" do

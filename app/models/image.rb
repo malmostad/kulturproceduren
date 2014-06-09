@@ -12,6 +12,7 @@ class Image < ActiveRecord::Base
     :height,
     :thumb_width,
     :thumb_height,
+    :file,
     :event_id,            :event,
     :culture_provider_id, :culture_provider
 
@@ -21,47 +22,14 @@ class Image < ActiveRecord::Base
   after_destroy :cleanup
 
   attr_accessor :type
+  attr_accessor :file
+
+  before_create :process_file
 
 
   # Alias after rename name => description in case name is used anywhere
   def name
     self.description
-  end
-
-  # Keep a reference to the original ActiveRecord save method
-  alias :save_orig  :save
-
-  # Override the save method. This method resizes an uploaded
-  # image and creates the image's thumbnail before saving the
-  # ActiveRecord data.
-  def save(upload)
-
-    return false unless valid?
-
-    self.filename = Image.generate_filename
-    File.open(self.image_path, "wb") { |f| f.write(upload['datafile'].read) }
-    
-    img = Magick::Image.read(self.image_path).first
-    
-    if img.nil?
-      raise "Could not read the uploaded image."
-    end
-    
-    img.resize_to_fit!(APP_CONFIG[:upload_image][:width], APP_CONFIG[:upload_image][:height])
-
-    self.width = img.columns
-    self.height = img.rows
-    
-    img.write(self.image_path)
-
-    img.resize_to_fit!(APP_CONFIG[:upload_image][:thumb_width], APP_CONFIG[:upload_image][:thumb_height])
-
-    self.thumb_width = img.columns
-    self.thumb_height = img.rows
-
-    img.write(self.thumb_path)
-    
-    save_orig
   end
 
   # Generates the filesystem path to the image file
@@ -120,6 +88,36 @@ class Image < ActiveRecord::Base
   # Base URLs for the image files
   def self.url
     "#{APP_CONFIG[:upload_image][:path]}"
+  end
+
+
+  private
+
+  # This method resizes an uploaded image and creates the image's thumbnail
+  def process_file
+    return false unless valid?
+    return true unless self.file
+
+    self.filename = Image.generate_filename
+    File.open(self.image_path, "wb") { |f| f.write(self.file.read) }
+
+    img = Magick::Image.read(self.image_path).first
+
+    raise "Could not read the uploaded image." if img.nil?
+
+    img.resize_to_fit!(APP_CONFIG[:upload_image][:width], APP_CONFIG[:upload_image][:height])
+
+    self.width = img.columns
+    self.height = img.rows
+
+    img.write(self.image_path)
+
+    img.resize_to_fit!(APP_CONFIG[:upload_image][:thumb_width], APP_CONFIG[:upload_image][:thumb_height])
+
+    self.thumb_width = img.columns
+    self.thumb_height = img.rows
+
+    img.write(self.thumb_path)
   end
 
 end

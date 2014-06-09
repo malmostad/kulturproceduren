@@ -11,20 +11,20 @@ class ImageTest < ActiveSupport::TestCase
     APP_CONFIG.replace(upload_image: { width: 10, height: 20, thumb_width: 1, thumb_height: 2 })
 
     outfile = "#{Rails.root}/tmp/foo.txt"
-    upload = { "datafile" => stub(read: "foo") }
+    file = stub(read: "foo")
     magick = stub(columns: 20, rows: 21)
     magick.expects(:resize_to_fit!).with(10, 20).returns(true)
     magick.expects(:resize_to_fit!).with(1, 2).returns(true)
     magick.expects(:write).with(outfile).returns(true)
     magick.expects(:write).with(outfile + ".thumb").returns(true)
 
-    image = Image.new(description: "foo")
+    image = Image.new(description: "foo", file: file)
 
     image.stubs(:image_path).returns(outfile)
     image.stubs(:thumb_path).returns(outfile + ".thumb")
     Magick::Image.stubs(:read).returns([magick])
 
-    image.save(upload)
+    image.save
 
     assert File.exists?(outfile)
 

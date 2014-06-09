@@ -21,10 +21,10 @@ common: &common
         :path: uploads/attachments
     :upload_image:
         :path: model
-        :width: 454
-        :height: 340
-        :thumb_width: 204
-        :thumb_height: 153
+        :width: 800
+        :height: 600
+        :thumb_width: 340
+        :thumb_height: 255
 
     :kp_external_link: "http://www.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
