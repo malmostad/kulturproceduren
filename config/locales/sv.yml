@@ -310,6 +310,7 @@ sv:
         user_id: "Användare:"
       attachment:
         description: "Beskrivning:"
+        file: "Bild:*"
       companion:
         name: "Namn:"
         email: "Epostadress:"
