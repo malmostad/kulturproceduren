@@ -20,16 +20,23 @@
   <% end -%>
 </ul>
 
+<% if @event.bus_booking? %>
+  <p>
+    Kulturbuss är reserverad och kan bokas via Kulturproceduren fram till och
+    med <%= @event.last_bus_booking_date %>.
+  </p>
+<% else %>
+  <p>
+    Till detta evenemang är Kulturbuss <strong>inte garanterad</strong>.
+    <br/>
+    <%= link_to "Gör en förfrågan om Kulturbuss här.", APP_CONFIG[:culture_bus_link] %>.
+  </p>
+<% end %>
+
 <p>
   <a href="<%= mail_url(event_path(@event)) %>">
     Läs mer om <%= @event.name %> och boka eventuella platser här.
   </a>
-</p>
-
-<p>
-  Till detta evenemang är Kulturbuss <strong>inte garanterad</strong>.
-  <br/>
-  <%= link_to "Gör en förfrågan om Kulturbuss här.", APP_CONFIG[:culture_bus_link] %>.
 </p>
 
 <p>
