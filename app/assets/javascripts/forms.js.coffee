@@ -66,3 +66,12 @@ $ ->
 
         groupSelection.on "school-select", ->
             form.find(":input").prop("disabled", true)
+
+
+    $(".context-form.collapsed").each ->
+        container = $(this)
+        form = container.find("form")
+        form.one "focus", ":input", ->
+            container.removeClass("collapsed")
+        form.one "click", ->
+            container.removeClass("collapsed")

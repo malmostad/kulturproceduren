@@ -11,7 +11,7 @@ module OccasionHelper
           content_tag(:span, "Fullbokat", class: "sold-out")
         end
       end
-    else
+    elsif !user_online?
       if occasion.event.bookable?
         login_link "Kulturproceduren", new_occasion_booking_path(occasion)
       else

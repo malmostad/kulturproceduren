@@ -13,7 +13,7 @@ describe OccasionHelper do
       helper.stub(:current_user).and_return(current_user)
     end
 
-    context "without booking privileges" do
+    context "not online" do
       context "with a bookable event" do
         it "links to the login page" do
           expect(helper.booking_link(occasion)).to have_css("a[href^='/login']")
@@ -24,6 +24,13 @@ describe OccasionHelper do
         it "links to the event" do
           expect(helper.booking_link(occasion)).to have_css("a[href='/events/#{event.id}']")
         end
+      end
+    end
+    context "online without booking privileges" do
+      let(:user_online) { true }
+      let(:current_user) { double(:user, can_book?: false) }
+      it "displays nothing" do
+        expect(helper.booking_link(occasion)).to be_blank
       end
     end
     context "with booking privileges" do

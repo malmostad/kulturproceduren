@@ -8,7 +8,8 @@
           event_path(event),
           method: :delete,
           data: { confirm: "Är du säker på att du vill radera evenemanget?" }
-    
+
+    %li= link_to "Hantera föreställningar", event_occasions_path(event)
     %li= link_to "Hantera bilder", event_images_path(event)
     %li= link_to 'Hantera filer', event_attachments_path(event)
     %li

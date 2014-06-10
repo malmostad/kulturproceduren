@@ -60,6 +60,7 @@ Kulturproceduren::Application.routes.draw do
       patch :next_transition
     end
 
+    resources :occasions,             only: [:index]
     resources :images,                except: [:show, :edit, :update, :new]
     resources :attachments,           except: [:edit, :update, :new]
     resources :notification_requests, only: [:new, :create] do

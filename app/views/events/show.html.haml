@@ -207,25 +207,12 @@
                       - if @event.bookable?
                         %li= booking_link(occasion)
 
-                      - if current_user.can_administrate?(@event.culture_provider)
-                        %li= link_to "Redigera", edit_occasion_path(occasion)
-
-                        - if @event.bookable?
-                          - if occasion.date >= Date.today && !occasion.cancelled
-                            %li
-                              = link_to "Ställ in",
-                                cancel_occasion_path(occasion),
-                                data: { confirm: "Är du säker på att du vill ställa in föreställningen?" }
-                        - else
-                          %li
-                            = link_to "Ta bort", occasion,
-                              method: "delete",
-                              data: { confirm: "Är du säker på att du vill radera föreställningen?"}
                       - if current_user.can_view_bookings?
                         %li= link_to "Bokningar", occasion_bookings_path(occasion)
 
                       - if occasion.date >= Date.today
                         %li= link_to "Närvarolista", occasion_attendance_index_path(occasion)
+
                       - elsif !occasion.cancelled && current_user.has_role?(:admin, :host)
                         %li
                           = link_to "Rapportera närvaro",
