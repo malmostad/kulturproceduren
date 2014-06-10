@@ -1,13 +1,10 @@
 class EventLinksController < ApplicationController
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :load_entity
 
   def index
-  end
-
-  def new
     session[:event_links] ||= {}
 
     @culture_providers = CultureProvider.order "name"
@@ -31,9 +28,9 @@ class EventLinksController < ApplicationController
     session[:event_links][:selected_culture_provider] = params[:selected_culture_provider_id].to_i
 
     if @culture_provider
-      redirect_to new_culture_provider_event_link_url(culture_provider_id: @culture_provider.id)
+      redirect_to culture_provider_event_links_url(@culture_provider)
     elsif @event
-      redirect_to new_event_event_link_url(event_id: @event.id)
+      redirect_to event_event_links_url(@event)
     end
   end
 
@@ -48,7 +45,7 @@ class EventLinksController < ApplicationController
     elsif @culture_provider
       @culture_provider.linked_events << new_link
       flash[:notice] = "Länken mellan evenemanget och arrangören skapades."
-      redirect_to culture_provider_event_links_url(culture_provider_id: @culture_provider.id)
+      redirect_to culture_provider_event_links_url(@culture_provider)
     end
   end
 
@@ -63,7 +60,7 @@ class EventLinksController < ApplicationController
     elsif @culture_provider
       @culture_provider.linked_events.delete(linked)
       flash[:notice] = "Länken mellan evenemanget och arrangören togs bort."
-      redirect_to culture_provider_event_links_url(culture_provider_id: @culture_provider.id)
+      redirect_to culture_provider_event_links_url(@culture_provider)
     end
   end
 

@@ -34,14 +34,14 @@ class EventLinksControllerTest < ActionController::TestCase
     assert_equal         "Du har inte behörighet att komma åt sidan.", flash[:error]
   end
 
-  test "new" do
+  test "index" do
     session[:event_links] = nil
 
     @event.linked_events            << @event
     @culture_provider.linked_events << @event
 
     # No selected culture provider
-    get :new, culture_provider_id: @culture_provider.id
+    get :index, culture_provider_id: @culture_provider.id
 
     assert_response :success
     assert_equal(   {}, session[:event_links])
@@ -50,7 +50,7 @@ class EventLinksControllerTest < ActionController::TestCase
 
     # Culture provider
     session[:event_links][:selected_culture_provider] = @culture_provider.id
-    get :new, culture_provider_id: @culture_provider.id
+    get :index, culture_provider_id: @culture_provider.id
 
     assert_response :success
     assert_equal    CultureProvider.order("name"),                        assigns(:culture_providers)
@@ -59,7 +59,7 @@ class EventLinksControllerTest < ActionController::TestCase
 
     # Event
     session[:event_links][:selected_culture_provider] = @culture_provider.id
-    get :new, event_id: @event.id
+    get :index, event_id: @event.id
 
     assert_response :success
     assert_equal    CultureProvider.order("name"),                        assigns(:culture_providers)
@@ -70,13 +70,13 @@ class EventLinksControllerTest < ActionController::TestCase
   test "select culture provider, for culture provider" do
     session[:event_links] = nil
     get :select_culture_provider, culture_provider_id: @culture_provider.id, selected_culture_provider_id: @culture_provider.id
-    assert_redirected_to new_culture_provider_event_link_url(culture_provider_id: @culture_provider.id)
+    assert_redirected_to culture_provider_event_links_url(culture_provider_id: @culture_provider.id)
     assert_equal         @culture_provider.id, session[:event_links][:selected_culture_provider]
   end
   test "select culture provider, for event" do
     session[:event_links] = nil
     get :select_culture_provider, event_id: @event.id, selected_culture_provider_id: @culture_provider.id
-    assert_redirected_to new_event_event_link_url(event_id: @event.id)
+    assert_redirected_to event_event_links_url(event_id: @event.id)
     assert_equal         @culture_provider.id, session[:event_links][:selected_culture_provider]
   end
 

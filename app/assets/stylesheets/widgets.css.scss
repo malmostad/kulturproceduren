@@ -100,3 +100,8 @@ aside.details {
 .context-actions {
     margin-bottom: 1em;
 }
+
+.large-selection {
+    max-height: 10em;
+    overflow-y: scroll;
+}

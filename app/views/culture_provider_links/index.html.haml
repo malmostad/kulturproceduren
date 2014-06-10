@@ -1,0 +1,59 @@
+- content_for(:page_title) do
+  Hantera länkade arrangörer för
+  - if @culture_provider
+    = link_to @culture_provider.name, @culture_provider
+  - elsif @event
+    = link_to @event.name, @event
+
+%main
+  %nav.return
+    - if @culture_provider
+      = link_to "Återvänd till presentationen för #{@culture_provider.name}", @culture_provider
+    - elsif @event
+      = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  - entity = @culture_provider ? @culture_provider : @event
+
+  %section.box.context-form
+    %h1.box-title Välj en arrangör att länka till
+    .box-content
+      .large-selection
+        %table
+          %tbody
+            - @culture_providers.each do |culture_provider|
+              %tr
+                %td= culture_provider.name
+                %td
+                  - if @culture_provider
+                    - url = select_culture_provider_culture_provider_link_path(@culture_provider, culture_provider)
+                  - elsif @event
+                    - url = select_event_culture_provider_link_path(@event, culture_provider)
+                  = link_to "Välj",
+                    url,
+                    class: "btn btn-default btn-sm"
+
+  - if @culture_provider
+    = render partial: "culture_providers/administration_menu", locals: { culture_provider: @culture_provider }
+  - elsif @event
+    = render partial: "events/administration_menu", locals: { event: @event }
+
+  - unless entity.linked_culture_providers.blank?
+    %table
+      %thead
+        %tr
+          %th Arrangör
+          %th
+
+      %tbody
+        - entity.linked_culture_providers.each do |link|
+          %tr
+            %td= link_to link.name, link
+            %td
+              - if @culture_provider
+                - url = culture_provider_culture_provider_link_path(@culture_provider, link)
+              - elsif @event
+                - url = event_culture_provider_link_path(@event, link)
+              = link_to "Ta bort",
+                url,
+                method: :delete,
+                class: "btn btn-danger btn-sm"

@@ -4,4 +4,8 @@
 
 section.context-form {
     @include columns(8);
+
+    .input-group {
+        margin-bottom: 1em;
+    }
 }
