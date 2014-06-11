@@ -99,6 +99,11 @@ aside.details {
 
 .context-actions {
     margin-bottom: 1em;
+
+    .warning {
+        display: inline-block;
+        margin-left: 1em;
+    }
 }
 
 .large-selection {

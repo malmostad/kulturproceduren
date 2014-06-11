@@ -8,16 +8,19 @@ class QuestionsHelperTest < ActionView::TestCase
     assert_equal "", question_statistics(question, nil)
 
     question.qtype = "QuestionMark"
-    assert_equal "Genomsnitt = 4.5", question_statistics(question, [4.5, 6.6])
+    assert_equal "<table><tr><th>Genomsnitt</th><td>4.5</td></tr></table>",
+      question_statistics(question, [4.5, 6.6])
 
     question.qtype = "QuestionText"
-    assert_equal "<ul><li>foo</li><li>1.1</li></ul>", question_statistics(question, ["foo", nil, "", 1.1])
+    assert_equal "<table><tr><td>foo</td></tr><tr><td>1.1</td></tr></table>",
+      question_statistics(question, ["foo", nil, "", 1.1])
 
     question.qtype = "QuestionBool"
-    assert_equal "Ja 33.3% , Nej 66.7%", question_statistics(question, [33.3, 66.7])
+    assert_equal "<table><tr><th>Ja</th><td>33.3%</td></tr><tr><th>Nej</th><td>66.7%</td></tr></table>",
+      question_statistics(question, [33.3, 66.7])
 
     question.qtype = "QuestionMchoice"
-    assert_equal "<table id=\"kp-mchoice-stat\"><thead><tr><th>apa</th><th>bepa</th><th>cepa</th></tr></thead><tbody><tr><td>1.1</td><td>2.2</td><td>3.3</td></tr></tbody></table>",
+    assert_equal "<table><tr><th>apa</th><td>1.1</td></tr><tr><th>bepa</th><td>2.2</td></tr><tr><th>cepa</th><td>3.3</td></tr></table>",
       question_statistics(question, {
         "cepa" => 3.3,
         "apa"  => 1.1,

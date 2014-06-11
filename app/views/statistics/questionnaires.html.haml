@@ -1,0 +1,53 @@
+- content_for(:page_title) do
+  Enkätstatistik
+  - if @event
+    för
+    = @event.name
+  - else
+    = @term
+
+%main.admin.with-aside
+  .context-actions
+    - if @event
+      = link_to "Ladda ner enkätstatistik för evenemanget #{@event.name} #{@term} som Excel-fil",
+        questionnaires_event_statistic_path(@event, @term, format: :xls),
+        class: "btn btn-default"
+    - else
+      = link_to "Ladda ner all enkätsstatistik för #{@term} som Excel-fil",
+        questionnaires_statistic_path(@term, format: :xls),
+        class: "btn btn-default"
+
+  - if @event
+    %p
+      Antal besvarade enkäter:
+      = @event.questionnaire.answer_forms.where(completed: true).count
+    %p
+      Antal obesvarade enkäter:
+      = @event.questionnaire.answer_forms.where(completed: false).count
+
+    %table.statistics
+      %thead
+        %tr
+          %th Fråga
+          %th Svarsstatistik
+      %tbody
+        - @event.questionnaire.questions.each do |question|
+          %tr
+            %td= question.question
+            %td= question_statistics(question, question.statistics_for_event(@event))
+
+  - else
+    %table
+      %thead
+        %tr
+          %th Evenemang
+          %th Arrangör
+      %tbody
+        - @events.each do |event|
+          %tr
+            %td= link_to event.name, questionnaires_event_statistic_path(event, @term)
+            %td= event.culture_provider.name
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"
