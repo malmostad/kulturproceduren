@@ -17,6 +17,32 @@ SimpleForm.setup do |config|
     end
   end
 
+  config.wrappers :radio, tag: 'div', class: 'form-group', error_class: 'warning' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.wrapper tag: 'span', class: 'control-label' do |label|
+      label.use :label
+    end
+    b.wrapper tag: 'div', class: 'controls radio' do |ba|
+      ba.use :input
+      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    end
+  end
+  config.wrappers :checkbox, tag: 'div', class: 'form-group', error_class: 'warning' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.wrapper tag: 'span', class: 'control-label' do |label|
+      label.use :label
+    end
+    b.wrapper tag: 'div', class: 'controls checkbox' do |ba|
+      ba.use :input
+      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    end
+  end
+
+
   config.wrappers :addon, tag: 'div', class: 'form-group', error_class: 'warning' do |b|
     b.use :html5
     b.use :placeholder
