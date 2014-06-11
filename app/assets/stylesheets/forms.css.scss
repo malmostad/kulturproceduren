@@ -7,6 +7,14 @@
     width: auto;
 }
 
+.mf-v4 .controls.no-input {
+    padding-top: 7px;
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
 section.context-form {
     @include columns(8);
 

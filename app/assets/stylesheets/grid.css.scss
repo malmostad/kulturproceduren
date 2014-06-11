@@ -12,9 +12,15 @@
 main.with-aside {
     @include columns(8);
 }
+main.admin.with-aside {
+    @include columns(9);
+}
 
 .wrapper > aside {
     @include columns(4, true);
+}
+.wrapper > aside.admin {
+    @include columns(3, true);
 }
 
 
