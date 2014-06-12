@@ -1,6 +1,6 @@
 # Controller for managing category groups
 class CategoryGroupsController < ApplicationController
-  layout "admin"
+  layout "application"
 
   before_filter :authenticate
   before_filter :require_admin
