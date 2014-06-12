@@ -1,0 +1,9 @@
+- content_for(:page_title) do
+  Lägg till ny skola
+
+%main.admin.with-aside
+  = render partial: "form", locals: { school: @school, districts: @districts }
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

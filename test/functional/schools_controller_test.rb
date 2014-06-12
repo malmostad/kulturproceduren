@@ -44,16 +44,6 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_equal    districts,        assigns(:districts)
   end
 
-  test "edit" do
-    districts = create_list(:district, 3)
-    school    = create(:school, district: districts.first)
-
-    get :edit, id: school.id
-    assert_response :success
-    assert_template "schools/new"
-    assert_equal    school,    assigns(:school)
-    assert_equal    districts, assigns(:districts)
-  end
 
   test "create" do
     districts = create_list(:district, 3)

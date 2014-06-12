@@ -1,0 +1,11 @@
+%table
+  %thead
+    %tr
+      %th= sort_link "Namn", "name"
+      %th= sort_link "Område", "district"
+      %th
+  %tbody
+    - schools.each do |school|
+      %tr
+        %td= link_to school.name, school
+        %td= link_to school.district.name, school.district
