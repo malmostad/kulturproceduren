@@ -1,6 +1,6 @@
 # Controller for managing age groups
 class AgeGroupsController < ApplicationController
-  layout "admin"
+  layout "application"
 
   before_filter :authenticate
   before_filter :require_admin
@@ -10,6 +10,7 @@ class AgeGroupsController < ApplicationController
   def edit
     @age_group = AgeGroup.find(params[:id])
     @group = @age_group.group
+    @schools = School.order("name ASC")
     render template: "groups/show"
   end
   
@@ -22,6 +23,7 @@ class AgeGroupsController < ApplicationController
       redirect_to(@age_group.group)
     else
       @group = @age_group.group
+      @schools = School.order("name ASC")
       render template: "groups/show"
     end
   end
@@ -35,6 +37,7 @@ class AgeGroupsController < ApplicationController
       redirect_to(@age_group.group)
     else
       @group = @age_group.group
+      @schools = School.order("name ASC")
       render template: "groups/show"
     end
   end

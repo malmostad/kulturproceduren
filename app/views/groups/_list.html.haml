@@ -1,0 +1,24 @@
+%table
+  %thead
+    %tr
+      %th= sort_link "Namn", "name"
+      %th= sort_link "Skola", "school"
+      %th= sort_link "Område", "district"
+      %th= sort_link "Aktiv", "active"
+      %th= sort_link "Prioritering", "priority"
+  %tbody
+    - groups.each do |group|
+      %tr
+        %td= link_to group.name, group
+        %td= link_to group.school.name, group.school
+        %td= link_to group.school.district.name, group.school.district
+        %td= group.active ? "Ja" : "Nej"
+        - return_to = url_for(request.query_parameters.update(request.path_parameters))
+        %td
+          .btn-group
+            = link_to "Flytta först",
+              move_first_in_priority_group_path(group, return_to: return_to),
+              class: "btn btn-default"
+            = link_to "Flytta sist",
+              move_last_in_priority_group_path(group, return_to: return_to),
+              class: "btn btn-default"

@@ -1,0 +1,15 @@
+- content_for(:page_title) do
+  Historik för
+  = @group.name
+
+%main.admin.with-aside
+  %nav.return
+    = link_to "Återvänd till #{@group.name}", @group
+
+  = render partial: "versions/versions",
+    object: @group.versions.updates,
+    locals: { model: Group, fields: %w(name contacts), extra_title: "Åldersgrupper (ålder: antal)" }
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

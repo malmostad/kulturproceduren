@@ -1,0 +1,58 @@
+- content_for(:page_title) do
+  = @group.name_was
+
+%main.admin.with-aside
+  .context-actions
+    = link_to "Historik",
+      history_group_path(@group),
+      class: "btn btn-default"
+
+  = render partial: "groups/form", locals: { group: @group, schools: @schools }
+
+  %h2 Åldersgrupper
+
+  %section.box
+    %h1.box-title
+      - if @age_group.new_record?
+        Lägg till
+      - else
+        Uppdatera
+      åldersgrupp
+    .box-content
+      = simple_form_for @age_group, html: { class: "basic" } do |f|
+        = f.error_notification class: "warning"
+
+        = f.input :age
+        = f.input :quantity
+        = f.hidden_field :group_id
+
+        .form-group
+          %span.control-label
+          .controls
+            = submit_tag "Spara", class: "btn btn-primary"
+
+  %table
+    %thead
+      %tr
+        %th Ålder
+        %th Antal elever
+        %th
+    %tbody
+      - @group.age_groups.each do |age_group|
+        %tr
+          %td= age_group.age
+          %td= age_group.quantity
+          %td
+            .btn-group
+              = link_to "Redigera",
+                edit_age_group_path(age_group),
+                class: "btn btn-default"
+              = link_to "Ta bort",
+                age_group,
+                method: :delete,
+                data: { confirm: "Är du säker?" },
+                class: "btn btn-danger"
+
+%aside.admin
+  = render partial: "groups/menu"
+  = render partial: "shared/admin_menu"
