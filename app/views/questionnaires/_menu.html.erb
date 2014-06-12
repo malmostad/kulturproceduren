@@ -1,8 +1,0 @@
-<% content_for :section_sub do -%>
-  <ul class="section-nav">
-    <li class="<%= active_by_action "questionnaires", "index" %>"><%= link_to 'Lista enkäter', questionnaires_path %></li>
-    <li class="<%= active_by_action "questionnaires", "new" %>"><%= link_to 'Lägg till enkät', new_questionnaire_path %></li>
-    <li class="<%= active_by_action "questions", "index" %>"><%= link_to 'Hantera mallfrågor', questions_path %></li>
-    <li class="<%= active_by_action "questions", "index" %>"><%= link_to 'Hantera avbokningsenkät', unbooking_questionnaires_path %></li>
-  </ul>
-<% end -%>

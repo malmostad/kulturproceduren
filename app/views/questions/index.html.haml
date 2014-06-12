@@ -1,0 +1,40 @@
+- content_for(:page_title) do
+  Hantera mallfrågor
+
+%main.admin.with-aside
+  %section.box
+    %h1.box-title Lägg till mallfråga
+    .box-content
+      = render partial: "questions/form",
+        locals: { question: @question }
+
+  %table
+    %thead
+      %tr
+        %th= sort_link "Fråga", "question"
+        %th= sort_link "Typ", "qtype"
+        %th Obligatorisk
+        %th Svarsalternativ
+        %th
+    %tbody
+      - question_types = Question::QTYPES.invert
+      - @questions.each do |question|
+        %tr
+          %td= question.question
+          %td= question_types[question.qtype]
+          %td= "Ja" if question.mandatory
+          %td= question.choice_csv if question.qtype == "QuestionMchoice"
+          %td
+            = link_to "Redigera",
+              edit_question_path(question),
+              class: "btn btn-default"
+            = link_to "Ta bort",
+              question,
+              method: :delete,
+              data: { confirm: "Är du säker?" },
+              class: "btn btn-danger"
+
+
+%aside.admin
+  = render partial: "questionnaires/menu"
+  = render partial: "shared/admin_menu"

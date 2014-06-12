@@ -1,0 +1,31 @@
+- content_for(:page_title) do
+  Enkäter
+
+%main.admin.with-aside
+  %table
+    %thead
+      %tr
+        %th= sort_link "Arrangemang", "event"
+        %th Beskrivning
+        %th
+    %tbody
+      - @questionnaires.each do |questionnaire|
+        %tr
+          %td= questionnaire.event.name
+          %td= questionnaire.description
+          %td
+            .btn-group
+              = link_to "Visa enkät",
+                questionnaire,
+                class: "btn btn-default"
+              = link_to "Radera enkät",
+                questionnaire,
+                class: "btn btn-danger",
+                method: :delete,
+                data: { confirm: "Är du säker?" }
+
+  = will_paginate @questionnaires
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

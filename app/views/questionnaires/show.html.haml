@@ -1,0 +1,70 @@
+- content_for(:page_title) do
+  - if @questionnaire.for_event?
+    Enkät för
+    = link_to @questionnaire.event.name, @questionnaire.event
+  - else
+    Avbokningsenkät
+
+%main.admin.with-aside
+  .context-actions
+    .btn-group
+      = link_to "Redigera",
+        edit_questionnaire_path(@questionnaire),
+        class: "btn btn-default"
+      = link_to "Radera",
+        @questionnaire,
+        class: "btn btn-danger",
+        method: :delete,
+        data: { confirm: "Är du säker?" }
+
+  %article.body-copy
+    %p= @questionnaire.description
+
+  %section.box
+    %h1.box-title Lägg till enkätfråga
+    .box-content
+      - unless @template_questions.blank?
+        = form_tag add_template_question_questionnaire_path(@questionnaire), class: "basic" do
+          .form-group
+            %label.control-label(for="template-question") Välj mallfråga:
+            .controls
+              %select#template-question(name="question_id" class="form-control")
+                = options_from_collection_for_select @template_questions, :id, :question
+          .form-group
+            %span.control-label
+            .controls
+              = submit_tag "Lägg till mallfråga", class: "btn btn-primary"
+
+      = render partial: "questions/form",
+        locals: { question: @question, questionnaire: @questionnaire }
+
+  - unless @questionnaire.questions.blank?
+    %table
+      %thead
+        %tr
+          %th Fråga
+          - if @questionnaire.for_event?
+            %th Mallfråga
+          %th Obligatorisk
+          %th
+      %tbody
+        - @questionnaire.questions.each do |question|
+          %tr
+            %td= question.question
+            - if @questionnaire.for_event?
+              %td= "Ja" if question.template
+            %td= "Ja" if question.mandatory
+            %td
+              = link_to "Redigera",
+                edit_questionnaire_question_path(@questionnaire, question),
+                class: "btn btn-default" unless question.template
+              = link_to "Ta bort",
+                questionnaire_question_path(@questionnaire, question),
+                method: :delete,
+                data: { confirm: "Är du säker?" },
+                class: "btn btn-danger"
+
+
+%aside.admin
+  = render partial: "questionnaires/menu"
+  = render partial: "shared/admin_menu"

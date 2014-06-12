@@ -1,0 +1,29 @@
+- content_for(:page_title) do
+  - if @questionnaire.new_record?
+    Lägg till enkät
+  - else
+    Uppdatera enkät
+  - if @questionnaire.for_event? && @questionnaire.event
+    för
+    = link_to @questionnaire.event.name, @questionnaire
+
+%main.admin.with-aside
+  = simple_form_for @questionnaire, html: { class: "basic" } do |f|
+    = f.error_notification class: "warning"
+
+    - if @questionnaire.new_record?
+      = f.input :event_id,
+        as: :select,
+        collection: @events
+
+    = f.input :description
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit "Spara", class: "btn btn-primary"
+        = link_to "Avbryt", questionnaires_path, class: "btn btn-default"
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

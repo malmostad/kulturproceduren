@@ -75,3 +75,23 @@ $ ->
             container.removeClass("collapsed")
         form.one "click", ->
             container.removeClass("collapsed")
+
+
+    $("#question-form").each ->
+        form = $(this)
+
+        typeSelector = form.find(".question_qtype")
+
+        typeSelector.on "change", ":radio", ->
+            # Hide everything that's dependent on which type is selected
+            form.find(".type-dependent").hide()
+            form.find(".type-dependent :input").prop("disabled", true)
+
+            # Show the fields dependent on the currently selected type
+            typeId = $(this).val()
+            console.log(typeId)
+            form.find(".type-dependent[data-type-id=#{typeId}]").show()
+            form.find(".type-dependent[data-type-id=#{typeId}] :input").prop("disabled", false)
+
+        # Initialize the form
+        typeSelector.find(":checked").trigger("change")
