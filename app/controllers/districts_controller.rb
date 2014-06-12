@@ -1,6 +1,6 @@
 # Controller for managing districts
 class DistrictsController < ApplicationController
-  layout "admin"
+  layout "application"
   
   before_filter :authenticate
   before_filter :require_admin, except: [ :select ]
@@ -10,6 +10,7 @@ class DistrictsController < ApplicationController
   end
 
   def show
+    @school_types = SchoolType.order(:name)
     @district = District.find(params[:id])
   end
 
@@ -20,12 +21,6 @@ class DistrictsController < ApplicationController
   def new
     @school_types = SchoolType.order(:name)
     @district = District.new
-  end
-
-  def edit
-    @school_types = SchoolType.order(:name)
-    @district = District.find(params[:id])
-    render action: "new"
   end
 
   def create
@@ -48,7 +43,7 @@ class DistrictsController < ApplicationController
       redirect_to(@district)
     else
       @school_types = SchoolType.order(:name)
-      render action: "new"
+      render action: "show"
     end
   end
 
