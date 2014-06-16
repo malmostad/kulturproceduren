@@ -1,0 +1,25 @@
+- content_for(:page_title) do
+  = @school.name_was
+
+%main.admin.with-aside
+  .context-actions
+    = link_to "Historik",
+      history_school_path(@school),
+      class: "btn btn-default"
+
+  = render partial: "form", locals: { school: @school, districts: @districts }
+
+  %h2 Grupper i skolan
+
+  .context-actions
+    = link_to "Lägg till grupp",
+      new_group_path(school_id: @school.id),
+      class: "btn btn-default"
+
+  %table
+    = render partial: "groups/list", locals: { groups: @groups }
+    = will_paginate @groups
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

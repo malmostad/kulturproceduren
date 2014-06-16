@@ -36,14 +36,6 @@ class DistrictsControllerTest < ActionController::TestCase
     assert          assigns(:district).new_record?
   end
 
-  test "edit" do
-    district = create(:district)
-    get :edit, id: district.id
-    assert_response :success
-    assert_template "districts/new"
-    assert_equal    district, assigns(:district)
-  end
-
   test "create" do
     # Invalid
     post :create, district: { name: "" }
@@ -66,7 +58,7 @@ class DistrictsControllerTest < ActionController::TestCase
     # Invalid
     put :update, id: district.id, district: { name: "" }
     assert_response :success
-    assert_template "districts/new"
+    assert_template "districts/show"
     assert_equal    district, assigns(:district)
     assert          !assigns(:district).valid?
 

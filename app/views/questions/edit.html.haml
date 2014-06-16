@@ -1,0 +1,9 @@
+- content_for(:page_title) do
+  Uppdatera fråga
+
+%main.admin.with-aside
+  = render partial: "form", locals: { question: @question, questionnaire: @questionnaire }
+
+%aside.admin
+  = render partial: "questionnaires/menu"
+  = render partial: "shared/admin_menu"

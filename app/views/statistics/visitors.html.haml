@@ -1,0 +1,56 @@
+- content_for(:page_title) do
+  Besökstatistik
+  - if @visitor_stats
+    för
+    = @event.name
+  - else
+    = @term
+
+%main.admin.with-aside
+  .context-actions
+    - if @visitor_stats
+      = link_to "Ladda ner besökstatistik för evenemanget #{@event.name} #{@term} som Excel-fil",
+        visitors_event_statistic_path(@event, @term, format: :xls),
+        class: "btn btn-default"
+    - else
+      = link_to "Ladda ner all besökstatistik för #{@term} som Excel-fil",
+        visitors_statistic_path(@term, format: :xls),
+        class: "btn btn-default"
+      .warning
+        Det kan ta tid att ladda ner all besökstatistik
+
+  - if @visitor_stats
+    %table.statistics
+      %thead
+        %tr
+          %th Område
+          %th Skola
+          %th Grupp
+          %th Antal bokade
+          %th Antal barn
+          %th Antal vuxna
+      %tbody
+        - @visitor_stats.each do |stat|
+          %tr
+            %td= stat["district_name"]
+            %td= stat["school_name"]
+            %td= stat["group_name"]
+            %td= stat["num_booked"]
+            %td= stat["num_children"]
+            %td= stat["num_adult"]
+
+  - else
+    %table
+      %thead
+        %tr
+          %th Evenemang
+          %th Arrangör
+      %tbody
+        - @events.each do |event|
+          %tr
+            %td= link_to event.name, visitors_event_statistic_path(event, @term)
+            %td= event.culture_provider.name
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

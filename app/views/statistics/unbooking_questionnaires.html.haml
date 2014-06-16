@@ -1,0 +1,24 @@
+- content_for(:page_title) do
+  Avbokningsstatistik
+  = @term
+
+%main.admin.with-aside
+  .context-actions
+    = link_to "Ladda ner avbokningsstatistik för #{@term} som Excel-fil",
+      unbooking_questionnaires_statistic_path(@term, format: :xls),
+      class: "btn btn-default"
+
+  %table.statistics
+    %thead
+      %tr
+        %th Fråga
+        %th Svarsstatistik
+    %tbody
+      - @questionnaire.questions.each do |question|
+        %tr
+          %td= question.question
+          %td= question_statistics(question, question.statistics_for_answer_forms(@answer_forms))
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

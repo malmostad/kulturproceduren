@@ -1,0 +1,39 @@
+- content_for(:page_title) do
+  Besvara behörighetsansökan
+
+%main.admin.with-aside
+  = simple_form_for @role_application, html: { class: "basic" } do |f|
+    = f.error_notification class: "warning"
+
+    .form-group
+      %span.control-label Typ av ansökan:
+      .controls.no-input
+        %p= type_string(@role_application)
+
+    .form-group
+      %span.control-label Avsändare:
+      .controls.no-input
+        %p= link_to @role_application.user.name, @role_application.user
+    .form-group
+      %span.control-label Meddelande:
+      .controls.no-input
+        %p= @role_application.message
+
+    = f.input :state,
+      as: :radio_buttons,
+      wrapper: :radio,
+      label: "",
+      collection: [ [ "Godkänn", RoleApplication::ACCEPTED ], [ "Neka", RoleApplication::DENIED ] ]
+
+    = f.input :response, input_html: { rows: 5 }
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit("Besvara ansökan", class: "btn btn-primary")
+        = link_to "Avbryt", role_applications_path, class: "btn btn-default"
+
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

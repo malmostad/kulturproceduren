@@ -1,7 +1,7 @@
 # Controller for managing quiestionnaires.
 class QuestionnairesController < ApplicationController
 
-  layout "admin"
+  layout "application"
   
   before_filter :authenticate
   before_filter :require_admin

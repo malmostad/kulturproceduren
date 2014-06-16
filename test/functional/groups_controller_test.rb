@@ -48,17 +48,6 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal    schools,      assigns(:schools)
   end
 
-  test "edit" do
-    schools = create_list(:school, 3).sort_by(&:name)
-    group   = create(:group, school: schools.last)
-
-    get :edit, id: group.id
-    assert_response :success
-    assert_template "groups/new"
-    assert_equal    group, assigns(:group)
-    assert_equal    schools, assigns(:schools)
-  end
-
   test "create" do
     schools = create_list(:school, 3).sort_by(&:name)
 
@@ -85,7 +74,7 @@ class GroupsControllerTest < ActionController::TestCase
     # Invalid
     put :update, id: group.id, group: { name: "" }
     assert_response :success
-    assert_template "groups/new"
+    assert_template "groups/show"
     assert_equal    group, assigns(:group)
     assert          !assigns(:group).valid?
     assert_equal    schools, assigns(:schools)

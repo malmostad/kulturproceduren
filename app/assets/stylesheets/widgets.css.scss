@@ -91,6 +91,10 @@ aside.details {
     legend {
         font-family: $sans-serif;
     }
+
+    button.select-group {
+        margin-left: 34%;
+    }
 }
 
 .no-hits {
@@ -99,6 +103,11 @@ aside.details {
 
 .context-actions {
     margin-bottom: 1em;
+
+    .warning {
+        display: inline-block;
+        margin-left: 1em;
+    }
 }
 
 .large-selection {

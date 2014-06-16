@@ -1,6 +1,6 @@
 # Controller for managing schools.
 class SchoolsController < ApplicationController
-  layout "admin", except: [ :options_list ]
+  layout "application", except: [ :options_list ]
   
   before_filter :authenticate, except: [ :options_list, :select, :search ]
   before_filter :require_admin, except: [ :options_list, :select, :search ]
@@ -11,6 +11,7 @@ class SchoolsController < ApplicationController
 
 
   def show
+    @districts = District.all
     @school = School.find(params[:id])
     @groups = @school.groups.order(sort_order("name")).paginate(page: params[:page])
   end
@@ -24,12 +25,6 @@ class SchoolsController < ApplicationController
     @school.district_id = params[:district_id] if params[:district_id]
 
     @districts = District.all
-  end
-
-  def edit
-    @school = School.find(params[:id])
-    @districts = District.all
-    render action: "new"
   end
 
   def create
@@ -51,8 +46,9 @@ class SchoolsController < ApplicationController
       flash[:notice] = 'Skolan uppdaterades.'
       redirect_to(@school)
     else
+      @groups = @school.groups.order(sort_order("name")).paginate(page: params[:page])
       @districts = District.all
-      render action: "new"
+      render action: "show"
     end
   end
 

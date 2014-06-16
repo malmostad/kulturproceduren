@@ -3,7 +3,7 @@ require 'csv'
 # Controller for showing global statistics
 class StatisticsController < ApplicationController
 
-  layout "admin"
+  layout "application"
   before_filter :authenticate
 
   # Shows available statistics grouped by term

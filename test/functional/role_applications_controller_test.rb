@@ -15,7 +15,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
 
     get :index
     assert_response :success
-    assert_equal    role_applications, assigns(:applications)
+    assert_equal    role_applications, assigns(:role_applications)
   end
   test "index, other users" do
     session[:current_user_id] = @user.id
@@ -38,7 +38,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
     
     get :archive
     assert_response :success
-    assert_equal    role_applications, assigns(:applications)
+    assert_equal    role_applications, assigns(:role_applications)
   end
 
   test "edit" do
@@ -49,7 +49,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
 
     get :edit, id: role_application.id
     assert_response :success
-    assert_equal    role_application, assigns(:application)
+    assert_equal    role_application, assigns(:role_application)
 
     # Accepted
     role_application = create(:role_application, state: RoleApplication::ACCEPTED)
@@ -120,7 +120,7 @@ class RoleApplicationsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template "role_applications/edit"
-    assert_equal    role_application, assigns(:application)
+    assert_equal    role_application, assigns(:role_application)
   end
   test "update, accepted" do
     @controller.expects(:require_admin).at_least_once.returns(true)

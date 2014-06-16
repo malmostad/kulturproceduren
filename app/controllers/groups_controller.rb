@@ -1,6 +1,6 @@
 # Controller for managing groups
 class GroupsController < ApplicationController
-  layout "admin", except: [ :options_list ]
+  layout "application", except: [ :options_list ]
   
   before_filter :authenticate, except: [ :options_list, :select ]
   before_filter :require_admin, except: [ :options_list, :select ]
@@ -14,6 +14,7 @@ class GroupsController < ApplicationController
   def show
     @group = Group.find(params[:id])
     @age_group = AgeGroup.new { |ag| ag.group_id = @group.id }
+    @schools = School.order("name ASC")
   end
 
   def history
@@ -25,12 +26,6 @@ class GroupsController < ApplicationController
     @group.school_id = params[:school_id] if params[:school_id]
     
     @schools = School.order("name ASC")
-  end
-
-  def edit
-    @group = Group.find(params[:id])
-    @schools = School.order("name ASC")
-    render action: "new"
   end
 
   def create
@@ -53,7 +48,8 @@ class GroupsController < ApplicationController
       redirect_to(@group)
     else
       @schools = School.order("name ASC")
-      render action: "new"
+      @age_group = AgeGroup.new { |ag| ag.group_id = @group.id }
+      render action: "show"
     end
   end
 

@@ -1,0 +1,32 @@
+- content_for(:page_title) do
+  Arkiv för behörighetsansökan
+
+%main.admin.with-aside
+  - if !@role_applications.blank?
+    %table
+      %thead
+        %tr
+          %th= sort_link "Typ", "role"
+          %th Meddelande
+          %th= sort_link "Inskickad", "created_at"
+          %th= sort_link "Inskickad av", "user"
+          %th= sort_link "Besvarad", "updated_at"
+          %th Svar
+      %tbody
+        - @role_applications.each do |role_application|
+          %tr
+            %td= type_string(role_application)
+            %td= role_application.message
+            %td= l role_application.created_at, format: :short
+            %td= role_application.user.name
+            %td= l role_application.updated_at, format: :short
+            %td= role_application.response
+
+    = will_paginate @role_applications
+
+  - else
+    .success.no-hits Det finns inga nya ansökningar
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"
