@@ -5,12 +5,6 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require "rails/test_help"
 
-FactoryGirl.define do
-  sequence :email do |n|
-    "person#{n}@example.com"
-  end
-end
-
 class ActiveSupport::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
   # in a transaction that's rolled back on completion.  This ensures that the
