@@ -81,52 +81,7 @@ class LoginController < ApplicationController
 
   private
 
-  def get_ldap
-    ldap = KPLdapManager.new(
-      APP_CONFIG[:ldap][:address],
-      APP_CONFIG[:ldap][:port],
-      APP_CONFIG[:ldap][:base_dn],
-      APP_CONFIG[:ldap][:bind][:dn],
-      APP_CONFIG[:ldap][:bind][:password]
-    )
-  end
-
-  # Authenticates the user by first checking the LDAP, then the local user database.
-  #
-  # If the user is authenticated by the LDAP but does not have a local user profile,
-  # a profile is automatically created.
   def authenticate_user
-    if APP_CONFIG[:ldap]
-      ldap = get_ldap()
-
-      ldap_user = ldap.authenticate params[:user][:username], params[:user][:password]
-
-      if ldap_user
-        user = User.where(username: "#{APP_CONFIG[:ldap][:username_prefix]}#{params[:user][:username]}").first
-
-        if user
-          return user
-        else
-          ldap_user = ldap.get_user(params[:user][:username])
-
-          user = User.new
-          user.name                  = ldap_user[:name]
-          user.email                 = ldap_user[:email]
-          user.cellphone             = ldap_user[:cellphone]
-          user.username              = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
-          user.password              = "ldap"
-          user.password_confirmation = "ldap"
-          user.districts             << District.first
-
-          user.save!
-
-          return user
-        end
-      else
-        return params[:user] && User.authenticate(params[:user][:username], params[:user][:password])
-      end
-    else
-      return params[:user] && User.authenticate(params[:user][:username], params[:user][:password])
-    end
+    return params[:user] && User.authenticate(params[:user][:username], params[:user][:password])
   end
 end

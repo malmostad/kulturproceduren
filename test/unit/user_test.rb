@@ -89,11 +89,6 @@ class UserTest < ActiveSupport::TestCase
 
   test "get_username" do
     user = create(:user, username: "username")
-
-    assert_equal "username", user.get_username
-
-    APP_CONFIG.replace(ldap: { username_prefix: "ldap_" })
-    user.username = "ldap_username"
     assert_equal "username", user.get_username
   end
 
@@ -210,10 +205,6 @@ class UserTest < ActiveSupport::TestCase
 
   test "username unique" do
     user = create(:user, username: "username")
-
     assert !build(:user, username: "username").valid?
-
-    APP_CONFIG.replace(salt_length: 10, ldap: { username_prefix: "ldap_" })
-    assert !build(:user, username: "ldap_username").valid?
   end
 end

@@ -75,13 +75,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
 
-    if APP_CONFIG[:ldap] && ldap_user_exists(params[:user][:username])
-      @user.valid?
-      @user.errors.add(:username,
-                       :taken,
-                       default: "Användarnamnet är redan taget",
-                       value: params[:user][:username])
-    elsif @user.save
+    if @user.save
       if user_online? && current_user.has_role?(:admin)
         flash[:notice] = 'Användaren skapades. Den kan nu logga in med användarnamn och lösenord.'
         redirect_to(@user)
@@ -248,16 +242,5 @@ class UsersController < ApplicationController
     else
       @user = current_user
     end
-  end
-
-  # Checks if a username exists in the LDAP.
-  def ldap_user_exists(username)
-    ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
-      APP_CONFIG[:ldap][:port],
-      APP_CONFIG[:ldap][:base_dn],
-      APP_CONFIG[:ldap][:bind][:dn],
-      APP_CONFIG[:ldap][:bind][:password]
-
-    return !ldap.get_user(username).nil?
   end
 end

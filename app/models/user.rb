@@ -87,11 +87,7 @@ class User < ActiveRecord::Base
   end
 
   def get_username
-    if APP_CONFIG[:ldap]
-      return self.username.sub(APP_CONFIG[:ldap][:username_prefix] , "")
-    else
-      return self.username
-    end
+    self.username
   end
 
   # Returns the bookings a user has made
@@ -203,14 +199,8 @@ class User < ActiveRecord::Base
   end
 
   def username_unique
-    if APP_CONFIG[:ldap]
-      prefix = APP_CONFIG[:ldap][:username_prefix] 
-    else
-      prefix = ""
-    end
-    if User.find_by_username("#{prefix}#{username}") || User.find_by_username(username.sub(prefix , ""))
-      self.errors.add(:username, :taken , message: "Användarnamnet är redan taget" )
+    if User.where(username: self.username).exists?
+      self.errors.add(:username, :taken, message: "Användarnamnet är redan taget" )
     end
   end
-
 end
