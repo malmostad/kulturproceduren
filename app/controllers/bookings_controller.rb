@@ -70,7 +70,6 @@ class BookingsController < ApplicationController
   # Displays bookings by group
   def group
     load_group()
-    load_group_selection_collections()
     
     if @group
       @bookings = Booking.active.find_for_group(@group, params[:page])
@@ -119,7 +118,6 @@ class BookingsController < ApplicationController
   def new
     @occasion = Occasion.find(params[:occasion_id])
     load_group()
-    load_group_selection_collections(@occasion)
 
     if @group
       @booking = Booking.active.where(group_id: @group.id, occasion_id: @occasion.id).first
@@ -168,8 +166,6 @@ class BookingsController < ApplicationController
       flash[:notice] = "Platserna bokades."
       redirect_to booking_url(@booking)
     else
-      load_group_selection_collections(@occasion)
-
       render action: "new"
     end
   end
@@ -179,8 +175,6 @@ class BookingsController < ApplicationController
     @group = @booking.group
     @occasion = @booking.occasion
     @is_edit = true
-
-    load_group_selection_collections(@occasion)
 
     render action: "new"
   end
@@ -208,10 +202,7 @@ class BookingsController < ApplicationController
       redirect_to booking_url(@booking)
     else
       @is_edit = true
-
       @group = @booking.group
-      load_group_selection_collections(@occasion)
-
       render action: "new"
     end
   end
