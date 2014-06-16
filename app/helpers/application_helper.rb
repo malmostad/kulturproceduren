@@ -172,7 +172,7 @@ module ApplicationHelper
 
 
   # Renders a form for selecting a group
-  def group_selection_form(occasion: nil, return_to: nil, school_search_path: nil, notification_request_hint: false)
+  def group_selection_form(occasion: nil, return_to: nil, school_search_path: nil, notification_request_hint: false, select_button: nil)
     state = session[:group_selection] || {}
     return_to ||= url_for(request.query_parameters.update(request.path_parameters))
 
@@ -188,7 +188,8 @@ module ApplicationHelper
         state: state,
         group_options: group_options,
         school_search_path: school_search_path,
-        notification_request_hint: notification_request_hint
+        notification_request_hint: notification_request_hint,
+        select_button: select_button
       }
     )
   end

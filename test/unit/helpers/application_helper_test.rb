@@ -155,6 +155,11 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_select "p.help-block", 1
     assert_select "p.help-block a[href=/events/#{occasion.event_id}/notification_requests/new]"
   end
+  test "group_selection_form, select_button, no state" do
+    occasion = create(:occasion)
+    group_selection_form(return_to: "/foo", select_button: "select_button", occasion: occasion)
+    assert_select "button.select-group", 1
+  end
 
   test "group_selection_form, return_to, school selected" do
     group = create(:group)

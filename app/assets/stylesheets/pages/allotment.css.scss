@@ -1,0 +1,35 @@
+table.allotment-distribution {
+    tr.school td:first-child {
+        padding-left: 1.9em;
+    }
+    tr.group td:first-child {
+        padding-left: 3.4em;
+    }
+
+    .collapser {
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:before {
+            display: inline-block;
+            content: "\25BC\2003";
+        }
+        &.collapsed:before {
+            content: "\25B6\2003";
+        }
+    }
+
+    .partial {
+        background: $warning-background;
+    }
+    .full {
+        background: $success-background;
+    }
+}
+
+#allotment-details {
+    background: #fff;
+}

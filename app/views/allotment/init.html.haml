@@ -1,0 +1,142 @@
+- content_for(:page_title) do
+  Fördelning för
+  = @event.name
+
+%main.with-aside
+  %nav.return
+    = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  %p.body-copy
+    Fördelar biljetter för evenemanget
+    = link_to @event.name, @event
+    som arrangeras av
+    = succeed "." do
+      = link_to @event.culture_provider.name, @event.culture_provider
+
+  - is_edit = @event.tickets.count > 0
+
+  - if is_edit
+    .success
+      Detta evenemang har redan
+      %b= @event.tickets.count
+      st biljetter fördelade.
+
+  = form_tag({ action: "assign_params", id: params[:id] }, id: "allotment-init-form", class: "basic") do
+
+    .form-group
+      %label.control-label(for="allotment_release_date") Biljettsläpp:*
+      .controls.input-group
+        = text_field_tag "allotment[release_date]",
+          @event.ticket_release_date,
+          class: "form-control datepicker",
+          data: { "start-date" => Date.tomorrow }
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-calendar
+
+    - if !is_edit || @event.ticket_state == :alloted_group
+      .form-group
+        %span.control-label
+        .controls.checkbox
+          %label.checkbox
+            = check_box_tag "allotment[skip_district_transition]", nil
+            Hoppa över övergång till område
+
+      .form-group
+        %label.control-label(for="allotment_district_transition_date") Övergång till område:
+        .controls.input-group
+          = text_field_tag "allotment[district_transition_date]",
+            @event.district_transition_date,
+            class: "form-control datepicker#{" changed" if !@event.district_transition_date.blank?}",
+            data: { "start-date" => Date.tomorrow, "default-interval" => APP_CONFIG[:ticket_state][:group_days] }
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-calendar
+
+    - if !is_edit || [ :alloted_group, :alloted_district ].include?(@event.ticket_state)
+      .form-group
+        %label.control-label(for="allotment_free_for_all_transition_date") Övergång till hela staden:
+        .controls.input-group
+          = text_field_tag "allotment[free_for_all_transition_date]",
+            @event.free_for_all_transition_date,
+            class: "form-control datepicker#{" changed" if !@event.free_for_all_transition_date.blank?}",
+            data: { "start-date" => Date.tomorrow,
+              "default-interval" => APP_CONFIG[:ticket_state][:group_days] + APP_CONFIG[:ticket_state][:district_days] }
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-calendar
+
+    .form-group
+      %label.control-label(for="allotment_num_tickets")
+        Antal
+        - is_edit ? "ytterligare" : "inköpta"
+        biljetter:
+      .controls
+        = text_field_tag "allotment[num_tickets]", nil, class: "form-control"
+
+    .form-group
+      %span.control-label
+      .controls.checkbox
+        %label.checkbox
+          = check_box_tag "allotment[bus_booking]", 1, @event.bus_booking
+          Aktivera bussbokning för evenemanget
+
+    .form-group
+      %label.control-label(for="allotment_last_bus_booking_date") Sista datum för bussbokning:
+      .controls.input-group
+        = text_field_tag "allotment[last_bus_booking_date]",
+          @event.last_bus_booking_date,
+          class: "form-control datepicker#{" changed" if !@event.last_bus_booking_date.blank?}",
+          disabled: !@event.bus_booking,
+          data: { "start-date" => Date.tomorrow, "default-interval" => APP_CONFIG[:bus_booking][:active_days] }
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-calendar
+
+    - unless is_edit
+      .form-group
+        %label.control-label Fördelningsnivå:
+        .controls.radio
+          %label.radio-inline
+            = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_GROUP, true
+            Grupp
+          %label.radio-inline
+            = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_DISTRICT
+            Område
+          %label.radio-inline
+            = radio_button_tag "allotment[ticket_state]", Event::FREE_FOR_ALL
+            Hela staden
+
+    .form-group
+      %label.control-label Områden:
+      .controls.checkbox.districts
+        %label.checkbox
+          = check_box_tag "allotment[district_ids][]",
+            -1,
+            (!is_edit || @event.districts.size == @districts.size),
+            class: "all"
+          Alla
+        - @districts.each do |district|
+          %label.checkbox
+            - if is_edit
+              - current = @event.districts.include?(district)
+              = check_box_tag "allotment[district_ids][]",
+                district.id,
+                checked: current,
+                disabled: current
+            - else
+              = check_box_tag "allotment[district_ids][]",
+                district.id,
+                checked: true
+            = district.name
+
+
+    .form-group
+      %span.control-label
+      .controls
+        = submit_tag "Starta fördelning",
+          name: "submit",
+          class: "btn btn-primary"
+        - if is_edit
+          = link_to "Ta bort fördelningen helt",
+            { action: "destroy", id: params[:id] },
+            data: { confirm: "Är du säker?" },
+            class: "btn btn-danger"
+
+= render partial: "events/administration_menu", locals: { event: @event }

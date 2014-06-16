@@ -6,6 +6,9 @@ class AllotmentControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:require_admin).at_least_once.returns(true)
 
+    @user = create(:user, roles: [roles(:admin)])
+    session[:current_user_id] = @user.id
+
     # Base data
     @districts = create_list(:district, 2)
     @schools   = @districts.collect { |d| create_list(:school, 2, district: d) }.flatten
@@ -519,9 +522,10 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_nil           session[:allotment]
 
     @event.reload
-    assert_nil   @event.ticket_release_date
-    assert_nil   @event.district_transition_date
-    assert_nil   @event.free_for_all_transition_date
-    assert_nil   @event.ticket_state
+    assert_nil @event.ticket_release_date
+    assert_nil @event.district_transition_date
+    assert_nil @event.free_for_all_transition_date
+    assert_nil @event.ticket_state
+    assert     @event.tickets.blank?
   end
 end

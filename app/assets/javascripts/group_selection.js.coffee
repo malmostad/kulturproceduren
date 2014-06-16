@@ -34,6 +34,10 @@ $ ->
             form.trigger("group-select", [ groupId ])
             $.get(form.data("select-group"), group_id: groupId)
 
+        form.on "click", ".select-group", ->
+            groupId = parseInt(group.find("option:selected").val())
+            form.trigger("manual-group-select", groupId) if !isNaN(groupId)
+
 
     $("#booking-list").each ->
         list = $(this)

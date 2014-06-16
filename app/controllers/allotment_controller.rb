@@ -2,7 +2,7 @@
 # event
 class AllotmentController < ApplicationController
 
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :require_admin
@@ -112,7 +112,6 @@ class AllotmentController < ApplicationController
 
   # Renders a view for distributing the tickets
   def distribute
-    load_group_selection_collections()
     @districts = load_working_districts()
 
     if session[:allotment][:extra_groups]
@@ -204,7 +203,7 @@ class AllotmentController < ApplicationController
 
   # Completely removes an allotment from an event
   def destroy
-    @event.allotments.clear
+    @event.allotments.collect(&:destroy)
 
     session[:allotment] = nil
 

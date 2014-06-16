@@ -1,0 +1,157 @@
+- content_for(:page_title) do
+  Fördelning för
+  = @event.name
+
+%main.admin.with-aside
+  %nav.return
+    = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  - is_group_distribution = session[:allotment][:ticket_state] == :alloted_group
+
+  - if is_group_distribution
+    = group_selection_form select_button: "Lägg till grupp"
+
+  = form_tag({ action: "create_tickets", id: params[:id] }, id: "allotment-distribution-form") do
+    = hidden_field_tag "add_group[group_id]"
+
+    - if is_group_distribution
+      %table.allotment-distribution
+        %thead
+          %tr
+            %th(rowspan="2") Namn
+            %th(colspan="2") Antal barn
+            %th(rowspan="2" colspan="2") Antal biljetter
+          %tr
+            %th Totalt i gruppen
+            %th För fördelning
+
+        %tbody
+          - (@extra_groups || []).each do |group|
+            %tr.group.extra{class: fill_indicator(group.total_children, group.num_tickets), data: { type: "group" }}
+              %td
+                = group.school.name
+                %br
+                = group.name
+              %td= group.total_children
+              %td.children= group.total_children
+              %td
+                = text_field_tag "allotment[ticket_assignment[#{group.id}]]",
+                  group.num_tickets,
+                  size: 5,
+                  class: "form-control tickets",
+                  data: { value: group.num_tickets }
+              %td
+                .btn-group
+                  = link_to "+",
+                    "#",
+                    class: "fill btn btn-success",
+                    title: "Fyll gruppens tilldelade biljetter"
+                  = link_to "&#x2212;".html_safe,
+                    "#",
+                    class: "clear btn btn-danger",
+                    title: "Töm gruppens tilldelade biljetter"
+
+          - @districts.each do |district|
+            %tr.district(data-type="district")
+              %td
+                .collapser= district.name
+              %td
+              %td= district.num_children
+              %td.tickets= district.num_tickets
+              %td
+                .btn-group
+                  = link_to "+",
+                    "#",
+                    class: "fill btn btn-success",
+                    title: "Fyll områdets tilldelade biljetter så långt som möjligt"
+                  = link_to "&#x2212;".html_safe,
+                    "#",
+                    class: "clear btn btn-danger",
+                    title: "Töm områdets tilldelade biljetter"
+
+            - district.distribution_schools.each do |school|
+              %tr.school(data-type="school")
+                %td
+                  .collapser= school.name
+                %td
+                %td= school.num_children
+                %td.tickets= school.num_tickets
+                %td
+                  .btn-group
+                    = link_to "+",
+                      "#",
+                      class: "fill btn btn-success",
+                      title: "Fyll skolans tilldelade biljetter så långt som möjligt"
+                    = link_to "&#x2212;".html_safe,
+                      "#",
+                      class: "clear btn btn-danger",
+                      title: "Töm skolans tilldelade biljetter"
+
+              - school.distribution_groups.each do |group|
+                %tr.group{class: fill_indicator(group.num_children, group.num_tickets), data: { type: "group" }}
+                  - proximity = (group.total_children > group.num_children && (group.total_children - group.num_children) <= APP_CONFIG[:allotment][:proximity_boundary])
+                  %td= group.name
+                  %td{class: "#{"proximity" if proximity}"}= group.total_children
+                  %td{class: "children#{" proximity" if proximity}"}= group.num_children
+                  %td
+                    = text_field_tag "allotment[ticket_assignment[#{group.id}]]",
+                      group.num_tickets,
+                      size: 5,
+                      class: "form-control tickets",
+                      data: { value: group.num_tickets }
+                  %td
+                    .btn-group
+                      = link_to "+",
+                        "#",
+                        class: "fill btn btn-success",
+                        title: "Fyll gruppens tilldelade biljetter"
+                      = link_to "&#x2212;".html_safe,
+                        "#",
+                        class: "clear btn btn-danger",
+                        title: "Töm gruppens tilldelade biljetter"
+    - else
+      %table.allotment-distribution
+        %thead
+          %tr
+            %th Namn
+            %th Antal barn
+            %th Antal biljetter
+            %th
+
+        %tbody
+          - @districts.each do |district|
+            %tr.district{class: fill_indicator(district.num_children, district.num_tickets), data: { type: "editable-district" }}
+              %td= district.name
+              %td.children= district.num_children
+              %td
+                = text_field_tag "allotment[ticket_assignment[#{district.id}]]",
+                  district.num_tickets,
+                  size: 5,
+                  class: "form-control tickets",
+                  data: { value: district.num_tickets }
+              %td
+                .btn-group
+                  = link_to "+",
+                    "#",
+                    class: "fill btn btn-success",
+                    title: "Fyll områdets tilldelade biljetter"
+                  = link_to "&#x2212;".html_safe,
+                    "#",
+                    class: "clear btn btn-danger",
+                    title: "Töm områdets tilldelade biljetter"
+
+    .form-group
+      %span.control-label
+      .controls
+        = submit_tag "Skapa biljetter",
+          name: "create_tickets",
+          class: "btn btn-primary"
+
+%aside#allotment-details.admin.basic.details
+  %dl
+    %dt Biljettsläpp:
+    %dd= session[:allotment][:release_date]
+    %dt Totalt antal biljetter:
+    %dd= session[:allotment][:num_tickets]
+    %dt Tillgängliga biljetter:
+    %dd#ticket-pool= @tickets_left
