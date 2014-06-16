@@ -40,7 +40,6 @@ class LdapController < ApplicationController
         u.username = "#{APP_CONFIG[:ldap][:username_prefix]}#{ldap_user[:username]}"
         u.password = "ldap"
         u.password_confirmation = "ldap"
-        u.districts << District.first
       end
 
       user.save!

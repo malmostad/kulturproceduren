@@ -204,7 +204,7 @@ sv:
       event: evenemanget
       culture_provider: arrangören
       occasion: föreställningen
-      district: stadsdelen
+      district: området
       school: skolan
       group: gruppen
       age_group: åldersgruppen
@@ -243,6 +243,8 @@ sv:
         map_address: "Kartadress:"
         single_group: "Endast en grupp kan boka denna föreställning"
       district:
+        school_type: "Skolform:"
+        school_type_id: "Skolform:"
         name: "Namn:"
         contacts: "Kontaktadresser:"
         elit_id: "ELIT-ID:"
@@ -250,7 +252,7 @@ sv:
         name: "Namn:"
         contacts: "Kontaktadresser:"
         elit_id: "ELIT-ID:"
-        district_id: "Stadsdel:"
+        district_id: "Område:"
       group:
         name: "Namn:"
         contacts: "Kontaktadresser:"

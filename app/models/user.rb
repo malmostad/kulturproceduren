@@ -50,8 +50,6 @@ class User < ActiveRecord::Base
     message: "Användarnamnet är redan taget"
   validates_confirmation_of :password,
     message: "Lösenordsbekräftelsen matchar inte lösenordet"
-  validates_presence_of :district_ids,
-    message: "Minst en stadsdel måste väljas"
 
   # The id and salt is automatically generated and should not be changed.
   attr_protected :id, :salt
@@ -64,11 +62,6 @@ class User < ActiveRecord::Base
     relation = where(true).order(order).paginate(page: page)
     return relation if filter.blank?
 
-    if filter.has_key? :district_id
-      relation = relation.where("users.id IN (SELECT user_id FROM districts_users WHERE district_id = ?)", filter[:district_id])
-    end
-
-    # Does this really work?
     if filter.has_key? :name
       name     = "%#{filter[:name]}%"
       relation = relation.where("(users.name ILIKE ? OR users.username ILIKE ?)", name, name)

@@ -1,5 +1,11 @@
 <%= render partial: "menu" %>
 
+<% content_for :head do %>
+<script type="text/javascript">
+  kpConfig.schools.search.url = "<%= search_occasion_schools_path(@occasion) %>";
+</script>
+<% end %>
+
 <h2 class="form-title">
   Boka platser för
   <%= link_to @occasion.event.name, @occasion.event -%>,
@@ -7,9 +13,7 @@
 </h2>
 
 <div class="booking-group-selection">
-  <%= render partial: "shared/group_selection",
-    locals: { occasion: @occasion, return_to: new_occasion_booking_path(@occasion) }
-  %>
+  <%= group_selection_form(occasion: @occasion) %>
 
   <div class="notification-request-info">
     <p>

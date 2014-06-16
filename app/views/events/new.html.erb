@@ -19,6 +19,23 @@
 
     <%= f.check_box :further_education %>
 
+    <%= f.row do -%>
+      <label>Skolform:</label>
+
+      <ul class="checkbox-list">
+        <% @school_types.each do |school_type| -%>
+          <li>
+            <%= check_box_tag "event[school_type_ids][]",
+              school_type.id,
+              @event.school_types.any? { |f| f.id == school_type.id },
+              id: "kp-event-school_type-#{school_type.id}" %>
+
+            <label for="kp-event-school_type-<%= school_type.id %>"><%= school_type.name %></label>
+          </li>
+        <% end -%>
+      </ul>
+    <% end -%>
+
     <%= f.select :from_age, (0..19).to_a, row_hidden: is_edit && @event.further_education %>
     <%= f.select :to_age, (0..19).to_a, row_hidden: is_edit && @event.further_education %>
 

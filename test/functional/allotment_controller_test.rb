@@ -54,6 +54,12 @@ class AllotmentControllerTest < ActionController::TestCase
     get :init, id: @event.id
     assert_response :success
     assert_equal District.order("name ASC").to_a, assigns(:districts)
+
+    # Event school type
+    @event.school_types << @districts.second.school_type
+    get :init, id: @event.id
+    assert_response :success
+    assert_equal [@districts.second], assigns(:districts)
   end
 
   def build_params(override = {})
@@ -294,6 +300,12 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal District.order("name ASC").to_a, assigns(:districts)
     assert_equal 100,                             assigns(:tickets_left)
     assert_nil   assigns(:extra_groups)
+
+    # Specific school type
+    @event.school_types << @districts.second.school_type
+    get :distribute, id: @event.id
+    assert_equal [@districts.second], assigns(:districts)
+    @event.school_types.clear
 
     # Specific districts
     session[:allotment][:district_ids] = [@districts.first.id]

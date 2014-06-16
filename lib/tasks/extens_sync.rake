@@ -21,6 +21,9 @@ namespace :kp do
       desc "Synchronize districts with Extens"
       task(districts: :environment) do
         puts "\n\nSynchronizing KP districts with Extens\n\n"
+
+        school_type = SchoolType.where(name: "Gamla stadsdelar").first!
+
         conn = get_connection()
         extens_districts = conn.select_all('select stadsdel_guid, namn from vvkultstadsdel')
 
@@ -33,6 +36,7 @@ namespace :kp do
           else
             puts "\tNo local district found, creating a new"
             local_district = District.new
+            local_district.school_type = school_type
             local_district.extens_id = extens_district['stadsdel_guid']
           end
 

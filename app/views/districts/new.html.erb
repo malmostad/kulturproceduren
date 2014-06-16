@@ -4,15 +4,16 @@
 
 <%= form_for(@district, builder: KPFormBuilder, html: { class: "district-form" }) do |f| %>
 
-  <%= f.title(is_edit ? "Redigera stadsdel" : "Skapa ny stadsdel") -%>
+  <%= f.title(is_edit ? "Redigera område" : "Skapa nytt område") -%>
 
   <%= f.conditional_hint is_edit do %>
-    Redigerar stadsdelen <%= link_to @district.name, @district %>.
+    Redigerar området <%= link_to @district.name, @district %>.
   <% end %>
 
   <%= f.validation_error_indicator %>
 
   <%= f.fields do -%>
+    <%= f.collection_select :school_type_id, @school_types, :id, :name  %>
     <%= f.text_field :name %>
     <%= f.text_field :contacts, field_help: "Ange epostadresser, separerade med kommatecken." %>
 

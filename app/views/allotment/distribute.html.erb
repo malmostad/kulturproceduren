@@ -95,8 +95,8 @@
             <td class="num-children"><%= district.num_children %></td>
             <td class="num-tickets"><%= district.num_tickets %></td>
             <td class="tools">
-              <a href="#" class="fill" title="Fyll stadsdelens tilldelade biljetter så långt som möjligt">+</a>
-              <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">&#x2212;</a>
+              <a href="#" class="fill" title="Fyll områdets tilldelade biljetter så långt som möjligt">+</a>
+              <a href="#" class="clear" title="Töm områdets tilldelade biljetter">&#x2212;</a>
             </td>
           </tr>
 
@@ -164,8 +164,8 @@
                      name="allotment[ticket_assignment[<%= district.id %>]]" value="<%= district.num_tickets %>"/>
             </td>
             <td class="tools">
-              <a href="#" class="fill" title="Fyll stadsdelens tilldelade biljetter">+</a>
-              <a href="#" class="clear" title="Töm stadsdelens tilldelade biljetter">&#x2212;</a>
+              <a href="#" class="fill" title="Fyll områdets tilldelade biljetter">+</a>
+              <a href="#" class="clear" title="Töm områdets tilldelade biljetter">&#x2212;</a>
             </td>
           </tr>
         <% end -%>

@@ -80,6 +80,7 @@ class GroupsController < ApplicationController
     group = Group.includes(:school).find(params[:group_id])
     session[:group_selection] = {
       district_id: group.school.district_id,
+      school_name: group.school.name,
       school_id: group.school.id,
       group_id: group.id
     }
@@ -96,25 +97,23 @@ class GroupsController < ApplicationController
   def options_list
     conditions = {}
 
-    school_id = params[:school_id].to_i
-    occasion_id = params[:occasion_id].to_i
+    school = if !params[:school_id].blank?
+               School.find params[:school_id]
+             elsif !params[:school_name].blank?
+               School.active.name_search(params[:school_name]).first!
+             end
 
-    if (params[:school_id] && school_id <= 0) || (params[:occasion_id] && occasion_id <= 0)
-      render text: "", content_type: 'text/plain', status: 404
-      return
-    end
+    if school
+      conditions[:school_id] = school.id
 
-    if school_id > 0
-      conditions[:school_id] = school_id
-
-      school = School.find params[:school_id]
       session[:group_selection] = {
         district_id: school.district_id,
-        school_id: school.id
+        school_id: school.id,
+        school_name: school.name
       }
     end
 
-    if occasion_id > 0
+    if params[:occasion_id]
       @occasion = Occasion.find params[:occasion_id]
       @groups = Group.where(conditions).to_a.select { |g|
         g.available_tickets_by_occasion(@occasion) > 0

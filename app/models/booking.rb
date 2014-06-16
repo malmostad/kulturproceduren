@@ -132,7 +132,7 @@ class Booking < ActiveRecord::Base
       Evenemang
       Datum
       Adress
-      Stadsdel
+      Område
       Skola
       Grupp
       Medföljande\ vuxen

@@ -308,7 +308,7 @@ class BookingTest < ActiveSupport::TestCase
     )
 
     assert_equal(
-      "Evenemang\tDatum\tAdress\tStadsdel\tSkola\tGrupp\tMedföljande vuxen\tTelefonnummer\tE-postadress\tAntal platser\tResa\tHållplats\n#{booking.occasion.event.name}\t#{booking.occasion.date.strftime("%Y-%m-%d")} #{booking.occasion.start_time.strftime("%H:%M")}\t#{booking.occasion.address}\t#{booking.group.school.district.name}\t#{booking.group.school.name}\t#{booking.group.name}\t#{booking.companion_name}\t#{booking.companion_phone}\t#{booking.companion_email}\t#{booking.total_count}\tTur och retur\tBus stop\n",
+      "Evenemang\tDatum\tAdress\tOmråde\tSkola\tGrupp\tMedföljande vuxen\tTelefonnummer\tE-postadress\tAntal platser\tResa\tHållplats\n#{booking.occasion.event.name}\t#{booking.occasion.date.strftime("%Y-%m-%d")} #{booking.occasion.start_time.strftime("%H:%M")}\t#{booking.occasion.address}\t#{booking.group.school.district.name}\t#{booking.group.school.name}\t#{booking.group.name}\t#{booking.companion_name}\t#{booking.companion_phone}\t#{booking.companion_email}\t#{booking.total_count}\tTur och retur\tBus stop\n",
       Booking.bus_booking_csv([booking])
     )
   end

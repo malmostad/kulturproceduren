@@ -42,15 +42,18 @@ class EventsController < ApplicationController
         culture_provider = CultureProvider.find params[:culture_provider_id]
         e.map_address = culture_provider.map_address
       end
-    end  
-    @category_groups = CategoryGroup.order "name ASC"
+    end
+
+    @category_groups = CategoryGroup.order("name ASC")
+    @school_types = SchoolType.order("name ASC")
     
     load_culture_providers()
   end
 
   def edit
     @event = Event.find(params[:id])
-    @category_groups = CategoryGroup.order "name ASC"
+    @category_groups = CategoryGroup.order("name ASC")
+    @school_types = SchoolType.order("name ASC")
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
@@ -84,7 +87,8 @@ class EventsController < ApplicationController
       redirect_to(@event)
     else
       load_culture_providers()
-      @category_groups = CategoryGroup.order "name ASC"
+      @category_groups = CategoryGroup.order("name ASC")
+      @school_types = SchoolType.order("name ASC")
       render action: "new"
     end
   end
@@ -113,7 +117,8 @@ class EventsController < ApplicationController
       flash[:notice] = 'Evenemanget uppdaterades.'
       redirect_to(@event)
     else
-      @category_groups = CategoryGroup.order "name ASC"
+      @category_groups = CategoryGroup.order("name ASC")
+      @school_types = SchoolType.order("name ASC")
       render action: "new"
     end
   end
@@ -203,7 +208,7 @@ class EventsController < ApplicationController
 
   def ticket_allotment_csv(event)
     CSV.generate(col_sep: "\t") do |csv|
-      csv << [ "Stadsdel", "Skola", "Grupp", "Antal biljetter" ]
+      csv << [ "Område", "Skola", "Grupp", "Antal biljetter" ]
 
       event.allotments.each do |allotment|
         if allotment.for_group?

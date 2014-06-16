@@ -1,5 +1,11 @@
 FactoryGirl.define do
+  factory :school_type do
+    sequence(:name) { |n| "School type %09d" % n }
+    active          true
+  end
+
   factory :district do
+    school_type
     sequence(:name)      { |n| "District %09d" % n }
     contacts             { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
     elit_id              nil
@@ -119,7 +125,6 @@ FactoryGirl.define do
     name                  { username }
     email                 { "#{username}@example.com" }
     cellphone             "012 - 34 567"
-    districts             { [FactoryGirl.create(:district)] }
     roles                 { [] }
   end
 

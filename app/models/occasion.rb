@@ -5,30 +5,17 @@ class Occasion < ActiveRecord::Base
   belongs_to :event
   has_many :tickets
   has_many :bookings do
-    def hierarchically_ordered
-      active.includes(group: {school: :district}).order("districts.name ASC, schools.name ASC, groups.name ASC")
-    end
     def school_ordered
-      active.includes(group: {school: :district}).order("schools.name ASC").order("groups.name ASC")
+      active.includes(group: :school).order("schools.name ASC").order("groups.name ASC")
     end
   end
 
-  has_many(:groups, lambda{ distinct }, through: :tickets) do
-    def hierarchically_ordered
-      includes(school: :district).order("districts.name ASC, schools.name ASC").order("groups.name ASC")
-    end
-
-    def school_ordered
-      includes(school: :district).order("schools.name ASC").order("groups.name ASC")
-    end
-  end
-
+  has_many(:groups, lambda{ distinct }, through: :tickets)
 
   has_many :attending_groups,
-    lambda{ includes(school: :district) 
+    lambda{ includes(:school)
       .where("tickets.state != 0")
       .distinct
-      .order("districts.name ASC")
       .order("schools.name ASC")
       .order("groups.name ASC")
     },

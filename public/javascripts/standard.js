@@ -32,6 +32,36 @@
     $(function () {
         if ($("#kp-group-selection-form").length > 0) {
             /**
+             * Autocomplete for schools
+             */
+            $("#kp-group_selection-school_name").autocomplete({
+                source: kpConfig.schools.search.url,
+                select: function(event, ui) {
+                    var values = $(this).parents("form").serializeArray();
+
+                    // The select event happens before the value is set in the form
+                    for (i = 0 ; i < values.length ; i++) {
+                        if (values[i].name == "school_name") {
+                            values[i].value = ui.item.value;
+                        }
+                    }
+
+                    var request = $.ajax({
+                        url: kpConfig.groups.list.url,
+                        data: values,
+                        success: function(data, textStatus) {
+                            $("#kp-group_selection-group_id").html(data).removeAttr("disabled");
+                        },
+                        error: function() {
+                            $("#kp-group_selection-group_id").html("").attr("disabled", "disabled");
+                        },
+                        complete: function() {
+                            $("#kp-group-selection-form").trigger("schoolSelected");
+                        }
+                    });
+                }
+            })
+            /**
              * Fetches schools by Ajax when choosing a district in the group selection fragment
              */
             $("#kp-group_selection-district_id").change(function() {
@@ -50,7 +80,7 @@
                         $("#kp-group_selection-school_id").html(data).removeAttr("disabled");
                     },
                     error: function() {
-                        $("#kp-group_selection-school_id").html("<option>Välj stadsdel först</option>");
+                        $("#kp-group_selection-school_id").html("<option>Välj område först</option>");
                     },
                     complete: function() {
                         $("#kp-group-selection-form").trigger("districtSelected", [ districtId ]);
@@ -63,7 +93,6 @@
              * Fetches groups by Ajax when choosing a school in the group selection fragment
              */
             $("#kp-group_selection-school_id").change(function() {
-                var schoolId = $("#kp-group_selection-school_id option:selected").val();
                 var values = $(this).parents("form").serialize();
 
                 $("#kp-group_selection-school_id").parent().append('<div class="load-indicator"></div>');
@@ -80,7 +109,7 @@
                     },
                     complete: function() {
                         $("#kp-group_selection-school_id").parent().find('.load-indicator').remove();
-                        $("#kp-group-selection-form").trigger("schoolSelected", [ schoolId ]);
+                        $("#kp-group-selection-form").trigger("schoolSelected");
                     }
                 });
             });
@@ -110,7 +139,7 @@
                 // Disable the form
                 $("#kp .notification-request-form input").attr("disabled", "disabled");
             }
-        }).bind("districtSelected schoolSelected", function(e, id){
+        }).bind("districtSelected schoolSelected", function(e) {
             // Disable the form
             $("#kp .notification-request-form input").attr("disabled", "disabled");
         });

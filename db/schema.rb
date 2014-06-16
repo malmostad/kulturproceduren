@@ -171,7 +171,8 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.string   "elit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "extens_id",  limit: 64
+    t.string   "extens_id",      limit: 64
+    t.integer  "school_type_id"
   end
 
   add_index "districts", ["extens_id"], name: "index_districts_on_extens_id", using: :btree
@@ -215,6 +216,11 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.date     "free_for_all_transition_date"
     t.boolean  "bus_booking",                  default: false
     t.date     "last_bus_booking_date"
+  end
+
+  create_table "events_school_types", force: true do |t|
+    t.integer "event_id"
+    t.integer "school_type_id"
   end
 
   create_table "groups", force: true do |t|
@@ -319,6 +325,13 @@ ActiveRecord::Schema.define(version: 20140520081802) do
   create_table "roles_users", id: false, force: true do |t|
     t.integer "role_id"
     t.integer "user_id"
+  end
+
+  create_table "school_types", force: true do |t|
+    t.string   "name"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "schools", force: true do |t|

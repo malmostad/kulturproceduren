@@ -27,10 +27,7 @@ class LoginController < ApplicationController
       u.last_active = Time.zone.now
       u.save
 
-      if !u.valid?
-        flash[:warning] = "Kulturproceduren har uppdaterats med ytterligare fält i din profil. Var god uppdatera din profil."
-        redirect_to edit_user_url(u)
-      elsif u.roles.empty?
+      if u.roles.empty?
         flash[:warning] = "Du har för tillfället inga behörigheter i systemet. Var god ansök om behörigheter nedan."
         redirect_to role_applications_url()
       elsif session[:return_to]

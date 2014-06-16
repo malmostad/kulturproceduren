@@ -1,5 +1,7 @@
 # A district contains multiple schools.
 class District < ActiveRecord::Base
+
+  belongs_to :school_type
   
   has_many(:schools, lambda{ order "name ASC" }, dependent: :destroy) do
 
@@ -18,10 +20,14 @@ class District < ActiveRecord::Base
   attr_accessible :name,
     :contacts,
     :elit_id,
-    :extens_id
+    :extens_id,
+    :school_type,
+    :school_type_id
 
   validates_presence_of :name,
     message: "Namnet får inte vara tomt."
+  validates_presence_of :school_type,
+    message: "Området måste tillhöra en skoltyp."
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_schools
