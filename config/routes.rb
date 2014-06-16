@@ -8,10 +8,10 @@ Kulturproceduren::Application.routes.draw do
       post :send_password_reset_confirmation
     end
     member do
-      get  :edit_password
-      put  :update_password
-      post :add_culture_provider
-      get  :reset_password
+      get   :edit_password
+      patch :update_password
+      post  :add_culture_provider
+      get   :reset_password
     end
 
   end
@@ -60,6 +60,7 @@ Kulturproceduren::Application.routes.draw do
       patch :next_transition
     end
 
+    resources :occasions,             only: [:index]
     resources :images,                except: [:show, :edit, :update, :new]
     resources :attachments,           except: [:edit, :update, :new]
     resources :notification_requests, only: [:new, :create] do
@@ -132,6 +133,7 @@ Kulturproceduren::Application.routes.draw do
       get :group_list
       get :group
       get :form
+      post :apply_filter
     end
     member do
       get :unbook

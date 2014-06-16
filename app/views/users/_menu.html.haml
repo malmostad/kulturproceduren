@@ -1,0 +1,14 @@
+%aside.users
+  %nav.content
+    %h1 Användare
+    %ul
+      - if user_online?
+        - if current_user.has_role?(:admin)
+          %li= link_to "Alla användare", users_path
+        - else
+          %li= link_to "Mitt konto", current_user
+          %li= link_to "Ansök om behörigheter", role_applications_path
+      - else
+        %li= link_to "Logga in", controller: "login", action: "login"
+        %li= link_to "Registrera konto", new_user_path
+        %li= link_to "Glömt lösenord?", request_password_reset_users_path

@@ -1,0 +1,29 @@
+- category_groups ||= []
+- category_groups = category_groups.reject { |g| !g.visible_in_calendar }
+
+%table.calendar
+  %thead
+    %tr
+      %th.date Datum
+      %th.event Evenemang
+      %th.culture-provider Arrangör
+      %th.age Ålder
+      - category_groups.each do |category_group|
+        %th.categories= category_group.name
+
+  %tbody
+    - events.each do |event|
+
+      %tr.event
+        %td.time
+          = l event.visible_from
+          = "-"
+          = l event.visible_to
+        %td.event= link_to event.name, event
+        %td= link_to event.culture_provider.name, event.culture_provider
+        %td.age
+          - unless event.further_education
+            = "#{event.from_age}-#{event.to_age}"
+        - category_groups.each do |category_group|
+          %td.categories
+            = event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")

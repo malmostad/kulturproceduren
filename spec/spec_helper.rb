@@ -50,4 +50,14 @@ RSpec.configure do |config|
 
   # FactoryGirl
   config.include FactoryGirl::Syntax::Methods
+
+
+  # Handle backup and restore of APP_CONFIG automatically
+  # so tests don't pollute each other's environment
+  config.before(:each) do
+    @default_app_config = ::APP_CONFIG.clone
+  end
+  config.after(:each) do
+    ::APP_CONFIG.replace(@default_app_config)
+  end
 end

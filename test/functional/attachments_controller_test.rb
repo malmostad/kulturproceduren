@@ -70,8 +70,7 @@ class AttachmentsControllerTest < ActionController::TestCase
     # Proper data, unable to save
     post :create,
       event_id: @event.id,
-      attachment: {}, # no description => invalid
-      upload: { document: upload_file }
+      attachment: { file: upload_file } # no description => invalid
     assert_template "attachments/index"
     assert assigns(:attachment).new_record?
 
@@ -80,8 +79,7 @@ class AttachmentsControllerTest < ActionController::TestCase
 
     post :create,
       event_id: @event.id,
-      attachment: { description: "foo" },
-      upload: { document: upload_file }
+      attachment: { file: upload_file, description: "foo" }
     assert_redirected_to event_attachments_url(@event)
     assert_equal "Filen laddades upp.", flash[:notice]
 

@@ -10,7 +10,7 @@ class UsersControllerTest < ActionController::TestCase
   test "load user" do
     user = create(:user)
     session[:current_user_id] = user.id
-    get :edit, id: @admin.id
+    get :show, id: @admin.id
     assert_equal user, assigns(:user)
   end
 
@@ -68,17 +68,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_template "users/show"
     assert_equal    user, assigns(:user)
   end
-  test "show for coordinator" do
-    coordinator               = create(:user, roles: [roles(:coordinator)])
-    session[:current_user_id] = coordinator.id
-
-    user = create(:user)
-
-    get :show, id: user.id
-    assert_response :success
-    assert_template "users/show_readonly"
-    assert_equal    user, assigns(:user)
-  end
   test "show for others" do
     user                      = create(:user)
     session[:current_user_id] = user.id
@@ -129,25 +118,6 @@ class UsersControllerTest < ActionController::TestCase
     assert          assigns(:user).new_record?
   end
 
-  test "edit" do
-    session[:current_user_id] = @admin.id
-    user = create(:user)
-
-    get :edit, id: user.id
-    assert_response :success
-    assert_equal    user,      assigns(:user)
-  end
-
-  test "edit password" do
-    user                      = create(:user)
-    session[:current_user_id] = user.id
-    
-    get :edit_password, id: user.id
-    assert_response :success
-    assert_equal    user, assigns(:user)
-    assert_nil      assigns(:user).password
-    assert_nil      assigns(:user).password_confirmation
-  end
 
   test "create, normal user" do
     @controller.unstub(:authenticate)
@@ -211,7 +181,7 @@ class UsersControllerTest < ActionController::TestCase
     # Invalid
     put :update, id: user.id, user: { name: ""}
     assert_response :success
-    assert_template "users/edit"
+    assert_template "users/show"
     assert_equal    user,      assigns(:user)
 
     # Valid
@@ -235,23 +205,23 @@ class UsersControllerTest < ActionController::TestCase
     session[:current_user_id] = user.id
 
     # Wrong current password
-    put :update_password, id: user.id, current_password: "bar", user: { password: "bar", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    patch :update_password, id: user.id, user: { current_password: "bar", password: "bar", password_confirmation: "baz" }
+    assert_redirected_to user
     assert_equal         "Felaktigt lösenord.", flash[:warning]
 
     # Empty password
-    put :update_password, id: user.id, current_password: "foo", user: { password: "", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    patch :update_password, id: user.id, user: { current_password: "foo", password: "", password_confirmation: "baz" }
+    assert_redirected_to user
     assert_equal         "Lösenordet får inte vara tomt.", flash[:warning]
 
     # Confirmation not matching password
-    put :update_password, id: user.id, current_password: "foo", user: { password: "bar", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    patch :update_password, id: user.id, user: { current_password: "foo", password: "bar", password_confirmation: "baz" }
+    assert_redirected_to user
     assert_equal         "Lösenordsbekräftelsen matchar inte.", flash[:warning]
 
     # OK
-    put :update_password, id: user.id, current_password: "foo", user: { password: "bar", password_confirmation: "bar" }
-    assert_redirected_to action: "index"
+    patch :update_password, id: user.id, user: { current_password: "foo", password: "bar", password_confirmation: "bar" }
+    assert_redirected_to user
     assert_equal         "Lösenordet uppdaterades.", flash[:notice]
   end
   test "update password, admin" do
@@ -260,17 +230,17 @@ class UsersControllerTest < ActionController::TestCase
 
     # Empty password
     put :update_password, id: user.id, user: { password: "", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    assert_redirected_to user
     assert_equal         "Lösenordet får inte vara tomt.", flash[:warning]
 
     # Confirmation not matching password
     put :update_password, id: user.id, user: { password: "bar", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    assert_redirected_to user
     assert_equal         "Lösenordsbekräftelsen matchar inte.", flash[:warning]
 
     # OK
     put :update_password, id: user.id, user: { password: "bar", password_confirmation: "bar" }
-    assert_redirected_to action: "index"
+    assert_redirected_to user
     assert_equal         "Lösenordet uppdaterades.", flash[:notice]
   end
 

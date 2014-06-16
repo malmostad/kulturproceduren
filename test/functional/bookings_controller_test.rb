@@ -207,35 +207,42 @@ class BookingsControllerTest < ActionController::TestCase
     occasion = create(:occasion)
 
     # Redirects
+    post :apply_filter
+    assert_redirected_to bookings_url
     post :apply_filter, occasion_id: occasion.id
     assert_redirected_to occasion_bookings_url(occasion.id)
     post :apply_filter, event_id: occasion.event.id
     assert_redirected_to event_bookings_url(occasion.event.id)
 
+    # Resetting
+    session[:booking_list_filter] = { foo: "bar", baz: 1 }
+    post :apply_filter, filter: false
+    assert_equal({}, session[:booking_list_filter])
+
     # district_id
     session[:booking_list_filter] = nil
-    post :apply_filter, occasion_id: occasion.id, district_id: "42"
+    post :apply_filter, filter: 1, district_id: "42"
     assert_equal 42, session[:booking_list_filter][:district_id]
 
     session[:booking_list_filter] = nil
-    post :apply_filter, occasion_id: occasion.id
+    post :apply_filter, filter: 1
     assert_nil session[:booking_list_filter][:district_id]
 
     session[:booking_list_filter] = nil
-    post :apply_filter, occasion_id: occasion.id, district_id: 0
+    post :apply_filter, filter: 1, district_id: 0
     assert_nil session[:booking_list_filter][:district_id]
 
     # unbooked
     session[:booking_list_filter] = nil
-    post :apply_filter, occasion_id: occasion.id
+    post :apply_filter, filter: 1
     assert session[:booking_list_filter][:unbooked] == false
 
     session[:booking_list_filter] = nil
-    post :apply_filter, occasion_id: occasion.id, unbooked: ""
+    post :apply_filter, filter: 1, unbooked: ""
     assert session[:booking_list_filter][:unbooked] == false
 
     session[:booking_list_filter] = nil
-    post :apply_filter, occasion_id: occasion.id, unbooked: "1"
+    post :apply_filter, filter: 1, unbooked: "1"
     assert session[:booking_list_filter][:unbooked] == true
   end
 
@@ -708,14 +715,6 @@ class BookingsControllerTest < ActionController::TestCase
     assert booking.unbooked
     assert_equal @user, booking.unbooked_by
   end
-  test "destroy, cancel" do
-    booking = create(:booking, user: @user)
-
-    delete :destroy, id: booking.id, commit: "Avbryt"
-
-    assert_redirected_to booking_url(booking)
-    assert_equal booking, Booking.find(booking.id)
-  end
   test "destroy with questionnaire" do
     create(:user, roles: [roles(:admin)])
 
@@ -733,7 +732,6 @@ class BookingsControllerTest < ActionController::TestCase
     assert_equal booking.occasion, assigns(:occasion)
     assert_equal questionnaire,    assigns(:questionnaire)
     assert_equal({},               assigns(:answer))
-    assert_equal booking,          assigns(:answer_form).booking
     assert_equal booking.occasion, assigns(:answer_form).occasion
     assert_equal booking.group,    assigns(:answer_form).group
     assert_equal questionnaire,    assigns(:answer_form).questionnaire

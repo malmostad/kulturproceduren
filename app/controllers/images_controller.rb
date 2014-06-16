@@ -1,7 +1,7 @@
 # Controller for managing images
 class ImagesController < ApplicationController
   
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :load_image, only: [ :index, :create ]
@@ -23,8 +23,7 @@ class ImagesController < ApplicationController
   end
 
   def create
-    if @image.save(params[:upload])
-      
+    if @image.save
       if @image.culture_provider
         redirect_to culture_provider_images_url(@image.culture_provider)
       elsif @image.event

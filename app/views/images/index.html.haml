@@ -1,0 +1,70 @@
+- content_for(:page_title) do
+  Hantera bilder för
+  - if @image.culture_provider
+    = link_to @image.culture_provider.name, @image.culture_provider
+  - elsif @image.event
+    = link_to @image.event.name, @image.event
+
+%main
+  %nav.return
+    - if @image.culture_provider
+      = link_to "Återvänd till presentationen för #{@image.culture_provider.name}", @image.culture_provider
+    - elsif @image.event
+      = link_to "Återvänd till presentationen för #{@image.event.name}", @image.event
+
+  %section.box.context-form
+    %h1.box-title Ladda upp ny bild
+    .box-content
+
+      - if @image.culture_provider
+        - form_url = culture_provider_images_path(@image.culture_provider)
+      - elsif @image.event
+        - form_url = event_images_path(@image.event)
+
+      = simple_form_for @image, url: form_url, html: { class: "basic", multipart: true } do |f|
+        = f.error_notification class: "warning"
+
+        = f.input :description
+        = f.input :file, as: :file,
+          hint: "För att inte Kulturproceduren ska bli långsam för användarna, var god tänk på storleken på bilden."
+
+        .form-group
+          %span.control-label
+          .controls
+            = f.submit "Ladda upp", class: "btn btn-primary"
+
+  - if @image.culture_provider
+    = render partial: "culture_providers/administration_menu", locals: { culture_provider: @image.culture_provider }
+  - elsif @image.event
+    = render partial: "events/administration_menu", locals: { event: @image.event }
+
+  - unless @images.blank?
+    %table
+      %thead
+        %tr
+          %th Bild
+          %th Bildtext
+          %th
+
+      %tbody
+        - @images.each do |image|
+          %tr
+            %td= uploaded_image_tag(image, true)
+            %td= image.description
+            %td
+              .btn-group
+                - if image.culture_provider
+                  = link_to "Använd som logotyp",
+                    set_main_culture_provider_image_path(image.culture_provider, image),
+                    class: "btn btn-default btn-sm" unless image.id == image.culture_provider.main_image_id
+                  = link_to "Ta bort",
+                    culture_provider_image_path(image.culture_provider, image),
+                    method: :delete,
+                    class: "btn btn-danger btn-sm",
+                    data: { confirm: "Är du säker?" }
+                - elsif image.event
+                  = link_to "Ta bort",
+                    event_image_path(image.event, image),
+                    method: :delete,
+                    class: "btn btn-danger btn-sm",
+                    data: { confirm: "Är du säker?" }

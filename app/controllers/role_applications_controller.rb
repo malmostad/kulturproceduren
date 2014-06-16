@@ -1,6 +1,6 @@
 # Controller for managing role applications
 class RoleApplicationsController < ApplicationController
-  layout "standard"
+  layout "application"
   
   before_filter :authenticate
   before_filter :deny_admin, only: [ :create ]
@@ -19,13 +19,12 @@ class RoleApplicationsController < ApplicationController
 
       render action: "admin_index", layout: "admin"
     else
+      @booker = Role.where("lower(name) = ?", "booker").first
+      @culture_worker = Role.where("lower(name) = ?", "culture_worker").first
+      @host = Role.where("lower(name) = ?",  "host").first
 
-      @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
-      @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
-      @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
-
+      @role_application = RoleApplication.new { |ra| ra.role = @booker }
       @culture_providers = CultureProvider.order("name")
-      
     end
   end
 
@@ -51,31 +50,19 @@ class RoleApplicationsController < ApplicationController
 
   # Submits a role application from a user
   def create
+    @role_application = RoleApplication.new(params[:role_application])
+    @role_application.user = current_user
+    @role_application.state = RoleApplication::PENDING
 
-    @application = RoleApplication.new(params[:role_application])
-    @application.user = current_user
-    @application.state = RoleApplication::PENDING
-
-    if @application.save
+    if @role_application.save
       flash[:notice] = "Din ansökan har skickats till administratörerna."
       redirect_to current_user
     else
       @culture_providers = CultureProvider.order("name")
 
-      @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
-      @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
-      @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
-
-      @application_type = @application.role.symbol_name
-      
-      case @application_type
-      when :booker
-        @booker_appl = @application
-      when :culture_worker
-        @culture_worker_appl = @application
-      when :host
-        @host_appl = @application
-      end
+      @booker = Role.where("lower(name) = ?", "booker").first
+      @culture_worker = Role.where("lower(name) = ?", "culture_worker").first
+      @host = Role.where("lower(name) = ?",  "host").first
 
       render action: "index"
     end

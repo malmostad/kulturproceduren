@@ -1,0 +1,47 @@
+- content_for(:page_title) do
+  = @culture_provider.name
+
+%main
+  #slideshow.header
+    .map-container(style="display:none;")
+    .images
+      - @culture_provider.images_excluding_main.each do |image|
+        = uploaded_image_tag image
+    %menu
+      %li.prev Föregående
+      %li.next Nästa
+
+  = render partial: "details", locals: { culture_provider: @culture_provider }
+
+  %article.body-copy.description
+    = show_description(@culture_provider.description)
+
+    - unless @culture_provider.linked_culture_providers.empty? && @culture_provider.linked_events.empty?
+      %section.box.related
+        %h3.box-title Se även
+
+        .box-content
+          %ul
+            - @culture_provider.linked_culture_providers.each do |link|
+              %li= link_to link.name, link
+            - @culture_provider.linked_events.each do |link|
+              %li= link_to link.name, link
+
+  - if user_online? && current_user.can_administrate?(@culture_provider)
+    = render partial: "administration_menu", locals: { culture_provider: @culture_provider }
+
+  %section.events
+    .occasions
+      %h3 Kommande evenemang
+      - cache upcoming_occasions_cache_key(@culture_provider), skip_digest: true do
+        - unless @culture_provider.upcoming_occasions.empty?
+          = render partial: "calendar/occasions_list",
+            locals: { occasions: @culture_provider.upcoming_occasions,
+            hide_culture_provider: true }
+    .events
+      %h3 Löpande evenemang
+      - cache standing_events_cache_key(@culture_provider), skip_digest: true do
+        - unless @culture_provider.standing_events.empty?
+          %ul
+            - @culture_provider.standing_events.each do |event|
+              %li= link_to event.name, event

@@ -231,6 +231,7 @@ sv:
         cost: "Kostnad:"
         further_education: "Fortbildning pedagoger/vuxna"
         map_address: "Kartadress:"
+        school_type_ids: "Skolformer:"
       occasion:
         date: "Datum:"
         seats: "Antal platser:"
@@ -286,6 +287,7 @@ sv:
         map_address: "Kartadress:"
       image:
         description: "Bildtext:"
+        file: "Bild:*"
       category:
         name: "Namn:"
         category_group: "Kategorigrupp:"
@@ -308,6 +310,7 @@ sv:
         user_id: "Användare:"
       attachment:
         description: "Beskrivning:"
+        file: "Bild:*"
       companion:
         name: "Namn:"
         email: "Epostadress:"

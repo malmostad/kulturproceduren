@@ -1,0 +1,223 @@
+- content_for(:page_title) do
+  = @event.name
+
+%main
+  #slideshow.header
+    .map-container(style="display:none;")
+    .images
+      - @event.images_excluding_main.each do |image|
+        = uploaded_image_tag image
+    %menu
+      %li.prev Föregående
+      %li.next Nästa
+
+  = render partial: "culture_providers/details",
+    locals: { culture_provider: @event.culture_provider }
+
+  %article.body-copy.description
+    = show_description(@event.description)
+
+    - if user_online? && current_user.can_book? && @event.bookable? && @event.fully_booked?
+      .warning
+        Evenemanget är fullbokat, men du kan
+        = link_to "klicka här", new_event_notification_request_path(@event)
+        för att få ett meddelande om reservplatser blir tillgängliga.
+
+    - unless @event.linked_culture_providers.empty? && @event.linked_events.empty?
+      %section.box.related
+        %h3.box-title Se även
+        .box-content
+          %ul
+            - @event.linked_culture_providers.each do |link|
+              %li= link_to link.name, link
+            - @event.linked_events.each do |link|
+              %li= link_to link.name, link
+
+  - if user_online? && current_user.can_administrate?(@event.culture_provider)
+    = render partial: "events/administration_menu", locals: { event: @event }
+
+  - elsif user_online? && current_user.has_role?(:coordinator)
+    %nav.basic.administration
+      %h1 Administrera
+      %ul
+        %li= link_to "Bokningar", event_bookings_path(@event)
+
+  %aside.basic.details.event
+    %dl
+      - unless @event.map_address.blank?
+        %dt Hitta till oss
+        %dd
+          = link_to "Visa på karta",
+            "http://www.malmo.se/karta?poi=#{u(@event.map_address)}&amp;zoomlevel=4&amp;maptype=karta",
+            class: "show-on-map m-icon-location",
+            "data-poi" => @event.map_address,
+            "data-map-selector" => ".map-container",
+            "data-scroll-to" => ".map-container"
+
+      - if user_online? && current_user.can_administrate?(@event.culture_provider)
+        %dt Visas mellan
+        %dd
+          = @event.visible_from
+          och
+          = @event.visible_to
+
+      - unless @event.ticket_release_date.blank?
+        %dt Biljettsläpp
+        %dd= @event.ticket_release_date
+      - unless @event.district_transition_date.blank?
+        %dt Släpp till område
+        %dd= @event.district_transition_date
+      - unless @event.free_for_all_transition_date.blank?
+        %dt Släpp till hela staden
+        %dd= @event.free_for_all_transition_date
+
+      %dt Bussbokning
+      %dd= @event.bus_booking? ? "Ja" : "Nej"
+
+      - if !@event.booking_info.blank? && !@event.bookable?
+        %dt Bokningsinformation
+        %dd= auto_link @event.booking_info
+      - elsif @event.bookable? && !user_online?
+        %dt Bokningsinformation
+        %dd
+          Platserna är fördelade.
+          = login_link "Logga in"
+          och välj önskad dag och plats.
+
+      - unless @event.cost.blank?
+        %dt Kostnad
+        %dd= linebreakize(@event.cost)
+
+      %dt Arrangör
+      %dd
+        = link_to @event.culture_provider.name,
+          culture_provider_path(@event.culture_provider)
+
+      - if @event.further_education
+        %dt Fortbildning pedagoger/vuxna
+        %dd Ja
+      - else
+        %dt För åldrar
+        %dd
+          - if @event.from_age == @event.to_age
+            = "#{@event.from_age} år"
+          - else
+            = "#{@event.from_age}-#{@event.to_age} år"
+
+      - if (num_school_types = @event.school_types.length) > 0
+        %dt= "Skolform#{"er" if num_school_types > 1}"
+        %dd= @event.school_types.collect(&:name).join(", ")
+
+      - @category_groups.each do |category_group|
+        - category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }
+  
+        - unless category_names.empty?
+          %dt= category_group.name
+          %dd= category_names.join(", ")
+
+      - unless @event.opening_hours.blank?
+        %dt Öppettider
+        %dd= linebreakize(@event.opening_hours)
+
+      - unless @event.url.blank?
+        %dt Extern länk
+        %dd= link_to @event.url, qualified_url(@event.url)
+      - unless @event.movie_url.blank?
+        %dt Filmlänk
+        %dd= link_to @event.movie_url, qualified_url(@event.movie_url)
+
+      - if user_online? && !@event.attachments.empty?
+        %dt Bifogade filer
+        %dd
+          %ul
+            - @event.attachments.each do |attachment|
+              %li
+                = link_to attachment.description, event_attachment_path(@event, attachment)
+
+      - if user_online? && current_user.has_role?(:admin) && !@event.occasions.empty?
+        - min = @event.occasions.minimum("date")
+        - max = @event.occasions.maximum("date")
+        %dt Besöksstatistik
+        %dd
+          %ul
+            - while min < max
+              %li
+                = link_to to_term(min), visitors_event_statistic_path(@event, to_term(min))
+              - min += 6.months
+
+  %section.events
+    - cache occasion_list_cache_key(@event), skip_digest: true do
+      - unless @event.occasions.empty?
+        %table.calendar
+          %thead
+            %tr
+              %th.date-time Datum/tid
+              %th.num-seats
+                - if !@event.tickets.empty?
+                  Lediga
+                - else
+                  Antal
+                platser
+              %th.address Adress
+              %th.description Beskrivning
+              %th.actions
+
+          %tbody
+            - @event.occasions.each do |occasion|
+              - available_seats = [ occasion.available_seats.to_i, @event.unbooked_tickets.to_i ].min
+
+              %tr{class: "#{"cancelled" if occasion.cancelled}"}
+                %td.date-time
+                  %span.date= occasion.date
+                  %span.time
+                    = l occasion.start_time, format: :only_time
+                    = "-"
+                    = l occasion.stop_time, format: :only_time
+
+                %td.num-seats
+                  - if !@event.tickets.empty?
+                    = available_seats
+                  - else
+                    = occasion.seats.to_i + occasion.wheelchair_seats.to_i
+                  - if occasion.wheelchair_seats > 0
+                    = image_tag "icon_rullstol.png",
+                      alt: "Rullstolsplatser finns",
+                      title: "Rullstolsplatser finns" 
+
+                %td.address
+                  - unless occasion.address.blank?
+                    = linebreakize(occasion.address)
+                  - unless occasion.map_address.blank?
+                    - unless occasion.address.blank?
+                      %br
+                    = link_to "Visa på karta",
+                      "http://www.malmo.se/karta?poi=#{u(occasion.map_address)}&amp;zoomlevel=4&amp;maptype=karta",
+                      class: "show-on-map m-icon-location",
+                      "data-poi" => occasion.map_address,
+                      "data-map-selector" => ".map-container",
+                      "data-scroll-to" => ".map-container"
+
+                %td.description= linebreakize(occasion.description)
+
+                %td.actions
+                  - if occasion.cancelled
+                    %span.cancelled Inställd
+                  - elsif user_online?
+                    %ul
+                      - if @event.bookable?
+                        %li= booking_link(occasion)
+
+                      - if current_user.can_view_bookings?
+                        %li= link_to "Bokningar", occasion_bookings_path(occasion)
+
+                      - if occasion.date >= Date.today
+                        %li= link_to "Närvarolista", occasion_attendance_index_path(occasion)
+
+                      - elsif !occasion.cancelled && current_user.has_role?(:admin, :host)
+                        %li
+                          = link_to "Rapportera närvaro",
+                            report_occasion_attendance_index_path(occasion)
+
+                  - else
+                    = login_link "Logga in", new_occasion_booking_path(occasion)
+                    för att boka

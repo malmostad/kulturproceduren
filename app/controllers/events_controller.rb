@@ -1,6 +1,6 @@
 # Controller for managing events
 class EventsController < ApplicationController
-  layout "standard", except: [ :options_list ]
+  layout "application", except: [ :options_list ]
 
   before_filter :authenticate, except: :show
   before_filter :check_roles, except: :show

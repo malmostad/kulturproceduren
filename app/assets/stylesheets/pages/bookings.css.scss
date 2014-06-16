@@ -1,0 +1,38 @@
+.filter.bookings,
+main.bookings.group #group-selection-form {
+    @include columns(8);
+}
+
+aside.bookings {
+    @include columns(4, true);
+}
+
+
+#booking-confirmation {
+    font-family: $sans-serif;
+
+    dl {
+        margin: 0 0 2em 0;
+    }
+
+    dt {
+        clear: left;
+        margin: 0 0 1em 0;
+        padding: 0;
+        @include columns(4);
+    }
+    dd {
+        margin: 0 0 1em 0;
+        padding: 0;
+        @include columns(8, true);
+        font-size: 1.1em;
+
+        ul {
+            margin-top: 0;
+        }
+    }
+
+    .unbooked-at {
+        color: $warning-color;
+    }
+}

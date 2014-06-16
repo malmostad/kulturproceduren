@@ -195,6 +195,17 @@ FactoryGirl.define do
         end
       end
     end
+
+    factory :bookable_event do
+      ticket_release_date { Date.today }
+
+      ignore do
+        _tickets 1
+      end
+      after(:create) do |event, evaluator|
+        create_list(:ticket, evaluator._tickets, event: event)
+      end
+    end
   end
 
   factory :occasion do

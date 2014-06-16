@@ -1,0 +1,30 @@
+%nav.basic.administration
+  %h1 Administrera
+  %ul
+    %li
+      = link_to "Redigera",
+        edit_culture_provider_path(culture_provider)
+    - if current_user.has_role?(:admin)
+      %li
+        - if culture_provider.active
+          = link_to "Deaktivera",
+            deactivate_culture_provider_path(culture_provider),
+            method: :post,
+            data: {confirm: "Är du säker på att du vill deaktivera arrangören?"}
+        - else
+          = link_to "Aktivera",
+            activate_culture_provider_path(culture_provider),
+            method: :post,
+            data: {confirm: "Är du säker på att du vill aktivera arrangören?"}
+    %li
+      = link_to "Hantera bilder",
+        culture_provider_images_path(culture_provider)
+    %li
+      = link_to "Lägg till evenemang",
+        new_event_path(culture_provider_id: culture_provider.id)
+    %li
+      = link_to "Hantera länkade arrangörer",
+        culture_provider_culture_provider_links_path(culture_provider_id: culture_provider.id)
+    %li
+      = link_to "Hantera länkade evenemang",
+        culture_provider_event_links_path(culture_provider_id: culture_provider.id)

@@ -38,13 +38,11 @@ class CultureProvidersControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).never
 
     culture_provider = create(:culture_provider)
-    category_groups = create_list(:category_group, 2)
 
     get :show, id: culture_provider.id
 
     assert_response :success
     assert_equal    culture_provider,                assigns(:culture_provider)
-    assert_equal    category_groups.sort_by(&:name), assigns(:category_groups)
   end
 
   test "new" do

@@ -1,6 +1,6 @@
 # Controller for managing culture providers
 class CultureProvidersController < ApplicationController
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate, except: [ :index, :show ]
   before_filter :require_admin, only: [ :new, :create, :destroy, :activate, :deactivate ]
@@ -11,17 +11,16 @@ class CultureProvidersController < ApplicationController
 
   # Displays a paginated list of all culture providers
   def index
-    @culture_providers = if user_online? && current_user.has_role?(:admin)
-      CultureProvider.order(sort_order("name")).paginate page: params[:page]
-    else
-      CultureProvider.where(active: true).order(sort_order("name")).paginate(page: params[:page])
+    @culture_providers = CultureProvider.order(sort_order("name"))
+
+    if !user_online? || !current_user.has_role?(:admin)
+      @culture_providers = @culture_providers.where(active: true)
     end
   end
 
   # Displays a culture provider's presentation page
   def show
-    @culture_provider = CultureProvider.includes(:main_image).find params[:id]
-    @category_groups = CategoryGroup.order "name ASC"
+    @culture_provider = CultureProvider.find params[:id]
   end
 
   # Displays a form for adding a culture provider
@@ -79,15 +78,6 @@ class CultureProvidersController < ApplicationController
 
 
   protected
-
-  # Always sort by the culture provider's name
-  def sort_column_from_param(p)
-    case p.to_sym
-    when :active then "active"
-    else
-      "name"
-    end
-  end
 
   # Cache key for the list of upcoming occasions
   def upcoming_occasions_cache_key(culture_provider)

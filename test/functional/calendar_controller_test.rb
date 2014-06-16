@@ -2,16 +2,16 @@ require 'test_helper'
 
 class CalendarControllerTest < ActionController::TestCase
 
-  test "set list" do
+  test "calendar list" do
     [:index, :filter, :apply_filter, :clear_filter].each do |action|
       get action
-      assert_equal :occasions, assigns(:calendar_list)
+      assert_equal :occasions, @controller.send(:calendar_list)
 
       get action, list: "foo"
-      assert_equal :occasions, assigns(:calendar_list)
+      assert_equal :occasions, @controller.send(:calendar_list)
 
       get action, list: "events"
-      assert_equal :events, assigns(:calendar_list)
+      assert_equal :events, @controller.send(:calendar_list)
     end
   end
 
@@ -63,7 +63,7 @@ class CalendarControllerTest < ActionController::TestCase
     get :filter
     assert_response :success
     assert          !assigns(:category_groups).blank?
-    assert_equal    CategoryGroup.order("name ASC").to_a,            assigns(:category_groups)
+    assert_equal    CategoryGroup.order("name ASC").to_a, assigns(:category_groups)
     assert          !assigns(:occasions).blank?
     assert_equal    Occasion.search({ from_date: Date.today - 1 }, nil), assigns(:occasions)
 
@@ -71,7 +71,7 @@ class CalendarControllerTest < ActionController::TestCase
     get :filter, list: "events"
     assert_response :success
     assert          !assigns(:category_groups).blank?
-    assert_equal    CategoryGroup.order("name ASC").to_a,                  assigns(:category_groups)
+    assert_equal    CategoryGroup.order("name ASC").to_a, assigns(:category_groups)
     assert          !assigns(:events).blank?
     assert_equal    Event.search_standing({ from_date: Date.today - 1 }, nil), assigns(:events)
   end
@@ -149,7 +149,6 @@ class CalendarControllerTest < ActionController::TestCase
 
   test "list cache key" do
     @controller.stubs(:session).returns({})
-    @controller.instance_variable_set(:@calendar_list, "occasions")
     @controller.stubs(:params).returns(page: 2)
     
     assert_equal "calendar/list/occasions/not_bookable/2", @controller.send(:list_cache_key)

@@ -1,0 +1,10 @@
+- content_for(:page_title) do
+  Klassers/avdelningars bokningar
+
+%main.bookings.group
+  = group_selection_form
+
+  = render partial: "menu"
+
+  #booking-list{data: { list: { path: group_list_bookings_path }}}
+    = render partial: "list", locals: { bookings: @bookings }

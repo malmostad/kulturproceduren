@@ -1,0 +1,98 @@
+- content_for(:page_title) do
+  Hantera föreställningar för
+  = link_to @event.name, @event
+
+%main
+  %nav.return
+    = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  %section.box.context-form{class: "#{"collapsed" if @occasion.new_record?}"}
+    %h1.box-title
+      - if @occasion.new_record?
+        Lägg till
+      - else
+        Redigera
+      föreställning
+
+    .box-content
+      = simple_form_for @occasion, html: { class: "basic" } do |f|
+        = f.error_notification class: "warning"
+
+        .form-group
+          = f.label :date, class: "control-label"
+          .controls.input-group
+            = f.input_field :date,
+              as: :string,
+              class: "form-control datepicker",
+              data: { "start-date" => Date.today }
+            %span.input-group-addon
+              %span.glyphicon.glyphicon-calendar
+
+        = f.input :start_time, minute_step: 5
+        = f.input :stop_time, minute_step: 5
+        = f.input :seats
+        = f.input :wheelchair_seats
+        = f.input :single_group,
+          as: :radio_buttons,
+          wrapper: :radio,
+          collection: [ [ "Ja", true ], [ "Nej", false ] ]
+        = f.input :address, input_html: { rows: 5 }
+        = f.input :description, input_html: { rows: 5 }
+        = f.input :telecoil,
+          as: :radio_buttons,
+          wrapper: :radio,
+          collection: [ [ "Ja", true ], [ "Nej", false ] ]
+        = f.input :map_address
+
+        = f.hidden_field :event_id
+
+        .form-group
+          %span.control-label
+          .controls
+            = f.submit "Spara", class: "btn btn-primary"
+            - unless @occasion.new_record?
+              = link_to "Avbryt", event_occasions_path(@event), class: "btn btn-default"
+
+  = render partial: "events/administration_menu", locals: { event: @event }
+
+  %table
+    %thead
+      %tr
+        %th(rowspan=2) Datum/tid
+        %th(colspan=2) Antal platser
+        %th(rowspan=2) Adress
+        %th(rowspan=2) Beskrivning
+        %th(rowspan=2) Kartadress
+        %th(rowspan=2)
+      %tr
+        %th Vanliga
+        %th Rullstol
+
+    %tbody
+      - @event.occasions.each do |occasion|
+        %tr{class: "#{"cancelled" if occasion.cancelled}"}
+          %td
+            = occasion.date
+            %br
+            = "#{l occasion.start_time, format: :only_time}-#{l occasion.stop_time, format: :only_time}"
+          %td= occasion.seats
+          %td= occasion.wheelchair_seats
+          %td= occasion.address
+          %td= occasion.description
+          %td= occasion.map_address
+          %td
+            - if !occasion.cancelled
+              .btn-group
+                = link_to "Redigera", edit_occasion_path(occasion), class: "btn btn-default btn-sm"
+
+                - if @event.bookable?
+                  - if occasion.date >= Date.today
+                    = link_to "Ställ in",
+                      cancel_occasion_path(occasion),
+                      data: { confirm: "Är du säker på att du vill ställa in föreställningen?" },
+                      class: "btn btn-danger btn-sm"
+                - else
+                  = link_to "Ta bort", occasion,
+                    method: "delete",
+                    data: { confirm: "Är du säker på att du vill radera föreställningen?"},
+                    class: "btn btn-danger btn-sm"

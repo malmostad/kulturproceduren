@@ -1,0 +1,25 @@
+.wrapper {
+    @include clearfix();
+    margin: 0 auto;
+    padding: 0 1em;
+    max-width: 67em;
+}
+
+.preamble {
+    @include clearfix();
+}
+
+main.with-aside {
+    @include columns(8);
+}
+
+.wrapper > aside {
+    @include columns(4, true);
+}
+
+
+@media print {
+    main.with-aside {
+        width: 100%;
+    }
+}

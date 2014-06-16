@@ -7,8 +7,8 @@ class SchoolType < ActiveRecord::Base
   validates_presence_of :name,
     :message => "Namnet får inte vara tomt."
 
-  scope :active, -> { where(active: true) }
-  scope :inactive, -> { where(active: false) }
+  scope :active, -> { rewhere(active: true) }
+  scope :inactive, -> { rewhere(active: false) }
 
   default_scope { active }
 end

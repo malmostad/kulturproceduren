@@ -1,0 +1,41 @@
+- content_for(:page_title) do
+  Användare
+
+%main
+
+  %section.filter.box.users
+    %h1.box-title Filtrera
+    .box-content
+      = form_tag apply_filter_users_path(), class: "basic" do
+        - filter = (session[:user_list_filter] || {})
+        .form-group
+          %span.control-label
+            %label(for="name") Namn/användarnamn:
+          .controls
+            = text_field_tag "name", filter[:name], class: "form-control"
+        .form-group
+          %span.control-label
+          .controls
+            %button(type="submit" name="search" class="btn btn-primary") Sök
+            %button(type="submit" name="clear" class="btn btn-default") Rensa
+
+  = render partial: "menu"
+
+  %table.users
+    %thead
+      %tr
+        %th= sort_link "Namn", "name"
+        %th= sort_link "Användarnamn", "username"
+        %th= sort_link "Mobilnummer", "cellphone"
+        %th= sort_link "E-post", "email"
+
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= link_to user.name, user
+          %td= link_to user.get_username, user
+          %td= user.cellphone
+          %td
+            =link_to user.email, "mailto:#{u user.email}"
+
+= will_paginate @users

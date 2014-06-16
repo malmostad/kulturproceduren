@@ -57,10 +57,16 @@ module Kulturproceduren
     config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
-    config.assets.enabled = false
+    config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    config.assets.paths += [
+      Rails.root.join("vendor", "malmo_shared_assets", "stylesheets").to_s,
+      Rails.root.join("vendor", "malmo_shared_assets", "stylesheets", "shared").to_s,
+      Rails.root.join("vendor", "malmo_shared_assets", "stylesheets", "external").to_s
+    ]
 
     # Don't report field errors in the summary in the beginnning of the form
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag }
