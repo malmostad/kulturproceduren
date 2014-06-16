@@ -1,7 +1,5 @@
 # Controller for managing districts
 class VersionsController < ApplicationController
-  layout "admin"
-  
   before_filter :authenticate
   before_filter :require_admin
 
