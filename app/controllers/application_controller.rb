@@ -21,38 +21,6 @@ class ApplicationController < ActionController::Base
   #  redirect_to(url_root + "/maintenance.html", status: :found)
   #end
 
-  # Loads the appropriate data for the group selection fragment
-  #
-  # If occasion is given, the data is restricted to districts/schools/groups
-  # that have tickets on the given occasion
-  def load_group_selection_collections(occasion = nil)
-    session[:group_selection] ||= {}
-
-    gsc = {
-      districts: District.order("name")
-    }
-
-    if session[:group_selection][:district_id]
-      gsc[:schools] = School.where(district_id: session[:group_selection][:district_id]).order("name")
-    end
-
-    if session[:group_selection][:school_id]
-      gsc[:groups] = Group.where(school_id: session[:group_selection][:school_id]).order("name")
-    end
-
-    if occasion
-      @group_selection_collections = {}
-
-      gsc.each_pair do |key, coll|
-        @group_selection_collections[key] = coll.select do |i|
-          i.available_tickets_by_occasion(occasion) > 0
-        end
-      end
-    else
-      @group_selection_collections = gsc
-    end
-  end
-
   # Method for getting the SQL sort order from paging parameters
   def sort_order(default)
     "#{sort_column_from_param(params[:c] || default)} #{params[:d] == 'down' ? 'DESC' : 'ASC'}"
