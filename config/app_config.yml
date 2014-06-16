@@ -32,16 +32,6 @@ common: &common
     :kbu_facebook: "http://www.facebook.com/kbumalmo"
     :culture_bus_link: "http://malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
 
-    #:ldap:
-    #    :address:
-    #    :port: 389
-    #    :base_dn:
-    #    :bind:
-    #        :dn:
-    #        :password:
-    #    :max_search_results: 25
-    #    :username_prefix: "malmoaut-"
-
     :allotment:
         :proximity_boundary: 3
 

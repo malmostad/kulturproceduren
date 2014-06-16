@@ -11,7 +11,6 @@ gem "passenger", "~> 4.0.42"
 gem "rmagick", "2.13.2", require: "RMagick"
 gem "will_paginate", "3.0.5"
 gem "pdf-writer", git: "https://github.com/Hermanverschooten/pdf-writer.git", ref: "f57c298a2527893acd62430aefc2516e76499633"
-gem "ruby-ldap", "0.9.12", require: "ldap"
 
 gem "simple_form", "~> 3.1.0.rc1", :git => "https://github.com/plataformatec/simple_form"
 gem "active_attr", "~> 0.8.3"

@@ -154,11 +154,6 @@ module ApplicationHelper
     "#{date.month > 6 ? "ht" : "vt"}#{date.year}"
   end
 
-  # Includes wysiwyg libraries and initialization files
-  def wysiwyg_init
-    render partial: "shared/wysiwyg_init"
-  end
-
   # Change the default link renderer for will_paginate
   def will_paginate(collection_or_options = nil, options = {})
     if collection_or_options.is_a?(Hash)

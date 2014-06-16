@@ -217,8 +217,5 @@ Kulturproceduren::Application.routes.draw do
   match "users/:id/grant/:role" => "users#grant", as: :grant_role, via: [:get, :post]
   match "users/:id/revoke/:role" => "users#revoke", as: :revoke_role, via: [:get, :post]
   match "users/:id/remove_culture_provider/:culture_provider_id" => "users#remove_culture_provider", as: :remove_culture_provider_user, via: [:get, :post]
-  match "ldap/" => "ldap#index", as: :ldap, via: [:get, :post]
-  match "ldap/search" => "ldap#search", as: :ldap_search, via: [:get, :post]
-  match "ldap/handle/:username" => "ldap#handle", as: :ldap_handle, via: [:get, :post]
   match "/:controller(/:action(/:id))", via: [:get, :post]
 end
