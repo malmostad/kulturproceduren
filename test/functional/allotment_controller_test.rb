@@ -118,7 +118,7 @@ class AllotmentControllerTest < ActionController::TestCase
     groups = [
       District.first.schools.first.groups.first,
       District.first.schools.second.groups.first,
-      create(:group_with_age_groups, age_group_data: [[5, 10]])
+      create(:group_with_age_groups, _age_group_data: [[5, 10]])
     ]
 
     # Districts from the groups, the odd group district, and a district from the parameters

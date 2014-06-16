@@ -20,6 +20,8 @@ gem "protected_attributes", "1.0.7"
 gem "activerecord-session_store", "0.1.0"
 gem "rails-observers", "0.1.2"
 
+gem "paper_trail", "~> 3.0.2"
+
 group :development do
   gem "capistrano", "~> 3.1.0"
   gem "capistrano-rails", "~> 1.1.1"

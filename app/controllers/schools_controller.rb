@@ -15,6 +15,10 @@ class SchoolsController < ApplicationController
     @groups = @school.groups.order(sort_order("name")).paginate(page: params[:page])
   end
 
+  def history
+    @school = School.find(params[:id])
+  end
+
   def new
     @school = School.new
     @school.district_id = params[:district_id] if params[:district_id]

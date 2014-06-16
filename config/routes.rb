@@ -153,7 +153,17 @@ Kulturproceduren::Application.routes.draw do
   resources :questions,       except: [:show, :new]
   resources :categories,      except: [:show, :new]
   resources :category_groups, except: [:show, :new]
+
+  resources :versions, only: [] do
+    member do
+      put :revert
+    end
+  end
+
   resources :districts do
+    member do
+      get :history
+    end
     collection do
       get  :select
       post :select
@@ -161,6 +171,9 @@ Kulturproceduren::Application.routes.draw do
   end
 
   resources :schools do
+    member do
+      get :history
+    end
     collection do
       get  :select
       post :select
@@ -171,6 +184,9 @@ Kulturproceduren::Application.routes.draw do
   end
 
   resources :groups do
+    member do
+      get :history
+    end
     collection do
       get  :select
       post :select

@@ -21,6 +21,13 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_equal    school.groups.to_a, assigns(:groups)
   end
 
+  test "history" do
+    school = create(:school)
+    get :history, id: school.id
+    assert_response :success
+    assert_equal    school, assigns(:school)
+  end
+
   test "new" do
     districts = create_list(:district, 3)
 

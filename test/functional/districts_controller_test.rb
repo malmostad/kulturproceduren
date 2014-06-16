@@ -23,6 +23,13 @@ class DistrictsControllerTest < ActionController::TestCase
     assert_equal    district, assigns(:district)
   end
 
+  test "history" do
+    district = create(:district)
+    get :history, id: district.id
+    assert_response :success
+    assert_equal    district, assigns(:district)
+  end
+
   test "new" do
     get :new
     assert_response :success

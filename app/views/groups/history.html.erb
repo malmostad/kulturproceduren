@@ -1,0 +1,15 @@
+<%= render partial: "menu" -%>
+
+<div class="model-cnt">
+
+  <h2>Historik för <%= @group.name %>, <%= @group.school.name %></h2>
+
+  <ul class="admin-tools">
+    <li><%= link_to 'Återvänd', @group %></li>
+  </ul>
+
+</div>
+
+<%= render partial: "versions/versions",
+  object: @group.versions.updates,
+  locals: { model: Group, fields: %w(name contacts), extra_title: "Åldersgrupper (ålder: antal)" } %>

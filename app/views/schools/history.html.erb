@@ -1,0 +1,15 @@
+<%= render partial: "menu" -%>
+
+<div class="model-cnt">
+
+  <h2>Historik för <%= @school.name %></h2>
+
+  <ul class="admin-tools">
+    <li><%= link_to 'Återvänd', @school %></li>
+  </ul>
+
+</div>
+
+<%= render partial: "versions/versions",
+  object: @school.versions.updates,
+  locals: { model: School, fields: %w(name contacts) } %>

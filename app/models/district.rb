@@ -1,8 +1,10 @@
 # A district contains multiple schools.
 class District < ActiveRecord::Base
 
+  has_paper_trail
+
   belongs_to :school_type
-  
+
   has_many(:schools, lambda{ order "name ASC" }, dependent: :destroy) do
 
     # Finds all schools in the district that has children in the given age span.

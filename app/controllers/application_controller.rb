@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
 
   # Accessor method for getting the current user.
   def current_user
-    @current_user ||= User.find(session[:current_user_id])
+    @current_user ||= User.find(session[:current_user_id]) if user_online?
   end
   helper_method :current_user
 

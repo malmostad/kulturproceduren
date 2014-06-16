@@ -16,6 +16,10 @@ class GroupsController < ApplicationController
     @age_group = AgeGroup.new { |ag| ag.group_id = @group.id }
   end
 
+  def history
+    @group = Group.find(params[:id])
+  end
+
   def new
     @group = Group.new
     @group.school_id = params[:school_id] if params[:school_id]

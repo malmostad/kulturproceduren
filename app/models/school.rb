@@ -1,6 +1,8 @@
 # Model for schools. A schools belongs to a district and has many groups within it.
 class School < ActiveRecord::Base
-  
+
+  has_paper_trail
+
   has_many :groups, dependent: :destroy do
     def find_by_age_span(from, to)
       where("id in (select g.id from age_groups ag left join groups g on ag.group_id = g.id where age between ? and ? and g.active = ?)", from, to, true)

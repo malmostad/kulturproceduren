@@ -14,13 +14,13 @@ class SchoolTest < ActiveSupport::TestCase
     school = create(:school)
     create(:school_with_age_groups) # dummy
 
-    7.upto(12).collect { |i| create(:group_with_age_groups, school: school, age_group_data: [[i, 1]]) }
+    7.upto(12).collect { |i| create(:group_with_age_groups, school: school, _age_group_data: [[i, 1]]) }
 
     groups = school.groups.find_by_age_span(8, 11)
     assert !groups.blank?
     groups.each { |g| assert g.age_groups.exists?(age: (8..11))}
 
-    create(:group_with_age_groups, school: school, age_group_data: [[1, 1]], active: false)
+    create(:group_with_age_groups, school: school, _age_group_data: [[1, 1]], active: false)
     assert school.groups.find_by_age_span(1, 2).blank?
   end
 

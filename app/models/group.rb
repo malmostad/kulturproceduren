@@ -1,5 +1,8 @@
 # A group is the representation of a group of children in a school.
 class Group < ActiveRecord::Base
+
+  has_paper_trail meta: { extra_data: :age_group_data }
+
   has_many :allotments, dependent: :nullify
   has_many :tickets, dependent: :destroy
   has_many :bookings, dependent: :destroy
@@ -110,10 +113,33 @@ class Group < ActiveRecord::Base
     connection.select_values(sanitize_sql_array(["select id from groups where id in (?) order by priority asc", ids]))
   end
 
+
+  def age_group_data
+    Hash[age_groups(true).collect { |ag| [ag.age, ag.quantity] }]
+  end
+
+  def set_extra_data_from_version!(extra_data)
+    age_groups = self.age_groups(true)
+
+    saved = []
+
+    extra_data.each do |age, quantity|
+      age_group = age_groups.detect { |ag| ag.age == age }
+      age_group ||= self.age_groups.build(age: age)
+
+      age_group.quantity = quantity
+      age_group.save!
+
+      saved << age_group.id
+    end
+
+    age_groups.reject { |ag| saved.include?(ag.id) }.collect(&:destroy)
+  end
+
+
   private
 
   def set_default_priority
     self.priority = Group.count(:all) + 1
   end
-
 end

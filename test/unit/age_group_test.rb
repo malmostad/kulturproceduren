@@ -47,16 +47,16 @@ class AgeGroupTest < ActiveSupport::TestCase
   end
 
   test "number of children by district" do
-    district_1 = create(:district_with_age_groups, school_count: 2, group_count: 2, age_group_data: [[10, 10], [11, 20]])
-    district_2 = create(:district_with_age_groups, school_count: 3, group_count: 3, age_group_data: [[10, 5],  [11, 15]])
+    district_1 = create(:district_with_age_groups, school_count: 2, group_count: 2, _age_group_data: [[10, 10], [11, 20]])
+    district_2 = create(:district_with_age_groups, school_count: 3, group_count: 3, _age_group_data: [[10, 5],  [11, 15]])
 
     counts = AgeGroup.num_children_per_district
     assert_equal 2*2*10 + 2*2*20, counts[district_1.id.to_s]
     assert_equal 3*3*5 + 3*3*15,  counts[district_2.id.to_s]
   end
   test "number of children by group" do
-    group_1 = create(:group_with_age_groups, age_group_data: [[10, 10], [11, 20]])
-    group_2 = create(:group_with_age_groups, age_group_data: [[10, 5],  [11, 15]])
+    group_1 = create(:group_with_age_groups, _age_group_data: [[10, 10], [11, 20]])
+    group_2 = create(:group_with_age_groups, _age_group_data: [[10, 5],  [11, 15]])
 
     counts = AgeGroup.num_children_per_group
 

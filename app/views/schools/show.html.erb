@@ -14,6 +14,7 @@
   <ul class="admin-tools">
     <li><%= link_to 'Redigera', edit_school_path(@school) %></li>
     <li><%= link_to 'Radera', @school, data:{confirm: 'Är du säker på att du vill radera skolan?'}, method: :delete %></li>
+    <li><%= link_to 'Historik', history_school_path(@school) %></li>
   </ul>
 
 </div>
