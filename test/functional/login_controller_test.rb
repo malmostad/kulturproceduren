@@ -65,41 +65,6 @@ class LoginControllerTest < ActionController::TestCase
     assert_equal         user.id,             session[:current_user_id]
     assert_not_nil       user.reload.last_active
   end
-  test "login, ldap user, new user" do
-    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap" })
-
-    create(:district)
-    ldap_user_mock = { name: "Name", email: "name@example.com", cellphone: "123", username: "zomglol" }
-    ldap_mock      = stub(get_user: ldap_user_mock)
-
-    ldap_mock.expects(:authenticate).with("zomglol", "zomglol").returns(true)
-    @controller.stubs(:get_ldap).returns(ldap_mock)
-
-    post :login, user: { username: "zomglol", password: "zomglol" }
-    user = User.last
-
-    assert_equal user.id,            session[:current_user_id]
-    assert_equal "ldapzomglol",      user.username
-    assert_equal "name@example.com", user.email
-    assert_equal "123",              user.cellphone
-    assert       user.authenticate("ldap")
-  end
-  test "login, ldap user, existing user" do
-    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap" })
-
-    user = create(:user, last_active: nil, username: "ldaptestuser", password: "zomg", roles: [roles(:admin)])
-    @controller.stubs(:get_ldap).returns(stub(authenticate: true))
-
-    post :login, user: { username: "testuser", password: "doesntmatter" }
-    assert_equal user.id, session[:current_user_id]
-  end
-  test "login, ldap user, fallback" do
-    user = create(:user, last_active: nil, username: "testuser", password: "zomg", roles: [roles(:admin)])
-    @controller.stubs(:get_ldap).returns(stub(authenticate: false))
-
-    post :login, user: { username: "testuser", password: "zomg" }
-    assert_equal user.id, session[:current_user_id]
-  end
 
   test "logout" do
     get :logout

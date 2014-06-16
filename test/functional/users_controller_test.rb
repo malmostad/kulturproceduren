@@ -158,21 +158,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to User.last
     assert_equal         "Användaren skapades. Den kan nu logga in med användarnamn och lösenord.", flash[:notice]
   end
-  test "create, ldap username taken" do
-    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap_" })
-
-    @controller.unstub(:authenticate)
-
-    @controller.expects(:ldap_user_exists).with("foo").returns false
-
-    post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
-
-    assert_response :success
-    assert          assigns(:user).new_record?
-    assert          !assigns(:user).valid?
-    assert_nil      assigns(:user).password
-    assert_nil      assigns(:user).password_confirmation
-  end
 
   test "update" do
     user                      = create(:user, username: "old_username", name: "old name")
