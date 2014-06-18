@@ -7,6 +7,7 @@
     = link_to "Återvänd till presentationen för #{@event.name}", @event
 
   %section.box.context-form{class: "#{"collapsed" if @occasion.new_record?}"}
+    .map-container(style="display:none;")
     %h1.box-title
       - if @occasion.new_record?
         Lägg till
@@ -42,7 +43,8 @@
           as: :radio_buttons,
           wrapper: :radio,
           collection: [ [ "Ja", true ], [ "Nej", false ] ]
-        = f.input :map_address
+
+        = f.input :map_address, hint: "Skriv in en gatuadress", input_html: { class: "street-address" }
 
         = f.hidden_field :event_id
 
@@ -79,7 +81,14 @@
           %td= occasion.wheelchair_seats
           %td= occasion.address
           %td= occasion.description
-          %td= occasion.map_address
+          %td
+            = link_to "Visa på karta",
+              "http://www.malmo.se/karta?poi=#{u(occasion.map_address)}&amp;zoomlevel=4&amp;maptype=karta",
+              class: "show-on-map m-icon-location",
+              title: occasion.map_address,
+              "data-poi" => occasion.map_address,
+              "data-map-selector" => ".map-container",
+              "data-scroll-to" => ".map-container"
           %td
             - if !occasion.cancelled
               .btn-group

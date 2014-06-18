@@ -78,7 +78,7 @@
     = f.input :movie_url
     = f.input :opening_hours, input_html: { rows: 5 }
     = f.input :cost, input_html: { rows: 5 }
-    = f.input :map_address
+    = f.input :map_address, hint: "Skriv in en gatuadress", input_html: { class: "street-address" }
 
     .form-group
       %span.control-label
