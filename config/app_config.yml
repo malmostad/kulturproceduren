@@ -40,7 +40,7 @@ common: &common
     # OBS - se även config/enviroments/*rb actionmailer-config ... From-address måste anges även där
     :mailers:
         :from_address: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
-        :bus_booking_recipient: "camilla.bengtsson@malmo.se"
+        :bus_booking_recipient: "felicia.westerdahl@malmo.se; sofia.ek.landen@malmo.se"
     :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
         
 development:
