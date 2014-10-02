@@ -60,6 +60,7 @@ release_test:
 
 production:
     <<: *common
+    :instance_message: "På grund av systemuppgradering på hemsidan kan det uppstå störningar i Kulturproceduren den 4-6 oktober."
 
 education:
     <<: *common
