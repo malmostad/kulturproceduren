@@ -6,7 +6,7 @@ gem "haml-rails", "~> 0.5.3"
 
 gem "pg", "0.17.1"
 
-gem "passenger", "~> 4.0.42"
+gem "passenger", "4.0.41"
 
 gem "rmagick", "2.13.2", require: "RMagick"
 gem "will_paginate", "3.0.5"

@@ -134,7 +134,7 @@ GEM
     paper_trail (3.0.2)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
-    passenger (4.0.42)
+    passenger (4.0.41)
       daemon_controller (>= 1.2.0)
       rack
       rake (>= 0.8.1)
@@ -255,7 +255,7 @@ DEPENDENCIES
   jquery-rails
   mocha (= 1.1.0)
   paper_trail (~> 3.0.2)
-  passenger (~> 4.0.42)
+  passenger (= 4.0.41)
   pdf-writer!
   pg (= 0.17.1)
   protected_attributes (= 1.0.7)
