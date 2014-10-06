@@ -31,7 +31,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # Default value for default_env is {}
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 10
 
 set :rbenv_type, :user
 set :rbenv_ruby, "2.1.0"
