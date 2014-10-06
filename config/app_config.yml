@@ -31,7 +31,7 @@ common: &common
     :kp_manual_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
     :kbu_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor.html"
     :kbu_facebook: "http://www.facebook.com/kbumalmo"
-    :culture_bus_link: "http://malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
+    :culture_bus_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
 
     :allotment:
         :proximity_boundary: 3
