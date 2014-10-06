@@ -1,0 +1,20 @@
+table.users {
+    clear: both;
+}
+.filter.users {
+    @include columns(8);
+}
+aside.users {
+    @include columns(4, true);
+}
+
+ul.privileges li {
+    margin-bottom: 0.5em;
+
+    ul {
+        margin-top: 0.2em;
+    }
+    li {
+        margin-bottom: 0.2em;
+    }
+}

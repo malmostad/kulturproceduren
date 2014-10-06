@@ -21,6 +21,13 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_equal    school.groups.to_a, assigns(:groups)
   end
 
+  test "history" do
+    school = create(:school)
+    get :history, id: school.id
+    assert_response :success
+    assert_equal    school, assigns(:school)
+  end
+
   test "new" do
     districts = create_list(:district, 3)
 
@@ -37,16 +44,6 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_equal    districts,        assigns(:districts)
   end
 
-  test "edit" do
-    districts = create_list(:district, 3)
-    school    = create(:school, district: districts.first)
-
-    get :edit, id: school.id
-    assert_response :success
-    assert_template "schools/new"
-    assert_equal    school,    assigns(:school)
-    assert_equal    districts, assigns(:districts)
-  end
 
   test "create" do
     districts = create_list(:district, 3)
@@ -93,6 +90,27 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_nil           School.where(id: school.id).first
   end
 
+  test "search" do
+    @controller.unstub(:authenticate)
+    @controller.unstub(:require_admin)
+
+    school1 = create(:school, name: "foo")
+    school2 = create(:school, name: "ofoo")
+    school3 = create(:school, name: "bar")
+
+    # Search by prefix, by default
+    post :search, term: "fo"
+    assert_response :success
+    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
+    assert_equal    %w(foo).to_json, @response.body
+
+    # Expand to wildcard when there is no prefix match
+    post :search, term: "ar"
+    assert_response :success
+    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
+    assert_equal    %w(bar).to_json, @response.body
+  end
+
   test "select" do
     @controller.unstub(:authenticate)
     @controller.unstub(:require_admin)
@@ -103,7 +121,11 @@ class SchoolsControllerTest < ActionController::TestCase
 
     get :select, school_id: school.id, return_to: "/foo/bar"
     assert_redirected_to "/foo/bar"
-    assert_equal(        { school_id: school.id, district_id: school.district.id }, session[:group_selection])
+    assert_equal({
+      school_id: school.id,
+      school_name: school.name,
+      district_id: school.district.id
+    }, session[:group_selection])
 
     school = create(:school)
 
@@ -112,7 +134,11 @@ class SchoolsControllerTest < ActionController::TestCase
     assert_response :success
     assert          @response.body.blank?
     assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
-    assert_equal(   { school_id: school.id, district_id: school.district.id }, session[:group_selection])
+    assert_equal({
+      school_id: school.id,
+      school_name: school.name,
+      district_id: school.district.id
+    }, session[:group_selection])
   end
   test "select, no school" do
     @controller.unstub(:authenticate)

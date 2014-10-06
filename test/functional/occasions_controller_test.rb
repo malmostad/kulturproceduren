@@ -32,14 +32,9 @@ class OccasionsControllerTest < ActionController::TestCase
     @controller.unstub(:authenticate)
 
     occasion = create(:occasion)
-    category_groups = create_list(:category_group, 3).sort_by(&:name)
 
     get :show, id: occasion.id
-    assert_response :success
-    assert_template "events/show"
-    assert_equal    occasion,        assigns(:selected_occasion)
-    assert_equal    occasion.event,  assigns(:event)
-    assert_equal    category_groups, assigns(:category_groups)
+    assert_redirected_to occasion.event
   end
 
   test "edit" do
@@ -48,10 +43,9 @@ class OccasionsControllerTest < ActionController::TestCase
 
     get :edit, id: occasion.id
     assert_response :success
-    assert_template "events/show"
+    assert_template "occasions/index"
     assert_equal    occasion,        assigns(:occasion)
     assert_equal    occasion.event,  assigns(:event)
-    assert_equal    category_groups, assigns(:category_groups)
   end
 
   test "create, unauthed" do
@@ -65,21 +59,19 @@ class OccasionsControllerTest < ActionController::TestCase
   end
   test "create" do
     event           = create(:event)
-    category_groups = create_list(:category_group, 3).sort_by(&:name)
 
     # Invalid
     post :create, occasion: { event_id: event.id }
     assert_response :success
-    assert_template "events/show"
+    assert_template "occasions/index"
     assert          assigns(:occasion).new_record?
     assert          !assigns(:occasion).valid?
     assert_equal    event, assigns(:event)
-    assert_equal    category_groups, assigns(:category_groups)
 
     # Valid
     occasion_data = { event_id: event.id.to_s, date: Date.today.to_s, address: "Address", seats: 10.to_s }
     post :create, occasion: occasion_data
-    assert_redirected_to event
+    assert_redirected_to event_occasions_url(event)
     assert_equal         "Föreställningen skapades.",  flash[:notice]
     assert_equal         occasion_data.stringify_keys, session[:last_occasion_added]
 
@@ -97,15 +89,14 @@ class OccasionsControllerTest < ActionController::TestCase
     # Invalid
     put :update, id: occasion.id, occasion: { seats: nil }
     assert_response :success
-    assert_template "events/show"
+    assert_template "occasions/index"
     assert          !assigns(:occasion).valid?
     assert_equal    occasion.event, assigns(:event)
     assert_equal    occasion, assigns(:occasion)
-    assert_equal    category_groups, assigns(:category_groups)
 
     # Valid
     put :update, id: occasion.id, occasion: { seats: 11 }
-    assert_redirected_to occasion.event
+    assert_redirected_to event_occasions_url(occasion.event)
     assert_equal         "Föreställningen uppdaterades.",  flash[:notice]
     assert_equal         11, occasion.reload.seats
   end
@@ -114,7 +105,7 @@ class OccasionsControllerTest < ActionController::TestCase
     occasion = create(:occasion)
 
     delete :destroy, id: occasion.id
-    assert_redirected_to occasion.event
+    assert_redirected_to event_occasions_url(occasion.event)
     assert_equal         "Föreställningen togs bort.", flash[:notice]
     assert_nil           Occasion.where(id: occasion.id).first
   end
@@ -129,7 +120,7 @@ class OccasionsControllerTest < ActionController::TestCase
     OccasionMailer.expects(:occasion_cancelled_email).with(occasion).returns(mailer_mock)
 
     get :cancel, id: occasion.id
-    assert_redirected_to occasion
+    assert_redirected_to event_occasions_url(occasion.event)
     assert_equal         "Föreställningen ställdes in.", flash[:notice]
     assert               occasion.reload.cancelled
   end
@@ -144,13 +135,6 @@ class OccasionsControllerTest < ActionController::TestCase
     get :ticket_availability, id: occasion.id
     assert_equal occasion, assigns(:occasion)
     assert_equal [group.school], assigns(:entities)
-
-    @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :ticket_availability, id: occasion.id
-    assert_template "occasions/_ticket_availability_list"
-    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
-    assert_equal    occasion, assigns(:occasion)
-    assert_equal    [group.school], assigns(:entities)
   end
   test "ticket availability, alloted district" do
     group    = create(:group)
@@ -162,13 +146,6 @@ class OccasionsControllerTest < ActionController::TestCase
     get :ticket_availability, id: occasion.id
     assert_equal occasion, assigns(:occasion)
     assert_equal [group.school.district], assigns(:entities)
-
-    @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :ticket_availability, id: occasion.id
-    assert_template "occasions/_ticket_availability_list"
-    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
-    assert_equal    occasion, assigns(:occasion)
-    assert_equal    [group.school.district], assigns(:entities)
   end
   test "ticket availability, free for all" do
     event    = create(:event, ticket_state: :free_for_all)
@@ -178,13 +155,6 @@ class OccasionsControllerTest < ActionController::TestCase
     get :ticket_availability, id: occasion.id
     assert_equal occasion, assigns(:occasion)
     assert_nil   assigns(:entities)
-
-    @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :ticket_availability, id: occasion.id
-    assert_template "occasions/_ticket_availability_list"
-    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
-    assert_equal    occasion, assigns(:occasion)
-    assert_nil      assigns(:entities)
   end
   test "ticket availability, wrong state" do
     event    = create(:event, ticket_state: nil)
@@ -193,11 +163,5 @@ class OccasionsControllerTest < ActionController::TestCase
     get :ticket_availability, id: occasion.id
     assert_redirected_to root_url()
     assert_equal         "Platstillgänglighet kan inte presenteras för den önskade föreställningen.", flash[:error]
-
-    @request.env["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest"
-    get :ticket_availability, id: occasion.id
-    assert_response 404
-    assert          @response.body.blank?
-    assert          @response.headers["Content-Type"] =~ /\btext\/plain\b/
   end
 end

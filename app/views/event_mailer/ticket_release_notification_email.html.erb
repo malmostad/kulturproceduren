@@ -40,7 +40,7 @@
   <p>
     Platserna är reserverade till er fram till och med
     <%= (@event.district_transition_date || @event.free_for_all_transition_date) - 1 %>.
-    Därefter släpps obekräftade platser till hela stadsdelen.
+    Därefter släpps obekräftade platser till hela området.
   </p>
 
   <% if @event.bus_booking? %>
@@ -72,7 +72,7 @@
   <p>Begränsat antal platser. &quot;Först till kvarn&quot; gäller.</p>
 
   <p>
-    Platserna är reserverade till respektive stadsdel till och med
+    Platserna är reserverade till respektive område till och med
     <%= @event.free_for_all_transition_date - 1 %>.
     Därefter släpps obekräftade platser till samtliga förskolor/skolor i Malmö.
   </p>

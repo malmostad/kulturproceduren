@@ -1,5 +1,28 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+  # Returns a css class for the body tag which indicates what type of environment
+  # the app is running as. This is used for Google Analytics according to the WAG
+  def malmo_body_class
+    case Rails.env
+    when "production"
+      return ""
+    when "development"
+      return "development"
+    when "acceptance"
+      return "test"
+    else
+      return "staging"
+    end
+  end
+
+  # Partitions a collection by the first letter in the attribute given by
+  # +attribute+. Returns a hash with the first letters as keys.
+  def partition_by_first_letter(collection, attribute)
+    collection.group_by { |e| e[attribute].first.mb_chars.upcase.to_s }
+  end
+
+
   # Returns the css class <tt>active</tt> if the current controller is among
   # the names in the arguments.
   #
@@ -54,16 +77,13 @@ module ApplicationHelper
   def show_description(description)
     return "" if description.blank?
     if description.include?("<p")
-      content_tag(:div,
-        sanitize(
-          description,
-          tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
-          attributes: %w(href target title style)
-        ),
-        class: "description"
+      sanitize(
+        description,
+        tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
+        attributes: %w(href target title style)
       )
     else
-      paragraphize(description, 'class="description"')
+      paragraphize(description)
     end
   end
 
@@ -134,11 +154,6 @@ module ApplicationHelper
     "#{date.month > 6 ? "ht" : "vt"}#{date.year}"
   end
 
-  # Includes wysiwyg libraries and initialization files
-  def wysiwyg_init
-    render partial: "shared/wysiwyg_init"
-  end
-
   # Change the default link renderer for will_paginate
   def will_paginate(collection_or_options = nil, options = {})
     if collection_or_options.is_a?(Hash)
@@ -148,5 +163,50 @@ module ApplicationHelper
       options = options.merge renderer: KPWillPaginate::LinkRenderer
     end
     super *[collection_or_options, options].compact
+  end
+
+
+  # Renders a form for selecting a group
+  def group_selection_form(occasion: nil, return_to: nil, school_search_path: nil, notification_request_hint: false, select_button: nil)
+    state = session[:group_selection] || {}
+    return_to ||= url_for(request.query_parameters.update(request.path_parameters))
+
+    group_options = group_selection_group_options(occasion, state[:school_id])
+
+    school_search_path ||= search_schools_path
+
+    render(
+      partial: "shared/group_selection_form",
+      locals: {
+        occasion: occasion,
+        return_to: return_to,
+        state: state,
+        group_options: group_options,
+        school_search_path: school_search_path,
+        notification_request_hint: notification_request_hint,
+        select_button: select_button
+      }
+    )
+  end
+
+
+  private
+
+  def group_selection_group_options(occasion, school_id)
+    return [] if school_id.blank?
+
+    groups = Group.where(school_id: school_id).order("name")
+
+    if occasion
+      groups = groups.select { |g| g.available_tickets_by_occasion(occasion) > 0 }
+
+      return [[ "Välj klass/avdelning", nil ]] + groups.collect { |g| [
+        g.name + (occasion.event.alloted_group? ? " (#{g.available_tickets_by_occasion(occasion)} platser)" : ""),
+        g.id
+      ] }
+    else
+      return [[ "Välj klass/avdelning", nil ]] + groups.collect { |g| [ g.name, g.id ] }
+    end
+
   end
 end

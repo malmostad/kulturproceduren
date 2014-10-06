@@ -1,6 +1,6 @@
 # Controller for managing role applications
 class RoleApplicationsController < ApplicationController
-  layout "standard"
+  layout "application"
   
   before_filter :authenticate
   before_filter :deny_admin, only: [ :create ]
@@ -12,70 +12,54 @@ class RoleApplicationsController < ApplicationController
   # of all the user's applications
   def index
     if current_user.has_role? :admin
-      @applications = RoleApplication.includes(:user, :role, :culture_provider)
+      @role_applications = RoleApplication.includes(:user, :role, :culture_provider)
         .where("state = ?", RoleApplication::PENDING)
         .order(sort_order("created_at"))
         .paginate(page: params[:page])
 
-      render action: "admin_index", layout: "admin"
+      render action: "admin_index"
     else
+      @booker = Role.where("lower(name) = ?", "booker").first
+      @culture_worker = Role.where("lower(name) = ?", "culture_worker").first
+      @host = Role.where("lower(name) = ?",  "host").first
 
-      @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
-      @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
-      @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
-
+      @role_application = RoleApplication.new { |ra| ra.role = @booker }
       @culture_providers = CultureProvider.order("name")
-      
     end
   end
 
   # Displays a list of all answered appliations
   def archive
     params[:d] ||= "down"
-    @applications = RoleApplication.includes(:user, :role, :culture_provider)
+    @role_applications = RoleApplication.includes(:user, :role, :culture_provider)
       .order(sort_order("created_at"))
       .paginate(page: params[:page])
-    render layout: "admin"
   end
   
   def edit
-    @application = RoleApplication.find params[:id]
+    @role_application = RoleApplication.find params[:id]
 
-    if @application.state != RoleApplication::PENDING
+    if @role_application.state != RoleApplication::PENDING
       flash[:warning] = "Behörighetsansökan är redan besvarad"
       redirect_to action: "archive"
-    else
-      render layout: "admin"
     end
   end
 
   # Submits a role application from a user
   def create
+    @role_application = RoleApplication.new(params[:role_application])
+    @role_application.user = current_user
+    @role_application.state = RoleApplication::PENDING
 
-    @application = RoleApplication.new(params[:role_application])
-    @application.user = current_user
-    @application.state = RoleApplication::PENDING
-
-    if @application.save
+    if @role_application.save
       flash[:notice] = "Din ansökan har skickats till administratörerna."
       redirect_to current_user
     else
       @culture_providers = CultureProvider.order("name")
 
-      @booker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:booker) }
-      @culture_worker_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:culture_worker) }
-      @host_appl = RoleApplication.new { |ra| ra.role = Role.find_by_symbol(:host) }
-
-      @application_type = @application.role.symbol_name
-      
-      case @application_type
-      when :booker
-        @booker_appl = @application
-      when :culture_worker
-        @culture_worker_appl = @application
-      when :host
-        @host_appl = @application
-      end
+      @booker = Role.where("lower(name) = ?", "booker").first
+      @culture_worker = Role.where("lower(name) = ?", "culture_worker").first
+      @host = Role.where("lower(name) = ?",  "host").first
 
       render action: "index"
     end
@@ -83,31 +67,31 @@ class RoleApplicationsController < ApplicationController
 
   # Answers a role application
   def update
-    @application = RoleApplication.find(params[:id])
+    @role_application = RoleApplication.find(params[:id])
 
-    if @application.update_attributes(params[:role_application])
+    if @role_application.update_attributes(params[:role_application])
 
-      if @application.state == RoleApplication::ACCEPTED
+      if @role_application.state == RoleApplication::ACCEPTED
 
-        unless @application.user.roles.any? { |r| r.id == @application.role.id }
-          @application.user.roles << @application.role
+        unless @role_application.user.roles.any? { |r| r.id == @role_application.role.id }
+          @role_application.user.roles << @role_application.role
         end
 
-        case @application.role.symbol_name
+        case @role_application.role.symbol_name
         when :culture_worker
-          if @application.culture_provider
-            @application.user.culture_providers << @application.culture_provider
+          if @role_application.culture_provider
+            @role_application.user.culture_providers << @role_application.culture_provider
           else
-            @application.user.culture_providers << CultureProvider.create(name: @application.new_culture_provider_name)
+            @role_application.user.culture_providers << CultureProvider.create(name: @role_application.new_culture_provider_name)
           end
         end
 
       end
 
-      flash[:notice] = 'Ansökan besvarades.'
+      flash[:notice] = "Ansökan besvarades."
       redirect_to action: "index"
     else
-      render action: "edit", layout: "admin"
+      render action: "edit"
     end
   end
   

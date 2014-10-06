@@ -106,6 +106,12 @@ class Event < ActiveRecord::Base
     lambda{ order "name ASC" },
     class_name: "CultureProvider"
 
+  has_and_belongs_to_many :school_types
+  has_many :school_type_districts,
+    through: :school_types,
+    class_name: "District",
+    source: :districts
+
   attr_accessible :name,
     :description,
     :visible_from,
@@ -127,7 +133,8 @@ class Event < ActiveRecord::Base
     :district_transition_date,
     :free_for_all_transition_date,
     :bus_booking,
-    :last_bus_booking_date
+    :last_bus_booking_date,
+    :school_type_ids
   
   validates_presence_of :name,
     message: "Namnet får inte vara tomt"

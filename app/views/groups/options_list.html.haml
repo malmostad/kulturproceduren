@@ -1,0 +1,5 @@
+%option Välj klass/avdelning
+- if @occasion.blank?
+  = options_from_collection_for_select @groups, :id, :name
+- else
+  = options_for_select(@groups.map { |g| [ g.name + (@occasion.event.alloted_group? ? " (#{g.available_tickets_by_occasion(@occasion)} platser)" : "") , g.id ] })

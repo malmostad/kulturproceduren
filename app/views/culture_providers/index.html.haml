@@ -1,0 +1,18 @@
+- content_for(:page_title) do
+  Kulturprocedurens arrangörer
+
+%main.with-aside
+  - partition_by_first_letter(@culture_providers, :name).sort.each do |letter, culture_providers|
+    %nav.letter
+      %h2= letter
+      %ul.culture-providers
+        - culture_providers.each do |culture_provider|
+          %li= link_to culture_provider.name, culture_provider
+
+%aside
+  %nav.content
+    %h1 Arrangörer
+    %ul
+      %li= link_to "Visa alla", culture_providers_path
+      - if user_online? && current_user.has_role?(:admin)
+        %li= link_to "Lägg till ny", new_culture_provider_path

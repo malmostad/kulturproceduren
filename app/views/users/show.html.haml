@@ -1,0 +1,179 @@
+- content_for(:page_title) do
+  = @user.name
+
+%main.with-aside
+
+  - readonly = current_user.id != @user.id && !current_user.has_role?(:admin)
+
+  = simple_form_for @user, html: { class: "basic" } do |f|
+    = f.error_notification class: "warning"
+
+    = f.input :name, disabled: readonly
+    = f.input :email, disabled: readonly
+    = f.input :cellphone, disabled: readonly
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit "Uppdatera personuppgifter", class: "btn btn-primary", disabled: readonly
+
+  - unless readonly
+    = simple_form_for User.new,
+      url: update_password_user_path(@user),
+      method: "patch",
+      html: { class: "basic" } do |f|
+
+      = f.error_notification class: "warning"
+
+      - if current_user.id == @user.id
+        = f.input :current_password, label: "Nuvarande lösenord:", required: true, disabled: readonly
+
+      = f.input :password, label: "Nytt lösenord:", disabled: readonly
+      = f.input :password_confirmation, disabled: readonly
+
+      .form-group
+        %span.control-label
+        .controls
+          = f.submit "Byt lösenord", class: "btn btn-primary", disabled: readonly
+
+      - if current_user.id != @user.id && current_user.has_role?(:admin)
+        .form-group
+          %span.control-label
+          .controls
+            = link_to "Ta bort användaren",
+              @user,
+              method: :delete,
+              class: "btn btn-danger",
+              data: { confirm: "Är du säker på att du vill ta bort användaren?" }
+
+  %h2 Behörigheter
+
+  %ul.privileges
+    - denom = current_user.id == @user.id ? "Du" : "Användaren"
+
+    - if @user.has_role?(:admin)
+      %li
+        = denom
+        är administratör och har fulla rättigheter i systemet.
+        - if current_user.has_role?(:admin)
+          = link_to "Återkalla rättigheter",
+            revoke_role_path(id: @user.id, role: :admin),
+            class: "btn btn-default btn-xs"
+
+    - elsif @user.roles.blank? && !current_user.has_role?(:admin)
+
+      %li
+        - if current_user.id == @user.id
+          = denom
+          har inga behörigheter,
+          = link_to "ansök om behörigheter här", role_applications_path
+        - else
+          Användaren har inga behörigheter.
+
+    - else
+
+      - if @user.has_role?(:booker)
+        %li
+          = denom
+          kan boka platser.
+          = link_to "Återkalla rättigheter",
+            revoke_role_path(id: @user.id, role: :booker),
+            class: "btn btn-default btn-xs" if current_user.has_role?(:admin)
+      - elsif current_user.has_role?(:admin)
+        %li
+          Användaren kan inte boka platser.
+          = link_to "Tilldela rättigheter",
+            grant_role_path(id: @user.id, role: :booker),
+            class: "btn btn-default btn-xs"
+
+      - if @user.has_role?(:host)
+        %li
+          = denom
+          är evenemangsvärd.
+          = link_to "Återkalla rättigheter",
+            revoke_role_path(id: @user.id, role: :host),
+            class: "btn btn-default btn-xs" if current_user.has_role?(:admin)
+      - elsif current_user.has_role?(:admin)
+        %li
+          Användaren är inte evenemangsvärd.
+          = link_to "Tilldela rättigheter",
+            grant_role_path(id: @user.id, role: :host),
+            class: "btn btn-default btn-xs"
+
+      - if @user.has_role?(:coordinator)
+        %li
+          = denom
+          är samordnare.
+          = link_to "Återkalla rättigheter",
+            revoke_role_path(id: @user.id, role: :coordinator),
+            class: "btn btn-default btn-xs" if current_user.has_role?(:admin)
+      - elsif current_user.has_role?(:admin)
+        %li
+          Användaren är inte samordnare.
+          = link_to "Tilldela rättigheter",
+            grant_role_path(id: @user.id, role: :coordinator),
+            class: "btn btn-default btn-xs"
+
+      - if @user.has_role?(:culture_worker)
+        %li
+          = denom
+          kan publicera evenemang och administrera profilen för följande arrangörer:
+
+          %ul
+            - if @user.culture_providers.blank?
+              %li Inga arrangörer
+            - else
+              - @user.culture_providers.each do |culture_provider|
+                %li
+                  = link_to culture_provider.name, culture_provider
+                  - if current_user.has_role?(:admin)
+                    = link_to "Ta bort",
+                      remove_culture_provider_user_path(id: @user.id, culture_provider_id: culture_provider.id),
+                      class: "btn btn-default btn-xs"
+
+          - if current_user.has_role?(:admin)
+            = form_tag add_culture_provider_user_path(@user) do
+              = hidden_field_tag "authenticity_token", form_authenticity_token
+              = select_tag "culture_provider_id",
+                options_from_collection_for_select(CultureProvider.all, "id", "name")
+              = submit_tag "Lägg till arrangör", class: "btn btn-default btn-xs"
+            = link_to "Återkalla rättigheter",
+              revoke_role_path(id: @user.id, role: :culture_worker),
+              class: "btn btn-default btn-xs"
+
+      - elsif current_user.has_role?(:admin)
+        %li
+          Användaren kan inte publicera evenemang och administrera profilen för arrangörer.
+          = link_to "Tilldela rättigheter",
+            grant_role_path(id: @user.id, role: :culture_worker),
+            class: "btn btn-default btn-xs"
+
+      - if current_user.has_role?(:admin)
+        %li
+          = link_to "Tilldela användaren administratörsrättigheter",
+            grant_role_path(id: @user.id, role: :admin),
+            class: "btn btn-default btn-xs"
+
+  - unless @user.role_applications.empty?
+    %h2 Ansökningshistorik
+
+    %table
+      %thead
+        %tr
+          %th Typ
+          %th Inskickad
+          %th Status
+          %th Besvarad
+          %th Svar
+
+      %tbody
+        - @user.role_applications.each do |role_application|
+          %tr
+            %td= type_string(role_application)
+            %td= l role_application.created_at, format: :short
+            %td= state_string(role_application)
+            %td= l role_application.updated_at, format: :short unless role_application.created_at == role_application.updated_at
+            %td= role_application.response
+
+
+= render partial: "menu"

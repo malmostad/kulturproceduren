@@ -3,13 +3,13 @@
 class AnswerForm < ActiveRecord::Base
   # Answer forms have ASCII-ID:s for URL obfuscation
   self.primary_key = "id"
-  
+
   has_many :answers, -> { order("answers.question_id, answers.id") }, dependent: :destroy
-  belongs_to :booking
   belongs_to :occasion
   belongs_to :booking
   belongs_to :questionnaire
   belongs_to :group
+  has_many :questions, through: :questionnaire
 
   attr_accessible :completed,
     :occasion_id,      :occasion,
@@ -27,10 +27,10 @@ class AnswerForm < ActiveRecord::Base
     answer.keys.each { |k| question_ids << k unless answer[k].blank? }
 
     unless question_ids.blank?
-      missing_answers = self.questionnaire.questions.select { |q| q.mandatory }.collect(&:id) -
+      self.missing_answers = self.questionnaire.questions.select { |q| q.mandatory }.collect(&:id) -
         question_ids.map { |k| k.to_i }.sort
 
-      return missing_answers.blank?
+      return self.missing_answers.blank?
     end
 
     return false
@@ -57,6 +57,11 @@ class AnswerForm < ActiveRecord::Base
     end
 
     return false
+  end
+
+  # Returns the answers for a given question as an array
+  def answers_for(question)
+    answers.select { |a| a.question_id == question.id }
   end
 
   # Finds all unanswered forms for occasions the given date

@@ -2,11 +2,6 @@
 require 'test_helper'
 
 class ApplicationProxyController < ApplicationController
-  def test_load_group_selection_collections
-    occasion = params[:occasion_id] ? Occasion.find(params[:occasion_id]) : nil
-    load_group_selection_collections(occasion)
-    render nothing: true
-  end
   def test_sort_order
     render text: sort_order(params[:default])
   end
@@ -39,62 +34,6 @@ class ApplicationProxyController < ApplicationController
 end
 
 class ApplicationProxyControllerTest < ActionController::TestCase
-  test "load group selection collections" do
-    districts = create_list(:district_with_groups, 2)
-
-    assert_nil session[:group_selection]
-
-    # no selection, no occasion
-    get :test_load_group_selection_collections
-    assert_equal({},        session[:group_selection])
-    assert_equal districts, assigns(:group_selection_collections)[:districts]
-    assert_nil   assigns(:group_selection_collections)[:schools]
-    assert_nil   assigns(:group_selection_collections)[:groups]
-
-    # district, no occasion
-    district = districts.first
-    session[:group_selection][:district_id] = district.id
-    get :test_load_group_selection_collections
-    assert_equal districts,                        assigns(:group_selection_collections)[:districts]
-    assert_equal district.schools.sort_by(&:name), assigns(:group_selection_collections)[:schools]
-    assert_nil   assigns(:group_selection_collections)[:groups]
-
-    # school, no occasion
-    school = district.schools.second
-    session[:group_selection][:school_id] = school.id
-    get :test_load_group_selection_collections
-    assert_equal districts,                        assigns(:group_selection_collections)[:districts]
-    assert_equal district.schools.sort_by(&:name), assigns(:group_selection_collections)[:schools]
-    assert_equal school.groups.sort_by(&:name),    assigns(:group_selection_collections)[:groups]
-
-    # occasion setup
-    group = school.groups.second
-    occasion = create(:occasion)
-    occasion.event.ticket_state = :alloted_group
-    create(:ticket, event: occasion.event, group: group, district: district, state: :unbooked)
-
-    # no selection, occasion
-    session[:group_selection] = nil
-    get :test_load_group_selection_collections, occasion_id: occasion.id
-    assert_equal({},         session[:group_selection])
-    assert_equal [district], assigns(:group_selection_collections)[:districts]
-    assert_nil   assigns(:group_selection_collections)[:schools]
-    assert_nil   assigns(:group_selection_collections)[:groups]
-
-    # district, occasion
-    session[:group_selection][:district_id] = district.id
-    get :test_load_group_selection_collections, occasion_id: occasion.id
-    assert_equal [district], assigns(:group_selection_collections)[:districts]
-    assert_equal [school],   assigns(:group_selection_collections)[:schools]
-    assert_nil   assigns(:group_selection_collections)[:groups]
-
-    # school, occasion
-    session[:group_selection][:school_id] = school.id
-    get :test_load_group_selection_collections, occasion_id: occasion.id
-    assert_equal [district], assigns(:group_selection_collections)[:districts]
-    assert_equal [school],   assigns(:group_selection_collections)[:schools]
-    assert_equal [group],    assigns(:group_selection_collections)[:groups]
-  end
   test "sort order" do
     get :test_sort_order, default: "foo"
     assert_equal "foo ASC", @response.body
@@ -134,6 +73,8 @@ class ApplicationProxyControllerTest < ActionController::TestCase
   end
   test "current user" do
     user = create(:user)
+    get :test_current_user
+    assert_nil assigns(:result)
     session[:current_user_id] = user.id
     get :test_current_user
     assert_equal user, assigns(:result)

@@ -2,7 +2,7 @@
 # event
 class AllotmentController < ApplicationController
 
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :require_admin
@@ -11,7 +11,11 @@ class AllotmentController < ApplicationController
   # Intializing view for the allotment process, displays a form
   # for allotment parameters
   def init
-    @districts = District.order("name ASC")
+    if @event.school_types.blank?
+      @districts = District.order("name ASC")
+    else
+      @districts = @event.school_type_districts
+    end
   end
 
   # Stores the allotment parameters in the session and redirects
@@ -108,7 +112,6 @@ class AllotmentController < ApplicationController
 
   # Renders a view for distributing the tickets
   def distribute
-    load_group_selection_collections()
     @districts = load_working_districts()
 
     if session[:allotment][:extra_groups]
@@ -200,7 +203,7 @@ class AllotmentController < ApplicationController
 
   # Completely removes an allotment from an event
   def destroy
-    @event.allotments.clear
+    @event.allotments.collect(&:destroy)
 
     session[:allotment] = nil
 
@@ -221,6 +224,8 @@ class AllotmentController < ApplicationController
   def load_working_districts
     if session[:allotment][:district_ids]
       return District.order("name ASC").find(session[:allotment][:district_ids])
+    elsif !@event.school_types.blank?
+      return @event.school_type_districts
     else
       return District.order("name ASC")
     end

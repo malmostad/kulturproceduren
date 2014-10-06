@@ -23,9 +23,6 @@ class UserTest < ActiveSupport::TestCase
     user = build(:user, password: "foo", password_confirmation: "bar")
     assert !user.valid?
     assert user.errors.include?(:password_confirmation), user.errors.to_yaml
-    user = build(:user, district_ids: nil)
-    assert !user.valid?
-    assert user.errors.include?(:district_ids)
   end
 
   test "groups by occasion" do
@@ -48,14 +45,14 @@ class UserTest < ActiveSupport::TestCase
 
   test "filter" do
     districts = create_list(:district, 3)
-    create(:user, districts: districts,          username: "zap",  name: "depa")
-    create(:user, districts: districts,          username: "foo",  name: "apa")
-    create(:user, districts: districts,          username: "bazq", name: "cepa")
-    create(:user, districts: districts,          username: "barq", name: "bepa")
-    create(:user, districts: [districts.second], username: "zab",  name: "gepaq")
-    create(:user, districts: [districts.second], username: "paz",  name: "hepa")
-    create(:user, districts: [districts.first],  username: "rab",  name: "fepaq")
-    create(:user, districts: [districts.first],  username: "oof",  name: "epa")
+    create(:user, username: "zap",  name: "depa")
+    create(:user, username: "foo",  name: "apa")
+    create(:user, username: "bazq", name: "cepa")
+    create(:user, username: "barq", name: "bepa")
+    create(:user, username: "zab",  name: "gepaq")
+    create(:user, username: "paz",  name: "hepa")
+    create(:user, username: "rab",  name: "fepaq")
+    create(:user, username: "oof",  name: "epa")
 
     old_per_page = User.per_page
     User.per_page = 3
@@ -68,11 +65,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "fepaq", users.third.name
 
     User.per_page = old_per_page
-
-    # District
-    users = User.filter({ district_id: districts.first.id }, 1, "name asc")
-    assert_equal 6, users.length
-    users.each { |u| assert u.districts.exists?(id: districts.first.id) }
 
     # Name
     users = User.filter({ name: "q" }, 1, "name asc")
@@ -97,11 +89,6 @@ class UserTest < ActiveSupport::TestCase
 
   test "get_username" do
     user = create(:user, username: "username")
-
-    assert_equal "username", user.get_username
-
-    APP_CONFIG.replace(ldap: { username_prefix: "ldap_" })
-    user.username = "ldap_username"
     assert_equal "username", user.get_username
   end
 
@@ -218,10 +205,6 @@ class UserTest < ActiveSupport::TestCase
 
   test "username unique" do
     user = create(:user, username: "username")
-
     assert !build(:user, username: "username").valid?
-
-    APP_CONFIG.replace(salt_length: 10, ldap: { username_prefix: "ldap_" })
-    assert !build(:user, username: "ldap_username").valid?
   end
 end

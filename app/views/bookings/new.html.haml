@@ -1,0 +1,18 @@
+- content_for(:page_title) do
+  Boka platser för
+  = link_to @occasion.event.name, @occasion.event
+  %span.subtitle
+    Föreställningen
+    = @occasion.date
+    kl
+    = "#{l(@occasion.start_time, format: :only_time)} - #{l(@occasion.stop_time, format: :only_time)}"
+
+%main.with-aside
+  = group_selection_form occasion: @occasion,
+    school_search_path: search_occasion_schools_path(@occasion),
+    notification_request_hint: true
+
+  #booking-form{data: { occasion: { id: @occasion.id }, form: { path: form_bookings_path }}}
+    = render partial: "form" if @group
+
+= render partial: "menu"

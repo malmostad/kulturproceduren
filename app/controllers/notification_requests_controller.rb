@@ -1,6 +1,6 @@
 # Controller for managing notification requests
 class NotificationRequestsController < ApplicationController
-  layout "standard"
+  layout "application"
 
   before_filter :load_event
   before_filter :require_booker
@@ -11,8 +11,7 @@ class NotificationRequestsController < ApplicationController
 
     case @event.ticket_state
     when :alloted_group, :alloted_district
-      load_group_selection_collections()
-      @notification_request.group_id = session[:group_selection][:group_id]
+      @notification_request.group_id = session[:group_selection][:group_id] if session[:group_selection]
     when :free_for_all
       if NotificationRequest.unbooking_for(current_user, @event)
         flash[:warning] = "Du är redan registrerad för restplatser på detta evenemang"

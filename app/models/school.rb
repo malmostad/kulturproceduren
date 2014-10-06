@@ -1,6 +1,8 @@
 # Model for schools. A schools belongs to a district and has many groups within it.
 class School < ActiveRecord::Base
-  
+
+  has_paper_trail
+
   has_many :groups, dependent: :destroy do
     def find_by_age_span(from, to)
       where("id in (select g.id from age_groups ag left join groups g on ag.group_id = g.id where age between ? and ? and g.active = ?)", from, to, true)
@@ -16,11 +18,12 @@ class School < ActiveRecord::Base
     :extens_id
 
   belongs_to :district
+  has_one :school_type, through: :district
 
   validates_presence_of :name,
     message: "Namnet får inte vara tomt"
   validates_presence_of :district,
-    message: "Skolan måste tillhöra en stadsdel"
+    message: "Skolan måste tillhöra ett område"
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups
@@ -52,4 +55,14 @@ class School < ActiveRecord::Base
       .order("schools.name ASC")
   end
 
+
+  # Scopes to schools belong to a school type which is active
+  def self.active
+    includes(:school_type).where("school_types.active = ?", true).references(:school_type)
+  end
+
+  # Scopes by name using ilike
+  def self.name_search(name_query)
+    where([ "schools.name ilike ?", name_query ])
+  end
 end

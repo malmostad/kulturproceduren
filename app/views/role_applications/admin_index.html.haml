@@ -1,0 +1,33 @@
+- content_for(:page_title) do
+  Obesvarade behörighetsansökningar
+
+%main.admin.with-aside
+  - if !@role_applications.blank?
+    %table
+      %thead
+        %tr
+          %th= sort_link "Typ", "role"
+          %th Meddelande
+          %th= sort_link "Inskickad", "created_at"
+          %th= sort_link "Inskickad av", "user"
+          %th
+      %tbody
+        - @role_applications.each do |role_application|
+          %tr
+            %td= type_string(role_application)
+            %td= role_application.message
+            %td= l role_application.created_at, format: :short
+            %td= role_application.user.name
+            %td
+              = link_to "Besvara",
+                edit_role_application_path(role_application),
+                class: "btn btn-default"
+
+    = will_paginate @role_applications
+
+  - else
+    .success.no-hits Det finns inga nya ansökningar
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

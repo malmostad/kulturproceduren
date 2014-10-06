@@ -23,18 +23,17 @@ class DistrictsControllerTest < ActionController::TestCase
     assert_equal    district, assigns(:district)
   end
 
+  test "history" do
+    district = create(:district)
+    get :history, id: district.id
+    assert_response :success
+    assert_equal    district, assigns(:district)
+  end
+
   test "new" do
     get :new
     assert_response :success
     assert          assigns(:district).new_record?
-  end
-
-  test "edit" do
-    district = create(:district)
-    get :edit, id: district.id
-    assert_response :success
-    assert_template "districts/new"
-    assert_equal    district, assigns(:district)
   end
 
   test "create" do
@@ -45,10 +44,11 @@ class DistrictsControllerTest < ActionController::TestCase
     assert          assigns(:district).new_record?
     assert          !assigns(:district).valid?
 
-    # Invalid
-    post :create, district: { name: "zomg" }
+    # Valid
+    school_type = create(:school_type)
+    post :create, district: { name: "zomg", school_type_id: school_type.id }
     assert_redirected_to assigns(:district)
-    assert_equal         "Stadsdelen skapades.", flash[:notice]
+    assert_equal         "Området skapades.", flash[:notice]
     assert_equal         "zomg", District.find(assigns(:district).id).name
   end
 
@@ -58,14 +58,14 @@ class DistrictsControllerTest < ActionController::TestCase
     # Invalid
     put :update, id: district.id, district: { name: "" }
     assert_response :success
-    assert_template "districts/new"
+    assert_template "districts/show"
     assert_equal    district, assigns(:district)
     assert          !assigns(:district).valid?
 
     # Invalid
     put :update, id: district.id, district: { name: "zomg" }
     assert_redirected_to district
-    assert_equal         "Stadsdelen uppdaterades.", flash[:notice]
+    assert_equal         "Området uppdaterades.", flash[:notice]
 
     district.reload
     assert_equal "zomg", district.name
@@ -75,7 +75,7 @@ class DistrictsControllerTest < ActionController::TestCase
     district = create(:district)
     delete :destroy, id: district.id
     assert_redirected_to districts_url()
-    assert_equal         "Stadsdelen togs bort.", flash[:notice]
+    assert_equal         "Området togs bort.", flash[:notice]
     assert_nil           District.where(id: district.id).first
   end
 

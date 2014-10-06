@@ -266,7 +266,26 @@ class BookingTest < ActiveSupport::TestCase
   test "find for user" do
     booking = create(:booking)
     create(:booking)
-    assert_equal [booking], Booking.find_for_user(booking.user, 1)
+    assert_equal [booking], Booking.find_for_user(booking.user, {}, 1)
+
+    # Targeted school
+    school = create(:school, name: "zomglol")
+    school_booking = create(:booking, user: booking.user, group: create(:group, school: school))
+
+    # Targeted group
+    group = create(:group, name: "zomglol")
+    group_booking = create(:booking, user: booking.user, group: group)
+
+    # Targeted event
+    event = create(:event, name: "zomglol", ticket_state: :alloted_group, ticket_release_date: Date.today - 1)
+    event_booking = create(:booking, user: booking.user, occasion: create(:occasion, event: event))
+
+    result = Booking.find_for_user(booking.user, { search: "omglo" }, 1)
+
+    assert_equal 3, result.length
+    assert result.include?(school_booking)
+    assert result.include?(group_booking)
+    assert result.include?(event_booking)
   end
 
   test "find for group" do
@@ -308,7 +327,7 @@ class BookingTest < ActiveSupport::TestCase
     )
 
     assert_equal(
-      "Evenemang\tDatum\tAdress\tStadsdel\tSkola\tGrupp\tMedföljande vuxen\tTelefonnummer\tE-postadress\tAntal platser\tResa\tHållplats\n#{booking.occasion.event.name}\t#{booking.occasion.date.strftime("%Y-%m-%d")} #{booking.occasion.start_time.strftime("%H:%M")}\t#{booking.occasion.address}\t#{booking.group.school.district.name}\t#{booking.group.school.name}\t#{booking.group.name}\t#{booking.companion_name}\t#{booking.companion_phone}\t#{booking.companion_email}\t#{booking.total_count}\tTur och retur\tBus stop\n",
+      "Evenemang\tDatum\tAdress\tOmråde\tSkola\tGrupp\tMedföljande vuxen\tTelefonnummer\tE-postadress\tAntal platser\tResa\tHållplats\n#{booking.occasion.event.name}\t#{booking.occasion.date.strftime("%Y-%m-%d")} #{booking.occasion.start_time.strftime("%H:%M")}\t#{booking.occasion.address}\t#{booking.group.school.district.name}\t#{booking.group.school.name}\t#{booking.group.name}\t#{booking.companion_name}\t#{booking.companion_phone}\t#{booking.companion_email}\t#{booking.total_count}\tTur och retur\tBus stop\n",
       Booking.bus_booking_csv([booking])
     )
   end

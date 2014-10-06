@@ -52,6 +52,20 @@ class AnswerFormTest < ActiveSupport::TestCase
     answer_form.answers.each { |a| assert_equal "foo", a.answer_text }
   end
 
+  test "answers_for" do
+    answer_form = create(:answer_form)
+    answer1 = create(:answer, answer_form: answer_form)
+    answer2 = create(:answer, answer_form: answer_form)
+    answer3 = create(:answer, answer_form: answer_form)
+    answer4 = create(:answer, answer_form: answer_form, question: answer3.question)
+
+    answers = answer_form.answers_for(answer3.question)
+
+    assert_equal 2, answers.length
+    assert answers.include?(answer3)
+    assert answers.include?(answer4)
+  end
+
   test "find_overdue" do
     regular    = create(:occasion, date: Date.today - 10)
     wrong_date = create(:occasion, date: Date.today - 5)

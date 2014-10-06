@@ -204,7 +204,7 @@ sv:
       event: evenemanget
       culture_provider: arrangören
       occasion: föreställningen
-      district: stadsdelen
+      district: området
       school: skolan
       group: gruppen
       age_group: åldersgruppen
@@ -231,6 +231,7 @@ sv:
         cost: "Kostnad:"
         further_education: "Fortbildning pedagoger/vuxna"
         map_address: "Kartadress:"
+        school_type_ids: "Skolformer:"
       occasion:
         date: "Datum:"
         seats: "Antal platser:"
@@ -243,6 +244,8 @@ sv:
         map_address: "Kartadress:"
         single_group: "Endast en grupp kan boka denna föreställning"
       district:
+        school_type: "Skolform:"
+        school_type_id: "Skolform:"
         name: "Namn:"
         contacts: "Kontaktadresser:"
         elit_id: "ELIT-ID:"
@@ -250,7 +253,7 @@ sv:
         name: "Namn:"
         contacts: "Kontaktadresser:"
         elit_id: "ELIT-ID:"
-        district_id: "Stadsdel:"
+        district_id: "Område:"
       group:
         name: "Namn:"
         contacts: "Kontaktadresser:"
@@ -284,6 +287,7 @@ sv:
         map_address: "Kartadress:"
       image:
         description: "Bildtext:"
+        file: "Bild:*"
       category:
         name: "Namn:"
         category_group: "Kategorigrupp:"
@@ -306,6 +310,7 @@ sv:
         user_id: "Användare:"
       attachment:
         description: "Beskrivning:"
+        file: "Bild:*"
       companion:
         name: "Namn:"
         email: "Epostadress:"
@@ -324,8 +329,8 @@ sv:
         bus_stop: "Från hållplats:"
         bus_one_way: "Enkel resa"
 
-  helpers:
-    label:
+  simple_form:
+    labels:
       information_mail:
         recipients: "Mottagare:"
         subject: "Ämnesrad:"

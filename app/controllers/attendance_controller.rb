@@ -1,5 +1,5 @@
 class AttendanceController < ApplicationController
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :load_entity

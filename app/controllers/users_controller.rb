@@ -1,19 +1,18 @@
 # Controller for managing users.
 class UsersController < ApplicationController
-  layout :set_layout
+  layout "application"
 
   before_filter :authenticate,
     except: [ :new, :create, :request_password_reset, :send_password_reset_confirmation, :reset_password ]
   before_filter :require_admin,
     only: [ :grant, :revoke, :destroy, :add_culture_provider, :remove_culture_provider ]
   before_filter :load_user,
-    only: [ :edit, :edit_password, :update, :update_password ]
+    only: [ :update, :update_password ]
 
   # Displays a list of users in the system.
   def index
     if current_user.has_role?(:admin, :coordinator)
       @users = User.filter session[:user_list_filter], params[:page], sort_order("username")
-      @districts = District.order("name ASC")
     else
       redirect_to current_user
     end
@@ -23,7 +22,6 @@ class UsersController < ApplicationController
     filter = {}
 
     if !params[:clear]
-      filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
       filter[:name] = params[:name].strip if !params[:name].blank?
 
       session[:user_list_filter] = filter
@@ -39,10 +37,6 @@ class UsersController < ApplicationController
   def show
     if current_user.has_role?(:admin, :coordinator)
       @user = User.find(params[:id])
-
-      if current_user.has_role?(:coordinator)
-        render action: "show_readonly"
-      end
     else
       @user = current_user
     end
@@ -76,28 +70,12 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @districts = District.order(name: :asc)
-  end
-
-  def edit
-    @districts = District.order(name: :asc)
-  end
-
-  # Displays a form for changing a user's password.
-  def edit_password
-    @user.reset_password
   end
 
   def create
     @user = User.new(params[:user])
 
-    if APP_CONFIG[:ldap] && ldap_user_exists(params[:user][:username])
-      @user.valid?
-      @user.errors.add(:username,
-                       :taken,
-                       default: "Användarnamnet är redan taget",
-                       value: params[:user][:username])
-    elsif @user.save
+    if @user.save
       if user_online? && current_user.has_role?(:admin)
         flash[:notice] = 'Användaren skapades. Den kan nu logga in med användarnamn och lösenord.'
         redirect_to(@user)
@@ -109,7 +87,6 @@ class UsersController < ApplicationController
       return
     end
 
-    @districts = District.order("name ASC")
     @user.reset_password
     render action: "new"
   end
@@ -118,50 +95,43 @@ class UsersController < ApplicationController
     @user.name = params[:user][:name]
     @user.email = params[:user][:email]
     @user.cellphone = params[:user][:cellphone]
-    @user.district_ids = params[:user][:district_ids]
 
     if @user.save
       flash[:notice] = 'Användaren uppdaterades.'
       redirect_to(@user)
     else
-      @districts = District.order("name ASC")
-      render action: "edit"
+      render action: "show"
     end
   end
 
   # Updates a user's password. If the user is not an administrator, the user's
   # current password is required in order to change it.
   def update_password
-    if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:current_password])
+    if !(user_online? && current_user.has_role?(:admin)) && !@user.authenticate(params[:user][:current_password])
       flash[:warning] = "Felaktigt lösenord."
-      redirect_to edit_password_user_url(@user)
-      return
     elsif params[:user][:password].blank?
       flash[:warning] = "Lösenordet får inte vara tomt."
-      redirect_to edit_password_user_url(@user)
-      return
     elsif params[:user][:password] != params[:user][:password_confirmation]
       flash[:warning] = "Lösenordsbekräftelsen matchar inte."
-      redirect_to edit_password_user_url(@user)
-      return
-    end
-
-    @user.password = params[:user][:password]
-    @user.password_confirmation = params[:user][:password_confirmation]
-
-    if @user.save
-      flash[:notice] = "Lösenordet uppdaterades."
-      redirect_to action: "index"
     else
-      flash[:warning] = "Ett fel uppstod när lösenordet uppdaterades."
-      redirect_to edit_password_user_url(@user)
+      @user.password = params[:user][:password]
+      @user.password_confirmation = params[:user][:password_confirmation]
+
+      if @user.save
+        flash[:notice] = "Lösenordet uppdaterades."
+      else
+        flash[:warning] = "Ett fel uppstod när lösenordet uppdaterades."
+      end
     end
+
+    redirect_to @user
   end
 
   def destroy
     user = User.find(params[:id])
     user.destroy
 
+    flash[:notice] = "Användaren raderades från Kulturproceduren."
     redirect_to(users_url)
   end
 
@@ -251,24 +221,19 @@ class UsersController < ApplicationController
 
   # Sort users by their username by default.
   def sort_column_from_param(p)
-    return "username" if p.blank?
+    return "name" if p.blank?
 
     case p.to_sym
-    when :name then "name"
+    when :username then "username"
     when :cellphone then "cellphone"
     when :email then "email"
     else
-      "username"
+      "name"
     end
   end
 
 
   private
-
-  # Use the admin layout if the user is an administrator.
-  def set_layout
-    user_online? && current_user.has_role?(:admin) ? "admin" : "standard"
-  end
 
   # Loads the requested user from the database.
   def load_user
@@ -277,16 +242,5 @@ class UsersController < ApplicationController
     else
       @user = current_user
     end
-  end
-
-  # Checks if a username exists in the LDAP.
-  def ldap_user_exists(username)
-    ldap = KPLdapManager.new APP_CONFIG[:ldap][:address],
-      APP_CONFIG[:ldap][:port],
-      APP_CONFIG[:ldap][:base_dn],
-      APP_CONFIG[:ldap][:bind][:dn],
-      APP_CONFIG[:ldap][:bind][:password]
-
-    return !ldap.get_user(username).nil?
   end
 end

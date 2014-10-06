@@ -1,0 +1,47 @@
+- content_for(:page_title) do
+  Hantera filer för
+  = link_to @event.name, @event
+
+%main
+  %nav.return
+    = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  %section.box.context-form
+    %h1.box-title Ladda upp dokument
+    .box-content
+      = simple_form_for @attachment, url: event_attachments_path(@event), html: { class: "basic", multipart: true } do |f|
+        = f.error_notification class: "warning"
+
+        = f.input :description
+        = f.input :file, as: :file
+
+        .form-group
+          %span.control-label
+          .controls
+            = f.submit "Ladda upp", class: "btn btn-primary"
+
+  = render partial: "events/administration_menu", locals: { event: @event }
+
+  - unless @event.attachments.blank?
+    %table
+      %thead
+        %tr
+          %th Filnamn
+          %th Beskrivning
+          %th
+
+      %tbody
+        - @event.attachments.each do |attachment|
+          %tr
+            %td= attachment.filename
+            %td= attachment.description
+            %td
+              .btn-group
+                = link_to "Ladda ner",
+                  event_attachment_path(@event, attachment),
+                  class: "btn btn-default btn-sm"
+                = link_to "Ta bort",
+                  event_attachment_path(@event, attachment),
+                  method: :delete,
+                  class: "btn btn-danger btn-sm",
+                  data: { confirm: "Är du säker?" }

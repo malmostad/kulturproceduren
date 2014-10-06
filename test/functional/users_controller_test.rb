@@ -10,27 +10,22 @@ class UsersControllerTest < ActionController::TestCase
   test "load user" do
     user = create(:user)
     session[:current_user_id] = user.id
-    get :edit, id: @admin.id
+    get :show, id: @admin.id
     assert_equal user, assigns(:user)
   end
 
   test "index for admin" do
     session[:current_user_id] = @admin.id
-    districts                 = [create_list(:district, 3), @admin.districts].flatten.sort_by(&:name)
-
     get :index
     assert_response :success
-    assert_equal    districts, assigns(:districts)
     assert_equal    [@admin],  assigns(:users)
   end
   test "index for coordinator" do
     coordinator               = create(:user, roles: [roles(:coordinator)])
     session[:current_user_id] = coordinator.id
-    districts                 = [create_list(:district, 3), @admin.districts, coordinator.districts].flatten.sort_by(&:name)
 
     get :index
     assert_response :success
-    assert_equal    districts,                                  assigns(:districts)
     assert_equal    [@admin, coordinator].sort_by(&:username),  assigns(:users)
   end
   test "index for others" do
@@ -43,9 +38,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test "apply filter" do
     session[:user_list_filter] = nil
-    post :apply_filter, district_id: "10", name: "name"
+    post :apply_filter,  name: "name"
     assert_redirected_to users_url()
-    assert_equal(        { district_id: 10, name: "name" }, session[:user_list_filter])
+    assert_equal(        { name: "name" }, session[:user_list_filter])
 
     session[:user_list_filter] = nil
     post :apply_filter
@@ -53,12 +48,12 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal(        {}, session[:user_list_filter])
 
     session[:user_list_filter] = nil
-    post :apply_filter, district_id: "-1", name: ""
+    post :apply_filter,  name: ""
     assert_redirected_to users_url()
     assert_equal(        {}, session[:user_list_filter])
 
-    session[:user_list_filter] = { district_id: 10, name: "name"}
-    post :apply_filter, district_id: "21", name: "name2", clear: true
+    session[:user_list_filter] = { name: "name"}
+    post :apply_filter,  name: "name2", clear: true
     assert_redirected_to users_url()
     assert_equal(        {}, session[:user_list_filter])
   end
@@ -71,17 +66,6 @@ class UsersControllerTest < ActionController::TestCase
     get :show, id: user.id
     assert_response :success
     assert_template "users/show"
-    assert_equal    user, assigns(:user)
-  end
-  test "show for coordinator" do
-    coordinator               = create(:user, roles: [roles(:coordinator)])
-    session[:current_user_id] = coordinator.id
-
-    user = create(:user)
-
-    get :show, id: user.id
-    assert_response :success
-    assert_template "users/show_readonly"
     assert_equal    user, assigns(:user)
   end
   test "show for others" do
@@ -129,45 +113,18 @@ class UsersControllerTest < ActionController::TestCase
   test "new" do
     @controller.unstub(:authenticate)
 
-    districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
-    
     get :new
     assert_response :success
     assert          assigns(:user).new_record?
-    assert_equal    districts, assigns(:districts)
   end
 
-  test "edit" do
-    session[:current_user_id] = @admin.id
-
-    districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
-    user      = create(:user, districts: [districts.second])
-    
-    get :edit, id: user.id
-    assert_response :success
-    assert_equal    user,      assigns(:user)
-    assert_equal    districts, assigns(:districts)
-  end
-
-  test "edit password" do
-    user                      = create(:user)
-    session[:current_user_id] = user.id
-    
-    get :edit_password, id: user.id
-    assert_response :success
-    assert_equal    user, assigns(:user)
-    assert_nil      assigns(:user).password
-    assert_nil      assigns(:user).password_confirmation
-  end
 
   test "create, normal user" do
     @controller.unstub(:authenticate)
-    districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
 
     # Invalid
     post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
     assert_response :success
-    assert_equal    districts, assigns(:districts)
     assert          assigns(:user).new_record?
     assert          !assigns(:user).valid?
     assert_nil      assigns(:user).password
@@ -175,7 +132,6 @@ class UsersControllerTest < ActionController::TestCase
 
     # Valid
     user_attributes = attributes_for(:user)
-    user_attributes[:district_ids] = user_attributes.delete(:districts).map(&:id)
 
     post :create, user: user_attributes
     assert_redirected_to controller: "login"
@@ -186,12 +142,10 @@ class UsersControllerTest < ActionController::TestCase
     session[:current_user_id] = @admin.id
 
     @controller.unstub(:authenticate)
-    districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
 
     # Invalid
     post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
     assert_response :success
-    assert_equal    districts, assigns(:districts)
     assert          assigns(:user).new_record?
     assert          !assigns(:user).valid?
     assert_nil      assigns(:user).password
@@ -199,40 +153,20 @@ class UsersControllerTest < ActionController::TestCase
 
     # Valid
     user_attributes = attributes_for(:user)
-    user_attributes[:district_ids] = user_attributes.delete(:districts).map(&:id)
 
     post :create, user: user_attributes
     assert_redirected_to User.last
     assert_equal         "Användaren skapades. Den kan nu logga in med användarnamn och lösenord.", flash[:notice]
   end
-  test "create, ldap username taken" do
-    APP_CONFIG.replace(salt_length: 4, ldap: { username_prefix: "ldap_" })
-
-    @controller.unstub(:authenticate)
-    districts = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
-
-    @controller.expects(:ldap_user_exists).with("foo").returns false
-
-    post :create, user: { username: "foo", password: "foo", password_confirmation: "bar" }
-
-    assert_response :success
-    assert_equal    districts, assigns(:districts)
-    assert          assigns(:user).new_record?
-    assert          !assigns(:user).valid?
-    assert_nil      assigns(:user).password
-    assert_nil      assigns(:user).password_confirmation
-  end
 
   test "update" do
-    districts                 = [@admin.districts, create_list(:district, 3)].flatten.sort_by(&:name)
-    user                      = create(:user, username: "old_username", name: "old name", districts: @admin.districts)
+    user                      = create(:user, username: "old_username", name: "old name")
     session[:current_user_id] = user.id
 
     # Invalid
     put :update, id: user.id, user: { name: ""}
     assert_response :success
-    assert_template "users/edit"
-    assert_equal    districts, assigns(:districts)
+    assert_template "users/show"
     assert_equal    user,      assigns(:user)
 
     # Valid
@@ -242,8 +176,7 @@ class UsersControllerTest < ActionController::TestCase
         name: "new name",
         username: "new_username",
         email: "a@b.com",
-        cellphone: "123",
-        district_ids: user.districts.collect(&:id)
+        cellphone: "123"
       }
     )
     assert_redirected_to user
@@ -257,23 +190,23 @@ class UsersControllerTest < ActionController::TestCase
     session[:current_user_id] = user.id
 
     # Wrong current password
-    put :update_password, id: user.id, current_password: "bar", user: { password: "bar", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    patch :update_password, id: user.id, user: { current_password: "bar", password: "bar", password_confirmation: "baz" }
+    assert_redirected_to user
     assert_equal         "Felaktigt lösenord.", flash[:warning]
 
     # Empty password
-    put :update_password, id: user.id, current_password: "foo", user: { password: "", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    patch :update_password, id: user.id, user: { current_password: "foo", password: "", password_confirmation: "baz" }
+    assert_redirected_to user
     assert_equal         "Lösenordet får inte vara tomt.", flash[:warning]
 
     # Confirmation not matching password
-    put :update_password, id: user.id, current_password: "foo", user: { password: "bar", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    patch :update_password, id: user.id, user: { current_password: "foo", password: "bar", password_confirmation: "baz" }
+    assert_redirected_to user
     assert_equal         "Lösenordsbekräftelsen matchar inte.", flash[:warning]
 
     # OK
-    put :update_password, id: user.id, current_password: "foo", user: { password: "bar", password_confirmation: "bar" }
-    assert_redirected_to action: "index"
+    patch :update_password, id: user.id, user: { current_password: "foo", password: "bar", password_confirmation: "bar" }
+    assert_redirected_to user
     assert_equal         "Lösenordet uppdaterades.", flash[:notice]
   end
   test "update password, admin" do
@@ -282,17 +215,17 @@ class UsersControllerTest < ActionController::TestCase
 
     # Empty password
     put :update_password, id: user.id, user: { password: "", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    assert_redirected_to user
     assert_equal         "Lösenordet får inte vara tomt.", flash[:warning]
 
     # Confirmation not matching password
     put :update_password, id: user.id, user: { password: "bar", password_confirmation: "baz" }
-    assert_redirected_to edit_password_user_url(user)
+    assert_redirected_to user
     assert_equal         "Lösenordsbekräftelsen matchar inte.", flash[:warning]
 
     # OK
     put :update_password, id: user.id, user: { password: "bar", password_confirmation: "bar" }
-    assert_redirected_to action: "index"
+    assert_redirected_to user
     assert_equal         "Lösenordet uppdaterades.", flash[:notice]
   end
 

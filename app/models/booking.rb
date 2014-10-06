@@ -88,9 +88,12 @@ class Booking < ActiveRecord::Base
   end
 
 
-  def self.find_for_user(user, page)
-    self.includes(:occasion)
-      .where(user_id: user.id)
+  def self.find_for_user(user, filter, page)
+    conditions = [ "bookings.user_id = ?", user.id ]
+    apply_filter(conditions, filter)
+
+    self.includes(occasion: :event, group: :school)
+      .where(conditions[0], *conditions[1..-1])
       .order("occasions.date desc, group_id desc")
       .paginate(page: page)
   end
@@ -117,7 +120,6 @@ class Booking < ActiveRecord::Base
     conditions = [ "occasions.id = ?", occasion_id ]
     apply_filter(conditions, filter)
 
-
     self.includes(:occasion, group: :school)
       .where(conditions[0], *conditions[1..-1])
       .order("schools.name, groups.name desc")
@@ -132,7 +134,7 @@ class Booking < ActiveRecord::Base
       Evenemang
       Datum
       Adress
-      Stadsdel
+      Område
       Skola
       Grupp
       Medföljande\ vuxen
@@ -227,6 +229,13 @@ class Booking < ActiveRecord::Base
       if !filter[:unbooked]
         conditions[0] << " and unbooked = ? "
         conditions << false
+      end
+
+      if !filter[:search].blank?
+        conditions[0] << " and (schools.name ilike ? or groups.name ilike ? or events.name ilike ?) "
+        conditions << "%#{filter[:search]}%"
+        conditions << "%#{filter[:search]}%"
+        conditions << "%#{filter[:search]}%"
       end
     end
   end

@@ -1,0 +1,42 @@
+- if bookings.blank?
+  .warning.no-hits Inga bokningar hittades.
+
+- else
+  %table
+    %thead
+      %tr
+        %th
+          Skola
+          %br
+          Klass/avdelning
+        %th Evenemang
+        %th Datum
+        %th Antal platser
+        %th Bokad av
+        %th
+    %tbody
+      - bookings.each do |booking|
+        %tr{class: "#{"cancelled" if booking.occasion.cancelled}"}
+          %td
+            = booking.group.school.name
+            %br
+            = booking.group.name
+          %td= link_to booking.occasion.event.name, booking.occasion.event
+          %td= booking.occasion.date
+          %td
+            - if booking.unbooked
+              Avbokad
+              = booking.unbooked_at.to_date
+            - else
+              = booking.total_count
+              platser bokade
+          %td= booking.user.name
+          %td
+            = link_to "Bokningsbekräftelse", booking_path(booking)
+            - if !booking.unbooked && !booking.occasion.cancelled && booking.occasion.date >= Date.today
+              %br
+              = link_to "Ändra bokning", edit_booking_path(booking)
+              %br
+              = link_to "Avboka", unbook_booking_path(booking)
+
+  - will_paginate bookings

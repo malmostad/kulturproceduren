@@ -1,7 +1,7 @@
 # Controller for managing bookings
 class BookingsController < ApplicationController
 
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :require_admin, only: :bus
@@ -22,12 +22,14 @@ class BookingsController < ApplicationController
 
     if params[:occasion_id]
       @districts = District.order("name asc")
+      @occasion = Occasion.find(params[:occasion_id])
       @bookings = Booking.find_for_occasion(params[:occasion_id], session[:booking_list_filter], params[:page])
     elsif params[:event_id]
       @districts = District.order("name asc")
+      @event = Event.find(params[:event_id])
       @bookings = Booking.find_for_event(params[:event_id], session[:booking_list_filter], params[:page])
     else
-      @bookings = Booking.active.find_for_user(current_user, params[:page])
+      @bookings = Booking.active.find_for_user(current_user, session[:booking_list_filter], params[:page])
     end
   end
 
@@ -47,8 +49,12 @@ class BookingsController < ApplicationController
   # Applies a filter for the occasion booking list
   def apply_filter
     filter = {}
-    filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
-    filter[:unbooked] = !params[:unbooked].blank?
+
+    if params[:filter]
+      filter[:district_id] = params[:district_id].to_i if !params[:district_id].blank? && params[:district_id].to_i > 0
+      filter[:unbooked] = !params[:unbooked].blank?
+      filter[:search] = params[:search] if !params[:search].blank?
+    end
 
     session[:booking_list_filter] = filter
 
@@ -56,13 +62,14 @@ class BookingsController < ApplicationController
       redirect_to occasion_bookings_url(params[:occasion_id])
     elsif params[:event_id]
       redirect_to event_bookings_url(params[:event_id])
+    else
+      redirect_to bookings_url
     end
   end
 
   # Displays bookings by group
   def group
     load_group()
-    load_group_selection_collections()
     
     if @group
       @bookings = Booking.active.find_for_group(@group, params[:page])
@@ -111,7 +118,6 @@ class BookingsController < ApplicationController
   def new
     @occasion = Occasion.find(params[:occasion_id])
     load_group()
-    load_group_selection_collections(@occasion)
 
     if @group
       @booking = Booking.active.where(group_id: @group.id, occasion_id: @occasion.id).first
@@ -160,8 +166,6 @@ class BookingsController < ApplicationController
       flash[:notice] = "Platserna bokades."
       redirect_to booking_url(@booking)
     else
-      load_group_selection_collections(@occasion)
-
       render action: "new"
     end
   end
@@ -171,8 +175,6 @@ class BookingsController < ApplicationController
     @group = @booking.group
     @occasion = @booking.occasion
     @is_edit = true
-
-    load_group_selection_collections(@occasion)
 
     render action: "new"
   end
@@ -200,10 +202,7 @@ class BookingsController < ApplicationController
       redirect_to booking_url(@booking)
     else
       @is_edit = true
-
       @group = @booking.group
-      load_group_selection_collections(@occasion)
-
       render action: "new"
     end
   end
@@ -216,18 +215,12 @@ class BookingsController < ApplicationController
 
   # Unbooks a booking
   def destroy
-    if params[:commit] == "Avbryt"
-      redirect_to booking_url(@booking)
-      return
-    end
-
     @occasion = @booking.occasion
     @questionnaire = Questionnaire.find_unbooking
 
     unless @questionnaire.questions.empty?
       @answer = params[:answer] || {}
       @answer_form = AnswerForm.new do |a|
-        a.booking = @booking
         a.occasion = @occasion
         a.group = @booking.group
         a.questionnaire = @questionnaire
@@ -240,7 +233,11 @@ class BookingsController < ApplicationController
     end
 
     @booking.unbook!(current_user)
-    @answer_form.answer(@answer) if @answer_form
+
+    if @answer_form
+      @answer_form.booking = @booking
+      @answer_form.answer(@answer) if @answer_form
+    end
 
     notify_admins_of_unbooking(@booking, @answer_form)
     notify_requests_of_unbooking(@booking.event)

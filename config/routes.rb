@@ -8,10 +8,10 @@ Kulturproceduren::Application.routes.draw do
       post :send_password_reset_confirmation
     end
     member do
-      get  :edit_password
-      put  :update_password
-      post :add_culture_provider
-      get  :reset_password
+      get   :edit_password
+      patch :update_password
+      post  :add_culture_provider
+      get   :reset_password
     end
 
   end
@@ -60,6 +60,7 @@ Kulturproceduren::Application.routes.draw do
       patch :next_transition
     end
 
+    resources :occasions,             only: [:index]
     resources :images,                except: [:show, :edit, :update, :new]
     resources :attachments,           except: [:edit, :update, :new]
     resources :notification_requests, only: [:new, :create] do
@@ -119,6 +120,12 @@ Kulturproceduren::Application.routes.draw do
         get :report
       end
     end
+    resources :schools, only: [] do
+      collection do
+        get :search
+        post :search
+      end
+    end
   end
 
   resources :bookings, except: [:new] do
@@ -126,6 +133,7 @@ Kulturproceduren::Application.routes.draw do
       get :group_list
       get :group
       get :form
+      post :apply_filter
     end
     member do
       get :unbook
@@ -147,7 +155,17 @@ Kulturproceduren::Application.routes.draw do
   resources :questions,       except: [:show, :new]
   resources :categories,      except: [:show, :new]
   resources :category_groups, except: [:show, :new]
+
+  resources :versions, only: [] do
+    member do
+      put :revert
+    end
+  end
+
   resources :districts do
+    member do
+      get :history
+    end
     collection do
       get  :select
       post :select
@@ -155,14 +173,22 @@ Kulturproceduren::Application.routes.draw do
   end
 
   resources :schools do
+    member do
+      get :history
+    end
     collection do
       get  :select
       post :select
+      get  :search
+      post :search
       get  :options_list
     end
   end
 
   resources :groups do
+    member do
+      get :history
+    end
     collection do
       get  :select
       post :select
@@ -191,8 +217,5 @@ Kulturproceduren::Application.routes.draw do
   match "users/:id/grant/:role" => "users#grant", as: :grant_role, via: [:get, :post]
   match "users/:id/revoke/:role" => "users#revoke", as: :revoke_role, via: [:get, :post]
   match "users/:id/remove_culture_provider/:culture_provider_id" => "users#remove_culture_provider", as: :remove_culture_provider_user, via: [:get, :post]
-  match "ldap/" => "ldap#index", as: :ldap, via: [:get, :post]
-  match "ldap/search" => "ldap#search", as: :ldap_search, via: [:get, :post]
-  match "ldap/handle/:username" => "ldap#handle", as: :ldap_handle, via: [:get, :post]
   match "/:controller(/:action(/:id))", via: [:get, :post]
 end

@@ -4,14 +4,16 @@ namespace :kp do
 
     desc "Creates a group structure (district/school/group/age group) from demo/group_structure.yml"
     task(create_group_structure: :environment) do
+      school_type = SchoolType.find_or_create_by!(name: "Gamla stadsdelar")
+
       YAML.load_file("#{Rails.root}/demo/group_structure.yml").each do |district_name, schools|
 
         puts "District \"#{district_name}\""
-        district = District.find_or_create_by_name(district_name)
+        district = District.create_with(school_type: school_type).find_or_create_by!(name: district_name)
 
         schools.each do |school_name, classes|
           puts "\tSchool \"#{school_name}\""
-          school = School.find_or_initialize_by_name(
+          school = School.find_or_initialize_by(
             name: school_name,
             district: district
           )
@@ -84,7 +86,7 @@ namespace :kp do
     task(create_categories: :environment) do
       YAML.load_file("#{Rails.root}/demo/categories.yml").each do |group_name, category_names|
         puts "Group: #{group_name}"
-        group = CategoryGroup.find_or_create_by_name(group_name)
+        group = CategoryGroup.find_or_create_by(name: group_name)
 
         group.categories.clear
 

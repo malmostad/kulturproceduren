@@ -51,13 +51,13 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "show description" do
     assert_equal "", show_description(nil)
-    assert_equal paragraphize("abc\ndef\n\nghi", 'class="description"'), show_description("abc\ndef\n\nghi")
+    assert_equal paragraphize("abc\ndef\n\nghi"), show_description("abc\ndef\n\nghi")
     self.expects(:sanitize).with(
       "<p>foo</p>",
       tags: %w(a b strong i em span p ul ol li h1 h2 h3 h4 h5 h6 blockquote),
       attributes: %w(href target title style)
     ).returns("ok_value")
-    assert_equal '<div class="description">ok_value</div>', show_description("<p>foo</p>")
+    assert_equal "ok_value", show_description("<p>foo</p>")
   end
 
   def link_to_unless(condition, title, url)
@@ -118,4 +118,106 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal "vt2010", to_term(Date.new(2010, 1, 1))
   end
 
+  test "group_selection_form, no arguments, no state" do
+    request = stub(
+      path_parameters: { controller: "booking" },
+      query_parameters: { action: "new" }
+    )
+    self.stubs(:request).returns(request)
+
+    group_selection_form()
+
+    assert_select "form", 2
+    assert_select "#group-selection-group option", 0
+    assert_select "#group-selection-group[disabled]", 1
+    assert_select "[name=return_to][value=/booking/new]", 2
+    assert_select "[data-search-path=/schools/search]", 1
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, return_to, no state" do
+    group_selection_form(return_to: "/foo/bar")
+
+    assert_select "form", 2
+    assert_select "#group-selection-group option", 0
+    assert_select "#group-selection-group[disabled]", 1
+    assert_select "[name=return_to][value=/foo/bar]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, school_search_path, no state" do
+    group_selection_form(return_to: "/foo", school_search_path: "/foo/bar")
+    assert_select "[data-search-path=/foo/bar]", 1
+  end
+  test "group_selection_form, notification_request_hint, no state" do
+    occasion = create(:occasion)
+    group_selection_form(return_to: "/foo", notification_request_hint: true, occasion: occasion)
+    assert_select "p.help-block", 1
+    assert_select "p.help-block a[href=/events/#{occasion.event_id}/notification_requests/new]"
+  end
+  test "group_selection_form, select_button, no state" do
+    occasion = create(:occasion)
+    group_selection_form(return_to: "/foo", select_button: "select_button", occasion: occasion)
+    assert_select "button.select-group", 1
+  end
+
+  test "group_selection_form, return_to, school selected" do
+    group = create(:group)
+    session[:group_selection] = {
+      school_id: group.school.id,
+      school_name: group.school.name
+    }
+
+    group_selection_form(return_to: "/")
+
+    assert_select "form", 2
+    assert_select "#group-selection-group option", 1+1 # Blank entry and one group
+    assert_select "#group-selection-group[disabled]", 0
+    assert_select "#group-selection-group option[selected]", 0
+    assert_select "[name=return_to][value=/]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, return_to, group selected" do
+    group = create(:group)
+    session[:group_selection] = {
+      school_id: group.school.id,
+      school_name: group.school.name,
+      group_id: group.id
+    }
+
+    group_selection_form(return_to: "/")
+
+    assert_select "form", 2
+    assert_select "#group-selection-group option", 1+1 # Blank entry and one group
+    assert_select "#group-selection-group[disabled]", 0
+    assert_select "#group-selection-group option[selected]", { count: 1, text: group.name }
+    assert_select "[name=return_to][value=/]", 2
+    assert_select "[name=occasion_id]", 0
+  end
+
+  test "group_selection_form, occasion allotted to group, group selected" do
+    group1 = create(:group)
+    group2 = create(:group, school: group1.school)
+
+    occasion = create(:occasion, seats: 2)
+    event = occasion.event
+
+    create_list(:ticket, 1, group: group1, district: group1.school.district, event: event, state: :unbooked)
+
+    session[:group_selection] = {
+      school_id: group1.school.id,
+      school_name: group1.school.name,
+      group_id: group1.id
+    }
+
+    group_selection_form(occasion: occasion, return_to: "/")
+
+    assert_select "form", 2
+    assert_select "#group-selection-group option", 1+1 # Blank entry and one group
+    assert_select "#group-selection-group[disabled]", 0
+    assert_select "#group-selection-group option[selected]", { count: 1, text: "#{group1.name} (1 platser)" }
+    assert_select "[name=return_to][value=/]", 2
+    assert_select "[name=occasion_id]", 2
+  end
 end

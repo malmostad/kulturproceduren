@@ -1,9 +1,9 @@
 # Controller for managing schools.
 class SchoolsController < ApplicationController
-  layout "admin", except: [ :options_list ]
+  layout "application", except: [ :options_list ]
   
-  before_filter :authenticate, except: [ :options_list, :select ]
-  before_filter :require_admin, except: [ :options_list, :select ]
+  before_filter :authenticate, except: [ :options_list, :select, :search ]
+  before_filter :require_admin, except: [ :options_list, :select, :search ]
 
   def index
     @schools = School.includes(:district).order(sort_order("name")).paginate(page: params[:page])
@@ -11,8 +11,13 @@ class SchoolsController < ApplicationController
 
 
   def show
+    @districts = District.all
     @school = School.find(params[:id])
     @groups = @school.groups.order(sort_order("name")).paginate(page: params[:page])
+  end
+
+  def history
+    @school = School.find(params[:id])
   end
 
   def new
@@ -20,12 +25,6 @@ class SchoolsController < ApplicationController
     @school.district_id = params[:district_id] if params[:district_id]
 
     @districts = District.all
-  end
-
-  def edit
-    @school = School.find(params[:id])
-    @districts = District.all
-    render action: "new"
   end
 
   def create
@@ -47,8 +46,9 @@ class SchoolsController < ApplicationController
       flash[:notice] = 'Skolan uppdaterades.'
       redirect_to(@school)
     else
+      @groups = @school.groups.order(sort_order("name")).paginate(page: params[:page])
       @districts = District.all
-      render action: "new"
+      render action: "show"
     end
   end
 
@@ -62,13 +62,31 @@ class SchoolsController < ApplicationController
   end
 
 
+  def search
+    query = School.active.order(:name).limit(10)
+
+    schools = query.name_search("#{params[:term]}%" )
+
+    if schools.blank?
+      schools = query.name_search("%#{params[:term]}%" )
+    end
+
+    render text: schools.collect(&:name).to_json, content_type: "text/plain"
+  end
+
   # Selects a school for the working session. Used by the select group fragment
   # as step two when selecting district-school-group.
   def select
-    school = School.find params[:school_id]
+    if !params[:school_id].blank?
+      school = School.find params[:school_id]
+    else
+      school = School.active.name_search(params[:school_name]).first!
+    end
+
     session[:group_selection] = {
       district_id: school.district_id,
-      school_id: school.id
+      school_id: school.id,
+      school_name: school.name
     }
   rescue
   ensure

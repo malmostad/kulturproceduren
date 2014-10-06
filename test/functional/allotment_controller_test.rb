@@ -6,6 +6,9 @@ class AllotmentControllerTest < ActionController::TestCase
     @controller.expects(:authenticate).at_least_once.returns(true)
     @controller.expects(:require_admin).at_least_once.returns(true)
 
+    @user = create(:user, roles: [roles(:admin)])
+    session[:current_user_id] = @user.id
+
     # Base data
     @districts = create_list(:district, 2)
     @schools   = @districts.collect { |d| create_list(:school, 2, district: d) }.flatten
@@ -54,6 +57,12 @@ class AllotmentControllerTest < ActionController::TestCase
     get :init, id: @event.id
     assert_response :success
     assert_equal District.order("name ASC").to_a, assigns(:districts)
+
+    # Event school type
+    @event.school_types << @districts.second.school_type
+    get :init, id: @event.id
+    assert_response :success
+    assert_equal [@districts.second], assigns(:districts)
   end
 
   def build_params(override = {})
@@ -112,7 +121,7 @@ class AllotmentControllerTest < ActionController::TestCase
     groups = [
       District.first.schools.first.groups.first,
       District.first.schools.second.groups.first,
-      create(:group_with_age_groups, age_group_data: [[5, 10]])
+      create(:group_with_age_groups, _age_group_data: [[5, 10]])
     ]
 
     # Districts from the groups, the odd group district, and a district from the parameters
@@ -294,6 +303,12 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_equal District.order("name ASC").to_a, assigns(:districts)
     assert_equal 100,                             assigns(:tickets_left)
     assert_nil   assigns(:extra_groups)
+
+    # Specific school type
+    @event.school_types << @districts.second.school_type
+    get :distribute, id: @event.id
+    assert_equal [@districts.second], assigns(:districts)
+    @event.school_types.clear
 
     # Specific districts
     session[:allotment][:district_ids] = [@districts.first.id]
@@ -507,9 +522,10 @@ class AllotmentControllerTest < ActionController::TestCase
     assert_nil           session[:allotment]
 
     @event.reload
-    assert_nil   @event.ticket_release_date
-    assert_nil   @event.district_transition_date
-    assert_nil   @event.free_for_all_transition_date
-    assert_nil   @event.ticket_state
+    assert_nil @event.ticket_release_date
+    assert_nil @event.district_transition_date
+    assert_nil @event.free_for_all_transition_date
+    assert_nil @event.ticket_state
+    assert     @event.tickets.blank?
   end
 end

@@ -5,6 +5,7 @@ namespace :kp do
   task(:bootstrap) do
     Rake::Task["kp:bootstrap:create_system_roles"].invoke
     Rake::Task["kp:bootstrap:create_admin_account"].invoke
+    Rake::Task["kp:bootstrap:create_school_types"].invoke
   end
 
   namespace :bootstrap do
@@ -38,6 +39,20 @@ namespace :kp do
         u.save(validate: false)
 
         u.roles << Role.find_by_symbol(:admin)
+      end
+    end
+
+    # Creates the school types required for the application
+    desc "Create school types if they do not exist"
+    task(create_school_types: :environment) do
+      %w(Förskola Grundskola).each do |type|
+        unless SchoolType.where(name: type).exists?
+          school_type = SchoolType.new
+          school_type.name = type
+
+          puts "School type: #{type}"
+          school_type.save!
+        end
       end
     end
   end

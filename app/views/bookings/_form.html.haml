@@ -1,0 +1,104 @@
+- available_tickets = @group.available_tickets_by_occasion(@occasion)
+
+- if !@is_edit && available_tickets <= 0
+
+  .warning
+    Tyvärr finns det inga bokningsbara platser för det här evenemanget för den
+    valda klassen/avdelningen.
+    = link_to "Klicka här", new_event_notification_request_path(@occasion.event)
+    om du vill få ett meddelande om platser blir tillgängliga senare.
+
+- else
+
+  = simple_form_for @booking, html: { class: "basic booking" } do |f|
+
+    = f.error_notification class: "warning"
+
+    - if @group.age_groups.num_children_by_age_span(@occasion.event.from_age, @occasion.event.to_age) == 0
+      .warning
+        Den valda klassen/avdelningen har elever vars ålder inte är
+        rekommenderad för det här evenemanget.
+
+    .success
+      - if @is_edit
+
+        Uppdatera bokningen för
+        = succeed "." do
+          %b= "#{@group.school.name}, #{@group.name}"
+        Det finns ytterligare
+        %b= available_tickets
+        platser tillgängliga för bokning.
+
+      - else
+
+        - case @occasion.event.ticket_state
+        - when :alloted_group
+          %b= "#{@group.school.name}, #{@group.name}"
+          har
+          %b= available_tickets
+          platser tillgängliga för bokning.
+        - when :alloted_district
+          Det finns
+          %b= available_tickets
+          tillgängliga platser att boka för alla förskolor och skolor i
+          = succeed "." do
+            %b= @group.school.district.name
+        - when :free_for_all
+          Det finns
+          %b= available_tickets
+          tillgängliga platser att boka. Först till kvarn gäller.
+
+    %fieldset
+      %legend Antal platser
+
+      = f.input :student_count, input_html: { class: "seats" }
+      = f.input :adult_count, input_html: { class: "seats" }
+
+      - if @occasion.wheelchair_seats.to_i > 0
+        = f.input :wheelchair_count,
+          input_html: { class: "seats" },
+          hint: "#{@occasion.wheelchair_seats.to_i - Ticket.count_wheelchair_by_occasion(@occasion)} rullstolsplatser tillgängligt på den här föreställningen."
+
+      .form-group
+        %span.control-label
+        .controls.success.total-seats
+
+    %fieldset
+      %legend Medföljande vuxen
+      = f.input :companion_name
+      = f.input :companion_email
+      = f.input :companion_phone
+
+    - if @occasion.bus_booking?
+      %fieldset
+        %legend Boka kulturbuss
+
+        = f.input :bus_booking,
+          as: :radio_buttons,
+          wrapper: :radio
+
+        = f.input :bus_stop
+
+        = f.input :bus_one_way,
+          label: false,
+          as: :radio_buttons,
+          wrapper: :radio,
+          collection: [ [ "Tur och retur", false ], [ "Enkel resa", true ] ]
+
+        .form-group
+          %span.control-label
+          .controls.success
+            Bussbolaget kontaktar medföljande vuxen via e-post om hämtningstider.
+
+    %fieldset
+      %legend Speciella krav / Extra information ang. bokning
+      = f.input :requirement, input_html: { rows: 8 }
+
+    
+    = f.hidden_field :group_id
+    = f.hidden_field :occasion_id
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit(@is_edit ? "Uppdatera bokning" : "Boka", class: "btn btn-primary")

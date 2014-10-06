@@ -1,0 +1,45 @@
+- content_for(:page_title) do
+  Ansök om behörighet
+
+%main.with-aside
+
+  = simple_form_for @role_application, html: { class: "basic", id: "role-application-form" } do |f|
+
+    = f.error_notification class: "warning"
+
+    = f.input :role_id,
+      as: :radio_buttons,
+      wrapper: :radio,
+      label: "Behörighet:",
+      collection: %w(Bokning Publicering Värd).zip([ @booker.id, @culture_worker.id, @host.id ])
+
+    .form-group
+      %span.control-label
+      .controls
+        %p.help-block.role-dependent{data: { role: { id: @booker.id } }}
+          För att kunna ge dig behörighet att boka evenemang åt elever eller
+          förskolebarn behöver vi veta vilken skola du arbetar på. Var god fyll i
+          namnet på skolan i fältet nedan. Du kan även komplettera med annan
+          information i fältet.
+        %p.help-block.role-dependent{data: { role: { id: @culture_worker.id } }}
+          För att kunna ge dig behörighet att publicera evenemang åt elever
+          eller förskolebarn behöver vi veta vilken arrangör du arbetar för.
+          Var god välj din arrangör nedan, eller skriv namnet på arrangören om
+          du inte hittar den i listan. Du kan även lämna meddelanden till
+          administratören som hanterar din ansökan.
+        %p.help-block
+          Ditt namn, din epost och ditt mobilnummer bifogas automatiskt från din
+          profil.
+
+    .role-dependent{data: { role: { id: @culture_worker.id } }}
+      = f.input :culture_provider_id, collection: @culture_providers, prompt: "Välj arrangör"
+      = f.input :new_culture_provider_name, as: :string
+
+    = f.input :message, input_html: { rows: 10 }
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit "Skicka ansökan", class: "btn btn-primary"
+
+= render partial: "users/menu"

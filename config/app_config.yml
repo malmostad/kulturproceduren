@@ -1,8 +1,12 @@
 common: &common
+    :assets_url_base: "//assets.malmo.se/external/v4/"
     :asset_host: "http://www.malmo.se/assets-2.0"
+    :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
+
     :salt_length: 10
     :request_key_length: 20
     :generated_password_length: 8
+
     :occasion_reminder_days: 2
     :unbooking_notification_request_seat_limit: 5
     :evaluation_form:
@@ -13,43 +17,40 @@ common: &common
         :district_days: 14
     :bus_booking:
         :active_days: 14
+
     :upload_attachment:
         :path: uploads/attachments
     :upload_image:
         :path: model
-        :width: 454
-        :height: 340
-        :thumb_width: 204
-        :thumb_height: 153
+        :width: 800
+        :height: 600
+        :thumb_width: 340
+        :thumb_height: 255
+
     :kp_external_link: "http://www.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
     :kbu_link: "http://www.malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor.html"
     :kbu_facebook: "http://www.facebook.com/kbumalmo"
     :culture_bus_link: "http://malmo.se/Medborgare/Kultur--noje/Barn--unga/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
-    #:ldap:
-    #    :address:
-    #    :port: 389
-    #    :base_dn:
-    #    :bind:
-    #        :dn:
-    #        :password:
-    #    :max_search_results: 25
-    #    :username_prefix: "malmoaut-"
+
     :allotment:
         :proximity_boundary: 3
+
     # OBS - se även config/enviroments/*rb actionmailer-config ... From-address måste anges även där
     :mailers:
         :from_address: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :bus_booking_recipient: "felicia.westerdahl@malmo.se; sofia.ek.landen@malmo.se"
-    :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
-        
+
 development:
     <<: *common
     :instance_title: "DEV"
+
     :evaluation_form:
         :activation_days: 0
         :reminder_days: 0
+
     :occasion_reminder_days: 0
+
     #:mailers:
     #    :debug_recipient: "camilla.bengtsson@malmo.se"
 

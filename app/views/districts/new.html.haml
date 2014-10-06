@@ -1,0 +1,9 @@
+- content_for(:page_title) do
+  Lägg till nytt område
+
+%main.admin.with-aside
+  = render partial: "form", locals: { district: @district, school_types: @school_types }
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

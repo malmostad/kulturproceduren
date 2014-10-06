@@ -1,0 +1,53 @@
+- hide_culture_provider ||= false
+- category_groups ||= []
+- category_groups = category_groups.reject { |g| !g.visible_in_calendar }
+
+%table.calendar
+  %thead
+    %tr
+      %th.time Tid
+      %th.event Evenemang
+      - unless hide_culture_provider
+        %th.culture-provider Arrangör
+      %th.age Ålder
+      - category_groups.each do |category_group|
+        %th.categories= category_group.name
+      %th.booking
+        - if user_online?
+          Boka
+        - else
+          Bokas via
+      %th.accessibility Hjälpmedel
+
+  %tbody
+    - prev_date = Date.new
+    - occasions.each do |occasion|
+
+      - if prev_date < occasion.date
+        %tr.date
+          %th{colspan: (hide_culture_provider ? 5 : 6) + category_groups.length}
+            = occasion.date
+
+      - prev_date = occasion.date
+
+      %tr.occasion
+        %td.time= l occasion.start_time, format: :only_time
+        %td.event= link_to occasion.event.name, occasion.event
+        - unless hide_culture_provider
+          %td= link_to occasion.event.culture_provider.name, occasion.event.culture_provider
+        %td.age
+          - unless occasion.event.further_education
+            = "#{occasion.event.from_age}-#{occasion.event.to_age}"
+        - category_groups.each do |category_group|
+          %td.categories
+            = occasion.event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name }.join(", ")
+        %td.booking
+          = booking_link(occasion)
+          = ticket_availability_link(occasion)
+        %td.accessibility
+          = image_tag "icon_rullstol.png",
+            alt: "Rullstolsplatser finns",
+            title: "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0
+          = image_tag "icon_horslinga.png",
+            alt: "Hörselslinga finns",
+            title: "Hörselslinga finns" if occasion.telecoil

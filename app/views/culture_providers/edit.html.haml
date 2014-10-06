@@ -1,0 +1,32 @@
+- content_for(:page_title) do
+  - if @culture_provider.new_record?
+    Skapa ny arrangör
+  - else
+    Redigera
+    = @culture_provider.name_was
+
+- content_for(:javascript) do
+  = javascript_include_tag "wysiwyg"
+
+%main.with-aside
+
+  = simple_form_for @culture_provider do |f|
+
+    = f.error_notification class: "warning"
+
+    = f.input :name
+    = f.input :description, input_html: { class: "ckeditor" }
+    = f.input :contact_person
+    = f.input :email
+    = f.input :phone
+    = f.input :address, input_html: { rows: 5 }
+    = f.input :opening_hours, input_html: { rows: 5 }
+    = f.input :url
+    = f.input :map_address, hint: "Skriv in en gatuadress", input_html: { class: "street-address" }
+
+    .form-group
+      %span.control-label
+      .controls
+        = f.submit(@culture_provider.new_record? ? "Skapa arrangör" : "Uppdatera arrangör", class: "btn btn-primary")
+
+= render partial: "administration_menu", locals: { culture_provider: @culture_provider } unless @culture_provider.new_record?

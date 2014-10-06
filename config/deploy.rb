@@ -1,5 +1,5 @@
-# config valid only for Capistrano 3.1
-lock "3.1.0"
+# config valid only for Capistrano 3.2.1
+lock "3.2.1"
 
 set :application, "kulturproceduren"
 set :repo_url, "https://github.com/malmostad/kulturproceduren.git"
@@ -31,7 +31,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # Default value for default_env is {}
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 10
 
 set :rbenv_type, :user
 set :rbenv_ruby, "2.1.0"

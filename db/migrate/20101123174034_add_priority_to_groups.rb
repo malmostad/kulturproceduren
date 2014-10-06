@@ -5,12 +5,11 @@ class AddPriorityToGroups < ActiveRecord::Migration
     prio = 1
 
     if defined?(SchoolPrio)
-      groups = Group.all(
-        include: { school: :school_prio },
-        order: "school_prios.prio ASC"
-      )
+      groups = Group.includes(school: :school_prio)
+        .references(:school_prios)
+        .order("school_prios.prio ASC")
     else
-      groups = Group.all(order: "name ASC")
+      groups = Group.order("name ASC")
     end
 
     groups.each do |group|

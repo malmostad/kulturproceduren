@@ -1,0 +1,99 @@
+%main
+  %section.calendar.filter.box
+    %h1.box-title Filtrera
+    .box-content
+
+      = form_tag({ action: "apply_filter", list: calendar_list }, { class: "basic calendar-filter" }) do
+        .form-group.text-fields
+          %label.control-label(for="filter_free_text") Fritext:
+          .controls
+            = text_field_tag "filter[free_text]", calendar_filter[:free_text],
+              class: "form-control"
+
+        .target-fields
+          %h4 För vem:
+
+          .form-group
+            = radio_button_tag "filter[further_education]",
+              "0",
+              !calendar_filter[:further_education]
+
+            = select_tag "filter[from_age]",
+              options_for_select([[ "Från ålder", -1 ]] + (0..19).to_a.map{ |i| [ "#{i} år", i ]}, calendar_filter[:from_age]),
+              class: "form-control"
+            = select_tag "filter[to_age]",
+              options_for_select([[ "Till ålder", -1 ]] + (0..19).to_a.map{ |i| [ "#{i} år", i ]}, calendar_filter[:to_age]),
+              class: "form-control"
+
+          .form-group
+            = radio_button_tag "filter[further_education]",
+              "1",
+              calendar_filter[:further_education],
+              id: "filter_further_education_true"
+            %label(for="filter_further_education_true") fortbildning pedagoger/vuxna
+
+        .date-fields
+          %h4 Datum:
+
+          .form-group
+            %label.control-label(for="filter_from_date") Från:
+            .controls.input-group
+              = text_field_tag "filter[from_date]",
+                calendar_filter[:from_date],
+                class: "form-control datepicker"
+              %span.input-group-addon
+                %span.glyphicon.glyphicon-calendar
+
+          .form-group
+            = radio_button_tag "filter[date_span]",
+              "unbounded",
+              calendar_filter[:date_span].blank? || calendar_filter[:date_span] == :unbounded,
+              label: "filter_date_span_unbounded"
+            %label(for="filter_date_span_unbounded") och framåt
+          .form-group
+            = radio_button_tag "filter[date_span]",
+              "day",
+              calendar_filter[:date_span] == :day,
+              label: "filter_date_span_day"
+            %label(for="filter_date_span_day") endast den valda dagen
+          .form-group
+            = radio_button_tag "filter[date_span]",
+              "week",
+              calendar_filter[:date_span] == :week,
+              label: "filter_date_span_week"
+            %label(for="filter_date_span_week") en vecka framåt
+          .form-group
+            = radio_button_tag "filter[date_span]",
+              "month",
+              calendar_filter[:date_span] == :month,
+              label: "filter_date_span_month"
+            %label(for="filter_date_span_month") en månad framåt
+
+          .form-group
+            .control-label
+              = radio_button_tag "filter[date_span]",
+                "date",
+                calendar_filter[:date_span] == :date,
+                label: "filter_date_span_month"
+              %label(for="filter_to_date") Till:
+            .controls.input-group
+              = text_field_tag "filter[to_date]",
+                calendar_filter[:to_date],
+                class: "form-control datepicker"
+              %span.input-group-addon
+                %span.glyphicon.glyphicon-calendar
+
+        .category-fields
+          - @category_groups.each do |category_group|
+            %h4= "#{category_group.name}:"
+            .form-group
+              = select_tag "filter[categories][]",
+                options_for_select([[ "Alla", -1 ]]) + options_from_collection_for_select(category_group.categories, :id, :name, calendar_filter[:categories]),
+                class: "form-control"
+
+        .form-buttons
+          = submit_tag "Sök", name: "do_filter", class: "btn btn-primary"
+          = submit_tag "Återställ", name: "clear_filter", class: "btn"
+
+  = render partial: "list",
+    locals: { events: @events, occasions: @occasions, category_groups: @category_groups }

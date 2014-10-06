@@ -1,23 +1,18 @@
 # Controller for managing links to culture providers from events
 # or other culture providers
 class CultureProviderLinksController < ApplicationController
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :load_entity
 
   def index
-  end
-
-  def new
     if @culture_provider
       @culture_providers = CultureProvider.not_linked_to_culture_provider(@culture_provider)
         .order(sort_order("name"))
-        .paginate(page: params[:page])
     elsif @event
       @culture_providers = CultureProvider.not_linked_to_event(@event)
         .order(sort_order("name"))
-        .paginate(page: params[:page])
     end
   end
 

@@ -1,0 +1,28 @@
+.mf-v4 .cke *, .mf-v4 .cke *:before, .mf-v4 .cke *:after {
+    @include box-sizing(content-box);
+}
+
+.mf-v4 .form-control.time {
+    display: inline-block;
+    width: auto;
+}
+
+.mf-v4 .controls.no-input {
+    padding-top: 7px;
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+section.context-form {
+    @include columns(8);
+
+    .input-group {
+        margin-bottom: 1em;
+    }
+}
+section.context-form.collapsed {
+    max-height: 15em;
+    overflow: hidden;
+}

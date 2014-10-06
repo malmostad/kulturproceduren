@@ -1,0 +1,7 @@
+- missing ||= false
+.form-group{class: "#{"warning" if missing}"}
+  %label.control-label= question.question + (question.mandatory ? "*" : "")
+  .controls
+    = text_field_tag "answer[#{question.id}]", value, class: "form-control"
+    - if missing
+      .help-block Frågan är obligatorisk

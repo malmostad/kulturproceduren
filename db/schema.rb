@@ -171,7 +171,8 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.string   "elit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "extens_id",  limit: 64
+    t.string   "extens_id",      limit: 64
+    t.integer  "school_type_id"
   end
 
   add_index "districts", ["extens_id"], name: "index_districts_on_extens_id", using: :btree
@@ -215,6 +216,11 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.date     "free_for_all_transition_date"
     t.boolean  "bus_booking",                  default: false
     t.date     "last_bus_booking_date"
+  end
+
+  create_table "events_school_types", force: true do |t|
+    t.integer "event_id"
+    t.integer "school_type_id"
   end
 
   create_table "groups", force: true do |t|
@@ -321,6 +327,13 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.integer "user_id"
   end
 
+  create_table "school_types", force: true do |t|
+    t.string   "name"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "schools", force: true do |t|
     t.string   "name"
     t.string   "contacts"
@@ -376,5 +389,17 @@ ActiveRecord::Schema.define(version: 20140520081802) do
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+
+  create_table "versions", force: true do |t|
+    t.string   "item_type",               null: false
+    t.integer  "item_id",                 null: false
+    t.string   "event",                   null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.text     "extra_data", default: ""
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end

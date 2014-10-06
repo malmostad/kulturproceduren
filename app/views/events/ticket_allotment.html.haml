@@ -1,0 +1,46 @@
+- content_for(:page_title) do
+  Fördelning för
+  = link_to @event.name, @event
+
+%main.with-aside
+  .btn-group.context-actions
+    - if current_user.has_role?(:admin) && !@event.further_education && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today)
+      = link_to "Ändra fördelning",
+        { controller: "allotment", action: "init", id: @event.id },
+        class: "btn btn-default"
+    = link_to "Ladda ner fördelningen som Excel-fil",
+      ticket_allotment_event_path(@event, format: :xls),
+      class: "btn btn-default"
+
+  %table
+    %thead
+      %tr
+        %th Namn
+        %th Antal biljetter
+    %tbody
+      - prev_school_id = nil
+
+      - @event.allotments.each do |allotment|
+
+        - if allotment.for_group?
+
+          - if allotment.group.school_id != prev_school_id
+            %tr
+              %th
+                = allotment.group.school.name
+                i
+                = allotment.district.name
+              %th
+              - prev_school_id = allotment.group.school_id
+
+        %tr
+          %td
+            - if allotment.for_group?
+              = allotment.group.name
+            - elsif allotment.for_district?
+              = allotment.district.name
+            - else
+              Hela staden
+          %td= allotment.amount
+
+= render partial: "administration_menu", locals: { event: @event }

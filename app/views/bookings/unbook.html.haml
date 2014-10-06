@@ -1,0 +1,38 @@
+- content_for(:page_title) do
+  Avboka för
+  = succeed "," do
+    = @booking.group.school.name
+  = @booking.group.name
+  %span.subtitle
+    från
+    = succeed "," do
+      = @booking.occasion.event.name
+    föreställningen
+    = @booking.occasion.date
+
+%main.with-aside
+  .warning
+    Detta avbokar alla
+    = @booking.total_count
+    platser.
+
+  = form_tag @booking, method: :delete, class: "basic" do
+
+    - if @answer_form && @answer_form.missing_answers
+      - missing_answers = @answer_form.missing_answers
+      .warning Vänligen korrigera uppgifterna nedan:
+    - else
+      - missing_answers = []
+
+    - @questionnaire.questions.each do |question|
+      = render partial: get_question_fragment(question),
+        locals: { question: question, value: @answer[question.id.to_s], missing: missing_answers.include?(question.id) }
+
+
+    .form-group
+      %span.control-label
+      .controls
+        = submit_tag "Avboka", class: "btn btn-danger"
+        = link_to "Avbryt", @booking, class: "btn btn-default"
+
+= render partial: "menu"

@@ -1,0 +1,15 @@
+- content_for(:page_title) do
+  Historik för
+  = @district.name
+
+%main.admin.with-aside
+  %nav.return
+    = link_to "Återvänd till #{@district.name}", @district
+
+  = render partial: "versions/versions",
+    object: @district.versions.updates,
+    locals: { model: District, fields: %w(name contacts) }
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

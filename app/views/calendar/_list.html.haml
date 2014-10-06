@@ -1,0 +1,23 @@
+%nav.calendar-nav
+  .btn-group
+    = link_to "Evenemang", calendar_path(params[:action], :occasions),
+      class: "btn btn-default#{ " active" if occasions_calendar?}"
+    = link_to "Löpande evenemang", calendar_path(params[:action], :events),
+      class: "btn btn-default#{ " active" if events_calendar?}"
+
+  - if params[:action] == "filter"
+    = link_to "Ingen sökning »", { action: "index", list: calendar_list }
+  - else
+    = link_to "Detaljerad sökning »", { action: "filter", list: calendar_list }
+
+  = link_to "Visa alla arrangörer i Kulturproceduren", culture_providers_path,
+    class: "culture-providers"
+
+%section.calendar
+  - if events_calendar? && events
+    = render partial: "events_list", locals: { events: events, category_groups: category_groups }
+    = will_paginate events
+  - elsif occasions_calendar? && occasions
+    = render partial: "occasions_list", locals: { occasions: occasions, category_groups: category_groups }
+    = will_paginate occasions
+

@@ -1,0 +1,65 @@
+- content_for(:page_title) do
+  - if @occasion
+    Bokningar för
+    = link_to @occasion.event.name, @occasion.event
+    %span.subtitle
+      Föreställningen
+      = @occasion.date
+      kl
+      = "#{l(@occasion.start_time, format: :only_time)} - #{l(@occasion.stop_time, format: :only_time)}"
+
+  - elsif @event
+    Bokningar för
+    = link_to @event.name, @event
+
+  - else
+    Mina bokningar
+
+%main
+
+  %section.filter.box.bookings
+    %h1.box-title Filtrera
+    .box-content
+      - if @occasion
+        - url = apply_filter_occasion_bookings_path(@occasion)
+      - elsif @event
+        - url = apply_filter_event_bookings_path(@event)
+      - else
+        - url = apply_filter_bookings_path
+
+      = form_tag url, class: "basic" do
+        - filter = (session[:booking_list_filter] || {})
+
+        - if @districts
+          .form-group
+            %span.control-label
+              %label(for="district_id") Område:
+            .controls
+              = select_tag "district_id",
+                options_from_collection_for_select(@districts, :id, :name, filter[:district_id]).insert(0, '<option value="all">Alla</option>'),
+                class: "form-control"
+
+        - else
+          .form-group
+            %span.control-label
+              %label(for="search") Söktext:
+            .controls
+              = text_field_tag "search", filter[:search], class: "form-control"
+
+        - if current_user.has_role?(:admin)
+          .form-group
+            %span.control-label
+            .controls.checkbox
+              %label
+                = check_box_tag "unbooked", 1, filter[:unbooked]
+                Visa avbokade
+
+        .form-group
+          %span.control-label
+          .controls
+            %button(type="submit" name="filter" class="btn btn-primary") Visa
+            %button(type="clear" name="reset" class="btn btn-default") Återställ
+
+  = render partial: "menu"
+
+  = render partial: "list", locals: { bookings: @bookings }

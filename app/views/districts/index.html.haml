@@ -1,0 +1,20 @@
+- content_for(:page_title) do
+  Områden
+
+%main.admin.with-aside
+  %table
+    %thead
+      %tr
+        %th= sort_link "Namn", "name"
+        %th= sort_link "Skolform", "school_type"
+    %tbody
+      - @districts.each do |district|
+        %tr
+          %td= link_to district.name, district
+          %td= district.school_type.name
+
+  = will_paginate @districts
+
+%aside.admin
+  = render partial: "menu"
+  = render partial: "shared/admin_menu"

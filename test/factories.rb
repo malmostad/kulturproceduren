@@ -1,5 +1,15 @@
 FactoryGirl.define do
+  sequence :email do |n|
+    "person#{n}@example.com"
+  end
+
+  factory :school_type do
+    sequence(:name) { |n| "School type %09d" % n }
+    active          true
+  end
+
   factory :district do
+    school_type
     sequence(:name)      { |n| "District %09d" % n }
     contacts             { "#{FactoryGirl.generate(:email)},#{FactoryGirl.generate(:email)}" }
     elit_id              nil
@@ -26,12 +36,12 @@ FactoryGirl.define do
       ignore do
         school_count   5
         group_count    5
-        age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
+        _age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |district, evaluator|
         FactoryGirl.create_list(:school, evaluator.school_count, district: district).each do |school|
           FactoryGirl.create_list(:group, evaluator.group_count, school: school).each do |group|
-            evaluator.age_group_data.each do |age, quantity|
+            evaluator._age_group_data.each do |age, quantity|
               FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
             end
           end
@@ -58,11 +68,11 @@ FactoryGirl.define do
     factory :school_with_age_groups do
       ignore do
         group_count    5
-        age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
+        _age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |school, evaluator|
         FactoryGirl.create_list(:group, evaluator.group_count, school: school).each do |group|
-          evaluator.age_group_data.each do |age, quantity|
+          evaluator._age_group_data.each do |age, quantity|
             FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
           end
         end
@@ -81,10 +91,10 @@ FactoryGirl.define do
 
     factory :group_with_age_groups do
       ignore do
-        age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
+        _age_group_data [[10,20]] # [ [ :age1, :quantity1 ], [ :age2, :quantity2 ] ... ]
       end
       after(:create) do |group, evaluator|
-        evaluator.age_group_data.each do |age, quantity|
+        evaluator._age_group_data.each do |age, quantity|
           FactoryGirl.create(:age_group, group: group, age: age, quantity: quantity)
         end
       end
@@ -119,7 +129,6 @@ FactoryGirl.define do
     name                  { username }
     email                 { "#{username}@example.com" }
     cellphone             "012 - 34 567"
-    districts             { [FactoryGirl.create(:district)] }
     roles                 { [] }
   end
 
@@ -184,6 +193,17 @@ FactoryGirl.define do
             date: evaluator.occasion_dates[(i-1)%len] # Cycle through the occasion dates
           )
         end
+      end
+    end
+
+    factory :bookable_event do
+      ticket_release_date { Date.today }
+
+      ignore do
+        _tickets 1
+      end
+      after(:create) do |event, evaluator|
+        create_list(:ticket, evaluator._tickets, event: event)
       end
     end
   end

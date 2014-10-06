@@ -6,8 +6,8 @@ class AddBusBookingDetails < ActiveRecord::Migration
     add_column :bookings, :bus_one_way, :boolean, default: false
     add_column :bookings, :bus_stop,    :string
 
-    Event.update_all(  { bus_booking: false }, { bus_booking: nil })
-    Booking.update_all({ bus_booking: false }, { bus_booking: nil })
+    Event.where(bus_booking: nil).update_all(bus_booking: false)
+    Booking.where(bus_booking: nil).update_all(bus_booking: false)
   end
 
   def self.down

@@ -1,0 +1,34 @@
+- extra_title ||= nil
+
+%table.versions
+  %thead
+    %tr
+      - fields.each do |field|
+        %th= model.human_attribute_name(field)
+      - if extra_title
+        %th= extra_title
+      %th
+
+  %tbody
+    - versions.each do |version|
+      %tr
+        - old_object = version.object ? PaperTrail.serializer.load(version.object) : {}
+        - fields.each do |field|
+          %td= old_object[field]
+        - if extra_title
+          %td
+            - unless version.extra_data.blank?
+              %ul
+                - version.extra_data.each do |k,v|
+                  %li
+                    %b
+                      = succeed ":" do
+                        = k
+                    = v
+
+        %td
+          = link_to "Återställ",
+            revert_version_path(version.id),
+            data: { confirm: "Är du säker på att du vill återställa till den här versionen?" },
+            method: :put,
+            class: "btn btn-default"

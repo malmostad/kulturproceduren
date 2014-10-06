@@ -1,6 +1,6 @@
 # Controller for managing an event's attachments
 class AttachmentsController < ApplicationController
-  layout "standard"
+  layout "application"
 
   before_filter :authenticate
   before_filter :require_culture_worker, except: :show
@@ -21,13 +21,13 @@ class AttachmentsController < ApplicationController
   end
 
   def create
-    if !params[:upload] || !params[:upload][:document]
+    if !params[:attachment] || !params[:attachment][:file]
       flash[:warning] = "Du måste välja en fil att ladda upp."
       redirect_to event_attachments_url(@event)
       return
     end
 
-    uploaded_file = params[:upload][:document]
+    uploaded_file = params[:attachment].delete(:file)
 
     @attachment = Attachment.new(params[:attachment])
     @attachment.filename = uploaded_file.original_filename

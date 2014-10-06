@@ -1,0 +1,36 @@
+- questionnaire ||= nil
+
+- if questionnaire
+  - url = question.new_record? ? questionnaire_questions_path(questionnaire) : questionnaire_question_path(questionnaire, question)
+- else
+  - url = question
+
+= simple_form_for question, url: url, html: { id: "question-form", class: "basic" } do |f|
+  = f.error_notification class: "warning"
+
+  = f.input :question
+
+  = f.input :qtype,
+    as: :radio_buttons,
+    wrapper: :radio,
+    label: "",
+    collection: Question::QTYPES.collect { |type, value| [ type, value ] }
+
+  .type-dependent{data: { type: { id: "QuestionMchoice" }}}
+    = f.input :choice_csv,
+      hint: "Ange alternativen separerade med kommatecken"
+
+  = f.input :mandatory,
+    as: :radio_buttons,
+    wrapper: :radio,
+    collection: [ [ "Ja", true ], [ "Nej", false ] ]
+
+  = f.hidden_field :template
+
+  .form-group
+    %span.control-label
+    .controls
+      - if question.new_record?
+        = submit_tag "Lägg till ny fråga", class: "btn btn-primary"
+      - else
+        = submit_tag "Uppdatera", class: "btn btn-primary"

@@ -42,12 +42,9 @@ class CultureProviderLinksControllerTest < ActionController::TestCase
   test "index" do
     get :index, culture_provider_id: @culture_provider
     assert_response :success
-  end
-
-  test "new" do
-    get :new, culture_provider_id: @culture_provider.id
     assert_equal CultureProvider.not_linked_to_culture_provider(@culture_provider).order("name asc").to_a, assigns(:culture_providers)
-    get :new, event_id: @event.id
+    get :index, event_id: @event.id
+    assert_response :success
     assert_equal CultureProvider.not_linked_to_event(@event).order("name asc").to_a, assigns(:culture_providers)
   end
 

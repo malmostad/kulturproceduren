@@ -1,6 +1,6 @@
 # Controller for managing groups
 class GroupsController < ApplicationController
-  layout "admin", except: [ :options_list ]
+  layout "application", except: [ :options_list ]
   
   before_filter :authenticate, except: [ :options_list, :select ]
   before_filter :require_admin, except: [ :options_list, :select ]
@@ -14,6 +14,11 @@ class GroupsController < ApplicationController
   def show
     @group = Group.find(params[:id])
     @age_group = AgeGroup.new { |ag| ag.group_id = @group.id }
+    @schools = School.order("name ASC")
+  end
+
+  def history
+    @group = Group.find(params[:id])
   end
 
   def new
@@ -21,12 +26,6 @@ class GroupsController < ApplicationController
     @group.school_id = params[:school_id] if params[:school_id]
     
     @schools = School.order("name ASC")
-  end
-
-  def edit
-    @group = Group.find(params[:id])
-    @schools = School.order("name ASC")
-    render action: "new"
   end
 
   def create
@@ -49,7 +48,8 @@ class GroupsController < ApplicationController
       redirect_to(@group)
     else
       @schools = School.order("name ASC")
-      render action: "new"
+      @age_group = AgeGroup.new { |ag| ag.group_id = @group.id }
+      render action: "show"
     end
   end
 
@@ -80,6 +80,7 @@ class GroupsController < ApplicationController
     group = Group.includes(:school).find(params[:group_id])
     session[:group_selection] = {
       district_id: group.school.district_id,
+      school_name: group.school.name,
       school_id: group.school.id,
       group_id: group.id
     }
@@ -96,25 +97,23 @@ class GroupsController < ApplicationController
   def options_list
     conditions = {}
 
-    school_id = params[:school_id].to_i
-    occasion_id = params[:occasion_id].to_i
+    school = if !params[:school_id].blank?
+               School.find params[:school_id]
+             elsif !params[:school_name].blank?
+               School.active.name_search(params[:school_name]).first!
+             end
 
-    if (params[:school_id] && school_id <= 0) || (params[:occasion_id] && occasion_id <= 0)
-      render text: "", content_type: 'text/plain', status: 404
-      return
-    end
+    if school
+      conditions[:school_id] = school.id
 
-    if school_id > 0
-      conditions[:school_id] = school_id
-
-      school = School.find params[:school_id]
       session[:group_selection] = {
         district_id: school.district_id,
-        school_id: school.id
+        school_id: school.id,
+        school_name: school.name
       }
     end
 
-    if occasion_id > 0
+    if params[:occasion_id]
       @occasion = Occasion.find params[:occasion_id]
       @groups = Group.where(conditions).to_a.select { |g|
         g.available_tickets_by_occasion(@occasion) > 0
@@ -123,9 +122,9 @@ class GroupsController < ApplicationController
       @groups = Group.where(conditions).order("name ASC")
     end
 
-    render action: "options_list", content_type: 'text/plain'
+    render action: "options_list", content_type: 'text/plain', layout: false
   rescue
-    render text: "", content_type: 'text/plain', status: 404
+    render text: "", content_type: 'text/plain', status: 404, layout: false
   end
 
   private

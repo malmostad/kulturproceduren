@@ -1,0 +1,50 @@
+- content_for(:page_title) do
+  Hantera kategorigrupper
+
+%main.admin.with-aside
+  %section.box
+    %h1.box-title
+      - if @category_group.new_record?
+        Lägg till kategorigrupp
+      - else
+        Redigera kategorigrupp
+    .box-content
+      = simple_form_for @category_group, html: { class: "basic" } do |f|
+        = f.error_notification class: "warning"
+
+        = f.input :name
+        = f.input :visible_in_calendar,
+          as: :radio_buttons,
+          wrapper: :radio,
+          collection: [ [ "Ja", true ], [ "Nej", false ] ]
+
+        .form-group
+          %span.control-label
+          .controls
+            = submit_tag "Spara", class: "btn btn-primary"
+
+  %table
+    %thead
+      %tr
+        %th Namn
+        %th Visas i kalendern
+        %th
+    %tbody
+      - @category_groups.each do |category_group|
+        %tr
+          %td= category_group.name
+          %td= category_group.visible_in_calendar ? "Ja" : "Nej"
+          %td
+            .btn-group
+              = link_to "Redigera",
+                edit_category_group_path(category_group),
+                class: "btn btn-default"
+              = link_to "Ta bort",
+                category_group,
+                method: :delete,
+                data: { confirm: "Är du säker?" },
+                class: "btn btn-danger"
+
+%aside.admin
+  = render partial: "categories/menu"
+  = render partial: "shared/admin_menu"

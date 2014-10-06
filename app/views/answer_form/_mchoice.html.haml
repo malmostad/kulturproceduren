@@ -1,0 +1,10 @@
+- missing ||= false
+.form-group{class: "#{"warning" if missing}"}
+  %label.control-label= question.question + (question.mandatory ? "*" : "")
+  .controls.checkbox
+    - question.choice_csv.split(',').each do |option| 
+      %label.checkbox
+        = check_box_tag "answer[#{question.id}][]", option 
+        = option
+    - if missing
+      .help-block Frågan är obligatorisk
