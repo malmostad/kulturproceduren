@@ -61,7 +61,7 @@ release_test:
 
 production:
     <<: *common
-    :instance_message: "På grund av systemuppgradering på hemsidan kan det uppstå störningar i Kulturproceduren den 4-6 oktober."
+    :instance_message: "Kulturproceduren har fått ett nytt utseende, men alla funktioner är detsamma som tidigare. Hitta och läs mer om kulturutbudet i kalendariet och boka platser precis som vanligt!"
 
 education:
     <<: *common

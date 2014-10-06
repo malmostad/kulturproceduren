@@ -49,6 +49,11 @@
         - else
           Kulturproceduren
 
+
+      - # Show temporary notice about new design
+      - if APP_CONFIG[:instance_message]
+        %p.flash{class: "warning"}= APP_CONFIG[:instance_message]
+
       - flash.each do |key, value|
         %p.flash{class: key}= value
 
