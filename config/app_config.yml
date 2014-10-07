@@ -61,7 +61,7 @@ release_test:
 
 production:
     <<: *common
-    :instance_message: "Ursäckta röran Kulturproceduren bygger om. Det går fortfarande att använda siten som vanligt."
+    :instance_message: "Ursäkta röran Kulturproceduren bygger om. Det går fortfarande att använda siten som vanligt."
 
 education:
     <<: *common

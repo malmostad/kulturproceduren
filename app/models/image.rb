@@ -19,8 +19,8 @@ class Image < ActiveRecord::Base
   validates_presence_of :description,
     message: "Bildtexten får inte vara tom"
 
-  validates_presence_of :filename,
-    message: "Filnamnet får inte vara tomt"
+  #validates_presence_of :file,
+  #  message: "Filnamnet får inte vara tomt"
 
   after_destroy :cleanup
 
