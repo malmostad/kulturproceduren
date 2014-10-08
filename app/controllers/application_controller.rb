@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   #prepend_before_filter :maintenance_redirect
+  before_filter :goto_redirect
 
   protected
 
@@ -20,6 +21,17 @@ class ApplicationController < ActionController::Base
   #  url_root = ActionController::Base.relative_url_root || ""
   #  redirect_to(url_root + "/maintenance.html", status: :found)
   #end
+
+  #Redirect for goto queries
+  def goto_redirect
+    if params[:goto]
+      if ActionController::Base.relative_url_root && !params[:goto].start_with?(ActionController::Base.relative_url_root)
+        redirect_to ActionController::Base.relative_url_root + params[:goto]
+      else
+        redirect_to params[:goto]
+      end
+    end
+  end
 
   # Method for getting the SQL sort order from paging parameters
   def sort_order(default)
