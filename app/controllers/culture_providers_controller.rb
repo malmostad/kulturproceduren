@@ -91,6 +91,12 @@ class CultureProvidersController < ApplicationController
   end
   helper_method :standing_events_cache_key
 
+  # Cache key for the list of standing events
+  def all_events_cache_key(culture_provider)
+    "culture_providers/show/#{culture_provider.id}/all_events"
+  end
+  helper_method :all_events_cache_key
+
 
   private
 

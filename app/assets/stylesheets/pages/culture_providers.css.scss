@@ -14,4 +14,11 @@ section.events {
             margin-bottom: 0.3em;
         }
     }
+    .all_events {
+        @include columns(4, true);
+
+        li {
+            margin-bottom: 0.3em;
+        }
+    }
 }

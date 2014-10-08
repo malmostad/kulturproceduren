@@ -45,3 +45,12 @@
           %ul
             - @culture_provider.standing_events.each do |event|
               %li= link_to event.name, event
+
+    - if user_online? && current_user.can_administrate?(@culture_provider)
+      .all_events
+        %h3 Alla evenemang
+        - cache all_events_cache_key(@culture_provider), skip_digest: true do
+          - unless @culture_provider.events.empty?
+            %ul
+              - @culture_provider.events.order(created_at: :desc).each do |event|
+                %li= link_to event.name, event
