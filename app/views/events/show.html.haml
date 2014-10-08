@@ -179,7 +179,7 @@
                     = available_seats
                   - else
                     = occasion.seats.to_i + occasion.wheelchair_seats.to_i
-                  - if occasion.wheelchair_seats > 0
+                  - if occasion.wheelchair_seats.to_i > 0
                     = image_tag "icon_rullstol.png",
                       alt: "Rullstolsplatser finns",
                       title: "Rullstolsplatser finns" 
