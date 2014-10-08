@@ -9,6 +9,8 @@
           %li= link_to "Mitt konto", current_user
           %li= link_to "Ansök om behörigheter", role_applications_path
         - if current_user.can_book?
+          %br
+          %h1 Bokningar
           %li= link_to "Mina bokningar", bookings_path
           %li= link_to "Klassers/avdelningars bokningar", group_bookings_path
           %li= link_to "Förfrågan om Kulturbuss", APP_CONFIG[:culture_bus_link]
