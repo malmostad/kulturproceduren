@@ -71,11 +71,7 @@ class EventMailer < ActionMailer::Base
 
     @event = event
 
-    bookings = event.bookings.all(
-      conditions: { bus_booking: true },
-      include: :occasion,
-      order: "occasions.date, occasions.start_time"
-    )
+    bookings = event.bookings.where(bus_booking: true).includes(:occasion).order("occasions.date, occasions.start_time")
 
     attachments["bussbokning_evenemang#{event.id}.tsv"] = {
       mime_type: "text/csv",
