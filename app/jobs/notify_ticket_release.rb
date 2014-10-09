@@ -1,7 +1,7 @@
 class NotifyTicketRelease
 
   def run
-    events = Event.find :all, conditions: "ticket_release_date = current_date"
+    events = Event.where("ticket_release_date = current_date")
     events.each{ |e| process_event(e) }
   end
 
@@ -37,7 +37,7 @@ class NotifyTicketRelease
         end
       end
     when :free_for_all
-      District.find(:all).each do |district|
+      District.all.each do |district|
         addresses += (district.contacts || "").split(",")
 
         district.schools.find_by_age_span(event.from_age, event.to_age).each do |school|

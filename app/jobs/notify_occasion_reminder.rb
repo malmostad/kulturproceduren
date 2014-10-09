@@ -15,12 +15,8 @@ class NotifyOccasionReminder
 
       # Notify for Saturday and Sunday when the targeted notification date is a Monday.
       if occasion_date.wday == 1
-        occasions += Occasion.find :all,
-          conditions: { date: occasion_date - 1, cancelled: false },
-          include: :event
-        occasions += Occasion.find :all,
-          conditions: { date: occasion_date - 2, cancelled: false },
-          include: :event
+        occasions += Occasion.where(date: occasion_date - 1, cancelled: false ).includes(:event)
+        occasions += Occasion.where(date: occasion_date - 2, cancelled: false ).includes(:event)
       end
 
       occasions.each do |occasion|
