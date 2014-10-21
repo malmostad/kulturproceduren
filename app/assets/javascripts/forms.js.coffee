@@ -47,6 +47,7 @@ $ ->
             $.get form.data("form-path"), params, (data) ->
                 form.html(data)
                 form.find(":input.seats:first").trigger("change")
+                location.reload()
 
         groupSelection.on "school-select", ->
             form.html("")
