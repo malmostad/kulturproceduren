@@ -61,8 +61,7 @@ release_test:
 
 production:
     <<: *common
-    :instance_message: "Just nu: tillfälliga problem med bokning av platser. Vid problem med sidan tryck F5 eller på annat sätt ladda om sidan och fyll i era uppgifter på nytt. Om problem kvarstår kontakta Kultur för barn och unga på kbu@malmo.se eller 040-34 48 00"
-
+    
 education:
     <<: *common
     :instance_title: "UTB"
