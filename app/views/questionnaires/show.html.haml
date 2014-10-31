@@ -58,12 +58,18 @@
               = link_to "Redigera",
                 edit_questionnaire_question_path(@questionnaire, question),
                 class: "btn btn-default" unless question.template
-              = link_to "Ta bort",
-                questionnaire_question_path(@questionnaire, question),
-                method: :delete,
-                data: { confirm: "Är du säker?" },
-                class: "btn btn-danger"
-
+              - if question.template
+                = link_to "Ta bort",
+                  remove_template_question_questionnaire_path(@questionnaire, question_id: question.id),
+                  method: :delete,
+                  data: { confirm: "Är du säker?" },
+                  class: "btn btn-danger"
+              - else
+                = link_to "Ta bort",
+                  questionnaire_question_path(@questionnaire, question),
+                  method: :delete,
+                  data: { confirm: "Är du säker?" },
+                  class: "btn btn-danger"
 
 %aside.admin
   = render partial: "questionnaires/menu"
