@@ -121,11 +121,15 @@ module ApplicationHelper
     if thumb
       options[:width] = image.thumb_width
       options[:height] = image.thumb_height
-      options[:src] = image_path + image.thumb_url
+      if image.filename
+        options[:src] = image_path + image.thumb_url
+      end
     else
       options[:width] = image.width
       options[:height] = image.height
-      options[:src] = image_path + image.image_url
+      if image.filename
+        options[:src] = image_path + image.image_url
+      end
     end
 
     return tag("img", options).html_safe
