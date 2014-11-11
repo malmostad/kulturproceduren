@@ -7,14 +7,14 @@ class KP::Import::GroupContactImporter < KP::Import::Base
   end
 
   def attributes_from_row(row)
-    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 4)") if row.length != 4
+    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
 
-    contact = row[3].try(:strip)
+    contact = row[1].try(:strip)
     return nil if contact.blank?
 
     {
-      contact: contact,
-      group_id: row[0].try(:strip)
+      group_id: row[0].try(:strip),
+      contact: contact
     }
   end
 

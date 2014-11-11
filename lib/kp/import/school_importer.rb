@@ -10,9 +10,9 @@ class KP::Import::SchoolImporter < KP::Import::Base
     raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
 
     {
-      name: row[2].try(:strip),
       extens_id: row[0].try(:strip),
-      district_id: row[1].try(:strip)
+      district_id: row[1].try(:strip),
+      name: row[2].try(:strip)
     }
   end
 

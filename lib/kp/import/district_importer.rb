@@ -10,8 +10,8 @@ class KP::Import::DistrictImporter < KP::Import::Base
     raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
 
     {
-      name: row[1].try(:strip),
-      extens_id: row[0].try(:strip)
+      extens_id: row[0].try(:strip),
+      name: row[1].try(:strip)
     }
   end
 

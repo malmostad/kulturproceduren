@@ -7,12 +7,12 @@ class KP::Import::GroupImporter < KP::Import::Base
   end
 
   def attributes_from_row(row)
-    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 4)") if row.length != 4
+    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
 
     {
-      name: row[3].try(:strip),
       extens_id: row[0].try(:strip),
-      school_id: row[1].try(:strip)
+      school_id: row[1].try(:strip),
+      name: row[2].try(:strip)
     }
   end
 

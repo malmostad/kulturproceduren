@@ -13,12 +13,12 @@ class KP::Import::AgeGroupImporter < KP::Import::Base
   end
 
   def attributes_from_row(row)
-    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
+    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
 
     {
-      birth_year: row[5].try(:to_i),
-      quantity: row[4].try(:to_i),
-      group_id: row[1].try(:strip)
+      group_id: row[0].try(:strip),
+      birth_year: row[1].try(:to_i),
+      quantity: row[2].try(:to_i)
     }
   end
 

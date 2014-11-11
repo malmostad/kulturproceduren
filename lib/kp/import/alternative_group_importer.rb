@@ -9,9 +9,9 @@ class KP::Import::AlternativeGroupImporter < KP::Import::GroupImporter
     raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
 
     {
-      name: row[2].try(:strip),
+      school_id: row[0].try(:strip),
       extens_id: row[1].try(:strip),
-      school_id: row[0].try(:strip)
+      name: row[2].try(:strip)
     }
   end
 end
