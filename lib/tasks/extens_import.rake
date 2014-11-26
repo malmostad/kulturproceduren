@@ -77,6 +77,27 @@ namespace :kp do
         do_import("group contacts", KP::Import::GroupContactImporter.new(csv, school_type.id), csv_separator)
       end
 
+      desc "Prepare old group objects for fresh import by setting active=false and adding suffix to names"
+      task(do_prepare_groups: :environment) do
+        suffix = ENV["suffix"] || ""
+        suffix = " Kentor" if suffix.empty?
+        puts "Do prepare of group objects with suffix \"#{suffix}\""
+        Group.where(active: true).find_each do |group|
+          group.update_attribute(:name, group.name+=suffix)
+          group.update_attribute(:active, false)
+        end
+      end
+
+      desc "Undo prepare old group objects for fresh import by setting active=true and removing suffix from names"
+      task(undo_prepare_groups: :environment) do
+        suffix = ENV["suffix"] || ""
+        suffix = " Kentor" if suffix.empty?
+        puts "Undo prepare of group objects with suffix \"#{suffix}\""
+        Group.where(active: false).find_each do |group|
+          group.update_attribute(:active, true) if group.name.end_with?(suffix)
+          group.update_attribute(:name, group.name.chomp(suffix))
+        end
+      end
 
       private
 

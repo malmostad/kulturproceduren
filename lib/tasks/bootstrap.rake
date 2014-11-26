@@ -45,7 +45,7 @@ namespace :kp do
     # Creates the school types required for the application
     desc "Create school types if they do not exist"
     task(create_school_types: :environment) do
-      %w(Förskola Grundskola).each do |type|
+      %w(Förskola Grundskola Gymnasieskola).each do |type|
         unless SchoolType.where(name: type).exists?
           school_type = SchoolType.new
           school_type.name = type
