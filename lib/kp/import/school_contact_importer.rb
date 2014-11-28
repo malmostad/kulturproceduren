@@ -1,20 +1,24 @@
 require "kp/import/base"
 
 class KP::Import::SchoolContactImporter < KP::Import::Base
-  def initialize(csv, school_type_id, csv_header = false)
+  def initialize(csv, school_type_id, csv_header = false, school_prefix, group_prefix)
     super(csv, csv_header)
     @school_type_id = school_type_id
+
+    # Handle prefixes added to extens_id in db
+    @school_prefix = school_prefix
+    @group_prefix = group_prefix
   end
 
   def attributes_from_row(row)
-    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
+    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
 
-    contact = row[2].try(:strip)
+    contact = row[1].try(:strip)
     return nil if contact.blank?
 
     {
-      contact: row[2].try(:strip),
-      school_id: row[0].try(:strip)
+      school_id: row[0].try(:strip),
+      contact: contact
     }
   end
 
@@ -24,9 +28,11 @@ class KP::Import::SchoolContactImporter < KP::Import::Base
   end
 
   def build(attributes)
+    #puts "#{@school_prefix+attributes[:school_id]}"
+
     school = School.includes(:district).references(:district)
       .where([ "districts.school_type_id = ?", @school_type_id ])
-      .where(extens_id: attributes[:school_id]).first
+      .where(extens_id: @school_prefix+attributes[:school_id]).first
     return nil unless school
 
     contacts = school.contacts.try(:split, ",") || []
