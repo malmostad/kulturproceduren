@@ -1,7 +1,7 @@
 require "kp/import/base"
 
 class KP::Import::DistrictImporter < KP::Import::Base
-  def initialize(csv, school_type_id, csv_header = false)
+  def initialize(csv, school_type_id, csv_header = false, school_prefix, group_prefix)
     super(csv, csv_header)
     @school_type_id = school_type_id
   end

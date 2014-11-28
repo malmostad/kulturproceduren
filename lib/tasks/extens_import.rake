@@ -37,44 +37,44 @@ namespace :kp do
 
       desc "Import districts from Extens"
       task(districts: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("districts", KP::Import::DistrictImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix  = create_importer_arguments
+        do_import("districts", KP::Import::DistrictImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Import schools from Extens"
       task(schools: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("schools", KP::Import::SchoolImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix = create_importer_arguments
+        do_import("schools", KP::Import::SchoolImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Import groups"
       task(groups: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("groups", KP::Import::GroupImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix = create_importer_arguments
+        do_import("groups", KP::Import::GroupImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Import groups (alternative file format, from age group file)"
       task(alternative_groups: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("groups", KP::Import::AlternativeGroupImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix = create_importer_arguments
+        do_import("groups", KP::Import::AlternativeGroupImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Import age groups"
       task(age_groups: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("age groups", KP::Import::AgeGroupImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix = create_importer_arguments
+        do_import("age groups", KP::Import::AgeGroupImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Import school contacts"
       task(school_contacts: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("school contacts", KP::Import::SchoolContactImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix = create_importer_arguments
+        do_import("school contacts", KP::Import::SchoolContactImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Import group contacts"
       task(group_contacts: :environment) do
-        csv, csv_separator, school_type = create_importer_arguments
-        do_import("group contacts", KP::Import::GroupContactImporter.new(csv, school_type.id), csv_separator)
+        csv, csv_separator, school_type, school_prefix, group_prefix = create_importer_arguments
+        do_import("group contacts", KP::Import::GroupContactImporter.new(csv, school_type.id, school_prefix, group_prefix), csv_separator)
       end
 
       desc "Prepare old group objects for fresh import by setting active=false and adding suffix to names"
@@ -105,8 +105,10 @@ namespace :kp do
         csv_separator = ENV["csv_separator"] || "\t"
         csv = CSV.open(ENV["file"], "r", col_sep: csv_separator)
         school_type = SchoolType.find(ENV["school_type_id"])
+        school_prefix = ENV["school_prefix"] || ""
+        group_prefix = ENV["group_prefix"] || ""
 
-        return csv, csv_separator, school_type
+        return csv, csv_separator, school_type, school_prefix, group_prefix
       end
 
       def do_import(subject, importer, csv_separator)

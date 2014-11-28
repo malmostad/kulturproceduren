@@ -1,7 +1,7 @@
 require "kp/import/base"
 
 class KP::Import::AgeGroupImporter < KP::Import::Base
-  def initialize(csv, school_type_id, csv_header = false)
+  def initialize(csv, school_type_id, csv_header = false, school_prefix, group_prefix)
     super(csv, csv_header)
     @school_type_id = school_type_id
 
@@ -10,6 +10,10 @@ class KP::Import::AgeGroupImporter < KP::Import::Base
 
     # Track updated age groups, per group
     @updated = {}
+
+    # Handle prefixes added to extens_id in db
+    @school_prefix = school_prefix
+    @group_prefix = group_prefix
   end
 
   def attributes_from_row(row)
@@ -30,7 +34,7 @@ class KP::Import::AgeGroupImporter < KP::Import::Base
   def build(attributes)
     group = Group.includes(school: :district).references(:district, :school)
       .where([ "districts.school_type_id = ?", @school_type_id ])
-      .where(extens_id: attributes[:group_id]).first
+      .where(extens_id: @group_prefix+attributes[:group_id]).first
 
     return nil unless group
 

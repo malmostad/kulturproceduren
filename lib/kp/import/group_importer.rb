@@ -1,9 +1,13 @@
 require "kp/import/base"
 
 class KP::Import::GroupImporter < KP::Import::Base
-  def initialize(csv, school_type_id, csv_header = false)
+  def initialize(csv, school_type_id, csv_header = false, school_prefix, group_prefix)
     super(csv, csv_header)
     @school_type_id = school_type_id
+    
+    # Handle prefixes added to extens_id in db
+    @school_prefix = school_prefix
+    @group_prefix = group_prefix
   end
 
   def attributes_from_row(row)
@@ -23,16 +27,16 @@ class KP::Import::GroupImporter < KP::Import::Base
   def build(attributes)
     school = School.includes(:district).references(:district)
       .where([ "districts.school_type_id = ?", @school_type_id ])
-      .where(extens_id: attributes[:school_id]).first
+      .where(extens_id: @school_prefix+attributes[:school_id]).first
     return nil unless school
 
     base = Group.where(school_id: school.id)
 
-    group = base.where(extens_id: attributes[:extens_id]).first
+    group = base.where(extens_id: @group_prefix+attributes[:extens_id]).first
     group ||= Group.new(school_id: school.id)
 
     group.name = attributes[:name]
-    group.extens_id = attributes[:extens_id]
+    group.extens_id = @group_prefix+attributes[:extens_id]
     group.active = true
 
     return group
