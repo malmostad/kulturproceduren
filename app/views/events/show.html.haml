@@ -219,5 +219,9 @@
                             report_occasion_attendance_index_path(occasion)
 
                   - else
-                    = login_link "Logga in", new_occasion_booking_path(occasion)
-                    för att boka
+                    %ul
+                    - if @event.bookable?
+                      %li= login_link "Logga in", new_occasion_booking_path(occasion)
+                        för att boka
+                    - else
+                      Denna föreställning går ej att boka än
