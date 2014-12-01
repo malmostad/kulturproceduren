@@ -200,6 +200,10 @@
                 %td.description= linebreakize(occasion.description)
 
                 %td.actions
+                  "current_user #{current_user.can_book?}"
+                  "user online #{user_online?}"
+                  "event bookable #{@event.bookable?}"
+                  "occasion bookable #{occasion.event.bookable?}"
                   - if occasion.cancelled
                     %span.cancelled Inställd
                   - elsif user_online?
