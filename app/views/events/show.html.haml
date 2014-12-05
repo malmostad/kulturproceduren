@@ -72,7 +72,10 @@
         %dd= @event.free_for_all_transition_date
 
       %dt Bussbokning
-      %dd= @event.bus_booking? ? "Ja" : "Nej"
+      - if @event.bus_booking?
+        %dd= "Ja till och med: #{@event.last_bus_booking_date}"
+      - else
+        %dd= "Nej"
 
       - if !@event.booking_info.blank? && !@event.bookable?
         %dt Bokningsinformation
@@ -200,10 +203,6 @@
                 %td.description= linebreakize(occasion.description)
 
                 %td.actions
-                  "current_user #{current_user.can_book?}"
-                  "user online #{user_online?}"
-                  "event bookable #{@event.bookable?}"
-                  "occasion bookable #{occasion.event.bookable?}"
                   - if occasion.cancelled
                     %span.cancelled Inställd
                   - elsif user_online?
@@ -225,7 +224,7 @@
                   - else
                     %ul
                     - if @event.bookable?
-                      %li= login_link "Logga in", new_occasion_booking_path(occasion)
+                      = login_link "Logga in", new_occasion_booking_path(occasion)
                       för att boka
                     - else
                       Denna föreställning går ej att boka än
