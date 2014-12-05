@@ -11,12 +11,7 @@ module OccasionHelper
           else
             content_tag(:span, "Fullbokat", class: "sold-out")
           end
-        else
-          flash[:notice] = 'Event not bookable'
         end  
-      else
-        # User can't book
-        flash[:notice] = 'User can not book'    
       end
     else
       if occasion.event.bookable?

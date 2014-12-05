@@ -32,7 +32,7 @@
 
       %tr.occasion
         %td.time= l occasion.start_time, format: :only_time
-        %td.event= link_to occasion.event.name + " " + occasion.id.to_s, occasion.event
+        %td.event= link_to occasion.event.name, occasion.event
         - unless hide_culture_provider
           %td= link_to occasion.event.culture_provider.name, occasion.event.culture_provider
         %td.age
