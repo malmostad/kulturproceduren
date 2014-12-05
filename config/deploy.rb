@@ -68,6 +68,7 @@ namespace :deploy do
     on roles(:app) do
       within release_path do
         execute :bundle, "exec passenger stop -p #{fetch(:passenger_port)}"
+        execute :bundle, "exec rake tmp:cache:clear"
       end
     end
   end
