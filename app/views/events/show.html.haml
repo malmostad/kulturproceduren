@@ -189,7 +189,7 @@
 
                 %td.address
                   - unless occasion.address.blank?
-                    = linebreakize(occasion.address)
+                    = linebreakize(occasion.address + " " + occasion.id.to_s)
                   - unless occasion.map_address.blank?
                     - unless occasion.address.blank?
                       %br
