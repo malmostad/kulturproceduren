@@ -1,6 +1,6 @@
 # Sweeper for Event caches
 class EventSweeper < ActionController::Caching::Sweeper
-  observe Event, Occasion
+  observe Event, Occasion, Allotment
 
   def after_save(record)
     invalidate_cache(record)
@@ -22,14 +22,17 @@ class EventSweeper < ActionController::Caching::Sweeper
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/not_administratable/reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/administratable/not_reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/administratable/reportable"
+
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/not_administratable/not_reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/not_administratable/reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/administratable/not_reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/administratable/reportable"
+
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/not_administratable/not_reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/not_administratable/reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/administratable/not_reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/administratable/reportable"
+
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/not_administratable/not_reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/not_administratable/reportable"
     ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/administratable/not_reportable"
