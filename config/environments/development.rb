@@ -1,7 +1,7 @@
 Kulturproceduren::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.eager_load = false
+  config.eager_load = true
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -9,8 +9,8 @@ Kulturproceduren::Application.configure do
   config.cache_classes = false
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false

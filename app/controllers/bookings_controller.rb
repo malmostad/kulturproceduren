@@ -304,14 +304,21 @@ class BookingsController < ApplicationController
   # of free seats on an occasion.
   def sweep_event_cache
     if @occasion
+      expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/not_bookable/not_administratable/not_reportable"
+      expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/not_bookable/not_administratable/reportable"
+      expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/not_bookable/administratable/not_reportable"
+      expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/not_bookable/administratable/reportable"
+
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/not_administratable/not_reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/not_administratable/reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/administratable/not_reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/not_online/bookable/administratable/reportable"
+
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/not_administratable/not_reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/not_administratable/reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/administratable/not_reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/not_bookable/administratable/reportable"
+
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/not_administratable/not_reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/not_administratable/reportable"
       expire_fragment "events/show/#{@occasion.event.id}/occasion_list/online/bookable/administratable/not_reportable"

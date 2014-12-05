@@ -8,6 +8,8 @@ class AllotmentController < ApplicationController
   before_filter :require_admin
   before_filter :load_event
 
+  cache_sweeper :event_sweeper, only: [ :create, :update, :destroy ]
+
   # Intializing view for the allotment process, displays a form
   # for allotment parameters
   def init
