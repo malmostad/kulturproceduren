@@ -72,7 +72,10 @@
         %dd= @event.free_for_all_transition_date
 
       %dt Bussbokning
-      %dd= @event.bus_booking? ? "Ja" : "Nej"
+      - if @event.bus_booking?
+        %dd= "Ja till och med: #{@event.last_bus_booking_date}"
+      - else
+        %dd= "Nej"
 
       - if !@event.booking_info.blank? && !@event.bookable?
         %dt Bokningsinformation
@@ -219,5 +222,9 @@
                             report_occasion_attendance_index_path(occasion)
 
                   - else
-                    = login_link "Logga in", new_occasion_booking_path(occasion)
-                    för att boka
+                    %ul
+                    - if @event.bookable?
+                      = login_link "Logga in", new_occasion_booking_path(occasion)
+                      för att boka
+                    - else
+                      Denna föreställning går ej att boka än
