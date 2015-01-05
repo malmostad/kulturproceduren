@@ -94,13 +94,23 @@ class AllotmentController < ApplicationController
     redirect_to action: "distribute", id: params[:id]
   end
 
-  # Creates tickets that are in the free for all state
-  def create_free_for_all_tickets
+  #Saves nessesary event information
+  def save_event_information
+    # Update the event
     @event.allotments.clear
 
-    @event.ticket_release_date = session[:allotment][:release_date]
-    @event.ticket_state = session[:allotment][:ticket_state]
+    @event.ticket_release_date          = session[:allotment][:release_date]
+    @event.district_transition_date     = session[:allotment][:district_transition_date]
+    @event.free_for_all_transition_date = session[:allotment][:free_for_all_transition_date]
+    @event.ticket_state                 = session[:allotment][:ticket_state]
+    @event.bus_booking                  = session[:allotment][:bus_booking]
+    @event.last_bus_booking_date        = session[:allotment][:last_bus_booking_date]
     @event.save!
+  end
+
+  # Creates tickets that are in the free for all state
+  def create_free_for_all_tickets
+    save_event_information()
 
     @event.allotments.create!(
       user: current_user,
@@ -134,16 +144,7 @@ class AllotmentController < ApplicationController
     params[:allotment][:ticket_assignment].each { |k,v| assignment[k.to_i] = v.to_i if v.to_i > 0 }
 
     if params[:create_tickets]
-      # Update the event
-      @event.allotments.clear
-
-      @event.ticket_release_date          = session[:allotment][:release_date]
-      @event.district_transition_date     = session[:allotment][:district_transition_date]
-      @event.free_for_all_transition_date = session[:allotment][:free_for_all_transition_date]
-      @event.ticket_state                 = session[:allotment][:ticket_state]
-      @event.bus_booking                  = session[:allotment][:bus_booking]
-      @event.last_bus_booking_date        = session[:allotment][:last_bus_booking_date]
-      @event.save!
+      save_event_information()
 
       tickets_created = 0
 
