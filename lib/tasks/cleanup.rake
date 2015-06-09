@@ -65,9 +65,9 @@ namespace :kp do
       puts "Removing non-standing events and associated Occasions, Questionnaires, Attachments, Images"
       Event.non_standing.all.each { |e| e.destroy }
       puts "Removing inactive Groups with associated AgeGroups"
-      Group.all(conditions: { active: false }).each { |g| g.destroy }
+      Group.where(active: false).each { |g| g.destroy }
       puts "Removing orphaned Questions"
-      Question.all(conditions: "template = false and id not in (select question_id from questionnaires_questions)").each { |q| q.destroy }
+      Question.where("template = false and id not in (select question_id from questionnaires_questions)").each { |q| q.destroy }
     end
 
   end
