@@ -7,7 +7,7 @@ class KK::FTP_Import::SchoolImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
+    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 5)") if row.length != 5
 
     {
       extens_id: row[0].try(:strip),
