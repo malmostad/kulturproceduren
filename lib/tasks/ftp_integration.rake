@@ -1,8 +1,6 @@
 require "csv"
 require "active_support"
-require "kk/ftp_import/pre_schools"
-require "kk/ftp_import/schools"
-require "kk/ftp_import/high_schools"
+
 
 namespace :kk do
 	namespace :extens do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140520081802) do
+ActiveRecord::Schema.define(version: 20150715131830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -341,7 +341,9 @@ ActiveRecord::Schema.define(version: 20140520081802) do
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "extens_id",   limit: 64
+    t.string   "extens_id",      limit: 64
+    t.string   "city_area"
+    t.string   "disctrict_area"
   end
 
   add_index "schools", ["extens_id"], name: "index_schools_on_extens_id", using: :btree
