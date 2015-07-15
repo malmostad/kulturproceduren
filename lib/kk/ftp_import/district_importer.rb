@@ -7,7 +7,7 @@ class KK::FTP_Import::DistrictImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length < 2
+    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
 
     {
       extens_id: row[0].try(:strip),

@@ -43,6 +43,7 @@ common: &common
         :from_address: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
         :bus_booking_recipient: "carolina.wilse@malmo.se; sofia.ek.landen@malmo.se; maria.gonzalez@malmo.se"
         :existens_error_reporting: "carolina.wilse@malmo.se; support.gbg@kentor.se"
+        :extens_error_in_files: "support.gbg@kentor.se"
 
 development:
     <<: *common
