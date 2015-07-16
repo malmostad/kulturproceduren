@@ -19,6 +19,10 @@
           Behöver du hjälp eller vill läsa mer om någon del i Kulturkartan
           hittar du
           = link_to "användarhjälp här", APP_CONFIG[:kp_manual_link]
+        - unless user_online?
+          %p
+            Är du kulturombud och vill boka evenemang,
+            = link_to "skapa ett konto här", controller: "login", action: "index"
 
     = render partial: "shared/contact_us"
 
