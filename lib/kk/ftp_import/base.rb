@@ -1,5 +1,5 @@
-module KP
-  module Import
+module KK
+  module FTP_Import
 
     class ParseError < ::StandardError
     end
@@ -32,6 +32,10 @@ module KP
         errors = []
         row_number = 0
 
+        fileDate = Date.yesterday.to_s
+        subject = "Daglig överföring från Extens"
+        body = "Fel i filer skickade " + fileDate + "\n Följande fel hittdes: "
+
         csv.each do |row|
           row_number += 1
 
@@ -55,7 +59,9 @@ module KP
         end
 
         # Raise all ParseErrors as a single ParseError
-        raise ParseError.new(errors.join("\n")) unless errors.blank?
+        #raise ParseError.new(errors.join("\n")) unless errors.blank?
+        body << errors.to_s
+        InformationMailer.custom_email(APP_CONFIG[:mailers][:extens_error_in_files], subject, body).deliver unless errors.blank?
       end
 
       # Contains the parsed data as hashes with :attributes

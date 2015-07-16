@@ -2,6 +2,8 @@ common: &common
     :assets_url_base: "//assets.malmo.se/external/v4/"
     :asset_host: "http://www.malmo.se/assets-2.0"
     :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
+    :ftp_import_directory: "./tmp/importArchive/"
+    :ftp_import_archive: "./tmp/importArchive/ftpImportArchive"
 
     :salt_length: 10
     :request_key_length: 20
@@ -40,6 +42,8 @@ common: &common
     :mailers:
         :from_address: "Kulturkartan, Malmö Stad <noreply@malmo.se>"
         :bus_booking_recipient: "carolina.wilse@malmo.se; sofia.ek.landen@malmo.se; maria.gonzalez@malmo.se"
+        :existens_error_reporting: "carolina.wilse@malmo.se; support.gbg@kentor.se"
+        :extens_error_in_files: "support.gbg@kentor.se"
 
 development:
     <<: *common

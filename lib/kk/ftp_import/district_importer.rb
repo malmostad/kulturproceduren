@@ -1,13 +1,13 @@
-require "kp/import/base"
+require "kk/ftp_import/base"
 
-class KP::Import::DistrictImporter < KP::Import::Base
-  def initialize(csv, school_type_id, csv_header = false, school_prefix, group_prefix)
+class KK::FTP_Import::DistrictImporter < KK::FTP_Import::Base
+  def initialize(csv, school_type_id, csv_header = false)
     super(csv, csv_header)
     @school_type_id = school_type_id
   end
 
   def attributes_from_row(row)
-    raise KP::Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
+    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
 
     {
       extens_id: row[0].try(:strip),
@@ -23,7 +23,6 @@ class KP::Import::DistrictImporter < KP::Import::Base
     base = District.where(school_type_id: @school_type_id)
 
     district = base.where(extens_id: attributes[:extens_id]).first
-    district ||= base.where([ "name ilike ?", attributes[:name] ]).first
     district ||= District.new(school_type_id: @school_type_id)
 
     district.name = attributes[:name]
