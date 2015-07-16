@@ -23,7 +23,7 @@ namespace :kk do
     		fileDate = Date.yesterday.to_s
     		subject = "Daglig överföring från Extens"
     		body = "Den dagliga överföringen från Extens misslyckades för filer skickade " + fileDate
-    		filenames = ["forskola_utbildningsomraden", "forskolor.tsv", "forskolor_grupper.tsv", "forskolor_antal_barn.tsv", "forskolor_kontakter.tsv", "grundskola_utbildningsomraden.tsv", "grundskolor.tsv", "grundskolor_klasser.tsv", "grundskolor_antal_barn.tsv", "grundskolor_rektorer.tsv", "grundskolor_klassforestandare.tsv"].to_set
+    		filenames = ["forskolor.tsv", "forskolor_grupper.tsv", "forskolor_antal_barn.tsv", "forskolor_kontakter.tsv", "grundskola_utbildningsomraden.tsv", "grundskolor.tsv", "grundskolor_klasser.tsv", "grundskolor_antal_barn.tsv", "grundskolor_rektorer.tsv", "grundskolor_klassforestandare.tsv"].to_set
 
     		task(checkfiles: :environment) do
         		dir = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*")
@@ -36,8 +36,8 @@ namespace :kk do
 
       		desc "Import pre-schools from Extens"
       		task(pre_schools: :environment) do
-      			ENV["file"] = "forskola_utbildningsomraden.tsv"
-        		do_import("pre school districts", KK::FTP_Import::DistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskola_utbildningsomraden.tsv", "r", col_sep: csv_separator), school_type_id))
+      			ENV["file"] = "forskolor.tsv"
+        		do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
         		ENV["file"] = "forskolor.tsv"
         		do_import("pre schools", KK::FTP_Import::SchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
         		ENV["file"] = "forskolor_grupper.tsv"
