@@ -2,7 +2,7 @@
 <% type = @role_application.role.symbol_name %>
 
 <h1>
-  Kulturproceduren -
+  Kulturkartan -
   <% if accepted %>
     Behörighet
   <% else %>
@@ -23,7 +23,7 @@
   <% elsif type == :host %>
     hantera närvaro
   <% end %>
-  i <%= link_to "Kulturproceduren", APP_CONFIG[:kp_external_link] %>.
+  i <%= link_to "Kulturkartan", APP_CONFIG[:kp_external_link] %>.
 </p>
 
 <p>
@@ -31,7 +31,7 @@
     <% if accepted %>
       Här kan du få hjälp med att komma igång.
     <% else %>
-      Här kan du läsa mer om vad som gäller för att få behörighet i Kulturproceduren.
+      Här kan du läsa mer om vad som gäller för att få behörighet i Kulturkartan.
     <% end %>
   </a>
 </p>

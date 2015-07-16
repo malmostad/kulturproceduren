@@ -21,7 +21,7 @@ class BookingMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Avbokning - #{booking.group.name}, #{booking.group.school.name} till #{booking.occasion.event.name}"
+      subject: "Kulturkartan: Avbokning - #{booking.group.name}, #{booking.group.school.name} till #{booking.occasion.event.name}"
     )
   end
 end

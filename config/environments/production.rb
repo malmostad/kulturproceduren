@@ -66,6 +66,6 @@ Kulturproceduren::Application.configure do
 
   config.action_mailer.sendmail_settings = {
     location: "/usr/sbin/sendmail",
-    arguments: "-i -t -F Kulturproceduren -f noreply@malmo.se"
+    arguments: "-i -t -F Kulturkartan -f noreply@malmo.se"
   }
 end

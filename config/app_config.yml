@@ -38,7 +38,7 @@ common: &common
 
     # OBS - se även config/enviroments/*rb actionmailer-config ... From-address måste anges även där
     :mailers:
-        :from_address: "Kulturproceduren, Malmö Stad <noreply@malmo.se>"
+        :from_address: "Kulturkartan, Malmö Stad <noreply@malmo.se>"
         :bus_booking_recipient: "carolina.wilse@malmo.se; sofia.ek.landen@malmo.se; maria.gonzalez@malmo.se"
 
 development:

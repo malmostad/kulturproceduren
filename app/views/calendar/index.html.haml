@@ -1,22 +1,22 @@
 %main
   .preamble.calendar
     %section.about.box.light
-      %h1.box-title Om Kulturproceduren
+      %h1.box-title Om Kulturkartan
       .box-content
         .map-container(style="display:none;")
         %p
-          Välkommen till Kulturproceduren. I kalendariet hittar du kulturutbud
+          Välkommen till Kulturkartan. I kalendariet hittar du kulturutbud
           för barn och unga i Malmö.
         %p
-          Kulturproceduren är även ett bokningssystem som är tillgängligt för
+          Kulturkartan är även ett bokningssystem som är tillgängligt för
           Malmös förskolor och grundskolor.
         - unless user_online?
           %p
             Är du kulturproducent i Malmö och vill presentera ditt utbud på
-            Kulturproceduren,
+            Kulturkartan,
             = link_to "skapa ett konto här", controller: "login", action: "index"
         %p
-          Behöver du hjälp eller vill läsa mer om någon del i Kulturproceduren
+          Behöver du hjälp eller vill läsa mer om någon del i Kulturkartan
           hittar du
           = link_to "användarhjälp här", APP_CONFIG[:kp_manual_link]
 

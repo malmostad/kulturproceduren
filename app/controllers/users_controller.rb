@@ -131,7 +131,7 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     user.destroy
 
-    flash[:notice] = "Användaren raderades från Kulturproceduren."
+    flash[:notice] = "Användaren raderades från Kulturkartan."
     redirect_to(users_url)
   end
 

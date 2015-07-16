@@ -19,7 +19,7 @@ class OccasionMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Inställt evenemang - #{occasion.event.name}"
+      subject: "Kulturkartan: Inställt evenemang - #{occasion.event.name}"
     )
   end
 
@@ -37,7 +37,7 @@ class OccasionMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Snart dags för #{occasion.event.name}"
+      subject: "Kulturkartan: Snart dags för #{occasion.event.name}"
     )
   end
 
@@ -55,7 +55,7 @@ class OccasionMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Utvärdering av #{occasion.event.name}"
+      subject: "Kulturkartan: Utvärdering av #{occasion.event.name}"
     )
   end
 
@@ -72,7 +72,7 @@ class OccasionMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Påminnelse utvärdering - #{answer_form.occasion.event.name}"
+      subject: "Kulturkartan: Påminnelse utvärdering - #{answer_form.occasion.event.name}"
     )
   end
 end

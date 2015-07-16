@@ -15,7 +15,7 @@ module OccasionHelper
       end
     else
       if occasion.event.bookable?
-        login_link "Kulturproceduren", new_occasion_booking_path(occasion)
+        login_link "Kulturkartan", new_occasion_booking_path(occasion)
       else
         link_to "Arrangören", occasion.event
       end

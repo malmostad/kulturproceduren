@@ -20,7 +20,7 @@ class EventMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Fördelade platser till #{event.name}"
+      subject: "Kulturkartan: Fördelade platser till #{event.name}"
     )
   end
 
@@ -38,7 +38,7 @@ class EventMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Restplatser till #{event.name}"
+      subject: "Kulturkartan: Restplatser till #{event.name}"
     )
   end
 
@@ -57,7 +57,7 @@ class EventMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Restplatser till #{event.name}"
+      subject: "Kulturkartan: Restplatser till #{event.name}"
     )
   end
 
@@ -81,7 +81,7 @@ class EventMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Kulturbussbokningar för #{event.name}"
+      subject: "Kulturkartan: Kulturbussbokningar för #{event.name}"
     )
   end
 end

@@ -1,5 +1,5 @@
 - content_for(:page_title) do
-  Kulturprocedurens arrangörer
+  Kulturkartans arrangörer
 
 %main.with-aside
   - partition_by_first_letter(@culture_providers, :name).sort.each do |letter, culture_providers|

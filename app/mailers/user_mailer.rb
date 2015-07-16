@@ -17,7 +17,7 @@ class UserMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Bekräfta återställning av lösenord"
+      subject: "Kulturkartan: Bekräfta återställning av lösenord"
     )
   end
 
@@ -35,7 +35,7 @@ class UserMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Nytt lösenord"
+      subject: "Kulturkartan: Nytt lösenord"
     )
   end
 

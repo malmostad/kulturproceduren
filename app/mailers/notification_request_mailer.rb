@@ -22,7 +22,7 @@ class NotificationRequestMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Restplatser till #{notification_request.event.name}"
+      subject: "Kulturkartan: Restplatser till #{notification_request.event.name}"
     )
   end
 
@@ -38,7 +38,7 @@ class NotificationRequestMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Reservplatser till #{notification_request.event.name}"
+      subject: "Kulturkartan: Reservplatser till #{notification_request.event.name}"
     )
   end
 end

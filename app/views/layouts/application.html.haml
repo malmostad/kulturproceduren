@@ -8,7 +8,7 @@
       %meta{"http-equiv" => "X-UA-Compatible", "content" => "IE=edge"}
 
     %title
-      Kulturproceduren - Malmö stad
+      Kulturkartan - Malmö stad
 
     /[if lte IE 8]
       = javascript_include_tag "#{APP_CONFIG[:assets_url_base]}html5shiv-printshiv.js"
@@ -35,19 +35,19 @@
           %li= link_to "Mitt konto", current_user
           %li= link_to "Logga ut", controller: "login", action: "logout"
         - else
-          %li= login_link "Logga in på Kulturproceduren"
+          %li= login_link "Logga in på Kulturkartan"
 
       %ol.breadcrumbs
         %li= link_to "Start", "http://www.malmo.se/"
         %li= link_to "Kultur & nöje", "http://www.malmo.se/Kultur--fritid/Kultur--noje.html"
         %li= link_to "Barn & unga", "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--unga.html"
-        %li= link_to "Kulturproceduren", root_path
+        %li= link_to "Kulturkartan", root_path
 
       %h1.body-copy
         - if content_for?(:page_title)
           = yield(:page_title)
         - else
-          Kulturproceduren
+          Kulturkartan
 
 
       - # Show temporary notice about new design

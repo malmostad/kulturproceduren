@@ -18,7 +18,7 @@ class RoleApplicationMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Behörighetsansökan"
+      subject: "Kulturkartan: Behörighetsansökan"
     )
   end
 
@@ -35,7 +35,7 @@ class RoleApplicationMailer < ActionMailer::Base
     mail(
       to: recipients,
       date: Time.zone.now,
-      subject: "Kulturproceduren: Behörighet"
+      subject: "Kulturkartan: Behörighet"
     )
   end
 end
