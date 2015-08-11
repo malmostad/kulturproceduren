@@ -21,7 +21,7 @@ class KK::FTP_Import::PreSchoolDistrictImporter < KK::FTP_Import::Base
     district ||= District.new(school_type_id: @school_type_id)
 
     district.name = attributes[:name]
-    district.extens_id = "Pre-School-District-" + attrifutes[:name]
+    district.extens_id = "Pre-School-District-" + attributes[:name]
 
     return district
   end
