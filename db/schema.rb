@@ -341,9 +341,9 @@ ActiveRecord::Schema.define(version: 20150715131830) do
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "extens_id",      limit: 64
-    t.string   "city_area"
-    t.string   "disctrict_area"
+    t.string   "extens_id",     limit: 64
+    t.text     "city_area"
+    t.text     "district_area"
   end
 
   add_index "schools", ["extens_id"], name: "index_schools_on_extens_id", using: :btree

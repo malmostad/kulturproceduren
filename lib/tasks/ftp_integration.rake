@@ -83,7 +83,7 @@ namespace :kk do
          		puts "Importing #{subject} from #{ENV["file"]}"
         		begin
         			result = importer.import!
-        		rescue KP::Import::ParseError => e
+        		rescue KK::FTP_Import::ParseError => e
           			puts "Found errors when importing:\n#{e.message}"
         		end
       		end
