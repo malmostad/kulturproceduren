@@ -3,7 +3,7 @@ common: &common
     :asset_host: "http://www.malmo.se/assets-2.0"
     :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
     :ftp_import_directory: "./tmp/importArchive/"
-    :ftp_import_archive: "./tmp/importArchive/ftpImportArchive"
+    :ftp_import_archive: "./tmp/importArchive/processed"
 
     :salt_length: 10
     :request_key_length: 20
