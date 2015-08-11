@@ -39,7 +39,7 @@ namespace :kk do
       			ENV["file"] = "forskolor.tsv"
         		do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
         		ENV["file"] = "forskolor.tsv"
-        		do_import("pre schools", KK::FTP_Import::SchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
+        		do_import("pre schools", KK::FTP_Import::PreSchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
         		ENV["file"] = "forskolor_grupper.tsv"
         		do_import("pre school classes", KK::FTP_Import::GroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor_grupper.tsv", "r", col_sep: csv_separator), school_type_id))
         		ENV["file"] = "forskolor_antal_barn.tsv"
