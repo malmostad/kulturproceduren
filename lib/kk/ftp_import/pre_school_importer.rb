@@ -24,7 +24,7 @@ class KK::FTP_Import::PreSchoolImporter < KK::FTP_Import::Base
 
   def build(attributes)
     district_name = attributes[:city_area]
-    district_name = '-' if district_name.nil? or district_name.empty?
+    district_name = 'Fristående' if district_name.nil? or district_name.empty?
     district = District.where(school_type_id: @school_type_id, name: district_name).first
     return nil unless district
 

@@ -15,12 +15,12 @@ class KK::FTP_Import::PreSchoolDistrictImporter < KK::FTP_Import::Base
   end
 
   def unique_id(attributes)
-    attributes[:name] || '-'
+    attributes[:name] || 'Fristående'
   end
 
   def build(attributes)
     base = District.where(school_type_id: @school_type_id)
-    district_name = attributes[:name] || '-'
+    district_name = attributes[:name] || 'Fristående'
 
     district = base.where(name: district_name).first
     district ||= District.new(school_type_id: @school_type_id)
