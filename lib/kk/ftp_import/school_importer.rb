@@ -35,6 +35,7 @@ class KK::FTP_Import::SchoolImporter < KK::FTP_Import::Base
     school.extens_id = attributes[:extens_id]
     school.city_area = attributes[:city_area]
     school.district_area = attributes[:district_area]
+    school.to_delete = false
 
     return school
   end

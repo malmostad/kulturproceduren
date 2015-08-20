@@ -27,6 +27,7 @@ class KK::FTP_Import::DistrictImporter < KK::FTP_Import::Base
 
     district.name = attributes[:name]
     district.extens_id = attributes[:extens_id]
+    district.to_delete = false
 
     return district
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150715131830) do
+ActiveRecord::Schema.define(version: 20150716151245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20150715131830) do
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "to_delete"
   end
 
   create_table "allotments", force: true do |t|
@@ -173,6 +174,7 @@ ActiveRecord::Schema.define(version: 20150715131830) do
     t.datetime "updated_at"
     t.string   "extens_id",      limit: 64
     t.integer  "school_type_id"
+    t.boolean  "to_delete"
   end
 
   add_index "districts", ["extens_id"], name: "index_districts_on_extens_id", using: :btree
@@ -233,6 +235,7 @@ ActiveRecord::Schema.define(version: 20150715131830) do
     t.boolean  "active",                default: true
     t.integer  "priority"
     t.string   "extens_id",  limit: 64
+    t.boolean  "to_delete"
   end
 
   add_index "groups", ["extens_id"], name: "index_groups_on_extens_id", using: :btree
@@ -341,9 +344,10 @@ ActiveRecord::Schema.define(version: 20150715131830) do
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "extens_id",     limit: 64
+    t.string   "extens_id",      limit: 64
     t.text     "city_area"
-    t.text     "district_area"
+    t.text     "disctrict_area"
+    t.boolean  "to_delete"
   end
 
   add_index "schools", ["extens_id"], name: "index_schools_on_extens_id", using: :btree

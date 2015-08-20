@@ -1,6 +1,7 @@
 require "csv"
 require "active_support"
 require "fileutils"
+require "kk/ftp_import/import_deleter"
 require "kk/ftp_import/district_importer"
 require "kk/ftp_import/school_importer"
 require "kk/ftp_import/group_importer"
@@ -70,12 +71,24 @@ namespace :kk do
             FileUtils.mv(dir, APP_CONFIG[:ftp_import_archive])
           end
 
+          desc "Sets all extens districts, schools and groups to be deleted."
+          task(mark_for_delete: :environment) do
+            KK::FTP_Import::ImportDeleter.new().mark_for_delete()
+          end
+
+          desc "Deletes all marked records"
+          task(delete_marked: :environment) do
+            KK::FTP_Import::ImportDeleter.new().delete_marked()
+          end
+
       		desc "Import all files in ftp directory"
       		task(import_files: :environment) do
       			Rake::Task["kk:extens:ftp_import:checkfiles"].invoke
+            Rake::Task["kk:extens:ftp_import:mark_for_delete"].invoke
       			Rake::Task["kk:extens:ftp_import:pre_schools"].invoke
       			Rake::Task["kk:extens:ftp_import:schools"].invoke
             Rake::Task["kk:extens:ftp_import:move_files"].invoke
+            Rake::Task["kk:extens:ftp_import:delete_marked"].invoke
       		end
 
       		private

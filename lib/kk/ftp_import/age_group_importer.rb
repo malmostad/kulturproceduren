@@ -40,6 +40,7 @@ class KK::FTP_Import::AgeGroupImporter < KK::FTP_Import::Base
     age_group ||= group.age_groups.build(age: age)
 
     age_group.quantity = attributes[:quantity]
+    age_group.to_delete = false
 
     # Track existing age groups which will be updated
     @updated[group.id] ||= []

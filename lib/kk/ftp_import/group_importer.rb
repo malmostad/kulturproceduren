@@ -34,6 +34,7 @@ class KK::FTP_Import::GroupImporter < KK::FTP_Import::Base
     group.name = attributes[:name]
     group.extens_id = attributes[:extens_id]
     group.active = true
+    group.to_delete = false
 
     return group
   end

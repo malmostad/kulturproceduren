@@ -27,6 +27,7 @@ class KK::FTP_Import::PreSchoolDistrictImporter < KK::FTP_Import::Base
 
     district.name = district_name
     district.extens_id = "Pre-School-District-" + district_name
+    district.to_delete = false
 
     return district
   end
