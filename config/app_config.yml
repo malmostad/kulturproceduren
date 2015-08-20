@@ -32,7 +32,6 @@ common: &common
     :kp_external_link: "http://www.malmo.se/kulturproceduren"
     :kp_manual_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
     :kbu_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor.html"
-    :kbu_facebook: "http://www.facebook.com/kbumalmo"
     :culture_bus_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
 
     :allotment:
