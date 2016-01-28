@@ -78,6 +78,6 @@ class AnswerFormTest < ActiveSupport::TestCase
 
     result = AnswerForm.find_overdue(Date.today - 10)
     assert_equal 10, result.length
-    result.each { |af| assert !af.completed && af.occasion.date = Date.today - 10 && !af.occasion.cancelled }
+    result.each { |af| assert !af.completed && af.occasion.date == Date.today - 10 && !af.occasion.cancelled }
   end
 end

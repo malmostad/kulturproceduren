@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../../test_helper'
 
 class MailerHelperTest < ActionView::TestCase
   test "mail url" do

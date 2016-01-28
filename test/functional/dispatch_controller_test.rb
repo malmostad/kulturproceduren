@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../test_helper'
 
 class DispatchControllerTest < ActionController::TestCase
   test "index, no goto" do

@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../test_helper'
 
 class AnswerFormControllerTest < ActionController::TestCase
   test "submit not existing" do
