@@ -1,5 +1,5 @@
 # Sends mail for actions concerning Events
-class EventMailer < ActionMailer::Base
+class EventMailer < ApplicationMailer
   layout 'mail'
   helper :mailer
 
@@ -17,11 +17,7 @@ class EventMailer < ActionMailer::Base
     @group_structure = group_structure
     @category_groups = CategoryGroup.all
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Fördelade platser till #{event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Fördelade platser till #{event.name}"
   end
 
   # Sends an email to contacts when tickets transition to free for all allotment
@@ -35,11 +31,7 @@ class EventMailer < ActionMailer::Base
     @event           = event
     @category_groups = CategoryGroup.all
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Restplatser till #{event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Restplatser till #{event.name}"
   end
 
   # Sends an email to contacts when tickets transition to district allotment
@@ -54,11 +46,7 @@ class EventMailer < ActionMailer::Base
     @district        = district
     @category_groups = CategoryGroup.all
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Restplatser till #{event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Restplatser till #{event.name}"
   end
 
   # Sends a mail to the bus booking recipient with an event's bus bookings
@@ -78,10 +66,6 @@ class EventMailer < ActionMailer::Base
       content: Booking.bus_booking_csv(bookings)
     }
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Kulturbussbokningar för #{event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Kulturbussbokningar för #{event.name}"
   end
 end

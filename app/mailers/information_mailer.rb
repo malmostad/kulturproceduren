@@ -1,5 +1,5 @@
 # Sends information mails to recipients in the system
-class InformationMailer < ActionMailer::Base
+class InformationMailer < ApplicationMailer
   layout "mail"
 
   default from: APP_CONFIG[:mailers][:from_address]
@@ -14,10 +14,6 @@ class InformationMailer < ActionMailer::Base
 
     @message = body
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: subject
-    )
+    mail_from_app recipients, subject
   end
 end

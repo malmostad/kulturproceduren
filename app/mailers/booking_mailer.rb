@@ -1,5 +1,5 @@
 # Mailer for actions concerning bookings
-class BookingMailer < ActionMailer::Base
+class BookingMailer < ApplicationMailer
   layout "mail"
   helper :mailer
   helper :application
@@ -18,10 +18,6 @@ class BookingMailer < ActionMailer::Base
     @booking     = booking
     @answer_form = answer_form
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Avbokning - #{booking.group.name}, #{booking.group.school.name} till #{booking.occasion.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Avbokning - #{booking.group.name}, #{booking.group.school.name} till #{booking.occasion.event.name}"
   end
 end
