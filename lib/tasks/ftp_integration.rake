@@ -24,43 +24,76 @@ namespace :kk do
     		fileDate = Date.yesterday.to_s
     		subject = "Daglig överföring från Extens"
     		body = "Den dagliga överföringen från Extens misslyckades för filer skickade " + fileDate
-    		filenames = ["forskolor.tsv", "forskolor_grupper.tsv", "forskolor_antal_barn.tsv", "utbildningsomraden.tsv", "skolor.tsv", "klasser.tsv", "antal_barn.tsv", "klassforestandare.tsv"].to_set
 
     		task(checkfiles: :environment) do
-        		dir = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*")
-        		if filenames.subset?(dir.to_set)
-        			ENV["ALLFILES"] = "true"
-        		else
-        			InformationMailer.custom_email(APP_CONFIG[:mailers][:existens_error_reporting], subject, body).deliver
-        		end
+						dir = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*").grep(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/)
+						if !dir.empty?
+							ENV["ALLFILES"] = "true"
+            else
+							#InformationMailer.custom_email(APP_CONFIG[:mailers][:existens_error_reporting], subject, body).deliver
+						end
       		end
 
       		desc "Import pre-schools from Extens"
       		task(pre_schools: :environment) do
-      			ENV["file"] = "forskolor.tsv"
-        		do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "forskolor.tsv"
-        		do_import("pre schools", KK::FTP_Import::PreSchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "forskolor_grupper.tsv"
-        		do_import("pre school classes", KK::FTP_Import::GroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor_grupper.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "forskolor_antal_barn.tsv"
-        		do_import("pre school number of children", KK::FTP_Import::AgeGroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor_antal_barn.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "forskolor_kontakter.tsv"
-        		do_import("pre school contacts", KK::FTP_Import::SchoolContactImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"forskolor_kontakter.tsv", "r", col_sep: csv_separator), school_type_id))
+						encoding = 'windows-1252'
+						all_files = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*").map {|p| File.basename p}.grep(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/)
+
+            all_files.grep(/^forskolor_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+            end
+
+						all_files.grep(/^forskolor_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("pre schools", KK::FTP_Import::PreSchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^forskolor_grupper_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("pre school classes", KK::FTP_Import::GroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^forskolor_antal_barn_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("pre school number of children", KK::FTP_Import::AgeGroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^forskolor_kontakter_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("pre school contacts", KK::FTP_Import::SchoolContactImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
       		end
 
       		desc "Import schools"
           task(schools: :environment) do
-     			  ENV["file"] = "utbildningsomraden.tsv"
-        		do_import("schools districts", KK::FTP_Import::DistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"utbildningsomraden.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "skolor.tsv"
-        		do_import("schools", KK::FTP_Import::SchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"skolor.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "klasser.tsv"
-        		do_import("school classes", KK::FTP_Import::GroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"klasser.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "antal_barn.tsv"
-        		do_import("school number of children", KK::FTP_Import::AgeGroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"antal_barn.tsv", "r", col_sep: csv_separator), school_type_id))
-        		ENV["file"] = "klassforestandare.tsv"
-        		do_import("school class contacts", KK::FTP_Import::GroupContactImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+"klassforestandare.tsv", "r", col_sep: csv_separator), school_type_id))
+						encoding = 'windows-1252'
+						all_files = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*").map {|p| File.basename p}.grep(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/)
+
+						all_files.grep(/^utbildningsomraden_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("schools districts", KK::FTP_Import::DistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^skolor_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("schools", KK::FTP_Import::SchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^klasser_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("school classes", KK::FTP_Import::GroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^antal_barn_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("school number of children", KK::FTP_Import::AgeGroupImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
+
+						all_files.grep(/^klassforestandare_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+							ENV["file"] = file_name
+							do_import("school class contacts", KK::FTP_Import::GroupContactImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						end
       		end
       
           desc "Moves files to archive"
@@ -76,7 +109,7 @@ namespace :kk do
 
           desc "Deletes all marked records"
           task(delete_marked: :environment) do
-            KK::FTP_Import::ImportDeleter.new().delete_marked()
+            #KK::FTP_Import::ImportDeleter.new().delete_marked()
           end
 
       		desc "Import all files in ftp directory"

@@ -7,14 +7,15 @@ class KK::FTP_Import::PreSchoolImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 5)") if row.length != 5
+    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
 
     {
       extens_id: row[0].try(:strip),
       district_id: row[1].try(:strip),
       name: row[2].try(:strip),
       city_area: row[3].try(:strip),
-      district_area: row[4].try(:strip)
+      district_area: row[4].try(:strip),
+      school_type_code: row[5].try(:strip)
     }
   end
 
@@ -26,6 +27,12 @@ class KK::FTP_Import::PreSchoolImporter < KK::FTP_Import::Base
     district_name = attributes[:city_area]
     district_name = 'Fristående' if district_name.nil? or district_name.empty?
     district = District.where(school_type_id: @school_type_id, name: district_name).first
+    unless district
+      # enligt överenskommelse med Carolina Wilse på telefon 2016-02-10...
+      # ... så skall de förskolor som inte har någon områdeskoppling hamna under 'Fristående'
+      district = District.where(school_type_id: @school_type_id, name: 'Fristående').first
+    end
+    return nil if attributes[:school_type_code].match(/^FSKIK/) #Enligt Anders Ljungdahl är dessa enbart för intrakommunal ersättning
     return nil unless district
 
     base = School.where(district_id: district.id)

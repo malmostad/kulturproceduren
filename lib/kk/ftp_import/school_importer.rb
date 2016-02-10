@@ -7,14 +7,15 @@ class KK::FTP_Import::SchoolImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 5)") if row.length != 5
+    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
 
     {
       extens_id: row[0].try(:strip),
       district_id: row[1].try(:strip),
       name: row[2].try(:strip),
       city_area: row[3].try(:strip),
-      district_area: row[4].try(:strip)
+      district_area: row[4].try(:strip),
+      school_type_code: row[5].try(:strip)
     }
   end
 
@@ -24,6 +25,11 @@ class KK::FTP_Import::SchoolImporter < KK::FTP_Import::Base
 
   def build(attributes)
     district = District.where(school_type_id: @school_type_id, extens_id: attributes[:district_id]).first
+    unless district
+      # enligt överenskommelse med Carolina Wilse på telefon 2016-02-10...
+      # ... så skall de skolor som inte har någon områdeskoppling hamna under 'Gymnasieförvaltningen'
+      district = District.where(school_type_id: @school_type_id, name: 'Gymnasieförvaltningen').first
+    end
     return nil unless district
 
     base = School.where(district_id: district.id)
