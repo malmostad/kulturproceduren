@@ -1,4 +1,4 @@
-class UserMailer < ActionMailer::Base
+class UserMailer < ApplicationMailer
   layout 'mail'
   helper :mailer
 
@@ -14,11 +14,7 @@ class UserMailer < ActionMailer::Base
 
     @user = user
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Bekräfta återställning av lösenord"
-    )
+    mail_from_app recipients, "Kulturkartan: Bekräfta återställning av lösenord"
   end
 
   # Sends an email containing the user's new password
@@ -32,11 +28,7 @@ class UserMailer < ActionMailer::Base
     @user     = user
     @password = password
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Nytt lösenord"
-    )
+    mail_from_app recipients, "Kulturkartan: Nytt lösenord"
   end
 
 end

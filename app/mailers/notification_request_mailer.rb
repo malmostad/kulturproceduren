@@ -1,5 +1,5 @@
 # Mailer for actions concerning notification requests.
-class NotificationRequestMailer < ActionMailer::Base
+class NotificationRequestMailer < ApplicationMailer
   layout 'mail'
   helper :mailer
 
@@ -19,11 +19,7 @@ class NotificationRequestMailer < ActionMailer::Base
     @district_release     = district_release
     @category_groups      = CategoryGroup.all
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Restplatser till #{notification_request.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Restplatser till #{notification_request.event.name}"
   end
 
   def unbooking_notification(notification_request)
@@ -35,10 +31,6 @@ class NotificationRequestMailer < ActionMailer::Base
 
     @notification_request = notification_request
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Reservplatser till #{notification_request.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Reservplatser till #{notification_request.event.name}"
   end
 end

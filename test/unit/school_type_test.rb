@@ -9,15 +9,33 @@ class SchoolTypeTest < ActiveSupport::TestCase
   end
 
   test "default scopes" do
-    active   = create(:school_type, active: true)
-    inactive = create(:school_type, active: false)
-    assert_equal [active], SchoolType.all
+    # The default scope should only return active school types
+    create(:school_type, active: false)
+
+    all_schoolTypes = SchoolType.all
+    all_schoolTypes.each do |sc|
+      assert_equal true, sc.active
+    end
   end
 
   test "active scopes" do
-    active   = create(:school_type, active: true)
-    inactive = create(:school_type, active: false)
-    assert_equal [active],   SchoolType.active
-    assert_equal [inactive], SchoolType.inactive
+    create(:school_type, active: true)
+    create(:school_type, active: false)
+
+    all_active = SchoolType.active
+    assert all_active.size > 0
+
+    all_active.each do |sc|
+      assert_equal true,  sc.active
+    end
+
+    all_inactive = SchoolType.inactive
+    all_inactive.each do |sc|
+      assert_equal false,  sc.active
+    end
+
+    # Since all only returns active
+    assert all_active.size + all_inactive.size > SchoolType.all.size
+
   end
 end

@@ -53,7 +53,8 @@ class ImagesControllerTest < ActionController::TestCase
     assert_equal         "Felaktigt anrop.", flash[:error]
   end
   test "create, culture provider" do
-    file = Rack::Test::UploadedFile.new("#{Rails.root}/test/fixtures/image.jpg", "image/jpeg")
+
+    file = fixture_file_upload("image.jpg", "image/jpeg", true)
 
     culture_provider = create(:culture_provider)
 
@@ -76,7 +77,7 @@ class ImagesControllerTest < ActionController::TestCase
     image.destroy
   end
   test "create, event" do
-    file = Rack::Test::UploadedFile.new("#{Rails.root}/test/fixtures/image.jpg", "image/jpeg")
+    file = fixture_file_upload("image.jpg", "image/jpeg", true)
 
     event = create(:event)
 

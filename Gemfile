@@ -1,18 +1,22 @@
 source "https://rubygems.org"
 
-gem "rails", "4.1.1"
+gem "rake", "10.5.0"
+
+gem "rails", "4.1.9"
 
 gem "haml-rails", "~> 0.5.3"
 
-gem "pg", "0.17.1"
+gem "pg", '~> 0.18.0'
+
+gem "nokogiri", '~> 1.6.7'
 
 gem "passenger", "4.0.41"
 
-gem "rmagick", "2.13.2", require: "RMagick"
+gem "rmagick", "2.15.4", require: "RMagick"
 gem "will_paginate", "3.0.5"
 gem "pdf-writer", git: "https://github.com/Hermanverschooten/pdf-writer.git", ref: "f57c298a2527893acd62430aefc2516e76499633"
 
-gem "simple_form", "~> 3.1.0.rc1", :git => "https://github.com/plataformatec/simple_form"
+gem "simple_form", "~> 3.2.1", :git => "https://github.com/plataformatec/simple_form"
 gem "active_attr", "~> 0.8.3"
 
 gem "simple_enum", "1.6.9"
@@ -30,10 +34,11 @@ gem "jquery-rails"
 gem "sass-rails", "~> 4.0.3"
 gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.0.0"
-gem "therubyracer", "~> 0.12.1"
+#gem "therubyracer", "~> 0.12.1"
 gem "bootstrap-datepicker-rails", "~> 1.3.0.2"
 gem "ckeditor_rails", "~> 4.4.0"
 
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
 group :development do
   gem "capistrano", "~> 3.2.1"

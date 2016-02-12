@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../../test_helper'
 
 class AllotmentHelperTest < ActionView::TestCase
   test "fill indicator" do

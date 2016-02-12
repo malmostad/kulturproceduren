@@ -1,5 +1,5 @@
 # Mailer for actions concerning role applications.
-class RoleApplicationMailer < ActionMailer::Base
+class RoleApplicationMailer < ApplicationMailer
   layout 'mail'
   helper :mailer
 
@@ -15,11 +15,7 @@ class RoleApplicationMailer < ActionMailer::Base
 
     @role_application = role_application
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Behörighetsansökan"
-    )
+    mail_from_app recipients, "Kulturkartan: Behörighetsansökan"
   end
 
   # Sends an email to the user when an administrator has handled a role application
@@ -32,10 +28,6 @@ class RoleApplicationMailer < ActionMailer::Base
 
     @role_application = role_application
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Behörighet"
-    )
+    mail_from_app recipients, "Kulturkartan: Behörighet"
   end
 end

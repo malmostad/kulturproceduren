@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../test_helper'
 
 class AgeGroupsControllerTest < ActionController::TestCase
   def setup

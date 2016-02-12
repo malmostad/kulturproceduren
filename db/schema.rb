@@ -35,8 +35,7 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.datetime "updated_at"
   end
 
-  create_table "answer_forms", id: false, force: true do |t|
-    t.string   "id",               limit: 46, null: false
+  create_table "answer_forms", force: true do |t|
     t.boolean  "completed"
     t.integer  "occasion_id"
     t.integer  "group_id"
@@ -344,9 +343,9 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.integer  "district_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "extens_id",      limit: 64
+    t.string   "extens_id",     limit: 64
     t.text     "city_area"
-    t.text     "disctrict_area"
+    t.text     "district_area"
     t.boolean  "to_delete"
   end
 

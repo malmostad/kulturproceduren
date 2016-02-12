@@ -1,5 +1,5 @@
 # Mailer for actions concerning occasions.
-class OccasionMailer < ActionMailer::Base
+class OccasionMailer < ApplicationMailer
   layout 'mail'
   helper :mailer
   helper :application
@@ -16,11 +16,7 @@ class OccasionMailer < ActionMailer::Base
 
     @occasion = occasion
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Inställt evenemang - #{occasion.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Inställt evenemang - #{occasion.event.name}"
   end
 
   # Sends a reminder email about the given occasion to the given companion
@@ -34,11 +30,7 @@ class OccasionMailer < ActionMailer::Base
     @occasion = occasion
     @booking  = booking
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Snart dags för #{occasion.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Snart dags för #{occasion.event.name}"
   end
 
   # Sends a link to the answer form for the given occasion to the given booking's companion
@@ -52,11 +44,7 @@ class OccasionMailer < ActionMailer::Base
     @occasion = occasion
     @booking  = booking
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Utvärdering av #{occasion.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Utvärdering av #{occasion.event.name}"
   end
 
   # Sends a reminder to fill in the answer form
@@ -69,10 +57,6 @@ class OccasionMailer < ActionMailer::Base
 
     @answer_form = answer_form
 
-    mail(
-      to: recipients,
-      date: Time.zone.now,
-      subject: "Kulturkartan: Påminnelse utvärdering - #{answer_form.occasion.event.name}"
-    )
+    mail_from_app recipients, "Kulturkartan: Påminnelse utvärdering - #{answer_form.occasion.event.name}"
   end
 end

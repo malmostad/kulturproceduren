@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../../test_helper'
 
 class AnswerFormHelperTest < ActionView::TestCase
   test "get question fragment" do
