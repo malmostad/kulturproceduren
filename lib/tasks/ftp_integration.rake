@@ -36,7 +36,7 @@ namespace :kk do
 
       		desc "Import pre-schools from Extens"
       		task(pre_schools: :environment) do
-						encoding = 'windows-1252'
+						encoding = 'utf-8'
 						all_files = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*").map {|p| File.basename p}.grep(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/)
 
             all_files.grep(/^forskolor_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
@@ -67,7 +67,7 @@ namespace :kk do
 
       		desc "Import schools"
           task(schools: :environment) do
-						encoding = 'windows-1252'
+						encoding = 'utf-8'
 						all_files = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*").map {|p| File.basename p}.grep(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/)
 
 						all_files.grep(/^utbildningsomraden_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
