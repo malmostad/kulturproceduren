@@ -30,6 +30,7 @@ class KK::FTP_Import::SchoolImporter < KK::FTP_Import::Base
       # ... så skall de skolor som inte har någon områdeskoppling hamna under 'Gymnasieförvaltningen'
       district = District.where(school_type_id: @school_type_id, name: 'Gymnasieförvaltningen').first
     end
+    return nil if attributes[:school_type_code].match(/^AKGR/) #Enligt Anders Ljungdahl behöver inte dessa vara med
     return nil unless district
 
     base = School.where(district_id: district.id)

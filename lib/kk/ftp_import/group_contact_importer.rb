@@ -30,7 +30,9 @@ class KK::FTP_Import::GroupContactImporter < KK::FTP_Import::Base
     return nil unless group
 
     contacts = group.contacts.try(:split, ",") || []
-    contacts << attributes[:contact]
+    if !attributes[:contact].nil? && !attributes[:contact].match(/@/).nil?
+      contacts << attributes[:contact]
+    end
     group.contacts = contacts.uniq.sort.join(",")
 
     return group

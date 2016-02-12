@@ -32,7 +32,10 @@ class KK::FTP_Import::SchoolContactImporter < KK::FTP_Import::Base
     return nil unless school
 
     contacts = school.contacts.try(:split, ",") || []
-    contacts << attributes[:contact]
+    if !attributes[:contact].nil? && !attributes[:contact].match(/@/).nil?
+      puts attributes[:contact]
+      contacts << attributes[:contact]
+    end
     school.contacts = contacts.uniq.sort.join(",")
 
     return school
