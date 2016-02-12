@@ -34,7 +34,7 @@ gem "jquery-rails"
 gem "sass-rails", "~> 4.0.3"
 gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.0.0"
-#gem "therubyracer", "~> 0.12.1"
+gem "therubyracer", "~> 0.12.1"
 gem "bootstrap-datepicker-rails", "~> 1.3.0.2"
 gem "ckeditor_rails", "~> 4.4.0"
 
