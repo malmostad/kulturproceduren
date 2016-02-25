@@ -1,6 +1,6 @@
 set :passenger_port, 3004
 set :relative_url_root, "/kp-acceptance"
-set :tmp_dir, "/tmp/kulturproceduren-acceptance"
+set :tmp_dir, "/tmp/kulturkartan-acceptance"
 
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
@@ -10,9 +10,9 @@ ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don"t declare `role :all`, it"s a meta role
-role :app, %w{kulturproceduren-acceptance}
-role :web, %w{kulturproceduren-acceptance}
-role :db,  %w{kulturproceduren-acceptance}
+role :app, %w{kulturkartan-acceptance}
+role :web, %w{kulturkartan-acceptance}
+role :db,  %w{kulturkartan-acceptance}
 
 # Extended Server Syntax
 # ======================
