@@ -34,7 +34,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 set :keep_releases, 10
 
 set :rbenv_type, :user
-set :rbenv_ruby, "2.1.0"
+set :rbenv_ruby, "2.1.6"
 set :default_env, proc { {
   "LD_LIBRARY_PATH" => "$HOME/.rbenv/versions/#{fetch(:rbenv_ruby)}/lib:$LD_LIBRARY_PATH",
   "RAILS_RELATIVE_URL_ROOT" => fetch(:relative_url_root)
