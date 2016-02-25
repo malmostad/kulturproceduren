@@ -29,7 +29,7 @@ common: &common
         :thumb_width: 340
         :thumb_height: 255
 
-    :kp_external_link: "http://www.malmo.se/kulturproceduren"
+    :kp_external_link: "http://kulturkartan.malmo.se"
     :kp_manual_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
     :kbu_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor.html"
     :culture_bus_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
@@ -64,18 +64,24 @@ release_test:
 
 production:
     <<: *common
-    
+    :ftp_import_directory: "../importArchive/"
+    :ftp_import_archive: "../importArchive/processed"
+
 education:
     <<: *common
     :instance_title: "UTB"
 
 staging:
     <<: *common
+    :ftp_import_directory: "../importArchive/"
+    :ftp_import_archive: "../importArchive/processed"
     :instance_title: "STAGING"
     :instance_message: "Detta är en förberedelseinstans inför nästa termin. Förändringar här kommer inte att visas på malmo.se utan manuell handpåläggning av tekniker."
 
 archive:
     <<: *common
+    :ftp_import_directory: "../importArchive/"
+    :ftp_import_archive: "../importArchive/processed"
     :instance_title: "ARKIV"
     :instance_message: "Detta är en arkivinstans för föregående läsår. Inga ändringar här kommer att kunna flyttas till malmo.se."
 
