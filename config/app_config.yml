@@ -64,8 +64,8 @@ release_test:
 
 production:
     <<: *common
-    :ftp_import_directory: "../importArchive/"
-    :ftp_import_archive: "../importArchive/processed"
+    :ftp_import_directory: "/home/kp-production/app/importArchive/"
+    :ftp_import_archive: "/home/kp-production/app/importArchive/processed"
 
 education:
     <<: *common

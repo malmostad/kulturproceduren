@@ -24,7 +24,7 @@ cd $RAILS_DIR
 echo -n "Begin crontab task to import files from Extens, RAILS_ENV=$RAILS_ENV at "
 date
 
-bundle exec rake RAILS_ENV=$RAILS_ENV kk:extens:ftp_import
+/home/kp-production/.rbenv/shims/bundle exec rake RAILS_ENV=$RAILS_ENV kk:extens:ftp_import
 
 echo -n "Tasks done at "
 date
