@@ -13,7 +13,7 @@ class KK::FTP_Import::AgeGroupImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
+    raise KK::FTP_Import::ParseError.new("AgeGroupImporter #{ENV['file']}: Wrong row length (#{row.length} fields, expected 3)") if row.length != 3
 
     {
       group_id: row[0].try(:strip),

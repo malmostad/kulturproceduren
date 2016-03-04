@@ -7,7 +7,7 @@ class KK::FTP_Import::SchoolContactImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
+    raise KK::FTP_Import::ParseError.new("SchoolContactImporter #{ENV['file']}: Wrong row length (#{row.length} fields, expected 2)") if row.length != 2
 
     contact = row[1].try(:strip)
     return nil if contact.blank?

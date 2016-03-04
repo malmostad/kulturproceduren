@@ -7,7 +7,7 @@ class KK::FTP_Import::PreSchoolImporter < KK::FTP_Import::Base
   end
 
   def attributes_from_row(row)
-    raise KK::FTP_Import::ParseError.new("Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
+    raise KK::FTP_Import::ParseError.new("PreSchoolImporter #{ENV['file']}: Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
 
     {
       extens_id: row[0].try(:strip),
