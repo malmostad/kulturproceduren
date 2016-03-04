@@ -39,6 +39,7 @@ namespace :kk do
 						encoding = 'utf-8'
 						all_files = Dir::glob(APP_CONFIG[:ftp_import_directory]+"*").map {|p| File.basename p}.grep(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/)
 
+            #PreSchool district is fetched from the same file as the actual pre-schools
             all_files.grep(/^forskolor_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
 							ENV["file"] = file_name
 							do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
