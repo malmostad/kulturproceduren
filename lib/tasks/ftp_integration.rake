@@ -62,7 +62,7 @@ namespace :kk do
 
 						all_files.grep(/^forskolor_kontakter_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
 							ENV["file"] = file_name
-							do_import("pre school contacts", KK::FTP_Import::SchoolContactImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+							do_import("pre school contacts", KK::FTP_Import::PreSchoolContactImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
 						end
       		end
 
