@@ -111,9 +111,9 @@ class Booking < ActiveRecord::Base
     apply_filter(conditions, filter)
 
     self.includes(:occasion, group: :school)
-      .where(conditions[0], *conditions[1..-1])
-      .order("schools.name, groups.name desc")
-      .paginate(page: page)
+        .where(conditions[0], *conditions[1..-1])
+        .order("schools.name, groups.name desc")
+        .paginate(page: page)
   end
 
   def self.find_for_occasion(occasion_id, filter, page)
