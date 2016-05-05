@@ -12,6 +12,7 @@
 //
 //= require wysiwyg
 //= require jquery_ujs
+//= require ckeditor-jquery
 //= require bootstrap-datepicker/core
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.sv
 //= require core
