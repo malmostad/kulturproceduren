@@ -45,6 +45,11 @@ namespace :kk do
 							do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
             end
 
+						# all_files.grep(/^forskoleomraden_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
+						# 	ENV["file"] = file_name
+						# 	do_import("pre school districts", KK::FTP_Import::PreSchoolDistrictImporterNew.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
+						# end
+
 						all_files.grep(/^forskolor_[0-9]{4}\-[0-9]{2}\-[0-9]{2}.tsv/).sort.each do |file_name|
 							ENV["file"] = file_name
 							do_import("pre schools", KK::FTP_Import::PreSchoolImporter.new(CSV.open(APP_CONFIG[:ftp_import_directory]+file_name, "r", col_sep: csv_separator, encoding: encoding), school_type_id))
