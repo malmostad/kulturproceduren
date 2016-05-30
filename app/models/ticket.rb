@@ -21,6 +21,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :user
   belongs_to :booking
   belongs_to :allotment
+  belongs_to :school
 
   attr_accessible :state,
     :adult,
@@ -32,7 +33,8 @@ class Ticket < ActiveRecord::Base
     :district_id,  :district,
     :user_id,      :user,
     :booking_id,   :booking,
-    :allotment_id, :allotment
+    :allotment_id, :allotment,
+    :school_id,    :school
 
 
   def state
@@ -119,6 +121,7 @@ class Ticket < ActiveRecord::Base
       self.booking = nil
       self.user = nil
       self.occasion = nil
+      self.school = nil
       self.wheelchair = false
       self.adult = false
       self.booked_when = nil

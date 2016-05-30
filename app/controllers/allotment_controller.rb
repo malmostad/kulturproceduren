@@ -165,6 +165,19 @@ class AllotmentController < ApplicationController
           logger.info "Moving #{group.id} last in priority"
           group.move_last_in_prio
         end
+      elsif session[:allotment][:ticket_state] == :alloted_school
+        # Assign the tickets to schools
+        schools = Schools.include(:district).find assignment.keys
+
+        schools.each do |school|
+          amount = assignment[school.id]
+          @event.allotments.create!(
+              user: current_user,
+              school: school,
+              amount: amount
+          )
+          tickets_created += amount
+        end
 
       elsif session[:allotment][:ticket_state] == :alloted_district
         # Assign the tickets to districts
@@ -310,11 +323,23 @@ class AllotmentController < ApplicationController
         end
       end
 
+    elsif ticket_state == :alloted_school
+      districts.each do |district|
+        district.num_tickets = 0;
+        district.distribution_schools.each do |school|
+          school.num_tickets = 0;
+          school.distribution_groups.each do |group|
+            school.num_tickets += (session[:allotment][:working_distribution][school.id] || 0).to_i;
+            district.num_tickets += school.num_tickets
+            assigned_tickets += school.num_tickets
+          end
+        end
+      end
+
     elsif ticket_state == :alloted_district
 
       districts.each do |district|
-        district.num_tickets = 
-          (session[:allotment][:working_distribution][district.id] || 0).to_i;
+        district.num_tickets = (session[:allotment][:working_distribution][district.id] || 0).to_i;
         assigned_tickets += district.num_tickets
       end
 
@@ -343,6 +368,15 @@ class AllotmentController < ApplicationController
       if extra_group_ids
         extra_group_ids.each do |id|
           distribution[id] = group_counts[id].to_i;
+        end
+      end
+
+    elsif ticket_state == :alloted_school
+      school_counts = event.tickets.group("school_id").count
+
+      districts.each do |district|
+        district.distribution_schools.each do |school|
+          distribution[school.id] = school_counts[school.id].to_i;
         end
       end
 
@@ -398,6 +432,10 @@ class AllotmentController < ApplicationController
 
         logger.info "Pooling #{assigned_tickets} tickets"
         extra_pool = assigned_tickets
+
+      elsif ticket_state == :alloted_school
+        # TODO: :alloted_school
+        a = 1
 
       elsif ticket_state == :alloted_district
         distribution[district_id.to_i] = assigned_tickets

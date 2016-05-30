@@ -38,6 +38,8 @@ class School < ActiveRecord::Base
     case occasion.event.ticket_state
     when :alloted_group
       self.groups.map{ |g| g.available_tickets_by_occasion(occasion) }.sum
+    when :alloted_school
+      # TODO: ... :alloted_school
     when :alloted_district
       Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.district.id).count
     when :free_for_all
@@ -49,10 +51,16 @@ class School < ActiveRecord::Base
 
   # Returns all schools that have groups that have tickets (alloted or booked) to
   # the given event.
-  def self.find_with_tickets_to_event(event)
+  def self.find_with_tickets_to_event_for_all_groups(event)
     self.includes(:district)
       .where("schools.id in (select g.school_id from tickets t left join groups g on g.id = t.group_id where t.event_id = ?)", event.id)
       .order("schools.name ASC")
+  end
+
+  def self.find_with_tickets_to_event_for_school(event)
+    self.includes(:district)
+        .where("schools.id in (select t.school_id from tickets t where t.event_id = ?)", event.id)
+        .order("schools.name ASC")
   end
 
 

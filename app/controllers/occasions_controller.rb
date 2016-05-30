@@ -80,7 +80,9 @@ class OccasionsController < ApplicationController
 
     case @event.ticket_state
     when :alloted_group
-      @entities = School.find_with_tickets_to_event(@event)
+      @entities = School.find_with_tickets_to_event_for_all_groups(@event)
+    when :alloted_school
+      @entities = School.find_with_tickets_to_event_for_school(@event)
     when :alloted_district
       @entities = @event.districts.order "districts.name ASC"
     when :free_for_all

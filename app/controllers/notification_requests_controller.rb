@@ -10,8 +10,9 @@ class NotificationRequestsController < ApplicationController
     @notification_request.event = @event
 
     case @event.ticket_state
-    when :alloted_group, :alloted_district
+    when :alloted_group, :alloted_school, :alloted_district
       @notification_request.group_id = session[:group_selection][:group_id] if session[:group_selection]
+      @notification_request.school_id = session[:school_selection][:school_id] if session[:school_selection]
     when :free_for_all
       if NotificationRequest.unbooking_for(current_user, @event)
         flash[:warning] = "Du är redan registrerad för restplatser på detta evenemang"

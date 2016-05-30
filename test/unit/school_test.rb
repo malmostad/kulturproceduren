@@ -67,7 +67,7 @@ class SchoolTest < ActiveSupport::TestCase
 
     with_ids = with.collect(&:id)
 
-    School.find_with_tickets_to_event(events.first).each do |s|
+    School.find_with_tickets_to_event_for_all_groups(events.first).each do |s|
       assert with_ids.include?(s.id)
     end
   end

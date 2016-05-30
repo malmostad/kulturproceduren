@@ -153,11 +153,14 @@ class Event < ActiveRecord::Base
   ALLOTED_GROUP    = 1
   ALLOTED_DISTRICT = 2
   FREE_FOR_ALL     = 3
+  ALLOTED_SCHOOL   = 4
 
   def ticket_state
     case read_attribute(:ticket_state)
     when ALLOTED_GROUP
       :alloted_group
+    when ALLOTED_SCHOOL
+      :alloted_school
     when ALLOTED_DISTRICT
       :alloted_district
     when FREE_FOR_ALL
@@ -172,11 +175,19 @@ class Event < ActiveRecord::Base
       write_attribute(:ticket_state, self.class.ticket_state_id_from_symbol(value))
     when ALLOTED_GROUP..FREE_FOR_ALL
       write_attribute(:ticket_state, value)
+    when ALLOTED_SCHOOL
+      write_attribute(:ticket_state, value)
     else
       write_attribute(:ticket_state, nil)
     end
   end
 
+  def alloted_group?
+    self.ticket_state == :alloted_group
+  end
+  def alloted_school?
+    self.ticket_state == :alloted_school
+  end
   def alloted_group?
     self.ticket_state == :alloted_group
   end
@@ -189,17 +200,29 @@ class Event < ActiveRecord::Base
 
 
   # Transitioning
+  def transition_to_school?
+    !self.school_transition_date.blank? && self.alloted_group? && self.school_transition_date <= Date.today
+  end
+  def transition_to_school!
+    self.ticket_state = :alloted_school
+    self.save!
+  end
   def transition_to_district?
-    !self.district_transition_date.blank? && self.alloted_group? && self.district_transition_date <= Date.today
+     (
+      (self.alloted_group? && self.school_transition_date.blank?) ||
+      (self.alloted_school?)
+     ) && !self.district_transition_date.blank? && self.district_transition_date <= Date.today
   end
   def transition_to_district!
     self.ticket_state = :alloted_district
     self.save!
   end
   def transition_to_free_for_all?
-    (self.alloted_district? ||
-        (self.alloted_group? && self.district_transition_date.blank?)) &&
-      self.free_for_all_transition_date <= Date.today
+    (
+      (self.alloted_group? && self.school_transition_date.blank? && district_transition_date.blank?) ||
+      (self.alloted_school? && district_transition_date.blank?) ||
+      (self.alloted_district?)
+    ) && !self.free_for_all_transition_date.blank? && self.free_for_all_transition_date <= Date.today
   end
   def transition_to_free_for_all!
     self.ticket_state = :free_for_all
@@ -418,6 +441,8 @@ class Event < ActiveRecord::Base
     case sym
     when :alloted_group
       ALLOTED_GROUP
+    when :alloted_school
+      ALLOTED_SCHOOL
     when :alloted_district
       ALLOTED_DISTRICT
     when :free_for_all
