@@ -427,15 +427,33 @@ class AllotmentController < ApplicationController
             distribution[group_id.to_i] = amount
             logger.info "Giving #{amount} tickets to #{group_id}"
           end
-
         end
 
         logger.info "Pooling #{assigned_tickets} tickets"
         extra_pool = assigned_tickets
 
       elsif ticket_state == :alloted_school
-        # TODO: :alloted_school
-        a = 1
+        children_per_school = AgeGroup.
+            active.
+            with_age(event.from_age, event.to_age).
+            with_district(district_id).
+            num_children_per_school
+
+        logger.info "\n\nChildren per school in district #{district_id}:#{children_per_school.to_yaml}"
+
+        sorted_ids = children_per_school.keys.map{|x| x}.sort
+        sorted_ids.each do |school_id|
+          amount = children_per_school[school_id] + 1
+          logger.info "\nAmount for #{school_id}: #{amount}, tickets left: #{assigned_tickets}"
+          if assigned_tickets >= amount
+            assigned_tickets -= amount
+            distribution[school_id.to_i] = amount
+            logger.info "Giving #{amount} tickets to school.id: #{school_id}"
+          end
+        end
+
+        logger.info "Pooling #{assigned_tickets} tickets"
+        extra_pool = assigned_tickets
 
       elsif ticket_state == :alloted_district
         distribution[district_id.to_i] = assigned_tickets
