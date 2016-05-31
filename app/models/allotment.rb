@@ -3,13 +3,15 @@ class Allotment < ActiveRecord::Base
   belongs_to :event
   belongs_to :district
   belongs_to :group
+  belongs_to :school
   has_many :tickets, dependent: :delete_all
 
   attr_accessible :amount,
     :user_id,     :user,
     :event_id,    :event,
     :district_id, :district,
-    :group_id,    :group
+    :group_id,    :group,
+    :school_id,   :school
 
   after_save :synchronize_tickets
 
