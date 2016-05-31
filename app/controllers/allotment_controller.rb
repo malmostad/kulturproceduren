@@ -328,11 +328,9 @@ class AllotmentController < ApplicationController
         district.num_tickets = 0;
         district.distribution_schools.each do |school|
           school.num_tickets = 0;
-          school.distribution_groups.each do |group|
-            school.num_tickets += (session[:allotment][:working_distribution][school.id] || 0).to_i;
-            district.num_tickets += school.num_tickets
-            assigned_tickets += school.num_tickets
-          end
+          school.num_tickets += (session[:allotment][:working_distribution][school.id] || 0).to_i;
+          district.num_tickets += school.num_tickets
+          assigned_tickets += school.num_tickets
         end
       end
 
