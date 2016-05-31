@@ -130,22 +130,18 @@ class Event < ActiveRecord::Base
     :main_image_id,                :main_image,
     :map_address,
     :single_group_per_occasion,
+    :school_transition_date,
     :district_transition_date,
     :free_for_all_transition_date,
     :bus_booking,
     :last_bus_booking_date,
     :school_type_ids
   
-  validates_presence_of :name,
-    message: "Namnet får inte vara tomt"
-  validates_presence_of :description,
-    message: "Beskrivningen får inte vara tom"
-  validates_numericality_of :from_age, :to_age, only_integer: true,
-    message: "Åldern måste vara ett giltigt heltal."
-  validates_presence_of :visible_from,
-    message: "Du måste ange datum"
-  validates_presence_of :visible_to,
-    message: "Du måste ange datum"
+  validates_presence_of :name, message: "Namnet får inte vara tomt"
+  validates_presence_of :description, message: "Beskrivningen får inte vara tom"
+  validates_numericality_of :from_age, :to_age, only_integer: true, message: "Åldern måste vara ett giltigt heltal."
+  validates_presence_of :visible_from, message: "Du måste ange datum"
+  validates_presence_of :visible_to, message: "Du måste ange datum"
 
   before_save :set_further_education_age
 
