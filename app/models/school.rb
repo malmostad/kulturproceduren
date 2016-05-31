@@ -20,14 +20,11 @@ class School < ActiveRecord::Base
   belongs_to :district
   has_one :school_type, through: :district
 
-  validates_presence_of :name,
-    message: "Namnet får inte vara tomt"
-  validates_presence_of :district,
-    message: "Skolan måste tillhöra ett område"
+  validates_presence_of :name, message: "Namnet får inte vara tomt"
+  validates_presence_of :district, message: "Skolan måste tillhöra ett område"
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups
-
   
   # Returns the number of available tickets on the given occasion for this school.
   def available_tickets_by_occasion(occasion)

@@ -137,10 +137,12 @@
 
             - district.distribution_schools.each do |school|
               %tr.school(data-type="school")
-                - proximity = (school.total_children > school.num_children && (school.total_children - school.num_children) <= APP_CONFIG[:allotment][:proximity_boundary])
+                -#- proximity = (school.total_children > school.num_children && (school.total_children - school.num_children) <= APP_CONFIG[:allotment][:proximity_boundary])
                 %td= school.name
-                %td{class: "#{"proximity" if proximity}"}= school.total_children
-                %td{class: "children#{" proximity" if proximity}"}= school.num_children
+                %td
+                %td= school.num_children
+                -#%td{class: "#{"proximity" if proximity}"}= school.total_children
+                -#%td{class: "children#{" proximity" if proximity}"}= school.num_children
                 %td= text_field_tag "allotment[ticket_assignment[#{school.id}]]", school.num_tickets, size: 5, class: "form-control tickets", data: { value: school.num_tickets }
                 %td
                   .btn-group
