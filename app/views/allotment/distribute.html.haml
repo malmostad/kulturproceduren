@@ -119,7 +119,7 @@
             %th(colspan="2") Antal barn
             %th(rowspan="2" colspan="2") Antal biljetter
           %tr
-            %th Totalt i skolan
+            %th Totalt
             %th För fördelning
 
         %tbody
@@ -127,7 +127,7 @@
             %tr.district(data-type="district")
               %td
                 .collapser= district.name
-              %td
+              %td= district.tot_children
               %td= district.num_children
               %td.tickets= district.num_tickets
               %td
@@ -139,7 +139,7 @@
               %tr.school(data-type="school")
                 -#- proximity = (school.total_children > school.num_children && (school.total_children - school.num_children) <= APP_CONFIG[:allotment][:proximity_boundary])
                 %td= school.name
-                %td
+                %td= school.tot_children
                 %td= school.num_children
                 -#%td{class: "#{"proximity" if proximity}"}= school.total_children
                 -#%td{class: "children#{" proximity" if proximity}"}= school.num_children

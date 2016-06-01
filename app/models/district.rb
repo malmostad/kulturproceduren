@@ -33,6 +33,7 @@ class District < ActiveRecord::Base
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_schools
+  attr_accessor :tot_children
 
   # Returns the number of avaliable tickets for the district in
   # the given occasion.

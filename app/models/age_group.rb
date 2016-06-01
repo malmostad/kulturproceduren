@@ -45,4 +45,5 @@ class AgeGroup < ActiveRecord::Base
   def self.num_children_per_group
     self.group(:group_id).sum(:quantity)
   end
+
 end

@@ -25,7 +25,8 @@ class School < ActiveRecord::Base
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups
-  
+  attr_accessor :tot_children
+
   # Returns the number of available tickets on the given occasion for this school.
   def available_tickets_by_occasion(occasion)
     if occasion.is_a? Integer
