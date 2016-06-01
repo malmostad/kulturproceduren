@@ -33,6 +33,7 @@ class District < ActiveRecord::Base
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_schools
+  attr_accessor :tot_children
 
   # Returns the number of avaliable tickets for the district in
   # the given occasion.
@@ -47,7 +48,7 @@ class District < ActiveRecord::Base
       return nil if o.nil?
     end
     case o.event.ticket_state
-    when :alloted_group, :alloted_district
+    when :alloted_group, :alloted_school, :alloted_district
       # Count all tickets belonging to this district
       Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
     when :free_for_all

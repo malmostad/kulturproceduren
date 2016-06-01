@@ -20,15 +20,13 @@ class School < ActiveRecord::Base
   belongs_to :district
   has_one :school_type, through: :district
 
-  validates_presence_of :name,
-    message: "Namnet får inte vara tomt"
-  validates_presence_of :district,
-    message: "Skolan måste tillhöra ett område"
+  validates_presence_of :name, message: "Namnet får inte vara tomt"
+  validates_presence_of :district, message: "Skolan måste tillhöra ett område"
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_groups
+  attr_accessor :tot_children
 
-  
   # Returns the number of available tickets on the given occasion for this school.
   def available_tickets_by_occasion(occasion)
     if occasion.is_a? Integer
@@ -38,6 +36,8 @@ class School < ActiveRecord::Base
     case occasion.event.ticket_state
     when :alloted_group
       self.groups.map{ |g| g.available_tickets_by_occasion(occasion) }.sum
+    when :alloted_school
+      Ticket.unbooked.where(event_id: occasion.event.id, school_id: self.id).count
     when :alloted_district
       Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.district.id).count
     when :free_for_all
@@ -49,10 +49,16 @@ class School < ActiveRecord::Base
 
   # Returns all schools that have groups that have tickets (alloted or booked) to
   # the given event.
-  def self.find_with_tickets_to_event(event)
+  def self.find_with_tickets_to_event_for_all_groups(event)
     self.includes(:district)
       .where("schools.id in (select g.school_id from tickets t left join groups g on g.id = t.group_id where t.event_id = ?)", event.id)
       .order("schools.name ASC")
+  end
+
+  def self.find_with_tickets_to_event_for_school(event)
+    self.includes(:district)
+        .where("schools.id in (select t.school_id from tickets t where t.event_id = ?)", event.id)
+        .order("schools.name ASC")
   end
 
 

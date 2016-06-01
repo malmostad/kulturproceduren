@@ -6,16 +6,17 @@ class EventMailer < ApplicationMailer
   default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email to contacts when tickets have been released
-  def ticket_release_notification_email(event, addresses, group_structure = nil)
+  def ticket_release_notification_email(event, addresses, group_structure = nil, school_structure = nil)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients = APP_CONFIG[:mailers][:debug_recipient]
     else
       recipients = addresses
     end
 
-    @event           = event
-    @group_structure = group_structure
-    @category_groups = CategoryGroup.all
+    @event            = event
+    @group_structure  = group_structure
+    @school_structure = school_structure
+    @category_groups  = CategoryGroup.all
 
     mail_from_app recipients, "Kulturkartan: Fördelade platser till #{event.name}"
   end

@@ -213,10 +213,12 @@ class EventsController < ApplicationController
       event.allotments.each do |allotment|
         if allotment.for_group?
           row = [ allotment.district.name, allotment.group.school.name, allotment.group.name, allotment.amount ]
+        elsif allotment.for_school?
+          row = [ allotment.district.name, allotment.school.name, '', allotment.amount ]
         elsif allotment.for_district?
-          row = [ allotment.district.name, "", "", allotment.amount ]
+          row = [ allotment.district.name, '', '', allotment.amount ]
         else
-          row = [ "Hela staden", "", "", allotment.amount ]
+          row = [ 'Hela staden', '', '', allotment.amount ]
         end
 
         csv << row

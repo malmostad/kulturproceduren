@@ -32,21 +32,26 @@
       - else
 
         - case @occasion.event.ticket_state
-        - when :alloted_group
-          %b= "#{@group.school.name}, #{@group.name}"
-          har
-          %b= available_tickets
-          platser tillgängliga för bokning.
-        - when :alloted_district
-          Det finns
-          %b= available_tickets
-          tillgängliga platser att boka för alla förskolor och skolor i
-          = succeed "." do
-            %b= @group.school.district.name
-        - when :free_for_all
-          Det finns
-          %b= available_tickets
-          tillgängliga platser att boka. Först till kvarn gäller.
+          - when :alloted_group
+            %b= "#{@group.school.name}, #{@group.name}"
+            har
+            %b= available_tickets
+            platser tillgängliga för bokning.
+          - when :alloted_school
+            %b= "#{@group.school.name}"
+            har
+            %b= available_tickets
+            platser tillgängliga för bokning.
+          - when :alloted_district
+            Det finns
+            %b= available_tickets
+            tillgängliga platser att boka för alla förskolor och skolor i
+            = succeed "." do
+              %b= @group.school.district.name
+          - when :free_for_all
+            Det finns
+            %b= available_tickets
+            tillgängliga platser att boka. Först till kvarn gäller.
 
     %fieldset
       %legend Antal platser

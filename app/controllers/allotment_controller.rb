@@ -29,6 +29,9 @@ class AllotmentController < ApplicationController
     session[:allotment] = {}
     session[:allotment][:release_date] = Date.parse(incoming[:release_date])
 
+    if incoming.has_key?(:school_transition_date)
+      session[:allotment][:school_transition_date] = Date.parse(incoming[:school_transition_date])
+    end
     if incoming.has_key?(:district_transition_date)
       session[:allotment][:district_transition_date] = Date.parse(incoming[:district_transition_date]) 
     end
@@ -100,6 +103,7 @@ class AllotmentController < ApplicationController
     @event.allotments.clear
 
     @event.ticket_release_date          = session[:allotment][:release_date]
+    @event.school_transition_date       = session[:allotment][:school_transition_date]
     @event.district_transition_date     = session[:allotment][:district_transition_date]
     @event.free_for_all_transition_date = session[:allotment][:free_for_all_transition_date]
     @event.ticket_state                 = session[:allotment][:ticket_state]
@@ -166,6 +170,21 @@ class AllotmentController < ApplicationController
           group.move_last_in_prio
         end
 
+      elsif session[:allotment][:ticket_state] == :alloted_school
+        # Assign the tickets to schools
+        schools = School.includes(:district).find assignment.keys
+
+        schools.each do |school|
+          amount = assignment[school.id]
+          @event.allotments.create!(
+              user: current_user,
+              school: school,
+              district: school.district,
+              amount: amount
+          )
+          tickets_created += amount
+        end
+
       elsif session[:allotment][:ticket_state] == :alloted_district
         # Assign the tickets to districts
         districts = District.find assignment.keys
@@ -211,6 +230,7 @@ class AllotmentController < ApplicationController
     session[:allotment] = nil
 
     @event.ticket_release_date = nil
+    @event.school_transition_date = nil
     @event.district_transition_date = nil
     @event.free_for_all_transition_date = nil
     @event.ticket_state = 0
@@ -256,15 +276,25 @@ class AllotmentController < ApplicationController
   # in the groups in the given districts, and then sums these amounts
   # in the parent school and district
   def assign_children(event, districts)
+    district_ids = districts.map{|d| d.id}
+    from_age = event.from_age
+    to_age = event.to_age
+    children_per_group_in_age_range = num_children_in_districts_for_ages(district_ids, from_age, to_age)
+    tot_children_in_age_range = children_per_group_in_age_range.sum{|r| r[:quantity]}
+    children_per_school_in_age_range = num_children_per_school_in_districts(district_ids)
+
     total_children = 0
 
     # Assign child count
     districts.each do |district|
       district.num_children = 0
+      district.tot_children = 0
 
       district.distribution_schools = district.schools.find_by_age_span(event.from_age, event.to_age)
       district.distribution_schools.each do |school|
         school.num_children = 0
+        school.tot_children = children_per_school_in_age_range.find{|r| r[:school_id] == school.id}[:quantity]
+        district.tot_children += school.tot_children
 
         school.distribution_groups = school.groups.find_by_age_span(event.from_age, event.to_age)
         school.distribution_groups.each do |group|
@@ -279,6 +309,51 @@ class AllotmentController < ApplicationController
     end
 
     return total_children
+  end
+
+  def num_children_in_districts_for_ages(district_ids, from_age, to_age)
+    district_ids_string = district_ids.join(',')
+    sql = <<-END
+      select
+        d.id as district_id,
+        s.id as school_id,
+        g.id as group_id,
+        sum(ag.quantity) as quantity
+      from age_groups ag
+      join groups g on ag.group_id = g.id
+      join schools s on g.school_id = s.id
+      join districts d on s.district_id = d.id
+      where ag.age between #{from_age} and #{to_age}
+      and d.id in (#{district_ids_string})
+      group by d.id, s.id, g.id
+      order by d.id, s.id, g.id
+    END
+
+    puts "DEBUG_SQL: #{sql}"
+    res = ActiveRecord::Base.connection.execute(sql)
+    stats = res.collect.map{|r| {district_id: r[:district_id.to_s].to_i , school_id: r[:school_id.to_s].to_i, group_id: r[:group_id.to_s].to_i, quantity: r[:quantity.to_s].to_i}}
+    return stats
+  end
+
+  def num_children_per_school_in_districts(district_ids)
+    district_ids_string = district_ids.join(',')
+    sql = <<-END
+      select
+        s.id as school_id,
+        sum(ag.quantity) as quantity
+      from age_groups ag
+      join groups g on ag.group_id = g.id
+      join schools s on g.school_id = s.id
+      join districts d on s.district_id = d.id
+      where d.id in (#{district_ids_string})
+      group by s.id
+      order by s.id
+    END
+
+    puts "DEBUG_SQL: #{sql}"
+    res = ActiveRecord::Base.connection.execute(sql)
+    stats = res.collect.map{|r| {school_id: r[:school_id.to_s].to_i, quantity: r[:quantity.to_s].to_i}}
+    return stats
   end
 
   # Assigns the working distribution from the session
@@ -310,11 +385,21 @@ class AllotmentController < ApplicationController
         end
       end
 
+    elsif ticket_state == :alloted_school
+      districts.each do |district|
+        district.num_tickets = 0;
+        district.distribution_schools.each do |school|
+          school.num_tickets = 0;
+          school.num_tickets += (session[:allotment][:working_distribution][school.id] || 0).to_i;
+          district.num_tickets += school.num_tickets
+          assigned_tickets += school.num_tickets
+        end
+      end
+
     elsif ticket_state == :alloted_district
 
       districts.each do |district|
-        district.num_tickets = 
-          (session[:allotment][:working_distribution][district.id] || 0).to_i;
+        district.num_tickets = (session[:allotment][:working_distribution][district.id] || 0).to_i;
         assigned_tickets += district.num_tickets
       end
 
@@ -343,6 +428,15 @@ class AllotmentController < ApplicationController
       if extra_group_ids
         extra_group_ids.each do |id|
           distribution[id] = group_counts[id].to_i;
+        end
+      end
+
+    elsif ticket_state == :alloted_school
+      school_counts = event.tickets.group("school_id").count
+
+      districts.each do |district|
+        district.distribution_schools.each do |school|
+          distribution[school.id] = school_counts[school.id].to_i;
         end
       end
 
@@ -393,7 +487,29 @@ class AllotmentController < ApplicationController
             distribution[group_id.to_i] = amount
             logger.info "Giving #{amount} tickets to #{group_id}"
           end
+        end
 
+        logger.info "Pooling #{assigned_tickets} tickets"
+        extra_pool = assigned_tickets
+
+      elsif ticket_state == :alloted_school
+        children_per_school = AgeGroup.
+            active.
+            with_age(event.from_age, event.to_age).
+            with_district(district_id).
+            num_children_per_school
+
+        logger.info "\n\nChildren per school in district #{district_id}:#{children_per_school.to_yaml}"
+
+        sorted_ids = children_per_school.keys.map{|x| x}.sort
+        sorted_ids.each do |school_id|
+          amount = children_per_school[school_id] + 1
+          logger.info "\nAmount for #{school_id}: #{amount}, tickets left: #{assigned_tickets}"
+          if assigned_tickets >= amount
+            assigned_tickets -= amount
+            distribution[school_id.to_i] = amount
+            logger.info "Giving #{amount} tickets to school.id: #{school_id}"
+          end
         end
 
         logger.info "Pooling #{assigned_tickets} tickets"

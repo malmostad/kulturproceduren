@@ -3,13 +3,15 @@ class Allotment < ActiveRecord::Base
   belongs_to :event
   belongs_to :district
   belongs_to :group
+  belongs_to :school
   has_many :tickets, dependent: :delete_all
 
   attr_accessible :amount,
     :user_id,     :user,
     :event_id,    :event,
     :district_id, :district,
-    :group_id,    :group
+    :group_id,    :group,
+    :school_id,   :school
 
   after_save :synchronize_tickets
 
@@ -19,6 +21,8 @@ class Allotment < ActiveRecord::Base
   def allotment_type
     if self.group_id
       :group
+    elsif self.school_id
+      :school
     elsif self.district_id
       :district
     else
@@ -30,12 +34,16 @@ class Allotment < ActiveRecord::Base
     !self.group_id.nil?
   end
 
+  def for_school?
+    !self.school_id.nil?
+  end
+
   def for_district?
-    self.group_id.nil? && !self.district_id.nil?
+    self.group_id.nil? && self.school_id.nil? && !self.district_id.nil?
   end
 
   def for_all?
-    self.group_id.nil? && self.district_id.nil?
+    self.group_id.nil? && self.school_id.nil? && self.district_id.nil?
   end
 
 

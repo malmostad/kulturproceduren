@@ -5,12 +5,8 @@
 %main.with-aside
   .btn-group.context-actions
     - if current_user.has_role?(:admin) && !@event.further_education && (@event.ticket_release_date.nil? || @event.ticket_release_date > Date.today)
-      = link_to "Ändra fördelning",
-        { controller: "allotment", action: "init", id: @event.id },
-        class: "btn btn-default"
-    = link_to "Ladda ner fördelningen som Excel-fil",
-      ticket_allotment_event_path(@event, format: :xls),
-      class: "btn btn-default"
+      = link_to "Ändra fördelning", { controller: "allotment", action: "init", id: @event.id }, class: "btn btn-default"
+    = link_to "Ladda ner fördelningen som Excel-fil", ticket_allotment_event_path(@event, format: :xls), class: "btn btn-default"
 
   %table
     %thead
@@ -19,11 +15,11 @@
         %th Antal biljetter
     %tbody
       - prev_school_id = nil
+      - prev_district_id = nil
 
       - @event.allotments.each do |allotment|
 
         - if allotment.for_group?
-
           - if allotment.group.school_id != prev_school_id
             %tr
               %th
@@ -33,10 +29,20 @@
               %th
               - prev_school_id = allotment.group.school_id
 
+        - elsif allotment.for_school?
+          - if allotment.school.district_id != prev_district_id
+            %tr
+              %th
+                = allotment.school.district.name
+              %th
+                - prev_district_id = allotment.school.district_id
+
         %tr
           %td
             - if allotment.for_group?
               = allotment.group.name
+            - if allotment.for_school?
+              = allotment.school.name
             - elsif allotment.for_district?
               = allotment.district.name
             - else

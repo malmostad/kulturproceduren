@@ -67,6 +67,10 @@ class Group < ActiveRecord::Base
         states = [:unbooked]
         states << :deactivated if existing_booking
         Ticket.with_states(states).where(event_id: occasion.event.id, group_id: self.id, wheelchair: false)
+      when :alloted_school then
+        states = [:unbooked]
+        states << :deactivated if existing_booking
+        Ticket.with_states(states).where(event_id: occasion.event.id, school_id: self.school.id, wheelchair: false)
       when :alloted_district then
         Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id, wheelchair: false)
       when :free_for_all then
@@ -88,6 +92,8 @@ class Group < ActiveRecord::Base
     case occasion.event.ticket_state
     when :alloted_group
       tickets = tickets.with_states(:unbooked, :deactivated).where(event_id: occasion.event.id, group_id: self.id)
+    when :alloted_school
+      tickets = tickets.with_states(:unbooked, :deactivated).where(event_id: occasion.event.id, school_id: self.school_id)
     when :alloted_district
       tickets = tickets.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id)
     when :free_for_all

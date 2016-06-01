@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716151245) do
+ActiveRecord::Schema.define(version: 20160531132231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,10 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "school_id"
   end
+
+  add_index "allotments", ["school_id"], name: "index_allotments_on_school_id", using: :btree
 
   create_table "answer_forms", force: true do |t|
     t.boolean  "completed"
@@ -217,6 +220,7 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.date     "free_for_all_transition_date"
     t.boolean  "bus_booking",                  default: false
     t.date     "last_bus_booking_date"
+    t.date     "school_transition_date"
   end
 
   create_table "events_school_types", force: true do |t|
@@ -375,10 +379,12 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.datetime "updated_at"
     t.integer  "booking_id"
     t.integer  "allotment_id"
+    t.integer  "school_id"
   end
 
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
   add_index "tickets", ["group_id"], name: "index_tickets_on_group_id", using: :btree
+  add_index "tickets", ["school_id"], name: "index_tickets_on_school_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username"

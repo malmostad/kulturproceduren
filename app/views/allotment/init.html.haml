@@ -38,6 +38,24 @@
         %span.control-label
         .controls.checkbox
           %label.checkbox
+            = check_box_tag "allotment[skip_school_transition]", nil
+            Hoppa över övergång till skola
+
+      .form-group
+        %label.control-label(for="allotment_school_transition_date") Övergång till skola:
+        .controls.input-group
+          = text_field_tag "allotment[school_transition_date]",
+            @event.school_transition_date,
+            class: "form-control datepicker#{" changed" if !@event.school_transition_date.blank?}",
+            data: { "start-date" => Date.tomorrow, "default-interval" => APP_CONFIG[:ticket_state][:school_days] }
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-calendar
+
+    - if !is_edit || @event.ticket_state == :alloted_group || @event.ticket_state == :alloted_school
+      .form-group
+        %span.control-label
+        .controls.checkbox
+          %label.checkbox
             = check_box_tag "allotment[skip_district_transition]", nil
             Hoppa över övergång till område
 
@@ -96,6 +114,9 @@
           %label.radio-inline
             = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_GROUP, true
             Grupp
+          %label.radio-inline
+            = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_SCHOOL
+            Skola
           %label.radio-inline
             = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_DISTRICT
             Område
