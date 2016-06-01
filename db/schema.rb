@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160531132231) do
+ActiveRecord::Schema.define(version: 20160601125607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -221,6 +221,7 @@ ActiveRecord::Schema.define(version: 20160531132231) do
     t.boolean  "bus_booking",                  default: false
     t.date     "last_bus_booking_date"
     t.date     "school_transition_date"
+    t.integer  "excluded_district_ids",        default: [],    array: true
   end
 
   create_table "events_school_types", force: true do |t|

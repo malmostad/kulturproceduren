@@ -74,7 +74,12 @@ class Group < ActiveRecord::Base
       when :alloted_district then
         Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id, wheelchair: false)
       when :free_for_all then
-        Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
+
+        if occasion.event.excluded_district_ids == [] || !(occasion.event.excluded_district_ids.include? self.school.district_id)
+          Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
+        else
+          Ticket.where("false")
+        end
       end
     end
     available_seats = occasion.available_seats(existing_booking)
@@ -97,18 +102,22 @@ class Group < ActiveRecord::Base
     when :alloted_district
       tickets = tickets.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id)
     when :free_for_all
-      tickets = tickets.unbooked.where(event_id: occasion.event.id)
+      if occasion.event.excluded_district_ids == [] || !(occasion.event.excluded_district_ids.include? self.school.district_id)
+        tickets = tickets.unbooked.where(event_id: occasion.event.id)
+      else
+        tickets = Ticket.where("false")
+      end
     end
     tickets = tickets.lock if lock
     tickets
   end
-
 
   def move_first_in_prio
     self.class.where("priority < (select priority from groups where id = ?)", self.id).update_all("priority = priority + 1")
     self.priority = 1
     save!
   end
+
   def move_last_in_prio
     self.class.where("priority > (select priority from groups where id = ?)", self.id).update_all("priority = priority - 1")
     self.priority = Group.count(:all)
@@ -118,7 +127,6 @@ class Group < ActiveRecord::Base
   def self.sort_ids_by_priority(ids)
     connection.select_values(sanitize_sql_array(["select id from groups where id in (?) order by priority asc", ids]))
   end
-
 
   def age_group_data
     Hash[age_groups(true).collect { |ag| [ag.age, ag.quantity] }]

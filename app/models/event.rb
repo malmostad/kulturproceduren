@@ -135,7 +135,8 @@ class Event < ActiveRecord::Base
     :free_for_all_transition_date,
     :bus_booking,
     :last_bus_booking_date,
-    :school_type_ids
+    :school_type_ids,
+    :excluded_district_ids
   
   validates_presence_of :name, message: "Namnet får inte vara tomt"
   validates_presence_of :description, message: "Beskrivningen får inte vara tom"
@@ -150,6 +151,7 @@ class Event < ActiveRecord::Base
   ALLOTED_DISTRICT = 2
   FREE_FOR_ALL     = 3
   ALLOTED_SCHOOL   = 4
+  FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS = 5        # Only used when creating allotment, will be stored as :free_for_all
 
   def ticket_state
     case read_attribute(:ticket_state)
@@ -161,6 +163,8 @@ class Event < ActiveRecord::Base
       :alloted_district
     when FREE_FOR_ALL
       :free_for_all
+    when FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
+      :free_for_all_with_excluded_districts       # Only used when creating allotment, will be stored as :free_for_all
     else
       nil
     end
@@ -172,6 +176,8 @@ class Event < ActiveRecord::Base
     when ALLOTED_GROUP..FREE_FOR_ALL
       write_attribute(:ticket_state, value)
     when ALLOTED_SCHOOL
+      write_attribute(:ticket_state, value)
+    when FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
       write_attribute(:ticket_state, value)
     else
       write_attribute(:ticket_state, nil)
@@ -190,7 +196,9 @@ class Event < ActiveRecord::Base
   def free_for_all?
     self.ticket_state == :free_for_all
   end
-
+  def free_for_all_with_excluded_districts?
+    self.ticket_state == :free_for_all_with_excluded_districts
+  end
 
   # Transitioning
   def transition_to_school?
@@ -440,6 +448,8 @@ class Event < ActiveRecord::Base
       ALLOTED_DISTRICT
     when :free_for_all
       FREE_FOR_ALL
+    when :free_for_all_with_excluded_districts
+      FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
     else
       nil
     end
