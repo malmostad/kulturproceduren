@@ -21,6 +21,8 @@ class Allotment < ActiveRecord::Base
   def allotment_type
     if self.group_id
       :group
+    elsif self.school_id
+      :school
     elsif self.district_id
       :district
     else
@@ -32,12 +34,16 @@ class Allotment < ActiveRecord::Base
     !self.group_id.nil?
   end
 
+  def for_school?
+    !self.school_id.nil?
+  end
+
   def for_district?
-    self.group_id.nil? && !self.district_id.nil?
+    self.group_id.nil? && self.school_id.nil? && !self.district_id.nil?
   end
 
   def for_all?
-    self.group_id.nil? && self.district_id.nil?
+    self.group_id.nil? && self.school_id.nil? && self.district_id.nil?
   end
 
 

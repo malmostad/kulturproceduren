@@ -169,15 +169,17 @@ class AllotmentController < ApplicationController
           logger.info "Moving #{group.id} last in priority"
           group.move_last_in_prio
         end
+
       elsif session[:allotment][:ticket_state] == :alloted_school
         # Assign the tickets to schools
-        schools = Schools.include(:district).find assignment.keys
+        schools = School.includes(:district).find assignment.keys
 
         schools.each do |school|
           amount = assignment[school.id]
           @event.allotments.create!(
               user: current_user,
               school: school,
+              district: school.district,
               amount: amount
           )
           tickets_created += amount
@@ -277,9 +279,9 @@ class AllotmentController < ApplicationController
     district_ids = districts.map{|d| d.id}
     from_age = event.from_age
     to_age = event.to_age
-    result_in_ages = num_children_in_districts_for_ages(district_ids, from_age, to_age)
-    tot_in_ages = result_in_ages.sum{|r| r[:quantity]}
-    result_tot = num_children_per_school_in_districts(district_ids)
+    children_per_group_in_age_range = num_children_in_districts_for_ages(district_ids, from_age, to_age)
+    tot_children_in_age_range = children_per_group_in_age_range.sum{|r| r[:quantity]}
+    children_per_school_in_age_range = num_children_per_school_in_districts(district_ids)
 
     total_children = 0
 
@@ -291,7 +293,7 @@ class AllotmentController < ApplicationController
       district.distribution_schools = district.schools.find_by_age_span(event.from_age, event.to_age)
       district.distribution_schools.each do |school|
         school.num_children = 0
-        school.tot_children = result_tot.find{|r| r[:school_id] == school.id}[:quantity]
+        school.tot_children = children_per_school_in_age_range.find{|r| r[:school_id] == school.id}[:quantity]
         district.tot_children += school.tot_children
 
         school.distribution_groups = school.groups.find_by_age_span(event.from_age, event.to_age)
@@ -316,21 +318,20 @@ class AllotmentController < ApplicationController
         d.id as district_id,
         s.id as school_id,
         g.id as group_id,
-        ag.id as age_group_id,
-        ag.age,
-        ag.quantity
+        sum(ag.quantity) as quantity
       from age_groups ag
       join groups g on ag.group_id = g.id
       join schools s on g.school_id = s.id
       join districts d on s.district_id = d.id
       where ag.age between #{from_age} and #{to_age}
       and d.id in (#{district_ids_string})
+      group by d.id, s.id, g.id
       order by d.id, s.id, g.id
     END
 
     puts "DEBUG_SQL: #{sql}"
     res = ActiveRecord::Base.connection.execute(sql)
-    stats = res.collect.map{|r| {district_id: r[:district_id.to_s].to_i , school_id: r[:school_id.to_s].to_i, group_id: r[:group_id.to_s].to_i, age: r[:age.to_s].to_i, quantity: r[:quantity.to_s].to_i}}
+    stats = res.collect.map{|r| {district_id: r[:district_id.to_s].to_i , school_id: r[:school_id.to_s].to_i, group_id: r[:group_id.to_s].to_i, quantity: r[:quantity.to_s].to_i}}
     return stats
   end
 
