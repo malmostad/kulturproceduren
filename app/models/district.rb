@@ -48,7 +48,7 @@ class District < ActiveRecord::Base
       return nil if o.nil?
     end
     case o.event.ticket_state
-    when :alloted_group, :alloted_district
+    when :alloted_group, :alloted_school, :alloted_district
       # Count all tickets belonging to this district
       Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
     when :free_for_all

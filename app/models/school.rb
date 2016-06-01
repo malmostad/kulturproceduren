@@ -37,7 +37,7 @@ class School < ActiveRecord::Base
     when :alloted_group
       self.groups.map{ |g| g.available_tickets_by_occasion(occasion) }.sum
     when :alloted_school
-      # TODO: ... :alloted_school
+      Ticket.unbooked.where(event_id: occasion.event.id, school_id: self.id).count
     when :alloted_district
       Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.district.id).count
     when :free_for_all

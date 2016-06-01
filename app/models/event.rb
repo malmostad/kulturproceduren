@@ -184,9 +184,6 @@ class Event < ActiveRecord::Base
   def alloted_school?
     self.ticket_state == :alloted_school
   end
-  def alloted_group?
-    self.ticket_state == :alloted_group
-  end
   def alloted_district?
     self.ticket_state == :alloted_district
   end
