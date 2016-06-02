@@ -29,7 +29,8 @@
             %td= booking.group.name
             %td
               = booking.occasion.date
-              = l booking.occasion.start_time, format: :only_time
+              %br
+              = "#{l booking.occasion.start_time, format: :only_time} - #{l booking.occasion.stop_time, format: :only_time}"
             %td= booking.total_count
             %td= booking.bus_stop
             %td= booking.bus_one_way ? "Enkel resa" : "Tur och retur"
