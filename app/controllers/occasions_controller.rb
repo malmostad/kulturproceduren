@@ -85,8 +85,18 @@ class OccasionsController < ApplicationController
       @entities = School.find_with_tickets_to_event_for_school(@event)
     when :alloted_district
       @entities = @event.districts.order "districts.name ASC"
+    when :free_for_all_with_excluded_districts
+      if !@event.excluded_district_ids.empty?
+        available_district_ids = District.pluck(:id) - @event.excluded_district_ids
+        @entities =  District.where(id: available_district_ids).order(:name).pluck(:name)
+      end
     when :free_for_all
-      nil
+      if !@event.excluded_district_ids.empty?
+        available_district_ids = District.pluck(:id) - @event.excluded_district_ids
+        @entities =  District.where(id: available_district_ids).order(:name).pluck(:name)
+      else
+        nil
+      end
     else
       flash[:error] = "Platstillgänglighet kan inte presenteras för den önskade föreställningen."
       redirect_to root_url()

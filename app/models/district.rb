@@ -51,9 +51,20 @@ class District < ActiveRecord::Base
     when :alloted_group, :alloted_school, :alloted_district
       # Count all tickets belonging to this district
       Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
+    when :free_for_all_with_excluded_districts
+      if !o.event.excluded_district_ids.empty? && !(o.event.excluded_district_ids.include self.id)
+        Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
+      else
+        # Count all tickets
+        Ticket.unbooked.where(event_id: o.event.id).count
+      end
     when :free_for_all
-      # Count all tickets
-      Ticket.unbooked.where(event_id: o.event.id).count
+      if !o.event.excluded_district_ids.empty? && !(o.event.excluded_district_ids.include self.id)
+        Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
+      else
+        # Count all tickets
+        Ticket.unbooked.where(event_id: o.event.id).count
+      end
     else
       0
     end

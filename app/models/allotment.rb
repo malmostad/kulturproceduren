@@ -11,7 +11,8 @@ class Allotment < ActiveRecord::Base
     :event_id,    :event,
     :district_id, :district,
     :group_id,    :group,
-    :school_id,   :school
+    :school_id,   :school,
+    :excluded_district_ids
 
   after_save :synchronize_tickets
 
@@ -25,6 +26,8 @@ class Allotment < ActiveRecord::Base
       :school
     elsif self.district_id
       :district
+    elsif !self.excluded_district_ids.empty?
+      :free_for_all_with_excluded_districts
     else
       :free_for_all
     end
@@ -42,8 +45,12 @@ class Allotment < ActiveRecord::Base
     self.group_id.nil? && self.school_id.nil? && !self.district_id.nil?
   end
 
+  def for_all_with_excluded_districts?
+    self.group_id.nil? && self.school_id.nil? && self.district_id.nil? && !self.excluded_district_ids.empty?
+  end
+
   def for_all?
-    self.group_id.nil? && self.school_id.nil? && self.district_id.nil?
+    self.group_id.nil? && self.school_id.nil? && self.district_id.nil? && self.excluded_district_ids.empty?
   end
 
 

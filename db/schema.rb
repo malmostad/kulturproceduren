@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160601125607) do
+ActiveRecord::Schema.define(version: 20160602065315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20160601125607) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "school_id"
+    t.integer  "excluded_district_ids", default: [], array: true
   end
 
   add_index "allotments", ["school_id"], name: "index_allotments_on_school_id", using: :btree
