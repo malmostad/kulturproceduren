@@ -96,3 +96,15 @@ $ ->
 
         # Initialize the form
         typeSelector.find(":checked").trigger("change")
+
+    $('form#new_event').on 'change', 'input[name=event\\[is_age_range_used\\]]', () ->
+        is_age_range_used = $(this).val() == 'true'
+        if is_age_range_used
+            $('.form-group.age-range').show()
+        else
+            $('.form-group.age-range').hide()
+
+    # Trigger evaluation on page load
+    if $('form#new_event input[name=event\\[is_age_range_used\\]]').length > 0
+        $('form#new_event input[name=event\\[is_age_range_used\\]]:checked').trigger('change')
+

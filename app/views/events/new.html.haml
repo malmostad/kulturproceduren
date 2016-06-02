@@ -18,23 +18,21 @@
       = f.input :culture_provider_id, collection: @culture_providers
 
     = f.input :name
-    = f.input :further_education,
-      as: :radio_buttons,
-      wrapper: :radio,
-      collection: [ [ "Ja", true ], [ "Nej", false ] ]
+
+    = f.input :further_education, as: :radio_buttons, wrapper: :radio, collection: [ [ "Ja", true ], [ "Nej", false ] ]
 
     = f.input :school_type_ids,
       as: :check_boxes,
       wrapper: :checkbox,
       collection: @school_types
 
-    = f.input :from_age
-    = f.input :to_age
+    = f.input :is_age_range_used, as: :radio_buttons, wrapper: :radio, collection: [ [ "Ja", true ], [ "Nej", false ] ]
 
-    = f.input :single_group_per_occasion,
-      as: :radio_buttons,
-      wrapper: :radio,
-      collection: [ [ "Ja", true ], ["Nej", false ] ]
+    .form-group.age-range
+      = f.input :from_age
+      = f.input :to_age
+
+    = f.input :single_group_per_occasion, as: :radio_buttons, wrapper: :radio, collection: [ [ "Ja", true ], ["Nej", false ] ]
 
     - if @event.new_record? || @event.ticket_release_date.nil? || @event.ticket_release_date > Date.today
       .form-group
