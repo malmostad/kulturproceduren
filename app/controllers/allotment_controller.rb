@@ -73,11 +73,23 @@ class AllotmentController < ApplicationController
       end
     end
 
-    if session[:allotment][:ticket_state] == :free_for_all
-      # If the selected ticket state is free for all, we don't need to do any
-      # distribution
+    if session[:allotment][:ticket_state] == :free_for_all_with_excluded_districts
+      if ids.include?(-1)
+        session[:allotment][:excluded_district_ids] = nil
+      else
+        session[:allotment][:excluded_district_ids] = District.all.pluck(:id) - ids
+      end
+      session[:allotment][:ticket_state] == :free_for_all # Store this as :free_for_all
       redirect_to action: "create_free_for_all_tickets", id: params[:id]
       return
+
+    elsif session[:allotment][:ticket_state] == :free_for_all
+      # If the selected ticket state is free for all,
+      # then we don't need to do any distribution
+      session[:allotment][:excluded_district_ids] = nil
+      redirect_to action: "create_free_for_all_tickets", id: params[:id]
+      return
+
     elsif @event.allotments.empty?
       # Store the preliminary distribution in the session as the working distribution
       session[:allotment][:working_distribution] = get_preliminary_distribution(
@@ -109,6 +121,13 @@ class AllotmentController < ApplicationController
     @event.ticket_state                 = session[:allotment][:ticket_state]
     @event.bus_booking                  = session[:allotment][:bus_booking]
     @event.last_bus_booking_date        = session[:allotment][:last_bus_booking_date]
+
+    if (@event.free_for_all? || @event.free_for_all_with_excluded_districts?) && !session[:allotment][:excluded_district_ids].nil?
+      @event.excluded_district_ids = session[:allotment][:excluded_district_ids]
+    else
+      @event.excluded_district_ids = []
+    end
+
     @event.save!
   end
 
@@ -118,7 +137,8 @@ class AllotmentController < ApplicationController
 
     @event.allotments.create!(
       user: current_user,
-      amount: session[:allotment][:num_tickets]
+      amount: session[:allotment][:num_tickets],
+      excluded_district_ids: @event.excluded_district_ids
     )
 
     session[:allotment] = nil
@@ -162,7 +182,8 @@ class AllotmentController < ApplicationController
             user: current_user,
             group: group,
             district: group.school.district,
-            amount: amount
+            amount: amount,
+            excluded_district_ids: []
           )
           tickets_created += amount
 
@@ -180,7 +201,8 @@ class AllotmentController < ApplicationController
               user: current_user,
               school: school,
               district: school.district,
-              amount: amount
+              amount: amount,
+              excluded_district_ids: []
           )
           tickets_created += amount
         end
@@ -194,7 +216,8 @@ class AllotmentController < ApplicationController
           @event.allotments.create!(
             user: current_user,
             district: district,
-            amount: amount
+            amount: amount,
+            excluded_district_ids: []
           )
           tickets_created += amount
         end
@@ -205,7 +228,8 @@ class AllotmentController < ApplicationController
       extra_tickets = session[:allotment][:num_tickets] - tickets_created
       @event.allotments.create!(
         user: current_user,
-        amount: extra_tickets
+        amount: extra_tickets,
+        excluded_district_ids: []
       ) if extra_tickets > 0
 
       session[:allotment] = nil
@@ -222,7 +246,6 @@ class AllotmentController < ApplicationController
     end
   end
 
-
   # Completely removes an allotment from an event
   def destroy
     @event.allotments.collect(&:destroy)
@@ -234,6 +257,7 @@ class AllotmentController < ApplicationController
     @event.district_transition_date = nil
     @event.free_for_all_transition_date = nil
     @event.ticket_state = 0
+    @event.excluded_district_ids = []
     @event.save!
 
     flash[:notice] = "Fördelningen togs bort."
