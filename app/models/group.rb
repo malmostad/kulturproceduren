@@ -74,17 +74,13 @@ class Group < ActiveRecord::Base
       when :alloted_district
         Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id, wheelchair: false)
       when :free_for_all_with_excluded_districts
-        if occasion.event.excluded_district_ids == [] || !(occasion.event.excluded_district_ids.include? self.school.district_id)
+        if !(occasion.event.excluded_district_ids.include? self.school.district_id) || occasion.event.excluded_district_ids.empty?
           Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
         else
-          Ticket.where("false")
+          Ticket.where('false')
         end
       when :free_for_all
-        if occasion.event.excluded_district_ids == [] || !(occasion.event.excluded_district_ids.include? self.school.district_id)
-          Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
-        else
-          Ticket.where("false")
-        end
+        Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
       end
     end
     available_seats = occasion.available_seats(existing_booking)
@@ -107,17 +103,13 @@ class Group < ActiveRecord::Base
     when :alloted_district
       tickets = tickets.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id)
     when :free_for_all_with_excluded_districts
-      if occasion.event.excluded_district_ids == [] || !(occasion.event.excluded_district_ids.include? self.school.district_id)
+      if !(occasion.event.excluded_district_ids.include? self.school.district_id) || occasion.event.excluded_district_ids.empty?
         tickets = tickets.unbooked.where(event_id: occasion.event.id)
       else
-        tickets = Ticket.where("false")
+        tickets = Ticket.where('false')
       end
     when :free_for_all
-      if occasion.event.excluded_district_ids == [] || !(occasion.event.excluded_district_ids.include? self.school.district_id)
-        tickets = tickets.unbooked.where(event_id: occasion.event.id)
-      else
-        tickets = Ticket.where("false")
-      end
+      tickets = tickets.unbooked.where(event_id: occasion.event.id)
     end
     tickets = tickets.lock if lock
     tickets

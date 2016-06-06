@@ -151,7 +151,7 @@ class Event < ActiveRecord::Base
   ALLOTED_DISTRICT = 2
   FREE_FOR_ALL     = 3
   ALLOTED_SCHOOL   = 4
-  FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS = 5        # Only used when creating allotment, will be stored as :free_for_all
+  FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS = 5
 
   def ticket_state
     case read_attribute(:ticket_state)
@@ -161,10 +161,10 @@ class Event < ActiveRecord::Base
       :alloted_school
     when ALLOTED_DISTRICT
       :alloted_district
+    when FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
+      :free_for_all_with_excluded_districts
     when FREE_FOR_ALL
       :free_for_all
-    when FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
-      :free_for_all_with_excluded_districts       # Only used when creating allotment, will be stored as :free_for_all
     else
       nil
     end
@@ -193,11 +193,11 @@ class Event < ActiveRecord::Base
   def alloted_district?
     self.ticket_state == :alloted_district
   end
-  def free_for_all?
-    self.ticket_state == :free_for_all
-  end
   def free_for_all_with_excluded_districts?
     self.ticket_state == :free_for_all_with_excluded_districts
+  end
+  def free_for_all?
+    self.ticket_state == :free_for_all
   end
 
   # Transitioning
@@ -222,7 +222,8 @@ class Event < ActiveRecord::Base
     (
       (self.alloted_group? && self.school_transition_date.blank? && district_transition_date.blank?) ||
       (self.alloted_school? && district_transition_date.blank?) ||
-      (self.alloted_district?)
+      (self.alloted_district?) ||
+      (self.free_for_all_with_excluded_districts?)
     ) && !self.free_for_all_transition_date.blank? && self.free_for_all_transition_date <= Date.today
   end
   def transition_to_free_for_all!
@@ -446,10 +447,10 @@ class Event < ActiveRecord::Base
       ALLOTED_SCHOOL
     when :alloted_district
       ALLOTED_DISTRICT
-    when :free_for_all
-      FREE_FOR_ALL
     when :free_for_all_with_excluded_districts
       FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
+    when :free_for_all
+      FREE_FOR_ALL
     else
       nil
     end

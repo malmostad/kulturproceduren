@@ -41,17 +41,13 @@ class School < ActiveRecord::Base
     when :alloted_district
       Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.district.id).count
     when :free_for_all_with_excluded_districts
-      if !occasion.event.excluded_district_ids.empty? && !(occasion.event.excluded_district_ids.include?(self.district_id))
-        Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.district.id).count
-      else
+      if !(occasion.event.excluded_district_ids.include?(self.district_id)) || occasion.event.excluded_district_ids.empty?
         Ticket.unbooked.where(event_id: occasion.event.id).count
+      else
+        0
       end
     when :free_for_all
-      if !occasion.event.excluded_district_ids.empty? && !(occasion.event.excluded_district_ids.include?(self.district_id))
-        Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.district.id).count
-      else
-        Ticket.unbooked.where(event_id: occasion.event.id).count
-      end
+      Ticket.unbooked.where(event_id: occasion.event.id).count
     else
       0
     end

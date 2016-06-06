@@ -75,18 +75,17 @@ class AllotmentController < ApplicationController
 
     if session[:allotment][:ticket_state] == :free_for_all_with_excluded_districts
       if ids.include?(-1)
-        session[:allotment][:excluded_district_ids] = nil
+        session[:allotment][:excluded_district_ids] = []
       else
         session[:allotment][:excluded_district_ids] = District.all.pluck(:id) - ids
       end
-      session[:allotment][:ticket_state] == :free_for_all # Store this as :free_for_all
       redirect_to action: "create_free_for_all_tickets", id: params[:id]
       return
 
     elsif session[:allotment][:ticket_state] == :free_for_all
       # If the selected ticket state is free for all,
       # then we don't need to do any distribution
-      session[:allotment][:excluded_district_ids] = nil
+      session[:allotment][:excluded_district_ids] = []
       redirect_to action: "create_free_for_all_tickets", id: params[:id]
       return
 
@@ -122,8 +121,8 @@ class AllotmentController < ApplicationController
     @event.bus_booking                  = session[:allotment][:bus_booking]
     @event.last_bus_booking_date        = session[:allotment][:last_bus_booking_date]
 
-    if (@event.free_for_all? || @event.free_for_all_with_excluded_districts?) && !session[:allotment][:excluded_district_ids].nil?
-      @event.excluded_district_ids = session[:allotment][:excluded_district_ids]
+    if @event.free_for_all_with_excluded_districts?
+      @event.excluded_district_ids = session[:allotment][:excluded_district_ids] || []
     else
       @event.excluded_district_ids = []
     end
