@@ -1,7 +1,7 @@
 class UpdateTickets
 
   def run
-    events = Event.where(ticket_state: [ Event::ALLOTED_GROUP, Event::ALLOTED_SCHOOL, Event::ALLOTED_DISTRICT ])
+    events = Event.where(ticket_state: [ Event::ALLOTED_GROUP, Event::ALLOTED_SCHOOL, Event::ALLOTED_DISTRICT, Event::FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS ])
     events.each{ |e| process_event(e) }
   end
 
