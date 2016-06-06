@@ -36,6 +36,13 @@ class NotificationRequest < ActiveRecord::Base
       .where("event_id" => event.id, "schools.district_id" => districts.map(&:id))
   end
 
+  # Finds all notification requests for a specific event that belongs
+  # to schools in specific districts
+  def self.find_by_event_and_schools(event, schools)
+    self.includes(:user, {group: :school}, :event)
+        .where("event_id" => event.id, "schools.id" => schools.map(&:id))
+  end
+
   def self.unbooking_for(user, event)
     self.where(user_id: user.id, event_id: event.id, target_cd: NotificationRequest.targets.for_unbooking).first
   end

@@ -50,6 +50,21 @@ class EventMailer < ApplicationMailer
     mail_from_app recipients, "Kulturkartan: Restplatser till #{event.name}"
   end
 
+  # Sends an email to contacts when tickets transition to school allotment
+  def school_allotment_notification_email(event, school, recipient)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients = APP_CONFIG[:mailers][:debug_recipient]
+    else
+      recipients = recipient
+    end
+
+    @event           = event
+    @school          = school
+    @category_groups = CategoryGroup.all
+
+    mail_from_app recipients, "Kulturkartan: Restplatser till #{event.name}"
+  end
+
   # Sends a mail to the bus booking recipient with an event's bus bookings
   def bus_booking_email(event)
     if APP_CONFIG[:mailers][:debug_recipient]

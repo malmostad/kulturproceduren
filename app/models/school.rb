@@ -77,4 +77,9 @@ class School < ActiveRecord::Base
   def self.name_search(name_query)
     where([ "schools.name ilike ?", name_query ])
   end
+
+  def self.find_by_age_range(from, to)
+    where("schools.id in (select s.id from age_groups ag left join groups g on ag.group_id = g.id left join schools s on g.school_id = s.id  where age between ? and ? and g.active = ?)", from, to, true )
+    .order("schools.name ASC")
+  end
 end

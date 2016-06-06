@@ -62,6 +62,12 @@ class Event < ActiveRecord::Base
     end
   end
 
+  has_many(:schools, lambda{ distinct.order("schools.name ASC") }, through: :tickets) do
+    # Scope by district
+    def find_by_district(district)
+      where('tickets.district_id = ?', district.id).order("schools.name ASC")
+    end
+  end
 
   has_many :unordered_groups, lambda{ distinct },
     through: :tickets,
