@@ -54,6 +54,7 @@ class Allotment < ActiveRecord::Base
       self.tickets.create!(
         event: self.event,
         district: self.district,
+        school: self.school,
         group: self.group,
         state: :unbooked,
         wheelchair: false,
