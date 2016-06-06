@@ -52,19 +52,14 @@ class District < ActiveRecord::Base
       # Count all tickets belonging to this district
       Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
     when :free_for_all_with_excluded_districts
-      if !o.event.excluded_district_ids.empty? && !(o.event.excluded_district_ids.include self.id)
-        Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
-      else
-        # Count all tickets
+      if !(o.event.excluded_district_ids.include self.id) || o.event.excluded_district_ids.empty?
         Ticket.unbooked.where(event_id: o.event.id).count
+      else
+        Ticket.where('false')
       end
     when :free_for_all
-      if !o.event.excluded_district_ids.empty? && !(o.event.excluded_district_ids.include self.id)
-        Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
-      else
-        # Count all tickets
-        Ticket.unbooked.where(event_id: o.event.id).count
-      end
+      # Count all tickets
+      Ticket.unbooked.where(event_id: o.event.id).count
     else
       0
     end
