@@ -45,6 +45,18 @@ class NotifyTicketRelease
           end
         end
       end
+    when :free_for_all_with_excluded_districts
+      District.where.not(id: event.excluded_district_ids).each do |district|
+        addresses += (district.contacts || "").split(",")
+
+        district.schools.find_by_age_span(event.from_age, event.to_age).each do |school|
+          addresses += (school.contacts || "").split(",")
+
+          school.groups.find_by_age_span(event.from_age, event.to_age).each do |group|
+            addresses += (group.contacts || "").split(",")
+          end
+        end
+      end
     when :free_for_all
       District.all.each do |district|
         addresses += (district.contacts || "").split(",")
