@@ -268,6 +268,10 @@ class Event < ActiveRecord::Base
     tickets.booked.exists?
   end
 
+  def has_allotments?
+    allotments.exists?
+  end
+
   # Indicates whether the event has tickets available for booking
   def has_unbooked_tickets?(reload=false)
     if @has_unbooked_tickets.nil? || reload
