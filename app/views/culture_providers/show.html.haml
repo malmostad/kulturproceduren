@@ -38,6 +38,7 @@
           = render partial: "calendar/occasions_list",
             locals: { occasions: @culture_provider.upcoming_occasions,
             hide_culture_provider: true }
+
     .events
       %h3 Löpande evenemang
       - cache standing_events_cache_key(@culture_provider), skip_digest: true do
@@ -52,5 +53,5 @@
         - cache all_events_cache_key(@culture_provider), skip_digest: true do
           - unless @culture_provider.events.empty?
             %ul
-              - @culture_provider.events.order(created_at: :desc).each do |event|
+              - @culture_provider.events.reorder(name: :asc).each do |event|
                 %li= link_to event.name, event
