@@ -14,8 +14,8 @@
   = simple_form_for @mail, as: :information_mail, url: { action: "create" } do |f|
     = f.error_notification class: "warning"
 
-    - recipients = [ [ "Alla kontakter", :all_contacts ], [ "Alla användare", :all_users ]]
-    = f.input :recipients, as: :select, collection: recipients, include_blank: false
+    = f.input :event_id, as: :hidden, value: @event.id
+    = f.input :recipients, as: :select, collection: [ [ "Alla bokade till #{@event.name}", :all_booked ] ]
     = f.input :subject
     = f.input :body, as: :text, input_html: { class: "ckeditor", rows: 10 }
 

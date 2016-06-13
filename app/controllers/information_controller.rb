@@ -5,10 +5,13 @@ class InformationController < ApplicationController
   before_filter :require_admin
 
   def new
-    @mail = UtilityModels::InformationMail.new
-    if params[:event_id]
-      @event = Event.find(params[:event_id])
-      @mail.recipients = @event.id
+    @mail = UtilityModels::InformationMail.new params
+    @event = Event.find(params[:event_id]) if params[:event_id]
+
+    if @mail.recipients == :all_alloted
+      render 'new_for_all_alloted'
+    elsif @mail.recipients == :all_booked
+      render 'new_for_all_booked'
     end
   end
 
@@ -22,19 +25,30 @@ class InformationController < ApplicationController
         InformationMailer.custom_email(r, @mail.subject, @mail.body).deliver
       end
       
-      notice = case @mail.recipients
-      when :all_contacts
-        "alla kontakter"
-      when :all_users
-        "alla användare"
-      else
-        "alla bokade till #{@mail.event.name}"
-      end
+      notice =
+        case @mail.recipients
+        when :all_alloted
+         "alla fördelade för #{@mail.event.name}"
+        when :all_booked
+          "alla bokade till #{@mail.event.name}"
+        when :all_contacts
+          'alla kontakter'
+        when :all_users
+          'alla användare'
+        else
+          ''
+        end
 
       flash[:notice] = "E-post skickat till #{notice} (#{recipients.length} mottagare)"
-      redirect_to action: :new
+      redirect_to action: :new, recipients: @mail.recipients, event_id: @mail.event_id
     else
-      render action: :new
+      if @mail.recipients == :all_alloted
+        render 'new_for_all_alloted'
+      elsif @mail.recipients == :all_booked
+        render 'new_for_all_booked'
+      else
+        render action: :new
+      end
     end
 
   end
