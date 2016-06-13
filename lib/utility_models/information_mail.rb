@@ -27,7 +27,7 @@ module UtilityModels
       end
 
       @subject = params[:subject]
-      @body = params[:body]
+      @body = params[:body].gsub("\r\n", '<br/>').gsub("\r", '<br/>').gsub("\n", '<br/>')
     end
 
     def recipient_addresses
