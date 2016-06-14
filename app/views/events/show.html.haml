@@ -46,6 +46,12 @@
       %ul
         %li= link_to "Bokningar", event_bookings_path(@event)
 
+  - elsif user_online? && current_user.has_role?(:host) && @event.reportable?
+    %nav.basic.administration
+      %h1 Administrera
+      %ul
+        %li= link_to 'Närvaro', event_attendance_index_path(@event)
+
   %aside.basic.details.event
     %dl
       - unless @event.map_address.blank?

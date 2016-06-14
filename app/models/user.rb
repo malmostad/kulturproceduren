@@ -199,7 +199,7 @@ class User < ActiveRecord::Base
   end
 
   def username_unique
-    if User.where(username: self.username).exists?
+    if User.where("lower(users.username) = ?", self.username.downcase).exists?
       self.errors.add(:username, :taken, message: "Användarnamnet är redan taget" )
     end
   end
