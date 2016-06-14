@@ -30,6 +30,10 @@ class NotifyTicketRelease
         addresses += (school.contacts || "").split(",")
         addresses += (school.district.contacts || "").split(",")
 
+        school.groups.find_by_age_span(event.from_age, event.to_age).each do |group|
+          addresses += (group.contacts || "").split(",")
+        end
+
         school_structure[school] ||= []
         school_structure[school] << school
       end
