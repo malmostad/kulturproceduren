@@ -8,7 +8,10 @@
 #
 # The transition between the different states are done on a timed basis using a
 # Rake task.
+require 'uri'
+
 class Event < ActiveRecord::Base
+  before_save :correct_youtube_url
 
   # Scope for operating on standing events
   scope :standing, lambda{ where("events.id not in (select x.event_id from occasions x)") }
@@ -129,6 +132,7 @@ class Event < ActiveRecord::Base
     :ticket_state,
     :url,
     :movie_url,
+    :youtube_url,
     :opening_hours,
     :cost,
     :booking_info,
@@ -438,6 +442,23 @@ class Event < ActiveRecord::Base
 
 
   protected
+
+  def correct_youtube_url
+    prefix = 'https://www.youtube.com/embed'
+    if !self.youtube_url.blank?
+      if self.youtube_url =~ /v=/i
+        query_string = URI.parse(self.youtube_url).query
+        parameters = Hash[URI.decode_www_form(query_string)]
+        youtube_id = parameters['v']
+        self.youtube_url = "#{prefix}/#{youtube_id}"
+      else
+        youtube_id = youtube_url.split('/').reject!(&:empty?).last
+        if !youtube_id.blank?
+          self.youtube_url = "#{prefix}/#{youtube_id}"
+        end
+      end
+    end
+  end
 
   # Removes the ages when the event has <tt>further_education</tt> set.
   def set_further_education_age

@@ -2,7 +2,11 @@
   = @event.name
 
 %main
+
   #slideshow.header
+    -if !@event.youtube_url.blank?
+      #video
+        %iframe(width=686 height=385 allowfullscreen frameborder=0 src="#{@event.youtube_url}")
     .map-container(style="display:none;")
     .images
       - @event.images_excluding_main.each do |image|

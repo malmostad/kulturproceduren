@@ -227,6 +227,7 @@ sv:
         url: "Hemsida:"
         booking_info: "Bokningsinformation:"
         movie_url: "Filmlänk:"
+        youtube_url: "Inbäddad YouTube video:"
         opening_hours: "Öppettider:"
         cost: "Kostnad:"
         further_education: "Fortbildning pedagoger/vuxna"
