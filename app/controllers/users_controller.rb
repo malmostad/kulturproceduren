@@ -77,7 +77,7 @@ class UsersController < ApplicationController
 
     if @user.save
       if user_online? && current_user.has_role?(:admin)
-        flash[:notice] = 'Användaren skapades. Den kan nu logga in med användarnamn och lösenord.'
+        flash[:notice] = 'Användaren skapades. Du kan nu tilldela behörigheter.'
         redirect_to(@user)
       else
         flash[:notice] = 'Din användare har skapats. Du kan nu logga in med ditt användarnamn och lösenord.'
