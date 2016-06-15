@@ -6,9 +6,13 @@ class GroupsController < ApplicationController
   before_filter :require_admin, except: [ :options_list, :select ]
 
   def index
-    @groups = Group.includes(school: :district)
-      .order(sort_order("name"))
-      .paginate(page: params[:page])
+    if params[:filter] && params[:filter] == :external.to_s
+      @groups = Group.includes(school: :district).where.not(extens_id: nil).order(name: :asc).paginate(page: params[:page])
+    elsif params[:filter] && params[:filter] == :manual.to_s
+      @groups = Group.includes(school: :district).where(extens_id: nil).order(name: :asc).paginate(page: params[:page])
+    else
+      @groups = Group.includes(school: :district).order(name: :asc).paginate(page: params[:page])
+    end
   end
 
   def show
@@ -58,6 +62,7 @@ class GroupsController < ApplicationController
     group.move_first_in_prio
     redirect_to params[:return_to] || group_url()
   end
+
   def move_last_in_priority
     group = Group.find(params[:id])
     group.move_last_in_prio

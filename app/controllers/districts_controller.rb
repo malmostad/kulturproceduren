@@ -6,7 +6,13 @@ class DistrictsController < ApplicationController
   before_filter :require_admin, except: [ :select ]
 
   def index
-    @districts = District.includes(:school_type).order(sort_order("name")).paginate page: params[:page]
+    if params[:filter] && params[:filter] == :external.to_s
+      @districts = District.includes(:school_type).where.not(extens_id: nil).order(name: :asc).paginate page: params[:page]
+    elsif params[:filter] && params[:filter] == :manual.to_s
+      @districts = District.includes(:school_type).where(extens_id: nil).order(name: :asc).paginate page: params[:page]
+    else
+      @districts = District.includes(:school_type).order(name: :asc).paginate page: params[:page]
+    end
   end
 
   def show
