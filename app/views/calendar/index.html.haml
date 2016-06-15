@@ -22,7 +22,7 @@
         - unless user_online?
           %p
             Är du kulturombud och vill boka evenemang,
-            = link_to "skapa ett konto här", controller: "login", action: "index"
+            = link_to "skapa ett konto här", new_user_path
 
     = render partial: "shared/contact_us"
 
