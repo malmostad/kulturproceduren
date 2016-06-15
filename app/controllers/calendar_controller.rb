@@ -7,6 +7,7 @@ class CalendarController < ApplicationController
   def index
     unless fragment_exist?(list_cache_key())
       @category_groups = CategoryGroup.order "name ASC"
+      @age_categories = AgeCategory.order(from_age: :asc).all
       if events_calendar?
         @events = Event.search_standing({ from_date: Date.today }, params[:page])
       else
@@ -24,6 +25,7 @@ class CalendarController < ApplicationController
     end
 
     @category_groups = CategoryGroup.order "name ASC"
+    @age_categories = AgeCategory.order(from_age: :asc).all
   end
 
   # Stores the search parameters from the calendar filter in the session

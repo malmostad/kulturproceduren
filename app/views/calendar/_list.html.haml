@@ -1,17 +1,17 @@
 %nav.calendar-nav
-  .btn-group
-    = link_to "Evenemang", calendar_path(params[:action], :occasions),
-      class: "btn btn-default#{ " active" if occasions_calendar?}"
-    = link_to "Löpande evenemang", calendar_path(params[:action], :events),
-      class: "btn btn-default#{ " active" if events_calendar?}"
+  = form_tag("/index", method: :get) do
+    .btn-group
+      = link_to "Evenemang!!!", calendar_path(params[:action], :occasions), class: "btn btn-default#{ " active" if occasions_calendar?}"
+      = link_to "Löpande evenemang", calendar_path(params[:action], :events), class: "btn btn-default#{ " active" if events_calendar?}"
 
-  - if params[:action] == "filter"
-    = link_to "Ingen sökning »", { action: "index", list: calendar_list }
-  - else
-    = link_to "Detaljerad sökning »", { action: "filter", list: calendar_list }
+    = select_tag('age_category', options_from_collection_for_select(@age_categories, "id", "name", @age_category), prompt: "-Välj-" )
 
-  = link_to "Visa alla arrangörer i Kulturkartan", culture_providers_path,
-    class: "culture-providers"
+    - if params[:action] == "filter"
+      = link_to "Ingen sökning »", { action: "index", list: calendar_list }
+    - else
+      = link_to "Detaljerad sökning »", { action: "filter", list: calendar_list }
+
+    = link_to "Visa alla arrangörer i Kulturkartan", culture_providers_path, class: "culture-providers"
 
 %section.calendar
   - if events_calendar? && events
