@@ -140,13 +140,13 @@ class Event < ActiveRecord::Base
     :excluded_district_ids
 
   def is_age_range_used
-    !(!self.from_age.nil? && self.from_age == 0 && !self.to_age.nil? && self.to_age == 100)
+    !(!self.from_age.nil? && self.from_age == -1 && !self.to_age.nil? && self.to_age == -1)
   end
 
   def is_age_range_used=(val)
     if val == false then
-      self.from_age = 0
-      self.to_age = 100
+      self.from_age = -1
+      self.to_age = -1
     end
   end
 

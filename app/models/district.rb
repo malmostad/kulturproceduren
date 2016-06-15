@@ -9,6 +9,8 @@ class District < ActiveRecord::Base
 
     # Finds all schools in the district that has children in the given age span.
     def find_by_age_span(from, to)
+      from = 0 if from == -1
+      to = 100 if to == -1
       where("schools.id in (select s.id from age_groups ag left join groups g on ag.group_id = g.id left join schools s on g.school_id = s.id  where age between ? and ? and g.active = ?)", from, to, true )
       .order("schools.name ASC")
     end
