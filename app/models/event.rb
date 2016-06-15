@@ -229,6 +229,7 @@ class Event < ActiveRecord::Base
   end
   def transition_to_school!
     self.ticket_state = :alloted_school
+    self.last_transitioned_date = Date.today
     self.save!
   end
   def transition_to_district?
@@ -239,6 +240,7 @@ class Event < ActiveRecord::Base
   end
   def transition_to_district!
     self.ticket_state = :alloted_district
+    self.last_transitioned_date = Date.today
     self.save!
   end
   def transition_to_free_for_all?
@@ -251,9 +253,9 @@ class Event < ActiveRecord::Base
   end
   def transition_to_free_for_all!
     self.ticket_state = :free_for_all
+    self.last_transitioned_date = Date.today
     self.save!
   end
-
 
   # Indicates whether it is possible to book occasions belonging to this event.
   def bookable?(reload=false)

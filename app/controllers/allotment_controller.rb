@@ -113,6 +113,8 @@ class AllotmentController < ApplicationController
     # Update the event
     @event.allotments.clear
 
+    @event.last_transitioned_date = Date.today if @event.ticket_state != session[:allotment][:ticket_state]
+
     @event.ticket_release_date          = session[:allotment][:release_date]
     @event.school_transition_date       = session[:allotment][:school_transition_date]
     @event.district_transition_date     = session[:allotment][:district_transition_date]

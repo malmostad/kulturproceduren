@@ -18,9 +18,12 @@ namespace :kp do
 
   desc "Sends a notification for ticket release"
   task(notify_ticket_release: :environment) do
-    puts "NotifyTicketRelease.new.run starting"
     NotifyTicketRelease.new.run
-    puts "NotifyTicketRelease.new.run ended"
+  end
+
+  desc "Send a reminder that tickets are still available to alloted recipients"
+  task(notify_available_tickets: :environment) do
+    NotifyAvailableTickets.new(Date.today, APP_CONFIG[:ticket_state][:reminder_weeks].to_i).run
   end
 
 end

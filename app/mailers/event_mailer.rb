@@ -21,6 +21,22 @@ class EventMailer < ApplicationMailer
     mail_from_app recipients, "Kulturkartan: Fördelade platser till #{event.name}"
   end
 
+  # Sends an email to contacts if tickets are still available for an event
+  def tickets_available_notification_email(event, addresses, group_structure = nil, school_structure = nil)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients = APP_CONFIG[:mailers][:debug_recipient]
+    else
+      recipients = addresses
+    end
+
+    @event            = event
+    @group_structure  = group_structure
+    @school_structure = school_structure
+    @category_groups  = CategoryGroup.all
+
+    mail_from_app recipients, "Kulturkartan: Fördelade platser fortfarande kvar till #{event.name}"
+  end
+
   # Sends an email to contacts when tickets transition to free for all allotment
   def free_for_all_allotment_notification_email(event, recipient)
     if APP_CONFIG[:mailers][:debug_recipient]
