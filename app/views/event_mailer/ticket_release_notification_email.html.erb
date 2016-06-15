@@ -5,7 +5,10 @@
 <p>Välkomna att ta del av <%= @event.name %>.</p>
 
 <ul>
-  <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
+  <% if @event.is_age_range_used %>
+    <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
+  <% end %>
+
   <% @category_groups.each do |category_group| -%>
     <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
 

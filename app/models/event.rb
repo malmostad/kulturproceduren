@@ -125,6 +125,7 @@ class Event < ActiveRecord::Base
     :description,
     :visible_from,
     :visible_to,
+    :is_age_range_used,
     :from_age,
     :to_age,
     :further_education,
@@ -147,7 +148,18 @@ class Event < ActiveRecord::Base
     :last_bus_booking_date,
     :school_type_ids,
     :excluded_district_ids
-  
+
+  def is_age_range_used
+    !(!self.from_age.nil? && self.from_age == -1 && !self.to_age.nil? && self.to_age == -1)
+  end
+
+  def is_age_range_used=(val)
+    if val == false then
+      self.from_age = -1
+      self.to_age = -1
+    end
+  end
+
   validates_presence_of :name, message: "Namnet får inte vara tomt"
   validates_presence_of :description, message: "Beskrivningen får inte vara tom"
   validates_numericality_of :from_age, :to_age, only_integer: true, message: "Åldern måste vara ett giltigt heltal."

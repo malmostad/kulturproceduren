@@ -37,6 +37,7 @@ class EventsController < ApplicationController
     @event = Event.new do |e|
       e.to_age = 19
       e.culture_provider_id = params[:culture_provider_id] if params[:culture_provider_id]
+      e.is_age_range_used = false
 
       if params[:culture_provider_id]
         culture_provider = CultureProvider.find params[:culture_provider_id]
@@ -44,16 +45,16 @@ class EventsController < ApplicationController
       end
     end
 
-    @category_groups = CategoryGroup.order("name ASC")
-    @school_types = SchoolType.order("name ASC")
+    @category_groups = CategoryGroup.order(name: :asc)
+    @school_types = SchoolType.order(name: :asc)
     
     load_culture_providers()
   end
 
   def edit
     @event = Event.find(params[:id])
-    @category_groups = CategoryGroup.order("name ASC")
-    @school_types = SchoolType.order("name ASC")
+    @category_groups = CategoryGroup.order(name: :asc)
+    @school_types = SchoolType.order(name: :asc)
 
     unless current_user.can_administrate?(@event.culture_provider)
       flash[:error] = "Du har inte behörighet att komma åt sidan."
@@ -72,6 +73,10 @@ class EventsController < ApplicationController
       flash[:error] = "Du har inte behörighet att komma åt sidan."
       redirect_to root_url()
       return
+    end
+
+    if params[:is_age_range_used] && params[:is_age_range_used] == 'false' then
+      @event.is_age_range_used = false
     end
 
     if @event.save

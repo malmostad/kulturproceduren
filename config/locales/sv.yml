@@ -216,6 +216,7 @@ sv:
     attributes:
       event:
         name: "Namn:"
+        is_age_range_used: "Använd åldersspann:"
         from_age: "Från ålder:"
         to_age: "Till ålder:"
         single_group_per_occasion: "Endast en grupp per föreställning"
