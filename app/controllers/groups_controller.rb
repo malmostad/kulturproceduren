@@ -115,11 +115,11 @@ class GroupsController < ApplicationController
 
     if params[:occasion_id]
       @occasion = Occasion.find params[:occasion_id]
-      @groups = Group.where(conditions).to_a.select { |g|
+      @groups = Group.where(conditions).order(name: :asc).to_a.select { |g|
         g.available_tickets_by_occasion(@occasion) > 0
       }
     else
-      @groups = Group.where(conditions).order("name ASC")
+      @groups = Group.where(conditions).order(name: :asc)
     end
 
     render action: "options_list", content_type: 'text/plain', layout: false
