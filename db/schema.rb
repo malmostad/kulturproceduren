@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160614055717) do
+ActiveRecord::Schema.define(version: 20160615104317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,7 +224,10 @@ ActiveRecord::Schema.define(version: 20160614055717) do
     t.date     "school_transition_date"
     t.integer  "excluded_district_ids",        default: [],    array: true
     t.string   "youtube_url"
+    t.date     "last_transitioned_date"
   end
+
+  add_index "events", ["last_transitioned_date"], name: "index_events_on_last_transitioned_date", using: :btree
 
   create_table "events_school_types", force: true do |t|
     t.integer "event_id"
