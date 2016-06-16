@@ -16,6 +16,14 @@ ActiveRecord::Schema.define(version: 20160615104317) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "age_categories", force: true do |t|
+    t.string   "name",       limit: 40
+    t.integer  "from_age",              null: false
+    t.integer  "to_age",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "age_groups", force: true do |t|
     t.integer  "age"
     t.integer  "quantity"

@@ -16,6 +16,10 @@ class Group < ActiveRecord::Base
     def num_children_by_age_span(from, to)
       where("age BETWEEN ? AND ?", from, to).sum(:quantity)
     end
+
+    def average_age()
+      
+    end
   end
   
   has_many :answer_forms, dependent: :destroy
