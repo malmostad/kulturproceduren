@@ -93,20 +93,20 @@
             %dd
               - answers = @booking.answer_form.answers_for(question)
               - case question.qtype
-              - when "QuestionMark", "QuestionText"
-                = answers.first.answer_text
-              - when "QuestionBool"
-                = answers.first.answer_text == "y" ? "Ja" : "Nej"
-              - when "QuestionMchoice"
-                %ul
-                  - answers.each do |answer|
-                    %li= answer.answer_text
+                - when "QuestionMark", "QuestionText"
+                  = answers.first.answer_text
+                - when "QuestionBool"
+                  = answers.first.answer_text == "y" ? "Ja" : "Nej"
+                - when "QuestionMchoice"
+                  %ul
+                    - answers.each do |answer|
+                      %li= answer.answer_text
 
     - else
       .success
         %p
           Eventuell avbokning av platser görs via er bokningsbekräftelse på
-          www.malmo.se/kulturproceduren fram tills dagen före evenemanget.
+          kulturkartan.malmo.se fram tills dagen före evenemanget.
         %p
           Behöver ni avboka era platser samma dag som evenemanget ber vi er
           maila barnkulturenheten@malmo.se.

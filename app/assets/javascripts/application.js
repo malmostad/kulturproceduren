@@ -10,8 +10,9 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= stub wysiwyg
+//= require wysiwyg
 //= require jquery_ujs
+//= require ckeditor-jquery
 //= require bootstrap-datepicker/core
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.sv
 //= require core

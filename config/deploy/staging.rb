@@ -1,6 +1,6 @@
 set :passenger_port, 3001
 set :relative_url_root, "/kp-staging"
-set :tmp_dir, "/tmp/kulturproceduren-staging"
+set :tmp_dir, "/tmp/kulturkartan-staging"
 
 # Simple Role Syntax
 # ==================
@@ -8,9 +8,9 @@ set :tmp_dir, "/tmp/kulturproceduren-staging"
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don"t declare `role :all`, it"s a meta role
-role :app, %w{kulturproceduren-staging}
-role :web, %w{kulturproceduren-staging}
-role :db,  %w{kulturproceduren-staging}
+role :app, %w{kulturkartan-staging}
+role :web, %w{kulturkartan-staging}
+role :db,  %w{kulturkartan-staging}
 
 # Extended Server Syntax
 # ======================

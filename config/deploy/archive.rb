@@ -1,6 +1,6 @@
 set :passenger_port, 3002
 set :relative_url_root, "/kp-archive"
-set :tmp_dir, "/tmp/kulturproceduren-archive"
+set :tmp_dir, "/tmp/kulturkartan-archive"
 
 # Simple Role Syntax
 # ==================
@@ -8,9 +8,9 @@ set :tmp_dir, "/tmp/kulturproceduren-archive"
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don"t declare `role :all`, it"s a meta role
-role :app, %w{kulturproceduren-archive}
-role :web, %w{kulturproceduren-archive}
-role :db,  %w{kulturproceduren-archive}
+role :app, %w{kulturkartan-archive}
+role :web, %w{kulturkartan-archive}
+role :db,  %w{kulturkartan-archive}
 
 # Extended Server Syntax
 # ======================
