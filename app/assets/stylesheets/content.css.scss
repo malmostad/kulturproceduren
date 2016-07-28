@@ -12,3 +12,7 @@ h1 .subtitle {
     display: block;
     font-size: 0.7em;
 }
+
+.body-copy p b, .body-copy p strong, .body-copy li b, .body-copy li strong {
+  font-weight: bold !important;
+}
