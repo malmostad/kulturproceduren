@@ -31,7 +31,7 @@ common: &common
         :thumb_height: 255
 
     :kp_external_link: "http://kulturkartan.malmo.se"
-    :kp_manual_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
+    :kp_manual_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturkartan.html"
     :kbu_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor.html"
     :culture_bus_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
 
@@ -41,7 +41,7 @@ common: &common
     # OBS - se även config/enviroments/*rb actionmailer-config ... From-address måste anges även där
     :mailers:
         :from_address: "Kulturkartan, Malmö Stad <noreply@malmo.se>"
-        :bus_booking_recipient: "carolina.wilse@malmo.se; sofia.ek.landen@malmo.se; camilla.bengtsson@malmo.se"
+        :bus_booking_recipient: "carolina.wilse@malmo.se; camilla.bengtsson@malmo.se"
         :existens_error_reporting: "carolina.wilse@malmo.se; support.gbg@kentor.se"
         :extens_error_in_files: "support.gbg@kentor.se"
 
