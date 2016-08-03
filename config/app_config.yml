@@ -30,7 +30,7 @@ common: &common
         :thumb_height: 255
 
     :kp_external_link: "http://kulturkartan.malmo.se"
-    :kp_manual_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturproceduren.html"
+    :kp_manual_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Anvandarhjalp-till-Kulturkartan.html"
     :kbu_link: "http://www.malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor.html"
     :culture_bus_link: "http://malmo.se/Kultur--fritid/Kultur--noje/Barn--familj/Kultur-till-forskolor-och-skolor/Kulturbussen.html"
 
