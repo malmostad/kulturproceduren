@@ -34,11 +34,11 @@ class KK::FTP_Import::SchoolImporter < KK::FTP_Import::Base
     return nil if !attributes[:school_type_code].match(/^AKGR/).nil? #Enligt Anders Ljungdahl behöver inte dessa vara med
     return nil unless district
 
-    base = School.where(district_id: district.id)
+    base = School
 
     school = base.where(extens_id: attributes[:extens_id]).first
     school ||= School.new(district_id: district.id)
-
+    school.district_id = district.id
     school.name = attributes[:name]
     school.extens_id = attributes[:extens_id]
     #school.city_area = attributes[:city_area]

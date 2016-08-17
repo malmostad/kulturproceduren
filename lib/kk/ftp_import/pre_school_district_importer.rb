@@ -9,9 +9,10 @@ class KK::FTP_Import::PreSchoolDistrictImporter < KK::FTP_Import::Base
   def attributes_from_row(row)
     raise KK::FTP_Import::ParseError.new("PreSchoolDistrictImporter #{ENV['file']}: Wrong row length (#{row.length} fields, expected 6)") if row.length != 6
     data = {
-      name: row[3].try(:strip)
+      name: row[1].try(:strip)
     }
     if !data[:name].nil? && data[:name] == 'NULL' then data[:name] = 'Fristående' end
+    if !data[:name].nil? && data[:name].upcase == 'FRISTÅENDE' then data[:name] = 'Fristående' end
     return data
   end
 
