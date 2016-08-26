@@ -24,8 +24,9 @@ class KK::FTP_Import::PreSchoolImporter < KK::FTP_Import::Base
   end
 
   def build(attributes)
-    district_name = attributes[:city_area]
-    district_name = 'Fristående' if district_name.nil? or district_name.empty?
+    district_name = attributes[:district_id]
+    district_name = 'Fristående' if district_name.nil? or district_name.empty? or district_name.upcase == 'FRISTÅENDE'
+
     district = District.where(school_type_id: @school_type_id, name: district_name).first
     unless district
       # enligt överenskommelse med Carolina Wilse på telefon 2016-02-10...
@@ -35,11 +36,11 @@ class KK::FTP_Import::PreSchoolImporter < KK::FTP_Import::Base
     return nil if attributes[:school_type_code].match(/^FSKIK/) #Enligt Anders Ljungdahl är dessa enbart för intrakommunal ersättning
     return nil unless district
 
-    base = School.where(district_id: district.id)
+    base = School
 
     school = base.where(extens_id: attributes[:extens_id]).first
     school ||= School.new(district_id: district.id)
-
+    school.district_id = district.id
     school.name = attributes[:name]
     school.extens_id = attributes[:extens_id]
     school.city_area = attributes[:city_area]

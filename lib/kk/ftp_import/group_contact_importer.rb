@@ -29,7 +29,10 @@ class KK::FTP_Import::GroupContactImporter < KK::FTP_Import::Base
       .where(extens_id: attributes[:group_id]).first
     return nil unless group
 
-    contacts = group.contacts.try(:split, ",") || []
+    #contacts = group.contacts.try(:split, ",") || []
+    # 2016-08-26, Ändrar till att vi alltid skriver över kontaktuppgifter för grupper
+    # enligt diskussion med Camilla & Carolina (Ej för skolor!)
+    contacts = []
     if !attributes[:contact].nil? && !attributes[:contact].match(/@/).nil?
       contacts << attributes[:contact]
     end
