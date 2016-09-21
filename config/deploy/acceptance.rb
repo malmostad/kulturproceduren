@@ -2,7 +2,8 @@ set :passenger_port, 3004
 set :relative_url_root, "/kp-acceptance"
 set :tmp_dir, "/tmp/kulturkartan-acceptance"
 
-ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+#ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+set :branch, "develop"
 
 # Simple Role Syntax
 # ==================
