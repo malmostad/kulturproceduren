@@ -1,6 +1,6 @@
 # Kulturproceduren
 
-Kulturkartan is a web application specifically tailored for the work process
+Kulturkartan (acceptance branch) is a web application specifically tailored for the work process
 of Barnkulturenheten in City of Malmö.
 
 ## License
