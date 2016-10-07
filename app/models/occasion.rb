@@ -133,7 +133,7 @@ class Occasion < ActiveRecord::Base
     self.includes(event: :culture_provider)
       .references(:events, :culture_providers)
       .where(where_fragment, *variables)
-      .order("occasions.date ASC, events.name ASC, occasions.start_time ASC")
+      .order("occasions.date ASC, occasions.start_time ASC, events.name ASC")
       .paginate(page: page)
   end
 
