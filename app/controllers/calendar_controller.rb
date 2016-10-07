@@ -5,7 +5,12 @@ class CalendarController < ApplicationController
 
   # Displays a regular calendar for occasions/events without any search filter
   def index
-    session[:age_category] = params[:age_category] && !params[:age_category].blank? ? params[:age_category].to_i : session[:age_category] || 0
+    @age_categories = AgeCategory.order(from_age: :asc).all
+  end
+
+  # Displays a regular calendar for occasions/events without any search filter
+  def index_details
+    session[:age_category] = params[:age_category] && !params[:age_category].blank? ? params[:age_category].to_i : session[:age_category] || -1
     @age_category = session[:age_category]
 
     unless fragment_exist?(list_cache_key())
@@ -23,7 +28,7 @@ class CalendarController < ApplicationController
 
   # Displays a regular calendar for occasions/events with a search filter
   def filter
-    session[:age_category] = params[:age_category] && !params[:age_category].blank? ? params[:age_category].to_i : session[:age_category] || 0
+    session[:age_category] = params[:age_category] && !params[:age_category].blank? ? params[:age_category].to_i : session[:age_category] || -1
     @age_category = session[:age_category]
     # if (!calendar_filter[:from_age] || calendar_filter[:from_age] == -1) && (!calendar_filter[:to_age] || calendar_filter[:to_age] == -1) && @age_category != 0
     #   from_age, to_age = age_range()

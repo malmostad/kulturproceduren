@@ -22,3 +22,17 @@ form table {
         font-size: 1em;
     }
 }
+
+table#age_categories {
+  border-width: 0;
+  tr {
+    border-width: 0;
+    td {
+      border-width: 0;
+      img {
+        border: rgb(213, 213, 213) 1px solid;
+        padding: 3px;
+      }
+    }
+  }
+}
