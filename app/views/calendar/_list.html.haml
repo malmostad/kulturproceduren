@@ -1,7 +1,7 @@
 %nav.calendar-nav
-  - if controller.action_name != 'filter'
-    .form-group
-      = select_tag('age_category', options_from_collection_for_select(@age_categories, "id", "name", @age_category), {prompt: "-- Alla ålderskategorier --", class: "form-control", style: "width: 265px;"} )
+  -#- if controller.action_name != 'filter'
+  -#  .form-group
+  -#    = select_tag('age_category', options_from_collection_for_select(@age_categories, "id", "name", @age_category), {prompt: "-- Alla ålderskategorier --", class: "form-control", style: "width: 265px;"} )
 
   .btn-group
     = link_to "Evenemang", calendar_path(params[:action], :occasions), class: "btn btn-default#{ " active" if occasions_calendar?}"
