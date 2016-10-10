@@ -17,9 +17,11 @@ ActiveRecord::Schema.define(version: 20160615104317) do
   enable_extension "plpgsql"
 
   create_table "age_categories", force: true do |t|
-    t.string   "name",       limit: 40
-    t.integer  "from_age",              null: false
-    t.integer  "to_age",                null: false
+    t.string   "name",              limit: 40
+    t.integer  "from_age",                                     null: false
+    t.integer  "to_age",                                       null: false
+    t.boolean  "further_education",            default: false, null: false
+    t.integer  "sort_order",                   default: 0,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
