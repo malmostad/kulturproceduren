@@ -16,12 +16,20 @@ class CalendarController < ApplicationController
     unless fragment_exist?(list_cache_key())
       @category_groups = CategoryGroup.order "name ASC"
       @age_categories = AgeCategory.order(from_age: :asc).all
-      from_age, to_age = age_range()
+      from_age, to_age, further_education = age_range()
 
       if events_calendar?
-        @events = Event.search_standing({ from_date: Date.today, from_age: from_age, to_age: to_age }, params[:page])
+        if further_education == true then
+          @events = Event.search_standing({ from_date: Date.today, from_age: from_age, to_age: to_age, further_education: true }, params[:page])
+        else
+          @events = Event.search_standing({ from_date: Date.today, from_age: from_age, to_age: to_age }, params[:page])
+        end
       else
-        @occasions = Occasion.search({ from_date: Date.today, from_age: from_age, to_age: to_age }, params[:page])
+        if further_education == true then
+          @occasions = Occasion.search({ from_date: Date.today, from_age: from_age, to_age: to_age, further_education: true }, params[:page])
+        else
+          @occasions = Occasion.search({ from_date: Date.today, from_age: from_age, to_age: to_age }, params[:page])
+        end
       end
     end
   end
@@ -117,15 +125,20 @@ class CalendarController < ApplicationController
   def age_range
     from_age = -1
     to_age = 100
+    further_education = false
+
     if session[:age_category] && session[:age_category] != 0
       age_category = AgeCategory.find_by_id(session[:age_category])
       if age_category
         from_age = age_category.from_age
         to_age = age_category.to_age
+        further_education = age_category.further_education
       end
     end
-    return from_age, to_age
+
+    return from_age, to_age, further_education
   end
+
   helper_method :calendar_list
 
   private
