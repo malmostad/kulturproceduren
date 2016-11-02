@@ -34,8 +34,8 @@
       %tr
         - for col in 1..num_cols
           - index = ((row-1)*max_cols)+col-1
-          - current_title = if index == num_categories-1 then 'Samtliga ålderskategorier' else @age_categories[index].name end
-          - current_id = if index == num_categories-1 then 0 else @age_categories[index].id end
+          - current_title = if index == 0 then 'Samtliga ålderskategorier' else @age_categories[index-1].name end
+          - current_id = if index == 0 then 0 else @age_categories[index-1].id end
           %td(style="text-align: center;")
             = link_to image_tag("age_category_#{current_id}.png"), action: 'index_details', age_category: current_id
             %br

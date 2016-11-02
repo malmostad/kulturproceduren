@@ -5,7 +5,7 @@ class CalendarController < ApplicationController
 
   # Displays a regular calendar for occasions/events without any search filter
   def index
-    @age_categories = AgeCategory.order(from_age: :asc).all
+    @age_categories = AgeCategory.order(sort_order: :asc).all
   end
 
   # Displays a regular calendar for occasions/events without any search filter
@@ -15,7 +15,7 @@ class CalendarController < ApplicationController
 
     unless fragment_exist?(list_cache_key())
       @category_groups = CategoryGroup.order "name ASC"
-      @age_categories = AgeCategory.order(from_age: :asc).all
+      @age_categories = AgeCategory.order(sort_order: :asc).all
       from_age, to_age, further_education = age_range()
 
       if events_calendar?
