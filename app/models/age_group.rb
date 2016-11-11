@@ -35,8 +35,15 @@ class AgeGroup < ActiveRecord::Base
     end
   end
 
+  def self.num_children_per_school
+    {}.tap do |result|
+      counts = self.includes(:group).order("groups.school_id").group("groups.school_id").sum(:quantity)
+      counts.each{ |k, v| result[k.to_s] = v }
+    end
+  end
 
   def self.num_children_per_group
     self.group(:group_id).sum(:quantity)
   end
+
 end

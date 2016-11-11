@@ -5,7 +5,10 @@
 <p>Välkomna att ta del av <%= @event.name %>.</p>
 
 <ul>
-  <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
+  <% if @event.is_age_range_used %>
+    <li><strong>Målgrupp:</strong> <%= @event.from_age %>-<%= @event.to_age %> år</li>
+  <% end %>
+
   <% @category_groups.each do |category_group| -%>
     <% category_names = @event.categories.select { |c| c.category_group_id == category_group.id }.map { |c| c.name } %>
 
@@ -65,6 +68,43 @@
         och eventuell bussresa
       <% end %>
       genom att välja önskad dag och tid här.
+    </a>
+  </p>
+
+<% elsif @event.alloted_school? %>
+
+  <p>Följande skolor har fått platser reserverade för evenemanget:</p>
+
+  <ul>
+    <% @school_structure.sort_by { |s| s.name }.each do |school| %>
+      <li><%= group.name %></li>
+    <% end %>
+  </ul>
+
+  <p>Begränsat antal platser. &quot;Först till kvarn&quot; gäller.</p>
+
+  <p>
+    Platserna är reserverade till respektive skola till och med
+    <%= @event.free_for_all_transition_date - 1 %>.
+    Därefter släpps obekräftade platser till samtliga förskolor/skolor i Malmö.
+  </p>
+
+  <% if @event.bus_booking? %>
+      <p>
+        Kulturbuss är reserverad och kan bokas via Kulturkartan fram till och
+        med <%= @event.last_bus_booking_date %>.
+      </p>
+  <% else %>
+      <p>
+        Till detta evenemang är Kulturbuss <strong>inte garanterad</strong>.
+        <br/>
+        <%= link_to "Gör en förfrågan om Kulturbuss här.", APP_CONFIG[:culture_bus_link] %>.
+      </p>
+  <% end %>
+
+  <p>
+    <a href="<%= mail_url(event_path(@event)) %>">
+      Läs mer om <%= @event.name %> och bekräfta era platser genom att välja önskad dag och tid här.
     </a>
   </p>
 

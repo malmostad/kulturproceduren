@@ -9,6 +9,8 @@ class District < ActiveRecord::Base
 
     # Finds all schools in the district that has children in the given age span.
     def find_by_age_span(from, to)
+      from = 0 if from == -1
+      to = 100 if to == -1
       where("schools.id in (select s.id from age_groups ag left join groups g on ag.group_id = g.id left join schools s on g.school_id = s.id  where age between ? and ? and g.active = ?)", from, to, true )
       .order("schools.name ASC")
     end
@@ -33,6 +35,7 @@ class District < ActiveRecord::Base
 
   # Accessors for caching child and ticket amounts when doing the ticket allotment
   attr_accessor :num_children, :num_tickets, :distribution_schools
+  attr_accessor :tot_children
 
   # Returns the number of avaliable tickets for the district in
   # the given occasion.
@@ -47,9 +50,15 @@ class District < ActiveRecord::Base
       return nil if o.nil?
     end
     case o.event.ticket_state
-    when :alloted_group, :alloted_district
+    when :alloted_group, :alloted_school, :alloted_district
       # Count all tickets belonging to this district
       Ticket.unbooked.where(event_id: o.event.id, district_id: self.id).count
+    when :free_for_all_with_excluded_districts
+      if !(o.event.excluded_district_ids.include self.id) || o.event.excluded_district_ids.empty?
+        Ticket.unbooked.where(event_id: o.event.id).count
+      else
+        Ticket.where('false')
+      end
     when :free_for_all
       # Count all tickets
       Ticket.unbooked.where(event_id: o.event.id).count

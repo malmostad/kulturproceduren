@@ -1,7 +1,6 @@
 common: &common
     :assets_url_base: "//assets.malmo.se/external/v4/"
     :asset_host: "http://www.malmo.se/assets-2.0"
-    :elit_kp_service_endpoint: "http://localhost:9080/elit-kpService/elit-kpPort"
     :ftp_import_directory: "./tmp/importArchive/"
     :ftp_import_archive: "./tmp/importArchive/processed"
 
@@ -16,7 +15,9 @@ common: &common
         :reminder_days: 7
     :ticket_state:
         :group_days: 14
+        :school_days: 14
         :district_days: 14
+        :reminder_weeks: 4
     :bus_booking:
         :active_days: 14
 
@@ -54,8 +55,8 @@ development:
 
     :occasion_reminder_days: 0
 
-    #:mailers:
-    #    :debug_recipient: "camilla.bengtsson@malmo.se"
+    :mailers:
+        :debug_recipient: "ted.parnefors@kentor.se"
 
 test:
     <<: *common

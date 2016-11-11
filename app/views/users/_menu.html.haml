@@ -5,6 +5,7 @@
       - if user_online?
         - if current_user.has_role?(:admin)
           %li= link_to "Alla användare", users_path
+          %li= link_to "Skapa användare", new_user_path
         - else
           %li= link_to "Mitt konto", current_user
           %li= link_to "Ansök om behörigheter", role_applications_path

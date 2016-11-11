@@ -6,18 +6,35 @@ class EventMailer < ApplicationMailer
   default from: APP_CONFIG[:mailers][:from_address]
 
   # Sends an email to contacts when tickets have been released
-  def ticket_release_notification_email(event, addresses, group_structure = nil)
+  def ticket_release_notification_email(event, addresses, group_structure = nil, school_structure = nil)
     if APP_CONFIG[:mailers][:debug_recipient]
       recipients = APP_CONFIG[:mailers][:debug_recipient]
     else
       recipients = addresses
     end
 
-    @event           = event
-    @group_structure = group_structure
-    @category_groups = CategoryGroup.all
+    @event            = event
+    @group_structure  = group_structure
+    @school_structure = school_structure
+    @category_groups  = CategoryGroup.all
 
     mail_from_app recipients, "Kulturkartan: Fördelade platser till #{event.name}"
+  end
+
+  # Sends an email to contacts if tickets are still available for an event
+  def tickets_available_notification_email(event, addresses, group_structure = nil, school_structure = nil)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients = APP_CONFIG[:mailers][:debug_recipient]
+    else
+      recipients = addresses
+    end
+
+    @event            = event
+    @group_structure  = group_structure
+    @school_structure = school_structure
+    @category_groups  = CategoryGroup.all
+
+    mail_from_app recipients, "Kulturkartan: Fördelade platser fortfarande kvar till #{event.name}"
   end
 
   # Sends an email to contacts when tickets transition to free for all allotment
@@ -44,6 +61,21 @@ class EventMailer < ApplicationMailer
 
     @event           = event
     @district        = district
+    @category_groups = CategoryGroup.all
+
+    mail_from_app recipients, "Kulturkartan: Restplatser till #{event.name}"
+  end
+
+  # Sends an email to contacts when tickets transition to school allotment
+  def school_allotment_notification_email(event, school, recipient)
+    if APP_CONFIG[:mailers][:debug_recipient]
+      recipients = APP_CONFIG[:mailers][:debug_recipient]
+    else
+      recipients = recipient
+    end
+
+    @event           = event
+    @school          = school
     @category_groups = CategoryGroup.all
 
     mail_from_app recipients, "Kulturkartan: Restplatser till #{event.name}"

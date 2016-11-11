@@ -8,7 +8,10 @@
 #
 # The transition between the different states are done on a timed basis using a
 # Rake task.
+require 'uri'
+
 class Event < ActiveRecord::Base
+  before_save :correct_youtube_url
 
   # Scope for operating on standing events
   scope :standing, lambda{ where("events.id not in (select x.event_id from occasions x)") }
@@ -62,6 +65,12 @@ class Event < ActiveRecord::Base
     end
   end
 
+  has_many(:schools, lambda{ distinct.order("schools.name ASC") }, through: :tickets) do
+    # Scope by district
+    def find_by_district(district)
+      where('tickets.district_id = ?', district.id).order("schools.name ASC")
+    end
+  end
 
   has_many :unordered_groups, lambda{ distinct },
     through: :tickets,
@@ -116,6 +125,7 @@ class Event < ActiveRecord::Base
     :description,
     :visible_from,
     :visible_to,
+    :is_age_range_used,
     :from_age,
     :to_age,
     :further_education,
@@ -123,6 +133,7 @@ class Event < ActiveRecord::Base
     :ticket_state,
     :url,
     :movie_url,
+    :youtube_url,
     :opening_hours,
     :cost,
     :booking_info,
@@ -130,22 +141,31 @@ class Event < ActiveRecord::Base
     :main_image_id,                :main_image,
     :map_address,
     :single_group_per_occasion,
+    :school_transition_date,
     :district_transition_date,
     :free_for_all_transition_date,
     :bus_booking,
     :last_bus_booking_date,
-    :school_type_ids
-  
-  validates_presence_of :name,
-    message: "Namnet får inte vara tomt"
-  validates_presence_of :description,
-    message: "Beskrivningen får inte vara tom"
-  validates_numericality_of :from_age, :to_age, only_integer: true,
-    message: "Åldern måste vara ett giltigt heltal."
-  validates_presence_of :visible_from,
-    message: "Du måste ange datum"
-  validates_presence_of :visible_to,
-    message: "Du måste ange datum"
+    :school_type_ids,
+    :excluded_district_ids,
+    :last_transitioned_date
+
+  def is_age_range_used
+    !(!self.from_age.nil? && self.from_age == -1 && !self.to_age.nil? && self.to_age == -1)
+  end
+
+  def is_age_range_used=(val)
+    if val == false then
+      self.from_age = -1
+      self.to_age = -1
+    end
+  end
+
+  validates_presence_of :name, message: "Namnet får inte vara tomt"
+  validates_presence_of :description, message: "Beskrivningen får inte vara tom"
+  validates_numericality_of :from_age, :to_age, only_integer: true, message: "Åldern måste vara ett giltigt heltal."
+  validates_presence_of :visible_from, message: "Du måste ange datum"
+  validates_presence_of :visible_to, message: "Du måste ange datum"
 
   before_save :set_further_education_age
 
@@ -153,13 +173,19 @@ class Event < ActiveRecord::Base
   ALLOTED_GROUP    = 1
   ALLOTED_DISTRICT = 2
   FREE_FOR_ALL     = 3
+  ALLOTED_SCHOOL   = 4
+  FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS = 5
 
   def ticket_state
     case read_attribute(:ticket_state)
     when ALLOTED_GROUP
       :alloted_group
+    when ALLOTED_SCHOOL
+      :alloted_school
     when ALLOTED_DISTRICT
       :alloted_district
+    when FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
+      :free_for_all_with_excluded_districts
     when FREE_FOR_ALL
       :free_for_all
     else
@@ -172,6 +198,10 @@ class Event < ActiveRecord::Base
       write_attribute(:ticket_state, self.class.ticket_state_id_from_symbol(value))
     when ALLOTED_GROUP..FREE_FOR_ALL
       write_attribute(:ticket_state, value)
+    when ALLOTED_SCHOOL
+      write_attribute(:ticket_state, value)
+    when FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
+      write_attribute(:ticket_state, value)
     else
       write_attribute(:ticket_state, nil)
     end
@@ -180,32 +210,52 @@ class Event < ActiveRecord::Base
   def alloted_group?
     self.ticket_state == :alloted_group
   end
+  def alloted_school?
+    self.ticket_state == :alloted_school
+  end
   def alloted_district?
     self.ticket_state == :alloted_district
+  end
+  def free_for_all_with_excluded_districts?
+    self.ticket_state == :free_for_all_with_excluded_districts
   end
   def free_for_all?
     self.ticket_state == :free_for_all
   end
 
-
   # Transitioning
+  def transition_to_school?
+    !self.school_transition_date.blank? && self.alloted_group? && self.school_transition_date <= Date.today
+  end
+  def transition_to_school!
+    self.ticket_state = :alloted_school
+    self.last_transitioned_date = Date.today
+    self.save!
+  end
   def transition_to_district?
-    !self.district_transition_date.blank? && self.alloted_group? && self.district_transition_date <= Date.today
+     (
+      (self.alloted_group? && self.school_transition_date.blank?) ||
+      (self.alloted_school?)
+     ) && !self.district_transition_date.blank? && self.district_transition_date <= Date.today
   end
   def transition_to_district!
     self.ticket_state = :alloted_district
+    self.last_transitioned_date = Date.today
     self.save!
   end
   def transition_to_free_for_all?
-    (self.alloted_district? ||
-        (self.alloted_group? && self.district_transition_date.blank?)) &&
-      self.free_for_all_transition_date <= Date.today
+    (
+      (self.alloted_group? && self.school_transition_date.blank? && district_transition_date.blank?) ||
+      (self.alloted_school? && district_transition_date.blank?) ||
+      (self.alloted_district?) ||
+      (self.free_for_all_with_excluded_districts?)
+    ) && !self.free_for_all_transition_date.blank? && self.free_for_all_transition_date <= Date.today
   end
   def transition_to_free_for_all!
     self.ticket_state = :free_for_all
+    self.last_transitioned_date = Date.today
     self.save!
   end
-
 
   # Indicates whether it is possible to book occasions belonging to this event.
   def bookable?(reload=false)
@@ -235,6 +285,10 @@ class Event < ActiveRecord::Base
 
   def has_booking?
     tickets.booked.exists?
+  end
+
+  def has_allotments?
+    allotments.exists?
   end
 
   # Indicates whether the event has tickets available for booking
@@ -404,6 +458,23 @@ class Event < ActiveRecord::Base
 
   protected
 
+  def correct_youtube_url
+    prefix = 'https://www.youtube.com/embed'
+    if !self.youtube_url.blank?
+      if self.youtube_url =~ /v=/i
+        query_string = URI.parse(self.youtube_url).query
+        parameters = Hash[URI.decode_www_form(query_string)]
+        youtube_id = parameters['v']
+        self.youtube_url = "#{prefix}/#{youtube_id}"
+      else
+        youtube_id = youtube_url.split('/').reject!(&:empty?).last
+        if !youtube_id.blank?
+          self.youtube_url = "#{prefix}/#{youtube_id}"
+        end
+      end
+    end
+  end
+
   # Removes the ages when the event has <tt>further_education</tt> set.
   def set_further_education_age
     if self.further_education
@@ -418,8 +489,12 @@ class Event < ActiveRecord::Base
     case sym
     when :alloted_group
       ALLOTED_GROUP
+    when :alloted_school
+      ALLOTED_SCHOOL
     when :alloted_district
       ALLOTED_DISTRICT
+    when :free_for_all_with_excluded_districts
+      FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
     when :free_for_all
       FREE_FOR_ALL
     else

@@ -2,4 +2,6 @@
   %h1 Områden
   %ul
     %li= link_to "Alla områden", districts_path
+    %li= link_to "Områden från Extens", districts_path(filter: :external)
+    %li= link_to "Manuellt uplagda områden", districts_path(filter: :manual)
     %li= link_to "Nytt område", new_district_path

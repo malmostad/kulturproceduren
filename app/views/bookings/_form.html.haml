@@ -3,8 +3,7 @@
 - if !@is_edit && available_tickets <= 0
 
   .warning
-    Tyvärr finns det inga bokningsbara platser för det här evenemanget för den
-    valda klassen/avdelningen.
+    Tyvärr finns det inga bokningsbara platser för det här evenemanget för den valda klassen/avdelningen.
     = link_to "Klicka här", new_event_notification_request_path(@occasion.event)
     om du vill få ett meddelande om platser blir tillgängliga senare.
 
@@ -32,21 +31,30 @@
       - else
 
         - case @occasion.event.ticket_state
-        - when :alloted_group
-          %b= "#{@group.school.name}, #{@group.name}"
-          har
-          %b= available_tickets
-          platser tillgängliga för bokning.
-        - when :alloted_district
-          Det finns
-          %b= available_tickets
-          tillgängliga platser att boka för alla förskolor och skolor i
-          = succeed "." do
-            %b= @group.school.district.name
-        - when :free_for_all
-          Det finns
-          %b= available_tickets
-          tillgängliga platser att boka. Först till kvarn gäller.
+          - when :alloted_group
+            %b= "#{@group.school.name}, #{@group.name}"
+            har
+            %b= available_tickets
+            platser tillgängliga för bokning.
+          - when :alloted_school
+            %b= "#{@group.school.name}"
+            har
+            %b= available_tickets
+            platser tillgängliga för bokning.
+          - when :alloted_district
+            Det finns
+            %b= available_tickets
+            tillgängliga platser att boka för alla förskolor och skolor i
+            = succeed "." do
+              %b= @group.school.district.name
+          - when :free_for_all_with_excluded_districts
+            Det finns
+            %b= available_tickets
+            tillgängliga platser att boka. Först till kvarn gäller.
+          - when :free_for_all
+            Det finns
+            %b= available_tickets
+            tillgängliga platser att boka. Först till kvarn gäller.
 
     %fieldset
       %legend Antal platser

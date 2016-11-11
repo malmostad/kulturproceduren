@@ -2,4 +2,6 @@
   %h1 Skolor
   %ul
     %li= link_to "Alla skolor", schools_path
+    %li= link_to "Skolor från Extens", schools_path(filter: :external)
+    %li= link_to "Manuellt uplagda skolor", schools_path(filter: :manual)
     %li= link_to "Ny skola", new_school_path

@@ -5,27 +5,38 @@
       .box-content
         .map-container(style="display:none;")
         %p
-          Välkommen till Kulturkartan. I kalendariet hittar du kulturutbud
-          för barn och unga i Malmö.
+          Välkommen till Kulturkartan. I kalendariet hittar du kulturutbud för barn och unga i Malmö.
         %p
-          Kulturkartan är även ett bokningssystem som är tillgängligt för
-          Malmös förskolor och grundskolor.
+          Kulturkartan är även ett bokningssystem som är tillgängligt för Malmös förskolor och grundskolor.
         - unless user_online?
           %p
-            Är du kulturproducent i Malmö och vill presentera ditt utbud på
-            Kulturkartan,
+            Är du kulturproducent i Malmö och vill presentera ditt utbud på Kulturkartan,
             = link_to "skapa ett konto här", controller: "login", action: "index"
         %p
-          Behöver du hjälp eller vill läsa mer om någon del i Kulturkartan
-          hittar du
+          Behöver du hjälp eller vill läsa mer om någon del i Kulturkartan hittar du
           = link_to "användarhjälp här", APP_CONFIG[:kp_manual_link]
         - unless user_online?
           %p
             Är du kulturombud och vill boka evenemang,
-            = link_to "skapa ett konto här", controller: "login", action: "index"
+            = link_to "skapa ett konto här", new_user_path
 
     = render partial: "shared/contact_us"
 
-  - cache list_cache_key, skip_digest: true do
-    = render partial: "list",
-      locals: { events: @events, occasions: @occasions, category_groups: @category_groups }
+  %h3 Välj ålderskategori
+  %table#age_categories
+    - max_cols = 3
+    - num_categories = @age_categories.length + 1
+    - num_rows = (((num_categories-1)/max_cols)+1)
+
+    - for row in 1..num_rows
+      - num_cols = if row < num_rows then max_cols else num_categories % max_cols end
+      - num_cols = max_cols if num_cols == 0
+      %tr
+        - for col in 1..num_cols
+          - index = ((row-1)*max_cols)+col-1
+          - current_title = if index == 0 then 'Samtliga ålderskategorier' else @age_categories[index-1].name end
+          - current_id = if index == 0 then 0 else @age_categories[index-1].id end
+          %td(style="text-align: center;")
+            = link_to image_tag("age_category_#{current_id}.png"), action: 'index_details', age_category: current_id
+            %br
+            = current_title

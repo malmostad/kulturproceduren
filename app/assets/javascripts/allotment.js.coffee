@@ -23,10 +23,21 @@ $ ->
         # Handle manual changes of the dependent date fields
         form.on "change", "[data-default-interval]", -> $(this).addClass("changed")
 
+        # Hide districts if the user selects "free_for_all"
+        form.on 'change', 'input[name=allotment\\[ticket_state\\]]', ->
+          value = parseInt $(this).val()
+          if value == 3
+            $('.areas-group').hide()
+          else
+            $('.areas-group').show()
+
+        # Disable school transition date field when skipping school transition
+        form.on "change", "#allotment_skip_school_transition", ->
+          form.find("#allotment_school_transition_date").prop("disabled", $(this).is(":checked"))
 
         # Disable district transition date field when skipping district transition
-        form.on "change", "#allotment_skip_district_transition", ->
-            form.find("#allotment_district_transition_date").prop("disabled", $(this).is(":checked"))
+          form.on "change", "#allotment_skip_district_transition", ->
+              form.find("#allotment_district_transition_date").prop("disabled", $(this).is(":checked"))
 
         # Enable bus booking date field when enabling bus booking
         form.on "change", "#allotment_bus_booking", ->

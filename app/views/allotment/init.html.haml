@@ -33,7 +33,25 @@
         %span.input-group-addon
           %span.glyphicon.glyphicon-calendar
 
-    - if !is_edit || @event.ticket_state == :alloted_group
+    -#- if !is_edit || @event.ticket_state == :alloted_group
+    -#  .form-group
+    -#    %span.control-label
+    -#    .controls.checkbox
+    -#      %label.checkbox
+    -#        = check_box_tag "allotment[skip_school_transition]", nil
+    -#        Hoppa över övergång till skola
+    -#
+    -#  .form-group
+    -#    %label.control-label(for="allotment_school_transition_date") Övergång till skola:
+    -#    .controls.input-group
+    -#      = text_field_tag "allotment[school_transition_date]",
+    -#        @event.school_transition_date,
+    -#        class: "form-control datepicker#{" changed" if !@event.school_transition_date.blank?}",
+    -#        data: { "start-date" => Date.tomorrow, "default-interval" => APP_CONFIG[:ticket_state][:school_days] }
+    -#      %span.input-group-addon
+    -#        %span.glyphicon.glyphicon-calendar
+
+    - if !is_edit || @event.ticket_state == :alloted_group || @event.ticket_state == :alloted_school
       .form-group
         %span.control-label
         .controls.checkbox
@@ -96,15 +114,25 @@
           %label.radio-inline
             = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_GROUP, true
             Grupp
+          %br
+          %label.radio-inline
+            = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_SCHOOL
+            Skola
+          %br
           %label.radio-inline
             = radio_button_tag "allotment[ticket_state]", Event::ALLOTED_DISTRICT
             Område
+          %br
+          %label.radio-inline
+            = radio_button_tag "allotment[ticket_state]", Event::FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS
+            Hela staden med undantag
+          %br
           %label.radio-inline
             = radio_button_tag "allotment[ticket_state]", Event::FREE_FOR_ALL
             Hela staden
 
-    .form-group
-      %label.control-label Områden:
+    .form-group.areas-group
+      %label.control-label Fördelningsområden:
       .controls.checkbox.districts
         %label.checkbox
           = check_box_tag "allotment[district_ids][]",

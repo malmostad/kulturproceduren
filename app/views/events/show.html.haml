@@ -2,7 +2,11 @@
   = @event.name
 
 %main
+
   #slideshow.header
+    -if !@event.youtube_url.blank?
+      #video
+        %iframe(width=686 height=385 allowfullscreen frameborder=0 src="#{@event.youtube_url}")
     .map-container(style="display:none;")
     .images
       - @event.images_excluding_main.each do |image|
@@ -41,6 +45,12 @@
       %h1 Administrera
       %ul
         %li= link_to "Bokningar", event_bookings_path(@event)
+
+  - elsif user_online? && current_user.has_role?(:host) && @event.reportable?
+    %nav.basic.administration
+      %h1 Administrera
+      %ul
+        %li= link_to 'Närvaro', event_attendance_index_path(@event)
 
   %aside.basic.details.event
     %dl

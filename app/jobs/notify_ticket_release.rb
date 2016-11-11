@@ -24,8 +24,33 @@ class NotifyTicketRelease
         group_structure[group.school] ||= []
         group_structure[group.school] << group
       end
+    when :alloted_school
+      event.schools.each do |school|
+        # Notify the contacts on both schools and districts
+        addresses += (school.contacts || "").split(",")
+        addresses += (school.district.contacts || "").split(",")
+
+        school.groups.find_by_age_span(event.from_age, event.to_age).each do |group|
+          addresses += (group.contacts || "").split(",")
+        end
+
+        school_structure[school] ||= []
+        school_structure[school] << school
+      end
     when :alloted_district
       event.districts.each do |district|
+        addresses += (district.contacts || "").split(",")
+
+        district.schools.find_by_age_span(event.from_age, event.to_age).each do |school|
+          addresses += (school.contacts || "").split(",")
+
+          school.groups.find_by_age_span(event.from_age, event.to_age).each do |group|
+            addresses += (group.contacts || "").split(",")
+          end
+        end
+      end
+    when :free_for_all_with_excluded_districts
+      District.where.not(id: event.excluded_district_ids).each do |district|
         addresses += (district.contacts || "").split(",")
 
         district.schools.find_by_age_span(event.from_age, event.to_age).each do |school|
@@ -56,7 +81,7 @@ class NotifyTicketRelease
 
     addresses.each do |a|
       puts "Sending notification mail for ticket release about #{event.name} to #{a}"
-      EventMailer.ticket_release_notification_email(event,[a],group_structure).deliver
+      EventMailer.ticket_release_notification_email(event, [a], group_structure, school_structure).deliver
     end
   end
 end

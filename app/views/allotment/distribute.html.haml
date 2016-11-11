@@ -4,9 +4,10 @@
 
 %main.admin.with-aside
   %nav.return
-    = link_to "Återvänd till presentationen för #{@event.name}", @event
+    = link_to "Återvänd till presentationen för: #{@event.name}", @event
 
   - is_group_distribution = session[:allotment][:ticket_state] == :alloted_group
+  - is_school_distribution = session[:allotment][:ticket_state] == :alloted_school
 
   - if is_group_distribution
     = group_selection_form select_button: "Lägg till grupp"
@@ -109,6 +110,45 @@
                         "#",
                         class: "clear btn btn-danger",
                         title: "Töm gruppens tilldelade biljetter"
+
+    - elsif is_school_distribution
+      %table.allotment-distribution
+        %thead
+          %tr
+            %th(rowspan="2") Namn
+            %th(colspan="2") Antal barn
+            %th(rowspan="2" colspan="2") Antal biljetter
+          %tr
+            %th Totalt
+            %th För fördelning
+
+        %tbody
+          - @districts.each do |district|
+            %tr.district(data-type="district")
+              %td
+                .collapser= district.name
+              %td= district.tot_children
+              %td= district.num_children
+              %td.tickets= district.num_tickets
+              %td
+                .btn-group
+                  = link_to "+", "#", class: "fill btn btn-success", title: "Fyll områdets tilldelade biljetter så långt som möjligt"
+                  = link_to "&#x2212;".html_safe, "#", class: "clear btn btn-danger", title: "Töm områdets tilldelade biljetter"
+
+            - district.distribution_schools.each do |school|
+              %tr.school(data-type="school")
+                -#- proximity = (school.total_children > school.num_children && (school.total_children - school.num_children) <= APP_CONFIG[:allotment][:proximity_boundary])
+                %td= school.name
+                %td= school.tot_children
+                %td= school.num_children
+                -#%td{class: "#{"proximity" if proximity}"}= school.total_children
+                -#%td{class: "children#{" proximity" if proximity}"}= school.num_children
+                %td= text_field_tag "allotment[ticket_assignment[#{school.id}]]", school.num_tickets, size: 5, class: "form-control tickets", data: { value: school.num_tickets }
+                %td
+                  .btn-group
+                    = link_to "+", "#", class: "fill btn btn-success", title: "Fyll skolans tilldelade biljetter"
+                    = link_to "&#x2212;".html_safe, "#", class: "clear btn btn-danger", title: "Töm skolans tilldelade biljetter"
+
     - else
       %table.allotment-distribution
         %thead

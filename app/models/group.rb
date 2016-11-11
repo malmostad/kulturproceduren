@@ -16,6 +16,10 @@ class Group < ActiveRecord::Base
     def num_children_by_age_span(from, to)
       where("age BETWEEN ? AND ?", from, to).sum(:quantity)
     end
+
+    def average_age()
+      
+    end
   end
   
   has_many :answer_forms, dependent: :destroy
@@ -63,13 +67,23 @@ class Group < ActiveRecord::Base
     existing_booking = self.booked_tickets_by_occasion(occasion) > 0
     tickets          = begin
       case occasion.event.ticket_state
-      when :alloted_group then
+      when :alloted_group
         states = [:unbooked]
         states << :deactivated if existing_booking
         Ticket.with_states(states).where(event_id: occasion.event.id, group_id: self.id, wheelchair: false)
-      when :alloted_district then
+      when :alloted_school
+        states = [:unbooked]
+        states << :deactivated if existing_booking
+        Ticket.with_states(states).where(event_id: occasion.event.id, school_id: self.school.id, wheelchair: false)
+      when :alloted_district
         Ticket.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id, wheelchair: false)
-      when :free_for_all then
+      when :free_for_all_with_excluded_districts
+        if !(occasion.event.excluded_district_ids.include? self.school.district_id) || occasion.event.excluded_district_ids.empty?
+          Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
+        else
+          Ticket.where('false')
+        end
+      when :free_for_all
         Ticket.unbooked.where(event_id: occasion.event.id, wheelchair: false)
       end
     end
@@ -88,8 +102,16 @@ class Group < ActiveRecord::Base
     case occasion.event.ticket_state
     when :alloted_group
       tickets = tickets.with_states(:unbooked, :deactivated).where(event_id: occasion.event.id, group_id: self.id)
+    when :alloted_school
+      tickets = tickets.with_states(:unbooked, :deactivated).where(event_id: occasion.event.id, school_id: self.school_id)
     when :alloted_district
       tickets = tickets.unbooked.where(event_id: occasion.event.id, district_id: self.school.district.id)
+    when :free_for_all_with_excluded_districts
+      if !(occasion.event.excluded_district_ids.include? self.school.district_id) || occasion.event.excluded_district_ids.empty?
+        tickets = tickets.unbooked.where(event_id: occasion.event.id)
+      else
+        tickets = Ticket.where('false')
+      end
     when :free_for_all
       tickets = tickets.unbooked.where(event_id: occasion.event.id)
     end
@@ -97,12 +119,12 @@ class Group < ActiveRecord::Base
     tickets
   end
 
-
   def move_first_in_prio
     self.class.where("priority < (select priority from groups where id = ?)", self.id).update_all("priority = priority + 1")
     self.priority = 1
     save!
   end
+
   def move_last_in_prio
     self.class.where("priority > (select priority from groups where id = ?)", self.id).update_all("priority = priority - 1")
     self.priority = Group.count(:all)
@@ -112,7 +134,6 @@ class Group < ActiveRecord::Base
   def self.sort_ids_by_priority(ids)
     connection.select_values(sanitize_sql_array(["select id from groups where id in (?) order by priority asc", ids]))
   end
-
 
   def age_group_data
     Hash[age_groups(true).collect { |ag| [ag.age, ag.quantity] }]

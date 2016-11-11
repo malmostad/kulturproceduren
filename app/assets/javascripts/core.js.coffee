@@ -53,3 +53,9 @@ $ ->
                 )
             minLength: 2
         )
+
+    $(".calendar-nav select#age_category").on 'change', ->
+      val = $(this).val() || 0
+      url = $(this).parent().parent().find('.btn-group a.btn.active').attr('href')
+      url = "#{url}?age_category=#{val}"
+      window.location.href = url

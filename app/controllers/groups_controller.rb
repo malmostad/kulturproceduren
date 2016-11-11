@@ -6,9 +6,13 @@ class GroupsController < ApplicationController
   before_filter :require_admin, except: [ :options_list, :select ]
 
   def index
-    @groups = Group.includes(school: :district)
-      .order(sort_order("name"))
-      .paginate(page: params[:page])
+    if params[:filter] && params[:filter] == :external.to_s
+      @groups = Group.includes(school: :district).where.not(extens_id: nil).order(name: :asc).paginate(page: params[:page])
+    elsif params[:filter] && params[:filter] == :manual.to_s
+      @groups = Group.includes(school: :district).where(extens_id: nil).order(name: :asc).paginate(page: params[:page])
+    else
+      @groups = Group.includes(school: :district).order(name: :asc).paginate(page: params[:page])
+    end
   end
 
   def show
@@ -58,6 +62,7 @@ class GroupsController < ApplicationController
     group.move_first_in_prio
     redirect_to params[:return_to] || group_url()
   end
+
   def move_last_in_priority
     group = Group.find(params[:id])
     group.move_last_in_prio
@@ -115,11 +120,11 @@ class GroupsController < ApplicationController
 
     if params[:occasion_id]
       @occasion = Occasion.find params[:occasion_id]
-      @groups = Group.where(conditions).to_a.select { |g|
+      @groups = Group.where(conditions).order(name: :asc).to_a.select { |g|
         g.available_tickets_by_occasion(@occasion) > 0
       }
     else
-      @groups = Group.where(conditions).order("name ASC")
+      @groups = Group.where(conditions).order(name: :asc)
     end
 
     render action: "options_list", content_type: 'text/plain', layout: false

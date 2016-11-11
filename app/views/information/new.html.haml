@@ -14,25 +14,15 @@
   = simple_form_for @mail, as: :information_mail, url: { action: "create" } do |f|
     = f.error_notification class: "warning"
 
-    - if @event
-      - recipients = [ [ "Alla bokade till #{@event.name}", @event.id ] ]
-    - else
-      - recipients = [ [ "Alla kontakter", :all_contacts ], [ "Alla användare", :all_users ]]
-
-    = f.input :recipients,
-      as: :select,
-      collection: recipients,
-      include_blank: @event.blank?
-
+    - recipients = [ [ "Alla kontakter", :all_contacts ], [ "Alla användare", :all_users ]]
+    = f.input :recipients, as: :select, collection: recipients, include_blank: false
     = f.input :subject
     = f.input :body, as: :text, input_html: { class: "ckeditor", rows: 10 }
 
     .form-group
       %span.control-label
       .controls
-        = submit_tag "Skicka",
-          class: "btn btn-primary",
-          data: { confirm: "Detta skickar meddelandet till alla mottagare du har angett" }
+        = submit_tag "Skicka", class: "btn btn-primary", data: { confirm: "Detta skickar meddelandet till alla mottagare du har angett" }
 
 %aside.admin
   = render partial: "shared/admin_menu"

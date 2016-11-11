@@ -1,7 +1,7 @@
 class UpdateTickets
 
   def run
-    events = Event.where(ticket_state: [ Event::ALLOTED_GROUP, Event::ALLOTED_DISTRICT ])
+    events = Event.where(ticket_state: [ Event::ALLOTED_GROUP, Event::ALLOTED_SCHOOL, Event::ALLOTED_DISTRICT, Event::FREE_FOR_ALL_WITH_EXCLUDED_DISTRICTS ])
     events.each{ |e| process_event(e) }
   end
 
@@ -9,7 +9,39 @@ class UpdateTickets
   def process_event(e)
     notification_requests = []
 
-    if e.transition_to_district?
+    if e.transition_to_school?
+      puts "Changing to school allotment for #{e.id}: #{e.name}"
+      e.transition_to_school!
+
+      if !e.fully_booked?
+        puts "Notifying school allotment for #{e.id}: #{e.name}"
+
+        schools = e.schools.where( " tickets.state = ? ", Ticket::UNBOOKED )
+        if e.from_age != -1 then
+          schools = schools.find_by_age_range(e.from_age, e.to_age)
+        end
+
+        notification_requests = NotificationRequest.for_transition.find_by_event_and_schools(e, schools)
+
+        # Notify contacts on schools
+        schools.each do |school|
+          get_relevant_school_addresses(e, [school]).each do |address|
+            puts "Sending notification mail for school allotment on #{e.name} to #{address}"
+            EventMailer.school_allotment_notification_email(e, school, address).deliver
+          end
+        end
+
+        # Send responses to notification requests
+        notification_requests.each do |n|
+          if n.send_mail
+            puts "Notification request answered on #{e.name} to #{n.user.email}"
+            NotificationRequestMailer.tickets_available_email(n, true).deliver
+          end
+        end
+
+      end
+
+    elsif e.transition_to_district?
       puts "Changing to district allotment for #{e.id}: #{e.name}"
       e.transition_to_district!
 
@@ -21,7 +53,7 @@ class UpdateTickets
 
         # Notify contacts on districts
         districts.each do |district|
-          get_relevant_addresses(e, [district]).each do |address|
+          get_relevant_district_addresses(e, [district]).each do |address|
             puts "Sending notification mail for district allotment on #{e.name} to #{address}"
             EventMailer.district_allotment_notification_email(e, district, address).deliver
           end
@@ -44,7 +76,7 @@ class UpdateTickets
         notification_requests = NotificationRequest.for_transition.find_by_event(e)
 
         # Notify contacts on districts
-        get_relevant_addresses(e, District.all).each do |address|
+        get_relevant_district_addresses(e, District.all).each do |address|
           puts "Sending notification mail for free for all on #{e.name} to #{address}"
           EventMailer.free_for_all_allotment_notification_email(e, address).deliver
         end
@@ -66,7 +98,7 @@ class UpdateTickets
   #
   # This method selects the contacts for the given district, and the schools and groups in
   # the districts that have children in the correct age groups.
-  def get_relevant_addresses(event, districts)
+  def get_relevant_district_addresses(event, districts)
     addresses = []
 
     Role.find_by_symbol(:admin).users.each { |u| addresses << u.email }
@@ -94,5 +126,27 @@ class UpdateTickets
     return addresses.uniq
   end
 
+  def get_relevant_school_addresses(event, schools)
+    addresses = []
+
+    Role.find_by_symbol(:admin).users.each { |u| addresses << u.email }
+
+    schools.each do |s|
+      unless s.contacts.blank?
+        addresses += s.contacts.split(",").collect { |c| c.strip }
+      end
+
+      s.groups.find_by_age_span(event.from_age, event.to_age).each do |g|
+        unless g.contacts.blank?
+          addresses += g.contacts.split(",").collect { |c| c.strip }
+        end
+      end
+
+    end
+
+    addresses.reject! { |a| a !~ /\S+@\S+/ }
+
+    return addresses.uniq
+  end
 
 end

@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716151245) do
+ActiveRecord::Schema.define(version: 20160615104317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "age_categories", force: true do |t|
+    t.string   "name",              limit: 40
+    t.integer  "from_age",                                     null: false
+    t.integer  "to_age",                                       null: false
+    t.boolean  "further_education",            default: false, null: false
+    t.integer  "sort_order",                   default: 0,     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "age_groups", force: true do |t|
     t.integer  "age"
@@ -33,7 +43,11 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "school_id"
+    t.integer  "excluded_district_ids", default: [], array: true
   end
+
+  add_index "allotments", ["school_id"], name: "index_allotments_on_school_id", using: :btree
 
   create_table "answer_forms", force: true do |t|
     t.boolean  "completed"
@@ -217,7 +231,13 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.date     "free_for_all_transition_date"
     t.boolean  "bus_booking",                  default: false
     t.date     "last_bus_booking_date"
+    t.date     "school_transition_date"
+    t.integer  "excluded_district_ids",        default: [],    array: true
+    t.string   "youtube_url"
+    t.date     "last_transitioned_date"
   end
+
+  add_index "events", ["last_transitioned_date"], name: "index_events_on_last_transitioned_date", using: :btree
 
   create_table "events_school_types", force: true do |t|
     t.integer "event_id"
@@ -375,10 +395,12 @@ ActiveRecord::Schema.define(version: 20150716151245) do
     t.datetime "updated_at"
     t.integer  "booking_id"
     t.integer  "allotment_id"
+    t.integer  "school_id"
   end
 
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
   add_index "tickets", ["group_id"], name: "index_tickets_on_group_id", using: :btree
+  add_index "tickets", ["school_id"], name: "index_tickets_on_school_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username"
