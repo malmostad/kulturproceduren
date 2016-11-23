@@ -9,6 +9,7 @@ class NotifyTicketRelease
   def process_event(event)
     puts "Notifying ticket release for #{event.name}"
     group_structure = {}
+    school_structure = {}
     addresses = []
 
     Role.find_by_symbol(:admin).users.each { |u| addresses << u.email }
