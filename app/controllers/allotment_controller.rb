@@ -29,13 +29,13 @@ class AllotmentController < ApplicationController
     session[:allotment] = {}
     session[:allotment][:release_date] = Date.parse(incoming[:release_date])
 
-    if incoming.has_key?(:school_transition_date)
+    if incoming.has_key?(:school_transition_date) and not incoming[:school_transition_date].blank?
       session[:allotment][:school_transition_date] = Date.parse(incoming[:school_transition_date])
     end
-    if incoming.has_key?(:district_transition_date)
+    if incoming.has_key?(:district_transition_date) and not incoming[:district_transition_date].blank?
       session[:allotment][:district_transition_date] = Date.parse(incoming[:district_transition_date]) 
     end
-    if incoming.has_key?(:free_for_all_transition_date)
+    if incoming.has_key?(:free_for_all_transition_date) and not incoming[:free_for_all_transition_date].blank?
       session[:allotment][:free_for_all_transition_date] = Date.parse(incoming[:free_for_all_transition_date])
     end
 
@@ -43,7 +43,7 @@ class AllotmentController < ApplicationController
     session[:allotment][:ticket_state] = Event.new(ticket_state: incoming[:ticket_state].to_i).ticket_state
 
     session[:allotment][:bus_booking] = incoming[:bus_booking].to_i == 1
-    if incoming.has_key?(:last_bus_booking_date)
+    if incoming.has_key?(:last_bus_booking_date) and not incoming[:last_bus_booking_date].blank?
       session[:allotment][:last_bus_booking_date] = Date.parse(incoming[:last_bus_booking_date])
     end
 
