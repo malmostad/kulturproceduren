@@ -33,7 +33,13 @@ class AllotmentController < ApplicationController
       session[:allotment][:school_transition_date] = Date.parse(incoming[:school_transition_date])
     end
     if incoming.has_key?(:district_transition_date) and not incoming[:district_transition_date].blank?
-      session[:allotment][:district_transition_date] = Date.parse(incoming[:district_transition_date]) 
+      skip_district_transition =
+          incoming.has_key?(:skip_district_transition) and
+          not incoming[:skip_district_transition].blank? and
+          incoming[:skip_district_transition] == 'on'
+      if not skip_district_transition then
+        session[:allotment][:district_transition_date] = Date.parse(incoming[:district_transition_date])
+      end
     end
     if incoming.has_key?(:free_for_all_transition_date) and not incoming[:free_for_all_transition_date].blank?
       session[:allotment][:free_for_all_transition_date] = Date.parse(incoming[:free_for_all_transition_date])
