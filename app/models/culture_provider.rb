@@ -32,6 +32,7 @@ class CultureProvider < ActiveRecord::Base
   has_many :upcoming_occasions, lambda{
       where("CURRENT_DATE BETWEEN events.visible_from AND events.visible_to")
       .where("occasions.date >= CURRENT_DATE")
+      .where("occasions.cancelled = false")
       .order("occasions.date ASC")
     },
     through: :events,
