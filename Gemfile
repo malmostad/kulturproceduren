@@ -41,7 +41,7 @@ gem "ckeditor_rails", "~> 4.4.0"
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
 group :development do
-  gem "capistrano", "~> 3.2.1"
+  gem "capistrano", "~> 3.4.0"
   gem "capistrano-rails", "~> 1.1.1"
   gem "capistrano-rbenv", "~> 2.0.2"
 end
