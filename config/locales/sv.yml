@@ -327,8 +327,9 @@ sv:
         companion_email: "Epostadress:"
         companion_phone: "Mobilnummer:"
         requirement: "Extra behov:"
-        bus_booking: "Jag vill boka kulturbuss"
+        bus_booking: "Jag vill boka kulturbuss:"
         bus_stop: "Från hållplats:"
+        bus_booster_seats_count: "Ev. antal bälteskuddar:"
         bus_one_way: "Enkel resa"
 
   simple_form:

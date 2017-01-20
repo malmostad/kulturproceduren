@@ -70,10 +70,10 @@
       %fieldset
         %legend Kulturbussbokning
         %dl
-          %dt Från hållplats:
-          %dd= @booking.bus_stop
           %dt Bokningstyp:
           %dt= @booking.bus_one_way ? "Enkel resa" : "Tur och retur"
+          %dt Ev. antal bälteskuddar
+          %dd= @booking.bus_booster_seat_count
 
     - unless @booking.requirement.blank?
       %fieldset

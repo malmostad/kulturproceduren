@@ -24,7 +24,8 @@ class Booking < ActiveRecord::Base
     :user_id,          :user,
     :bus_booking,
     :bus_one_way,
-    :bus_stop
+    :bus_stop,
+    :bus_booster_seats_count
 
   validates_presence_of :group, message: "Bokningen måste tillhöra en grupp"
   validates_presence_of :occasion, message: "Bokningen måste tillhöra en föreställning"

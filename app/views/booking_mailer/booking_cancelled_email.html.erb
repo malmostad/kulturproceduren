@@ -16,8 +16,8 @@
   Denna bokning innehåller en bussbokning:
 </p>
 <ul>
-  <li><strong>Från hållplats:</strong> <%= @booking.bus_stop %></li>
   <li><strong>Bokningstyp:</strong> <%= @booking.bus_one_way ? "Enkel resa" : "Tur och retur" %></li>
+  <li><strong>Ev. antal bälteskuddar:</strong> <%= @booking.bus_booster_seats_count %></li>
 </ul>
 <% end %>
 

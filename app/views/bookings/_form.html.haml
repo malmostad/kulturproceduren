@@ -85,18 +85,18 @@
           as: :radio_buttons,
           wrapper: :radio
 
-        = f.input :bus_stop
-
         = f.input :bus_one_way,
           label: false,
           as: :radio_buttons,
           wrapper: :radio,
           collection: [ [ "Tur och retur", false ], [ "Enkel resa", true ] ]
 
+        = f.input :bus_booster_seats_count
+
         .form-group
           %span.control-label
           .controls.success
-            Bussbolaget kontaktar medföljande vuxen via e-post om hämtningstider.
+            Bussbolaget kontaktar medföljande vuxen via e-post om hämtningstider och upphämtningsplats.
 
     %fieldset
       %legend Speciella krav / Extra information ang. bokning

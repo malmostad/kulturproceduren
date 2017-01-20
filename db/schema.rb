@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160615104317) do
+ActiveRecord::Schema.define(version: 20170120122812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 20160615104317) do
 
   create_table "bookings", force: true do |t|
     t.datetime "booked_at"
-    t.boolean  "unbooked",         default: false
+    t.boolean  "unbooked",                default: false
     t.datetime "unbooked_at"
     t.integer  "unbooked_by_id"
     t.integer  "student_count"
@@ -110,9 +110,10 @@ ActiveRecord::Schema.define(version: 20160615104317) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "bus_booking",      default: false
-    t.boolean  "bus_one_way",      default: false
+    t.boolean  "bus_booking",             default: false
+    t.boolean  "bus_one_way",             default: false
     t.string   "bus_stop"
+    t.integer  "bus_booster_seats_count", default: 0
   end
 
   create_table "categories", force: true do |t|
