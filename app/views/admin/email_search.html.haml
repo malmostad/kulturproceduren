@@ -1,0 +1,31 @@
+%main
+  %section.box
+    %h1.box-title Sök e-mail address
+    .box-content
+
+      = form_tag({ action: 'email_search' }, { class: 'basic calendar-filter' }) do
+        .form-group.text-fields
+          %label.control-label(for="email_address") E-mail:
+          .controls
+            = text_field_tag 'email_address', params[:email_address], class: 'form-control'
+        .form-group.text-fields
+          %label.control-label
+          .controls
+            = submit_tag " Sök ", class: "btn btn-primary"
+
+  %section
+    -if not @districts.nil? and @districts.length > 0
+      %h2 Finns i följande områden som kontaktperson:
+      -for district in @districts do
+        %div
+          = link_to "#{district.name}", district_path(district.id)
+
+    -if not @schools.nil? and @schools.length > 0
+      %h2 Finns i följande skolor som kontaktperson:
+      -for school in @schools do
+        = link_to "#{school.name}", school_path(school.id)
+
+    -if not @groups.nil? and @groups.length > 0
+      %h2 Finns i följande grupper som kontaktperson:
+      -for group in @groups do
+        = link_to "#{group.name}, #{group.school.name}", group_path(group.id)

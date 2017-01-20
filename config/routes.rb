@@ -210,6 +210,8 @@ Kulturproceduren::Application.routes.draw do
 
   resource :information, only: [:new, :create]
 
+  get 'admin/email_search', to: 'admin#email_search'
+
   root to: "calendar#index"
 
   match "calendar/:action/:list" => "calendar#index", as: :calendar, via: [:get, :post]
