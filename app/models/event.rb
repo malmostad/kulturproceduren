@@ -265,11 +265,24 @@ class Event < ActiveRecord::Base
     end
     @is_bookable
   end
+
   # Indicates whether it is possible to report attendance globally on this event.
   def reportable?(reload=false)
     if @is_reportable.nil? || reload
       today = Date.today
-      @is_reportable = visible_from <= today && !ticket_release_date.nil? && ticket_release_date <= today && !tickets.empty? && !occasions.empty?
+
+      if is_external_event
+        @is_reportable =
+          is_external_event &&
+          visible_from <= today
+      else
+        @is_reportable =
+          visible_from <= today &&
+          !ticket_release_date.nil? &&
+          ticket_release_date <= today &&
+          !tickets.empty? &&
+          !occasions.empty?
+      end
     end
     @is_reportable
   end

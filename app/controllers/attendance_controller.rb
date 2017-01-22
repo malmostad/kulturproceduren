@@ -20,6 +20,12 @@ class AttendanceController < ApplicationController
       redirect_to occasion_attendance_index_url(@occasion)
       return
     end
+
+    if @event.is_external_event
+      render 'report_external'
+    else
+      render 'report'
+    end
   end
 
   # Updates the attendance report

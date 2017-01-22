@@ -1,0 +1,54 @@
+- content_for(:page_title) do
+  Rapportera närvaro för för
+  = @event.name
+  %span.subtitle
+    Alla föreställningar
+
+%main
+  %nav.return
+    = link_to "Återvänd till presentationen för #{@event.name}", @event
+
+  - url = update_report_event_attendance_index_path(@event)
+
+  = form_tag(url) do
+    %table
+      %thead
+        %tr
+          %th(rowspan="2") Skola
+          %th(rowspan="2") Grupp
+          %th(colspan="3") Antal anmälda
+          %th(colspan="3") Antal närvarande
+        %tr
+          %th Barn
+          %th Vuxna
+          %th Rullstolsplatser
+          %th Barn
+          %th Vuxna
+          %th Rullstolsplatser
+
+      %tbody
+        - occasions = @occasion ? [@occasion] : @event.reportable_occasions
+
+        - occasions.each do |occasion|
+          - unless @occasion
+            %tr
+              %th(colspan="8")
+                Föreställningen
+                = occasion.date
+                kl
+                = "#{l(occasion.start_time, format: :only_time)} - #{l(occasion.stop_time, format: :only_time)}"
+
+          - occasion.attending_groups.each do |group|
+            - booking = Ticket.booking(group, occasion)
+            - usage = Ticket.usage(group, occasion)
+            %tr
+              %td= group.school.name
+              %td= group.name
+              %td= booking[:normal]
+              %td= booking[:adult]
+              %td= booking[:wheelchair]
+              %td= text_field_tag "attendance[#{occasion.id}][#{group.id}][normal]", usage[:normal], size: 5
+              %td= text_field_tag "attendance[#{occasion.id}][#{group.id}][adult]", usage[:adult], size: 5
+              %td= text_field_tag "attendance[#{occasion.id}][#{group.id}][wheelchair]", usage[:wheelchair], size: 5
+
+    = submit_tag "Rapportera närvaro", class: "btn btn-primary"

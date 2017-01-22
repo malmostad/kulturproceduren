@@ -38,6 +38,8 @@
 
     - if event.reportable?
       %li= link_to 'Hantera närvaro', event_attendance_index_path(event)
+    - elsif event.is_external_event
+      %li= link_to 'Hantera extern närvo', event_attendence_index_path(event)
 
     - if current_user.has_role?(:admin) && event.has_booking?
       %li= link_to "Skicka e-post till alla bokade", new_event_information_path(event, recipients: :all_booked)
