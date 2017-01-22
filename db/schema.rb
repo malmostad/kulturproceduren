@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120122812) do
+ActiveRecord::Schema.define(version: 20170122202345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 20170120122812) do
     t.integer  "excluded_district_ids",        default: [],    array: true
     t.string   "youtube_url"
     t.date     "last_transitioned_date"
+    t.boolean  "is_external_event",            default: false
   end
 
   add_index "events", ["last_transitioned_date"], name: "index_events_on_last_transitioned_date", using: :btree
