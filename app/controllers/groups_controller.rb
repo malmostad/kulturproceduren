@@ -111,11 +111,13 @@ class GroupsController < ApplicationController
     if school
       conditions[:school_id] = school.id
 
-      session[:group_selection] = {
-        district_id: school.district_id,
-        school_id: school.id,
-        school_name: school.name
-      }
+      if params[:do_not_update_session].blank? or params[:do_not_update_session] == 'false'
+        session[:group_selection] = {
+            district_id: school.district_id,
+            school_id: school.id,
+            school_name: school.name
+        }
+      end
     end
 
     if params[:occasion_id]
