@@ -40,20 +40,14 @@
       .form-group
         = f.label :visible_from, class: "control-label"
         .controls.input-group
-          = f.input_field :visible_from,
-            as: :string,
-            class: "form-control datepicker",
-            data: { "start-date" => Date.today }
+          = f.input_field :visible_from, as: :string, class: "form-control datepicker", data: { "start-date" => Date.today }
           %span.input-group-addon
             %span.glyphicon.glyphicon-calendar
 
     .form-group
       = f.label :visible_to, class: "control-label"
       .controls.input-group
-        = f.input_field :visible_to,
-          as: :string,
-          class: "form-control datepicker",
-          data: { "start-date" => Date.today }
+        = f.input_field :visible_to, as: :string, class: "form-control datepicker", data: { "start-date" => Date.today }
         %span.input-group-addon
           %span.glyphicon.glyphicon-calendar
 
@@ -68,9 +62,7 @@
           .controls.checkbox
             - category_group.categories.each do |category|
               %label.checkbox
-                = check_box_tag "category_ids[]",
-                  category.id,
-                  @event.categories.any? { |c| c.id == category.id }
+                = check_box_tag "category_ids[]", category.id, @event.categories.any? { |c| c.id == category.id }
                 = category.name
 
     = f.input :url
