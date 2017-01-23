@@ -159,7 +159,7 @@
 
   %section.events
     - cache occasion_list_cache_key(@event), skip_digest: true do
-      - unless @event.occasions.empty?
+      - unless @event.occasions.empty? or @event.is_external_event
         %table.calendar
           %thead
             %tr
