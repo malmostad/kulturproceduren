@@ -279,9 +279,7 @@ class Event < ActiveRecord::Base
       today = Date.today
 
       if is_external_event
-        @is_reportable =
-          is_external_event &&
-          visible_from <= today
+        @is_reportable = visible_from <= today
       else
         @is_reportable =
           visible_from <= today &&
