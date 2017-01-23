@@ -93,7 +93,39 @@ class AttendanceController < ApplicationController
 
   # Updates the attendance report for external events
   def update_report_external
+    event_id = params[:event_id].to_i
+    date = params[:date]
+    group_id = params[:event_id].to_i
+    normal_count = params[:normal].to_i
+    adult_count = params[:adult].to_i
+    wheelchair_count = params[:wheelchair].to_i
+    total_count = (normal_count + adult_count + wheelchair_count)
 
+    event = Event.find(event_id)
+    if event
+      occasion = event.occasions.where(date: date).where(cancelled: false).first
+      if occasion.nil?
+        occasion = Occasion.new do |o|
+          o.event_id = event.id
+          o.date = date
+          o.start_time = '00:00'
+          o.stop_time = '00:00'
+          o.seats = 0
+          o.wheelchair_seats = 0
+          o.address = event.culture_provider.address || ''
+          if o.address.blank? then o.address = 'Saknas' end
+        end
+      end
+      occasion.seats += total_count
+      occasion.wheelchair_seats += wheelchair_count
+      occasion.save!
+
+      booking = Booking.new do |b|
+
+      end
+
+      redirect_to event_attendance_index_path(event)
+    end
   end
 
   protected
