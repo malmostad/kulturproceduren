@@ -148,7 +148,8 @@ class Event < ActiveRecord::Base
     :last_bus_booking_date,
     :school_type_ids,
     :excluded_district_ids,
-    :last_transitioned_date
+    :last_transitioned_date,
+    :is_external_event
 
   def is_age_range_used
     !(!self.from_age.nil? && self.from_age == -1 && !self.to_age.nil? && self.to_age == -1)

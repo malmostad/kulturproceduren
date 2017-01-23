@@ -1,8 +1,11 @@
 - content_for(:page_title) do
-  Närvarolista för
+  Närvarolista för:
+  %br
   = @event.name
   %span.subtitle
-    - if @occasion
+    - if @event.is_external_event
+      Externt evenemang
+    - elsif @occasion
       Föreställningen
       = @occasion.date
       kl
@@ -29,47 +32,78 @@
         - else
           = link_to "Rapportera närvaro för hela evenemanget", report_event_attendance_index_path(@event)
 
-  %table
-    %thead
-      %tr
-        %th
-          Skola
-          %br
-          Grupp
-        %th Medföljande vuxen
-        %th Antal barn
-        %th Antal vuxna
-        %th Antal rullstolsplatser
-        - if is_admin
-          %th Övriga önskemål
+  - if @event.is_external_event
+    %table
+      %thead
+        %tr
+          %th
+            Skola
+            %br
+            Grupp
+          %th Antal barn
+          %th Antal vuxna
+          %th Antal rullstolsplatser
 
-    %tbody
-      - occasions = @occasion ? [@occasion] : @event.occasions
-
-      - occasions.each do |occasion|
-        - unless @occasion
+      %tbody
+        - @event.occasions.each do |occasion|
           %tr
-            %th{colspan: "#{is_admin ? 6 : 5}"}
-              Föreställningen
+            %th{colspan: '4'}
+              Närvaro
               = occasion.date
               kl
               = "#{l(occasion.start_time, format: :only_time)} - #{l(occasion.stop_time, format: :only_time)}"
 
-        - occasion.bookings.school_ordered.each do |booking|
-          %tr
-            %td
-              = booking.group.school.name
-              %br
-              = booking.group.name
-            %td
-              = booking.companion_name
-              %br
-              = booking.companion_phone
-              %br
-              = link_to booking.companion_email, "mailto:#{u(booking.companion_email)}"
-            %td= booking.student_count
-            %td= booking.adult_count
-            %td= booking.wheelchair_count
-            - if is_admin
-              %td= linebreakize(booking.requirement) unless booking.requirement.blank?
+          - occasion.bookings.school_ordered.each do |booking|
+            %tr
+              %td
+                = booking.group.school.name
+                %br
+                = booking.group.name
+              %td= booking.student_count
+              %td= booking.adult_count
+              %td= booking.wheelchair_count
+  - else
+    %table
+      %thead
+        %tr
+          %th
+            Skola
+            %br
+            Grupp
+          %th Medföljande vuxen
+          %th Antal barn
+          %th Antal vuxna
+          %th Antal rullstolsplatser
+          - if is_admin
+            %th Övriga önskemål
+
+      %tbody
+        - occasions = @occasion ? [@occasion] : @event.occasions
+
+        - occasions.each do |occasion|
+          - unless @occasion
+            %tr
+              %th{colspan: "#{is_admin ? 6 : 5}"}
+                Föreställningen
+                = occasion.date
+                kl
+                = "#{l(occasion.start_time, format: :only_time)} - #{l(occasion.stop_time, format: :only_time)}"
+
+          - occasion.bookings.school_ordered.each do |booking|
+            %tr
+              %td
+                = booking.group.school.name
+                %br
+                = booking.group.name
+              %td
+                = booking.companion_name
+                %br
+                = booking.companion_phone
+                %br
+                = link_to booking.companion_email, "mailto:#{u(booking.companion_email)}"
+              %td= booking.student_count
+              %td= booking.adult_count
+              %td= booking.wheelchair_count
+              - if is_admin
+                %td= linebreakize(booking.requirement) unless booking.requirement.blank?
 
