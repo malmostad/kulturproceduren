@@ -38,14 +38,27 @@
       %tbody
         %tr
           %td
-            .input-group
-              = text_field_tag 'school_name', '', placeholder: 'Skola...', class: 'form-control'
+            .form-group
+              .input-group
+                = text_field_tag 'school_name', '', placeholder: 'Skola...', class: 'form-control'
           %td
-            .input-group
-              = select_tag "group_id", raw('<option>Välj skola först</option>'), class: "form-control", disabled: true
+            .form-group
+              .input-group
+                = select_tag "group_id", raw('<option>Välj skola först</option>'), class: 'form-control', disabled: true
 
-          %td= text_field_tag 'normal', '0', disabled: true
-          %td= text_field_tag 'adult', '0', disabled: true
-          %td= text_field_tag 'wheelchair', '0', disabled: true
+          %td
+            .form-group
+              .input-group
+                = text_field_tag 'normal', '0', class: 'form-control', disabled: true
+
+          %td
+            .form-group
+              .input-group
+                = text_field_tag 'adult', '0', class: 'form-control', disabled: true
+
+          %td
+            .form-group
+              .input-group
+                = text_field_tag 'wheelchair', '0', class: 'form-control', disabled: true
 
     = submit_tag 'Rapportera närvaro', class: 'btn btn-primary', disabled: true
