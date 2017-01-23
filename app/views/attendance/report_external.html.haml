@@ -9,7 +9,7 @@
   %nav.return
     = link_to "Återvänd till presentationen för #{@event.name}", @event
 
-  - url = update_report_event_attendance_index_path(@event)
+  - url = update_report_external_event_attendance_index_path(@event)
 
   = form_tag(url, class: 'basic', id: 'external-event-attendance') do
     = hidden_field_tag 'do_not_update_session', 'true'

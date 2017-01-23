@@ -91,6 +91,11 @@ class AttendanceController < ApplicationController
     end
   end
 
+  # Updates the attendance report for external events
+  def update_report_external
+
+  end
+
   protected
 
   # Loads either the requested event or the requested occasion

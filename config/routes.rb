@@ -90,6 +90,7 @@ Kulturproceduren::Application.routes.draw do
     resources :attendance, only: [:index] do
       collection do
         post :update_report
+        post :update_report_external
         get  :report
       end
     end
