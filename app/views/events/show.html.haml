@@ -15,8 +15,7 @@
       %li.prev Föregående
       %li.next Nästa
 
-  = render partial: "culture_providers/details",
-    locals: { culture_provider: @event.culture_provider }
+  = render partial: "culture_providers/details", locals: { culture_provider: @event.culture_provider }
 
   %article.body-copy.description
     = show_description(@event.description)

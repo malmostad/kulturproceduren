@@ -261,7 +261,14 @@ class Event < ActiveRecord::Base
   def bookable?(reload=false)
     if @is_bookable.nil? || reload
       today = Date.today
-      @is_bookable = visible_from <= today && visible_to >= today && !ticket_release_date.nil? && ticket_release_date <= today && !tickets.empty? && !occasions.empty?
+      @is_bookable =
+        !is_external_event &&
+        visible_from <= today &&
+        visible_to >= today &&
+        !ticket_release_date.nil? &&
+        ticket_release_date <= today &&
+        !tickets.empty? &&
+        !occasions.empty?
     end
     @is_bookable
   end

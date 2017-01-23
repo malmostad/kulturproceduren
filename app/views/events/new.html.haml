@@ -21,6 +21,8 @@
 
     = f.input :further_education, as: :radio_buttons, wrapper: :radio, collection: [ [ "Ja", true ], [ "Nej", false ] ]
 
+    = f.input :is_external_event, as: :radio_buttons, wrapper: :radio, collection: [ [ "Ja", true ], [ "Nej", false ] ]
+
     = f.input :school_type_ids,
       as: :check_boxes,
       wrapper: :checkbox,

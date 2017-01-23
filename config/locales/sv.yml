@@ -234,6 +234,7 @@ sv:
         further_education: "Fortbildning pedagoger/vuxna"
         map_address: "Kartadress:"
         school_type_ids: "Skolformer:"
+        is_external_event: "Externt evenemang:"
       occasion:
         date: "Datum:"
         seats: "Antal platser:"
