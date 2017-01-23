@@ -73,7 +73,7 @@
           %dt Bokningstyp:
           %dt= @booking.bus_one_way ? "Enkel resa" : "Tur och retur"
           %dt Ev. antal bälteskuddar
-          %dd= @booking.bus_booster_seat_count
+          %dd= @booking.bus_booster_seats_count
 
     - unless @booking.requirement.blank?
       %fieldset
