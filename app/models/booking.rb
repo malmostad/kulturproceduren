@@ -37,7 +37,7 @@ class Booking < ActiveRecord::Base
   validates_presence_of :companion_email, message: "Epostadressen får inte vara tom"
   validates_presence_of :companion_phone, message: "Telefonnumret får inte vara tomt"
 
-  validates_presence_of :bus_stop, if: :bus_booking, message: "Du måste ange en hållplats"
+  #validates_presence_of :bus_stop, if: :bus_booking, message: "Du måste ange en hållplats"
 
   after_save :synchronize_tickets
   before_create :set_booked_at_timestamp
