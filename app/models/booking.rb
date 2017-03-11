@@ -59,6 +59,8 @@ class Booking < ActiveRecord::Base
   end
 
   def synchronize_tickets
+    return if self.occasion.event.is_external_event
+
     if !self.unbooked
       bookable_tickets = self.tickets + self.group.bookable_tickets(self.occasion, true)
 
@@ -179,6 +181,7 @@ class Booking < ActiveRecord::Base
 
   def validate_seats
     return if self.group.blank? || self.occasion.blank?
+    return if self.occasion.event.is_external_event?
 
     total_new = self.total_count
     total_new_wheelchair = self.wheelchair_count

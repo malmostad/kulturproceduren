@@ -22,6 +22,9 @@ class AttendanceController < ApplicationController
     end
 
     if @event.is_external_event
+      if !params[:booking_id].blank?
+        @booking_id = params[:booking_id]
+      end
       render 'report_external'
     else
       render 'report'
@@ -93,39 +96,68 @@ class AttendanceController < ApplicationController
 
   # Updates the attendance report for external events
   def update_report_external
-    event_id = params[:event_id].to_i
     date = params[:date]
-    group_id = params[:event_id].to_i
-    normal_count = params[:normal].to_i
+    event_id = params[:event_id].to_i
+    group_id = params[:group_id].to_i
+    student_count = params[:student].to_i
     adult_count = params[:adult].to_i
     wheelchair_count = params[:wheelchair].to_i
-    total_count = (normal_count + adult_count + wheelchair_count)
+    booking_id = (params[:booking_id] || '0').to_i
+    total_count = (student_count + adult_count + wheelchair_count)
 
-    event = Event.find(event_id)
-    if event
-      occasion = event.occasions.where(date: date).where(cancelled: false).first
-      if occasion.nil?
-        occasion = Occasion.new do |o|
-          o.event_id = event.id
-          o.date = date
-          o.start_time = '00:00'
-          o.stop_time = '00:00'
-          o.seats = 0
-          o.wheelchair_seats = 0
-          o.address = event.culture_provider.address || ''
-          if o.address.blank? then o.address = 'Saknas' end
-        end
+    if booking_id > 0
+      booking = Booking.find(booking_id)
+      tickets = Ticket.where(booking_id: booking_id).all
+      tickets.each do |t|
+        t.destroy!
       end
-      occasion.seats += total_count
-      occasion.wheelchair_seats += wheelchair_count
-      occasion.save!
-
-      booking = Booking.new do |b|
-
-      end
-
-      redirect_to event_attendance_index_path(event)
+      booking.occasion.seats -= booking.student_count
+      booking.occasion.seats -= booking.adult_count
+      booking.occasion.wheelchair_seats -= booking.wheelchair_count
+      booking.occasion.save!
+      booking.destroy!
     end
+
+    if total_count > 0
+      event = Event.find(event_id)
+      if event
+        occasion = event.occasions.where(date: date).where(cancelled: false).first
+        if occasion.nil?
+          occasion = Occasion.new do |o|
+            o.event_id = event.id
+            o.date = date
+            o.start_time = '00:00'
+            o.stop_time = '23:59'
+            o.seats = 0
+            o.wheelchair_seats = 0
+            o.address = event.culture_provider.address || ''
+            if o.address.blank? then o.address = 'Saknas' end
+          end
+        end
+        occasion.seats += total_count
+        occasion.wheelchair_seats += wheelchair_count
+        occasion.save!
+
+        booking = Booking.new do |b|
+          b.occasion = occasion
+          b.group = Group.find(group_id)
+          b.user = current_user
+          b.student_count = student_count
+          b.adult_count = adult_count
+          b.wheelchair_count = wheelchair_count
+          b.companion_name = "*"
+          b.companion_email = "*"
+          b.companion_phone = "*"
+        end
+
+        booking.save!
+
+        create_extra_external_tickets(booking, student_count, adult_count, wheelchair_count)
+
+      end
+    end
+
+    redirect_to event_attendance_index_path(event)
   end
 
   protected
@@ -266,6 +298,28 @@ class AttendanceController < ApplicationController
         t.booking = base.booking
         t.adult = (type == :adult)
         t.wheelchair = (type == :wheelchair)
+        t.booked_when = Time.zone.now
+      end
+
+      ticket.save!
+    end
+  end
+
+  def create_extra_external_tickets(booking, student_count, adult_count, wheelchair_count)
+    total_count = student_count + adult_count + wheelchair_count
+
+    1.upto(total_count) do |i|
+      ticket = Ticket.new do |t|
+        t.state = :used
+        t.event = booking.event
+        t.occasion = booking.occasion
+        t.group = booking.group
+        t.school = booking.group.school
+        t.district = booking.group.school.district
+        t.booking = booking
+        t.user = current_user
+        t.adult = (i > student_count && i <= (student_count + adult_count))
+        t.wheelchair = (i > (student_count + adult_count) && i <= (student_count + adult_count + wheelchair_count))
         t.booked_when = Time.zone.now
       end
 

@@ -45,7 +45,7 @@ $ ->
         $school_input = $form.find('input[name=school_name]')
         $group_select = $form.find('select[name=group_id]')
         $submit = $form.find('input[type=submit]')
-        $inputNormal = $form.find('input[name=normal]')
+        $inputStudent = $form.find('input[name=student]')
         $inputAdult = $form.find('input[name=adult]')
         $inputWheelchair = $form.find('input[name=wheelchair]')
 
@@ -76,13 +76,13 @@ $ ->
             group_id = parseInt($group_select.val())
             if !isNaN(group_id)
                 $submit.prop('disabled', false)
-                $inputNormal.prop('disabled', false)
+                $inputStudent.prop('disabled', false)
                 $inputAdult.prop('disabled', false)
                 $inputWheelchair.prop('disabled', false)
-                $inputNormal.focus()
+                $inputStudent.focus()
             else
                 $submit.prop('disabled', true)
-                $inputNormal.prop('disabled', true)
+                $inputStudent.prop('disabled', true)
                 $inputAdult.prop('disabled', true)
                 $inputWheelchair.prop('disabled', true)
 
