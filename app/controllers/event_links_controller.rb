@@ -19,7 +19,7 @@ class EventLinksController < ApplicationController
         @events = @events.not_linked_to_event(@event)
       end
 
-      @events = @events.paginate(page: params[:page])
+      # @events = @events.paginate(page: params[:page])
     end
   end
 
