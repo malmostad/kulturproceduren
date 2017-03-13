@@ -53,9 +53,9 @@
             .form-group
               .input-group(style="width: 100%")
                 - if @booking
-                  = text_field_tag 'school_name', @booking.group.school.name, placeholder: 'Skola...', class: 'form-control'
+                  = text_field_tag 'school_name', @booking.group.school.name, placeholder: 'Skola...', class: 'form-control', 'data-search-path' => search_schools_path
                 - else
-                  = text_field_tag 'school_name', '', placeholder: 'Skola...', class: 'form-control'
+                  = text_field_tag 'school_name', '', placeholder: 'Skola...', class: 'form-control', 'data-search-path' => search_schools_path
           %td
             .form-group
               .input-group(style="width: 100%")

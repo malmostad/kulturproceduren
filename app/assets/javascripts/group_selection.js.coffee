@@ -49,8 +49,10 @@ $ ->
         $inputAdult = $form.find('input[name=adult]')
         $inputWheelchair = $form.find('input[name=wheelchair]')
 
+        query_url = $school_input.data('search-path')
+
         $school_input.autocomplete(
-            source: '/schools/search'
+            source: query_url
             select: (event, ui) ->
                 values = $form.serializeArray()
 
