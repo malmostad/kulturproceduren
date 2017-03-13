@@ -253,10 +253,11 @@ ActiveRecord::Schema.define(version: 20170122202345) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active",                default: true
+    t.boolean  "active",                     default: true
     t.integer  "priority"
-    t.string   "extens_id",  limit: 64
+    t.string   "extens_id",       limit: 64
     t.boolean  "to_delete"
+    t.string   "contacts_backup"
   end
 
   add_index "groups", ["extens_id"], name: "index_groups_on_extens_id", using: :btree

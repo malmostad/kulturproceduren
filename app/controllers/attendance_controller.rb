@@ -22,8 +22,8 @@ class AttendanceController < ApplicationController
     end
 
     if @event.is_external_event
-      if !params[:booking_id].blank?
-        @booking_id = params[:booking_id]
+      if !params[:booking_id].blank? and params[:booking_id] != '0'
+        @booking = Booking.find(params[:booking_id].to_i)
       end
       render 'report_external'
     else
@@ -98,6 +98,7 @@ class AttendanceController < ApplicationController
   def update_report_external
     date = params[:date]
     event_id = params[:event_id].to_i
+    event = Event.find(event_id)
     group_id = params[:group_id].to_i
     student_count = params[:student].to_i
     adult_count = params[:adult].to_i
@@ -107,6 +108,8 @@ class AttendanceController < ApplicationController
 
     if booking_id > 0
       booking = Booking.find(booking_id)
+      occasion = booking.occasion
+      num_bookings = occasion.bookings.length
       tickets = Ticket.where(booking_id: booking_id).all
       tickets.each do |t|
         t.destroy!
@@ -116,10 +119,12 @@ class AttendanceController < ApplicationController
       booking.occasion.wheelchair_seats -= booking.wheelchair_count
       booking.occasion.save!
       booking.destroy!
+      if num_bookings == 1
+        occasion.destroy!
+      end
     end
 
     if total_count > 0
-      event = Event.find(event_id)
       if event
         occasion = event.occasions.where(date: date).where(cancelled: false).first
         if occasion.nil?

@@ -6,20 +6,31 @@
     Alla föreställningar
 
 %main
+  -if @booking
+    - booking_date = @booking.occasion.date
+    - student_count = @booking.student_count
+    - adult_count = @booking.adult_count
+    - wheelchair_count = @booking.wheelchair_count
+  -else
+    - booking_date = Date.today
+    - student_count = 0
+    - adult_count = 0
+    - wheelchair_count = 0
+
   %nav.return
     = link_to "Återvänd till presentationen för #{@event.name}", @event
 
   - url = update_report_external_event_attendance_index_path(@event)
 
   = form_tag(url, class: 'basic', id: 'external-event-attendance') do
-    = hidden_field_tag 'do_not_update_session', 'true'
     = hidden_field_tag :event_id, @event.id
-    = hidden_field_tag :booking_id, @booking_id
+    -if @booking
+      = hidden_field_tag :booking_id, @booking.id
     .form-group
       %span.control-label
         = label_tag 'date', 'Datum:'
         .input-group
-          = text_field_tag 'date', Date.today.to_s, class: 'form-control datepicker', data: { 'start-date' => Date.today }
+          = text_field_tag 'date', booking_date.to_s, class: 'form-control datepicker', data: { 'start-date' => booking_date }
           %span.input-group-addon
             %span.glyphicon.glyphicon-calendar
 
@@ -41,25 +52,31 @@
           %td
             .form-group
               .input-group(style="width: 100%")
-                = text_field_tag 'school_name', '', placeholder: 'Skola...', class: 'form-control'
+                - if @booking
+                  = text_field_tag 'school_name', @booking.group.school.name, placeholder: 'Skola...', class: 'form-control'
+                - else
+                  = text_field_tag 'school_name', '', placeholder: 'Skola...', class: 'form-control'
           %td
             .form-group
               .input-group(style="width: 100%")
-                = select_tag "group_id", raw('<option>Välj skola först</option>'), class: 'form-control', disabled: true
+                - if @booking
+                  = select_tag "group_id", options_from_collection_for_select(@booking.group.school.groups.order(name: :asc), "id", "name", @booking.group_id), class: 'form-control', disabled: if @booking then false else true end
+                - else
+                  = select_tag "group_id", raw('<option>Välj skola först</option>'), class: 'form-control', disabled: true
 
           %td(style="width: 150px")
             .form-group
               .input-group
-                = text_field_tag 'student', '0', class: 'form-control', disabled: true
+                = text_field_tag 'student', student_count, class: 'form-control', disabled: if @booking then false else true end
 
           %td(style="width: 150px")
             .form-group
               .input-group
-                = text_field_tag 'adult', '0', class: 'form-control', disabled: true
+                = text_field_tag 'adult', adult_count, class: 'form-control', disabled: if @booking then false else true end
 
           %td(style="width: 150px")
             .form-group
               .input-group
-                = text_field_tag 'wheelchair', '0', class: 'form-control', disabled: true
+                = text_field_tag 'wheelchair', wheelchair_count, class: 'form-control', disabled: if @booking then false else true end
 
-    = submit_tag 'Rapportera närvaro', class: 'btn btn-primary', disabled: true
+    = submit_tag 'Rapportera närvaro', class: 'btn btn-primary', disabled: if @booking then false else true end

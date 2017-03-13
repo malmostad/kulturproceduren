@@ -43,6 +43,7 @@
           %th Antal barn
           %th Antal vuxna
           %th Antal rullstolsplatser
+          %th &nbsp;
 
       %tbody
         - @event.occasions.each do |occasion|
@@ -50,18 +51,16 @@
             %th{colspan: '4'}
               Närvaro
               = occasion.date
-              kl
-              = "#{l(occasion.start_time, format: :only_time)} - #{l(occasion.stop_time, format: :only_time)}"
+              -#kl
+              -#= "#{l(occasion.start_time, format: :only_time)} - #{l(occasion.stop_time, format: :only_time)}"
 
           - occasion.bookings.school_ordered.each do |booking|
             %tr
-              %td
-                = booking.group.school.name
-                %br
-                = booking.group.name
+              %td= "#{booking.group.school.name} (#{booking.group.name})"
               %td= booking.student_count
               %td= booking.adult_count
               %td= booking.wheelchair_count
+              %td= link_to "Ändra", report_event_attendance_index_path(@event, { booking_id: booking.id})
   - else
     %table
       %thead
