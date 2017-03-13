@@ -49,10 +49,11 @@ $ ->
         $inputAdult = $form.find('input[name=adult]')
         $inputWheelchair = $form.find('input[name=wheelchair]')
 
-        query_url = $school_input.data('search-path')
+        school_query_url = $school_input.data('search-path')
+        group_options_url = $group_select.data('list-group')
 
         $school_input.autocomplete(
-            source: query_url
+            source: school_query_url
             select: (event, ui) ->
                 values = $form.serializeArray()
 
@@ -63,7 +64,7 @@ $ ->
                 $group_select.prop('disabled', true)
 
                 $.ajax(
-                    url: '/groups/options_list'
+                    url: group_options_url
                     data: values
                     success: (data) ->
                         $group_select.html(data).prop('disabled', false)

@@ -62,7 +62,7 @@
                 - if @booking
                   = select_tag "group_id", options_from_collection_for_select(@booking.group.school.groups.order(name: :asc), "id", "name", @booking.group_id), class: 'form-control', disabled: if @booking then false else true end
                 - else
-                  = select_tag "group_id", raw('<option>Välj skola först</option>'), class: 'form-control', disabled: true
+                  = select_tag "group_id", raw('<option>Välj skola först</option>'), class: 'form-control', disabled: true, 'data-list-group' => options_list_groups_path
 
           %td(style="width: 150px")
             .form-group
