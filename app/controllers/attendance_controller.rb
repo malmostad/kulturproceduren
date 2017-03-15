@@ -25,6 +25,20 @@ class AttendanceController < ApplicationController
       if !params[:booking_id].blank? and params[:booking_id] != '0'
         @booking = Booking.find(params[:booking_id].to_i)
       end
+
+      @bookings = []
+
+      if !@occasion
+        @occasion = Occasion.new do |o|
+          o.date = Date.today
+        end
+      end
+
+      if !@booking
+        @booking = Booking.new
+      end
+      @bookings << @booking
+
       render 'report_external'
     else
       render 'report'
@@ -99,14 +113,32 @@ class AttendanceController < ApplicationController
     date = params[:date]
     event_id = params[:event_id].to_i
     event = Event.find(event_id)
-    group_id = params[:group_id].to_i
-    student_count = params[:student].to_i
-    adult_count = params[:adult].to_i
-    wheelchair_count = params[:wheelchair].to_i
-    booking_id = (params[:booking_id] || '0').to_i
+
+    if params[:bookings]
+      params[:bookings].each do |attendance_data|
+        booking_id = (attendance_data[:booking_id] || '0').to_i
+        group_id = (attendance_data[:group_id] || '0').to_i
+        student_count = (attendance_data[:student_count] || '0').to_i
+        adult_count = (attendance_data[:adult_count] || '0').to_i
+        wheelchair_count = (attendance_data[:wheelchair_count] || '0').to_i
+        update_external_event_attendance(event, date, booking_id, group_id, student_count, adult_count, wheelchair_count)
+      end
+    end
+
+    redirect_to event_attendance_index_path(event)
+  end
+
+  protected
+
+  def update_external_event_attendance(event, date, booking_id, group_id, student_count, adult_count, wheelchair_count)
     total_count = (student_count + adult_count + wheelchair_count)
 
+    if !event then return end
+    if group_id == 0 then return end
+    if booking_id == 0 && total_count == 0 then return end
+
     if booking_id > 0
+      # Update of existing attendance 'booking'
       booking = Booking.find(booking_id)
       occasion = booking.occasion
       num_bookings = occasion.bookings.length
@@ -161,11 +193,7 @@ class AttendanceController < ApplicationController
 
       end
     end
-
-    redirect_to event_attendance_index_path(event)
   end
-
-  protected
 
   # Loads either the requested event or the requested occasion
   def load_entity
