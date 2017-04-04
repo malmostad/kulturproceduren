@@ -255,6 +255,10 @@ class AllotmentController < ApplicationController
 
   # Completely removes an allotment from an event
   def destroy
+    @event.tickets.collect(&:destroy)
+    @event.occasions.each do |o|
+      o.bookings.collect(&:destroy)
+    end
     @event.allotments.collect(&:destroy)
 
     session[:allotment] = nil
