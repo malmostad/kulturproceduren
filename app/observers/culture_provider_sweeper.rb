@@ -29,6 +29,7 @@ class CultureProviderSweeper < ActionController::Caching::Sweeper
     ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/bookable"
     ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/upcoming_occasions/not_bookable"
     ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/standing_events"
+    ActionController::Base.new.expire_fragment "culture_providers/show/#{culture_provider.id}/show_all"
   end
 
   # Removes the cache for all culture providers
