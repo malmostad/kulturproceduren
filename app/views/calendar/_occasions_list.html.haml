@@ -22,6 +22,7 @@
   %tbody
     - prev_date = Date.new
     - occasions.each do |occasion|
+      - if occasion.cancelled then next end
 
       - if prev_date < occasion.date
         %tr.date
@@ -45,9 +46,5 @@
           = booking_link(occasion)
           = ticket_availability_link(occasion)
         %td.accessibility
-          = image_tag "icon_rullstol.png",
-            alt: "Rullstolsplatser finns",
-            title: "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0
-          = image_tag "icon_horslinga.png",
-            alt: "Hörselslinga finns",
-            title: "Hörselslinga finns" if occasion.telecoil
+          = image_tag "icon_rullstol.png", alt: "Rullstolsplatser finns", title: "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0
+          = image_tag "icon_horslinga.png", alt: "Hörselslinga finns", title: "Hörselslinga finns" if occasion.telecoil

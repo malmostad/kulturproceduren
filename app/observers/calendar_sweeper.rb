@@ -19,6 +19,6 @@ class CalendarSweeper < ActionController::Caching::Sweeper
 
   # Removes all cached fragments for the calendar
   def invalidate_cache
-    ActionController::Base.new.expire_fragment %r{calendar/list/(events|occasions)/(not_)?bookable/\d+}
+    ActionController::Base.new.expire_fragment %r{calendar/list/\d+/(events|occasions)/(not_)?bookable/\d+}
   end
 end
