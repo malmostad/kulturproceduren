@@ -29,6 +29,7 @@ class OccasionsController < ApplicationController
 
   def create
     @occasion = Occasion.new(params[:occasion])
+    @occasion.wheelchair_seats = 0 if @occasion.wheelchair_seats.nil?
     @event = @occasion.event
 
     unless current_user.can_administrate?(@event.culture_provider)
