@@ -75,7 +75,7 @@
             %br
             = "#{l occasion.start_time, format: :only_time}-#{l occasion.stop_time, format: :only_time}"
           %td
-            = occasion.seats + occasion.wheelchair_seats
+            = occasion.seats + (occasion.wheelchair_seats || 0)
             = image_tag "icon_rullstol.png", alt: "Rullstolsplatser finns", title: "Rullstolsplatser finns" if occasion.wheelchair_seats.to_i > 0
             = image_tag "icon_horslinga.png", alt: "Hörselslinga finns", title: "Hörselslinga finns" if occasion.telecoil
           %td= occasion.address
