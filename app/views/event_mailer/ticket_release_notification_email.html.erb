@@ -136,7 +136,7 @@
     </a>
   </p>
 
-<% elsif @event.free_for_all? %>
+<% elsif (@event.free_for_all? || @event.free_for_all_with_excluded_districts?) %>
   <p>Begränsat antal platser. &quot;Först till kvarn&quot; gäller.</p>
 
   <% if @event.bus_booking? %>
