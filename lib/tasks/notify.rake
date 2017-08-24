@@ -18,7 +18,16 @@ namespace :kp do
 
   desc "Sends a notification for ticket release"
   task(notify_ticket_release: :environment) do
-    NotifyTicketRelease.new.run
+    event_id = ENV["event_id"]
+    if !event_id.blank?
+      puts "Processing event #{event_id}"
+      tr = NotifyTicketRelease.new
+      e = Event.find(event_id)
+      tr.process_event(e)
+      puts "Finished processing event #{event_id}"
+    else
+      NotifyTicketRelease.new.run
+    end
   end
 
   desc "Send a reminder that tickets are still available to alloted recipients"
