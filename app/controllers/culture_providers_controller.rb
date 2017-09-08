@@ -13,7 +13,9 @@ class CultureProvidersController < ApplicationController
   def index
     @culture_providers = CultureProvider.order(sort_order("name"))
 
-    if !user_online? || !current_user.has_role?(:admin)
+    if !params[:only_active].blank? && params[:only_active] == 'true'
+      @culture_providers = @culture_providers.where(active: true)
+    elsif !user_online? || !current_user.has_role?(:admin)
       @culture_providers = @culture_providers.where(active: true)
     end
   end

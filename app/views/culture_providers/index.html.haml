@@ -14,5 +14,6 @@
     %h1 Arrangörer
     %ul
       %li= link_to "Visa alla", culture_providers_path
+      %li= link_to "Visa aktiva", culture_providers_path(only_active: true)
       - if user_online? && current_user.has_role?(:admin)
         %li= link_to "Lägg till ny", new_culture_provider_path
