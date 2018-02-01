@@ -41,7 +41,8 @@ class BookingsController < ApplicationController
     if params[:format] == "xls"
       send_csv(
         "bussbokning_evenemang#{@event.id}.tsv",
-        Booking.bus_booking_csv(@bookings)
+        Booking.bus_booking_csv(@bookings),
+        'utf-8'
       )
     end
   end

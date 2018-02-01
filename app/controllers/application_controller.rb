@@ -97,12 +97,13 @@ class ApplicationController < ActionController::Base
   helper_method :occasion_list_cache_key
 
 
-  def send_csv(filename, csv)
-    csv = csv.gsub(/\n/,"\r\n").encode("windows-1252")
+  def send_csv(filename, csv, encoding)
+    encoding = 'windows-1252' if encoding.blank?
+    csv = csv.gsub(/\n/,"\r\n").encode(encoding)
     send_data(
       csv,
       filename: filename,
-      type: "text/csv; charset=windows-1252; header=present",
+      type: "text/csv; charset=#{encoding}; header=present",
       disposition: "inline"
     )
   end
