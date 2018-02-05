@@ -23,7 +23,14 @@ namespace :kp do
       puts "Processing event #{event_id}"
       tr = NotifyTicketRelease.new
       e = Event.find(event_id)
-      tr.process_event(e)
+
+      if event_id == 2438 || event_id == 2455 || event_id == 2459
+        # Special handling, only send email to school contacts for these events.
+        tr.process_event_cultureworkers_only(e)
+      else
+        tr.process_event(e)
+      end
+
       puts "Finished processing event #{event_id}"
     else
       NotifyTicketRelease.new.run
