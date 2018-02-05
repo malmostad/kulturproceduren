@@ -61,6 +61,12 @@ class NotifyTicketRelease
   end
 
   def process_event(event)
+    if [2438, 2455, 2459].include?(event.id)
+      # Special handling, only send email to school contacts for these events.
+      process_event_cultureworkers_only(event)
+      return
+    end
+
     puts "Notifying ticket release for #{event.name}"
     group_structure = {}
     school_structure = {}
