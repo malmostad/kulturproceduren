@@ -28,7 +28,8 @@ class EventsController < ApplicationController
     if params[:format] == "xls"
       send_csv(
         "fordelning_evenemang#{@event.id}.tsv",
-        ticket_allotment_csv(@event)
+        ticket_allotment_csv(@event),
+        ""
       )
     end
   end

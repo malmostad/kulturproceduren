@@ -32,7 +32,8 @@ class StatisticsController < ApplicationController
       # Output an xls file
       send_csv(
         "besokstatistik_#{@term}.tsv",
-        visitor_stats_csv(@visitor_stats)
+        visitor_stats_csv(@visitor_stats),
+        ""
       ) if params[:format] == "xls"
     else
       @events = available_events(@term)
@@ -52,7 +53,8 @@ class StatisticsController < ApplicationController
           questionnaire_stats_csv(
             "Enkätsvar för #{@event.name}",
             @event.questionnaire
-          )
+          ),
+          ""
         ) if params[:format] == "xls"
       else
         flash[:warning] = "Evenemanget saknar enkät eller enkätsvar."
@@ -75,7 +77,7 @@ class StatisticsController < ApplicationController
       questionnaire_stats_csv(
         "Avbokningsenkätsvar",
         @questionnaire
-      )
+      ), ""
     ) if params[:format] == "xls"
   end
 

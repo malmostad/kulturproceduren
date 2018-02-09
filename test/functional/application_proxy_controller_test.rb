@@ -29,7 +29,7 @@ class ApplicationProxyController < ApplicationController
     render nothing: true
   end
   def test_send_csv
-    send_csv(params[:filename], params[:csv])
+    send_csv(params[:filename], params[:csv], "")
   end
 end
 
