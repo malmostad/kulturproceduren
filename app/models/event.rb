@@ -267,7 +267,7 @@ class Event < ActiveRecord::Base
         visible_from <= today &&
         visible_to >= today &&
         !ticket_release_date.nil? &&
-        ticket_release_date <= today &&
+        (ticket_release_date < today || (ticket_release_date == today && Time.now.hour >= 8)) &&
         !tickets.empty? &&
         !occasions.empty?
     end
