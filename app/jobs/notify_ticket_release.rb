@@ -65,6 +65,7 @@ class NotifyTicketRelease
       # Special handling, only send email to school contacts for these events.
       # process_event_cultureworkers_only(event)
       # Do nothing...
+      expire_event_from_cache(event)
       return
     end
 
@@ -145,5 +146,28 @@ class NotifyTicketRelease
       puts "Sending notification mail for ticket release about #{event.name} to #{a}"
       EventMailer.ticket_release_notification_email(event, [a], group_structure, school_structure).deliver
     end
+    expire_event_from_cache(event)
+  end
+
+  def expire_event_from_cache(event)
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/not_administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/not_administratable/reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/not_bookable/administratable/reportable"
+
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/not_administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/not_administratable/reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/not_online/bookable/administratable/reportable"
+
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/not_administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/not_administratable/reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/not_bookable/administratable/reportable"
+
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/not_administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/not_administratable/reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/administratable/not_reportable"
+    ActionController::Base.new.expire_fragment "events/show/#{event.id}/occasion_list/online/bookable/administratable/reportable"
   end
 end
