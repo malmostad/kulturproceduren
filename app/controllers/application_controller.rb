@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
 
   def send_csv(filename, csv, encoding)
     encoding = 'windows-1252' if encoding.blank?
-    csv = csv.gsub(/\n/,"\r\n").encode(encoding)
+    csv = csv.gsub(/\n/,"\r\n").encode(encoding, invalid: :replace, undef: :replace, replace: '')
     send_data(
       csv,
       filename: filename,

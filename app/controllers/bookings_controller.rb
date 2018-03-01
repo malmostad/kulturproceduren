@@ -42,7 +42,7 @@ class BookingsController < ApplicationController
       send_csv(
         "bussbokning_evenemang#{@event.id}.tsv",
         Booking.bus_booking_csv(@bookings),
-        'utf-8'
+        'windows-1252'
       )
     end
   end
